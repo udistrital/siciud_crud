@@ -1,0 +1,2 @@
+class StateGroup < ApplicationRecord
+end

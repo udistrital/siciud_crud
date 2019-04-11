@@ -1,0 +1,2 @@
+class Snies < ApplicationRecord
+end

@@ -10,6 +10,47 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 0) do
+ActiveRecord::Schema.define(version: 2019_04_11_150034) do
+
+  create_table "colciencias_categories", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "curricular_projects", force: :cascade do |t|
+    t.string "name"
+    t.integer "faculty_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["faculty_id"], name: "index_curricular_projects_on_faculty_id"
+  end
+
+  create_table "faculties", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "research_focus", force: :cascade do |t|
+    t.string "name"
+    t.integer "faculty_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["faculty_id"], name: "index_research_focus_on_faculty_id"
+  end
+
+  create_table "snies", force: :cascade do |t|
+    t.integer "code"
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "state_groups", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
 end
