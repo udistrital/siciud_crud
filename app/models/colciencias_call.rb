@@ -1,0 +1,2 @@
+class ColcienciasCall < ApplicationRecord
+end
