@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_23_221144) do
+ActiveRecord::Schema.define(version: 2019_04_24_154448) do
 
   create_table "colciencias_calls", force: :cascade do |t|
     t.string "name"
@@ -33,7 +33,19 @@ ActiveRecord::Schema.define(version: 2019_04_23_221144) do
     t.index ["faculty_id"], name: "index_curricular_projects_on_faculty_id"
   end
 
+  create_table "document_types", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "faculties", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "genres", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
