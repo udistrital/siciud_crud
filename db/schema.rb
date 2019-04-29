@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_29_153436) do
+ActiveRecord::Schema.define(version: 2019_04_29_203110) do
 
   create_table "colciencias_calls", force: :cascade do |t|
     t.string "name"
@@ -51,7 +51,7 @@ ActiveRecord::Schema.define(version: 2019_04_29_153436) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "periods", force: :cascade do |t|
+  create_table "members", force: :cascade do |t|
     t.date "initialDate"
     t.date "finalDate"
     t.integer "role_id"
@@ -59,9 +59,9 @@ ActiveRecord::Schema.define(version: 2019_04_29_153436) do
     t.integer "research_group_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["research_group_id"], name: "index_periods_on_research_group_id"
-    t.index ["researcher_id"], name: "index_periods_on_researcher_id"
-    t.index ["role_id"], name: "index_periods_on_role_id"
+    t.index ["research_group_id"], name: "index_members_on_research_group_id"
+    t.index ["researcher_id"], name: "index_members_on_researcher_id"
+    t.index ["role_id"], name: "index_members_on_role_id"
   end
 
   create_table "research_focus", force: :cascade do |t|
@@ -89,7 +89,6 @@ ActiveRecord::Schema.define(version: 2019_04_29_153436) do
     t.string "webpage"
     t.text "mission"
     t.text "vision"
-    t.text "descripion"
     t.integer "research_focus_id"
     t.string "colcienciasCode"
     t.datetime "created_at", null: false
