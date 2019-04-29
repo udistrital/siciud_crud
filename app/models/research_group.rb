@@ -4,4 +4,6 @@ class ResearchGroup < ApplicationRecord
   belongs_to :state_group
   belongs_to :snies
   belongs_to :research_focus
+  has_many :members
+
 end
