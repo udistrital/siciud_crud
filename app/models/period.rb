@@ -1,6 +1,5 @@
 class Period < ApplicationRecord
   belongs_to :role
   belongs_to :researcher
-
-  validates :initialDate, presence: true
+  belongs_to :research_group
 end

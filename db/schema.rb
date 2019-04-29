@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_25_211901) do
+ActiveRecord::Schema.define(version: 2019_04_29_153436) do
 
   create_table "colciencias_calls", force: :cascade do |t|
     t.string "name"
@@ -56,8 +56,10 @@ ActiveRecord::Schema.define(version: 2019_04_25_211901) do
     t.date "finalDate"
     t.integer "role_id"
     t.integer "researcher_id"
+    t.integer "research_group_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["research_group_id"], name: "index_periods_on_research_group_id"
     t.index ["researcher_id"], name: "index_periods_on_researcher_id"
     t.index ["role_id"], name: "index_periods_on_role_id"
   end
@@ -68,6 +70,35 @@ ActiveRecord::Schema.define(version: 2019_04_25_211901) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["faculty_id"], name: "index_research_focus_on_faculty_id"
+  end
+
+  create_table "research_groups", force: :cascade do |t|
+    t.string "name"
+    t.string "acronym"
+    t.text "description"
+    t.integer "faculty_id"
+    t.integer "curricular_project_id"
+    t.date "cidcRegistrationDate"
+    t.integer "cidcActNmber"
+    t.integer "facultyActNumber"
+    t.date "facultyRegistrationDate"
+    t.integer "state_group_id"
+    t.integer "snies_id"
+    t.string "email"
+    t.string "gruplac"
+    t.string "webpage"
+    t.text "mission"
+    t.text "vision"
+    t.text "descripion"
+    t.integer "research_focus_id"
+    t.string "colcienciasCode"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["curricular_project_id"], name: "index_research_groups_on_curricular_project_id"
+    t.index ["faculty_id"], name: "index_research_groups_on_faculty_id"
+    t.index ["research_focus_id"], name: "index_research_groups_on_research_focus_id"
+    t.index ["snies_id"], name: "index_research_groups_on_snies_id"
+    t.index ["state_group_id"], name: "index_research_groups_on_state_group_id"
   end
 
   create_table "researchers", force: :cascade do |t|

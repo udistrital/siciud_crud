@@ -5,6 +5,7 @@ class CreatePeriods < ActiveRecord::Migration[5.2]
       t.date :finalDate
       t.references :role, foreign_key: true
       t.references :researcher, foreign_key: true
+      t.references :research_group, foreign_key: true
 
       t.timestamps
     end
