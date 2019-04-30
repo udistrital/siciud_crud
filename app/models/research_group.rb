@@ -1,5 +1,5 @@
 class ResearchGroup < ApplicationRecord
-  belongs_to :faculty
+  has_and_belongs_to_many :faculties
   belongs_to :curricular_project
   belongs_to :state_group
   belongs_to :snies

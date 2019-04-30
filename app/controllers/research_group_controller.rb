@@ -5,7 +5,7 @@ class ResearchGroupController < ApplicationController
     #Listar todos los grupos
     @research_groups = ResearchGroup.all
     #Director .members.where("role_id='1'")
-    render json: @research_groups
+    render json: @research_groups.includes(:faculties,:curricular_project)
   end
   
 
@@ -39,9 +39,9 @@ class ResearchGroupController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def research_group_params
-      params.require(:research_group).permit(:name,:acronym,:description,:faculty_id,:curricular_project_id,:cidcRegistrationDate,
+      params.require(:research_group).permit(:name,:acronym,:description,:curricular_project_id,:cidcRegistrationDate,
         :cidcActNmber,:facultyActNumber,:facultyRegistrationDate,:state_group_id,
-        :snies_id,:email,:gruplac,:webpage,:mission,:vision,:research_focus_id)
+        :snies_id,:email,:gruplac,:webpage,:mission,:vision,:research_focus_id,faculty_ids: [])
 
     end
 end
