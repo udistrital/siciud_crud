@@ -5,5 +5,8 @@ class ResearchGroup < ApplicationRecord
   belongs_to :snies
   belongs_to :research_focus
   has_many :members
-
+  validates :name,:acronym,:description,:curricular_project_id,:cidcRegistrationDate,
+        :cidcActNmber,:facultyActNumber,:facultyRegistrationDate,:state_group_id,
+        :snies_id,:email,:research_focus_id, presence: true
+  
 end

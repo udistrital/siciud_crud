@@ -41,7 +41,7 @@ class ResearchGroupController < ApplicationController
     def research_group_params
       params.require(:research_group).permit(:name,:acronym,:description,:curricular_project_id,:cidcRegistrationDate,
         :cidcActNmber,:facultyActNumber,:facultyRegistrationDate,:state_group_id,
-        :snies_id,:email,:gruplac,:webpage,:mission,:vision,:research_focus_id,faculty_ids: [])
+        :snies_id,:email,:colcienciasCode,:gruplac,:webpage,:mission,:vision,:research_focus_id,faculty_ids: [])
 
     end
 end

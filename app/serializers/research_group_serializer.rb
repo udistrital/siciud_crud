@@ -13,22 +13,17 @@ class ResearchGroupSerializer < ActiveModel::Serializer
 
   def state_group
     state_group = self.object.state_group
-    {
-      name: state_group.name
-    }
+    state_group.name
+    
     
   end
   def snies
     snies = self.object.snies
-    {
-      name: snies.name
-    }
+    snies.name
   end
   def research_focus
     research_focus = self.object.research_focus
-    {
-      name: research_focus.name
-    }
+    research_focus.name
     
   end
   
