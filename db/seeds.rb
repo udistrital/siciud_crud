@@ -59,3 +59,12 @@ end
         
     )
 end
+
+Role.create(name:"Director")
+DocumentType.create(name:"CC")
+Genre.create(name:"Male")
+StateResearcher.create(name:"Activo")
+Researcher.create(name:"jorge",document_type_id:1,
+    faculty_id:1,curricular_project_id:1,snies_id:1,
+    genre_id:1,state_researcher_id:1,codeNumber:1564,
+    identificationNumber:451,lastName:"bocanegra",academicEmail:"Test")

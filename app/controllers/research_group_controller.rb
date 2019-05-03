@@ -5,7 +5,7 @@ class ResearchGroupController < ApplicationController
     #Listar todos los grupos
     @research_groups = ResearchGroup.all
     #Director .members.where("role_id='1'")
-    render json: @research_groups.includes(:faculties,:curricular_projects)
+    render json: @research_groups.includes(:faculties,:curricular_projects,:research_focuses,:members)
   end
   
 

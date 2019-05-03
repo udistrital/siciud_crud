@@ -1,5 +1,5 @@
 class ResearchGroupSerializer < ActiveModel::Serializer
-  attributes :id, :name, :acronym, :description,:cidcRegistrationDate,:faculties,:cidcActNmber,:facultyActNumber,:facultyRegistrationDate,:email,:gruplac,:webpage,:mission,:vision,:colcienciasCode,:curricular_project,:state_group,:snies,:research_focus
+  attributes :id, :name, :acronym, :description,:cidcRegistrationDate,:faculties,:cidcActNmber,:facultyActNumber,:facultyRegistrationDate,:email,:gruplac,:webpage,:mission,:vision,:colcienciasCode,:curricular_project,:state_group,:snies,:research_focus,:director
   def faculties
     faculties = self.object.faculties
   end
@@ -21,6 +21,9 @@ class ResearchGroupSerializer < ActiveModel::Serializer
   def research_focus
     research_focuses = self.object.research_focuses
     
+  end
+  def director
+    members = self.object.members.where(role_id:1)
   end
   
 end
