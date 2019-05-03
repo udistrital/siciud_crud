@@ -4,8 +4,8 @@ class CreateResearchGroups < ActiveRecord::Migration[5.2]
       t.string :name
       t.string :acronym
       t.text :description
-      t.references :faculty, foreign_key: true
-      t.references :curricular_project, foreign_key: true
+      # t.references :faculty, foreign_key: true
+      # t.references :curricular_project, foreign_key: true
       t.date :cidcRegistrationDate
       t.integer :cidcActNmber
       t.integer :facultyActNumber
@@ -18,7 +18,7 @@ class CreateResearchGroups < ActiveRecord::Migration[5.2]
       t.text :mission
       t.text :vision
       t.text :descripion
-      t.references :research_focus, foreign_key: true
+      # t.references :research_focus, foreign_key: true
       t.string :colcienciasCode
 
       t.timestamps

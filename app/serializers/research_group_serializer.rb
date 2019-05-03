@@ -4,10 +4,7 @@ class ResearchGroupSerializer < ActiveModel::Serializer
     faculties = self.object.faculties
   end
   def curricular_project
-    curricular_project = self.object.curricular_project
-    {
-      name: curricular_project.name
-    }
+    curricular_projects = self.object.curricular_projects
     
   end
 
@@ -22,8 +19,7 @@ class ResearchGroupSerializer < ActiveModel::Serializer
     snies.name
   end
   def research_focus
-    research_focus = self.object.research_focus
-    research_focus.name
+    research_focuses = self.object.research_focuses
     
   end
   

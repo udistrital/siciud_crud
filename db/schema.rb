@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_30_203549) do
+ActiveRecord::Schema.define(version: 2019_05_03_195122) do
 
   create_table "colciencias_calls", force: :cascade do |t|
     t.string "name"
@@ -31,6 +31,11 @@ ActiveRecord::Schema.define(version: 2019_04_30_203549) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["faculty_id"], name: "index_curricular_projects_on_faculty_id"
+  end
+
+  create_table "curricular_projects_research_groups", id: false, force: :cascade do |t|
+    t.integer "research_group_id", null: false
+    t.integer "curricular_project_id", null: false
   end
 
   create_table "document_types", force: :cascade do |t|
@@ -69,20 +74,23 @@ ActiveRecord::Schema.define(version: 2019_04_30_203549) do
     t.index ["role_id"], name: "index_members_on_role_id"
   end
 
-  create_table "research_focus", force: :cascade do |t|
+  create_table "research_focuses", force: :cascade do |t|
     t.string "name"
     t.integer "faculty_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["faculty_id"], name: "index_research_focus_on_faculty_id"
+    t.index ["faculty_id"], name: "index_research_focuses_on_faculty_id"
+  end
+
+  create_table "research_focuses_groups", id: false, force: :cascade do |t|
+    t.integer "research_group_id", null: false
+    t.integer "research_focus_id", null: false
   end
 
   create_table "research_groups", force: :cascade do |t|
     t.string "name"
     t.string "acronym"
     t.text "description"
-    t.integer "faculty_id"
-    t.integer "curricular_project_id"
     t.date "cidcRegistrationDate"
     t.integer "cidcActNmber"
     t.integer "facultyActNumber"
@@ -94,13 +102,9 @@ ActiveRecord::Schema.define(version: 2019_04_30_203549) do
     t.string "webpage"
     t.text "mission"
     t.text "vision"
-    t.integer "research_focus_id"
     t.string "colcienciasCode"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["curricular_project_id"], name: "index_research_groups_on_curricular_project_id"
-    t.index ["faculty_id"], name: "index_research_groups_on_faculty_id"
-    t.index ["research_focus_id"], name: "index_research_groups_on_research_focus_id"
     t.index ["snies_id"], name: "index_research_groups_on_snies_id"
     t.index ["state_group_id"], name: "index_research_groups_on_state_group_id"
   end
