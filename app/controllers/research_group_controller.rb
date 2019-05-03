@@ -1,6 +1,10 @@
 class ResearchGroupController < ApplicationController
     before_action :set_research_group, only: [:show, :update]
 
+  rescue_from ActiveRecord::RecordNotFound do |e|
+    render json: {error: e.message}, status: :not_found
+  end
+  
   def index
     #Listar todos los grupos
     @research_groups = ResearchGroup.all
@@ -10,7 +14,11 @@ class ResearchGroupController < ApplicationController
   
 
   def show
+    if @research_group.empty?
     render json: @research_group
+    else
+       render json: {error: 'Not found'}, status: :not_found
+    end
   end
 
   def create
