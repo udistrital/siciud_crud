@@ -14,11 +14,7 @@ class ResearchGroupController < ApplicationController
   
 
   def show
-    if @research_group.empty?
     render json: @research_group
-    else
-       render json: {error: 'Not found'}, status: :not_found
-    end
   end
 
   def create
