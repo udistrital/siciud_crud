@@ -22,7 +22,10 @@ class ResearchGroupSerializer < ActiveModel::Serializer
 
   def state_group
     state_group = self.object.state_group
-    state_group.name
+    {
+      id: state_group.id,
+      name: state_group.name      
+    }
     
     
   end
@@ -50,6 +53,7 @@ class ResearchGroupSerializer < ActiveModel::Serializer
       academicEmail: members.researcher.academicEmail
 
     }
+
   end
   
 end

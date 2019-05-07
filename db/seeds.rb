@@ -47,7 +47,7 @@ end
         cidcActNmber: Faker::Number.number(4),
         facultyRegistrationDate: Faker::Date.backward(50),
         facultyActNumber: Faker::Number.number(4),
-        state_group_id: 1,
+        state_group_id: rand(1..2),
         snies_id: rand(1..10),
         email: Faker::Internet.email,
         gruplac: Faker::Internet.url('colciencias.com'),
@@ -64,6 +64,8 @@ Role.create(name:"Director")
 DocumentType.create(name:"CC")
 Genre.create(name:"Male")
 StateResearcher.create(name:"Activo")
+Researcher.create(name:"jorge",document_type_id:1,faculty_id:1,curricular_project_id:1,snies_id:1,genre_id:1,state_researcher_id:1,codeNumber:1564,identificationNumber:451,lastName:"bocanegra",academicEmail:"Test")
+
 20.times do |i|
 Member.create(role_id:1,researcher_id:1,research_group_id:i+1)
 end
