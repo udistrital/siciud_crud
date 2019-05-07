@@ -1,23 +1,32 @@
 class ResearchGroupController < ApplicationController
     before_action :set_research_group, only: [:show, :update,:attach]
 
+  rescue_from Exception do |e|
+    render json: {error: e.message}, status: :internal_error
+  end 
+  #Manejo de excepciones de la database
   rescue_from ActiveRecord::RecordNotFound do |e|
     render json: {error: e.message}, status: :not_found
   end
-  
-  def index
+  rescue_from ActiveRecord::RecordInvalid do |e|
+    render json: {error: e.message}, status: :unprocessable_entity
+end
     #Listar todos los grupos
+
+  def index
     @research_groups = ResearchGroup.all
     #Director .members.where("role_id='1'")
     render json: @research_groups.includes(:faculties,:curricular_projects,:research_focuses,
       :state_group,:snies,:cidcActDocument_attachment,:facultyActDocument_attachment)
   end
   
+    #Mostrar detalle de un grupo
 
   def show
     render json: @research_group
   end
-
+   
+  #Crear un grupo
   def create
     @research_group = ResearchGroup.new(research_group_params)
 
@@ -27,6 +36,8 @@ class ResearchGroupController < ApplicationController
       render json: @research_group.errors, status: :unprocessable_entity
     end
   end
+  
+  #Actualizar un grupo
 
   def update
     if @research_group.update(research_group_params)
@@ -35,6 +46,9 @@ class ResearchGroupController < ApplicationController
       render json: @research_group.errors, status: :unprocessable_entity
     end
   end
+
+  #Actualizar  documentos de un grupo
+
   def attach
     
     @research_group.facultyActDocument.attach(params[:facultyActDocument])

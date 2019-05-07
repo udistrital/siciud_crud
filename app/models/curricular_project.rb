@@ -1,8 +1,11 @@
 class CurricularProject < ApplicationRecord
+  #Relaciones con los diferentes modelos
+
   belongs_to :faculty
   has_many :researchers
   has_many :research_groups
-  validates :name, presence: true
   has_and_belongs_to_many :research_groups
+  #Validaciones de los campos obligatorios
+  validates :name, presence: true
 
 end

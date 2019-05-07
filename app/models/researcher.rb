@@ -1,4 +1,5 @@
 class Researcher < ApplicationRecord
+  #Relaciones con los diferentes modelos
   belongs_to :document_type
   belongs_to :faculty
   belongs_to :curricular_project
@@ -7,6 +8,7 @@ class Researcher < ApplicationRecord
   belongs_to :state_researcher
   has_many :periods
 
+  #Validaciones de los campos obligatorios
   validates :codeNumber, presence: true, uniqueness: true
   validates :identificationNumber, presence: true, uniqueness: true
   validates :name, presence: true
