@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   
   get 'research_focus/', to: 'research_focus#index'
   get 'research_focus/:id', to: 'research_focus#show'
+  put 'research_group/attach/:id', to: 'research_group#attach'
 
   get 'snies/', to: 'snies#index'
   get 'snies/:id', to: 'snies#show'

@@ -1,4 +1,6 @@
 class ResearchGroup < ApplicationRecord
+  has_one_attached :facultyActDocument
+  has_one_attached :cidcActDocument
   has_and_belongs_to_many :faculties
   has_and_belongs_to_many :curricular_projects
 

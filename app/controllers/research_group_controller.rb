@@ -1,5 +1,5 @@
 class ResearchGroupController < ApplicationController
-    before_action :set_research_group, only: [:show, :update]
+    before_action :set_research_group, only: [:show, :update,:attach]
 
   rescue_from ActiveRecord::RecordNotFound do |e|
     render json: {error: e.message}, status: :not_found
@@ -34,6 +34,12 @@ class ResearchGroupController < ApplicationController
       render json: @research_group.errors, status: :unprocessable_entity
     end
   end
+  def attach
+    
+    @research_group.facultyActDocument.attach(params[:facultyActDocument])
+    @research_group.cidcActDocument.attach(params[:cidcActDocument])
+
+  end
 
   private
     # Use callbacks to share common setup or constraints between actions.
@@ -45,7 +51,7 @@ class ResearchGroupController < ApplicationController
     def research_group_params
       params.require(:research_group).permit(:name,:acronym,:description,:cidcRegistrationDate,
         :cidcActNmber,:facultyActNumber,:facultyRegistrationDate,:state_group_id,
-        :snies_id,:email,:colcienciasCode,:gruplac,:webpage,:mission,:vision,
+        :snies_id,:email,:colcienciasCode,:gruplac,:webpage,:mission,:vision,:facultyActDocument,:cidcActDocument,
         research_focus_ids: [],faculty_ids: [],curricular_project_ids: [])
 
     end

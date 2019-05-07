@@ -1,5 +1,9 @@
 class ResearchGroupSerializer < ActiveModel::Serializer
-  attributes :id, :name, :acronym, :description,:cidcRegistrationDate,:faculties,:cidcActNmber,:facultyActNumber,:facultyRegistrationDate,:email,:gruplac,:webpage,:mission,:vision,:colcienciasCode,:curricular_projects,:state_group,:snies,:research_focuses,:director
+    include Rails.application.routes.url_helpers
+  attributes :id, :name, :acronym, :description,:cidcRegistrationDate,
+  :faculties,:cidcActNmber,:facultyActNumber,:facultyRegistrationDate,
+  :email,:gruplac,:webpage,:mission,:vision,:colcienciasCode,:curricular_projects,
+  :state_group,:snies,:research_focuses,:director,:facultyActDocument,:cidcActDocument
   def faculties
      self.object.faculties.map do |faculty|
       { 
@@ -9,6 +13,7 @@ class ResearchGroupSerializer < ActiveModel::Serializer
     end 
     #faculties = self.object.faculties
   end
+  
   def curricular_projects
     self.object.curricular_projects.map do |curricular_project|
       { 
@@ -54,6 +59,12 @@ class ResearchGroupSerializer < ActiveModel::Serializer
 
     }
 
+  end
+  def facultyActDocument
+    rails_blob_path(self.object.facultyActDocument, only_path: true) if self.object.facultyActDocument.attached?
+  end
+  def cidcActDocument
+    rails_blob_path(self.object.cidcActDocument, only_path: true) if self.object.cidcActDocument  .attached?
   end
   
 end
