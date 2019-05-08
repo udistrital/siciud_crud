@@ -1,9 +1,7 @@
 class ResearchGroupController < ApplicationController
     before_action :set_research_group, only: [:show, :update,:attach]
 
-  rescue_from Exception do |e|
-    render json: {error: e.message}, status: :internal_error
-  end 
+
   #Manejo de excepciones de la database
   rescue_from ActiveRecord::RecordNotFound do |e|
     render json: {error: e.message}, status: :not_found
@@ -16,8 +14,8 @@ end
   def index
     @research_groups = ResearchGroup.all
     #Director .members.where("role_id='1'")
-    render json: @research_groups.includes(:faculties,:curricular_projects,:research_focuses,
-      :state_group,:snies,:cidcActDocument_attachment,:facultyActDocument_attachment)
+    paginate json: @research_groups.includes(:faculties,:curricular_projects,:research_focuses,
+      :state_group,:snies,:cidcActDocument_attachment,:facultyActDocument_attachment), per_page: 10
   end
   
     #Mostrar detalle de un grupo
