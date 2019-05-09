@@ -7,7 +7,7 @@ class CreateResearchGroups < ActiveRecord::Migration[5.2]
       # t.references :faculty, foreign_key: true
       # t.references :curricular_project, foreign_key: true
       t.date :cidcRegistrationDate
-      t.integer :cidcActNmber
+      t.integer :cidcActNumber
       t.integer :facultyActNumber
       t.date :facultyRegistrationDate
       t.references :state_group, foreign_key: true

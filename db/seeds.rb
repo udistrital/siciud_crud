@@ -44,7 +44,7 @@ end
         faculty_ids: Array.new(2) { rand(1..5)},
         curricular_project_ids: Array.new(2) { rand(1..15)},
         cidcRegistrationDate: Faker::Date.backward(50),
-        cidcActNmber: Faker::Number.number(4),
+        cidcActNumber: Faker::Number.number(4),
         facultyRegistrationDate: Faker::Date.backward(50),
         facultyActNumber: Faker::Number.number(4),
         state_group_id: rand(1..2),

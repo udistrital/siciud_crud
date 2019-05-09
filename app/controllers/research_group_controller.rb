@@ -14,6 +14,9 @@ end
   def index
     @research_groups = ResearchGroup.all
     #Director .members.where("role_id='1'")
+    if params[:search].present? && !params[:search].nil?  
+      @research_groups = ResearchGroupsSearchService.search(@research_groups,params[:search])
+    end
     paginate json: @research_groups.includes(:faculties,:curricular_projects,:research_focuses,
       :state_group,:snies,:cidcActDocument_attachment,:facultyActDocument_attachment), per_page: 10
   end
@@ -63,7 +66,7 @@ end
     # Only allow a trusted parameter "white list" through.
     def research_group_params
       params.require(:research_group).permit(:name,:acronym,:description,:cidcRegistrationDate,
-        :cidcActNmber,:facultyActNumber,:facultyRegistrationDate,:state_group_id,
+        :cidcActNumber,:facultyActNumber,:facultyRegistrationDate,:state_group_id,
         :snies_id,:email,:colcienciasCode,:gruplac,:webpage,:mission,:vision,:facultyActDocument,:cidcActDocument,
         research_focus_ids: [],faculty_ids: [],curricular_project_ids: [])
 

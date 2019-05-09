@@ -11,7 +11,7 @@ class ResearchGroup < ApplicationRecord
   has_many :members
   #Validaciones de los campos obligatorios
   validates :name,:acronym,:description,:curricular_project_ids,:cidcRegistrationDate,
-        :cidcActNmber,:facultyActNumber,:facultyRegistrationDate,:state_group_id,
+        :cidcActNumber,:facultyActNumber,:facultyRegistrationDate,:state_group_id,
         :snies_id,:email, presence: true
   
 end

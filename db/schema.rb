@@ -113,7 +113,7 @@ ActiveRecord::Schema.define(version: 2019_05_07_162950) do
     t.string "acronym"
     t.text "description"
     t.date "cidcRegistrationDate"
-    t.integer "cidcActNmber"
+    t.integer "cidcActNumber"
     t.integer "facultyActNumber"
     t.date "facultyRegistrationDate"
     t.integer "state_group_id"

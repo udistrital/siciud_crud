@@ -1,7 +1,7 @@
 class ResearchGroupSerializer < ActiveModel::Serializer
     include Rails.application.routes.url_helpers
   attributes :id, :name, :acronym, :description,:cidcRegistrationDate,
-  :faculties,:cidcActNmber,:facultyActNumber,:facultyRegistrationDate,
+  :faculties,:cidcActNumber,:facultyActNumber,:facultyRegistrationDate,
   :email,:gruplac,:webpage,:mission,:vision,:colcienciasCode,:curricular_projects,
   :state_group,:snies,:research_focuses,:director,:facultyActDocument,:cidcActDocument
   def faculties
