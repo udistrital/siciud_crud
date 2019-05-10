@@ -10,7 +10,7 @@ class ResearchGroup < ApplicationRecord
 #  belongs_to :research_focus
   has_many :members
   #Validaciones de los campos obligatorios
-  validates :name,:acronym,:description,:curricular_project_ids,:cidcRegistrationDate,
+  validates :name,:acronym,:description,:cidcRegistrationDate,
         :cidcActNumber,:facultyActNumber,:facultyRegistrationDate,:state_group_id,
         :snies_id,:email, presence: true
   
