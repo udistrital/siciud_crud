@@ -5,7 +5,8 @@ class Researcher < ApplicationRecord
   belongs_to :curricular_project
   belongs_to :snies
   belongs_to :genre
-  belongs_to :state_researcher
+  belongs_to :researcher_type
+
   has_many :periods
 
   #Validaciones de los campos obligatorios

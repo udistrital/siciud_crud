@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_07_162950) do
+ActiveRecord::Schema.define(version: 2019_05_14_210143) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -90,9 +90,14 @@ ActiveRecord::Schema.define(version: 2019_05_07_162950) do
     t.integer "research_group_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "ResearcherType_id"
+    t.integer "researcher_type_id"
+    t.integer "state_researcher_id"
     t.index ["research_group_id"], name: "index_members_on_research_group_id"
     t.index ["researcher_id"], name: "index_members_on_researcher_id"
+    t.index ["researcher_type_id"], name: "index_members_on_researcher_type_id"
     t.index ["role_id"], name: "index_members_on_role_id"
+    t.index ["state_researcher_id"], name: "index_members_on_state_researcher_id"
   end
 
   create_table "research_focuses", force: :cascade do |t|
@@ -130,6 +135,12 @@ ActiveRecord::Schema.define(version: 2019_05_07_162950) do
     t.index ["state_group_id"], name: "index_research_groups_on_state_group_id"
   end
 
+  create_table "researcher_types", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "researchers", force: :cascade do |t|
     t.integer "codeNumber"
     t.integer "identificationNumber"
@@ -141,7 +152,6 @@ ActiveRecord::Schema.define(version: 2019_05_07_162950) do
     t.integer "curricular_project_id"
     t.integer "snies_id"
     t.integer "genre_id"
-    t.integer "state_researcher_id"
     t.string "telNumber"
     t.string "celNumber"
     t.string "address"
@@ -149,12 +159,13 @@ ActiveRecord::Schema.define(version: 2019_05_07_162950) do
     t.string "personalEmail"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "researcher_type_id"
     t.index ["curricular_project_id"], name: "index_researchers_on_curricular_project_id"
     t.index ["document_type_id"], name: "index_researchers_on_document_type_id"
     t.index ["faculty_id"], name: "index_researchers_on_faculty_id"
     t.index ["genre_id"], name: "index_researchers_on_genre_id"
+    t.index ["researcher_type_id"], name: "index_researchers_on_researcher_type_id"
     t.index ["snies_id"], name: "index_researchers_on_snies_id"
-    t.index ["state_researcher_id"], name: "index_researchers_on_state_researcher_id"
   end
 
   create_table "roles", force: :cascade do |t|

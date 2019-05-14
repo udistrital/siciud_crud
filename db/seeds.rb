@@ -64,8 +64,9 @@ Role.create(name:"Director")
 DocumentType.create(name:"CC")
 Genre.create(name:"Male")
 StateResearcher.create(name:"Activo")
-Researcher.create(name:"jorge",document_type_id:1,faculty_id:1,curricular_project_id:1,snies_id:1,genre_id:1,state_researcher_id:1,codeNumber:1564,identificationNumber:451,lastName:"bocanegra",academicEmail:"Test")
+ResearcherType.create(name:"Docente")
+Researcher.create(name:"jorge",document_type_id:1,faculty_id:1,curricular_project_id:1,snies_id:1,genre_id:1,researcher_type_id:1,codeNumber:1564,identificationNumber:451,lastName:"bocanegra",academicEmail:"Test")
 
 100.times do |i|
-Member.create(role_id:1,researcher_id:1,research_group_id:i+1)
+Member.create(role_id:1,researcher_id:1,research_group_id:i+1,state_researcher_id:1)
 end

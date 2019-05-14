@@ -3,7 +3,7 @@ class ResearchGroupSerializer < ActiveModel::Serializer
   attributes :id, :name, :acronym, :description,:cidcRegistrationDate,
   :faculties,:cidcActNumber,:facultyActNumber,:facultyRegistrationDate,
   :email,:gruplac,:webpage,:mission,:vision,:colcienciasCode,:curricular_projects,
-  :state_group,:snies,:research_focuses,:facultyActDocument,:cidcActDocument
+  :state_group,:snies,:research_focuses,:facultyActDocument,:cidcActDocument,:director
   def faculties
      self.object.faculties.map do |faculty|
       { 
@@ -56,6 +56,7 @@ class ResearchGroupSerializer < ActiveModel::Serializer
       initialDate: members.initialDate,
       finalDate: members.finalDate,
       academicEmail: members.researcher.academicEmail
+      #researcherType: members.researcherType.name
 
     }
 
