@@ -1,0 +1,2 @@
+class ResearcherType < ApplicationRecord
+end

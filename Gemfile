@@ -7,6 +7,8 @@ ruby '2.6.2'
 gem 'rails', '~> 5.2.3'
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
+# Use pg as the database for Active Record
+#gem 'pg'
 # Use Puma as the app server
 gem 'puma', '~> 3.11'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
@@ -15,10 +17,11 @@ gem 'puma', '~> 3.11'
 # gem 'redis', '~> 4.0'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
-
+gem 'will_paginate'
+gem 'api-pagination'
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
-
+gem "bullet"
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
