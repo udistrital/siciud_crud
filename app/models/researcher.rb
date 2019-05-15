@@ -14,6 +14,8 @@ class Researcher < ApplicationRecord
   validates :identificationNumber, presence: true, uniqueness: true
   validates :name, presence: true
   validates :lastName, presence: true
+  validates :researcher_type, presence: true
+
   validates :academicEmail, presence: true, uniqueness: true  
   
 
