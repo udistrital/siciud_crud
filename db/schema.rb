@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_14_210143) do
+ActiveRecord::Schema.define(version: 2019_05_15_211501) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -134,6 +134,24 @@ ActiveRecord::Schema.define(version: 2019_05_14_210143) do
     t.index ["state_group_id"], name: "index_research_groups_on_state_group_id"
   end
 
+  create_table "research_seed_beds", force: :cascade do |t|
+    t.string "name"
+    t.string "acronym"
+    t.text "description"
+    t.date "cidcRegistrationDate"
+    t.date "facultyRegistrationDate"
+    t.integer "cidcActNumber"
+    t.integer "facultyActNumber"
+    t.integer "state_seedbed_id"
+    t.string "mail"
+    t.string "webpage"
+    t.string "mission"
+    t.string "vision"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["state_seedbed_id"], name: "index_research_seed_beds_on_state_seedbed_id"
+  end
+
   create_table "researcher_types", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -187,6 +205,12 @@ ActiveRecord::Schema.define(version: 2019_05_14_210143) do
   end
 
   create_table "state_researchers", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "state_seedbeds", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
