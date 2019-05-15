@@ -97,7 +97,6 @@ ActiveRecord::Schema.define(version: 2019_05_14_210143) do
     t.index ["researcher_id"], name: "index_members_on_researcher_id"
     t.index ["researcher_type_id"], name: "index_members_on_researcher_type_id"
     t.index ["role_id"], name: "index_members_on_role_id"
-    t.index ["state_researcher_id"], name: "index_members_on_state_researcher_id"
   end
 
   create_table "research_focuses", force: :cascade do |t|
