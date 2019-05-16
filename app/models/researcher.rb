@@ -7,6 +7,7 @@ class Researcher < ApplicationRecord
   belongs_to :genre
   belongs_to :researcher_type
 
+  
   has_many :periods
 
   #Validaciones de los campos obligatorios

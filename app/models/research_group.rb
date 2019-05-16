@@ -9,6 +9,7 @@ class ResearchGroup < ApplicationRecord
   belongs_to :snies
 #  belongs_to :research_focus
   has_many :members
+  has_many :historical_colciencias_ranks
   #Validaciones de los campos obligatorios
   validates :name,:acronym ,:cidcRegistrationDate,
         :cidcActNumber,:facultyActNumber,:facultyRegistrationDate,:state_group_id,
