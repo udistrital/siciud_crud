@@ -13,6 +13,8 @@ class CreateResearchSeedBeds < ActiveRecord::Migration[5.2]
       t.string :webpage
       t.string :mission
       t.string :vision
+      t.references :snies, foreign_key: true
+      t.references :researcher_focus, foreign_key: true
 
       t.timestamps
     end

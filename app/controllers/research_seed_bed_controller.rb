@@ -31,7 +31,7 @@ class ResearchSeedBedController < ApplicationController
     def research_seed_bed_params
       params.require(:research_seed_bed).permit(:name,:acronym,:description,:cidcRegistrationDate,
         :cidcActNumber,:facultyActNumber,:facultyRegistrationDate,:state_seedbed_id,
-        :snies_id,:email,:webpage,:mission,:vision,:facultyActDocument,:cidcActDocument,:faculty_ids,
+        :snies_id,:mail,:webpage,:mission,:vision,:facultyActDocument,:cidcActDocument,:faculty_ids,
         :research_focus_ids,:curricular_project_ids)
 
     end
