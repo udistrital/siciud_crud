@@ -1,6 +1,10 @@
 Rails.application.routes.draw do
   
 
+  get 'research_seed_bed/index'
+  get 'research_seed_bed/show'
+  get 'research_seed_bed/create'
+  get 'research_seed_bed/update'
   # get 'research_group/index'
   # get 'research_group/show/:id'
   # post 'research_group/create'
