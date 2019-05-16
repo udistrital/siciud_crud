@@ -3,7 +3,8 @@ class ResearchGroupSerializer < ActiveModel::Serializer
   attributes :id, :name, :acronym, :description,:cidcRegistrationDate,
   :faculties,:cidcActNumber,:facultyActNumber,:facultyRegistrationDate,
   :email,:gruplac,:webpage,:mission,:vision,:colcienciasCode,:curricular_projects,
-  :state_group,:snies,:research_focuses,:facultyActDocument,:cidcActDocument,:director
+  :state_group,:snies,:research_focuses,:facultyActDocument,:cidcActDocument,:director,
+  :historicalColciencias
   def faculties
      self.object.faculties.map do |faculty|
       { 
@@ -67,6 +68,16 @@ class ResearchGroupSerializer < ActiveModel::Serializer
   def cidcActDocument
     rails_blob_path(self.object.cidcActDocument, only_path: true) if self.object.cidcActDocument  .attached?
   end
+  def historicalColciencias
+    if self.object.historical_colciencias_ranks
+      self.object.historical_colciencias_ranks.map do |rank|
+        { 
+          call: rank.colciencias_call, 
+          rank: rank.colciencias_category}
+      end 
+    end
+  end
+
   
 end
 
