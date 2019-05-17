@@ -1,11 +1,13 @@
 class ResearchSeedBedController < ApplicationController
+    before_action :set_research_group, only: [:show, :update]
+
   def index
-    @research_seed_beds = ResearchSeedBed.all
+    @research_seedbeds = ResearchSeedBed.all
     #Director .members.where("role_id='1'")
     # if params[:search].present? && !params[:search].nil?  
     #   @research_groups = ResearchGroupsSearchService.search(@research_groups,params[:search])
     # end
-    paginate json: @research_seed_beds
+    paginate json: @research_seedbeds
     #.includes(:faculties,:curricular_projects,:research_focuses,
      # :state_group,:snies,:cidcActDocument_attachment,:facultyActDocument_attachment), per_page: 10
   end
@@ -13,22 +15,34 @@ class ResearchSeedBedController < ApplicationController
   
 
   def show
+      render json: @research_seedbed
   end
 
   def create
+    @research_seedbed = ResearchGroup.new(research_seedbed_params)
+    if @research_group.save
+      render json: @research_seedbed, status: :created
+    else
+      render json: @research_seedbed.errors, status: :unprocessable_entity
+    end
   end
 
   def update
+    if @research_seedbed.update(research_seedbed_params)
+      render json: @research_seedbed
+    else
+      render json: @research_seedbed.errors, status: :unprocessable_entity
+    end
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
-    def set_research_seed_bed
-      @research_seed_bed = ResearchSeedBed.find(params[:id])
+    def set_research_seedbed
+      @research_seedbed = ResearchSeedBed.find(params[:id])
     end
 
     # Only allow a trusted parameter "white list" through.
-    def research_seed_bed_params
+    def research_seedbed_params
       params.require(:research_seed_bed).permit(:name,:acronym,:description,:cidcRegistrationDate,
         :cidcActNumber,:facultyActNumber,:facultyRegistrationDate,:state_seedbed_id,
         :snies_id,:mail,:webpage,:mission,:vision,:facultyActDocument,:cidcActDocument,:faculty_ids,

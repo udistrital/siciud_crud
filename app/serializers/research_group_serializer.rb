@@ -50,16 +50,20 @@ class ResearchGroupSerializer < ActiveModel::Serializer
     
   end
   def director
+    
     members = self.object.members.where(role_id:1).last
-    {
-      name: members.researcher.name,
-      lastName: members.researcher.lastName,
-      initialDate: members.initialDate,
-      finalDate: members.finalDate,
-      academicEmail: members.researcher.academicEmail,
-      researcherType: members.researcher.researcher_type.name
+      if members
+        {
+          name: members.researcher.name,
+          lastName: members.researcher.lastName,
+          initialDate: members.initialDate,
+          finalDate: members.finalDate,
+          academicEmail: members.researcher.academicEmail,
+          researcherType: members.researcher.researcher_type.name
 
-    }
+        }
+      end 
+  end
 
   end
   def facultyActDocument

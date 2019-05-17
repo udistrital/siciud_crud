@@ -72,7 +72,7 @@ end
   #Actualizar  documentos de un grupo
 
   def attach
-    
+     params.permit(:facultyActDocument,:cidcActDocument)
     @research_group.facultyActDocument.attach(params[:facultyActDocument])
     @research_group.cidcActDocument.attach(params[:cidcActDocument])
 
