@@ -19,7 +19,7 @@ class ResearchSeedBedController < ApplicationController
   end
 
   def create
-    @research_seedbed = ResearchGroup.new(research_seedbed_params)
+    @research_seedbed = ResearchSeedBed.new(research_seedbed_params)
     if @research_group.save
       render json: @research_seedbed, status: :created
     else

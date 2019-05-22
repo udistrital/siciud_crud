@@ -5,7 +5,7 @@ class CreateMemberSeedBeds < ActiveRecord::Migration[5.2]
       t.date :finalDate
       t.references :role, foreign_key: true
       t.references :researcher, foreign_key: true
-      t.reference :research_seedbed
+      t.references :research_seedbed
 
       t.timestamps
     end

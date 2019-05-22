@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_16_193101) do
+ActiveRecord::Schema.define(version: 2019_05_16_214457) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -93,6 +93,19 @@ ActiveRecord::Schema.define(version: 2019_05_16_193101) do
     t.index ["research_group_id"], name: "index_historical_colciencias_ranks_on_research_group_id"
   end
 
+  create_table "member_seed_beds", force: :cascade do |t|
+    t.date "initialDate"
+    t.date "finalDate"
+    t.integer "role_id"
+    t.integer "researcher_id"
+    t.integer "research_seedbed_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["research_seedbed_id"], name: "index_member_seed_beds_on_research_seedbed_id"
+    t.index ["researcher_id"], name: "index_member_seed_beds_on_researcher_id"
+    t.index ["role_id"], name: "index_member_seed_beds_on_role_id"
+  end
+
   create_table "members", force: :cascade do |t|
     t.date "initialDate"
     t.date "finalDate"
@@ -158,8 +171,12 @@ ActiveRecord::Schema.define(version: 2019_05_16_193101) do
     t.string "webpage"
     t.string "mission"
     t.string "vision"
+    t.integer "snies_id"
+    t.integer "researcher_focus_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["researcher_focus_id"], name: "index_research_seed_beds_on_researcher_focus_id"
+    t.index ["snies_id"], name: "index_research_seed_beds_on_snies_id"
     t.index ["state_seedbed_id"], name: "index_research_seed_beds_on_state_seedbed_id"
   end
 

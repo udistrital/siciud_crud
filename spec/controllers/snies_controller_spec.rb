@@ -17,3 +17,4 @@ RSpec.describe SniesController, type: :controller do
   end
 
 end
+ 
