@@ -7,7 +7,6 @@ Rails.application.routes.draw do
   #get 'research_seedbed/update'
 
 
-
   # get 'research_group/index'
   # get 'research_group/show/:id'
   # post 'research_group/create'
