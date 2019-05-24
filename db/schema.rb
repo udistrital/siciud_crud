@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_24_155113) do
+ActiveRecord::Schema.define(version: 2019_05_24_172331) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -59,6 +59,11 @@ ActiveRecord::Schema.define(version: 2019_05_24_155113) do
     t.integer "curricular_project_id", null: false
   end
 
+  create_table "curricular_projects_research_seedbeds", id: false, force: :cascade do |t|
+    t.integer "research_seedbed_id", null: false
+    t.integer "curricular_project_id", null: false
+  end
+
   create_table "document_types", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -73,6 +78,11 @@ ActiveRecord::Schema.define(version: 2019_05_24_155113) do
 
   create_table "faculties_research_groups", id: false, force: :cascade do |t|
     t.integer "research_group_id", null: false
+    t.integer "faculty_id", null: false
+  end
+
+  create_table "faculties_research_seedbeds", id: false, force: :cascade do |t|
+    t.integer "research_seedbed_id", null: false
     t.integer "faculty_id", null: false
   end
 

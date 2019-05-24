@@ -8,7 +8,7 @@ class ResearchGroupController < ApplicationController
   end
   rescue_from ActiveRecord::RecordInvalid do |e|
     render json: {error: e.message}, status: :unprocessable_entity
-end
+  end
     #Listar todos los grupos
 
   def index
@@ -63,7 +63,7 @@ end
       curricular_project_ids = curricular_project_ids.split(',')
       @research_group.curricular_project_ids = curricular_project_ids 
       if @research_group.save
-      render json: @research_group
+        render json: @research_group
       else
         render json: @research_group.errors, status: :unprocessable_entity
       end
@@ -75,10 +75,9 @@ end
   #Actualizar  documentos de un grupo
 
   def attach
-     params.permit(:facultyActDocument,:cidcActDocument)
+    params.permit(:facultyActDocument,:cidcActDocument)
     @research_group.facultyActDocument.attach(params[:facultyActDocument])
     @research_group.cidcActDocument.attach(params[:cidcActDocument])
-
   end
 
   private
@@ -93,6 +92,5 @@ end
         :cidcActNumber,:facultyActNumber,:facultyRegistrationDate,:state_group_id,
         :snies_id,:email,:colcienciasCode,:gruplac,:webpage,:mission,:vision,:facultyActDocument,:cidcActDocument,:faculty_ids,
         :research_focus_ids,:curricular_project_ids)
-
     end
 end

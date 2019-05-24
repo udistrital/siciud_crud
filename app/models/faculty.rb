@@ -4,6 +4,8 @@ class Faculty < ApplicationRecord
     has_many :research_focuses, class_name: 'ResearchFocus'
     has_many :researchers
     has_and_belongs_to_many :research_groups
+    has_and_belongs_to_many :research_seedbeds
+
     #Validaciones de los campos obligatorios
     validates :name, presence: true
 

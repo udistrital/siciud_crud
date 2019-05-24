@@ -4,6 +4,7 @@ class ResearchSeedbed < ApplicationRecord
   belongs_to :state_seedbed
   belongs_to :snies
   belongs_to :researcher_focus
-  
-# has_many :member_sed_beds
+  has_and_belongs_to_many :faculties
+  has_and_belongs_to_many :curricular_projects
+  has_many :member_sedbeds
 end
