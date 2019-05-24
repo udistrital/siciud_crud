@@ -1,5 +1,5 @@
-class ResearchSeedBedController < ApplicationController
-    before_action :set_research_group, only: [:show, :update]
+class ResearchSeedbedController < ApplicationController
+    before_action :set_research_group, only: [:show, :update,:attach]
 
   def index
     @research_seedbeds = ResearchSeedBed.all
@@ -13,7 +13,6 @@ class ResearchSeedBedController < ApplicationController
   end
   
   
-
   def show
       render json: @research_seedbed
   end
@@ -33,6 +32,13 @@ class ResearchSeedBedController < ApplicationController
     else
       render json: @research_seedbed.errors, status: :unprocessable_entity
     end
+  end
+
+    def attach
+     params.permit(:facultyActDocument,:cidcActDocument)
+    @research_seedbed.facultyActDocument.attach(params[:facultyActDocument])
+    @researchresearch_seedbed_group.cidcActDocument.attach(params[:cidcActDocument])
+
   end
 
   private

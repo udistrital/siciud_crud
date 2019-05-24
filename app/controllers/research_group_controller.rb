@@ -62,8 +62,11 @@ end
       curricular_project_ids = research_group_params[:curricular_project_ids]
       curricular_project_ids = curricular_project_ids.split(',')
       @research_group.curricular_project_ids = curricular_project_ids 
-      @research_group.save
+      if @research_group.save
       render json: @research_group
+      else
+        render json: @research_group.errors, status: :unprocessable_entity
+      end
     else
       render json: @research_group.errors, status: :unprocessable_entity
     end

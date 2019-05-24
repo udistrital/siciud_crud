@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_16_214457) do
+ActiveRecord::Schema.define(version: 2019_05_24_155113) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -106,6 +106,23 @@ ActiveRecord::Schema.define(version: 2019_05_16_214457) do
     t.index ["role_id"], name: "index_member_seed_beds_on_role_id"
   end
 
+  create_table "member_seedbeds", force: :cascade do |t|
+    t.date "initialDate"
+    t.date "finalDate"
+    t.integer "role_id"
+    t.integer "researcher_id"
+    t.integer "research_seedbed_id"
+    t.integer "state_reseacher_id"
+    t.integer "researcher_type_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["research_seedbed_id"], name: "index_member_seedbeds_on_research_seedbed_id"
+    t.index ["researcher_id"], name: "index_member_seedbeds_on_researcher_id"
+    t.index ["researcher_type_id"], name: "index_member_seedbeds_on_researcher_type_id"
+    t.index ["role_id"], name: "index_member_seedbeds_on_role_id"
+    t.index ["state_reseacher_id"], name: "index_member_seedbeds_on_state_reseacher_id"
+  end
+
   create_table "members", force: :cascade do |t|
     t.date "initialDate"
     t.date "finalDate"
@@ -178,6 +195,28 @@ ActiveRecord::Schema.define(version: 2019_05_16_214457) do
     t.index ["researcher_focus_id"], name: "index_research_seed_beds_on_researcher_focus_id"
     t.index ["snies_id"], name: "index_research_seed_beds_on_snies_id"
     t.index ["state_seedbed_id"], name: "index_research_seed_beds_on_state_seedbed_id"
+  end
+
+  create_table "research_seedbeds", force: :cascade do |t|
+    t.string "name"
+    t.string "acronym"
+    t.text "description"
+    t.date "cidcRegistrationDate"
+    t.date "facultyRegistrationDate"
+    t.integer "cidcActNumber"
+    t.integer "facultyActNumber"
+    t.integer "state_seedbed_id"
+    t.string "mail"
+    t.string "webpage"
+    t.string "mission"
+    t.string "vision"
+    t.integer "snies_id"
+    t.integer "researcher_focus_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["researcher_focus_id"], name: "index_research_seedbeds_on_researcher_focus_id"
+    t.index ["snies_id"], name: "index_research_seedbeds_on_snies_id"
+    t.index ["state_seedbed_id"], name: "index_research_seedbeds_on_state_seedbed_id"
   end
 
   create_table "researcher_types", force: :cascade do |t|

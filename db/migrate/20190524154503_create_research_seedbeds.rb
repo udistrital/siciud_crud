@@ -1,6 +1,6 @@
-class CreateResearchSeedBeds < ActiveRecord::Migration[5.2]
+class CreateResearchSeedbeds < ActiveRecord::Migration[5.2]
   def change
-    create_table :research_seed_beds do |t|
+    create_table :research_seedbeds do |t|
       t.string :name
       t.string :acronym
       t.text :description

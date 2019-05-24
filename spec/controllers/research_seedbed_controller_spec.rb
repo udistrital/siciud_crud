@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe ResearchSeedBedController, type: :controller do
+RSpec.describe ResearchSeedbedController, type: :controller do
 
   describe "GET #index" do
     it "returns http success" do
