@@ -1,11 +1,12 @@
 class ResearchFocusSerializer < ActiveModel::Serializer
-  attributes :id, :name,:faculty
+  attributes :id, :name, :faculty
+
   def faculty
     faculty = self.object.faculty
     {
-      id: faculty.id,
-     name: faculty.name
+        id: faculty.id,
+        name: faculty.name
     }
-    
+
   end
 end

@@ -15,9 +15,10 @@ class StateGroupController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_state_group
-      @state_group = StateGroup.find(params[:id])
-    end
+
+  # Use callbacks to share common setup or constraints between actions.
+  def set_state_group
+    @state_group = StateGroup.find(params[:id])
+  end
 
 end
