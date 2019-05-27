@@ -10,7 +10,7 @@ class ResearchSeedbedController < ApplicationController
   end
 
   def index
-    @research_seedbeds = ResearchSeedBed.all
+    @research_seedbeds = ResearchSeedbed.all
     #Director .members.where("role_id='1'")
     if params[:search].present? && !params[:search].nil?
       @research_seedbeds = ResearchSeedbedsSearchService.search(@research_seedbeds, params[:search])
@@ -33,63 +33,61 @@ class ResearchSeedbedController < ApplicationController
     # if(research_focus_ids = research_seedbed_params[:research_focus_ids])
     #research_focus_ids = research_focus_ids.split(',')
     #@research_group.research_focus_ids = research_focus_ids
-  end
+    #end
 
-  if (curricular_project_ids = research_seedbed_params[:curricular_project_ids])
-    curricular_project_ids = curricular_project_ids.split(',')
-    @research_seedbed.curricular_project_ids = curricular_project_ids
-  end
-  if @research_group.save
-    render json: @research_seedbed, status: :created
-  else
-    render json: @research_seedbed.errors, status: :unprocessable_entity
-  end
-end
-
-def update
-  if @research_seedbed.update(research_seedbed_params)
-    faculties = research_seedbed_params[:faculty_ids]
-    faculties = faculties.split(',')
-    @research_seedbed.faculty_ids = faculties
-    #research_focus_ids = research_seedbed_params[:research_focus_ids]
-    #research_focus_ids = research_focus_ids.split(',')
-    #@research_seedbed.research_focus_ids = research_focus_ids
-    curricular_project_ids = research_seedbed_params[:curricular_project_ids]
-    curricular_project_ids = curricular_project_ids.split(',')
-    @research_seedbed.curricular_project_ids = curricular_project_ids
-    if @research_seedbed.save
-      render json: @research_seedbed
+    if (curricular_project_ids = research_seedbed_params[:curricular_project_ids])
+      curricular_project_ids = curricular_project_ids.split(',')
+      @research_seedbed.curricular_project_ids = curricular_project_ids
+    end
+    if @research_group.save
+      render json: @research_seedbed, status: :created
     else
       render json: @research_seedbed.errors, status: :unprocessable_entity
     end
-  else
-    render json: @research_seedbed.errors, status: :unprocessable_entity
   end
-end
 
-def attach
-  params.permit(:facultyActDocument, :cidcActDocument)
-  @research_seedbed.facultyActDocument.attach(params[:facultyActDocument])
-  @researchresearch_seedbed_group.cidcActDocument.attach(params[:cidcActDocument])
+  def update
+    if @research_seedbed.update(research_seedbed_params)
+      faculties = research_seedbed_params[:faculty_ids]
+      faculties = faculties.split(',')
+      @research_seedbed.faculty_ids = faculties
+      #research_focus_ids = research_seedbed_params[:research_focus_ids]
+      #research_focus_ids = research_focus_ids.split(',')
+      #@research_seedbed.research_focus_ids = research_focus_ids
+      curricular_project_ids = research_seedbed_params[:curricular_project_ids]
+      curricular_project_ids = curricular_project_ids.split(',')
+      @research_seedbed.curricular_project_ids = curricular_project_ids
+      if @research_seedbed.save
+        render json: @research_seedbed
+      else
+        render json: @research_seedbed.errors, status: :unprocessable_entity
+      end
+    else
+      render json: @research_seedbed.errors, status: :unprocessable_entity
+    end
+  end
 
-end
+  def attach
+    params.permit(:facultyActDocument, :cidcActDocument)
+    @research_seedbed.facultyActDocument.attach(params[:facultyActDocument])
+    @researchresearch_seedbed_group.cidcActDocument.attach(params[:cidcActDocument])
 
-private
+  end
 
-# Use callbacks to share common setup or constraints between actions.
-def set_research_seedbed
-  @research_seedbed = ResearchSeedBed.find(params[:id])
-end
+  private
 
-# Only allow a trusted parameter "white list" through.
-def research_seedbed_params
-  params.require(:research_seed_bed).permit(:name, :acronym, :description, :cidcRegistrationDate,
-                                            :cidcActNumber, :facultyActNumber, :facultyRegistrationDate, :state_seedbed_id,
-                                            :snies_id, :mail, :webpage, :mission, :vision, :facultyActDocument, :cidcActDocument, :faculty_ids,
-                                            :research_focus_id, :curricular_project_ids)
-end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_research_seedbed
+    @research_seedbed = ResearchSeedBed.find(params[:id])
+  end
 
-end
+  # Only allow a trusted parameter "white list" through.
+  def research_seedbed_params
+    params.require(:research_seed_bed).permit(:name, :acronym, :description, :cidcRegistrationDate,
+                                              :cidcActNumber, :facultyActNumber, :facultyRegistrationDate, :state_seedbed_id,
+                                              :snies_id, :mail, :webpage, :mission, :vision, :facultyActDocument, :cidcActDocument, :faculty_ids,
+                                              :research_focus_id, :curricular_project_ids)
+  end
 
 
 end

@@ -2,16 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6e9b360a-1b66-4f3b-b845-868151e1e2eb" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/app/controllers/health_controller.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/health_controller.rb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/controllers/research_focus_controller.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/research_focus_controller.rb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/controllers/research_group_controller.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/research_group_controller.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/controllers/research_seedbed_controller.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/research_seedbed_controller.rb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/controllers/snies_controller.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/snies_controller.rb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/controllers/state_group_controller.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/state_group_controller.rb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/models/research_group.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/research_group.rb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/models/researcher.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/researcher.rb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/serializers/research_focus_serializer.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/serializers/research_focus_serializer.rb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/serializers/research_group_serializer.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/serializers/research_group_serializer.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/serializers/research_seedbed_serializer.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/serializers/research_seedbed_serializer.rb" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.bundle/" />
     <ignored path="$PROJECT_DIR$/components/" />
@@ -29,32 +22,22 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/models/member_seedbed.rb">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/models/member.rb">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/models/research_group.rb">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/serializers/research_seedbed_serializer.rb">
-          <provider selected="true" editor-type-id="text-editor" />
+        <entry file="file://$PROJECT_DIR$/app/controllers/research_seedbed_controller.rb">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="180">
+              <caret line="12" column="38" selection-start-line="12" selection-start-column="38" selection-end-line="12" selection-end-column="38" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/serializers/research_group_serializer.rb">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="15">
+              <caret line="1" column="26" lean-forward="true" selection-start-line="1" selection-start-column="26" selection-end-line="1" selection-end-column="26" />
+            </state>
+          </provider>
         </entry>
       </file>
     </leaf>
@@ -65,7 +48,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/app/controllers/research_seedbed_controller.rb" />
         <option value="$PROJECT_DIR$/app/controllers/research_group_controller.rb" />
         <option value="$PROJECT_DIR$/app/controllers/research_focus_controller.rb" />
         <option value="$PROJECT_DIR$/app/serializers/research_group_serializer.rb" />
@@ -76,6 +58,7 @@
         <option value="$PROJECT_DIR$/app/controllers/health_controller.rb" />
         <option value="$PROJECT_DIR$/app/models/researcher.rb" />
         <option value="$PROJECT_DIR$/app/models/research_group.rb" />
+        <option value="$PROJECT_DIR$/app/controllers/research_seedbed_controller.rb" />
       </list>
     </option>
   </component>
@@ -90,7 +73,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="y" value="9" />
     <option name="width" value="1660" />
     <option name="height" value="1016" />
@@ -145,6 +128,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="npm" />
@@ -271,18 +255,18 @@
       <option name="presentableId" value="Default" />
       <updated>1558978022108</updated>
       <workItem from="1558978027462" duration="147000" />
-      <workItem from="1558982326225" duration="250000" />
+      <workItem from="1558982326225" duration="2604000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="397000" />
+    <option name="totallyTimeSpent" value="2751000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="9" width="1660" height="1016" extended-state="0" />
+    <frame x="0" y="0" width="1920" height="1050" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.21260816" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.18317358" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -307,13 +291,6 @@
     <option name="version" value="1" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/controllers/research_seedbed_controller.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="23" column="34" selection-start-line="23" selection-start-column="34" selection-end-line="23" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/controllers/health_controller.rb">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="75">
@@ -332,13 +309,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="405">
           <caret line="27" column="5" selection-start-line="27" selection-start-column="5" selection-end-line="27" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/serializers/research_group_serializer.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="22" column="31" selection-start-line="22" selection-start-column="31" selection-end-line="22" selection-end-column="31" />
         </state>
       </provider>
     </entry>
@@ -377,13 +347,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/models/member_seedbed.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/models/researcher.rb">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
@@ -391,8 +354,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/models/member.rb">
-      <provider selected="true" editor-type-id="text-editor" />
+    <entry file="file://$PROJECT_DIR$/app/serializers/research_seedbed_serializer.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="3" lean-forward="true" selection-start-line="3" selection-end-line="3" />
+        </state>
+      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/models/research_group.rb">
       <provider selected="true" editor-type-id="text-editor">
@@ -401,8 +368,33 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/serializers/research_seedbed_serializer.rb">
-      <provider selected="true" editor-type-id="text-editor" />
+    <entry file="file://$PROJECT_DIR$/app/models/member.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/models/member_seedbed.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/serializers/research_group_serializer.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="1" column="26" lean-forward="true" selection-start-line="1" selection-start-column="26" selection-end-line="1" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/controllers/research_seedbed_controller.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="12" column="38" selection-start-line="12" selection-start-column="38" selection-end-line="12" selection-end-column="38" />
+        </state>
+      </provider>
     </entry>
   </component>
 </project>
