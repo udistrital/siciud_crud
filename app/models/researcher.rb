@@ -7,6 +7,7 @@ class Researcher < ApplicationRecord
   belongs_to :genre
   belongs_to :researcher_type
 
+
   has_many :periods
 
   #Validaciones de los campos obligatorios
@@ -16,9 +17,7 @@ class Researcher < ApplicationRecord
   validates :lastName, presence: true
   validates :researcher_type, presence: true
 
-  validates :academicEmail, presence: true, uniqueness: true  
-  
-
+  validates :academicEmail, presence: true, uniqueness: true
 
 
 end

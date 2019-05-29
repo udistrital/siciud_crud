@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_14_210143) do
+ActiveRecord::Schema.define(version: 2019_05_27_200044) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -59,6 +59,11 @@ ActiveRecord::Schema.define(version: 2019_05_14_210143) do
     t.integer "curricular_project_id", null: false
   end
 
+  create_table "curricular_projects_research_seedbeds", id: false, force: :cascade do |t|
+    t.integer "research_seedbed_id", null: false
+    t.integer "curricular_project_id", null: false
+  end
+
   create_table "document_types", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -76,10 +81,56 @@ ActiveRecord::Schema.define(version: 2019_05_14_210143) do
     t.integer "faculty_id", null: false
   end
 
+  create_table "faculties_research_seedbeds", id: false, force: :cascade do |t|
+    t.integer "research_seedbed_id", null: false
+    t.integer "faculty_id", null: false
+  end
+
   create_table "genres", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "historical_colciencias_ranks", force: :cascade do |t|
+    t.integer "colciencias_call_id"
+    t.integer "colciencias_category_id"
+    t.integer "research_group_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["colciencias_call_id"], name: "index_historical_colciencias_ranks_on_colciencias_call_id"
+    t.index ["colciencias_category_id"], name: "index_historical_colciencias_ranks_on_colciencias_category_id"
+    t.index ["research_group_id"], name: "index_historical_colciencias_ranks_on_research_group_id"
+  end
+
+  create_table "member_seed_beds", force: :cascade do |t|
+    t.date "initialDate"
+    t.date "finalDate"
+    t.integer "role_id"
+    t.integer "researcher_id"
+    t.integer "research_seedbed_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["research_seedbed_id"], name: "index_member_seed_beds_on_research_seedbed_id"
+    t.index ["researcher_id"], name: "index_member_seed_beds_on_researcher_id"
+    t.index ["role_id"], name: "index_member_seed_beds_on_role_id"
+  end
+
+  create_table "member_seedbeds", force: :cascade do |t|
+    t.date "initialDate"
+    t.date "finalDate"
+    t.integer "role_id"
+    t.integer "researcher_id"
+    t.integer "research_seedbed_id"
+    t.integer "state_reseacher_id"
+    t.integer "researcher_type_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["research_seedbed_id"], name: "index_member_seedbeds_on_research_seedbed_id"
+    t.index ["researcher_id"], name: "index_member_seedbeds_on_researcher_id"
+    t.index ["researcher_type_id"], name: "index_member_seedbeds_on_researcher_type_id"
+    t.index ["role_id"], name: "index_member_seedbeds_on_role_id"
+    t.index ["state_reseacher_id"], name: "index_member_seedbeds_on_state_reseacher_id"
   end
 
   create_table "members", force: :cascade do |t|
@@ -132,6 +183,50 @@ ActiveRecord::Schema.define(version: 2019_05_14_210143) do
     t.datetime "updated_at", null: false
     t.index ["snies_id"], name: "index_research_groups_on_snies_id"
     t.index ["state_group_id"], name: "index_research_groups_on_state_group_id"
+  end
+
+  create_table "research_seed_beds", force: :cascade do |t|
+    t.string "name"
+    t.string "acronym"
+    t.text "description"
+    t.date "cidcRegistrationDate"
+    t.date "facultyRegistrationDate"
+    t.integer "cidcActNumber"
+    t.integer "facultyActNumber"
+    t.integer "state_seedbed_id"
+    t.string "mail"
+    t.string "webpage"
+    t.string "mission"
+    t.string "vision"
+    t.integer "snies_id"
+    t.integer "researcher_focus_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["researcher_focus_id"], name: "index_research_seed_beds_on_researcher_focus_id"
+    t.index ["snies_id"], name: "index_research_seed_beds_on_snies_id"
+    t.index ["state_seedbed_id"], name: "index_research_seed_beds_on_state_seedbed_id"
+  end
+
+  create_table "research_seedbeds", force: :cascade do |t|
+    t.string "name"
+    t.string "acronym"
+    t.text "description"
+    t.date "cidcRegistrationDate"
+    t.date "facultyRegistrationDate"
+    t.integer "cidcActNumber"
+    t.integer "facultyActNumber"
+    t.integer "state_seedbed_id"
+    t.string "mail"
+    t.string "webpage"
+    t.string "mission"
+    t.string "vision"
+    t.integer "snies_id"
+    t.integer "researcher_focus_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["researcher_focus_id"], name: "index_research_seedbeds_on_researcher_focus_id"
+    t.index ["snies_id"], name: "index_research_seedbeds_on_snies_id"
+    t.index ["state_seedbed_id"], name: "index_research_seedbeds_on_state_seedbed_id"
   end
 
   create_table "researcher_types", force: :cascade do |t|
@@ -187,6 +282,12 @@ ActiveRecord::Schema.define(version: 2019_05_14_210143) do
   end
 
   create_table "state_researchers", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "state_seedbeds", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

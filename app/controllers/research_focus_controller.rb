@@ -15,8 +15,9 @@ class ResearchFocusController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_research_focus
-      @research_focus = ResearchFocus.find(params[:id])
-    end
+
+  # Use callbacks to share common setup or constraints between actions.
+  def set_research_focus
+    @research_focus = ResearchFocus.find(params[:id])
+  end
 end

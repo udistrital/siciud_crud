@@ -1,10 +1,9 @@
-class ResearchGroupSerializer < ActiveModel::Serializer
+class ResearchSeedbedSerializer < ActiveModel::Serializer
   include Rails.application.routes.url_helpers
   attributes :id, :name, :acronym, :description, :cidcRegistrationDate,
              :faculties, :cidcActNumber, :facultyActNumber, :facultyRegistrationDate,
-             :email, :gruplac, :webpage, :mission, :vision, :colcienciasCode, :curricular_projects,
-             :state_group, :snies, :research_focuses, :facultyActDocument, :cidcActDocument, :director,
-             :historicalColciencias
+             :mail, :webpage, :mission, :vision, :curricular_projects,
+             :state_seedbed, :snies, :facultyActDocument, :cidcActDocument,:director
 
   def faculties
     self.object.faculties.map do |faculty|
@@ -42,20 +41,21 @@ class ResearchGroupSerializer < ActiveModel::Serializer
   end
 
 
-  def research_focuses
-    self.object.research_focuses.map do |research_focus|
-      {
-          id: research_focus.id,
-          name: research_focus.name,
-          faculty_id: research_focus.faculty_id}
-    end
+  #def research_focuses
+   # self.object.research_focuses.map do |research_focus|
+    #  {
+     #     id: research_focus.id,
+      #    name: research_focus.name,
+       #   faculty_id: research_focus.faculty_id}
+    #end
     #    research_focuses = self.object.research_focuses
 
-  end
+  #end
+
 
   def director
 
-    members = self.object.members.where(role_id: 1).last
+    members = self.object.member_seedbeds.where(role_id: 1).last
     if members
       {
           name: members.researcher.name,
@@ -69,7 +69,6 @@ class ResearchGroupSerializer < ActiveModel::Serializer
     end
   end
 
-
   def facultyActDocument
     rails_blob_path(self.object.facultyActDocument, only_path: true) if self.object.facultyActDocument.attached?
   end
@@ -79,14 +78,5 @@ class ResearchGroupSerializer < ActiveModel::Serializer
   end
 
 
-  def historicalColciencias
-    if self.object.historical_colciencias_ranks
-      self.object.historical_colciencias_ranks.map do |rank|
-        {
-            call: rank.colciencias_call,
-            rank: rank.colciencias_category}
-      end
-    end
-  end
 
 end
