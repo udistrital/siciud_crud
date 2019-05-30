@@ -5,6 +5,8 @@ class ResearchSeedbed < ApplicationRecord
   belongs_to :snies
   has_and_belongs_to_many :faculties
   has_and_belongs_to_many :curricular_projects
+  has_and_belongs_to_many :research_focuses
+
   has_many :member_seedbeds
 
     validates :name,:acronym ,:cidcRegistrationDate,

@@ -15,7 +15,7 @@ class ResearchSeedbedController < ApplicationController
     if params[:search].present? && !params[:search].nil?
       @research_seedbeds = ResearchSeedbedsSearchService.search(@research_seedbeds, params[:search])
     end
-    paginate json: @research_seedbeds.includes(:faculties, :curricular_projects, :research_focus,
+    paginate json: @research_seedbeds.includes(:faculties, :curricular_projects, :research_focuses,
                                                :state_seedbed, :snies, :cidcActDocument_attachment, :facultyActDocument_attachment), per_page: 10
   end
 
@@ -30,10 +30,10 @@ class ResearchSeedbedController < ApplicationController
       faculties = faculties.split(',')
       @research_seedbed.faculty_ids = faculties
     end
-    # if(research_focus_ids = research_seedbed_params[:research_focus_ids])
-    #research_focus_ids = research_focus_ids.split(',')
-    #@research_group.research_focus_ids = research_focus_ids
-    #end
+     if(research_focus_ids = research_seedbed_params[:research_focus_ids])
+    research_focus_ids = research_focus_ids.split(',')
+    @research_group.research_focus_ids = research_focus_ids
+    end
 
     if (curricular_project_ids = research_seedbed_params[:curricular_project_ids])
       curricular_project_ids = curricular_project_ids.split(',')
@@ -51,9 +51,9 @@ class ResearchSeedbedController < ApplicationController
       faculties = research_seedbed_params[:faculty_ids]
       faculties = faculties.split(',')
       @research_seedbed.faculty_ids = faculties
-      #research_focus_ids = research_seedbed_params[:research_focus_ids]
-      #research_focus_ids = research_focus_ids.split(',')
-      #@research_seedbed.research_focus_ids = research_focus_ids
+      research_focus_ids = research_seedbed_params[:research_focus_ids]
+      research_focus_ids = research_focus_ids.split(',')
+      @research_seedbed.research_focus_ids = research_focus_ids
       curricular_project_ids = research_seedbed_params[:curricular_project_ids]
       curricular_project_ids = curricular_project_ids.split(',')
       @research_seedbed.curricular_project_ids = curricular_project_ids
@@ -86,7 +86,7 @@ class ResearchSeedbedController < ApplicationController
     params.require(:research_seed_bed).permit(:name, :acronym, :description, :cidcRegistrationDate,
                                               :cidcActNumber, :facultyActNumber, :facultyRegistrationDate, :state_seedbed_id,
                                               :snies_id, :mail, :webpage, :mission, :vision, :facultyActDocument, :cidcActDocument, :faculty_ids,
-                                              :faculty_ids, :curricular_project_ids)
+                                              :faculty_ids, :curricular_project_ids,:research_focus_ids)
   end
 
 

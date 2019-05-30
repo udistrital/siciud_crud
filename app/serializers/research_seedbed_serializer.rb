@@ -3,7 +3,7 @@ class ResearchSeedbedSerializer < ActiveModel::Serializer
   attributes :id, :name, :acronym, :description, :cidcRegistrationDate,
              :faculties, :cidcActNumber, :facultyActNumber, :facultyRegistrationDate,
              :mail, :webpage, :mission, :vision, :curricular_projects,
-             :state_seedbed, :snies, :facultyActDocument, :cidcActDocument,:director
+             :state_seedbed, :research_focuses,:snies, :facultyActDocument, :cidcActDocument,:director
 
   def faculties
     self.object.faculties.map do |faculty|
@@ -41,16 +41,15 @@ class ResearchSeedbedSerializer < ActiveModel::Serializer
   end
 
 
-  #def research_focuses
-   # self.object.research_focuses.map do |research_focus|
-    #  {
-     #     id: research_focus.id,
-      #    name: research_focus.name,
-       #   faculty_id: research_focus.faculty_id}
-    #end
-    #    research_focuses = self.object.research_focuses
-
-  #end
+  def research_focuses
+    self.object.research_focuses.map do |research_focus|
+      {
+         id: research_focus.id,
+         name: research_focus.name,
+         faculty_id: research_focus.faculty_id}
+    end
+        research_focuses = self.object.research_focuses
+  end
 
 
   def director
