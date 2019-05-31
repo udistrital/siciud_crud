@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_27_200044) do
+ActiveRecord::Schema.define(version: 2019_05_30_160017) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -160,6 +160,11 @@ ActiveRecord::Schema.define(version: 2019_05_27_200044) do
 
   create_table "research_focuses_groups", id: false, force: :cascade do |t|
     t.integer "research_group_id", null: false
+    t.integer "research_focus_id", null: false
+  end
+
+  create_table "research_focuses_seedbeds", id: false, force: :cascade do |t|
+    t.integer "research_seedbed_id", null: false
     t.integer "research_focus_id", null: false
   end
 
