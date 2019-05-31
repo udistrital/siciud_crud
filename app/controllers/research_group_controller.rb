@@ -15,7 +15,7 @@ class ResearchGroupController < ApplicationController
     @research_groups = ResearchGroup.all
     #Director .members.where("role_id='1'")
     if params[:search].present? && !params[:search].nil?
-      @research_groups = ResearchGroupsSearchService.search(@research_groups, params[:search])
+      @research_groups = ResearchGroupsSearchService.search(@research_groups, params[:search], params[:director])
     end
     paginate json: @research_groups.includes(:faculties, :curricular_projects, :research_focuses,
                                              :state_group, :snies, :cidcActDocument_attachment, :facultyActDocument_attachment), per_page: 10
