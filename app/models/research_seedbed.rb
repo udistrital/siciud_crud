@@ -9,7 +9,7 @@ class ResearchSeedbed < ApplicationRecord
 
   has_many :member_seedbeds
 
-    validates :name,:acronym ,:cidcRegistrationDate,
+  validates :name,:acronym ,:cidcRegistrationDate,
         :cidcActNumber,:facultyActNumber,:facultyRegistrationDate,:state_seedbed_id,
         :snies_id,:mail, presence: true
   
