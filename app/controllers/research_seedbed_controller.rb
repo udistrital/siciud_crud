@@ -13,7 +13,7 @@ class ResearchSeedbedController < ApplicationController
     @research_seedbeds = ResearchSeedbed.all
     #Director .members.where("role_id='1'")
     #if params[:search].present? && !params[:search].nil?
-    @research_seedbeds = ResearchSeedbedsSearchService.search(@research_seedbeds,params[:search])
+    @research_seedbeds = ResearchSeedbedsSearchService.search(@research_seedbeds,params[:name], params[:director],params[:facultyid])
     #end
     paginate json: @research_seedbeds.includes(:faculties, :curricular_projects, :research_focuses,
                                                :state_seedbed, :snies, :cidcActDocument_attachment, :facultyActDocument_attachment), per_page: 10
