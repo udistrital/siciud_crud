@@ -7,10 +7,11 @@ class FacultyController < ApplicationController
   end
 
   def index
+    #Listar todas las facultades
     @faculties = Faculty.all
     render json: @faculties, adapter: nil
   end
-
+  #Listar en detalle una facultad
   def show
     render json: @faculty
   end
