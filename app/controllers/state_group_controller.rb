@@ -5,11 +5,12 @@ class StateGroupController < ApplicationController
     render json: {error: e.message}, status: :not_found
   end
 
+  #listar todos los posibles estados de un grupo
   def index
     @states_group = StateGroup.all
     render json: @states_group
+    
   end
-
   def show
     render json: @state_group
   end
