@@ -1,3 +1,3 @@
 class ResearchProyectPlan < ApplicationRecord
-  belongs_to :Period
+  belongs_to :plan_period
 end
