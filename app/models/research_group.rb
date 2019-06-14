@@ -10,7 +10,7 @@ class ResearchGroup < ApplicationRecord
 #  belongs_to :research_focus
   has_many :members
   has_many :historical_colciencias_ranks
-  has_many :plan_periods
+  has_many :plan_periods, as: :planable
 #Validaciones de los campos obligatorios
   validates :name, :acronym, :cidcRegistrationDate,
             :cidcActNumber, :facultyActNumber, :facultyRegistrationDate, :state_group_id,

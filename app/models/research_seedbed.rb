@@ -6,7 +6,7 @@ class ResearchSeedbed < ApplicationRecord
   has_and_belongs_to_many :faculties
   has_and_belongs_to_many :curricular_projects
   has_many :member_seedbeds
-  has_many :plan_periods
+  has_many :plan_periods, as: :planable
 
     validates :name,:acronym ,:cidcRegistrationDate,
         :cidcActNumber,:facultyActNumber,:facultyRegistrationDate,:state_seedbed_id,
