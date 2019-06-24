@@ -1,4 +1,5 @@
 class PlanPeriodsController < ApplicationController
+  before_action :set_context, only: [:create, :show, :update, :destroy]
   before_action :set_plan_period, only: [:show, :update, :destroy]
 
   # GET /plan_periods
@@ -15,7 +16,6 @@ class PlanPeriodsController < ApplicationController
 
   # POST /plan_periods
   def create
-    @context = context
     @plan_period = @context.PlanPeriod.new(plan_period_params)
 
     if @plan_period.save
@@ -42,7 +42,6 @@ class PlanPeriodsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_plan_period
-      @context = context
       @plan_period = @context.PlanPeriod.find(params[:id])
     end
 
@@ -57,9 +56,9 @@ class PlanPeriodsController < ApplicationController
       if params[:research_group_id]
         id = params[:research_group_id]
         ResearchGroup.find(params[:research_group_id])
-      elsif params[:research_seed_bed_id]
-        id = params[:research_seed_bed_id]
-        ResearchSeedbed.find(params[:research_seed_bed_id])
+      elsif params[:research_seedbed_id]
+        id = params[:research_seedbed_id]
+        ResearchSeedbed.find(params[:research_seedbed_id])
       end
     end
 
@@ -67,7 +66,11 @@ class PlanPeriodsController < ApplicationController
       if ResearchGroup === context
         research_group_path(context)
       elsif ResearchSeedbed === context
-        research_seed_bed_path(context)
+        research_seedbed_path(context)
       end
+    end
+
+    def set_context
+      @context = context
     end
 end
