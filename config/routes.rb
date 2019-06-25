@@ -13,12 +13,29 @@ Rails.application.routes.draw do
   # Enpoint CRUD de los grupos des investigacion
   resources :research_group, only: [:index,:show,:create,:update] do
     member do
-      resources :plan_period #Endpoint para crear planes de accion de un grupo de investigacion
+      #Endpoint para crear planes de accion de un grupo de investigacion
+      resources :plan_period do
+        member do
+          resources :research_project_plan
+          resources :researcher_formation_plan
+          resources :result_transfer_plan
+          resources :social_appropriation_plan
+        end
+      end
     end
   end
   resources :research_seedbed,only: [:index,:show,:create,:update] do
     member do
-      resources :plan_period #Endpoint para crear planes de accion de un semillero de investigacion
+
+      #Endpoint para crear planes de accion de un semillero de investigacion
+      resources :plan_period do
+        member do
+          resources :research_project_plan
+          resources :researcher_formation_plan
+          resources :result_transfer_plan
+          resources :social_appropriation_plan
+        end
+      end
     end
   end 
   

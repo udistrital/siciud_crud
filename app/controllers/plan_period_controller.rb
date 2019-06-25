@@ -1,10 +1,10 @@
-class PlanPeriodsController < ApplicationController
-  before_action :set_context, only: [:create, :show, :update, :destroy]
+class PlanPeriodController < ApplicationController
+  before_action :set_context
   before_action :set_plan_period, only: [:show, :update, :destroy]
 
   # GET /plan_periods
   def index
-    @plan_periods = PlanPeriod.all
+    @plan_periods = @context.plan_periods.all
 
     render json: @plan_periods
   end
@@ -16,7 +16,10 @@ class PlanPeriodsController < ApplicationController
 
   # POST /plan_periods
   def create
-    @plan_period = @context.PlanPeriod.new(plan_period_params)
+    @plan_period = @context.plan_periods.new(plan_period_params)
+    if(description = plan_period_params[:description])
+      @plan_period.description = description
+    end
 
     if @plan_period.save
       render json: @plan_period, status: :created, location: @plan_period
@@ -42,12 +45,12 @@ class PlanPeriodsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_plan_period
-      @plan_period = @context.PlanPeriod.find(params[:id])
+      @plan_period = @context.plan_periods.find(params[:id])
     end
 
     # Only allow a trusted parameter "white list" through.
     def plan_period_params
-      params.fetch(:plan_period, {})
+      params.require(:plan_period).permit(:description)
     end
 
     #Function that implements the polymorphic association
