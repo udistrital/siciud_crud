@@ -46,6 +46,6 @@ class SocialAppropriationPlansController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def social_appropriation_plan_params
-      params.fetch(:social_appropriation_plan, {})
+      params.require(:social_appropriation_plan).permit(:activity, :description, :goal, :period_id)
     end
 end

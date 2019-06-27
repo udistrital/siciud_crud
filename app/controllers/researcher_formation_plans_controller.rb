@@ -46,6 +46,6 @@ class ResearcherFormationPlansController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def researcher_formation_plan_params
-      params.fetch(:researcher_formation_plan, {})
+      params.require(:researcher_formation_plan).permit(:activity, :description, :goal, :period_id)
     end
 end

@@ -17,6 +17,18 @@ class ResearchProjectPlansController < ApplicationController
   def create
     @research_project_plan = ResearchProjectPlan.new(research_project_plan_params)
 
+    if(proyect = research_project_plan_params[:proyect])
+      @research_project_plan.proyect = proyecto
+    end
+    if(description = research_project_plan_params[:description])
+      @research_project_plan.description = description
+    end
+    if(goal = research_project_plan_params[:goal])
+      @research_project_plan.goal = goal
+    end
+    if(period_id = research_project_plan_params[:period_id])
+      @research_project_plan.period_id = period_id
+    end
     if @research_project_plan.save
       render json: @research_project_plan, status: :created, location: @research_project_plan
     else
@@ -46,6 +58,6 @@ class ResearchProjectPlansController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def research_project_plan_params
-      params.fetch(:research_project_plan, {})
+      params.require(:research_project_plan).permit(:proyect, :description, :goal, :period_id)
     end
 end

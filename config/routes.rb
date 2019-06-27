@@ -14,12 +14,12 @@ Rails.application.routes.draw do
   resources :research_group, only: [:index,:show,:create,:update] do
     member do
       #Endpoint para crear planes de accion de un grupo de investigacion
-      resources :plan_period do
+      resources :plan_periods do
         member do
-          resources :research_project_plan
-          resources :researcher_formation_plan
-          resources :result_transfer_plan
-          resources :social_appropriation_plan
+          resources :research_project_plans
+          resources :researcher_formation_plans
+          resources :result_transfer_plans
+          resources :social_appropriation_plans
         end
       end
     end

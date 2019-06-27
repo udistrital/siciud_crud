@@ -1,4 +1,4 @@
-class PlanPeriodController < ApplicationController
+class PlanPeriodsController < ApplicationController
   before_action :set_context
   before_action :set_plan_period, only: [:show, :update, :destroy]
 

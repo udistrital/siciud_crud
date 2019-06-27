@@ -46,6 +46,6 @@ class ResultTransferPlansController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def result_transfer_plan_params
-      params.fetch(:result_transfer_plan, {})
+      params.require(:result_transfer_plan).permit(:activity, :description, :goal, :period_id)
     end
 end
