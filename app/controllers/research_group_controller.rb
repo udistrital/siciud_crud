@@ -14,14 +14,16 @@ class ResearchGroupController < ApplicationController
   def index
     @research_groups = ResearchGroup.all
     #Director .members.where("role_id='1'")
-    if params[:search].present? && !params[:search].nil?
-      @research_groups = ResearchGroupsSearchService.search(@research_groups, params[:search])
-    end
+    #if params[:search].present? && !params[:search].nil?
+    #Se envia al servicio de busqueda para flitrar los grupos segun los parametros
+    @research_groups = ResearchGroupsSearchService.search(@research_groups, params[:name], params[:director],params[:facultyid],params[:category])
+    #end
+    #Se envian los grupos en formato JSON paginados de a 10 elementos por pagina
     paginate json: @research_groups.includes(:faculties, :curricular_projects, :research_focuses,
                                              :state_group, :snies, :cidcActDocument_attachment, :facultyActDocument_attachment), per_page: 10
   end
 
-  #Mostrar detalle de un grupo
+    #Se muestra en detalle un grupo de investigacion segun un ID que se envia en el get
 
   def show
     render json: @research_group
@@ -29,7 +31,10 @@ class ResearchGroupController < ApplicationController
 
   #Crear un grupo
   def create
+    #Crear el grupo de investigacion con los parametros que se envian
     @research_group = ResearchGroup.new(research_group_params)
+    #Revisar si se enviaron facultades,lineas de investigacion e proyectos curriculares 
+    #y añadirselas al grupo (relacion muchos a muchos)
     if (faculties = research_group_params[:faculty_ids])
       faculties = faculties.split(',')
       @research_group.faculty_ids = faculties
@@ -49,7 +54,7 @@ class ResearchGroupController < ApplicationController
     end
   end
 
-  #Actualizar un grupo
+    #Se intenta actualizar el semillero con la informacion enviada en los parametros
 
   def update
     if @research_group.update(research_group_params)
@@ -72,12 +77,16 @@ class ResearchGroupController < ApplicationController
     end
   end
 
-  #Actualizar  documentos de un grupo
+    #Añadir los documentos de Facultad y de CIDC
 
   def attach
     params.permit(:facultyActDocument, :cidcActDocument)
+    if(params[:facultyActDocument])
     @research_group.facultyActDocument.attach(params[:facultyActDocument])
+    end
+    if(params[:cidcActDocument])
     @research_group.cidcActDocument.attach(params[:cidcActDocument])
+    end
   end
 
   private

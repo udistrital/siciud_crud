@@ -6,11 +6,13 @@ class SniesController < ApplicationController
     render json: {error: e.message}, status: :not_found
   end
 
+  #Listar todas las areas de conocimiento SNIES
   def index
     @snies = Snies.all
     render json: @snies
   end
 
+  #Listar en detalle un area de conocimiento SNIES
   def show
     render json: @snies
   end

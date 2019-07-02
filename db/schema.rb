@@ -10,6 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+
 ActiveRecord::Schema.define(version: 2019_06_19_032524) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
@@ -185,6 +186,7 @@ ActiveRecord::Schema.define(version: 2019_06_19_032524) do
     t.index ["state_group_id"], name: "index_research_groups_on_state_group_id"
   end
 
+
   create_table "research_project_plans", force: :cascade do |t|
     t.string "activity"
     t.text "description"
@@ -204,6 +206,7 @@ ActiveRecord::Schema.define(version: 2019_06_19_032524) do
     t.datetime "updated_at", null: false
     t.index ["plan_period_id"], name: "index_research_proyect_plans_on_plan_period_id"
   end
+
 
   create_table "research_seedbeds", force: :cascade do |t|
     t.string "name"
