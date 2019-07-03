@@ -5,10 +5,12 @@ class ResearchSeedbed < ApplicationRecord
   belongs_to :snies
   has_and_belongs_to_many :faculties
   has_and_belongs_to_many :curricular_projects
+  has_and_belongs_to_many :research_focuses
+
   has_many :member_seedbeds
   has_many :plan_periods, as: :planable
 
-    validates :name,:acronym ,:cidcRegistrationDate,
+  validates :name,:acronym ,:cidcRegistrationDate,
         :cidcActNumber,:facultyActNumber,:facultyRegistrationDate,:state_seedbed_id,
         :snies_id,:mail, presence: true
   
