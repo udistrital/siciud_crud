@@ -10,7 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_04_145732) do
+
+ActiveRecord::Schema.define(version: 2019_06_19_032524) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -136,6 +137,15 @@ ActiveRecord::Schema.define(version: 2019_06_04_145732) do
     t.index ["role_id"], name: "index_members_on_role_id"
   end
 
+  create_table "plan_periods", force: :cascade do |t|
+    t.string "description"
+    t.integer "planable_id"
+    t.string "planable_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["planable_id"], name: "index_plan_periods_on_planable_id"
+  end
+
   create_table "research_focuses", force: :cascade do |t|
     t.string "name"
     t.integer "faculty_id"
@@ -176,6 +186,28 @@ ActiveRecord::Schema.define(version: 2019_06_04_145732) do
     t.index ["state_group_id"], name: "index_research_groups_on_state_group_id"
   end
 
+
+  create_table "research_project_plans", force: :cascade do |t|
+    t.string "activity"
+    t.text "description"
+    t.text "goal"
+    t.integer "plan_period_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["plan_period_id"], name: "index_research_project_plans_on_plan_period_id"
+  end
+
+  create_table "research_proyect_plans", force: :cascade do |t|
+    t.string "activity"
+    t.text "description"
+    t.text "goal"
+    t.integer "plan_period_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["plan_period_id"], name: "index_research_proyect_plans_on_plan_period_id"
+  end
+
+
   create_table "research_seedbeds", force: :cascade do |t|
     t.string "name"
     t.string "acronym"
@@ -196,6 +228,16 @@ ActiveRecord::Schema.define(version: 2019_06_04_145732) do
     t.index ["researcher_focus_id"], name: "index_research_seedbeds_on_researcher_focus_id"
     t.index ["snies_id"], name: "index_research_seedbeds_on_snies_id"
     t.index ["state_seedbed_id"], name: "index_research_seedbeds_on_state_seedbed_id"
+  end
+
+  create_table "researcher_formation_plans", force: :cascade do |t|
+    t.string "activity"
+    t.text "description"
+    t.text "goal"
+    t.integer "plan_period_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["plan_period_id"], name: "index_researcher_formation_plans_on_plan_period_id"
   end
 
   create_table "researcher_types", force: :cascade do |t|
@@ -231,6 +273,16 @@ ActiveRecord::Schema.define(version: 2019_06_04_145732) do
     t.index ["snies_id"], name: "index_researchers_on_snies_id"
   end
 
+  create_table "result_transfer_plans", force: :cascade do |t|
+    t.string "activity"
+    t.text "description"
+    t.text "goal"
+    t.integer "plan_period_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["plan_period_id"], name: "index_result_transfer_plans_on_plan_period_id"
+  end
+
   create_table "roles", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -242,6 +294,16 @@ ActiveRecord::Schema.define(version: 2019_06_04_145732) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "social_appropriation_plans", force: :cascade do |t|
+    t.string "activity"
+    t.text "description"
+    t.text "goal"
+    t.integer "plan_period_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["plan_period_id"], name: "index_social_appropriation_plans_on_plan_period_id"
   end
 
   create_table "state_groups", force: :cascade do |t|
