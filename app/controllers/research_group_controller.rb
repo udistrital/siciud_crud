@@ -20,7 +20,7 @@ class ResearchGroupController < ApplicationController
     #end
     #Se envian los grupos en formato JSON paginados de a 10 elementos por pagina
     paginate json: @research_groups.includes(:faculties, :curricular_projects, :research_focuses,
-                                             :state_group, :snies, :cidcActDocument_attachment, :facultyActDocument_attachment), per_page: 10
+                                             :state_group, :snies, :cidcActDocument_attachment, :facultyActDocument_attachment)
   end
 
     #Se muestra en detalle un grupo de investigacion segun un ID que se envia en el get

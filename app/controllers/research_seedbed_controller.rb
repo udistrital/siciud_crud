@@ -18,7 +18,7 @@ class ResearchSeedbedController < ApplicationController
     #end
     #Se envian los semilleros en formato JSON paginados de a 10 elementos por pagina
     paginate json: @research_seedbeds.includes(:faculties, :curricular_projects, :research_focuses,
-                                               :state_seedbed, :snies, :cidcActDocument_attachment, :facultyActDocument_attachment), per_page: 10
+                                               :state_seedbed, :snies, :cidcActDocument_attachment, :facultyActDocument_attachment)
   end
 
 

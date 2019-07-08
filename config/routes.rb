@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
   
+
+  namespace :api do 
+    namespace :v1 do
   #get 'research_seedbed/index'
   #get 'research_seedbed/show'
   #get 'research_seedbed/create'
@@ -138,5 +141,6 @@ Rails.application.routes.draw do
   get 'faculty/:id', to: 'faculty#show'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   get '/health', to: 'health#health'
-
+    end
+  end
 end
