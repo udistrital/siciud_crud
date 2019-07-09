@@ -1,8 +1,34 @@
 Rails.application.routes.draw do
   
+  
+  #Enpoint para listar los estados de los grupos de investigacion
+  get 'state_group/', to: 'state_group#index'
 
-  namespace :api do 
-    namespace :v1 do
+  get 'state_group/:id', to: 'state_group#show'
+  #Enpoint para listar las lineas de investigacion
+  get 'research_focus/', to: 'research_focus#index'
+  get 'research_focus/:id', to: 'research_focus#show'
+  #Enpoint para actualizar los documentos de los grupos de investigacion
+  put 'research_group/:id/attach/', to: 'research_group#attach'
+  #Enpoint para actualizar los documentos de los grupos de investigacion
+  put 'research_seedbed/:id/attach/', to: 'research_seedbed#attach'
+  #Enpoint para listar los snies
+  get 'snies/', to: 'snies#index'
+  get 'snies/:id', to: 'snies#show'
+  #Enpoint para listar las facultades
+  get 'faculty/', to: 'faculty#index'
+  #Enpoint para listar los proyectos curriculares las facultades
+  get 'faculty/:id', to: 'faculty#show'
+  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  get '/health', to: 'health#health'
+   # end
+  #end
+  resources :faculty, only: [:index,:show] do
+      resources :curricular_project, only: [:index,:show]
+    end
+
+  #get 'curricular_project/index'
+  #get 'curricular_project/show'
   #get 'research_seedbed/index'
   #get 'research_seedbed/show'
   #get 'research_seedbed/create'
@@ -120,27 +146,5 @@ Rails.application.routes.draw do
       end
     end
   end 
-  
-  #Enpoint para listar los estados de los grupos de investigacion
-  get 'state_group/', to: 'state_group#index'
 
-  get 'state_group/:id', to: 'state_group#show'
-  #Enpoint para listar las lineas de investigacion
-  get 'research_focus/', to: 'research_focus#index'
-  get 'research_focus/:id', to: 'research_focus#show'
-  #Enpoint para actualizar los documentos de los grupos de investigacion
-  put 'research_group/attach/:id', to: 'research_group#attach'
-  #Enpoint para actualizar los documentos de los grupos de investigacion
-  put 'research_seedbed/attach/:id', to: 'research_seedbed#attach'
-  #Enpoint para listar los snies
-  get 'snies/', to: 'snies#index'
-  get 'snies/:id', to: 'snies#show'
-  #Enpoint para listar las facultades
-  get 'faculty/', to: 'faculty#index'
-  #Enpoint para listar los proyectos curriculares las facultades
-  get 'faculty/:id', to: 'faculty#show'
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-  get '/health', to: 'health#health'
-    end
-  end
 end
