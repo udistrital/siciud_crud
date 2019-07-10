@@ -20,7 +20,7 @@ class ResearchGroupController < ApplicationController
     #end
     #Se envian los grupos en formato JSON paginados de a 10 elementos por pagina
     paginate json: @research_groups.includes(:faculties, :curricular_projects, :research_focuses,
-                                             :state_group, :snies, :cidcActDocument_attachment, :facultyActDocument_attachment), per_page: 10
+                                             :state_group, :snies, :cidcActDocument_attachment, :facultyActDocument_attachment)
   end
 
     #Se muestra en detalle un grupo de investigacion segun un ID que se envia en el get
@@ -35,10 +35,10 @@ class ResearchGroupController < ApplicationController
     @research_group = ResearchGroup.new(research_group_params)
     #Revisar si se enviaron facultades,lineas de investigacion e proyectos curriculares 
     #y añadirselas al grupo (relacion muchos a muchos)
-    if (faculties = research_group_params[:faculty_ids])
-      faculties = faculties.split(',')
-      @research_group.faculty_ids = faculties
-    end
+    # if (faculties = research_group_params[:faculty_ids])
+    #   faculties = faculties.split(',')
+    #   @research_group.faculty_ids = faculties
+    # end
     if (research_focus_ids = research_group_params[:research_focus_ids])
       research_focus_ids = research_focus_ids.split(',')
       @research_group.research_focus_ids = research_focus_ids
@@ -46,6 +46,7 @@ class ResearchGroupController < ApplicationController
     if (curricular_project_ids = research_group_params[:curricular_project_ids])
       curricular_project_ids = curricular_project_ids.split(',')
       @research_group.curricular_project_ids = curricular_project_ids
+      setFaculties
     end
     if @research_group.save
       render json: @research_group, status: :created
@@ -58,15 +59,19 @@ class ResearchGroupController < ApplicationController
 
   def update
     if @research_group.update(research_group_params)
-      faculties = research_group_params[:faculty_ids]
-      faculties = faculties.split(',')
-      @research_group.faculty_ids = faculties
-      research_focus_ids = research_group_params[:research_focus_ids]
+      # if(faculties = research_group_params[:faculty_ids])
+      # faculties = faculties.split(',')
+      # @research_group.faculty_ids = faculties
+      # end
+      if(research_focus_ids = research_group_params[:research_focus_ids])
       research_focus_ids = research_focus_ids.split(',')
       @research_group.research_focus_ids = research_focus_ids
-      curricular_project_ids = research_group_params[:curricular_project_ids]
+      end
+      if(curricular_project_ids = research_group_params[:curricular_project_ids])
       curricular_project_ids = curricular_project_ids.split(',')
       @research_group.curricular_project_ids = curricular_project_ids
+      setFaculties
+      end
       if @research_group.save
         render json: @research_group
       else
@@ -91,6 +96,18 @@ class ResearchGroupController < ApplicationController
 
   private
 
+  def setFaculties 
+    @research_group.faculties.clear
+    faculties = []
+    @research_group.curricular_projects.each do |curricular_project|
+      if !@research_group.faculties.exists?(id: curricular_project.faculty.id)
+        #@research_group.faculties << curricular_project_id.faculty        
+        faculties.push(curricular_project.faculty.id)
+      end
+    end
+    @research_group.faculty_ids = faculties.uniq
+  end
+
   # Use callbacks to share common setup or constraints between actions.
   def set_research_group
     @research_group = ResearchGroup.find(params[:id])
@@ -100,7 +117,7 @@ class ResearchGroupController < ApplicationController
   def research_group_params
     params.require(:research_group).permit(:name, :acronym, :description, :cidcRegistrationDate,
                                            :cidcActNumber, :facultyActNumber, :facultyRegistrationDate, :state_group_id,
-                                           :snies_id, :email, :colcienciasCode, :gruplac, :webpage, :mission, :vision, :facultyActDocument, :cidcActDocument, :faculty_ids,
+                                           :snies_id, :email, :colcienciasCode, :gruplac, :webpage, :mission, :vision, :facultyActDocument, :cidcActDocument,
                                            :research_focus_ids, :curricular_project_ids)
   end
 end

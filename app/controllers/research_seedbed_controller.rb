@@ -1,5 +1,5 @@
 class ResearchSeedbedController < ApplicationController
-  before_action :set_research_group, only: [:show, :update, :attach]
+  before_action :set_research_seedbed, only: [:show, :update, :attach]
 
   #Manejo de excepciones de la database
   rescue_from ActiveRecord::RecordNotFound do |e|
@@ -18,7 +18,7 @@ class ResearchSeedbedController < ApplicationController
     #end
     #Se envian los semilleros en formato JSON paginados de a 10 elementos por pagina
     paginate json: @research_seedbeds.includes(:faculties, :curricular_projects, :research_focuses,
-                                               :state_seedbed, :snies, :cidcActDocument_attachment, :facultyActDocument_attachment), per_page: 10
+                                               :state_seedbed, :snies, :cidcActDocument_attachment, :facultyActDocument_attachment)
   end
 
 
@@ -30,20 +30,21 @@ class ResearchSeedbedController < ApplicationController
   def create
     #Crear el semillero de investigacion con los parametros que se envian
     @research_seedbed = ResearchSeedbed.new(research_seedbed_params)
-    if (faculties = research_seedbed_params[:faculty_ids])
+    #if (faculties = research_seedbed_params[:faculty_ids])
       #Revisar si se enviaron facultades  y añadirselas al semillero (relacion muchos a muchos)
-      faculties = faculties.split(',')
-      @research_seedbed.faculty_ids = faculties
-    end
+      #faculties = faculties.split(',')
+      #@research_seedbed.faculty_ids = faculties
+    #end
     #Revisar si se enviaron Lienas de investigacion  y añadirselas al semillero (relacion muchos a muchos)
-     if(research_focus_ids = research_seedbed_params[:research_focus_ids])
+    if(research_focus_ids = research_seedbed_params[:research_focus_ids])
     research_focus_ids = research_focus_ids.split(',')
-    @research_group.research_focus_ids = research_focus_ids
+    @research_seedbed.research_focus_ids = research_focus_ids
     end
     #Revisar si se enviaron projec  y añadirselas al semillero (relacion muchos a muchos)
     if (curricular_project_ids = research_seedbed_params[:curricular_project_ids])
       curricular_project_ids = curricular_project_ids.split(',')
       @research_seedbed.curricular_project_ids = curricular_project_ids
+      setFaculties
     end
     #Se intenta guardar el semillero
     if @research_seedbed.save
@@ -58,10 +59,10 @@ class ResearchSeedbedController < ApplicationController
     #Se intenta actualizar el semillero con la informacion enviada en los parametros
     if @research_seedbed.update(research_seedbed_params)
       #Se actualizan si se enviaron facultades  y añadirselas al semillero (relacion muchos a muchos)
-      if(faculties = research_seedbed_params[:faculty_ids])
-      faculties = faculties.split(',')
-      @research_seedbed.faculty_ids = faculties
-      end
+      #if(faculties = research_seedbed_params[:faculty_ids])
+      #faculties = faculties.split(',')
+      #@research_seedbed.faculty_ids = faculties
+      #end
       #Se actualizan si se enviaron facultades  y añadirselas al semillero (relacion muchos a muchos)     
       if(research_focus_ids = research_seedbed_params[:research_focus_ids])
       research_focus_ids = research_focus_ids.split(',')
@@ -71,6 +72,7 @@ class ResearchSeedbedController < ApplicationController
       if(curricular_project_ids = research_seedbed_params[:curricular_project_ids])
       curricular_project_ids = curricular_project_ids.split(',')
       @research_seedbed.curricular_project_ids = curricular_project_ids
+      setFaculties
       end
       #Se intenta actualizar el semillero de investigacion con las facultades en caso de que no se pueda envia error
       if @research_seedbed.save
@@ -90,12 +92,26 @@ class ResearchSeedbedController < ApplicationController
     @research_seedbed.facultyActDocument.attach(params[:facultyActDocument])
     end
     if(params[:cidcActDocument])
-    @researchresearch_seedbed_group.cidcActDocument.attach(params[:cidcActDocument])
+    @research_seedbed.cidcActDocument.attach(params[:cidcActDocument])
     end
 
   end
 
   private
+
+  def setFaculties 
+    @research_seedbed.faculties.clear
+    faculties = []
+    @research_seedbed.curricular_projects.each do |curricular_project|
+      if !@research_seedbed.faculties.exists?(id: curricular_project.faculty.id)
+        #byebug
+        faculties.push(curricular_project.faculty.id)
+        #@research_seedbed.faculties << curricular_project.faculty        
+      end
+    end
+    @research_seedbed.faculty_ids = faculties.uniq
+  
+  end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_research_seedbed
@@ -104,10 +120,9 @@ class ResearchSeedbedController < ApplicationController
 
   # Lista de parametros permitidos
   def research_seedbed_params
-    params.require(:research_seed_bed).permit(:name, :acronym, :description, :cidcRegistrationDate,
+    params.require(:research_seedbed).permit(:name, :acronym, :description, :cidcRegistrationDate,
                                               :cidcActNumber, :facultyActNumber, :facultyRegistrationDate, :state_seedbed_id,
-                                              :snies_id, :mail, :webpage, :mission, :vision, :facultyActDocument, :cidcActDocument, :faculty_ids,
-                                              :faculty_ids, :curricular_project_ids,:research_focus_ids)
+                                              :snies_id, :mail, :webpage, :mission, :vision, :facultyActDocument, :cidcActDocument,:curricular_project_ids,:research_focus_ids)
   end
 
 
