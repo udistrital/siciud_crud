@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-
-ActiveRecord::Schema.define(version: 2019_06_19_032524) do
+ActiveRecord::Schema.define(version: 2019_07_12_214703) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -32,6 +31,51 @@ ActiveRecord::Schema.define(version: 2019_06_19_032524) do
     t.string "checksum", null: false
     t.datetime "created_at", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "agreement_research_projects", force: :cascade do |t|
+    t.string "code"
+    t.date "year"
+    t.date "startDate"
+    t.date "approbationDate"
+    t.date "estimatedFinishDate"
+    t.date "closingDate"
+    t.integer "researchGroup_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["researchGroup_id"], name: "index_agreement_research_projects_on_researchGroup_id"
+  end
+
+  create_table "agreement_statuses", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "agreement_types", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "agreements", force: :cascade do |t|
+    t.string "name"
+    t.date "registerDate"
+    t.date "startDate"
+    t.date "finalDate"
+    t.integer "agreementNumber"
+    t.integer "faculty_id"
+    t.integer "research_group_id"
+    t.integer "agreement_status_id"
+    t.integer "agreement_type_id"
+    t.integer "funding_entity_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["agreement_status_id"], name: "index_agreements_on_agreement_status_id"
+    t.index ["agreement_type_id"], name: "index_agreements_on_agreement_type_id"
+    t.index ["faculty_id"], name: "index_agreements_on_faculty_id"
+    t.index ["funding_entity_id"], name: "index_agreements_on_funding_entity_id"
+    t.index ["research_group_id"], name: "index_agreements_on_research_group_id"
   end
 
   create_table "colciencias_calls", force: :cascade do |t|
@@ -87,6 +131,12 @@ ActiveRecord::Schema.define(version: 2019_06_19_032524) do
     t.integer "faculty_id", null: false
   end
 
+  create_table "funding_entities", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "genres", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -129,12 +179,11 @@ ActiveRecord::Schema.define(version: 2019_06_19_032524) do
     t.integer "research_group_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "researcher_type_id"
     t.integer "state_researcher_id"
     t.index ["research_group_id"], name: "index_members_on_research_group_id"
     t.index ["researcher_id"], name: "index_members_on_researcher_id"
-    t.index ["researcher_type_id"], name: "index_members_on_researcher_type_id"
     t.index ["role_id"], name: "index_members_on_role_id"
+    t.index ["state_researcher_id"], name: "index_members_on_state_researcher_id"
   end
 
   create_table "plan_periods", force: :cascade do |t|
@@ -186,7 +235,6 @@ ActiveRecord::Schema.define(version: 2019_06_19_032524) do
     t.index ["state_group_id"], name: "index_research_groups_on_state_group_id"
   end
 
-
   create_table "research_project_plans", force: :cascade do |t|
     t.string "activity"
     t.text "description"
@@ -196,17 +244,6 @@ ActiveRecord::Schema.define(version: 2019_06_19_032524) do
     t.datetime "updated_at", null: false
     t.index ["plan_period_id"], name: "index_research_project_plans_on_plan_period_id"
   end
-
-  create_table "research_proyect_plans", force: :cascade do |t|
-    t.string "activity"
-    t.text "description"
-    t.text "goal"
-    t.integer "plan_period_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["plan_period_id"], name: "index_research_proyect_plans_on_plan_period_id"
-  end
-
 
   create_table "research_seedbeds", force: :cascade do |t|
     t.string "name"

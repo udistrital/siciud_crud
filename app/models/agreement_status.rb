@@ -1,0 +1,2 @@
+class AgreementStatus < ApplicationRecord
+end
