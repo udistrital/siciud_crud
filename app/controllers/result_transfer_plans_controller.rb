@@ -16,9 +16,11 @@ class ResultTransferPlansController < ApplicationController
   # POST /result_transfer_plans
   def create
     @result_transfer_plan = ResultTransferPlan.new(result_transfer_plan_params)
-
+    @result_transfer_plan.plan_period_id = params[:plan_period_id]
+    #byebug
     if @result_transfer_plan.save
-      render json: @result_transfer_plan, status: :created, location: @result_transfer_plan
+      render json: @result_transfer_plan, status: :created
+      #, location: @result_transfer_plan
     else
       render json: @result_transfer_plan.errors, status: :unprocessable_entity
     end
@@ -46,6 +48,6 @@ class ResultTransferPlansController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def result_transfer_plan_params
-      params.require(:result_transfer_plan).permit(:activity, :description, :goal, :period_id)
+      params.require(:result_transfer_plan).permit(:activity, :description, :goal)
     end
 end

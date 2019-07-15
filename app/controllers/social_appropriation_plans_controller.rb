@@ -16,9 +16,10 @@ class SocialAppropriationPlansController < ApplicationController
   # POST /social_appropriation_plans
   def create
     @social_appropriation_plan = SocialAppropriationPlan.new(social_appropriation_plan_params)
-
+    @social_appropriation_plan.plan_period_id = params[:plan_period_id]
     if @social_appropriation_plan.save
-      render json: @social_appropriation_plan, status: :created, location: @social_appropriation_plan
+      render json: @social_appropriation_plan, status: :created
+      #, location: @social_appropriation_plan
     else
       render json: @social_appropriation_plan.errors, status: :unprocessable_entity
     end
@@ -46,6 +47,6 @@ class SocialAppropriationPlansController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def social_appropriation_plan_params
-      params.require(:social_appropriation_plan).permit(:activity, :description, :goal, :period_id)
+      params.require(:social_appropriation_plan).permit(:activity, :description, :goal, :plan_period_id)
     end
 end

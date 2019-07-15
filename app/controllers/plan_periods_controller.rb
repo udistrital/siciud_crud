@@ -22,7 +22,8 @@ class PlanPeriodsController < ApplicationController
     end
 
     if @plan_period.save
-      render json: @plan_period, status: :created, location: @plan_period
+      render json: @plan_period, status: :created
+      #, location: @plan_period
     else
       render json: @plan_period.errors, status: :unprocessable_entity
     end

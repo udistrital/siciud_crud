@@ -3,5 +3,5 @@ class ResearchProjectPlan < ApplicationRecord
   belongs_to :plan_period
 
   #Validaciones de los campos para crear un plan de un proyecto de investigacion
-  validates :project, :description, :goal, :period_id, presence: true
+  validates :description, :goal, :plan_period_id, presence: true
 end
