@@ -41,7 +41,7 @@ Rails.application.routes.draw do
   # get 'research_group/update'
   # Enpoint CRUD de los grupos des investigacion
   resources :research_group, only: [:index,:show,:create,:update] do
-    member do
+#    member do
     
     # GET    /research_group/:id/plan_periods                                         plan_periods#index                    [Endpoint para listar los periodos de un plan de accion]
     # POST   /research_group/:id/plan_periods                                         plan_periods#create                   [Endpoint para crear los periodos de un plan de accion]
@@ -51,7 +51,7 @@ Rails.application.routes.draw do
     # DELETE /research_group/:id/plan_periods/:id                                     plan_periods#destroy                  [Endpoint para eliminar un periodo de un plan de accion]
 
       resources :plan_periods do
-        member do
+ #       member do
     
     # GET    /research_group/:id/plan_periods/:id/research_project_plans              research_project_plans#index          [Endpoint para listar los proyectos de investigacion de un plan de accion]
     # POST   /research_group/:id/plan_periods/:id/research_project_plans              research_project_plans#create         [Endpoint para crear los proyectos de investigacion de un plan de accion]
@@ -89,13 +89,13 @@ Rails.application.routes.draw do
 
           resources :social_appropriation_plans
         end
-      end
-    end
+  #    end
+   # end
   end
 
   
   resources :research_seedbed,only: [:index,:show,:create,:update] do
-    member do
+    #member do
 
     # GET    /research_seedbed/:id/plan_periods                                         plan_periods#index                    [Endpoint para listar los periodos de un plan de accion]
     # POST   /research_seedbed/:id/plan_periods                                         plan_periods#create                   [Endpoint para crear los periodos de un plan de accion]
@@ -105,7 +105,7 @@ Rails.application.routes.draw do
     # DELETE /research_seedbed/:id/plan_periods/:id                                     plan_periods#destroy                  [Endpoint para eliminar un periodo de un plan de accion]
 
       resources :plan_periods do
-        member do
+     #   member do
 
     # GET    /research_seedbed/:id/plan_periods/:id/research_project_plans              research_project_plans#index          [Endpoint para listar los proyectos de investigacion de un plan de accion]
     # POST   /research_seedbed/:id/plan_periods/:id/research_project_plans              research_project_plans#create         [Endpoint para crear los proyectos de investigacion de un plan de accion]
@@ -143,8 +143,8 @@ Rails.application.routes.draw do
 
           resources :social_appropriation_plan
         end
-      end
-    end
+      #end
+    #end
   end 
 
 end

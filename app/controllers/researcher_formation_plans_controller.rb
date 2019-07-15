@@ -16,9 +16,10 @@ class ResearcherFormationPlansController < ApplicationController
   # POST /researcher_formation_plans
   def create
     @researcher_formation_plan = ResearcherFormationPlan.new(researcher_formation_plan_params)
-
+    @researcher_formation_plan.plan_period_id = params[:plan_period_id]
     if @researcher_formation_plan.save
-      render json: @researcher_formation_plan, status: :created, location: @researcher_formation_plan
+      render json: @researcher_formation_plan, status: :created
+      #, location: @researcher_formation_plan
     else
       render json: @researcher_formation_plan.errors, status: :unprocessable_entity
     end
@@ -46,6 +47,6 @@ class ResearcherFormationPlansController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def researcher_formation_plan_params
-      params.require(:researcher_formation_plan).permit(:activity, :description, :goal, :period_id)
+      params.require(:researcher_formation_plan).permit(:activity, :description, :goal, :plan_period_id)
     end
 end

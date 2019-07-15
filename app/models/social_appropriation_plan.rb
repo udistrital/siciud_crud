@@ -3,5 +3,5 @@ class SocialAppropriationPlan < ApplicationRecord
   belongs_to :plan_period
 
   #Validaciones de los campos para crear un plan de un proyecto de investigacion
-  validates :activity, :description, :goal, :period_id, presence: true
+  validates :activity, :description, :goal, :plan_period_id, presence: true
 end
