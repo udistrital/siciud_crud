@@ -1,7 +1,6 @@
 class Agreement < ApplicationRecord
   belongs_to :faculty
-  belongs_to :research_group
   belongs_to :agreement_status
   belongs_to :agreement_type
-  has_many :agreement_research_projects
+  has_and_belongs_to_many :research_groups
 end

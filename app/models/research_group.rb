@@ -5,6 +5,7 @@ class ResearchGroup < ApplicationRecord
   has_and_belongs_to_many :faculties
   has_and_belongs_to_many :curricular_projects
   has_and_belongs_to_many :research_focuses
+  has_and_belongs_to_many :agreements
   belongs_to :state_group
   belongs_to :snies
 #  belongs_to :research_focus
