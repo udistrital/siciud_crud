@@ -8,14 +8,13 @@ class ResearchGroup < ApplicationRecord
   has_and_belongs_to_many :agreements
   belongs_to :state_group
   belongs_to :snies
-#  belongs_to :research_focus
+  #  belongs_to :research_focus
   has_many :members
   has_many :historical_colciencias_ranks
   has_many :plan_periods, as: :planable
-#Validaciones de los campos obligatorios
+  #Validaciones de los campos obligatorios
   validates :name, :acronym, :cidcRegistrationDate,
             :cidcActNumber, :facultyActNumber, :facultyRegistrationDate, :state_group_id,
             :snies_id,
             :email, presence: true
-
 end

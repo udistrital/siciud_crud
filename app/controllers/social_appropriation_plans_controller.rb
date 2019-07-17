@@ -40,13 +40,14 @@ class SocialAppropriationPlansController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_social_appropriation_plan
-      @social_appropriation_plan = SocialAppropriationPlan.find(params[:id])
-    end
 
-    # Only allow a trusted parameter "white list" through.
-    def social_appropriation_plan_params
-      params.require(:social_appropriation_plan).permit(:activity, :description, :goal, :plan_period_id)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_social_appropriation_plan
+    @social_appropriation_plan = SocialAppropriationPlan.find(params[:id])
+  end
+
+  # Only allow a trusted parameter "white list" through.
+  def social_appropriation_plan_params
+    params.require(:social_appropriation_plan).permit(:activity, :description, :goal, :plan_period_id)
+  end
 end

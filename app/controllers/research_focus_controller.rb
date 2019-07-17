@@ -2,9 +2,9 @@ class ResearchFocusController < ApplicationController
   before_action :set_research_focus, only: [:show]
 
   rescue_from ActiveRecord::RecordNotFound do |e|
-    render json: {error: e.message}, status: :not_found
+    render json: { error: e.message }, status: :not_found
   end
-#listar todas las lineas de investigacion
+  #listar todas las lineas de investigacion
   def index
     @research_focuses = ResearchFocus.all
     render json: @research_focuses.includes(:faculty)

@@ -41,13 +41,14 @@ class ResultTransferPlansController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_result_transfer_plan
-      @result_transfer_plan = ResultTransferPlan.find(params[:id])
-    end
 
-    # Only allow a trusted parameter "white list" through.
-    def result_transfer_plan_params
-      params.require(:result_transfer_plan).permit(:activity, :description, :goal)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_result_transfer_plan
+    @result_transfer_plan = ResultTransferPlan.find(params[:id])
+  end
+
+  # Only allow a trusted parameter "white list" through.
+  def result_transfer_plan_params
+    params.require(:result_transfer_plan).permit(:activity, :description, :goal)
+  end
 end

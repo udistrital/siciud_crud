@@ -40,13 +40,14 @@ class ResearcherFormationPlansController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_researcher_formation_plan
-      @researcher_formation_plan = ResearcherFormationPlan.find(params[:id])
-    end
 
-    # Only allow a trusted parameter "white list" through.
-    def researcher_formation_plan_params
-      params.require(:researcher_formation_plan).permit(:activity, :description, :goal, :plan_period_id)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_researcher_formation_plan
+    @researcher_formation_plan = ResearcherFormationPlan.find(params[:id])
+  end
+
+  # Only allow a trusted parameter "white list" through.
+  def researcher_formation_plan_params
+    params.require(:researcher_formation_plan).permit(:activity, :description, :goal, :plan_period_id)
+  end
 end

@@ -17,7 +17,7 @@ class PlanPeriodsController < ApplicationController
   # POST /plan_periods
   def create
     @plan_period = @context.plan_periods.new(plan_period_params)
-    if(description = plan_period_params[:description])
+    if (description = plan_period_params[:description])
       @plan_period.description = description
     end
 
@@ -44,37 +44,38 @@ class PlanPeriodsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_plan_period
-      @plan_period = @context.plan_periods.find(params[:id])
-    end
 
-    # Only allow a trusted parameter "white list" through.
-    def plan_period_params
-      params.require(:plan_period).permit(:description)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_plan_period
+    @plan_period = @context.plan_periods.find(params[:id])
+  end
 
-    #Function that implements the polymorphic association
-    #for more info see https://richonrails.com/articles/polymorphic-associations-in-rails controllers section
-    def context
-      if params[:research_group_id]
-        id = params[:research_group_id]
-        ResearchGroup.find(params[:research_group_id])
-      elsif params[:research_seedbed_id]
-        id = params[:research_seedbed_id]
-        ResearchSeedbed.find(params[:research_seedbed_id])
-      end
-    end
+  # Only allow a trusted parameter "white list" through.
+  def plan_period_params
+    params.require(:plan_period).permit(:description)
+  end
 
-    def context_url(context)
-      if ResearchGroup === context
-        research_group_path(context)
-      elsif ResearchSeedbed === context
-        research_seedbed_path(context)
-      end
+  #Function that implements the polymorphic association
+  #for more info see https://richonrails.com/articles/polymorphic-associations-in-rails controllers section
+  def context
+    if params[:research_group_id]
+      id = params[:research_group_id]
+      ResearchGroup.find(params[:research_group_id])
+    elsif params[:research_seedbed_id]
+      id = params[:research_seedbed_id]
+      ResearchSeedbed.find(params[:research_seedbed_id])
     end
+  end
 
-    def set_context
-      @context = context
+  def context_url(context)
+    if ResearchGroup === context
+      research_group_path(context)
+    elsif ResearchSeedbed === context
+      research_seedbed_path(context)
     end
+  end
+
+  def set_context
+    @context = context
+  end
 end

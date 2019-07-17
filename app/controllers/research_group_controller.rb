@@ -1,13 +1,12 @@
 class ResearchGroupController < ApplicationController
   before_action :set_research_group, only: [:show, :update, :attach]
 
-
   #Manejo de excepciones de la database
   rescue_from ActiveRecord::RecordNotFound do |e|
-    render json: {error: e.message}, status: :not_found
+    render json: { error: e.message }, status: :not_found
   end
   rescue_from ActiveRecord::RecordInvalid do |e|
-    render json: {error: e.message}, status: :unprocessable_entity
+    render json: { error: e.message }, status: :unprocessable_entity
   end
   #Listar todos los grupos
 
@@ -16,14 +15,14 @@ class ResearchGroupController < ApplicationController
     #Director .members.where("role_id='1'")
     #if params[:search].present? && !params[:search].nil?
     #Se envia al servicio de busqueda para flitrar los grupos segun los parametros
-    @research_groups = ResearchGroupsSearchService.search(@research_groups, params[:name], params[:director],params[:facultyid],params[:category])
+    @research_groups = ResearchGroupsSearchService.search(@research_groups, params[:name], params[:director], params[:facultyid], params[:category])
     #end
     #Se envian los grupos en formato JSON paginados de a 10 elementos por pagina
     paginate json: @research_groups.includes(:faculties, :curricular_projects, :research_focuses,
                                              :state_group, :snies, :cidcActDocument_attachment, :facultyActDocument_attachment)
   end
 
-    #Se muestra en detalle un grupo de investigacion segun un ID que se envia en el get
+  #Se muestra en detalle un grupo de investigacion segun un ID que se envia en el get
 
   def show
     render json: @research_group
@@ -33,18 +32,18 @@ class ResearchGroupController < ApplicationController
   def create
     #Crear el grupo de investigacion con los parametros que se envian
     @research_group = ResearchGroup.new(research_group_params)
-    #Revisar si se enviaron facultades,lineas de investigacion e proyectos curriculares 
+    #Revisar si se enviaron facultades,lineas de investigacion e proyectos curriculares
     #y añadirselas al grupo (relacion muchos a muchos)
     # if (faculties = research_group_params[:faculty_ids])
     #   faculties = faculties.split(',')
     #   @research_group.faculty_ids = faculties
     # end
     if (research_focus_ids = research_group_params[:research_focus_ids])
-      research_focus_ids = research_focus_ids.split(',')
+      research_focus_ids = research_focus_ids.split(",")
       @research_group.research_focus_ids = research_focus_ids
     end
     if (curricular_project_ids = research_group_params[:curricular_project_ids])
-      curricular_project_ids = curricular_project_ids.split(',')
+      curricular_project_ids = curricular_project_ids.split(",")
       @research_group.curricular_project_ids = curricular_project_ids
       setFaculties
     end
@@ -55,7 +54,7 @@ class ResearchGroupController < ApplicationController
     end
   end
 
-    #Se intenta actualizar el semillero con la informacion enviada en los parametros
+  #Se intenta actualizar el semillero con la informacion enviada en los parametros
 
   def update
     if @research_group.update(research_group_params)
@@ -63,14 +62,14 @@ class ResearchGroupController < ApplicationController
       # faculties = faculties.split(',')
       # @research_group.faculty_ids = faculties
       # end
-      if(research_focus_ids = research_group_params[:research_focus_ids])
-      research_focus_ids = research_focus_ids.split(',')
-      @research_group.research_focus_ids = research_focus_ids
+      if (research_focus_ids = research_group_params[:research_focus_ids])
+        research_focus_ids = research_focus_ids.split(",")
+        @research_group.research_focus_ids = research_focus_ids
       end
-      if(curricular_project_ids = research_group_params[:curricular_project_ids])
-      curricular_project_ids = curricular_project_ids.split(',')
-      @research_group.curricular_project_ids = curricular_project_ids
-      setFaculties
+      if (curricular_project_ids = research_group_params[:curricular_project_ids])
+        curricular_project_ids = curricular_project_ids.split(",")
+        @research_group.curricular_project_ids = curricular_project_ids
+        setFaculties
       end
       if @research_group.save
         render json: @research_group
@@ -82,26 +81,26 @@ class ResearchGroupController < ApplicationController
     end
   end
 
-    #Añadir los documentos de Facultad y de CIDC
+  #Añadir los documentos de Facultad y de CIDC
 
   def attach
     params.permit(:facultyActDocument, :cidcActDocument)
-    if(params[:facultyActDocument])
-    @research_group.facultyActDocument.attach(params[:facultyActDocument])
+    if (params[:facultyActDocument])
+      @research_group.facultyActDocument.attach(params[:facultyActDocument])
     end
-    if(params[:cidcActDocument])
-    @research_group.cidcActDocument.attach(params[:cidcActDocument])
+    if (params[:cidcActDocument])
+      @research_group.cidcActDocument.attach(params[:cidcActDocument])
     end
   end
 
   private
 
-  def setFaculties 
+  def setFaculties
     @research_group.faculties.clear
     faculties = []
     @research_group.curricular_projects.each do |curricular_project|
       if !@research_group.faculties.exists?(id: curricular_project.faculty.id)
-        #@research_group.faculties << curricular_project_id.faculty        
+        #@research_group.faculties << curricular_project_id.faculty
         faculties.push(curricular_project.faculty.id)
       end
     end
