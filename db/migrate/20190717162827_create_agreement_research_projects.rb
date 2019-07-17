@@ -7,7 +7,6 @@ class CreateAgreementResearchProjects < ActiveRecord::Migration[5.2]
       t.date :approbationDate
       t.date :estimatedFinishDate
       t.date :closingDate
-      t.references :research_group, foreign_key: true
       t.references :agreement, foreign_key: true
 
       t.timestamps

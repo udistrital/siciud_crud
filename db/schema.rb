@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_15_144445) do
+ActiveRecord::Schema.define(version: 2019_07_17_162827) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -40,12 +40,10 @@ ActiveRecord::Schema.define(version: 2019_07_15_144445) do
     t.date "approbationDate"
     t.date "estimatedFinishDate"
     t.date "closingDate"
-    t.integer "research_group_id"
     t.integer "agreement_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["agreement_id"], name: "index_agreement_research_projects_on_agreement_id"
-    t.index ["research_group_id"], name: "index_agreement_research_projects_on_research_group_id"
   end
 
   create_table "agreement_statuses", force: :cascade do |t|
@@ -70,13 +68,11 @@ ActiveRecord::Schema.define(version: 2019_07_15_144445) do
     t.integer "research_group_id"
     t.integer "agreement_status_id"
     t.integer "agreement_type_id"
-    t.integer "funding_entity_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["agreement_status_id"], name: "index_agreements_on_agreement_status_id"
     t.index ["agreement_type_id"], name: "index_agreements_on_agreement_type_id"
     t.index ["faculty_id"], name: "index_agreements_on_faculty_id"
-    t.index ["funding_entity_id"], name: "index_agreements_on_funding_entity_id"
     t.index ["research_group_id"], name: "index_agreements_on_research_group_id"
   end
 
@@ -91,6 +87,27 @@ ActiveRecord::Schema.define(version: 2019_07_15_144445) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "contribution_funding_entity_items", force: :cascade do |t|
+    t.float "value"
+    t.integer "item_category_id"
+    t.integer "contribution_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["contribution_id"], name: "index_contribution_funding_entity_items_on_contribution_id"
+    t.index ["item_category_id"], name: "index_contribution_funding_entity_items_on_item_category_id"
+  end
+
+  create_table "contributions", force: :cascade do |t|
+    t.integer "funding_entity_id"
+    t.integer "agreement_id"
+    t.float "inKindContribution"
+    t.float "cashContribution"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["agreement_id"], name: "index_contributions_on_agreement_id"
+    t.index ["funding_entity_id"], name: "index_contributions_on_funding_entity_id"
   end
 
   create_table "curricular_projects", force: :cascade do |t|
@@ -154,6 +171,13 @@ ActiveRecord::Schema.define(version: 2019_07_15_144445) do
     t.index ["colciencias_call_id"], name: "index_historical_colciencias_ranks_on_colciencias_call_id"
     t.index ["colciencias_category_id"], name: "index_historical_colciencias_ranks_on_colciencias_category_id"
     t.index ["research_group_id"], name: "index_historical_colciencias_ranks_on_research_group_id"
+  end
+
+  create_table "item_categories", force: :cascade do |t|
+    t.string "name"
+    t.boolean "cashContribution"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "member_seedbeds", force: :cascade do |t|

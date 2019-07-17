@@ -1,5 +1,6 @@
 class ResearchProjectPlansController < ApplicationController
   before_action :set_research_project_plan, only: [:show, :update, :destroy]
+  before_action :set_plan_period, only: [:create]
 
   # GET /research_project_plans
   def index
@@ -15,23 +16,11 @@ class ResearchProjectPlansController < ApplicationController
 
   # POST /research_project_plans
   def create
-    @research_project_plan = ResearchProjectPlan.new(research_project_plan_params)
-    @research_project_plan.plan_period_id = params[:plan_period_id]
-   # if(proyect = research_project_plan_params[:proyect])
-    #  @research_project_plan.proyect = proyecto
-    #end
-    #if(description = research_project_plan_params[:description])
-     # @research_project_plan.description = description
-    #end
-    #if(goal = research_project_plan_params[:goal])
-     # @research_project_plan.goal = goal
-    #end
-    #if(period_id = research_project_plan_params[:period_id])
-      #@research_project_plan.period_id = period_id
-    #end
+    @research_project_plan = @plan_period.research_project_plans.new(research_project_plan_params)
+
     if @research_project_plan.save
       render json: @research_project_plan, status: :created
-      #, location: @research_project_plan
+      #, location: research_project_plan_path(@research_project_plan)
     else
       render json: @research_project_plan.errors, status: :unprocessable_entity
     end
@@ -52,13 +41,18 @@ class ResearchProjectPlansController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_research_project_plan
-      @research_project_plan = ResearchProjectPlan.find(params[:id])
-    end
 
-    # Only allow a trusted parameter "white list" through.
-    def research_project_plan_params
-      params.require(:research_project_plan).permit(:activity, :description, :goal, :plan_period_id)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_research_project_plan
+    @research_project_plan = ResearchProjectPlan.find(params[:id])
+  end
+
+  # Only allow a trusted parameter "white list" through.
+  def research_project_plan_params
+    params.require(:research_project_plan).permit(:activity, :description, :goal, :plan_period_id)
+  end
+
+  def set_plan_period
+    @plan_period = PlanPeriod.find(params[:plan_period_id])
+  end
 end

@@ -10,7 +10,6 @@ class CreateAgreements < ActiveRecord::Migration[5.2]
       t.references :research_group, foreign_key: true
       t.references :agreement_status, foreign_key: true
       t.references :agreement_type, foreign_key: true
-      t.references :funding_entity, foreign_key: true
 
       t.timestamps
     end
