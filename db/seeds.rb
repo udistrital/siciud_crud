@@ -95,3 +95,6 @@ StateSeedbed.create(name: "Inactivo")
 end
 
 puts "Seed complete"
+EntityType.create(name:"Publica")
+EntityType.create(name: "Privada")
+EntityType.create(name: "Mixta")

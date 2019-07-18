@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_17_164553) do
+ActiveRecord::Schema.define(version: 2019_07_18_203351) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -93,7 +93,8 @@ ActiveRecord::Schema.define(version: 2019_07_17_164553) do
   end
 
   create_table "contribution_funding_entity_items", force: :cascade do |t|
-    t.float "value"
+    t.float "cashValue"
+    t.float "inKindValue"
     t.integer "item_category_id"
     t.integer "contribution_id"
     t.datetime "created_at", null: false
@@ -137,6 +138,12 @@ ActiveRecord::Schema.define(version: 2019_07_17_164553) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "entity_types", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "faculties", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -157,6 +164,12 @@ ActiveRecord::Schema.define(version: 2019_07_17_164553) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "country"
+    t.string "city"
+    t.string "phoneNumber"
+    t.string "mobileNumber"
+    t.integer "entity_type_id"
+    t.index ["entity_type_id"], name: "index_funding_entities_on_entity_type_id"
   end
 
   create_table "genres", force: :cascade do |t|
@@ -178,7 +191,6 @@ ActiveRecord::Schema.define(version: 2019_07_17_164553) do
 
   create_table "item_categories", force: :cascade do |t|
     t.string "name"
-    t.boolean "cashContribution"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
