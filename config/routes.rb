@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
 
+  #get 'agreement/index'
+  #get 'agreement/show'
+  #get 'agreement/create'
+  #get 'agreement/update'
   #get 'agreement_type/index'
   #get 'agreement_type/show'
   #get 'agreement_type/create'
@@ -40,6 +44,7 @@ Rails.application.routes.draw do
   resources :item_category, only: [:index, :show, :create, :update]
   resources :agreement_status, only: [:index, :show]
   resources :agreement_type, only: [:index, :show, :create]
+  resources :agreement, only: [:index, :show, :create,:update]
   #get 'curricular_project/index'
   #get 'curricular_project/show'
   #get 'research_seedbed/index'

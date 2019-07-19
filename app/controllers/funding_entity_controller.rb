@@ -28,7 +28,7 @@ class FundingEntityController < ApplicationController
   end
 
   def update
-    if @funding_entity.update(funding_entity)
+    if @funding_entity.update(funding_entity_params)
       render json: @funding_entity
     else
       render json: @funding_entity.errors, status: :unprocessable_entity
