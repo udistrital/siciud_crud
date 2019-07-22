@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_19_212807) do
+ActiveRecord::Schema.define(version: 2019_07_22_144443) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -64,7 +64,6 @@ ActiveRecord::Schema.define(version: 2019_07_19_212807) do
     t.date "startDate"
     t.date "finalDate"
     t.integer "agreementNumber"
-    t.integer "faculty_id"
     t.integer "agreement_status_id"
     t.integer "agreement_type_id"
     t.datetime "created_at", null: false
@@ -75,7 +74,6 @@ ActiveRecord::Schema.define(version: 2019_07_19_212807) do
     t.text "description"
     t.index ["agreement_status_id"], name: "index_agreements_on_agreement_status_id"
     t.index ["agreement_type_id"], name: "index_agreements_on_agreement_type_id"
-    t.index ["faculty_id"], name: "index_agreements_on_faculty_id"
   end
 
   create_table "agreements_research_groups", id: false, force: :cascade do |t|

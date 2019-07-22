@@ -38,15 +38,15 @@ class ResearchGroupController < ApplicationController
     #   faculties = faculties.split(',')
     #   @research_group.faculty_ids = faculties
     # end
-    if (research_focus_ids = research_group_params[:research_focus_ids])
-      research_focus_ids = research_focus_ids.split(",")
-      @research_group.research_focus_ids = research_focus_ids
-    end
-    if (curricular_project_ids = research_group_params[:curricular_project_ids])
-      curricular_project_ids = curricular_project_ids.split(",")
-      @research_group.curricular_project_ids = curricular_project_ids
-      setFaculties
-    end
+    #if (research_focus_ids = research_group_params[:research_focus_ids])
+      #research_focus_ids = research_focus_ids.split(",")
+      #@research_group.research_focus_ids = research_focus_ids
+    #end
+    #if (curricular_project_ids = research_group_params[:curricular_project_ids])
+    #curricular_project_ids = curricular_project_ids.split(",")
+    #@research_group.curricular_project_ids = curricular_project_ids
+    setFaculties
+    #end
     if @research_group.save
       render json: @research_group, status: :created
     else
@@ -62,15 +62,15 @@ class ResearchGroupController < ApplicationController
       # faculties = faculties.split(',')
       # @research_group.faculty_ids = faculties
       # end
-      if (research_focus_ids = research_group_params[:research_focus_ids])
-        research_focus_ids = research_focus_ids.split(",")
-        @research_group.research_focus_ids = research_focus_ids
-      end
-      if (curricular_project_ids = research_group_params[:curricular_project_ids])
-        curricular_project_ids = curricular_project_ids.split(",")
-        @research_group.curricular_project_ids = curricular_project_ids
-        setFaculties
-      end
+      #if (research_focus_ids = research_group_params[:research_focus_ids])
+        #research_focus_ids = research_focus_ids.split(",")
+        #@research_group.research_focus_ids = research_focus_ids
+      #end
+      #if (curricular_project_ids = research_group_params[:curricular_project_ids])
+      # curricular_project_ids = curricular_project_ids.split(",")
+      #@research_group.curricular_project_ids = curricular_project_ids
+      #setFaculties
+      #end
       if @research_group.save
         render json: @research_group
       else
@@ -117,6 +117,6 @@ class ResearchGroupController < ApplicationController
     params.require(:research_group).permit(:name, :acronym, :description, :cidcRegistrationDate,
                                            :cidcActNumber, :facultyActNumber, :facultyRegistrationDate, :state_group_id,
                                            :snies_id, :email, :colcienciasCode, :gruplac, :webpage, :mission, :vision, :facultyActDocument, :cidcActDocument,
-                                           :research_focus_ids, :curricular_project_ids)
+                                           research_focus_ids: [], curricular_project_ids: [])
   end
 end

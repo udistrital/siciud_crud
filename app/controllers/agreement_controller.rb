@@ -19,6 +19,7 @@ class AgreementController < ApplicationController
 
   def create
     @agreement = Agreement.new(agreement_params)
+    @agreement.registerDate = DateTime.now.in_time_zone(-5).to_date
     if @agreement.save
       render json: @agreement, status: :created
     else
@@ -42,6 +43,6 @@ class AgreementController < ApplicationController
 
   def agreement_params
     params.require(:agreement).permit(:name, :registerDate, :startDate, :finalDate,
-                                      :agreementNumber, :faculty_id, :agreement_status_id, :agreement_type_id)
+                                      :agreementNumber, :agreement_status_id, :agreement_type_id,research_group_ids: [])
   end
 end

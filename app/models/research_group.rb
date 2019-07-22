@@ -16,5 +16,5 @@ class ResearchGroup < ApplicationRecord
   validates :name, :acronym, :cidcRegistrationDate,
             :cidcActNumber, :facultyActNumber, :facultyRegistrationDate, :state_group_id,
             :snies_id,
-            :email, presence: true
+            :email,:curricular_projects, presence: true
 end
