@@ -1,4 +1,4 @@
-class SocialAppropriationPlansController < ApplicationController
+class SocialAppropriationPlanController < ApplicationController
   before_action :set_social_appropriation_plan, only: [:show, :update, :destroy]
 
   # GET /social_appropriation_plans

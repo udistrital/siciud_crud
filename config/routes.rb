@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+
   #get 'agreement/index'
   #get 'agreement/show'
   #get 'agreement/create'
@@ -44,7 +45,9 @@ Rails.application.routes.draw do
   resources :item_category, only: [:index, :show, :create, :update]
   resources :agreement_status, only: [:index, :show]
   resources :agreement_type, only: [:index, :show, :create]
-  resources :agreement, only: [:index, :show, :create,:update]
+  resources :agreement, only: [:index, :show, :create,:update] do
+    resources :contribution, only: [:index, :show, :create,:update] 
+  end
   #get 'curricular_project/index'
   #get 'curricular_project/show'
   #get 'research_seedbed/index'
@@ -77,7 +80,7 @@ Rails.application.routes.draw do
       # PUT    /research_group/:id/plan_periods/:id/research_project_plans/:id          research_project_plans#update         [Endpoint para actualizar un proyecto de investigacion de un plan de accion]
       # DELETE /research_group/:id/plan_periods/:id/research_project_plans/:id          research_project_plans#destroy        [Endpoint para eliminar un proyecto de investigacion de un plan de accion]
 
-      resources :research_project_plans
+      resources :research_project_plan
 
       # GET    /research_group/:id/plan_periods/:id/researcher_formation_plans          researcher_formation_plans#index      [Endpoint para listar los planes de formacion de investigadores de un plan de accion]
       # POST   /research_group/:id/plan_periods/:id/researcher_formation_plans          researcher_formation_plans#create     [Endpoint para crear los planes de formacion de investigadores de un plan de accion]
@@ -86,7 +89,7 @@ Rails.application.routes.draw do
       # PUT    /research_group/:id/plan_periods/:id/researcher_formation_plans/:id      researcher_formation_plans#update     [Endpoint para actualizar un plan de formacion de investigadores de un plan de accion]
       # DELETE /research_group/:id/plan_periods/:id/researcher_formation_plans/:id      researcher_formation_plans#destroy    [Endpoint para eliminar un plan de formacion de investigadores de un plan de accion]
 
-      resources :researcher_formation_plans
+      resources :researcher_formation_plan
 
       # GET    /research_group/:id/plan_periods/:id/result_transfer_plans               result_transfer_plans#index           [Endpoint para listar los planes de transferencia de resultados de un plan de accion]
       # POST   /research_group/:id/plan_periods/:id/result_transfer_plans               result_transfer_plans#create          [Endpoint para crear los planes de transferencia de resultados de un plan de accion]
@@ -95,7 +98,7 @@ Rails.application.routes.draw do
       # PUT    /research_group/:id/plan_periods/:id/result_transfer_plans/:id           result_transfer_plans#update          [Endpoint para actualizar un plan de transferencia de resultados de un plan de accion]
       # DELETE /research_group/:id/plan_periods/:id/result_transfer_plans/:id           result_transfer_plans#destroy         [Endpoint para eliminar un plan de transferencia de resultados de un plan de accion]
 
-      resources :result_transfer_plans
+      resources :result_transfer_plan
 
       # GET    /research_group/:id/plan_periods/:id/social_appropriation_plans          social_appropriation_plans#index      [Endpoint para listar los planes de apropiacion social de un plan de accion]
       # POST   /research_group/:id/plan_periods/:id/social_appropriation_plans          social_appropriation_plans#create     [Endpoint para crear los planes de apropiacion social de un plan de accion]
@@ -104,7 +107,7 @@ Rails.application.routes.draw do
       # PUT    /research_group/:id/plan_periods/:id/social_appropriation_plans/:id      social_appropriation_plans#update     [Endpoint para actualizar un plan de apropiacion social de un plan de accion]
       # DELETE /research_group/:id/plan_periods/:id/social_appropriation_plans/:id      social_appropriation_plans#destroy    [Endpoint para eliminar un plan de apropiacion social de un plan de accion]
 
-      resources :social_appropriation_plans
+      resources :social_appropriation_plan
     end
     #    end
     # end

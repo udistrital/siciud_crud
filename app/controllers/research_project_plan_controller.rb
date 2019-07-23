@@ -1,10 +1,10 @@
-class ResearchProjectPlansController < ApplicationController
+class ResearchProjectPlanController < ApplicationController
+  before_action :set_plan_period
   before_action :set_research_project_plan, only: [:show, :update, :destroy]
-  before_action :set_plan_period, only: [:create]
 
   # GET /research_project_plans
   def index
-    @research_project_plans = ResearchProjectPlan.all
+    @research_project_plans = @plan_period.research_project_plans
 
     render json: @research_project_plans
   end
@@ -44,7 +44,7 @@ class ResearchProjectPlansController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_research_project_plan
-    @research_project_plan = ResearchProjectPlan.find(params[:id])
+    @research_project_plan = @plan_period.research_project_plans.find_by(params[:id])
   end
 
   # Only allow a trusted parameter "white list" through.

@@ -1,4 +1,4 @@
-class ResultTransferPlansController < ApplicationController
+class ResultTransferPlanController < ApplicationController
   before_action :set_result_transfer_plan, only: [:show, :update, :destroy]
 
   # GET /result_transfer_plans

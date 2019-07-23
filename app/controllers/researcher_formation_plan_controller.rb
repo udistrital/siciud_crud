@@ -1,4 +1,4 @@
-class ResearcherFormationPlansController < ApplicationController
+class ResearcherFormationPlanController < ApplicationController
   before_action :set_researcher_formation_plan, only: [:show, :update, :destroy]
 
   # GET /researcher_formation_plans
