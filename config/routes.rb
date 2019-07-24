@@ -46,7 +46,9 @@ Rails.application.routes.draw do
   resources :agreement_status, only: [:index, :show]
   resources :agreement_type, only: [:index, :show, :create]
   resources :agreement, only: [:index, :show, :create,:update] do
-    resources :contribution, only: [:index, :show, :create,:update] 
+    resources :contribution, only: [:index, :show, :create,:update] do
+      resources :contribution_funding_entity_item, only: [:index, :show, :create,:update] 
+    end
   end
   #get 'curricular_project/index'
   #get 'curricular_project/show'

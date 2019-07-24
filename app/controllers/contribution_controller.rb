@@ -52,7 +52,7 @@ class ContributionController < ApplicationController
   private
 
   def set_contribution
-    @contribution = @agreement.contributions.find_by(params[:id])
+    @contribution = @agreement.contributions.find_by(id:params[:id])
   end
 
   # Use callbacks to share common setup or constraints between actions.

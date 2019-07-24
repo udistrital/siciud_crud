@@ -3,7 +3,7 @@ class AgreementSerializer < ActiveModel::Serializer
   attributes :id, :name, :registerDate, :startDate, :finalDate,
            :agreementNumber, :agreement_status_id, :agreement_type_id,
            :duration, :availability, :bizagiNumber, :description, :research_groups,:faculties,:funding_entities,:contributions,:agreement_research_projects,
-           :budgetInKind,:budgetInCash
+           :budgetInKind,:budgetInCash, :totalBudget
 
   def faculties
    # self.object.research_groups.faculties
@@ -15,5 +15,8 @@ class AgreementSerializer < ActiveModel::Serializer
   end
 def budgetInCash
   self.object.contributions.sum(:cashContribution)
+end
+def totalBudget
+  self.object.contributions.sum(:inKindContribution)+self.object.contributions.sum(:cashContribution)
 end
 end
