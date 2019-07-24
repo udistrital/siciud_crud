@@ -14,9 +14,13 @@ class ContributionFundingEntityItemController < ApplicationController
 
   def create
    # byebug
-    if((@contribution.contribution_funding_entity_items.sum(:cashValue)+params[:contribution_funding_entity_item][:cashValue])< @contribution.cashContribution)
+    if(((@contribution.contribution_funding_entity_items.sum(:cashValue)+params[:contribution_funding_entity_item][:cashValue])< @contribution.cashContribution) &&
+      ((@contribution.contribution_funding_entity_items.sum(:inKindValue)+params[:contribution_funding_entity_item][:inKindValue])< @contribution.cashContribution))
     @contribution_funding_entity_item = @contribution.contribution_funding_entity_items.new(contribution_funding_entity_item_params)
+    else
+      return render json: {"error":"No se puede asignar mas del presupuesto asignado"}, status: :unprocessable_entity
     end
+    
     if @contribution_funding_entity_item.save
       render json: @contribution, status: :created
     else
