@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_22_144443) do
+ActiveRecord::Schema.define(version: 2019_07_25_143156) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -171,6 +171,8 @@ ActiveRecord::Schema.define(version: 2019_07_22_144443) do
     t.string "phoneNumber"
     t.string "mobileNumber"
     t.integer "entity_type_id"
+    t.text "observation"
+    t.text "address"
     t.index ["entity_type_id"], name: "index_funding_entities_on_entity_type_id"
   end
 

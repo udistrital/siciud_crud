@@ -42,6 +42,6 @@ class FundingEntityController < ApplicationController
   end
 
   def funding_entity_params
-    params.require(:funding_entity).permit(:name,:country,:city,:phoneNumber,:mobileNumber)
+    params.require(:funding_entity).permit(:name,:country,:city,:phoneNumber,:mobileNumber,:entity_type_id,:observation,:address)
   end
 end
