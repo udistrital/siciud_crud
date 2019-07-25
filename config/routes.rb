@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  get 'country/index'
+  get 'country/show'
   #get 'agreement/index'
   #get 'agreement/show'
   #get 'agreement/create'
@@ -45,10 +47,14 @@ Rails.application.routes.draw do
   resources :agreement_status, only: [:index, :show]
   resources :agreement_type, only: [:index, :show, :create]
   resources :agreement, only: [:index, :show, :create, :update] do
-    resources :contribution, only: [:index, :show, :create, :update] do
-      resources :contribution_funding_entity_item, only: [:index, :show, :create, :update]
-    end
-    resources :agreement_research_project, only: [:index, :show, :create, :update] 
+    resources :contribution, only: [:index, :show, :create, :update]
+    # do
+    #   resources :contribution_funding_entity_item, only: [:index, :show, :create, :update]
+    # end
+    resources :agreement_research_project, only: [:index, :show, :create, :update]
+  end
+  resources :contribution, only: [:index, :show, :create, :update]do
+    resources :contribution_funding_entity_item, only: [:index, :show, :create, :update]
   end
   #get 'curricular_project/index'
   #get 'curricular_project/show'
