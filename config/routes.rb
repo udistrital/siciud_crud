@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
 
-
   #get 'agreement/index'
   #get 'agreement/show'
   #get 'agreement/create'
@@ -11,7 +10,7 @@ Rails.application.routes.draw do
   #get 'agreement_status/index'
   # get 'agreement_status/show'
 
-  #Enpoint para listar los estados de los grupos de investigacion
+  #Endpoint para listar los estados de los grupos de investigacion
   resources :state_group, only: [:index, :show]
   #get "state_group/", to: "state_group#index"
 
@@ -45,10 +44,11 @@ Rails.application.routes.draw do
   resources :item_category, only: [:index, :show, :create, :update]
   resources :agreement_status, only: [:index, :show]
   resources :agreement_type, only: [:index, :show, :create]
-  resources :agreement, only: [:index, :show, :create,:update] do
-    resources :contribution, only: [:index, :show, :create,:update] do
-      resources :contribution_funding_entity_item, only: [:index, :show, :create,:update] 
+  resources :agreement, only: [:index, :show, :create, :update] do
+    resources :contribution, only: [:index, :show, :create, :update] do
+      resources :contribution_funding_entity_item, only: [:index, :show, :create, :update]
     end
+    resources :agreement_research_project, only: [:index, :show, :create, :update] 
   end
   #get 'curricular_project/index'
   #get 'curricular_project/show'

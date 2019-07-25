@@ -42,7 +42,7 @@ class AgreementController < ApplicationController
   end
 
   def agreement_params
-    params.require(:agreement).permit(:name, :registerDate, :startDate, :finalDate,
-                                      :agreementNumber, :agreement_status_id, :agreement_type_id,research_group_ids: [])
+    params.require(:agreement).permit(:name, :registerDate, :startDate, :finalDate, :duration, :availability, :bizagiNumber, :description,
+                                      :agreementNumber, :agreement_status_id, :agreement_type_id, research_group_ids: [])
   end
 end
