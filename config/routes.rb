@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
-      #get "country", to: "country#index"
-      #get "country/:name", to: "country#show"
+      get "country", to: "country#index"
+      get "country/:name", to: "country#show"
       #  resources :country, only: [:index, :show]
       #get 'agreement/index'
       #get 'agreement/show'
