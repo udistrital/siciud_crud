@@ -1,9 +1,11 @@
 Rails.application.routes.draw do
+  get "/api" => redirect("/swagger/dist/index.html?url=/api/v1/apidocs/")
   namespace :api do
     namespace :v1 do
       get "country", to: "country#index"
       get "country/:name", to: "country#show"
-      #  resources :country, only: [:index, :show]
+      resources :apidocs, only: [:index]
+      #resources :country, only: [:index, :show]
       #get 'agreement/index'
       #get 'agreement/show'
       #get 'agreement/create'

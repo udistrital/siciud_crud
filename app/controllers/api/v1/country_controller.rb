@@ -3,6 +3,8 @@ require "city-state"
 module Api
   module V1
     class CountryController < ApplicationController
+      include Swagger::CountryApi
+      
       def index
         render json: ISO3166::Country.all_translated(locale = "es")
       end

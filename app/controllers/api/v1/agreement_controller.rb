@@ -1,7 +1,10 @@
 module Api
   module V1
     class AgreementController < ApplicationController
+      include Swagger::AgreementApi
+
       before_action :set_agreement, only: [:show, :update]
+
       rescue_from ActiveRecord::RecordNotFound do |e|
         render json: { error: e.message }, status: :not_found
       end

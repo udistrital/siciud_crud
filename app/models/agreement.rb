@@ -1,4 +1,6 @@
 class Agreement < ApplicationRecord
+  include Swagger::AgreementSchema
+
   #belongs_to :faculty
   belongs_to :agreement_status
   belongs_to :agreement_type
@@ -9,4 +11,6 @@ class Agreement < ApplicationRecord
   has_many :agreement_research_projects
   validates :research_groups, presence: true
   validates :agreementNumber, uniqueness: true
+
+
 end
