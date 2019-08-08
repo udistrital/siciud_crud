@@ -9,7 +9,7 @@ class Agreement < ApplicationRecord
   has_many :contributions
   has_many :funding_entities, through: :contributions
   has_many :agreement_research_projects
-  validates :research_groups, presence: true
+  #validates :research_groups, presence: true
   validates :agreementNumber, uniqueness: true
 
 
