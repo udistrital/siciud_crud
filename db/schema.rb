@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_08_200831) do
+ActiveRecord::Schema.define(version: 2019_08_09_170705) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -103,6 +103,17 @@ ActiveRecord::Schema.define(version: 2019_08_08_200831) do
     t.datetime "updated_at", null: false
     t.index ["contribution_id"], name: "index_contribution_funding_entity_items_on_contribution_id"
     t.index ["item_category_id"], name: "index_contribution_funding_entity_items_on_item_category_id"
+  end
+
+  create_table "contribution_research_project_items", force: :cascade do |t|
+    t.float "cashValue"
+    t.float "inKindValue"
+    t.integer "item_category_id"
+    t.integer "contribution_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["contribution_id"], name: "index_contribution_research_project_items_on_contribution_id"
+    t.index ["item_category_id"], name: "index_contribution_research_project_items_on_item_category_id"
   end
 
   create_table "contributions", force: :cascade do |t|
@@ -205,15 +216,15 @@ ActiveRecord::Schema.define(version: 2019_08_08_200831) do
     t.integer "role_id"
     t.integer "researcher_id"
     t.integer "research_seedbed_id"
-    t.integer "state_reseacher_id"
     t.integer "researcher_type_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "state_researcher_id"
     t.index ["research_seedbed_id"], name: "index_member_seedbeds_on_research_seedbed_id"
     t.index ["researcher_id"], name: "index_member_seedbeds_on_researcher_id"
     t.index ["researcher_type_id"], name: "index_member_seedbeds_on_researcher_type_id"
     t.index ["role_id"], name: "index_member_seedbeds_on_role_id"
-    t.index ["state_reseacher_id"], name: "index_member_seedbeds_on_state_reseacher_id"
+    t.index ["state_researcher_id"], name: "index_member_seedbeds_on_state_researcher_id"
   end
 
   create_table "members", force: :cascade do |t|
@@ -338,12 +349,6 @@ ActiveRecord::Schema.define(version: 2019_08_08_200831) do
     t.integer "faculty_id"
     t.integer "curricular_project_id"
     t.integer "snies_id"
-    t.integer "genre_id"
-    t.string "telNumber"
-    t.string "celNumber"
-    t.string "address"
-    t.string "academicEmail"
-    t.string "personalEmail"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "researcher_type_id"
@@ -351,7 +356,6 @@ ActiveRecord::Schema.define(version: 2019_08_08_200831) do
     t.index ["curricular_project_id"], name: "index_researchers_on_curricular_project_id"
     t.index ["document_type_id"], name: "index_researchers_on_document_type_id"
     t.index ["faculty_id"], name: "index_researchers_on_faculty_id"
-    t.index ["genre_id"], name: "index_researchers_on_genre_id"
     t.index ["researcher_type_id"], name: "index_researchers_on_researcher_type_id"
     t.index ["snies_id"], name: "index_researchers_on_snies_id"
   end
