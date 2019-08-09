@@ -42,7 +42,7 @@ Rails.application.routes.draw do
       get "/health", to: "health#health"
       # end
       #end
-      resources :researcher, only: [:index, :show,:update,:create]
+      resources :researcher, only: [:index, :show, :update, :create]
       resources :faculty, only: [:index, :show] do
         resources :curricular_project, only: [:index, :show]
       end
@@ -60,6 +60,9 @@ Rails.application.routes.draw do
       end
       resources :contribution, only: [:index, :show, :create, :update] do
         resources :contribution_funding_entity_item, only: [:index, :show, :create, :update]
+      end
+      resources :agreement_research_project, only: [:index, :show, :create, :update] do
+        resources :contribution_rp_item, only: [:index, :show, :create, :update]
       end
       #get 'curricular_project/index'
       #get 'curricular_project/show'

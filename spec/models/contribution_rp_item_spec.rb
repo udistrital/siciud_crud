@@ -1,5 +1,5 @@
 require 'rails_helper'
 
-RSpec.describe ContributionResearchProjectItem, type: :model do
+RSpec.describe ContributionRpItem, type: :model do
   pending "add some examples to (or delete) #{__FILE__}"
 end

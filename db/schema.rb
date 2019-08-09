@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_09_170705) do
+ActiveRecord::Schema.define(version: 2019_08_09_204159) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -105,15 +105,17 @@ ActiveRecord::Schema.define(version: 2019_08_09_170705) do
     t.index ["item_category_id"], name: "index_contribution_funding_entity_items_on_item_category_id"
   end
 
-  create_table "contribution_research_project_items", force: :cascade do |t|
+  create_table "contribution_rp_items", force: :cascade do |t|
     t.float "cashValue"
     t.float "inKindValue"
     t.integer "item_category_id"
     t.integer "contribution_id"
+    t.integer "agreement_research_project_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["contribution_id"], name: "index_contribution_research_project_items_on_contribution_id"
-    t.index ["item_category_id"], name: "index_contribution_research_project_items_on_item_category_id"
+    t.index ["agreement_research_project_id"], name: "index_contribution_rp_items_on_agreement_research_project_id"
+    t.index ["contribution_id"], name: "index_contribution_rp_items_on_contribution_id"
+    t.index ["item_category_id"], name: "index_contribution_rp_items_on_item_category_id"
   end
 
   create_table "contributions", force: :cascade do |t|
