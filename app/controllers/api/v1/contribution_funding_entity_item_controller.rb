@@ -1,7 +1,7 @@
 module Api
   module V1
     class ContributionFundingEntityItemController < ApplicationController
-      before_action :set_agreement
+      #before_action :set_agreement
       before_action :set_contribution
       before_action :set_contribution_funding_entity_item, only: [:show, :update, :destroy]
 
@@ -30,7 +30,7 @@ module Api
             ((@contribution.contribution_funding_entity_items.sum(:inKindValue) + params[:contribution_funding_entity_item][:inKindValue]) < @contribution.cashContribution))
           @contribution_funding_entity_item = @contribution.contribution_funding_entity_items.new(contribution_funding_entity_item_params)
         else
-          return render json: { "error": "No se puede asignar mas del presupuesto asignado" }, status: :unprocessable_entity
+          return render json: { "error": "No se puede asignar mas del presupuesto asignado" }, status: :not_acceptable
         end
 
         if @contribution_funding_entity_item.save
@@ -40,7 +40,7 @@ module Api
         end
       end
 
-      def update
+      def update        
         if @contribution_funding_entity_item.update(contribution_funding_entity_item_params)
           render json: @contribution_funding_entity_item
         else
@@ -55,8 +55,9 @@ module Api
       end
 
       def set_contribution
-        @contribution = @agreement.contributions.find_by(id: params[:contribution_id])
+        #@contribution = @agreement.contributions.find_by(id: params[:contribution_id])
         #byebug
+        @contribution  = Contribution.find(params[:contribution_id])
       end
 
       # Use callbacks to share common setup or constraints between actions.
@@ -64,9 +65,9 @@ module Api
         params.require(:contribution_funding_entity_item).permit(:inKindValue, :cashValue, :item_category_id)
       end
 
-      def set_agreement
-        @agreement = Agreement.find(params[:agreement_id])
-      end
+      # def set_agreement
+      #   @agreement = Agreement.find(params[:agreement_id])
+      # end
     end
   end
 end
