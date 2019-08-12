@@ -31,10 +31,17 @@ module Api
       end
 
       def update
-        if @contribution_rp_item.update(contribution_rp_item_params)
-          render json: @contribution_rp_item
+        diferenceCashValue = params[:contribution_rp_item][:cashValue] - @contribution_rp_item.cashValue 
+        diferenceInKindValue = params[:contribution_rp_item][:inKindValue] - @contribution_rp_item.inKindValue 
+        if (((@contribution_funding_entity_item.contribution_rp_items.sum(:cashValue) + diferenceCashValue) <= @contribution_funding_entity_item.cashValue) &&
+            ((@contribution_funding_entity_item.contribution_rp_items.sum(:inKindValue) + diferenceInKindValue) <= @contribution_funding_entity_item.inKindValue))
+          if @contribution_rp_item.update(contribution_rp_item_params)
+            render json: @contribution_rp_item
+          else
+            render json: @contribution_rp_item.errors, status: :unprocessable_entity
+          end
         else
-          render json: @contribution_rp_item.errors, status: :unprocessable_entity
+          return render json: { "error": "No se puede asignar mas del presupuesto asignado" }, status: :not_acceptable
         end
       end
 
