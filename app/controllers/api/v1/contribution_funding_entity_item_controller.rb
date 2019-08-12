@@ -5,8 +5,6 @@ module Api
       before_action :set_contribution
       before_action :set_contribution_funding_entity_item, only: [:show, :update, :destroy]
 
-      before_action :set_research_group, only: [:show, :update, :attach]
-
       #Manejo de excepciones de la database
       rescue_from ActiveRecord::RecordNotFound do |e|
         render json: { error: e.message }, status: :not_found

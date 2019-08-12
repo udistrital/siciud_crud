@@ -3,6 +3,7 @@ module Api
     class ContributionRpItemController < ApplicationController
       before_action :set_agreement_research_project
       before_action :set_contribution_rp_item, only: [:show, :update]
+      before_action :set_contribution_funding_entity_item, only: [:create, :update]
 
       def index
         #Listar todos los convenios
@@ -15,7 +16,13 @@ module Api
       end
 
       def create
-        @contribution_rp_item = @agreement_research_project.contribution_rp_items.new(contribution_rp_item_params)
+        if (((@contribution_funding_entity_item.contribution_rp_items.sum(:cashValue) + params[:contribution_rp_item][:cashValue]) < @contribution_funding_entity_item.cashValue) &&
+            ((@contribution_funding_entity_item.contribution_rp_items.sum(:inKindValue) + params[:contribution_rp_item][:inKindValue]) < @contribution_funding_entity_item.inKindValue))
+          @contribution_rp_item = @agreement_research_project.contribution_rp_items.new(contribution_rp_item_params)
+        else
+          return render json: { "error": "No se puede asignar mas del presupuesto asignado" }, status: :not_acceptable
+        end
+
         if @agreement_research_project.save
           render json: @contribution_rp_item, status: :created
         else
@@ -38,8 +45,12 @@ module Api
         @agreement_research_project = AgreementResearchProject.find(params[:agreement_research_project_id])
       end
 
+      def set_contribution_funding_entity_item
+        @contribution_funding_entity_item = ContributionFundingEntityItem.find(params[:contribution_rp_item][:contribution_funding_entity_item_id])
+      end
+
       def contribution_rp_item_params
-        params.require(:contribution_rp_item).permit(:cashValue, :inKindValue, :contribution_id,:item_category_id)
+        params.require(:contribution_rp_item).permit(:cashValue, :inKindValue, :contribution_funding_entity_item_id)
       end
 
       def set_contribution_rp_item
