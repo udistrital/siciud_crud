@@ -62,7 +62,6 @@ class ResearchGroupSerializer < ActiveModel::Serializer
           lastName: members.researcher.lastName,
           initialDate: members.initialDate,
           finalDate: members.finalDate,
-          academicEmail: members.researcher.academicEmail,
           researcherType: members.researcher.researcher_type.name
 
       }
