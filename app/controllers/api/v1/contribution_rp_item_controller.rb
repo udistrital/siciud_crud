@@ -5,6 +5,16 @@ module Api
       before_action :set_contribution_rp_item, only: [:show, :update]
       before_action :set_contribution_funding_entity_item, only: [:create, :update]
 
+      rescue_from Exception do |e|
+        render json: { error: e.message }, status: :internal_error
+      end
+      rescue_from ActiveRecord::RecordNotFound do |e|
+        render json: { error: e.message }, status: :not_found
+      end
+      rescue_from ActiveRecord::RecordInvalid do |e|
+        render json: { error: e.message }, status: :unprocessable_entity
+      end
+
       def index
         #Listar todos los convenios
         @contribution_rp_items = @agreement_research_project.contribution_rp_items
@@ -16,8 +26,9 @@ module Api
       end
 
       def create
-        if (((@contribution_funding_entity_item.contribution_rp_items.sum(:cashValue) + params[:contribution_rp_item][:cashValue]) < @contribution_funding_entity_item.cashValue) &&
-            ((@contribution_funding_entity_item.contribution_rp_items.sum(:inKindValue) + params[:contribution_rp_item][:inKindValue]) < @contribution_funding_entity_item.inKindValue))
+        #byebug
+        if (((@contribution_funding_entity_item.contribution_rp_items.sum(:cashValue) + params[:contribution_rp_item][:cashValue]) <= @contribution_funding_entity_item.cashValue) &&
+            ((@contribution_funding_entity_item.contribution_rp_items.sum(:inKindValue) + params[:contribution_rp_item][:inKindValue]) <= @contribution_funding_entity_item.inKindValue))
           @contribution_rp_item = @agreement_research_project.contribution_rp_items.new(contribution_rp_item_params)
         else
           return render json: { "error": "No se puede asignar mas del presupuesto asignado" }, status: :not_acceptable
@@ -31,8 +42,8 @@ module Api
       end
 
       def update
-        diferenceCashValue = params[:contribution_rp_item][:cashValue] - @contribution_rp_item.cashValue 
-        diferenceInKindValue = params[:contribution_rp_item][:inKindValue] - @contribution_rp_item.inKindValue 
+        diferenceCashValue = params[:contribution_rp_item][:cashValue] - @contribution_rp_item.cashValue
+        diferenceInKindValue = params[:contribution_rp_item][:inKindValue] - @contribution_rp_item.inKindValue
         if (((@contribution_funding_entity_item.contribution_rp_items.sum(:cashValue) + diferenceCashValue) <= @contribution_funding_entity_item.cashValue) &&
             ((@contribution_funding_entity_item.contribution_rp_items.sum(:inKindValue) + diferenceInKindValue) <= @contribution_funding_entity_item.inKindValue))
           if @contribution_rp_item.update(contribution_rp_item_params)

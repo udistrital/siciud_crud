@@ -24,8 +24,8 @@ module Api
 
       def create
         # byebug
-        if (((@contribution.contribution_funding_entity_items.sum(:cashValue) + params[:contribution_funding_entity_item][:cashValue]) < @contribution.cashContribution) &&
-            ((@contribution.contribution_funding_entity_items.sum(:inKindValue) + params[:contribution_funding_entity_item][:inKindValue]) < @contribution.cashContribution))
+        if (((@contribution.contribution_funding_entity_items.sum(:cashValue) + params[:contribution_funding_entity_item][:cashValue]) <= @contribution.cashContribution) &&
+            ((@contribution.contribution_funding_entity_items.sum(:inKindValue) + params[:contribution_funding_entity_item][:inKindValue]) <= @contribution.cashContribution))
           @contribution_funding_entity_item = @contribution.contribution_funding_entity_items.new(contribution_funding_entity_item_params)
         else
           return render json: { "error": "No se puede asignar mas del presupuesto asignado" }, status: :not_acceptable
@@ -38,11 +38,18 @@ module Api
         end
       end
 
-      def update        
-        if @contribution_funding_entity_item.update(contribution_funding_entity_item_params)
-          render json: @contribution_funding_entity_item
+      def update
+        diferenceCashValue = params[:contribution_funding_entity_item][:cashValue] - @contribution_funding_entity_item.cashValue
+        diferenceInKindValue = params[:contribution_funding_entity_item][:inKindValue] - @contribution_funding_entity_item.inKindValue
+        if (((@contribution.contribution_funding_entity_items.sum(:cashValue) + diferenceCashValue) <= @contribution.cashContribution) &&
+            ((@contribution.contribution_funding_entity_items.sum(:inKindValue) + diferenceInKindValue) <= @contribution.cashContribution))
+          if @contribution_funding_entity_item.update(contribution_funding_entity_item_params)
+            render json: @contribution_funding_entity_item
+          else
+            render json: @contribution_funding_entity_item.errors, status: :unprocessable_entity
+          end
         else
-          render json: @contribution_funding_entity_item.errors, status: :unprocessable_entity
+          return render json: { "error": "No se puede asignar mas del presupuesto asignado" }, status: :not_acceptable
         end
       end
 
@@ -55,7 +62,7 @@ module Api
       def set_contribution
         #@contribution = @agreement.contributions.find_by(id: params[:contribution_id])
         #byebug
-        @contribution  = Contribution.find(params[:contribution_id])
+        @contribution = Contribution.find(params[:contribution_id])
       end
 
       # Use callbacks to share common setup or constraints between actions.

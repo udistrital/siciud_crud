@@ -58,7 +58,7 @@ Rails.application.routes.draw do
         # end
         resources :agreement_research_project, only: [:index, :show, :create, :update]
       end
-      resources :contribution, only: [:index, :show, :create, :update] do
+      resources :contribution, only: [] do
         resources :contribution_funding_entity_item, only: [:index, :show, :create, :update]
       end
       resources :agreement_research_project, only: [:index, :show, :create, :update] do
