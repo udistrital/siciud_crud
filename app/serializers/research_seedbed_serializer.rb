@@ -2,7 +2,7 @@ class ResearchSeedbedSerializer < ActiveModel::Serializer
   include Rails.application.routes.url_helpers
   attributes :id, :name, :acronym, :description, :cidcRegistrationDate,
              :faculties, :cidcActNumber, :facultyActNumber, :facultyRegistrationDate,
-             :mail, :webpage, :mission, :vision, :curricular_projects,
+             :email, :webpage, :mission, :vision, :curricular_projects,
              :state_seedbed, :research_focuses,:snies, :facultyActDocument, :cidcActDocument,:director
 
   def faculties
