@@ -37,16 +37,17 @@ module Api
         #@research_seedbed.faculty_ids = faculties
         #end
         #Revisar si se enviaron Lienas de investigacion  y añadirselas al semillero (relacion muchos a muchos)
-        if (research_focus_ids = research_seedbed_params[:research_focus_ids])
-          research_focus_ids = research_focus_ids.split(",")
-          @research_seedbed.research_focus_ids = research_focus_ids
-        end
-        #Revisar si se enviaron projec  y añadirselas al semillero (relacion muchos a muchos)
-        if (curricular_project_ids = research_seedbed_params[:curricular_project_ids])
-          curricular_project_ids = curricular_project_ids.split(",")
-          @research_seedbed.curricular_project_ids = curricular_project_ids
-          setFaculties
-        end
+        # if (research_focus_ids = research_seedbed_params[:research_focus_ids])
+        #   research_focus_ids = research_focus_ids.split(",")
+        #   @research_seedbed.research_focus_ids = research_focus_ids
+        # end
+        # #Revisar si se enviaron projec  y añadirselas al semillero (relacion muchos a muchos)
+        # if (curricular_project_ids = research_seedbed_params[:curricular_project_ids])
+        #   curricular_project_ids = curricular_project_ids.split(",")
+        #   @research_seedbed.curricular_project_ids = curricular_project_ids
+          
+        # end
+        setFaculties
         #Se intenta guardar el semillero
         if @research_seedbed.save
           render json: @research_seedbed, status: :created
@@ -122,7 +123,7 @@ module Api
         params.require(:research_seedbed).permit(:name, :acronym, :description, :cidcRegistrationDate,
                                                  :cidcActNumber, :facultyActNumber, :facultyRegistrationDate, :state_seedbed_id,
                                                  :snies_id, :email, :webpage, :mission, :vision, :facultyActDocument, :cidcActDocument,
-                                                  curricular_project_ids: [], research_focus_ids: [])
+                                               research_focus_ids: [], curricular_project_ids: [])
       end
     end
   end
