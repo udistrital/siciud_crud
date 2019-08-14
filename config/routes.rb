@@ -19,6 +19,7 @@ Rails.application.routes.draw do
       #Endpoint para listar los estados de los grupos de investigacion
       resources :state_group, only: [:index, :show]
       #get "state_group/", to: "state_group#index"
+      resources :state_seedbed, only: [:index, :show]
 
       #get "state_group/:id", to: "state_group#show"
       #Enpoint para listar las lineas de investigacion
@@ -29,6 +30,8 @@ Rails.application.routes.draw do
       put "research_group/:id/attach/", to: "research_group#attach"
       #Enpoint para actualizar los documentos de los grupos de investigacion
       put "research_seedbed/:id/attach/", to: "research_seedbed#attach"
+      #Enpoint para actualizar los documentos de los convenios
+      put "agreement/:id/attach/", to: "agreement#attach"
       #Enpoint para listar los snies
       resources :snies, only: [:index, :show]
       #get "snies/", to: "snies#index"
@@ -63,6 +66,9 @@ Rails.application.routes.draw do
       end
       resources :agreement_research_project, only: [:index, :show, :create, :update] do
         resources :contribution_rp_item, only: [:index, :show, :create, :update]
+      end
+      resources :contribution_rp_item, only: [] do
+        resources :arp_expense, only: [:index, :show, :create, :update]
       end
       #get 'curricular_project/index'
       #get 'curricular_project/show'

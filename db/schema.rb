@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_13_155719) do
+ActiveRecord::Schema.define(version: 2019_08_14_154232) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -80,6 +80,27 @@ ActiveRecord::Schema.define(version: 2019_08_13_155719) do
   create_table "agreements_research_groups", id: false, force: :cascade do |t|
     t.integer "agreement_id", null: false
     t.integer "research_group_id", null: false
+  end
+
+  create_table "arp_expenses", force: :cascade do |t|
+    t.string "name"
+    t.float "totalPayed"
+    t.float "remaining"
+    t.string "description"
+    t.date "date"
+    t.boolean "is_payed"
+    t.string "code"
+    t.string "bizagiCode"
+    t.integer "contribution_rp_item_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.float "inKindValue"
+    t.float "inCashValue"
+    t.float "totalPayedInCash"
+    t.float "totalPayedInKind"
+    t.float "remainingInCash"
+    t.float "remainingInKind"
+    t.index ["contribution_rp_item_id"], name: "index_arp_expenses_on_contribution_rp_item_id"
   end
 
   create_table "colciencias_calls", force: :cascade do |t|

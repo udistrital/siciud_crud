@@ -93,6 +93,7 @@ module Api
         if (params[:cidcActDocument])
           @research_group.cidcActDocument.attach(params[:cidcActDocument])
         end
+        render json: @research_group
       end
 
       private
