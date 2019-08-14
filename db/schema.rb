@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_14_154232) do
+ActiveRecord::Schema.define(version: 2019_08_14_162200) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -332,7 +332,6 @@ ActiveRecord::Schema.define(version: 2019_08_14_154232) do
     t.integer "cidcActNumber"
     t.integer "facultyActNumber"
     t.integer "state_seedbed_id"
-    t.string "mail"
     t.string "webpage"
     t.string "mission"
     t.string "vision"
@@ -340,6 +339,7 @@ ActiveRecord::Schema.define(version: 2019_08_14_154232) do
     t.integer "researcher_focus_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "email"
     t.index ["researcher_focus_id"], name: "index_research_seedbeds_on_researcher_focus_id"
     t.index ["snies_id"], name: "index_research_seedbeds_on_snies_id"
     t.index ["state_seedbed_id"], name: "index_research_seedbeds_on_state_seedbed_id"

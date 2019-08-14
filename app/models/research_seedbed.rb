@@ -12,6 +12,6 @@ class ResearchSeedbed < ApplicationRecord
 
   validates :name,:acronym ,:cidcRegistrationDate,
         :cidcActNumber,:facultyActNumber,:facultyRegistrationDate,:state_seedbed_id,
-        :snies_id,:mail, presence: true
+        :snies_id,:email, presence: true
   
 end

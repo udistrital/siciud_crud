@@ -121,7 +121,7 @@ module Api
       def research_seedbed_params
         params.require(:research_seedbed).permit(:name, :acronym, :description, :cidcRegistrationDate,
                                                  :cidcActNumber, :facultyActNumber, :facultyRegistrationDate, :state_seedbed_id,
-                                                 :snies_id, :mail, :webpage, :mission, :vision, :facultyActDocument, :cidcActDocument, :curricular_project_ids, :research_focus_ids)
+                                                 :snies_id, :email, :webpage, :mission, :vision, :facultyActDocument, :cidcActDocument, :curricular_project_ids, :research_focus_ids)
       end
     end
   end
