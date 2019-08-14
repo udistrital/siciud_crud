@@ -65,16 +65,16 @@ module Api
           #@research_seedbed.faculty_ids = faculties
           #end
           #Se actualizan si se enviaron facultades  y añadirselas al semillero (relacion muchos a muchos)
-          if (research_focus_ids = research_seedbed_params[:research_focus_ids])
-            research_focus_ids = research_focus_ids.split(",")
-            @research_seedbed.research_focus_ids = research_focus_ids
-          end
-          #Se actualizan si se enviaron facultades  y añadirselas al semillero (relacion muchos a muchos)
-          if (curricular_project_ids = research_seedbed_params[:curricular_project_ids])
-            curricular_project_ids = curricular_project_ids.split(",")
-            @research_seedbed.curricular_project_ids = curricular_project_ids
-            setFaculties
-          end
+          # if (research_focus_ids = research_seedbed_params[:research_focus_ids])
+          #   research_focus_ids = research_focus_ids.split(",")
+          #   @research_seedbed.research_focus_ids = research_focus_ids
+          # end
+          # #Se actualizan si se enviaron facultades  y añadirselas al semillero (relacion muchos a muchos)
+          # if (curricular_project_ids = research_seedbed_params[:curricular_project_ids])
+          #   curricular_project_ids = curricular_project_ids.split(",")
+          #   @research_seedbed.curricular_project_ids = curricular_project_ids
+          # end
+          setFaculties
           #Se intenta actualizar el semillero de investigacion con las facultades en caso de que no se pueda envia error
           if @research_seedbed.save
             render json: @research_seedbed
@@ -121,7 +121,8 @@ module Api
       def research_seedbed_params
         params.require(:research_seedbed).permit(:name, :acronym, :description, :cidcRegistrationDate,
                                                  :cidcActNumber, :facultyActNumber, :facultyRegistrationDate, :state_seedbed_id,
-                                                 :snies_id, :email, :webpage, :mission, :vision, :facultyActDocument, :cidcActDocument, :curricular_project_ids, :research_focus_ids)
+                                                 :snies_id, :email, :webpage, :mission, :vision, :facultyActDocument, :cidcActDocument,
+                                                  curricular_project_ids: [], research_focus_ids: [])
       end
     end
   end
