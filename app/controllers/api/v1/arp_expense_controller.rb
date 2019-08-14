@@ -15,15 +15,29 @@ module Api
       end
 
       def create
-        @arp_expense = ArpExpense.new(arp_expense_params)
-        @arp_expense.totalPayedInCash = 0
-        @arp_expense.totalPayedInKind = 0
-        @arp_expense.remainingInCash = @arp_expense.inKindValue
-        @arp_expense.remainingInKind = @arp_expense.inCashValue
-        @arp_expense.remaining = @arp_expense.remainingInCash + arp_expense.remainingInKind
-        @arp_expense.totalPayed = 0
+        #byebug
+        if ((params[:arp_expense][:inCashValue] <= @contribution_rp_item.remainingCash) &&
+            (params[:arp_expense][:inKindValue] <= @contribution_rp_item.remainingInKind))
+          @arp_expense = @contribution_rp_item.arp_expenses.new(arp_expense_params)
+          #@arp_expense = ArpExpense.new(arp_expense_params)
+          @arp_expense.totalPayedInCash = 0
+          @arp_expense.totalPayedInKind = 0
+          @arp_expense.remainingInCash = @arp_expense.inKindValue
+          @arp_expense.remainingInKind = @arp_expense.inCashValue
+          @arp_expense.remaining = @arp_expense.remainingInCash + @arp_expense.remainingInKind
+          @arp_expense.totalPayed = 0
 
+          #@contribution_rp_item.executedCash =
+          #@contribution_rp_item.executedInKind =
+          @contribution_rp_item.compromisedCash += @arp_expense.inCashValue
+          @contribution_rp_item.compromisedInKind += @arp_expense.inKindValue
+          @contribution_rp_item.remainingCash -= @arp_expense.inCashValue
+          @contribution_rp_item.remainingInKind -= @arp_expense.inKindValue
+        else
+          return render json: { "error": "No se puede gastar mas del presupuesto asignado" }, status: :not_acceptable
+        end
         if @arp_expense.save
+          @contribution_rp_item.save
           render json: @arp_expense, status: :created
         else
           render json: @arp_expense.errors, status: :unprocessable_entity

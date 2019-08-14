@@ -30,11 +30,17 @@ module Api
         if (((@contribution_funding_entity_item.contribution_rp_items.sum(:cashValue) + params[:contribution_rp_item][:cashValue]) <= @contribution_funding_entity_item.cashValue) &&
             ((@contribution_funding_entity_item.contribution_rp_items.sum(:inKindValue) + params[:contribution_rp_item][:inKindValue]) <= @contribution_funding_entity_item.inKindValue))
           @contribution_rp_item = @agreement_research_project.contribution_rp_items.new(contribution_rp_item_params)
+          @contribution_rp_item.executedCash = 0
+          @contribution_rp_item.executedInKind = 0
+          @contribution_rp_item.remainingCash = @contribution_rp_item.cashValue
+          @contribution_rp_item.remainingInKind = @contribution_rp_item.inKindValue
+          @contribution_rp_item.compromisedCash = 0
+          @contribution_rp_item.compromisedInKind = 0
         else
           return render json: { "error": "No se puede asignar mas del presupuesto asignado" }, status: :not_acceptable
         end
 
-        if @agreement_research_project.save
+        if @contribution_rp_item.save
           render json: @contribution_rp_item, status: :created
         else
           render json: @contribution_rp_item.errors, status: :unprocessable_entity

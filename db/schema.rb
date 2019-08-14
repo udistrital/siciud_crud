@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_14_162200) do
+ActiveRecord::Schema.define(version: 2019_08_14_213412) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -134,6 +134,12 @@ ActiveRecord::Schema.define(version: 2019_08_14_162200) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "contribution_funding_entity_item_id"
+    t.float "executedCash"
+    t.float "executedInKind"
+    t.float "remainingCash"
+    t.float "remainingInKind"
+    t.float "compromisedCash"
+    t.float "compromisedInKind"
     t.index ["agreement_research_project_id"], name: "index_contribution_rp_items_on_agreement_research_project_id"
     t.index ["contribution_funding_entity_item_id"], name: "index_contribution_rp_items_on_cont_funding_entity_item_id"
   end
