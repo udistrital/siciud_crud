@@ -31,6 +31,7 @@ module Api
       def create
         #Crear el semillero de investigacion con los parametros que se envian
         @research_seedbed = ResearchSeedbed.new(research_seedbed_params)
+        @research_seedbed.curricular_project_ids = (params[:research_seedbed][:curricular_project_ids]).uniq
         #if (faculties = research_seedbed_params[:faculty_ids])
         #Revisar si se enviaron facultades  y añadirselas al semillero (relacion muchos a muchos)
         #faculties = faculties.split(',')
@@ -45,7 +46,7 @@ module Api
         # if (curricular_project_ids = research_seedbed_params[:curricular_project_ids])
         #   curricular_project_ids = curricular_project_ids.split(",")
         #   @research_seedbed.curricular_project_ids = curricular_project_ids
-          
+
         # end
         setFaculties
         #Se intenta guardar el semillero
@@ -60,6 +61,7 @@ module Api
       def update
         #Se intenta actualizar el semillero con la informacion enviada en los parametros
         if @research_seedbed.update(research_seedbed_params)
+          @research_group.curricular_project_ids = (params[:research_seedbed][:curricular_project_ids]).uniq
           #Se actualizan si se enviaron facultades  y añadirselas al semillero (relacion muchos a muchos)
           #if(faculties = research_seedbed_params[:faculty_ids])
           #faculties = faculties.split(',')
@@ -123,7 +125,7 @@ module Api
         params.require(:research_seedbed).permit(:name, :acronym, :description, :cidcRegistrationDate,
                                                  :cidcActNumber, :facultyActNumber, :facultyRegistrationDate, :state_seedbed_id,
                                                  :snies_id, :email, :webpage, :mission, :vision, :facultyActDocument, :cidcActDocument,
-                                               research_focus_ids: [], curricular_project_ids: [])
+                                                 research_focus_ids: [], curricular_project_ids: [])
       end
     end
   end

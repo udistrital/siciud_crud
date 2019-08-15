@@ -34,6 +34,7 @@ module Api
       def create
         #Crear el grupo de investigacion con los parametros que se envian
         @research_group = ResearchGroup.new(research_group_params)
+        @research_group.curricular_project_ids = (params[:research_group][:curricular_project_ids]).uniq
         #Revisar si se enviaron facultades,lineas de investigacion e proyectos curriculares
         #y añadirselas al grupo (relacion muchos a muchos)
         # if (faculties = research_group_params[:faculty_ids])
@@ -60,6 +61,7 @@ module Api
 
       def update
         if @research_group.update(research_group_params)
+          @research_group.curricular_project_ids = (params[:research_group][:curricular_project_ids]).uniq
           # if(faculties = research_group_params[:faculty_ids])
           # faculties = faculties.split(',')
           # @research_group.faculty_ids = faculties
