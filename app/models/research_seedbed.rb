@@ -7,7 +7,7 @@ class ResearchSeedbed < ApplicationRecord
   has_and_belongs_to_many :curricular_projects
   has_and_belongs_to_many :research_focuses
 
-  has_many :member_seedbeds
+  has_many :seedbed_members
   has_many :plan_periods, as: :planable
 
   validates :name,:acronym ,:cidcRegistrationDate,

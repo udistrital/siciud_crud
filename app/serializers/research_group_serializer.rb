@@ -53,14 +53,14 @@ class ResearchGroupSerializer < ActiveModel::Serializer
   end
 
   def director
-    members = self.object.members.where(role_id: 1).last
+    members = self.object.group_members.where(role_id: 1).last
     if members
       {
         name: members.researcher.name,
         lastName: members.researcher.lastName,
-        initialDate: members.initialDate,
-        finalDate: members.finalDate,
-        researcherType: members.researcher.researcher_type.name,
+        #initialDate: members.initialDate,
+        #finalDate: members.finalDate,
+       # researcherType: members.researcher.researcher_type.name,
 
       }
     end

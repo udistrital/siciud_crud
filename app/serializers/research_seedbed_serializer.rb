@@ -54,15 +54,15 @@ class ResearchSeedbedSerializer < ActiveModel::Serializer
 
   def director
 
-    members = self.object.member_seedbeds.where(role_id: 1).last
+    members = self.object.seedbed_members.where(role_id: 1).last
     if members
       {
           name: members.researcher.name,
           lastName: members.researcher.lastName,
-          initialDate: members.initialDate,
-          finalDate: members.finalDate,
-          academicEmail: members.researcher.academicEmail,
-          researcherType: members.researcher.researcher_type.name
+          #initialDate: members.initialDate,
+          #finalDate: members.finalDate,
+          #academicEmail: members.researcher.academicEmail,
+         # researcherType: members.researcher.researcher_type.name
 
       }
     end

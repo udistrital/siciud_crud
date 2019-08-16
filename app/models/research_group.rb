@@ -9,7 +9,7 @@ class ResearchGroup < ApplicationRecord
   belongs_to :state_group
   belongs_to :snies
   #  belongs_to :research_focus
-  has_many :members
+  has_many :group_members
   has_many :historical_colciencias_ranks
   has_many :plan_periods, as: :planable
   #Validaciones de los campos obligatorios

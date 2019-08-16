@@ -77,10 +77,10 @@ Researcher.create(name: "Jorge",
                   lastName: "bocanegra")
 
 100.times do |i|
-  Member.create(role_id: 1, researcher_id: 1, research_group_id: i + 1, state_researcher_id: 1,initialDate: DateTime.now.in_time_zone(-5).to_date)
+  GroupMember.create(role_id: 1, researcher_id: 1, research_group_id: i + 1, state_researcher_id: 1)
 end
 100.times do |i|
-  Member.create(role_id: 2, researcher_id: 1, research_group_id: i + 1, state_researcher_id: 1, initialDate: DateTime.now.in_time_zone(-5).to_date)
+  GroupMember.create(role_id: 2, researcher_id: 1, research_group_id: i + 1, state_researcher_id: 1)
 end
 StateSeedbed.create(name: "Activo")
 StateSeedbed.create(name: "Inactivo")

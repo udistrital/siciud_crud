@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_14_213412) do
+ActiveRecord::Schema.define(version: 2019_08_16_155056) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -221,6 +221,30 @@ ActiveRecord::Schema.define(version: 2019_08_14_213412) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "gm_periods", force: :cascade do |t|
+    t.date "initialDate"
+    t.date "finalDate"
+    t.integer "role_id"
+    t.integer "group_member_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["group_member_id"], name: "index_gm_periods_on_group_member_id"
+    t.index ["role_id"], name: "index_gm_periods_on_role_id"
+  end
+
+  create_table "group_members", force: :cascade do |t|
+    t.integer "role_id"
+    t.integer "researcher_id"
+    t.integer "research_group_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "state_researcher_id"
+    t.index ["research_group_id"], name: "index_group_members_on_research_group_id"
+    t.index ["researcher_id"], name: "index_group_members_on_researcher_id"
+    t.index ["role_id"], name: "index_group_members_on_role_id"
+    t.index ["state_researcher_id"], name: "index_group_members_on_state_researcher_id"
+  end
+
   create_table "historical_colciencias_ranks", force: :cascade do |t|
     t.integer "colciencias_call_id"
     t.integer "colciencias_category_id"
@@ -238,19 +262,28 @@ ActiveRecord::Schema.define(version: 2019_08_14_213412) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "member_groups", force: :cascade do |t|
+    t.integer "role_id"
+    t.integer "researcher_id"
+    t.integer "research_group_id"
+    t.integer "state_reseacher_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["research_group_id"], name: "index_member_groups_on_research_group_id"
+    t.index ["researcher_id"], name: "index_member_groups_on_researcher_id"
+    t.index ["role_id"], name: "index_member_groups_on_role_id"
+    t.index ["state_reseacher_id"], name: "index_member_groups_on_state_reseacher_id"
+  end
+
   create_table "member_seedbeds", force: :cascade do |t|
-    t.date "initialDate"
-    t.date "finalDate"
     t.integer "role_id"
     t.integer "researcher_id"
     t.integer "research_seedbed_id"
-    t.integer "researcher_type_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "state_researcher_id"
     t.index ["research_seedbed_id"], name: "index_member_seedbeds_on_research_seedbed_id"
     t.index ["researcher_id"], name: "index_member_seedbeds_on_researcher_id"
-    t.index ["researcher_type_id"], name: "index_member_seedbeds_on_researcher_type_id"
     t.index ["role_id"], name: "index_member_seedbeds_on_role_id"
     t.index ["state_researcher_id"], name: "index_member_seedbeds_on_state_researcher_id"
   end
@@ -402,6 +435,30 @@ ActiveRecord::Schema.define(version: 2019_08_14_213412) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "seedbed_members", force: :cascade do |t|
+    t.integer "role_id"
+    t.integer "researcher_id"
+    t.integer "research_seedbed_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "state_researcher_id"
+    t.index ["research_seedbed_id"], name: "index_seedbed_members_on_research_seedbed_id"
+    t.index ["researcher_id"], name: "index_seedbed_members_on_researcher_id"
+    t.index ["role_id"], name: "index_seedbed_members_on_role_id"
+    t.index ["state_researcher_id"], name: "index_seedbed_members_on_state_researcher_id"
+  end
+
+  create_table "sm_periods", force: :cascade do |t|
+    t.date "initialDate"
+    t.date "finalDate"
+    t.integer "role_id"
+    t.integer "seedbeed_member_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["role_id"], name: "index_sm_periods_on_role_id"
+    t.index ["seedbeed_member_id"], name: "index_sm_periods_on_seedbeed_member_id"
   end
 
   create_table "snies", force: :cascade do |t|
