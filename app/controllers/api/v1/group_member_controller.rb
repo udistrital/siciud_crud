@@ -15,16 +15,24 @@ module Api
       end
 
       def create
-        @group_member = @research_group.group_members.new(group_member_params)
-        @group_member.state_researcher_id = 1
-        if @group_member.save
+        if (@research_group.group_members.find_by(researcher_id: params[:group_member][:researcher_id]))
+          @group_member = @research_group.group_members.find_by(researcher_id: params[:group_member][:researcher_id])
           @gm_periods = @group_member.gm_periods.new(initialDate: DateTime.now.in_time_zone(-5).to_date,
                                                      role_id: params[:group_member][:role_id])
           @gm_periods.save
           render json: @group_member, status: :created
-          #, location: research_project_plan_path(@research_project_plan)
         else
-          render json: @group_member.errors, status: :unprocessable_entity
+          @group_member = @research_group.group_members.new(group_member_params)
+          @group_member.state_researcher_id = 1
+          if @group_member.save
+            @gm_periods = @group_member.gm_periods.new(initialDate: DateTime.now.in_time_zone(-5).to_date,
+                                                       role_id: params[:group_member][:role_id])
+            @gm_periods.save
+            render json: @group_member, status: :created
+            #, location: research_project_plan_path(@research_project_plan)
+          else
+            render json: @group_member.errors, status: :unprocessable_entity
+          end
         end
       end
 
