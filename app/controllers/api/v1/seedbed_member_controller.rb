@@ -23,20 +23,25 @@ module Api
       def create
         if (@research_seedbed.seedbed_members.find_by(researcher_id: params[:seedbed_member][:researcher_id]))
           @seedbed_member = @research_seedbed.seedbed_members.find_by(researcher_id: params[:seedbed_member][:researcher_id])
-          @sm_period = @seedbed_member.sm_periods.new(initialDate: DateTime.now.in_time_zone(-5).to_date,
-                                                     role_id: params[:seedbed_member][:role_id])
-          #byebug
-          if(@sm_period.save)
-          render json: @seedbed_member, status: :created
+          if (@seedbed_member.sm_periods.last.finalDate)
+            @sm_period = @seedbed_member.sm_periods.new(initialDate: DateTime.now.in_time_zone(-5).to_date,
+                                                        role_id: params[:seedbed_member][:role_id])
+
+            byebug
+            if (@sm_period.save)
+              render json: @seedbed_member, status: :created
+            else
+              render json: @sm_period.errors, status: :unprocessable_entity
+            end
           else
-            render json: @sm_period.errors, status: :unprocessable_entity
+            return render json: { "error": "No se puede asignar un nuevo periodo si el integrante aun se encuentra activo" }, status: :not_acceptable
           end
         else
           @seedbed_member = @research_seedbed.seedbed_members.new(seedbed_member_params)
           @seedbed_member.state_researcher_id = 1
           if @seedbed_member.save
             @sm_periods = @seedbed_member.sm_periods.new(initialDate: DateTime.now.in_time_zone(-5).to_date,
-                                                       role_id: params[:seedbed_member][:role_id])
+                                                         role_id: params[:seedbed_member][:role_id])
             @sm_periods.save
             render json: @seedbed_member, status: :created
             #, location: research_project_plan_path(@research_project_plan)

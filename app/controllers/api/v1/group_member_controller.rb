@@ -24,10 +24,19 @@ module Api
       def create
         if (@research_group.group_members.find_by(researcher_id: params[:group_member][:researcher_id]))
           @group_member = @research_group.group_members.find_by(researcher_id: params[:group_member][:researcher_id])
-          @gm_periods = @group_member.gm_periods.new(initialDate: DateTime.now.in_time_zone(-5).to_date,
-                                                     role_id: params[:group_member][:role_id])
-          @gm_periods.save
-          render json: @group_member, status: :created
+          if (@group_member.gm_periods.last.finalDate)
+            @gm_periods = @group_member.gm_periods.new(initialDate: DateTime.now.in_time_zone(-5).to_date,
+                                                       role_id: params[:group_member][:role_id])
+            if @gm_periods.save
+              render json: @group_member, status: :created
+              #, location: research_project_plan_path(@research_project_plan)
+            else
+              render json: @gm_periods.errors, status: :unprocessable_entity
+            end
+            render json: @group_member, status: :created
+          else
+            return render json: { "error": "No se puede asignar un nuevo periodo si el integrante aun se encuentra activo" }, status: :not_acceptable
+          end
         else
           @group_member = @research_group.group_members.new(group_member_params)
           @group_member.state_researcher_id = 1
