@@ -4,6 +4,13 @@ module Api
       before_action :set_research_group
       before_action :set_group_member, only: [:show, :update, :destroy]
 
+      rescue_from ActiveRecord::RecordNotFound do |e|
+        render json: { error: e.message }, status: :not_found
+      end
+      rescue_from ActiveRecord::RecordInvalid do |e|
+        render json: { error: e.message }, status: :unprocessable_entity
+      end
+
       def index
         @group_members = @research_group.group_members
 

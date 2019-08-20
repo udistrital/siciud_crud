@@ -20,7 +20,8 @@ module Api
         #end
         #Se envian los semilleros en formato JSON paginados de a 10 elementos por pagina
         paginate json: @research_seedbeds.includes(:faculties, :curricular_projects, :research_focuses,
-                                                   :state_seedbed, :snies, :cidcActDocument_attachment, :facultyActDocument_attachment)
+                                                   :state_seedbed, :snies, :cidcActDocument_attachment, :facultyActDocument_attachment),
+                 each_serializer: ResearchSeedbedSimpleSerializer
       end
 
       def show
