@@ -24,6 +24,7 @@ module Api
           Agreement,
         AgreementController,
         CountryController,
+        GroupMemberController,
         self,
       ].freeze
 

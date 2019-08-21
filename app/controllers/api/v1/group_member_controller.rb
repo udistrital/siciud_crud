@@ -1,6 +1,8 @@
 module Api
   module V1
     class GroupMemberController < ApplicationController
+      include Swagger::GroupMemberApi
+
       before_action :set_research_group
       before_action :set_group_member, only: [:show, :update, :destroy, :deactivate]
 
@@ -27,7 +29,7 @@ module Api
           if (@group_member.gm_periods.last.finalDate)
             @gm_periods = @group_member.gm_periods.new(initialDate: DateTime.now.in_time_zone(-5).to_date,
                                                        role_id: params[:group_member][:role_id])
-            
+
             @group_member.role_id = params[:group_member][:role_id]
             @group_member.state_researcher_id = 1
             @group_member.save

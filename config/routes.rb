@@ -45,6 +45,7 @@ Rails.application.routes.draw do
       get "/health", to: "health#health"
       # end
       #end
+      resources :state_researcher, only: [:index, :show]
       resources :researcher, only: [:index, :show, :update, :create]
       resources :faculty, only: [:index, :show] do
         resources :curricular_project, only: [:index, :show]
