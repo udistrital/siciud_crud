@@ -6,7 +6,11 @@ class SeedbedMemberSerializer < ActiveModel::Serializer
   end
 
   def role
-    self.object.role.name
+    {
+      id: self.object.role.id,
+      name: self.object.role.name,
+
+    }
   end
 
   def sm_periods

@@ -16,7 +16,7 @@ module Api
       def index
         @group_members = @research_group.group_members
 
-        render json: @group_members
+        render json: @group_members.includes(:researcher,:role), each_serializer: GroupMemberBaseSerializer
       end
 
       def show

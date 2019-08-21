@@ -6,7 +6,12 @@ class GroupMemberSerializer < ActiveModel::Serializer
   end
 
   def role
-    self.object.role.name
+    
+      #id: self.object.role.id,
+      #name: 
+      self.object.role.name
+
+    
   end
 
   def gm_periods
@@ -16,8 +21,7 @@ class GroupMemberSerializer < ActiveModel::Serializer
         initialDate: gm_period.initialDate,
         finalDate: gm_period.finalDate,
         role_id: gm_period.role_id,
-        roleName: gm_period.role.name,
-        
+        roleName: gm_period.role.name        
       }
     end
     #    res
