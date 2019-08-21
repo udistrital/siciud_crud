@@ -1,9 +1,6 @@
 class FundingEntitySerializer < ActiveModel::Serializer
   attributes :id, :name, :country, :city,
              :phoneNumber, :mobileNumber,:observation,:address,
-             :entity_type
+             :entity_type_id
 
-  def entity_type
-   self.object.entity_type
-  end
 end

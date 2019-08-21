@@ -85,6 +85,7 @@ Rails.application.routes.draw do
       resources :research_group, only: [:index, :show, :create, :update] do
         #    member do
         resources :group_member, only: [:index, :show, :create, :update]
+        put "/group_member/:id/deactivate/", to: "group_member#deactivate"
         # GET    /research_group/:id/plan_periods                                         plan_periods#index                    [Endpoint para listar los periodos de un plan de accion]
         # POST   /research_group/:id/plan_periods                                         plan_periods#create                   [Endpoint para crear los periodos de un plan de accion]
         # GET    /research_group/:id/plan_periods/:id                                     plan_periods#show                     [Endpoint para mostrar un periodo de un plan de accion]
@@ -138,7 +139,7 @@ Rails.application.routes.draw do
       resources :research_seedbed, only: [:index, :show, :create, :update] do
         #member do
         resources :seedbed_member, only: [:index, :show, :create, :update]
-
+        put "/seedbed_member/:id/deactivate/", to: "seedbed_member#deactivate"
         # GET    /research_seedbed/:id/plan_periods                                         plan_periods#index                    [Endpoint para listar los periodos de un plan de accion]
         # POST   /research_seedbed/:id/plan_periods                                         plan_periods#create                   [Endpoint para crear los periodos de un plan de accion]
         # GET    /research_seedbed/:id/plan_periods/:id                                     plan_periods#show                     [Endpoint para mostrar un periodo de un plan de accion]

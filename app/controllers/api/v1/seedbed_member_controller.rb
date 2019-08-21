@@ -2,7 +2,7 @@ module Api
   module V1
     class SeedbedMemberController < ApplicationController
       before_action :set_research_seedbed
-      before_action :set_seedbed_member, only: [:show, :update, :destroy]
+      before_action :set_seedbed_member, only: [:show, :update, :destroy, :deactivate]
 
       rescue_from ActiveRecord::RecordNotFound do |e|
         render json: { error: e.message }, status: :not_found
@@ -27,7 +27,9 @@ module Api
             @sm_period = @seedbed_member.sm_periods.new(initialDate: DateTime.now.in_time_zone(-5).to_date,
                                                         role_id: params[:seedbed_member][:role_id])
 
-            byebug
+            @seedbed_member.role_id = params[:seedbed_member][:role_id]
+            @seedbed_member.state_researcher_id = 1
+            @seedbed_member.save
             if (@sm_period.save)
               render json: @seedbed_member, status: :created
             else
@@ -53,6 +55,17 @@ module Api
 
       def update
         if @seedbed_member.update(seedbed_member_params)
+          render json: @seedbed_member
+        else
+          render json: @seedbed_member.errors, status: :unprocessable_entity
+        end
+      end
+
+      def deactivate
+        @sm_period = @seedbed_member.sm_periods.last
+        @sm_period.finalDate = DateTime.now.in_time_zone(-5).to_date
+        @seedbed_member.state_researcher_id = 2
+        if @seedbed_member.save && @sm_period.save
           render json: @seedbed_member
         else
           render json: @seedbed_member.errors, status: :unprocessable_entity

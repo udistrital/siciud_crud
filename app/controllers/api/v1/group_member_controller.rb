@@ -2,7 +2,7 @@ module Api
   module V1
     class GroupMemberController < ApplicationController
       before_action :set_research_group
-      before_action :set_group_member, only: [:show, :update, :destroy]
+      before_action :set_group_member, only: [:show, :update, :destroy, :deactivate]
 
       rescue_from ActiveRecord::RecordNotFound do |e|
         render json: { error: e.message }, status: :not_found
@@ -27,13 +27,17 @@ module Api
           if (@group_member.gm_periods.last.finalDate)
             @gm_periods = @group_member.gm_periods.new(initialDate: DateTime.now.in_time_zone(-5).to_date,
                                                        role_id: params[:group_member][:role_id])
+            
+            @group_member.role_id = params[:group_member][:role_id]
+            @group_member.state_researcher_id = 1
+            @group_member.save
             if @gm_periods.save
               render json: @group_member, status: :created
               #, location: research_project_plan_path(@research_project_plan)
             else
               render json: @gm_periods.errors, status: :unprocessable_entity
             end
-            render json: @group_member, status: :created
+            #render json: @group_member, status: :created
           else
             return render json: { "error": "No se puede asignar un nuevo periodo si el integrante aun se encuentra activo" }, status: :not_acceptable
           end
@@ -49,6 +53,17 @@ module Api
           else
             render json: @group_member.errors, status: :unprocessable_entity
           end
+        end
+      end
+
+      def deactivate
+        @gm_period = @group_member.gm_periods.last
+        @gm_period.finalDate = DateTime.now.in_time_zone(-5).to_date
+        @group_member.state_researcher_id = 2
+        if @group_member.save && @gm_period.save
+          render json: @group_member
+        else
+          render json: @group_member.errors, status: :unprocessable_entity
         end
       end
 
