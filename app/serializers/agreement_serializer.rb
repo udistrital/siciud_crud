@@ -2,14 +2,14 @@ class AgreementSerializer < ActiveModel::Serializer
   include Rails.application.routes.url_helpers
   attributes :id, :name, :registerDate, :startDate, :finalDate,
              :agreementNumber, :agreement_status_id, :agreement_type_id,
-             :duration, :availability, :bizagiNumber, :description, :research_groups, :faculties, :funding_entities, :contributions, :agreement_research_projects,
+             :duration, :availability, :bizagiNumber, :description, :research_group_ids, :faculty_ids, :funding_entity_ids, :contributions, :agreement_research_project_ids,
              :budgetInKind, :budgetInCash, :totalBudget,:contractDocument,:initialActDocument
 
-  def faculties
+  #def faculties
     # self.object.research_groups.faculties
     #Faculty.where(research_groups: :faculty_ids)
-    self.object.faculties.uniq
-  end
+ #   self.object.faculties.uniq
+#  end
 
   def budgetInKind
     self.object.contributions.sum(:inKindContribution)
