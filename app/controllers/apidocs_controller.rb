@@ -21,10 +21,13 @@ module Api
 
       # A list of all classes that have swagger_* declarations.
       SWAGGERED_CLASSES = [
-          Agreement,
+        Agreement,
+        GroupMember,
+        SeedbedMember,
         AgreementController,
         CountryController,
         GroupMemberController,
+        SeedbedMemberController,
         self,
       ].freeze
 

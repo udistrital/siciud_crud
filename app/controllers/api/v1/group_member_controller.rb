@@ -69,14 +69,6 @@ module Api
         end
       end
 
-      def update
-        if @group_member.update(group_member_params)
-          render json: @group_member
-        else
-          render json: @group_member.errors, status: :unprocessable_entity
-        end
-      end
-
       private
 
       def set_group_member

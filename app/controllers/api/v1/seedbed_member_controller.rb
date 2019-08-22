@@ -1,6 +1,7 @@
 module Api
   module V1
     class SeedbedMemberController < ApplicationController
+      include Swagger::SeedbedMemberApi
       before_action :set_research_seedbed
       before_action :set_seedbed_member, only: [:show, :update, :destroy, :deactivate]
 
@@ -13,7 +14,7 @@ module Api
 
       def index
         @seedbed_members = @research_seedbed.seedbed_members
-        render json: @seedbed_members
+        render json: @seedbed_members, each_serializer: SeedbedMemberBaseSerializer
       end
 
       def show
