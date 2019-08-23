@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_20_211146) do
+ActiveRecord::Schema.define(version: 2019_08_22_211506) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -101,6 +101,18 @@ ActiveRecord::Schema.define(version: 2019_08_20_211146) do
     t.float "remainingInCash"
     t.float "remainingInKind"
     t.index ["contribution_rp_item_id"], name: "index_arp_expenses_on_contribution_rp_item_id"
+  end
+
+  create_table "arp_payments", force: :cascade do |t|
+    t.integer "inCashValue"
+    t.integer "inKindValue"
+    t.date "date"
+    t.string "code"
+    t.string "bizagiCode"
+    t.integer "arp_expense_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["arp_expense_id"], name: "index_arp_payments_on_arp_expense_id"
   end
 
   create_table "colciencias_calls", force: :cascade do |t|
@@ -260,47 +272,6 @@ ActiveRecord::Schema.define(version: 2019_08_20_211146) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-  end
-
-  create_table "member_groups", force: :cascade do |t|
-    t.integer "role_id"
-    t.integer "researcher_id"
-    t.integer "research_group_id"
-    t.integer "state_reseacher_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["research_group_id"], name: "index_member_groups_on_research_group_id"
-    t.index ["researcher_id"], name: "index_member_groups_on_researcher_id"
-    t.index ["role_id"], name: "index_member_groups_on_role_id"
-    t.index ["state_reseacher_id"], name: "index_member_groups_on_state_reseacher_id"
-  end
-
-  create_table "member_seedbeds", force: :cascade do |t|
-    t.integer "role_id"
-    t.integer "researcher_id"
-    t.integer "research_seedbed_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "state_researcher_id"
-    t.index ["research_seedbed_id"], name: "index_member_seedbeds_on_research_seedbed_id"
-    t.index ["researcher_id"], name: "index_member_seedbeds_on_researcher_id"
-    t.index ["role_id"], name: "index_member_seedbeds_on_role_id"
-    t.index ["state_researcher_id"], name: "index_member_seedbeds_on_state_researcher_id"
-  end
-
-  create_table "members", force: :cascade do |t|
-    t.date "initialDate"
-    t.date "finalDate"
-    t.integer "role_id"
-    t.integer "researcher_id"
-    t.integer "research_group_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "state_researcher_id"
-    t.index ["research_group_id"], name: "index_members_on_research_group_id"
-    t.index ["researcher_id"], name: "index_members_on_researcher_id"
-    t.index ["role_id"], name: "index_members_on_role_id"
-    t.index ["state_researcher_id"], name: "index_members_on_state_researcher_id"
   end
 
   create_table "plan_periods", force: :cascade do |t|

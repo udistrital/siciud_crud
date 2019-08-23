@@ -22,8 +22,8 @@ module Api
           #@arp_expense = ArpExpense.new(arp_expense_params)
           @arp_expense.totalPayedInCash = 0
           @arp_expense.totalPayedInKind = 0
-          @arp_expense.remainingInCash = @arp_expense.inKindValue
-          @arp_expense.remainingInKind = @arp_expense.inCashValue
+          @arp_expense.remainingInCash = @arp_expense.inCashValue
+          @arp_expense.remainingInKind = @arp_expense.inKindValue
           @arp_expense.remaining = @arp_expense.remainingInCash + @arp_expense.remainingInKind
           @arp_expense.totalPayed = 0
 
@@ -45,10 +45,17 @@ module Api
       end
 
       def update
-        if @arp_expense.update(arp_expense_params)
-          render json: @arp_expense
+        diferenceCashValue = params[:arp_expense][:inCashValue] - @arp_expense.inCashValue
+        diferenceInKindValue = params[:arp_expense][:inKindValue] - @arp_expense.inKindValue
+        if (((params[:arp_expense][:inCashValue] + diferenceCashValue) <= @contribution_rp_item.remainingCash) &&
+            ((params[:arp_expense][:inKindValue] + diferenceInKindValue) <= @contribution_rp_item.remainingInKind))
+          if @arp_expense.update(arp_expense_params)
+            render json: @arp_expense
+          else
+            render json: @arp_expense.errors, status: :unprocessable_entity
+          end
         else
-          render json: @arp_expense.errors, status: :unprocessable_entity
+          return render json: { "error": "No se puede gastar mas del presupuesto asignado" }, status: :not_acceptable
         end
       end
 

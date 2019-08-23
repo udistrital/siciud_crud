@@ -97,7 +97,7 @@ StateSeedbed.create(name: "Inactivo")
     facultyActNumber: Faker::Number.number(4),
     state_seedbed_id: rand(1..2),
     snies_id: rand(1..10),
-    mail: Faker::Internet.email,
+    email: Faker::Internet.email,
     webpage: Faker::Internet.url,
     mission: Faker::Lorem.paragraphs,
     vision: Faker::Lorem.paragraphs,
@@ -123,7 +123,7 @@ AgreementType.create(name: "Especifico")
 AgreementType.create(name: "Acuerdo de Cooperacion")
 AgreementType.create(name: "Contrato")
 AgreementType.create(name: "Inter Administrativo")
-Agreement.create(name: "Prueba", startDate: "2019-09-10", finalDate: "2019-09-10", agreementNumber: 5200, agreement_status_id: 1, agreement_type_id: 1, duration: 2, availability: 300, bizagiNumber: 300, description: "fdsfdfs")
-FundingEntity.create(name: "Jorge", entity_type_id: 1)
-Contribution.create(funding_entity_id: 1, agreement_id: 23, inKindContribution: 50000, cashContribution: 50000)
-Contribution.create(funding_entity_id: 1, agreement_id: 23, inKindContribution: 50000, cashContribution: 50000)
+Agreement.create(name: "Prueba", startDate: "2019-09-10", finalDate: "2019-09-10", agreementNumber: 5200, agreement_status_id: 1, agreement_type_id: 1, duration: 2, availability: 300, bizagiNumber: 300, description: "Acuerdo")
+FundingEntity.create(name: "Colciencias", entity_type_id: 1,country: "Colombia",city: "Bogota",mobileNumber:503241,address:"Cra 88")
+Contribution.create(funding_entity_id: 1, agreement_id: 1, inKindContribution: 50000, cashContribution: 50000)
+Contribution.create(funding_entity_id: 1, agreement_id: 1, inKindContribution: 50000, cashContribution: 50000)

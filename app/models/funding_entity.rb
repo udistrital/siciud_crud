@@ -3,7 +3,7 @@ class FundingEntity < ApplicationRecord
     validates :country, presence: true
     validates :city, presence: true
     #validates :phoneNumber, presence: true
-    validates :mobileNumber, presence: true
+    #validates :mobileNumber, presence: true
     validates :address, presence: true
 
     has_many :contributions

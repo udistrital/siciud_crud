@@ -72,6 +72,10 @@ Rails.application.routes.draw do
       resources :contribution_rp_item, only: [] do
         resources :arp_expense, only: [:index, :show, :create, :update]
       end
+      resources :arp_expense, only: [] do
+        resources :arp_payment, only: [:index, :show, :create]
+        put "arp_payment/:id/attach/", to: "arp_payment#attach"
+      end
       #get 'curricular_project/index'
       #get 'curricular_project/show'
       #get 'research_seedbed/index'

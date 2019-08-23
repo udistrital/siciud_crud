@@ -1,5 +1,7 @@
 class ArpExpense < ApplicationRecord
   belongs_to :contribution_rp_item
+  has_many :arp_payments
+
   validates :totalPayed, :numericality => { :greater_than_or_equal_to => 0 }, presence: true
   validates :remaining, :numericality => { :greater_than_or_equal_to => 0 }, presence: true
   validates :inKindValue, :numericality => { :greater_than_or_equal_to => 0 }, presence: true
