@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_22_211506) do
+ActiveRecord::Schema.define(version: 2019_08_23_155625) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -107,11 +107,12 @@ ActiveRecord::Schema.define(version: 2019_08_22_211506) do
     t.integer "inCashValue"
     t.integer "inKindValue"
     t.date "date"
-    t.string "code"
     t.string "bizagiCode"
     t.integer "arp_expense_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "cdpCode"
+    t.string "rpCode"
     t.index ["arp_expense_id"], name: "index_arp_payments_on_arp_expense_id"
   end
 

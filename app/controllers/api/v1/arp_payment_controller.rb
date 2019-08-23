@@ -26,6 +26,8 @@ class Api::V1::ArpPaymentController < ApplicationController
       @contribution_rp_item.compromisedInKind -= @arp_payment.inKindValue
       #@contribution_rp_item.remainingCash -= @arp_expense.inCashValue
       #@contribution_rp_item.remainingInKind -= @arp_expense.inKindValue
+      @contribution_rp_item.executedCash += @arp_payment.inCashValue
+      @contribution_rp_item.executedInKind += @arp_payment.inKindValue
     else
       return render json: { "error": "No se puede pagar mas del valor asignado" }, status: :not_acceptable
     end
@@ -42,10 +44,14 @@ class Api::V1::ArpPaymentController < ApplicationController
     params.permit(:paymentDocument)
     if (params[:paymentDocument])
       @arp_payment.paymentDocument.attach(params[:paymentDocument])
-      render json: @arp_payment
-    else
-      render json: {"error": "Porfavor adjunte un documento"}
     end
+    if (params[:rpDocument])
+      @arp_payment.rpDocument.attach(params[:rpDocument])
+    end
+    if (params[:cdpDocument])
+      @arp_payment.cdpDocument.attach(params[:cdpDocument])
+    end
+    render json: @arp_payment
   end
 
   private
@@ -57,7 +63,7 @@ class Api::V1::ArpPaymentController < ApplicationController
   end
 
   def arp_payment_params
-    params.require(:arp_payment).permit(:inCashValue, :inKindValue, :date, :code, :bizagiCode)
+    params.require(:arp_payment).permit(:inCashValue, :inKindValue, :date, :rpCode, :bizagiCode,:cdpCode)
   end
 
   def set_arp_payment
