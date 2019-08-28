@@ -50,6 +50,10 @@ module Api
         if (((params[:arp_expense][:inCashValue] + diferenceCashValue) <= @contribution_rp_item.remainingCash) &&
             ((params[:arp_expense][:inKindValue] + diferenceInKindValue) <= @contribution_rp_item.remainingInKind))
           if @arp_expense.update(arp_expense_params)
+            @contribution_rp_item.compromisedCash += @arp_expense.inCashValue
+            @contribution_rp_item.compromisedInKind += @arp_expense.inKindValue
+            @contribution_rp_item.remainingCash -= @arp_expense.inCashValue
+            @contribution_rp_item.remainingInKind -= @arp_expense.inKindValue
             render json: @arp_expense
           else
             render json: @arp_expense.errors, status: :unprocessable_entity

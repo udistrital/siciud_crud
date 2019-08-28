@@ -20,7 +20,7 @@ module Api
       private
 
       # Use set_role to share common setup or constraints between actions.
-      def set_state_researcher
+      def set_role
         @role = Role.find(params[:id])
       end
     end

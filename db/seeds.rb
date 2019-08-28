@@ -105,7 +105,7 @@ StateSeedbed.create(name: "Inactivo")
   )
 end
 
-puts "Seed complete"
+
 EntityType.create(name: "Publica")
 EntityType.create(name: "Privada")
 EntityType.create(name: "Mixta")
@@ -127,3 +127,13 @@ Agreement.create(name: "Prueba", startDate: "2019-09-10", finalDate: "2019-09-10
 FundingEntity.create(name: "Colciencias", entity_type_id: 1,country: "Colombia",city: "Bogota",mobileNumber:503241,address:"Cra 88")
 Contribution.create(funding_entity_id: 1, agreement_id: 1, inKindContribution: 50000, cashContribution: 50000)
 Contribution.create(funding_entity_id: 1, agreement_id: 1, inKindContribution: 50000, cashContribution: 50000)
+ArpRole.create(name: "Investigador Principal")
+ArpRole.create(name: "CoInvestigador")
+ArpRole.create(name: "Auxiliar de investigacion")
+ArpRole.create(name: "Estudiante de pregrado")
+ArpRole.create(name: "Estudiante de maestria")
+ArpRole.create(name: "Estudiante de doctorado")
+ArpRole.create(name: "Joven investigador")
+
+
+puts "Seed complete"

@@ -6,4 +6,6 @@ class GroupMember < ApplicationRecord
   belongs_to :research_group
   belongs_to :state_researcher
   has_many :gm_periods
+  has_many :arp_members
+  has_many :agreements, through: :arp_members
 end

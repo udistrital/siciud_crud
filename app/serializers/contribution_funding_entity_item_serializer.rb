@@ -7,11 +7,19 @@ class ContributionFundingEntityItemSerializer < ActiveModel::Serializer
   end
 
   def remainingCashValue
-    self.object.cashValue - self.object.contribution_rp_items.sum(:cashValue)
+    if self.object.contribution_rp_items
+      (self.object.cashValue - self.object.contribution_rp_items.sum(:cashValue))
+    else
+      self.object.cashValue
+    end
   end
 
   def remainingKindValue
-    self.object.inKindValue - self.object.contribution_rp_items.sum(:inKindValue)
+    if self.object.contribution_rp_items
+      self.object.inKindValue - self.object.contribution_rp_items.sum(:inKindValue)
+    else
+      self.object.inKindValue
+    end
   end
 
   def asignedCashValue

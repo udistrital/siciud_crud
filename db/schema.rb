@@ -10,7 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_23_155625) do
+ActiveRecord::Schema.define(version: 2019_08_27_155134) do
+
+  create_table "Agreements_GroupMembers", id: false, force: :cascade do |t|
+    t.integer "Agreement_id", null: false
+    t.integer "GroupMember_id", null: false
+  end
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -77,6 +82,11 @@ ActiveRecord::Schema.define(version: 2019_08_23_155625) do
     t.index ["agreement_type_id"], name: "index_agreements_on_agreement_type_id"
   end
 
+  create_table "agreements_group_members", id: false, force: :cascade do |t|
+    t.integer "agreement_id", null: false
+    t.integer "group_member_id", null: false
+  end
+
   create_table "agreements_research_groups", id: false, force: :cascade do |t|
     t.integer "agreement_id", null: false
     t.integer "research_group_id", null: false
@@ -103,6 +113,17 @@ ActiveRecord::Schema.define(version: 2019_08_23_155625) do
     t.index ["contribution_rp_item_id"], name: "index_arp_expenses_on_contribution_rp_item_id"
   end
 
+  create_table "arp_members", force: :cascade do |t|
+    t.integer "arp_role_id"
+    t.integer "agreement_id"
+    t.integer "group_member_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["agreement_id"], name: "index_arp_members_on_agreement_id"
+    t.index ["arp_role_id"], name: "index_arp_members_on_arp_role_id"
+    t.index ["group_member_id"], name: "index_arp_members_on_group_member_id"
+  end
+
   create_table "arp_payments", force: :cascade do |t|
     t.integer "inCashValue"
     t.integer "inKindValue"
@@ -114,6 +135,12 @@ ActiveRecord::Schema.define(version: 2019_08_23_155625) do
     t.string "cdpCode"
     t.string "rpCode"
     t.index ["arp_expense_id"], name: "index_arp_payments_on_arp_expense_id"
+  end
+
+  create_table "arp_roles", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "colciencias_calls", force: :cascade do |t|
