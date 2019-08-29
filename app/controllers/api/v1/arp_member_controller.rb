@@ -13,19 +13,34 @@ class Api::V1::ArpMemberController < ApplicationController
   end
 
   def create
-    @arp_member = arp_members.new(arp_member_params)
-    if @arp_member.save
-      render json: @arp_member, status: :created
+    if (ArpMember.find_by(agreement_id: @agreement_research_project.agreement.id,
+                          group_member_id: params[:arp_member][:group_member_id],
+                          agreement_research_project_id: params[:agreement_research_project_id]))
+      render json: { "error": "El investigador Ya  se encuentra registrado en el proyecto" }
     else
-      render json: @arp_member.errors, status: :unprocessable_entity
+      if (@agreement_research_project.agreement.arp_members.find_by(arp_role_id: 1) && params[:arp_member][:arp_role_id] == 1)
+        render json: { "error": "El Convenio Ya Cuenta con un investigador principal" }
+      else
+        @arp_member = @agreement_research_project.arp_members.new(arp_member_params)
+        @arp_member.agreement_id = @agreement_research_project.agreement.id
+        if @arp_member.save
+          render json: @arp_member, status: :created
+        else
+          render json: @arp_member.errors, status: :unprocessable_entity
+        end
+      end
     end
   end
 
   def update
-    if @arp_member.update(arp_member_params)
-      render json: @arp_member
+    if (@agreement_research_project.agreement.arp_members.find_by(arp_role_id: 1) && params[:arp_member][:arp_role_id] == 1)
+      render json: { "error": "El Convenio Ya Cuenta con un investigador principal" }
     else
-      render json: @arp_member.errors, status: :unprocessable_entity
+      if @arp_member.update(arp_member_params)
+        render json: @arp_member
+      else
+        render json: @arp_member.errors, status: :unprocessable_entity
+      end
     end
   end
 
@@ -44,6 +59,6 @@ class Api::V1::ArpMemberController < ApplicationController
 
   # Only allow a trusted parameter "white list" through.
   def arp_member_params
-    params.require(:arp_member).permit(:arp_role_id, :agreement_id, :group_member_id)
+    params.require(:arp_member).permit(:arp_role_id, :group_member_id)
   end
 end

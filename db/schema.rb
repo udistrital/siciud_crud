@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_27_155134) do
+ActiveRecord::Schema.define(version: 2019_08_28_164949) do
 
   create_table "Agreements_GroupMembers", id: false, force: :cascade do |t|
     t.integer "Agreement_id", null: false
@@ -119,7 +119,9 @@ ActiveRecord::Schema.define(version: 2019_08_27_155134) do
     t.integer "group_member_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "agreement_research_project_id"
     t.index ["agreement_id"], name: "index_arp_members_on_agreement_id"
+    t.index ["agreement_research_project_id"], name: "index_arp_members_on_agreement_research_project_id"
     t.index ["arp_role_id"], name: "index_arp_members_on_arp_role_id"
     t.index ["group_member_id"], name: "index_arp_members_on_group_member_id"
   end

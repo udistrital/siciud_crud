@@ -3,13 +3,13 @@ class AgreementSerializer < ActiveModel::Serializer
   attributes :id, :name, :registerDate, :startDate, :finalDate,
              :agreementNumber, :agreement_status_id, :agreement_type_id,
              :duration, :availability, :bizagiNumber, :description, :research_group_ids, :faculty_ids, :funding_entity_ids, :contributions, :agreement_research_project_ids,
-             :budgetInKind, :budgetInCash, :totalBudget,:contractDocument,:initialActDocument
+             :budgetInKind, :budgetInCash, :totalBudget, :contractDocument, :initialActDocument, :mainResearcher
 
   #def faculties
-    # self.object.research_groups.faculties
-    #Faculty.where(research_groups: :faculty_ids)
- #   self.object.faculties.uniq
-#  end
+  # self.object.research_groups.faculties
+  #Faculty.where(research_groups: :faculty_ids)
+  #   self.object.faculties.uniq
+  #  end
 
   def budgetInKind
     self.object.contributions.sum(:inKindContribution)
@@ -21,6 +21,10 @@ class AgreementSerializer < ActiveModel::Serializer
 
   def totalBudget
     self.object.contributions.sum(:inKindContribution) + self.object.contributions.sum(:cashContribution)
+  end
+
+  def mainResearcher
+    self.object.arp_members.find_by(arp_role_id: 1).group_member.researcher
   end
 
   def contractDocument
