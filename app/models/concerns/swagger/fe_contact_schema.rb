@@ -33,5 +33,29 @@ module Swagger::FeContactSchema
         end
       end
     end
+    swagger_schema :FeContactPost do
+      key :required, [:id, :name]
+
+      property :fe_contact do
+        property :name do
+          key :type, :string
+        end
+        property :lastName do
+          key :type, :string
+        end
+        property :phoneNumber do
+          key :type, :string
+        end
+        property :mobileNumber do
+          key :type, :string
+        end
+        property :role do
+          key :type, :string
+        end
+        property :email do
+          key :type, :string
+        end
+      end
+    end
   end
 end
