@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_28_164949) do
+ActiveRecord::Schema.define(version: 2019_09_03_164355) do
 
   create_table "Agreements_GroupMembers", id: false, force: :cascade do |t|
     t.integer "Agreement_id", null: false
@@ -241,6 +241,19 @@ ActiveRecord::Schema.define(version: 2019_08_28_164949) do
   create_table "faculties_research_seedbeds", id: false, force: :cascade do |t|
     t.integer "research_seedbed_id", null: false
     t.integer "faculty_id", null: false
+  end
+
+  create_table "fe_contacts", force: :cascade do |t|
+    t.string "name"
+    t.string "phoneNumber"
+    t.string "mobileNumber"
+    t.string "role"
+    t.string "email"
+    t.integer "funding_entity_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "lastName"
+    t.index ["funding_entity_id"], name: "index_fe_contacts_on_funding_entity_id"
   end
 
   create_table "funding_entities", force: :cascade do |t|

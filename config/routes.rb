@@ -51,7 +51,9 @@ Rails.application.routes.draw do
       resources :faculty, only: [:index, :show] do
         resources :curricular_project, only: [:index, :show]
       end
-      resources :funding_entity, only: [:index, :show, :create, :update]
+      resources :funding_entity, only: [:index, :show, :create, :update] do
+        resources :fe_contact, only: [:index, :show, :update, :create]
+      end
       resources :entity_type, only: [:index]
       resources :item_category, only: [:index, :show, :create, :update]
       resources :agreement_status, only: [:index, :show]

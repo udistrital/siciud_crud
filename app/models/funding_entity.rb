@@ -7,5 +7,6 @@ class FundingEntity < ApplicationRecord
     validates :address, presence: true
 
     has_many :contributions
+    has_many :fe_contacts
     belongs_to :entity_type
 end

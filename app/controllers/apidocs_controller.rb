@@ -24,10 +24,12 @@ module Api
         Agreement,
         GroupMember,
         SeedbedMember,
+        FeContact,
         AgreementController,
         CountryController,
         GroupMemberController,
         SeedbedMemberController,
+        FeContactController,
         self,
       ].freeze
 
