@@ -7,10 +7,10 @@ module Api
         key :swagger, "2.0"
         info do
           key :version, "1.0.0"
-          key :title, "Users demo API"
+          key :title, "API Sistema de informacion de investigadores 2.0"
           key :description, "A sample users CRUD API"
           contact do
-            key :name, "https://github.com/erendira"
+            key :name, "https://github.com/siciud-cidc"
           end
         end
         key :host, ENV["HOST"]

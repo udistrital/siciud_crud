@@ -28,6 +28,9 @@ class Api::V1::ArpPaymentController < ApplicationController
       #@contribution_rp_item.remainingInKind -= @arp_expense.inKindValue
       @contribution_rp_item.executedCash += @arp_payment.inCashValue
       @contribution_rp_item.executedInKind += @arp_payment.inKindValue
+      if(@arp_expense.remaining == 0)
+        @arp_expense.is_payed = true
+      end
     else
       return render json: { "error": "No se puede pagar mas del valor asignado" }, status: :not_acceptable
     end
