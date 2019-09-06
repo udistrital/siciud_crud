@@ -24,7 +24,7 @@ class AgreementSerializer < ActiveModel::Serializer
   end
 
   def mainResearchers
-    self.object.arp_members.find_by(arp_role_id: 1)
+    self.object.arp_members.find_by(arp_role_id: 1) 
   end
 
   def contractDocument
