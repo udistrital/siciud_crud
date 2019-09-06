@@ -1,11 +1,11 @@
 class ResearchSeedbedSimpleSerializer < ActiveModel::Serializer
-  attributes :id, :name, :acronym, :state_group
+  attributes :id, :name, :acronym, :state_seedbed
 
-  def state_group
-    state_group = self.object.state_group
+  def state_seedbed
+    state_seedbed = self.object.state_seedbed
     {
-      id: state_group.id,
-      name: state_group.name,
+      id: state_seedbed.id,
+      name: state_seedbed.name
     }
   end
 end

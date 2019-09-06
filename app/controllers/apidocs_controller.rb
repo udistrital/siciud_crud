@@ -25,11 +25,13 @@ module Api
         GroupMember,
         SeedbedMember,
         FeContact,
+        ApGeneralGoal,
         AgreementController,
         CountryController,
         GroupMemberController,
         SeedbedMemberController,
         FeContactController,
+        ApGeneralGoalController,
         self,
       ].freeze
 
