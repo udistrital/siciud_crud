@@ -27,6 +27,7 @@ module Api
         FeContact,
         ApGeneralGoal,
         ApSpecificGoal,
+        ApActivity,
         AgreementController,
         CountryController,
         GroupMemberController,
@@ -34,6 +35,7 @@ module Api
         FeContactController,
         ApGeneralGoalController,
         ApSpecificGoalController,
+        ApActivityController,
         self,
       ].freeze
 

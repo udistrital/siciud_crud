@@ -1,12 +1,12 @@
-module Swagger::ApSpecificGoalApi
+module Swagger::ApActivityApi
   extend ActiveSupport::Concern
   include Swagger::Blocks
 
   included do
-    swagger_path "/api/v1/ap_general_goal/{ap_general_goal_id}/ap_specific_goal" do
+    swagger_path "/api/v1/ap_specific_goal/{ap_specific_goal_id}/ap_activity" do
       operation :get do
-        key :description, "Traer el objetivo especifico del objetivo general de un proyecto de un convenio de investigacion"
-        key :operationId, :get_ap_specific_goal
+        key :description, "Traer las actividades del objetivo Especifico de un proyecto de un convenio de investigacion"
+        key :operationId, :get_ap_activity
         key :produces, [
               "application/json",
             ]
@@ -14,50 +14,50 @@ module Swagger::ApSpecificGoalApi
               "Objetivos de proyectos de investigacion",
             #,
             ]
-        parameter name: :ap_general_goal_id do
+        parameter name: :ap_specific_goal_id do
           key :in, :path
-          key :description, "AP General Goal ID"
+          key :description, "AP Specific Goal ID"
           key :required, false
           key :type, :int64
         end
         # definición del success response
         response 200 do
-          key :description, "Lista de contactos de la entidades financiadoras"
+          key :description, "Lista de acividades"
           schema do
             key :type, :array
             items do
-              key :'$ref', :ApSpecificGoal
+              key :'$ref', :ApActivity
             end
           end
         end
       end
       operation :post do
-        key :description, "Crear un objetivo especifico del objetivo general de un proyecto de un convenio de investigacion"
-        key :operationId, :create_ap_specific_goal
+        key :description, "Crear una actividad del objetivo Especifico de un proyecto de un convenio de investigacion"
+        key :operationId, :create_fe_contact
         key :produces, ["application/json"]
         key :tags, [
               "Objetivos de proyectos de investigacion",
             #,
             ]
-        parameter name: :ap_general_goal_id do
+        parameter name: :ap_specific_goal_id do
           key :in, :path
-          key :description, "AP General Goal ID"
+          key :description, "AP Especifico Goal ID"
           key :required, false
           key :type, :int64
         end
         parameter do
-          key :name, :ap_specific_goal
+          key :name, :ap_activity
           key :in, :body
-          key :description, "Objetivo Especifico"
+          key :description, "Actividad"
           key :required, true
           schema do
-            key :'$ref', :ApSpecificGoalPost
+            key :'$ref', :ApActivityPost
           end
         end
         response 200 do
           key :description, "Respuesta"
           schema do
-            key :'$ref', :ApSpecificGoal
+            key :'$ref', :ApActivity
           end
         end
         response :default do
@@ -65,10 +65,10 @@ module Swagger::ApSpecificGoalApi
         end
       end
     end
-    swagger_path "/api/v1/ap_general_goal/{ap_general_goal_id}/ap_specific_goal/{id}" do
+    swagger_path "/api/v1/ap_specific_goal/{ap_specific_goal_id}/ap_activity/{id}" do
       operation :get do
-        key :description, "Ver un objetivo especifico"
-        key :operationId, :get_ap_specific_goal
+        key :description, "Ver un actividad de un objetivo especifico"
+        key :operationId, :get_contact
         key :produces, [
           "application/json",
         ]
@@ -76,15 +76,15 @@ module Swagger::ApSpecificGoalApi
           "Objetivos de proyectos de investigacion",
         #,
         ]
-        parameter name: :ap_general_goal_id do
+        parameter name: :ap_specific_goal_id do
           key :in, :path
-          key :description, "AP General Goal ID"
+          key :description, "AP Specific Goal ID"
           key :required, false
           key :type, :int64
         end
         parameter name: :id do
           key :in, :path
-          key :description, "Ap Specific Goal id"
+          key :description, "Ap Activity id"
           key :required, false
           key :type, :int64
         end
@@ -92,13 +92,13 @@ module Swagger::ApSpecificGoalApi
         response 200 do
           key :description, "Respuesta"
           schema do
-            key :'$ref', :ApSpecificGoal
+            key :'$ref', :ApActivity
           end
         end
       end
       operation :put do
-        key :description, "Actualizar el objetivo especifico"
-        key :operationId, :put_ap_specific_goal
+        key :description, "Actualizar actividad del objetivo especifico"
+        key :operationId, :get_contact
         key :produces, [
               "application/json",
             ]
@@ -106,32 +106,32 @@ module Swagger::ApSpecificGoalApi
               "Objetivos de proyectos de investigacion",
             #,
             ]
-        parameter name: :ap_general_goal_id do
+        parameter name: :ap_specific_goal_id do
           key :in, :path
-          key :description, "AP General Goal ID"
+          key :description, "AP Especifico Goal ID"
           key :required, false
           key :type, :int64
         end
         parameter name: :id do
           key :in, :path
-          key :description, "Ap Specific Goal id"
+          key :description, "Ap Activity id"
           key :required, false
           key :type, :int64
         end
         parameter do
-          key :name, :ap_specific_goal
+          key :name, :ap_activity
           key :in, :body
-          key :description, "Objetivo especifico"
+          key :description, "Actividad"
           key :required, true
           schema do
-            key :'$ref', :ApSpecificGoalPost
+            key :'$ref', :ApActivityPost
           end
         end
         # definición del success response
         response 200 do
           key :description, "Respuesta"
           schema do
-            key :'$ref', :ApSpecificGoal
+            key :'$ref', :ApActivity
           end
         end
       end

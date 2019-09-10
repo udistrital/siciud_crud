@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_06_155339) do
+ActiveRecord::Schema.define(version: 2019_09_10_205515) do
 
   create_table "Agreements_GroupMembers", id: false, force: :cascade do |t|
     t.integer "Agreement_id", null: false
@@ -97,6 +97,8 @@ ActiveRecord::Schema.define(version: 2019_09_06_155339) do
     t.integer "ap_specific_goal_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "weight"
+    t.integer "completedPercentage"
     t.index ["ap_specific_goal_id"], name: "index_ap_activities_on_ap_specific_goal_id"
   end
 
@@ -105,6 +107,7 @@ ActiveRecord::Schema.define(version: 2019_09_06_155339) do
     t.integer "agreement_research_project_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "completedPercentage"
     t.index ["agreement_research_project_id"], name: "index_ap_general_goals_on_agreement_research_project_id"
   end
 
@@ -113,6 +116,8 @@ ActiveRecord::Schema.define(version: 2019_09_06_155339) do
     t.integer "ap_general_goal_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "weight"
+    t.integer "completedPercentage"
     t.index ["ap_general_goal_id"], name: "index_ap_specific_goals_on_ap_general_goal_id"
   end
 
