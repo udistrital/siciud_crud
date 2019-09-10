@@ -1,12 +1,12 @@
-module Swagger::ApGeneralGoalApi
+module Swagger::ApSpecificGoalApi
   extend ActiveSupport::Concern
   include Swagger::Blocks
 
   included do
-    swagger_path "/api/v1/agreement_research_project/{agreement_research_project_id}/ap_general_goal" do
+    swagger_path "/api/v1/ap_general_goal/{ap_general_goal_id}/ap_specific_goal" do
       operation :get do
-        key :description, "Traer el objetivo general de un proyecto de un convenio de investigacion"
-        key :operationId, :get_ap_general_goal
+        key :description, "Traer el objetivo especifico del objetivo general de un proyecto de un convenio de investigacion"
+        key :operationId, :get_ap_specific_goal
         key :produces, [
               "application/json",
             ]
@@ -14,9 +14,9 @@ module Swagger::ApGeneralGoalApi
               "Objetivos de proyectos de investigacion",
             #,
             ]
-        parameter name: :agreement_research_project_id do
+        parameter name: :ap_general_goal_id do
           key :in, :path
-          key :description, "Agreement Research Project ID"
+          key :description, "AP General Goal ID"
           key :required, false
           key :type, :int64
         end
@@ -26,38 +26,38 @@ module Swagger::ApGeneralGoalApi
           schema do
             key :type, :array
             items do
-              key :'$ref', :ApGeneralGoal
+              key :'$ref', :ApSpecificGoal
             end
           end
         end
       end
       operation :post do
-        key :description, "Crear el objetivo general de un proyecto de un convenio de investigacion"
+        key :description, "Crear un objetivo especifico del objetivo general de un proyecto de un convenio de investigacion"
         key :operationId, :create_fe_contact
         key :produces, ["application/json"]
         key :tags, [
               "Objetivos de proyectos de investigacion",
             #,
             ]
-        parameter name: :agreement_research_project_id do
+        parameter name: :ap_general_goal_id do
           key :in, :path
-          key :description, "Agreement Research Project ID"
+          key :description, "AP General Goal ID"
           key :required, false
           key :type, :int64
         end
         parameter do
-          key :name, :ap_general_goal
+          key :name, :ap_specific_goal
           key :in, :body
-          key :description, "Objetivo general"
+          key :description, "Objetivo Especifico"
           key :required, true
           schema do
-            key :'$ref', :ApGeneralGoalPost
+            key :'$ref', :ApSpecificGoalPost
           end
         end
         response 200 do
           key :description, "Respuesta"
           schema do
-            key :'$ref', :ApGeneralGoal
+            key :'$ref', :ApSpecificGoal
           end
         end
         response :default do
@@ -65,9 +65,9 @@ module Swagger::ApGeneralGoalApi
         end
       end
     end
-    swagger_path "/api/v1/agreement_research_project/{agreement_research_project_id}/ap_general_goal/{id}" do
+    swagger_path "/api/v1/ap_general_goal/{ap_general_goal_id}/ap_specific_goal/{id}" do
       operation :get do
-        key :description, "Ver un objetivo"
+        key :description, "Ver un objetivo especifico"
         key :operationId, :get_contact
         key :produces, [
           "application/json",
@@ -76,15 +76,15 @@ module Swagger::ApGeneralGoalApi
           "Objetivos de proyectos de investigacion",
         #,
         ]
-        parameter name: :agreement_research_project_id do
+        parameter name: :ap_general_goal_id do
           key :in, :path
-          key :description, "agreement Research Project ID"
+          key :description, "AP General Goal ID"
           key :required, false
           key :type, :int64
         end
         parameter name: :id do
           key :in, :path
-          key :description, "Ap General Goal id"
+          key :description, "Ap Specific Goal id"
           key :required, false
           key :type, :int64
         end
@@ -92,12 +92,12 @@ module Swagger::ApGeneralGoalApi
         response 200 do
           key :description, "Respuesta"
           schema do
-            key :'$ref', :ApGeneralGoal
+            key :'$ref', :ApSpecificGoal
           end
         end
       end
       operation :put do
-        key :description, "Actualizar el objetivo general"
+        key :description, "Actualizar el objetivo especifico"
         key :operationId, :get_contact
         key :produces, [
               "application/json",
@@ -106,32 +106,32 @@ module Swagger::ApGeneralGoalApi
               "Objetivos de proyectos de investigacion",
             #,
             ]
-        parameter name: :agreement_research_project_id do
+        parameter name: :ap_general_goal_id do
           key :in, :path
-          key :description, "agreement Research Project ID"
+          key :description, "AP General Goal ID"
           key :required, false
           key :type, :int64
         end
         parameter name: :id do
           key :in, :path
-          key :description, "Ap General Goal id"
+          key :description, "Ap Specific Goal id"
           key :required, false
           key :type, :int64
         end
         parameter do
-          key :name, :ap_general_goal
+          key :name, :ap_specific_goal
           key :in, :body
-          key :description, "Objetivo general"
+          key :description, "Objetivo especifico"
           key :required, true
           schema do
-            key :'$ref', :ApGeneralGoalPost
+            key :'$ref', :ApSpecificGoalPost
           end
         end
         # definición del success response
         response 200 do
           key :description, "Respuesta"
           schema do
-            key :'$ref', :ApGeneralGoal
+            key :'$ref', :ApSpecificGoal
           end
         end
       end

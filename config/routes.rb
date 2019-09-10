@@ -74,7 +74,10 @@ Rails.application.routes.draw do
       resources :agreement_research_project, only: [] do
         resources :contribution_rp_item, only: [:index, :show, :create, :update]
         resources :arp_member, only: [:index, :show, :create]
-        resources :ap_general_goal, only: [:index, :show, :create,:update]
+        resources :ap_general_goal, only: [:index, :show, :create, :update]
+      end
+      resources :ap_general_goal, only: [] do
+        resources :ap_specific_goal, only: [:index, :show, :create, :update]
       end
       resources :contribution_rp_item, only: [] do
         resources :arp_expense, only: [:index, :show, :create, :update]
