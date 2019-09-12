@@ -32,9 +32,6 @@ class Api::V1::ApGeneralGoalController < ApplicationController
     end
   end
 
-  def reportProgress
-  end
-
   private
 
   def set_ap_general_goal

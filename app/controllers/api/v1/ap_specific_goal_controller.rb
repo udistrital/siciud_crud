@@ -31,17 +31,35 @@ class Api::V1::ApSpecificGoalController < ApplicationController
 
   def update
     if (params[:ap_specific_goal][:weight])
-      #if(params[:ap_specific_goal][:weight] ) Se debe validar que sea enviado
-      diferenceCashValue = params[:ap_specific_goal][:weight] - @ap_specific_goal.weight
-      if (((@ap_general_goal.ap_specific_goals.sum(:weight) + diferenceCashValue) <= 100))
-        if @ap_specific_goal.update(ap_specific_goal_params)
-          render json: @ap_specific_goal
+      if @ap_specific_goal.completedPercentage == 0
+        #if(params[:ap_specific_goal][:weight] ) Se debe validar que sea enviado
+        diferenceCashValue = params[:ap_specific_goal][:weight] - @ap_specific_goal.weight
+        if (((@ap_general_goal.ap_specific_goals.sum(:weight) + diferenceCashValue) <= 100))
+          if @ap_specific_goal.update(ap_specific_goal_params)
+            render json: @ap_specific_goal
+          else
+            render json: @ap_specific_goal.errors, status: :unprocessable_entity
+          end
         else
-          render json: @ap_specific_goal.errors, status: :unprocessable_entity
+          render json: { "error": "Los pesos no pueden sumar mas de 100 puntos" }, status: :not_acceptable
         end
       else
-        render json: { "error": "Los pesos no pueden sumar mas de 100 puntos" }, status: :not_acceptable
+        render json: { "error": "No se puede cambiar el peso de una actividad que ya avanzo" }, status: :not_acceptable
       end
+      # elsif (params[:ap_specific_goal][:completedPercentage])
+      #   if (@ap_general_goal.ap_specific_goals.sum(:weight) == 100)
+      #     if (((params[:ap_specific_goal][:completedPercentage]) <= 100))
+      #       if @ap_specific_goal.update(ap_specific_goal_percetange_params)
+      #         render json: @ap_specific_goal
+      #       else
+      #         render json: @ap_specific_goal.errors, status: :unprocessable_entity
+      #       end
+      #     else
+      #       render json: { "error": "El cumplimiento maximo de la actividad es 100%" }, status: :not_acceptable
+      #     end
+      #   else
+      #     render json: { "error": "Todos los objetivos especificos deben sumar 100% antes de agregar progreso a un objetivo especifico" }, status: :not_acceptable
+      #   end
     else
       if @ap_specific_goal.update(ap_specific_goal_params)
         render json: @ap_specific_goal
@@ -58,8 +76,12 @@ class Api::V1::ApSpecificGoalController < ApplicationController
   end
 
   def ap_specific_goal_params
-    params.require(:ap_specific_goal).permit(:goal, :weight, :completedPercentage)
+    params.require(:ap_specific_goal).permit(:goal, :weight)
   end
+
+  # def ap_specific_goal_percetange_params
+  #   params.require(:ap_specific_goal).permit(:completedPercentage)
+  # end
 
   def set_ap_general_goal
     @ap_general_goal = ApGeneralGoal.find(params[:ap_general_goal_id])
