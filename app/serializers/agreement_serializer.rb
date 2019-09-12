@@ -3,7 +3,7 @@ class AgreementSerializer < ActiveModel::Serializer
   attributes :id, :name, :registerDate, :startDate, :finalDate,
              :agreementNumber, :agreement_status_id, :agreement_type_id,
              :duration, :availability, :bizagiNumber, :description, :research_group_ids, :faculty_ids, :funding_entity_ids, :contributions, :agreement_research_project_ids,
-             :budgetInKind, :budgetInCash, :totalBudget, :contractDocument, :initialActDocument, :mainResearchers
+             :budgetInKind, :budgetInCash, :totalBudget, :contractDocument, :initialActDocument, :mainResearchers, :research_groups
 
   #def faculties
   # self.object.research_groups.faculties
@@ -24,7 +24,7 @@ class AgreementSerializer < ActiveModel::Serializer
   end
 
   def mainResearchers
-    self.object.arp_members.find_by(arp_role_id: 1) 
+    self.object.arp_members.find_by(arp_role_id: 1)
   end
 
   def contractDocument
@@ -33,5 +33,11 @@ class AgreementSerializer < ActiveModel::Serializer
 
   def initialActDocument
     rails_blob_path(self.object.initialActDocument, only_path: true) if self.object.initialActDocument.attached?
+  end
+
+  def research_groups
+    self.object.arp_members.map do |researcher|
+      researcher.group_member.research_group_id
+    end.uniq
   end
 end
