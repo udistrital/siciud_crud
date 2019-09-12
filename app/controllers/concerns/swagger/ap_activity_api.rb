@@ -136,5 +136,50 @@ module Swagger::ApActivityApi
         end
       end
     end
+    swagger_path "/api/v1/ap_specific_goal/{ap_specific_goal_id}/ap_activity/{id}/report_progress" do
+      operation :put do
+        key :description, "Reportar progreso de una actividad"
+        key :operationId, :get_contact
+        key :produces, [
+              "application/json",
+            ]
+        key :tags, [
+              "Objetivos de proyectos de investigacion",
+            #,
+            ]
+        parameter name: :ap_specific_goal_id do
+          key :in, :path
+          key :description, "AP Specific Goal ID"
+          key :required, false
+          key :type, :int64
+        end
+        parameter name: :id do
+          key :in, :path
+          key :description, "Ap Activity id"
+          key :required, false
+          key :type, :int64
+        end
+        parameter do
+          key :name, :ap_activity
+          key :in, :body
+          key :description, "Actividad"
+          key :required, true
+          schema do
+            property :ap_activity do
+              property :completedPercentage do
+                key :type, :integer
+              end
+            end
+          end
+        end
+        # definición del success response
+        response 200 do
+          key :description, "Respuesta"
+          schema do
+            key :'$ref', :ApActivity
+          end
+        end
+      end
+    end
   end
 end

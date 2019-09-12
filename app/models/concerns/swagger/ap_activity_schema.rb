@@ -11,10 +11,16 @@ module Swagger::ApActivitySchema
         property :id do
           key :type, :integer
         end
-        property :goal do
+        property :ap_specific_goal_id do
+          key :type, :integer
+        end
+        property :activity do
           key :type, :string
         end
-        property :ap_specific_goal_id do
+        property :completedPercentage do
+          key :type, :integer
+        end
+        property :weight do
           key :type, :integer
         end
       end
@@ -23,8 +29,11 @@ module Swagger::ApActivitySchema
       key :required, [:id, :name]
 
       property :ap_activity do
-        property :goal do
+        property :activity do
           key :type, :string
+        end
+        property :weight do
+          key :type, :integer
         end
       end
     end

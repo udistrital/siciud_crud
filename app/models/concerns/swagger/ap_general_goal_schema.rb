@@ -17,6 +17,15 @@ module Swagger::ApGeneralGoalSchema
         property :agreement_research_project_id do
           key :type, :integer
         end
+        property :completedPercentage do
+          key :type, :integer
+        end
+        property :assignedWeight do
+          key :type, :integer
+        end
+        property :remaingWeight do
+          key :type, :integer
+        end
       end
     end
     swagger_schema :ApGeneralGoalPost do
