@@ -1,10 +1,11 @@
 class ContributionFundingEntityItemSerializer < ActiveModel::Serializer
-  attributes :id, :cashValue, :inKindValue, :contribution_id, :item_category, :remainingCashValue, :remainingKindValue,
-             :asignedCashValue, :asignedKindValue
+  attributes :id, :cashValue, :inKindValue, :contribution_id, :remainingCashValue, :remainingKindValue,
+             :asignedCashValue, :asignedKindValue,:item_category_id
+             #:item_category, 
 
-  def item_category
-    self.object.item_category
-  end
+  #def item_category
+    #self.object.item_category
+  #end
 
   def remainingCashValue
     if self.object.contribution_rp_items.sum(:cashValue)

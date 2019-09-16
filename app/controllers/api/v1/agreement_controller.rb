@@ -3,7 +3,7 @@ module Api
     class AgreementController < ApplicationController
       include Swagger::AgreementApi
 
-      before_action :set_agreement, only: [:show, :update,:attach]
+      before_action :set_agreement, only: [:show, :update, :attach]
 
       rescue_from ActiveRecord::RecordNotFound do |e|
         render json: { error: e.message }, status: :not_found
@@ -66,7 +66,8 @@ module Api
       def agreement_params
         #Parametros permitidos para la creacion de un acuerdo
         params.require(:agreement).permit(:name, :registerDate, :startDate, :finalDate, :duration, :availability, :bizagiNumber, :description,
-                                          :agreementNumber, :agreement_status_id, :agreement_type_id, research_group_ids: [])
+                                          :agreementNumber, :agreement_status_id, :agreement_type_id)
+        #, research_group_ids: [])
       end
     end
   end

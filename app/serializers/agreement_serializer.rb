@@ -2,8 +2,8 @@ class AgreementSerializer < ActiveModel::Serializer
   include Rails.application.routes.url_helpers
   attributes :id, :name, :registerDate, :startDate, :finalDate,
              :agreementNumber, :agreement_status_id, :agreement_type_id,
-             :duration, :availability, :bizagiNumber, :description, :research_group_ids, :faculty_ids, :funding_entity_ids, :contributions, :agreement_research_project_ids,
-             :budgetInKind, :budgetInCash, :totalBudget, :contractDocument, :initialActDocument, :mainResearchers, :research_groups
+             :duration, :availability, :bizagiNumber, :description, :faculty_ids, :funding_entity_ids, :contributions, :agreement_research_project_ids,
+             :budgetInKind, :budgetInCash, :totalBudget, :contractDocument, :initialActDocument, :mainResearchers, :research_groups_ids
 
   #def faculties
   # self.object.research_groups.faculties
@@ -35,7 +35,7 @@ class AgreementSerializer < ActiveModel::Serializer
     rails_blob_path(self.object.initialActDocument, only_path: true) if self.object.initialActDocument.attached?
   end
 
-  def research_groups
+  def research_groups_ids
     self.object.arp_members.map do |researcher|
       researcher.group_member.research_group_id
     end.uniq
