@@ -7,6 +7,10 @@ module Api
         render json: { error: e.message }, status: :not_found
       end
 
+      rescue_from ActiveRecord::RecordInvalid do |e|
+        render json: { error: e.message }, status: :unprocessable_entity
+      end
+
       #listar todos los roles de un investigador en un proyecto
       def index
         @arp_roles = ArpRole.all

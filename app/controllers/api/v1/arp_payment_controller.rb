@@ -3,6 +3,13 @@ class Api::V1::ArpPaymentController < ApplicationController
   before_action :set_contribution_rp_item
   before_action :set_arp_payment, only: [:show, :update, :attach]
 
+  rescue_from ActiveRecord::RecordNotFound do |e|
+    render json: { error: e.message }, status: :not_found
+  end
+  rescue_from ActiveRecord::RecordInvalid do |e|
+    render json: { error: e.message }, status: :unprocessable_entity
+  end
+
   def index
     @arp_payments = @arp_expense.arp_payments
     render json: @arp_payments
@@ -28,7 +35,7 @@ class Api::V1::ArpPaymentController < ApplicationController
       #@contribution_rp_item.remainingInKind -= @arp_expense.inKindValue
       @contribution_rp_item.executedCash += @arp_payment.inCashValue
       @contribution_rp_item.executedInKind += @arp_payment.inKindValue
-      if(@arp_expense.remaining == 0)
+      if (@arp_expense.remaining == 0)
         @arp_expense.is_payed = true
       end
     else
@@ -66,7 +73,7 @@ class Api::V1::ArpPaymentController < ApplicationController
   end
 
   def arp_payment_params
-    params.require(:arp_payment).permit(:inCashValue, :inKindValue, :date, :rpCode, :bizagiCode,:cdpCode)
+    params.require(:arp_payment).permit(:inCashValue, :inKindValue, :date, :rpCode, :bizagiCode, :cdpCode)
   end
 
   def set_arp_payment

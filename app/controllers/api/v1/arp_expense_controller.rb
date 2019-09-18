@@ -5,6 +5,13 @@ module Api
       before_action :set_contribution_rp_item
       before_action :set_arp_expense, only: [:show, :update]
 
+      rescue_from ActiveRecord::RecordNotFound do |e|
+        render json: { error: e.message }, status: :not_found
+      end
+      rescue_from ActiveRecord::RecordInvalid do |e|
+        render json: { error: e.message }, status: :unprocessable_entity
+      end
+
       def index
         @arp_expenses = @contribution_rp_item.arp_expenses
         render json: @arp_expenses

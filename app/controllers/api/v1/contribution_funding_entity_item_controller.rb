@@ -32,7 +32,7 @@ module Api
         end
 
         if @contribution_funding_entity_item.save
-          render json: @contribution, status: :created
+          render json: @contribution_funding_entity_item, status: :created
         else
           render json: @contribution_funding_entity_item.errors, status: :unprocessable_entity
         end

@@ -4,6 +4,13 @@ class Api::V1::ApGeneralGoalController < ApplicationController
   before_action :set_agreement_research_project
   before_action :set_ap_general_goal, only: [:show, :update]
 
+  rescue_from ActiveRecord::RecordNotFound do |e|
+    render json: { error: e.message }, status: :not_found
+  end
+  rescue_from ActiveRecord::RecordInvalid do |e|
+    render json: { error: e.message }, status: :unprocessable_entity
+  end
+
   def index
     #Listar todos los convenios
     @ap_general_goal = @agreement_research_project.ap_general_goals

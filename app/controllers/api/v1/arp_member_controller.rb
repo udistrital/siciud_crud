@@ -2,6 +2,13 @@ class Api::V1::ArpMemberController < ApplicationController
   before_action :set_agreement_research_project
   before_action :set_arp_member, only: [:show, :update]
 
+  rescue_from ActiveRecord::RecordNotFound do |e|
+    render json: { error: e.message }, status: :not_found
+  end
+  rescue_from ActiveRecord::RecordInvalid do |e|
+    render json: { error: e.message }, status: :unprocessable_entity
+  end
+
   def index
     @arp_members = @agreement_research_project.arp_members
     #@arp_members = ArpMember.all

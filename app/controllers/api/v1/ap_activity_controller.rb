@@ -5,6 +5,13 @@ class Api::V1::ApActivityController < ApplicationController
   before_action :set_ap_activity, only: [:show, :update, :report_progress]
   before_action :set_ap_general_goal, only: [:report_progress]
 
+  rescue_from ActiveRecord::RecordNotFound do |e|
+    render json: { error: e.message }, status: :not_found
+  end
+  rescue_from ActiveRecord::RecordInvalid do |e|
+    render json: { error: e.message }, status: :unprocessable_entity
+  end
+
   def index
     #Listar todos los convenios
     @ap_activity = @ap_specific_goal.ap_activities
