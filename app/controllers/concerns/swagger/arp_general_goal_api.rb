@@ -1,12 +1,12 @@
-module Swagger::ApGeneralGoalApi
+module Swagger::ArpGeneralGoalApi
   extend ActiveSupport::Concern
   include Swagger::Blocks
 
   included do
-    swagger_path "/api/v1/agreement_research_project/{agreement_research_project_id}/ap_general_goal" do
+    swagger_path "/api/v1/agreement_research_project/{agreement_research_project_id}/arp_general_goal" do
       operation :get do
         key :description, "Traer el objetivo general de un proyecto de un convenio de investigacion"
-        key :operationId, :get_ap_general_goal
+        key :operationId, :get_arp_general_goal
         key :produces, [
               "application/json",
             ]
@@ -26,7 +26,7 @@ module Swagger::ApGeneralGoalApi
           schema do
             key :type, :array
             items do
-              key :'$ref', :ApGeneralGoal
+              key :'$ref', :ArpGeneralGoal
             end
           end
         end
@@ -46,18 +46,18 @@ module Swagger::ApGeneralGoalApi
           key :type, :int64
         end
         parameter do
-          key :name, :ap_general_goal
+          key :name, :arp_general_goal
           key :in, :body
           key :description, "Objetivo general"
           key :required, true
           schema do
-            key :'$ref', :ApGeneralGoalPost
+            key :'$ref', :ArpGeneralGoalPost
           end
         end
         response 200 do
           key :description, "Respuesta"
           schema do
-            key :'$ref', :ApGeneralGoal
+            key :'$ref', :ArpGeneralGoal
           end
         end
         response :default do
@@ -65,7 +65,7 @@ module Swagger::ApGeneralGoalApi
         end
       end
     end
-    swagger_path "/api/v1/agreement_research_project/{agreement_research_project_id}/ap_general_goal/{id}" do
+    swagger_path "/api/v1/agreement_research_project/{agreement_research_project_id}/arp_general_goal/{id}" do
       operation :get do
         key :description, "Ver un objetivo"
         key :operationId, :get_contact
@@ -92,7 +92,7 @@ module Swagger::ApGeneralGoalApi
         response 200 do
           key :description, "Respuesta"
           schema do
-            key :'$ref', :ApGeneralGoal
+            key :'$ref', :ArpGeneralGoal
           end
         end
       end
@@ -119,19 +119,19 @@ module Swagger::ApGeneralGoalApi
           key :type, :int64
         end
         parameter do
-          key :name, :ap_general_goal
+          key :name, :arp_general_goal
           key :in, :body
           key :description, "Objetivo general"
           key :required, true
           schema do
-            key :'$ref', :ApGeneralGoalPost
+            key :'$ref', :ArpGeneralGoalPost
           end
         end
         # definición del success response
         response 200 do
           key :description, "Respuesta"
           schema do
-            key :'$ref', :ApGeneralGoal
+            key :'$ref', :ArpGeneralGoal
           end
         end
       end

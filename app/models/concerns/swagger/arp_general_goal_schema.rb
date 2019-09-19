@@ -1,5 +1,5 @@
 
-module Swagger::ApGeneralGoalSchema
+module Swagger::ArpGeneralGoalSchema
   extend ActiveSupport::Concern
   include Swagger::Blocks
 
@@ -7,7 +7,7 @@ module Swagger::ApGeneralGoalSchema
     swagger_schema :ApGeneralGoal do
       key :required, [:id, :name]
 
-      property :ap_general_goal do
+      property :arp_general_goal do
         property :id do
           key :type, :integer
         end
@@ -31,7 +31,7 @@ module Swagger::ApGeneralGoalSchema
     swagger_schema :ApGeneralGoalPost do
       key :required, [:id, :name]
 
-      property :ap_general_goal do
+      property :arp_general_goal do
         property :goal do
           key :type, :string
         end

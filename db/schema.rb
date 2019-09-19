@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_10_205515) do
+ActiveRecord::Schema.define(version: 2019_09_19_215535) do
 
   create_table "Agreements_GroupMembers", id: false, force: :cascade do |t|
     t.integer "Agreement_id", null: false
@@ -121,6 +121,15 @@ ActiveRecord::Schema.define(version: 2019_09_10_205515) do
     t.index ["ap_general_goal_id"], name: "index_ap_specific_goals_on_ap_general_goal_id"
   end
 
+  create_table "arp_activities", force: :cascade do |t|
+    t.text "activity"
+    t.integer "arp_specific_goal_id"
+    t.float "completedPercentage"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["arp_specific_goal_id"], name: "index_arp_activities_on_arp_specific_goal_id"
+  end
+
   create_table "arp_expenses", force: :cascade do |t|
     t.string "name"
     t.float "totalPayed"
@@ -140,6 +149,15 @@ ActiveRecord::Schema.define(version: 2019_09_10_205515) do
     t.float "remainingInCash"
     t.float "remainingInKind"
     t.index ["contribution_rp_item_id"], name: "index_arp_expenses_on_contribution_rp_item_id"
+  end
+
+  create_table "arp_general_goals", force: :cascade do |t|
+    t.text "goal"
+    t.integer "agreement_research_project_id"
+    t.float "completedPerecentage"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["agreement_research_project_id"], name: "index_arp_general_goals_on_agreement_research_project_id"
   end
 
   create_table "arp_members", force: :cascade do |t|
@@ -172,6 +190,16 @@ ActiveRecord::Schema.define(version: 2019_09_10_205515) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "arp_specific_goals", force: :cascade do |t|
+    t.text "goal"
+    t.integer "arp_general_goal_id"
+    t.float "completedPercentage"
+    t.integer "weight"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["arp_general_goal_id"], name: "index_arp_specific_goals_on_arp_general_goal_id"
   end
 
   create_table "colciencias_calls", force: :cascade do |t|

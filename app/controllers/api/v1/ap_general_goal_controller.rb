@@ -1,5 +1,5 @@
 class Api::V1::ApGeneralGoalController < ApplicationController
-  include Swagger::ApGeneralGoalApi
+  #include Swagger::ApGeneralGoalApi
 
   before_action :set_agreement_research_project
   before_action :set_ap_general_goal, only: [:show, :update]
