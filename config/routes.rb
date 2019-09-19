@@ -65,6 +65,7 @@ Rails.application.routes.draw do
         # end
         resources :agreement_research_project, only: [:index, :show, :create, :update]
         get "arp_item/", to: "arp_item#index"
+        get "arp_item/:id", to: "arp_item#show"
       end
       resources :contribution, only: [] do
         resources :contribution_funding_entity_item, only: [:index, :show, :create, :update]
