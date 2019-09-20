@@ -4,7 +4,7 @@ module Swagger::ArpGeneralGoalSchema
   include Swagger::Blocks
 
   included do
-    swagger_schema :ApGeneralGoal do
+    swagger_schema :ArpGeneralGoal do
       key :required, [:id, :name]
 
       property :arp_general_goal do
@@ -28,7 +28,7 @@ module Swagger::ArpGeneralGoalSchema
         end
       end
     end
-    swagger_schema :ApGeneralGoalPost do
+    swagger_schema :ArpGeneralGoalPost do
       key :required, [:id, :name]
 
       property :arp_general_goal do

@@ -1,20 +1,20 @@
 
-module Swagger::ApSpecificGoalSchema
+module Swagger::ArpSpecificGoalSchema
   extend ActiveSupport::Concern
   include Swagger::Blocks
 
   included do
-    swagger_schema :ApSpecificGoal do
+    swagger_schema :ArpSpecificGoal do
       key :required, [:id, :name]
 
-      property :ap_specific_goal do
+      property :arp_specific_goal do
         property :id do
           key :type, :integer
         end
         property :goal do
           key :type, :string
         end
-        property :ap_general_goal_id do
+        property :arp_general_goal_id do
           key :type, :integer
         end
         property :completedPercentage do
@@ -31,10 +31,10 @@ module Swagger::ApSpecificGoalSchema
         end
       end
     end
-    swagger_schema :ApSpecificGoalPost do
+    swagger_schema :ArpSpecificGoalPost do
       key :required, [:id, :name]
 
-      property :ap_specific_goal do
+      property :arp_specific_goal do
         property :goal do
           key :type, :string
         end

@@ -1,17 +1,17 @@
 
-module Swagger::ApActivitySchema
+module Swagger::ArpActivitySchema
   extend ActiveSupport::Concern
   include Swagger::Blocks
 
   included do
-    swagger_schema :ApActivity do
+    swagger_schema :ArpActivity do
       key :required, [:id, :name]
 
-      property :ap_activity do
+      property :arp_activity do
         property :id do
           key :type, :integer
         end
-        property :ap_specific_goal_id do
+        property :arp_specific_goal_id do
           key :type, :integer
         end
         property :activity do
@@ -20,20 +20,14 @@ module Swagger::ApActivitySchema
         property :completedPercentage do
           key :type, :integer
         end
-        property :weight do
-          key :type, :integer
-        end
       end
     end
-    swagger_schema :ApActivityPost do
+    swagger_schema :ArpActivityPost do
       key :required, [:id, :name]
 
-      property :ap_activity do
+      property :arp_activity do
         property :activity do
           key :type, :string
-        end
-        property :weight do
-          key :type, :integer
         end
       end
     end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_19_215535) do
+ActiveRecord::Schema.define(version: 2019_09_20_164219) do
 
   create_table "Agreements_GroupMembers", id: false, force: :cascade do |t|
     t.integer "Agreement_id", null: false
@@ -130,6 +130,15 @@ ActiveRecord::Schema.define(version: 2019_09_19_215535) do
     t.index ["arp_specific_goal_id"], name: "index_arp_activities_on_arp_specific_goal_id"
   end
 
+  create_table "arp_activity_reports", force: :cascade do |t|
+    t.integer "arp_activities_id"
+    t.float "completedPercentage"
+    t.boolean "approved"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["arp_activities_id"], name: "index_arp_activity_reports_on_arp_activities_id"
+  end
+
   create_table "arp_expenses", force: :cascade do |t|
     t.string "name"
     t.float "totalPayed"
@@ -154,7 +163,7 @@ ActiveRecord::Schema.define(version: 2019_09_19_215535) do
   create_table "arp_general_goals", force: :cascade do |t|
     t.text "goal"
     t.integer "agreement_research_project_id"
-    t.float "completedPerecentage"
+    t.float "completedPercentage"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["agreement_research_project_id"], name: "index_arp_general_goals_on_agreement_research_project_id"
