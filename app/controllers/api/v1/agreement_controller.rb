@@ -49,9 +49,19 @@ module Api
         params.permit(:contractDocument, :initialActDocument)
         if (params[:contractDocument])
           @agreement.contractDocument.attach(params[:contractDocument])
+
+          if (@agreement.contractDocument.filename.extension_without_delimiter != "pdf")
+            @agreement.contractDocument.purge
+            return render json: { "error": "El archivo debe ser de formato pdf" }, status: :unprocessable_entity
+          end
         end
         if (params[:initialActDocument])
           @agreement.initialActDocument.attach(params[:initialActDocument])
+
+          if (@agreement.initialActDocument.filename.extension_without_delimiter != "pdf")
+            @agreement.initialActDocument.purge
+            return render json: { "error": "El archivo debe ser de formato pdf" }, status: :unprocessable_entity
+          end
         end
         render json: @agreement
       end

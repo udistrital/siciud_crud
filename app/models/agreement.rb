@@ -1,6 +1,6 @@
 class Agreement < ApplicationRecord
   include Swagger::AgreementSchema
-  
+
   has_one_attached :contractDocument
   has_one_attached :initialActDocument #Acta de inicio
   has_many :arp_members
@@ -13,7 +13,9 @@ class Agreement < ApplicationRecord
   has_many :funding_entities, through: :contributions
   has_many :agreement_research_projects
   has_many :group_members, through: :arp_members
-  
+
   validates :agreementNumber, uniqueness: true
   #validates :research_groups, presence: true
+  #validates :contractDocument, attached: true, content_type: { in: "application/pdf", message: "is not a PDF" }
+  #validates :initialActDocument, attached: true, content_type: ["image/png", "image/jpg", "image/jpeg"]
 end
