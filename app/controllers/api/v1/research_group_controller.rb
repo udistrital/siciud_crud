@@ -91,10 +91,18 @@ module Api
       def attach
         params.permit(:facultyActDocument, :cidcActDocument)
         if (params[:facultyActDocument])
-          @research_group.facultyActDocument.attach(params[:facultyActDocument])
+          if (params[:facultyActDocument].content_type == "application/pdf")
+            @research_group.facultyActDocument.attach(params[:facultyActDocument])
+          else
+            return render json: { "error": "El acta de facultad debe ser de formato pdf" }, status: :unprocessable_entity
+          end
         end
         if (params[:cidcActDocument])
-          @research_group.cidcActDocument.attach(params[:cidcActDocument])
+          if (params[:cidcActDocument].content_type == "application/pdf")
+            @research_group.cidcActDocument.attach(params[:cidcActDocument])
+          else
+            return render json: { "error": "El acta del cidc debe ser de formato pdf" }, status: :unprocessable_entity
+          end
         end
         render json: @research_group
       end

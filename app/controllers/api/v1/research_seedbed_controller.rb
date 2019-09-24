@@ -92,12 +92,21 @@ module Api
 
       def attach
         #Añadir los documentos de Facultad y de CIDC
+
         params.permit(:facultyActDocument, :cidcActDocument)
         if (params[:facultyActDocument])
-          @research_seedbed.facultyActDocument.attach(params[:facultyActDocument])
+          if (params[:facultyActDocument].content_type == "application/pdf")
+            @research_seedbed.facultyActDocument.attach(params[:facultyActDocument])
+          else
+            return render json: { "error": "El acta de facultad debe ser de formato pdf" }, status: :unprocessable_entity
+          end
         end
         if (params[:cidcActDocument])
-          @research_seedbed.cidcActDocument.attach(params[:cidcActDocument])
+          if (params[:cidcActDocument].content_type == "application/pdf")
+            @research_seedbed.cidcActDocument.attach(params[:cidcActDocument])
+          else
+            return render json: { "error": "El acta del cidc debe ser de formato pdf" }, status: :unprocessable_entity
+          end
         end
       end
 
