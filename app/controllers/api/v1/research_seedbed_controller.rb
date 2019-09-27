@@ -62,7 +62,8 @@ module Api
       def update
         #Se intenta actualizar el semillero con la informacion enviada en los parametros
         if @research_seedbed.update(research_seedbed_params)
-          @research_group.curricular_project_ids = (params[:research_seedbed][:curricular_project_ids]).uniq
+          #byebug
+          @research_seedbed.curricular_project_ids = (params[:research_seedbed][:curricular_project_ids]).uniq
           #Se actualizan si se enviaron facultades  y añadirselas al semillero (relacion muchos a muchos)
           #if(faculties = research_seedbed_params[:faculty_ids])
           #faculties = faculties.split(',')

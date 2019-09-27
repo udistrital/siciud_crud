@@ -1,6 +1,6 @@
 class Api::V1::ArpActivityReportController < ApplicationController
-  before_action :set_arp_specific_goal
-  before_action :set_arp_activity, only: [:show, :update, :report_progress]
+  before_action :set_arp_activity
+  before_action :set_arp_specific_goal, only: [:report_progress]
   before_action :set_arp_general_goal, only: [:report_progress]
 
   def report_progress
