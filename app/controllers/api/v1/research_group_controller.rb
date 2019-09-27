@@ -62,7 +62,7 @@ module Api
 
       def update
         if @research_group.update(research_group_params)
-          @research_group.curricular_project_ids = (params[:research_group][:curricular_project_ids]).uniq
+          @research_group.curricular_project_ids = (params[:research_group][:curricular_project_ids]).map(&:to_i).uniq
           # if(faculties = research_group_params[:faculty_ids])
           # faculties = faculties.split(',')
           # @research_group.faculty_ids = faculties
