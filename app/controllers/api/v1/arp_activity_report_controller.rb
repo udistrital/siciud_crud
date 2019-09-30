@@ -5,7 +5,7 @@ class Api::V1::ArpActivityReportController < ApplicationController
 
   def report_progress
     #byebug
-    if (@arp_general_goal.arp_specific_goals.sum(:weight) == 100)
+    if @arp_general_goal.arp_specific_goals.sum(:weight) == 100
       if @arp_activity.update(params.require(:arp_activity).permit(:completedPercentage))
         set_arp_specific_goal_progress
         @arp_specific_goal.save
@@ -39,7 +39,7 @@ class Api::V1::ArpActivityReportController < ApplicationController
   end
 
   def arp_activity_params
-    params.require(:arp_activity).permit(:activity)
+    params.permit(:completedPercentage,:contractDocument)
   end
 
   def set_arp_specific_goal
