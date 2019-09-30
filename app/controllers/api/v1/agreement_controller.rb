@@ -48,8 +48,8 @@ module Api
       def attach
         params.permit(:id, :contractDocument, :initialActDocument)
         #byebug
-        if (params[:contractDocument])
-          if (params[:contractDocument].content_type == "application/pdf")
+        if params[:contractDocument]
+          if params[:contractDocument].content_type == "application/pdf"
             @agreement.contractDocument.attach(params[:contractDocument])
 
             # if (@agreement.contractDocument.filename.extension_without_delimiter != "pdf")
@@ -58,8 +58,8 @@ module Api
             return render json: { "error": "El contrato debe ser de formato pdf" }, status: :unprocessable_entity
           end
         end
-        if (params[:initialActDocument])
-          if (params[:initialActDocument].content_type == "application/pdf")
+        if params[:initialActDocument]
+          if params[:initialActDocument].content_type == "application/pdf"
             @agreement.initialActDocument.attach(params[:initialActDocument])
 
             #if (@agreement.initialActDocument.filename.extension_without_delimiter != "pdf")
