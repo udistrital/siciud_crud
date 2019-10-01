@@ -11,12 +11,15 @@ class Api::V1::ArpActivityReportController < ApplicationController
   end
 
   def create
-
-    @arp_activity_report = @arp_activity.arp_activity_reports.new(arp_activity_report_params)
-    if @arp_activity_report.save
-      render json: @arp_activity_report, status: :created
+    if @arp_activity.arp_activity_reports.last.nil? || @arp_activity.arp_activity_reports.last.status != "inReview"
+      @arp_activity_report = @arp_activity.arp_activity_reports.new(arp_activity_report_params)
+      if @arp_activity_report.save
+        render json: @arp_activity_report, status: :created
+      else
+        render json: @arp_activity_report.errors, status: :unprocessable_entity
+      end
     else
-      render json: @arp_activity_report.errors, status: :unprocessable_entity
+      render json: {"error": "Actualmente ya se encuentra un reporte en revision"}, status: :unprocessable_entity
     end
   end
 
@@ -25,7 +28,16 @@ class Api::V1::ArpActivityReportController < ApplicationController
   end
 
   def update
+    if @arp_activity_report.status == "inReview"
+      if @arp_activity_report.update(arp_activity_report_params)
+        render json: @arp_activity_report
+      else
+        render json: @arp_activity_report.errors, status: :unprocessable_entity
+      end
+    else
+      render json: {"error": "Este reporte ya fue revisado por lo que no es posible actualizarlo"}, status: :unprocessable_entity
 
+    end
   end
 
   # def report_progress

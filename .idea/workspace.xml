@@ -2,13 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6e9b360a-1b66-4f3b-b845-868151e1e2eb" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/app/validators/content_type_validator.rb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/db/migrate/20191001194739_add_status_to_arp_activity_reports.rb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/db/migrate/20191001210205_remove_approved_from_arp_activity_reports.rb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/controllers/api/v1/arp_activity_controller.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/api/v1/arp_activity_controller.rb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/controllers/api/v1/arp_activity_report_controller.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/api/v1/arp_activity_report_controller.rb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/models/arp_activity.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/arp_activity.rb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/models/arp_activity_report.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/arp_activity_report.rb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/locales/en.yml" beforeDir="false" afterPath="$PROJECT_DIR$/config/locales/en.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db/migrate/20190930213155_create_arp_activity_reports.rb" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/db/schema.rb" beforeDir="false" afterPath="$PROJECT_DIR$/db/schema.rb" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -254,7 +253,7 @@
       <workItem from="1569857610288" duration="441000" />
       <workItem from="1569858654622" duration="9265000" />
       <workItem from="1569939381061" duration="4657000" />
-      <workItem from="1569948518774" duration="1564000" />
+      <workItem from="1569948518774" duration="7216000" />
     </task>
     <servers />
   </component>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_01_142236) do
+ActiveRecord::Schema.define(version: 2019_10_01_210205) do
 
   create_table "Agreements_GroupMembers", id: false, force: :cascade do |t|
     t.integer "Agreement_id", null: false
@@ -133,9 +133,9 @@ ActiveRecord::Schema.define(version: 2019_10_01_142236) do
   create_table "arp_activity_reports", force: :cascade do |t|
     t.integer "arp_activity_id"
     t.float "completedPercentage"
-    t.boolean "approved"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "status"
     t.index ["arp_activity_id"], name: "index_arp_activity_reports_on_arp_activity_id"
   end
 
