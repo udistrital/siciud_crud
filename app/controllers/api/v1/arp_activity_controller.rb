@@ -2,8 +2,8 @@ class Api::V1::ArpActivityController < ApplicationController
   include Swagger::ArpActivityApi
 
   before_action :set_arp_specific_goal
-  before_action :set_arp_activity, only: [:show, :update, :report_progress]
-  before_action :set_arp_general_goal, only: [:report_progress]
+  before_action :set_arp_activity, only: [:show, :update]
+  #before_action :set_arp_general_goal, only: [:report_progress]
 
   rescue_from ActiveRecord::RecordNotFound do |e|
     render json: { error: e.message }, status: :not_found
@@ -13,9 +13,9 @@ class Api::V1::ArpActivityController < ApplicationController
   end
 
   def index
-    #Listar todos los convenios
-    @arp_activity = @arp_specific_goal.arp_activities
-    render json: @arp_activity
+    #Listar todas las actividades
+    @arp_activities = @arp_specific_goal.arp_activities
+    render json: @arp_activities
   end
 
   def show
