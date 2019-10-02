@@ -2,7 +2,7 @@ class Api::V1::ApSpecificGoalController < ApplicationController
   include Swagger::ApSpecificGoalApi
 
   before_action :set_ap_general_goal
-  before_action :set_ap_specific_goal, only: [:show, :update, :reportProgress]
+  before_action :set_ap_specific_goal, only: [:show, :update]
 
   rescue_from ActiveRecord::RecordNotFound do |e|
     render json: { error: e.message }, status: :not_found
@@ -23,7 +23,7 @@ class Api::V1::ApSpecificGoalController < ApplicationController
 
   def create
     #byebug
-    if ((@ap_general_goal.ap_specific_goals.sum(:weight) + (params[:ap_specific_goal][:weight])) <= 100)
+    if (@ap_general_goal.ap_specific_goals.sum(:weight) + (params[:ap_specific_goal][:weight])) <= 100
       @ap_specific_goal = @ap_general_goal.ap_specific_goals.new(ap_specific_goal_params)
       @ap_specific_goal.completedPercentage = 0
       if @ap_specific_goal.save

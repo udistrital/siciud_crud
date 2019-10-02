@@ -1,6 +1,6 @@
 class Api::V1::ArpActivityReportController < ApplicationController
   before_action :set_arp_activity
-  before_action :set_arp_activity_report, only: [:show, :update,:response_activity_progress]
+  before_action :set_arp_activity_report, only: [:show, :update, :response_activity_progress]
 
   before_action :set_arp_specific_goal #, only: [:report_progress]
   before_action :set_arp_general_goal #, only: [:report_progress]
@@ -13,11 +13,15 @@ class Api::V1::ArpActivityReportController < ApplicationController
   def create
     if @arp_general_goal.arp_specific_goals.sum(:weight) == 100
       if @arp_activity.arp_activity_reports.last.nil? || @arp_activity.arp_activity_reports.last.status != "inReview"
-        @arp_activity_report = @arp_activity.arp_activity_reports.new(arp_activity_report_params)
-        if @arp_activity_report.save
-          render json: @arp_activity_report, status: :created
+        if @arp_activity.completedPercentage < params[:completedPercentage].to_f
+          @arp_activity_report = @arp_activity.arp_activity_reports.new(arp_activity_report_params)
+          if @arp_activity_report.save
+            render json: @arp_activity_report, status: :created
+          else
+            render json: @arp_activity_report.errors, status: :unprocessable_entity
+          end
         else
-          render json: @arp_activity_report.errors, status: :unprocessable_entity
+          render json: {"error": "No se puede hacer un reporte de progreso menor al que ya fue aprovado"}, status: :unprocessable_entity
         end
       else
         render json: {"error": "Actualmente ya se encuentra un reporte en revision"}, status: :unprocessable_entity
@@ -45,17 +49,19 @@ class Api::V1::ArpActivityReportController < ApplicationController
   end
 
   def response_activity_progress
-    if @arp_activity_report.update(params.permit(:status))
-      if (@arp_activity_report.status = "approved")
-        set_arp_activity_goal_progress
-        set_arp_specific_goal_progress
-        set_arp_general_goal_progress
+    if @arp_activity_report.status == "inReview"
+      if @arp_activity_report.update(params.permit(:status))
+        if @arp_activity_report.status == "approved"
+          set_arp_activity_goal_progress
+          set_arp_specific_goal_progress
+          set_arp_general_goal_progress
+        end
+        render json: @arp_activity_report
       else
-
+        render json: @arp_activity_report.errors, status: :unprocessable_entity
       end
-      render json: @arp_activity_report
     else
-      render json: @arp_activity_report.errors, status: :unprocessable_entity
+      render json: {"error": "Este reporte ya fue revisado por lo que no es posible actualizarlo, por lo cual es necesario crear un nuevo reporte"}, status: :unprocessable_entity
     end
     #byebug
     #if @arp_general_goal.arp_specific_goals.sum(:weight) == 100
