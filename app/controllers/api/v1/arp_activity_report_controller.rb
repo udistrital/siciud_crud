@@ -1,9 +1,9 @@
 class Api::V1::ArpActivityReportController < ApplicationController
   before_action :set_arp_activity
-  before_action :set_arp_activity_report, only: [:show, :update]
+  before_action :set_arp_activity_report, only: [:show, :update,:response_activity_progress]
 
-  #before_action :set_arp_specific_goal, only: [:report_progress]
-  #before_action :set_arp_general_goal, only: [:report_progress]
+  before_action :set_arp_specific_goal #, only: [:report_progress]
+  before_action :set_arp_general_goal #, only: [:report_progress]
 
   def index
     @arp_activity_reports = @arp_activity.arp_activity_reports
@@ -11,15 +11,19 @@ class Api::V1::ArpActivityReportController < ApplicationController
   end
 
   def create
-    if @arp_activity.arp_activity_reports.last.nil? || @arp_activity.arp_activity_reports.last.status != "inReview"
-      @arp_activity_report = @arp_activity.arp_activity_reports.new(arp_activity_report_params)
-      if @arp_activity_report.save
-        render json: @arp_activity_report, status: :created
+    if @arp_general_goal.arp_specific_goals.sum(:weight) == 100
+      if @arp_activity.arp_activity_reports.last.nil? || @arp_activity.arp_activity_reports.last.status != "inReview"
+        @arp_activity_report = @arp_activity.arp_activity_reports.new(arp_activity_report_params)
+        if @arp_activity_report.save
+          render json: @arp_activity_report, status: :created
+        else
+          render json: @arp_activity_report.errors, status: :unprocessable_entity
+        end
       else
-        render json: @arp_activity_report.errors, status: :unprocessable_entity
+        render json: {"error": "Actualmente ya se encuentra un reporte en revision"}, status: :unprocessable_entity
       end
     else
-      render json: {"error": "Actualmente ya se encuentra un reporte en revision"}, status: :unprocessable_entity
+      render json: {"error": "EL peso de todas los objetivos especificos deben sumar 100% antes de agregar progreso la actividad"}, status: :not_acceptable
     end
   end
 
@@ -40,36 +44,56 @@ class Api::V1::ArpActivityReportController < ApplicationController
     end
   end
 
-  # def report_progress
-  #   #byebug
-  #   if @arp_general_goal.arp_specific_goals.sum(:weight) == 100
-  #     if @arp_activity.update(params.require(:arp_activity).permit(:completedPercentage))
-  #       set_arp_specific_goal_progress
-  #       @arp_specific_goal.save
-  #       set_arp_general_goal_progress
-  #       @arp_general_goal.save
-  #       render json: @arp_activity
-  #     else
-  #       render json: @arp_activity.errors, status: :unprocessable_entity
-  #     end
-  #   else
-  #     render json: {"error": "EL peso de todas los objetivos especificos deben sumar 100% antes de agregar progreso la actividad"}, status: :not_acceptable
-  #   end
-  # end
+  def response_activity_progress
+    if @arp_activity_report.update(params.permit(:status))
+      if (@arp_activity_report.status = "approved")
+        set_arp_activity_goal_progress
+        set_arp_specific_goal_progress
+        set_arp_general_goal_progress
+      else
+
+      end
+      render json: @arp_activity_report
+    else
+      render json: @arp_activity_report.errors, status: :unprocessable_entity
+    end
+    #byebug
+    #if @arp_general_goal.arp_specific_goals.sum(:weight) == 100
+    # if @arp_activity.update(params.require(:arp_activity).permit(:completedPercentage))
+    #   set_arp_specific_goal_progress
+    #   @arp_specific_goal.save
+    #   set_arp_general_goal_progress
+    #   @arp_general_goal.save
+    #   render json: @arp_activity
+    # else
+    #   render json: @arp_activity.errors, status: :unprocessable_entity
+    # end
+    # else
+    #   render json: {"error": "EL peso de todas los objetivos especificos deben sumar 100% antes de agregar progreso la actividad"}, status: :not_acceptable
+    # end
+  end
 
   private
 
-  # def set_arp_specific_goal_progress
-  #   @arp_specific_goal.completedPercentage = (@arp_specific_goal.arp_activities.map { |n| n.completedPercentage }.inject { |sum, x| sum + x } / @arp_specific_goal.arp_activities.size)
-  # end
+  def set_arp_activity_goal_progress
+    @arp_activity.completedPercentage = @arp_activity_report.completedPercentage
+    @arp_activity.save
+  end
+
+  def set_arp_specific_goal_progress
+    @arp_specific_goal.completedPercentage = (@arp_specific_goal.arp_activities.map { |n| n.completedPercentage }.inject { |sum, x| sum + x } / @arp_specific_goal.arp_activities.size)
+    @arp_specific_goal.save
+  end
+
   #
-  # def set_arp_general_goal_progress
-  #   @arp_general_goal.completedPercentage = (@arp_general_goal.arp_specific_goals.map { |n| n.weight * n.completedPercentage }.inject { |sum, x| sum + x } / 100)
-  # end
-  #
-  # def set_arp_general_goal
-  #   @arp_general_goal = @arp_specific_goal.arp_general_goal
-  # end
+  def set_arp_general_goal_progress
+    @arp_general_goal.completedPercentage = (@arp_general_goal.arp_specific_goals.map { |n| n.weight * n.completedPercentage }.inject { |sum, x| sum + x } / 100)
+    @arp_general_goal.save
+  end
+
+  def set_arp_general_goal
+    @arp_general_goal = @arp_specific_goal.arp_general_goal
+  end
 
   def set_arp_activity_report
     @arp_activity_report = @arp_activity.arp_activity_reports.find_by(id: params[:id])
@@ -83,9 +107,9 @@ class Api::V1::ArpActivityReportController < ApplicationController
     params.permit(:completedPercentage, :supportDocument)
   end
 
-=begin
+
   def set_arp_specific_goal
-    @arp_specific_goal = ArpSpecificGoal.find(params[:arp_specific_goal_id])
+    @arp_specific_goal = @arp_activity.arp_specific_goal
   end
-=end
+
 end
