@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_01_210205) do
+ActiveRecord::Schema.define(version: 2019_10_03_185923) do
 
   create_table "Agreements_GroupMembers", id: false, force: :cascade do |t|
     t.integer "Agreement_id", null: false
@@ -127,6 +127,7 @@ ActiveRecord::Schema.define(version: 2019_10_01_210205) do
     t.float "completedPercentage"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "weight"
     t.index ["arp_specific_goal_id"], name: "index_arp_activities_on_arp_specific_goal_id"
   end
 
