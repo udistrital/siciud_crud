@@ -3,6 +3,17 @@
   <component name="ChangeListManager">
     <list default="true" id="6e9b360a-1b66-4f3b-b845-868151e1e2eb" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/controllers/api/v1/ap_activity_controller.rb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/controllers/api/v1/ap_specific_goal_controller.rb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/controllers/api/v1/arp_activity_controller.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/api/v1/arp_activity_controller.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/controllers/api/v1/arp_activity_report_controller.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/api/v1/arp_activity_report_controller.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/models/arp_activity.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/arp_activity.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/models/arp_activity_report.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/arp_activity_report.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/serializers/ap_general_goal_serializer.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/serializers/arp_general_goal_serializer.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/serializers/ap_specific_goal_serializer.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/serializers/arp_specific_goal_serializer.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/serializers/arp_activity_report_serializer.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/serializers/arp_activity_report_serializer.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db/schema.rb" beforeDir="false" afterPath="$PROJECT_DIR$/db/schema.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db/seeds.rb" beforeDir="false" afterPath="$PROJECT_DIR$/db/seeds.rb" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -249,7 +260,7 @@
       <workItem from="1569939381061" duration="4657000" />
       <workItem from="1569948518774" duration="7573000" />
       <workItem from="1570028658069" duration="7612000" />
-      <workItem from="1570110946207" duration="3118000" />
+      <workItem from="1570110946207" duration="11468000" />
     </task>
     <servers />
   </component>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_03_185923) do
+ActiveRecord::Schema.define(version: 2019_10_03_215102) do
 
   create_table "Agreements_GroupMembers", id: false, force: :cascade do |t|
     t.integer "Agreement_id", null: false
@@ -128,6 +128,8 @@ ActiveRecord::Schema.define(version: 2019_10_03_185923) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "weight"
+    t.date "startDate"
+    t.date "finishDate"
     t.index ["arp_specific_goal_id"], name: "index_arp_activities_on_arp_specific_goal_id"
   end
 
@@ -137,6 +139,7 @@ ActiveRecord::Schema.define(version: 2019_10_03_185923) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "status"
+    t.text "comment"
     t.index ["arp_activity_id"], name: "index_arp_activity_reports_on_arp_activity_id"
   end
 
@@ -391,6 +394,12 @@ ActiveRecord::Schema.define(version: 2019_10_03_185923) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["planable_id"], name: "index_plan_periods_on_planable_id"
+  end
+
+  create_table "product_types", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "research_focuses", force: :cascade do |t|

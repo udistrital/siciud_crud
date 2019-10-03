@@ -6,10 +6,10 @@ class Api::V1::ArpActivityController < ApplicationController
   #before_action :set_arp_general_goal, only: [:report_progress]
 
   rescue_from ActiveRecord::RecordNotFound do |e|
-    render json: { error: e.message }, status: :not_found
+    render json: {error: e.message}, status: :not_found
   end
   rescue_from ActiveRecord::RecordInvalid do |e|
-    render json: { error: e.message }, status: :unprocessable_entity
+    render json: {error: e.message}, status: :unprocessable_entity
   end
 
   def index
@@ -24,12 +24,16 @@ class Api::V1::ArpActivityController < ApplicationController
 
   def create
     #byebug
-    @arp_activity = @arp_specific_goal.arp_activities.new(arp_activity_params)
-    @arp_activity.completedPercentage = 0
-    if @arp_specific_goal.save
-      render json: @arp_activity, status: :created
+    if (@arp_specific_goal.arp_activities.sum(:weight) + (params[:arp_activity][:weight])) <= 100
+      @arp_activity = @arp_specific_goal.arp_activities.new(arp_activity_params)
+      @arp_activity.completedPercentage = 0
+      if @arp_specific_goal.save
+        render json: @arp_activity, status: :created
+      else
+        render json: @arp_activity.errors, status: :unprocessable_entity
+      end
     else
-      render json: @arp_activity.errors, status: :unprocessable_entity
+      render json: {"error": "Los pesos no pueden sumar mas de 100 puntos"}, status: :not_acceptable
     end
   end
 
@@ -43,14 +47,12 @@ class Api::V1::ArpActivityController < ApplicationController
 
   private
 
-
-
   def set_arp_activity
     @arp_activity = @arp_specific_goal.arp_activities.find_by(id: params[:id])
   end
 
   def arp_activity_params
-    params.require(:arp_activity).permit(:activity)
+    params.require(:arp_activity).permit(:activity, :weight,:startDate,:finishDate)
   end
 
   def set_arp_specific_goal

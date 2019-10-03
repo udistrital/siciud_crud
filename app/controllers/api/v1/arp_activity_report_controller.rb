@@ -11,9 +11,9 @@ class Api::V1::ArpActivityReportController < ApplicationController
   end
 
   def create
-    if @arp_general_goal.arp_specific_goals.sum(:weight) == 100
+    if @arp_general_goal.arp_specific_goals.sum(:weight) == 100 && @arp_specific_goal.arp_activities.sum(:weight) == 100
       if @arp_activity.arp_activity_reports.last.nil? || @arp_activity.arp_activity_reports.last.status != "inReview"
-        if @arp_activity.completedPercentage < params[:completedPercentage].to_f
+        if @arp_activity.completedPercentage < params[:completedPercentage].to_f && params[:completedPercentage].to_f <= 100
           @arp_activity_report = @arp_activity.arp_activity_reports.new(arp_activity_report_params)
           if @arp_activity_report.save
             render json: @arp_activity_report, status: :created
@@ -21,7 +21,7 @@ class Api::V1::ArpActivityReportController < ApplicationController
             render json: @arp_activity_report.errors, status: :unprocessable_entity
           end
         else
-          render json: {"error": "No se puede hacer un reporte de progreso menor al que ya fue aprovado"}, status: :unprocessable_entity
+          render json: {"error": "No se puede hacer un reporte de progreso menor al que ya fue aprobado o mayor a 100"}, status: :unprocessable_entity
         end
       else
         render json: {"error": "Actualmente ya se encuentra un reporte en revision"}, status: :unprocessable_entity
@@ -50,7 +50,7 @@ class Api::V1::ArpActivityReportController < ApplicationController
 
   def response_activity_progress
     if @arp_activity_report.status == "inReview"
-      if @arp_activity_report.update(params.permit(:status))
+      if @arp_activity_report.update(params.permit(:status,:comment))
         if @arp_activity_report.status == "approved"
           set_arp_activity_goal_progress
           set_arp_specific_goal_progress
@@ -87,7 +87,8 @@ class Api::V1::ArpActivityReportController < ApplicationController
   end
 
   def set_arp_specific_goal_progress
-    @arp_specific_goal.completedPercentage = (@arp_specific_goal.arp_activities.map { |n| n.completedPercentage }.inject { |sum, x| sum + x } / @arp_specific_goal.arp_activities.size)
+    #@arp_specific_goal.completedPercentage = (@arp_specific_goal.arp_activities.map { |n| n.completedPercentage }.inject { |sum, x| sum + x } / @arp_specific_goal.arp_activities.size)
+    @arp_specific_goal.completedPercentage = (@arp_specific_goal.arp_activities.map { |n| n.weight *  n.completedPercentage }.inject { |sum, x| sum + x } / 100)
     @arp_specific_goal.save
   end
 

@@ -134,6 +134,8 @@ ArpRole.create(name: "Estudiante de pregrado")
 ArpRole.create(name: "Estudiante de maestria")
 ArpRole.create(name: "Estudiante de doctorado")
 ArpRole.create(name: "Joven investigador")
-
+ProductType.create(name:"Articulo")
+ProductType.create(name:"Capitulo de libro")
+ProductType.create(name:"Libro")
 
 puts "Seed complete"

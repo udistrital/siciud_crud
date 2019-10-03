@@ -5,7 +5,7 @@ class ArpActivityReport < ApplicationRecord
   validates :supportDocument, content_type: ["application/pdf"]
   #validate :support_document_present?
   attribute :status, :integer, default: :inReview
-
+  attribute :comment, :text, default: ""
     # private
     #
     # def support_document_present?
