@@ -22,16 +22,16 @@ module Api
       end
 
       def create
-        if (@research_seedbed.seedbed_members.find_by(researcher_id: params[:seedbed_member][:researcher_id]))
+        if @research_seedbed.seedbed_members.find_by(researcher_id: params[:seedbed_member][:researcher_id])
           @seedbed_member = @research_seedbed.seedbed_members.find_by(researcher_id: params[:seedbed_member][:researcher_id])
-          if (@seedbed_member.sm_periods.last.finalDate)
+          if @seedbed_member.sm_periods.last.finalDate
             @sm_period = @seedbed_member.sm_periods.new(initialDate: DateTime.now.in_time_zone(-5).to_date,
                                                         role_id: params[:seedbed_member][:role_id])
 
             @seedbed_member.role_id = params[:seedbed_member][:role_id]
             @seedbed_member.state_researcher_id = 1
             @seedbed_member.save
-            if (@sm_period.save)
+            if @sm_period.save
               render json: @seedbed_member, status: :created
             else
               render json: @sm_period.errors, status: :unprocessable_entity

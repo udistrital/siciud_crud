@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_03_215102) do
+ActiveRecord::Schema.define(version: 2019_10_04_211910) do
 
   create_table "Agreements_GroupMembers", id: false, force: :cascade do |t|
     t.integer "Agreement_id", null: false
@@ -121,16 +121,25 @@ ActiveRecord::Schema.define(version: 2019_10_03_215102) do
     t.index ["ap_general_goal_id"], name: "index_ap_specific_goals_on_ap_general_goal_id"
   end
 
+  create_table "arp_act_s_goals", force: :cascade do |t|
+    t.integer "weight"
+    t.integer "arp_activity_id"
+    t.integer "arp_specific_goal_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["arp_activity_id"], name: "index_arp_act_s_goals_on_arp_activity_id"
+    t.index ["arp_specific_goal_id"], name: "index_arp_act_s_goals_on_arp_specific_goal_id"
+  end
+
   create_table "arp_activities", force: :cascade do |t|
     t.text "activity"
-    t.integer "arp_specific_goal_id"
     t.float "completedPercentage"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "weight"
     t.date "startDate"
     t.date "finishDate"
-    t.index ["arp_specific_goal_id"], name: "index_arp_activities_on_arp_specific_goal_id"
+    t.integer "agreement_research_project_id"
+    t.index ["agreement_research_project_id"], name: "index_arp_activities_on_agreement_research_project_id"
   end
 
   create_table "arp_activity_reports", force: :cascade do |t|

@@ -2,10 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6e9b360a-1b66-4f3b-b845-868151e1e2eb" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/mailers/application_mailer.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/mailers/application_mailer.rb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/environments/development.rb" beforeDir="false" afterPath="$PROJECT_DIR$/config/environments/development.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/controllers/api/v1/arp_activity_controller.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/api/v1/arp_activity_controller.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/controllers/api/v1/seedbed_member_controller.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/api/v1/seedbed_member_controller.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/models/agreement_research_project.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/agreement_research_project.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/models/arp_activity.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/arp_activity.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/models/arp_specific_goal.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/arp_specific_goal.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/routes.rb" beforeDir="false" afterPath="$PROJECT_DIR$/config/routes.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db/schema.rb" beforeDir="false" afterPath="$PROJECT_DIR$/db/schema.rb" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -253,7 +257,7 @@
       <workItem from="1569948518774" duration="7573000" />
       <workItem from="1570028658069" duration="7612000" />
       <workItem from="1570110946207" duration="12521000" />
-      <workItem from="1570197028868" duration="4321000" />
+      <workItem from="1570197028868" duration="8913000" />
     </task>
     <servers />
   </component>

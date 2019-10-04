@@ -1,7 +1,8 @@
 class Api::V1::ArpActivityController < ApplicationController
   include Swagger::ArpActivityApi
 
-  before_action :set_arp_specific_goal
+  #before_action :set_arp_specific_goal
+  before_action :set_agreement_research_project
   before_action :set_arp_activity, only: [:show, :update]
   #before_action :set_arp_general_goal, only: [:report_progress]
 
@@ -14,7 +15,7 @@ class Api::V1::ArpActivityController < ApplicationController
 
   def index
     #Listar todas las actividades
-    @arp_activities = @arp_specific_goal.arp_activities
+    @arp_activities = @agreement_research_project.arp_activities
     render json: @arp_activities
   end
 
@@ -23,8 +24,9 @@ class Api::V1::ArpActivityController < ApplicationController
   end
 
   def create
+
     #byebug
-    if (@arp_specific_goal.arp_activities.sum(:weight) + (params[:arp_activity][:weight])) <= 100
+    #if (@arp_specific_goal.arp_activities.sum(:weight) + (params[:arp_activity][:weight])) <= 100
       @arp_activity = @arp_specific_goal.arp_activities.new(arp_activity_params)
       @arp_activity.completedPercentage = 0
       if @arp_specific_goal.save
@@ -32,9 +34,9 @@ class Api::V1::ArpActivityController < ApplicationController
       else
         render json: @arp_activity.errors, status: :unprocessable_entity
       end
-    else
-      render json: {"error": "Los pesos no pueden sumar mas de 100 puntos"}, status: :not_acceptable
-    end
+    # else
+    #   render json: {"error": "Los pesos no pueden sumar mas de 100 puntos"}, status: :not_acceptable
+    # end
   end
 
   def update
@@ -52,9 +54,11 @@ class Api::V1::ArpActivityController < ApplicationController
   end
 
   def arp_activity_params
-    params.require(:arp_activity).permit(:activity, :weight,:startDate,:finishDate)
+    params.require(:arp_activity).permit(:activity,:startDate,:finishDate)
   end
-
+  def set_agreement_research_project
+    @agreement_research_project = AgreementResearchProject.find(params[:agreement_research_project_id])
+  end
   def set_arp_specific_goal
     @arp_specific_goal = ArpSpecificGoal.find(params[:arp_specific_goal_id])
   end

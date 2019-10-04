@@ -77,13 +77,14 @@ Rails.application.routes.draw do
         resources :contribution_rp_item, only: [:index, :show, :create, :update]
         resources :arp_member, only: [:index, :show, :create]
         resources :arp_general_goal, only: [:index, :show, :create, :update]
+        resources :arp_activity, only: [:index, :show, :create, :update]
       end
       resources :arp_general_goal, only: [] do
         resources :arp_specific_goal, only: [:index, :show, :create, :update]
-        put "arp_specific_goal/:id/report_progress/", to: "arp_specific_goal#report_progress"
+        #put "arp_specific_goal/:id/report_progress/", to: "arp_specific_goal#report_progress"
       end
       resources :arp_specific_goal, only: [] do
-        resources :arp_activity, only: [:index, :show, :create, :update]
+        resources :arp_act_s_goal, only: [:index, :show, :create, :update]
         #put "arp_activity/:id/report_progress/", to: "arp_activity#report_progress"
       end
       resources :arp_activity, only: [] do

@@ -3,5 +3,6 @@ class AgreementResearchProject < ApplicationRecord
   has_many :contribution_rp_items
   has_many :arp_members
   has_many :arp_general_goals
+  has_many :arp_activities
 
 end
