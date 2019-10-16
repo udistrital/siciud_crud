@@ -2,8 +2,21 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6e9b360a-1b66-4f3b-b845-868151e1e2eb" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/controllers/api/v1/arp_act_s_goal_controller.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/api/v1/arp_act_s_goal_controller.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.generators" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.generators" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/siciud-backend.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/siciud-backend.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/bundle" beforeDir="false" afterPath="$PROJECT_DIR$/bin/bundle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/rails" beforeDir="false" afterPath="$PROJECT_DIR$/bin/rails" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/rake" beforeDir="false" afterPath="$PROJECT_DIR$/bin/rake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/setup" beforeDir="false" afterPath="$PROJECT_DIR$/bin/setup" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/spring" beforeDir="false" afterPath="$PROJECT_DIR$/bin/spring" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/update" beforeDir="false" afterPath="$PROJECT_DIR$/bin/update" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/environments/production.rb" beforeDir="false" afterPath="$PROJECT_DIR$/config/environments/production.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/swagger" beforeDir="false" afterPath="$PROJECT_DIR$/public/swagger" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/swagger/docker/configurator/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/swagger/docker/configurator/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/swagger/flavors/swagger-ui-react/release/run.sh" beforeDir="false" afterPath="$PROJECT_DIR$/public/swagger/flavors/swagger-ui-react/release/run.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/swagger/release/check-for-breaking-changes.sh" beforeDir="false" afterPath="$PROJECT_DIR$/public/swagger/release/check-for-breaking-changes.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/swagger/release/get-changelog.sh" beforeDir="false" afterPath="$PROJECT_DIR$/public/swagger/release/get-changelog.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/swagger/swagger-ui-dist-package/deploy.sh" beforeDir="false" afterPath="$PROJECT_DIR$/public/swagger/swagger-ui-dist-package/deploy.sh" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -261,6 +274,7 @@
       <workItem from="1570477763637" duration="3449000" />
       <workItem from="1570483680380" duration="875000" />
       <workItem from="1570551069918" duration="2762000" />
+      <workItem from="1571244941262" duration="200000" />
     </task>
     <servers />
   </component>
