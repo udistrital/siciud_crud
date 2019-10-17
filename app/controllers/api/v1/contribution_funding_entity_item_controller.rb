@@ -13,6 +13,7 @@ module Api
         render json: { error: e.message }, status: :unprocessable_entity
       end
 
+      #Este controlador permite asignar los aportes de cada entida por tipo de categoria
       def index
         @contribution_funding_entity_items = @contribution.contribution_funding_entity_items
         paginate json: @contribution_funding_entity_items

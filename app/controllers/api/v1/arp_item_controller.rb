@@ -33,7 +33,7 @@ class Api::V1::ArpItemController < ApplicationController
       }
     end
     #byebug
-    render json: { "items": @items }
+    render json:  @items
   end
 
   def show
