@@ -40,7 +40,8 @@ class Api::V1::ArpItemController < ApplicationController
     @contribution_rp_items = ItemCategory.find(params[:id]).contribution_funding_entity_items.joins(:contribution).where("contributions.agreement_id like '#{params[:agreement_id]}'").map do |contribution_funding_entity_item|
       contribution_funding_entity_item.contribution_rp_items
     end.delete_if(&:blank?)
-    render json: @contribution_rp_items
+    render json: @contribution_rp_items,                  each_serializer: nil
+
     #@items = ItemCategory.all.map do |category|
     # {
     #  cashValue: category.contribution_funding_entity_items.joins(:contribution).where("contributions.agreement_id like '#{params[:agreement_id]}'").sum(:cashValue),
