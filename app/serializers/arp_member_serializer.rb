@@ -1,11 +1,7 @@
 class ArpMemberSerializer < ActiveModel::Serializer
-  attributes :id, :arp_role_id, :agreement_id, :group_member_id, :agreement_research_project_id, :researcher
+  attributes :id, :arp_role_id, :agreement_id, :group_member_id, :agreement_research_project_id, :researcher_id
 
-  def researcher
-    {
-      name: self.object.group_member.researcher.name,
-      lastName: self.object.group_member.researcher.lastName,
-
-    }
+  def researcher_id
+    self.object.group_member.researcher.id
   end
 end
