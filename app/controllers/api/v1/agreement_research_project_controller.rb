@@ -39,7 +39,7 @@ module Api
       end
 
       def agreement_research_project_params
-        params.require(:agreement_research_project).permit(:code, :year, :startDate, :approbationDate, :estimatedFinishDate, :closingDate)
+        params.require(:agreement_research_project).permit(:name,:code, :year, :startDate, :approbationDate, :estimatedFinishDate, :closingDate)
       end
 
       def set_agreement
