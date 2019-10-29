@@ -3,8 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="6e9b360a-1b66-4f3b-b845-868151e1e2eb" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/services/research_groups_search_service.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/services/research_groups_search_service.rb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/services/research_seedbeds_search_service.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/services/research_seedbeds_search_service.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/controllers/api/v1/arp_item_controller.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/api/v1/arp_item_controller.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/controllers/api/v1/contribution_rp_item_controller.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/api/v1/contribution_rp_item_controller.rb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/swagger" beforeDir="false" afterPath="$PROJECT_DIR$/public/swagger" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/swagger/docker/configurator/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/swagger/docker/configurator/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/swagger/flavors/swagger-ui-react/release/run.sh" beforeDir="false" afterPath="$PROJECT_DIR$/public/swagger/flavors/swagger-ui-react/release/run.sh" afterDir="false" />
@@ -83,7 +83,7 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../VProduccion/siciud-backendvconvenios/siciud-backend" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="org.jetbrains.plugins.ruby.settings.RubyModuleStructureConfigurable" />
+    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -102,7 +102,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Rake.about: siciud-backend">
+  <component name="RunManager" selected="Rails.Development: siciud-backend">
     <configuration name="Development: siciud-backend" type="RailsRunConfigurationType" factoryName="Rails">
       <module name="siciud-backend" />
       <predefined_log_file enabled="true" id="RUBY_RAILS_SERVER" />
@@ -280,7 +280,7 @@
       <workItem from="1572015715975" duration="6235000" />
       <workItem from="1572274019958" duration="8788000" />
       <workItem from="1572295447126" duration="602000" />
-      <workItem from="1572358998654" duration="1864000" />
+      <workItem from="1572358998654" duration="5303000" />
     </task>
     <servers />
   </component>

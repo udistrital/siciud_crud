@@ -31,7 +31,9 @@ class Api::V1::ArpItemController < ApplicationController
         end.sum,
         item_category_id: category.id
       }
+      #byebug
     end
+    @items.delete_if {|x| x[:inKindValue] == 0 && x[:cashValue] == 0}
     #byebug
     render json:  @items
   end

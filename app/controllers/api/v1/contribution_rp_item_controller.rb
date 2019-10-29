@@ -6,13 +6,13 @@ module Api
       before_action :set_contribution_funding_entity_item, only: [:create, :update]
 
       rescue_from Exception do |e|
-        render json: { error: e.message }, status: :internal_error
+        render json: {error: e.message}, status: :internal_error
       end
       rescue_from ActiveRecord::RecordNotFound do |e|
-        render json: { error: e.message }, status: :not_found
+        render json: {error: e.message}, status: :not_found
       end
       rescue_from ActiveRecord::RecordInvalid do |e|
-        render json: { error: e.message }, status: :unprocessable_entity
+        render json: {error: e.message}, status: :unprocessable_entity
       end
 
       def index
@@ -27,23 +27,28 @@ module Api
 
       def create
         #byebug
-        if (((@contribution_funding_entity_item.contribution_rp_items.sum(:cashValue) + params[:contribution_rp_item][:cashValue]) <= @contribution_funding_entity_item.cashValue) &&
-            ((@contribution_funding_entity_item.contribution_rp_items.sum(:inKindValue) + params[:contribution_rp_item][:inKindValue]) <= @contribution_funding_entity_item.inKindValue))
-          @contribution_rp_item = @agreement_research_project.contribution_rp_items.new(contribution_rp_item_params)
-          @contribution_rp_item.executedCash = 0
-          @contribution_rp_item.executedInKind = 0
-          @contribution_rp_item.remainingCash = @contribution_rp_item.cashValue
-          @contribution_rp_item.remainingInKind = @contribution_rp_item.inKindValue
-          @contribution_rp_item.compromisedCash = 0
-          @contribution_rp_item.compromisedInKind = 0
+        if (@contribution_rp_item = @agreement_research_project.contribution_rp_items.find_by(contribution_funding_entity_item_id: params[:contribution_rp_item][:contribution_funding_entity_item_id]))
+          return render json: {"error": "No se puede asignar dos veces dinero del mismo tipo de rubro"}, status: :not_acceptable
         else
-          return render json: { "error": "No se puede asignar mas del presupuesto asignado" }, status: :not_acceptable
-        end
 
-        if @contribution_rp_item.save
-          render json: @contribution_rp_item, status: :created
-        else
-          render json: @contribution_rp_item.errors, status: :unprocessable_entity
+          if (((@contribution_funding_entity_item.contribution_rp_items.sum(:cashValue) + params[:contribution_rp_item][:cashValue]) <= @contribution_funding_entity_item.cashValue) &&
+              ((@contribution_funding_entity_item.contribution_rp_items.sum(:inKindValue) + params[:contribution_rp_item][:inKindValue]) <= @contribution_funding_entity_item.inKindValue))
+            @contribution_rp_item = @agreement_research_project.contribution_rp_items.new(contribution_rp_item_params)
+            @contribution_rp_item.executedCash = 0
+            @contribution_rp_item.executedInKind = 0
+            @contribution_rp_item.remainingCash = @contribution_rp_item.cashValue
+            @contribution_rp_item.remainingInKind = @contribution_rp_item.inKindValue
+            @contribution_rp_item.compromisedCash = 0
+            @contribution_rp_item.compromisedInKind = 0
+          else
+            return render json: {"error": "No se puede asignar mas del presupuesto asignado"}, status: :not_acceptable
+          end
+
+          if @contribution_rp_item.save
+            render json: @contribution_rp_item, status: :created
+          else
+            render json: @contribution_rp_item.errors, status: :unprocessable_entity
+          end
         end
       end
 
@@ -58,7 +63,7 @@ module Api
             render json: @contribution_rp_item.errors, status: :unprocessable_entity
           end
         else
-          return render json: { "error": "No se puede asignar mas del presupuesto asignado" }, status: :not_acceptable
+          return render json: {"error": "No se puede asignar mas del presupuesto asignado"}, status: :not_acceptable
         end
       end
 
