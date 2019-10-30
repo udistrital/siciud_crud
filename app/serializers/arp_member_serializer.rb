@@ -4,4 +4,7 @@ class ArpMemberSerializer < ActiveModel::Serializer
   def researcher_id
     self.object.group_member.researcher.id
   end
+  def research_group_id
+    self.object.group_member.research_group_id
+  end
 end

@@ -7,42 +7,43 @@ class Api::V1::ArpItemController < ApplicationController
     @items = ItemCategory.all.map do |category|
       item = category.contribution_funding_entity_items.joins(:contribution).where("contributions.agreement_id = '#{params[:agreement_id]}'")
       {
-        cashValue: item.sum(:cashValue),
-        inKindValue: item.sum(:inKindValue),
-        remainingCash: item.sum(:cashValue) - item.map do |contribution_funding_entity_item|
-          contribution_funding_entity_item.contribution_rp_items.sum(:compromisedCash)
-        end.sum - item.map do |contribution_funding_entity_item|
-          contribution_funding_entity_item.contribution_rp_items.sum(:executedCash)
-        end.sum,
-        remainingInKind: item.map do |contribution_funding_entity_item|
-          contribution_funding_entity_item.contribution_rp_items.sum(:remainingInKind)
-        end.sum,
-        compromisedCash: item.map do |contribution_funding_entity_item|
-          contribution_funding_entity_item.contribution_rp_items.sum(:compromisedCash)
-        end.sum,
-        compromisedInKind: item.map do |contribution_funding_entity_item|
-          contribution_funding_entity_item.contribution_rp_items.sum(:compromisedInKind)
-        end.sum,
-        executedCash: item.map do |contribution_funding_entity_item|
-          contribution_funding_entity_item.contribution_rp_items.sum(:executedCash)
-        end.sum,
-        executedInKind: item.map do |contribution_funding_entity_item|
-          contribution_funding_entity_item.contribution_rp_items.sum(:executedInKind)
-        end.sum,
-        item_category_id: category.id
+          item_category_id: category.id,
+          cashValue: item.sum(:cashValue),
+          inKindValue: item.sum(:inKindValue),
+          remainingCash: item.sum(:cashValue) - item.map do |contribution_funding_entity_item|
+            contribution_funding_entity_item.contribution_rp_items.sum(:compromisedCash)
+          end.sum - item.map do |contribution_funding_entity_item|
+            contribution_funding_entity_item.contribution_rp_items.sum(:executedCash)
+          end.sum,
+          remainingInKind: item.map do |contribution_funding_entity_item|
+            contribution_funding_entity_item.contribution_rp_items.sum(:remainingInKind)
+          end.sum,
+          compromisedCash: item.map do |contribution_funding_entity_item|
+            contribution_funding_entity_item.contribution_rp_items.sum(:compromisedCash)
+          end.sum,
+          compromisedInKind: item.map do |contribution_funding_entity_item|
+            contribution_funding_entity_item.contribution_rp_items.sum(:compromisedInKind)
+          end.sum,
+          executedCash: item.map do |contribution_funding_entity_item|
+            contribution_funding_entity_item.contribution_rp_items.sum(:executedCash)
+          end.sum,
+          executedInKind: item.map do |contribution_funding_entity_item|
+            contribution_funding_entity_item.contribution_rp_items.sum(:executedInKind)
+          end.sum
+
       }
       #byebug
     end
-    @items.delete_if {|x| x[:inKindValue] == 0 && x[:cashValue] == 0}
+    @items.delete_if { |x| x[:inKindValue] == 0 && x[:cashValue] == 0 }
     #byebug
-    render json:  @items
+    render json: @items
   end
 
   def show
     @contribution_rp_items = ItemCategory.find(params[:id]).contribution_funding_entity_items.joins(:contribution).where("contributions.agreement_id = '#{params[:agreement_id]}'").map do |contribution_funding_entity_item|
       contribution_funding_entity_item.contribution_rp_items
     end.delete_if(&:blank?)
-    render json: @contribution_rp_items.flatten,                  each_serializer: nil
+    render json: @contribution_rp_items.flatten, each_serializer: nil
 
     #@items = ItemCategory.all.map do |category|
     # {
