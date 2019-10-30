@@ -2,13 +2,21 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6e9b360a-1b66-4f3b-b845-868151e1e2eb" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/app/serializers/arp_member_serializer.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/serializers/arp_member_serializer.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/controllers/api/v1/arp_activity_controller.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/api/v1/arp_activity_controller.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/controllers/api/v1/arp_general_goal_controller.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/api/v1/arp_general_goal_controller.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/controllers/api/v1/arp_member_controller.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/api/v1/arp_member_controller.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/models/agreement_research_project.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/agreement_research_project.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/models/arp_general_goal.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/arp_general_goal.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db/schema.rb" beforeDir="false" afterPath="$PROJECT_DIR$/db/schema.rb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/swagger" beforeDir="false" afterPath="$PROJECT_DIR$/public/swagger" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/swagger/docker/configurator/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/swagger/docker/configurator/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/swagger/flavors/swagger-ui-react/release/run.sh" beforeDir="false" afterPath="$PROJECT_DIR$/public/swagger/flavors/swagger-ui-react/release/run.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/swagger/release/check-for-breaking-changes.sh" beforeDir="false" afterPath="$PROJECT_DIR$/public/swagger/release/check-for-breaking-changes.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/swagger/release/get-changelog.sh" beforeDir="false" afterPath="$PROJECT_DIR$/public/swagger/release/get-changelog.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/swagger/swagger-ui-dist-package/deploy.sh" beforeDir="false" afterPath="$PROJECT_DIR$/public/swagger/swagger-ui-dist-package/deploy.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spec/controllers/api/v1/ap_activity_controller_spec.rb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/spec/controllers/api/v1/ap_specific_goal_controller_spec.rb" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -280,7 +288,8 @@
       <workItem from="1572295447126" duration="602000" />
       <workItem from="1572358998654" duration="10282000" />
       <workItem from="1572445700982" duration="332000" />
-      <workItem from="1572448344181" duration="704000" />
+      <workItem from="1572448344181" duration="6448000" />
+      <workItem from="1572467473260" duration="2612000" />
     </task>
     <servers />
   </component>

@@ -13,7 +13,7 @@ class Api::V1::ArpGeneralGoalController < ApplicationController
 
   def index
     #Listar todos los convenios
-    @arp_general_goal = @agreement_research_project.arp_general_goals
+    @arp_general_goal = @agreement_research_project.arp_general_goal
     render json: @arp_general_goal
   end
 
@@ -23,7 +23,7 @@ class Api::V1::ArpGeneralGoalController < ApplicationController
 
   def create
     #byebug
-    @arp_general_goal = @agreement_research_project.arp_general_goals.new(arp_general_goal_params)
+    @arp_general_goal = @agreement_research_project.build_arp_general_goal(arp_general_goal_params)
     if @arp_general_goal.save
       render json: @arp_general_goal, status: :created
     else
@@ -42,7 +42,7 @@ class Api::V1::ArpGeneralGoalController < ApplicationController
   private
 
   def set_arp_general_goal
-    @arp_general_goal = @agreement_research_project.arp_general_goals.find_by(id: params[:id])
+    @arp_general_goal = @agreement_research_project.arp_general_goal.find_by(id: params[:id])
   end
 
   def arp_general_goal_params

@@ -3,10 +3,10 @@ class Api::V1::ArpMemberController < ApplicationController
   before_action :set_arp_member, only: [:show, :update]
 
   rescue_from ActiveRecord::RecordNotFound do |e|
-    render json: { error: e.message }, status: :not_found
+    render json: {error: e.message}, status: :not_found
   end
   rescue_from ActiveRecord::RecordInvalid do |e|
-    render json: { error: e.message }, status: :unprocessable_entity
+    render json: {error: e.message}, status: :unprocessable_entity
   end
 
   def index
@@ -20,22 +20,22 @@ class Api::V1::ArpMemberController < ApplicationController
   end
 
   def create
-    if (ArpMember.find_by(agreement_id: @agreement_research_project.agreement.id,
-                          group_member_id: params[:arp_member][:group_member_id],
-                          agreement_research_project_id: params[:agreement_research_project_id]))
-      render json: { "error": "El investigador Ya  se encuentra registrado en el proyecto" }
+    if ArpMember.find_by(agreement_id: @agreement_research_project.agreement.id,
+                         group_member_id: params[:arp_member][:group_member_id],
+                         agreement_research_project_id: params[:agreement_research_project_id])
+      return render json: {"error": "El investigador Ya  se encuentra registrado en el proyecto"}
     else
-      # if (@agreement_research_project.agreement.arp_members.find_by(arp_role_id: 1) && params[:arp_member][:arp_role_id] == 1)
-      #   render json: { "error": "El Convenio Ya Cuenta con un investigador principal" }
-      # else
-      @arp_member = @agreement_research_project.arp_members.new(arp_member_params)
-      @arp_member.agreement_id = @agreement_research_project.agreement.id
-      if @arp_member.save
-        render json: @arp_member, status: :created
+      if (@agreement_research_project.agreement.arp_members.find_by(arp_role_id: 1) && params[:arp_member][:arp_role_id] == 1)
+        return render json: {"error": "El Convenio Ya Cuenta con un investigador principal"}
       else
-        render json: @arp_member.errors, status: :unprocessable_entity
+        @arp_member = @agreement_research_project.arp_members.new(arp_member_params)
+        @arp_member.agreement_id = @agreement_research_project.agreement.id
+        if @arp_member.save
+          render json: @arp_member, status: :created
+        else
+          render json: @arp_member.errors, status: :unprocessable_entity
+        end
       end
-      #    end
     end
   end
 
