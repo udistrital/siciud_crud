@@ -3,6 +3,7 @@ class Api::V1::ArpActivityController < ApplicationController
 
   #before_action :set_arp_specific_goal
   before_action :set_agreement_research_project
+  #before_action :set_arp_specific_goal
   before_action :set_arp_activity, only: [:show, :update]
   #before_action :set_arp_general_goal, only: [:report_progress]
 
@@ -27,9 +28,9 @@ class Api::V1::ArpActivityController < ApplicationController
 
     #byebug
     #if (@arp_specific_goal.arp_activities.sum(:weight) + (params[:arp_activity][:weight])) <= 100
-    @arp_activity = @arp_specific_goal.arp_activities.new(arp_activity_params)
+    @arp_activity = @agreement_research_project.arp_activities.new(arp_activity_params)
     @arp_activity.completedPercentage = 0
-    if @arp_specific_goal.save
+    if @arp_activity.save
       render json: @arp_activity, status: :created
     else
       render json: @arp_activity.errors, status: :unprocessable_entity
