@@ -5,15 +5,17 @@ class Api::V1::ArpGeneralGoalController < ApplicationController
   before_action :set_arp_general_goal, only: [:show, :update]
 
   rescue_from ActiveRecord::RecordNotFound do |e|
-    render json: { error: e.message }, status: :not_found
+    render json: {error: e.message}, status: :not_found
   end
   rescue_from ActiveRecord::RecordInvalid do |e|
-    render json: { error: e.message }, status: :unprocessable_entity
+    render json: {error: e.message}, status: :unprocessable_entity
   end
 
   def index
     #Listar todos los convenios
     @arp_general_goal = @agreement_research_project.arp_general_goal
+    AgreementMailer.sample.deliver
+
     render json: @arp_general_goal
   end
 

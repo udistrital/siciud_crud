@@ -66,5 +66,5 @@ Rails.application.configure do
       :authentication => "plain",
       :enable_starttls_auto => true
   }
-  config.action_mailer.default_url_options = {:host => "localhost:3000"}
+  #config.action_mailer.default_url_options = {:host => "chronos.udistrital.edu.co:8095/siciud/ "}
 end
