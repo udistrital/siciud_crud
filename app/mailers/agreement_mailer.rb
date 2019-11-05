@@ -7,6 +7,6 @@ class AgreementMailer < ApplicationMailer
   #
   def sample(activity)
     @greeting = activity
-    mail to: "joranboc@gmail.com"
+    mail to: "siciud-cidc@correo.udistrital.edu.co"
   end
 end

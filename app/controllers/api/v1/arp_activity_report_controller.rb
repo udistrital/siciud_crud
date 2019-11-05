@@ -5,6 +5,18 @@ class Api::V1::ArpActivityReportController < ApplicationController
   before_action :set_arp_specific_goal #, only: [:report_progress]
   before_action :set_arp_general_goal #, only: [:report_progress]
 
+
+  rescue_from Exception do |e|
+    render json: {error: e.message}, status: :internal_error
+  end
+  rescue_from ActiveRecord::RecordNotFound do |e|
+    render json: {error: e.message}, status: :not_found
+  end
+  rescue_from ActiveRecord::RecordInvalid do |e|
+    render json: {error: e.message}, status: :unprocessable_entity
+  end
+
+
   def index
     @arp_activity_reports = @arp_activity.arp_activity_reports
     render json: @arp_activity_reports
@@ -13,12 +25,12 @@ class Api::V1::ArpActivityReportController < ApplicationController
   def create
     #byebug validate_specific_goals
     #if @arp_general_goal.arp_specific_goals.sum(:weight) == 100 && @arp_specific_goals.arp_activities.sum(:weight) == 100
-     if @arp_general_goal.arp_specific_goals.sum(:weight) == 100 && validate_specific_goals
+    if @arp_general_goal.arp_specific_goals.sum(:weight) == 100 && validate_specific_goals
       if @arp_activity.arp_activity_reports.last.nil? || @arp_activity.arp_activity_reports.last.status != "inReview"
         if @arp_activity.completedPercentage < params[:completedPercentage].to_f && params[:completedPercentage].to_f <= 100
           @arp_activity_report = @arp_activity.arp_activity_reports.new(arp_activity_report_params)
           if @arp_activity_report.save
-            AgreementMailer.sample(@arp_activity).deliver
+            AgreementMailer.sample(@arp_activity).deliver_later
             render json: @arp_activity_report, status: :created
           else
             render json: @arp_activity_report.errors, status: :unprocessable_entity
@@ -85,9 +97,10 @@ class Api::V1::ArpActivityReportController < ApplicationController
   private
 
   def validate_specific_goals
-    valid = @arp_specific_goals.map{|n| n.arp_activities.sum(:weight) == 100}
-    valid = valid.inject{|value,x| value && x}
+    valid = @arp_specific_goals.map { |n| n.arp_activities.sum(:weight) == 100 }
+    valid = valid.inject { |value, x| value && x }
   end
+
   def set_arp_activity_goal_progress
     @arp_activity.completedPercentage = @arp_activity_report.completedPercentage
     @arp_activity.save
@@ -110,7 +123,12 @@ class Api::V1::ArpActivityReportController < ApplicationController
   end
 
   def set_arp_activity_report
+    if
     @arp_activity_report = @arp_activity.arp_activity_reports.find_by(id: params[:id])
+    else
+      render json: {"error": "No existe un reporte con el id #{ params[:id]} para la actividad #{params[:arp_activity_id]}"}, status: :unprocessable_entity
+
+      end
   end
 
   def set_arp_activity
