@@ -98,6 +98,8 @@ Rails.application.routes.draw do
         resources :arp_payment, only: [:index, :show, :create]
         put "arp_payment/:id/attach/", to: "arp_payment#attach"
       end
+      resources :users, only: [:index, :show, :create, :update]
+
       #get 'curricular_project/index'
       #get 'curricular_project/show'
       #get 'research_seedbed/index'

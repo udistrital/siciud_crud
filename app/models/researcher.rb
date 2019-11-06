@@ -6,6 +6,7 @@ class Researcher < ApplicationRecord
   belongs_to :snies
   belongs_to :researcher_type
 
+  has_one :user
 
   has_many :periods
 
