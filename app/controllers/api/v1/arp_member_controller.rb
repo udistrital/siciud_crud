@@ -11,6 +11,11 @@ class Api::V1::ArpMemberController < ApplicationController
 
   def index
     @arp_members = @agreement_research_project.arp_members
+    #byebug
+    if (@agreement_research_project.agreement.arp_members.find_by(arp_role_id: 1) && !@arp_members.find_by(id: @agreement_research_project.agreement.arp_members.find_by(arp_role_id: 1).id ))
+      @arp_members = @arp_members.to_a
+      @arp_members.push(@agreement_research_project.agreement.arp_members.find_by(arp_role_id: 1))
+    end
     #@arp_members = ArpMember.all
     render json: @arp_members
   end
