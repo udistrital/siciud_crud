@@ -16,6 +16,9 @@ class Api::V1::ArpMemberController < ApplicationController
       @arp_members = @arp_members.to_a
       @arp_members.push(@agreement_research_project.agreement.arp_members.find_by(arp_role_id: 1))
     end
+    @arp_members =  @arp_members.sort_by {|member| member.arp_role_id}
+
+    #byebug
     #@arp_members = ArpMember.all
     render json: @arp_members
   end
