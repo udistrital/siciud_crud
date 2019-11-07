@@ -2,6 +2,7 @@ module Api
   module V1
     class UsersController < ApplicationController
       before_action :set_user, only: [:show, :update]
+#User.joins(:user_roles).where("user_roles.id = 4").first.researcher.mail
 
       # GET /users
       def index
