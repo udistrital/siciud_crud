@@ -1,7 +1,7 @@
 module Api
   module V1
     class UsersController < ApplicationController
-      before_action :set_user, only: [:show, :update, :destroy]
+      before_action :set_user, only: [:show, :update]
 
       # GET /users
       def index
@@ -20,7 +20,7 @@ module Api
         @user = User.new(user_params)
 
         if @user.save
-          render json: @user, status: :created, location: @user
+          render json: @user, status: :created
         else
           render json: @user.errors, status: :unprocessable_entity
         end
@@ -45,7 +45,7 @@ module Api
 
       # Only allow a trusted parameter "white list" through.
       def user_params
-        params.require(:user).permit(:username, :researcher_id)
+        params.require(:user).permit(:username, :researcher_id, user_role_ids: [])
       end
     end
   end

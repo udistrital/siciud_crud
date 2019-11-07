@@ -73,6 +73,8 @@ Rails.application.routes.draw do
 
       resources :arp_role, only: [:index, :show, :create]
 
+      resources :user_roles, only: [:index, :show, :create, :update]
+
       resources :agreement_research_project, only: [] do
         resources :contribution_rp_item, only: [:index, :show, :create, :update]
         resources :arp_member, only: [:index, :show, :create]
@@ -99,6 +101,7 @@ Rails.application.routes.draw do
         put "arp_payment/:id/attach/", to: "arp_payment#attach"
       end
       resources :users, only: [:index, :show, :create, :update]
+
 
       #get 'curricular_project/index'
       #get 'curricular_project/show'
