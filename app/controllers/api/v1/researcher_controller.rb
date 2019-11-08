@@ -38,7 +38,7 @@ module Api
 
       def researcher_params
         params.require(:researcher).permit(:codeNumber, :identificationNumber, :name, :lastName, :document_type_id, :birthPlace, :faculty_id, :curricular_project_id,
-                                           :snies_id, :genre_id, :telNumber, :celNumber, :address, :academicEmail, :personalEmail, :researcher_type_id, :orcid_id)
+                                           :snies_id, :genre_id, :telNumber, :celNumber, :address, :academic_email, :personalEmail, :researcher_type_id, :orcid_id)
       end
     end
   end
