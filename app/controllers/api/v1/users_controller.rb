@@ -4,6 +4,17 @@ module Api
       before_action :set_user, only: [:show, :update]
       #User.joins(:user_roles).where("user_roles.id = 4").first.researcher.mail
 
+      rescue_from Exception do |e|
+        render json: {error: e.message}, status: :internal_error
+      end
+      #Manejo de excepciones
+      rescue_from ActiveRecord::RecordNotFound do |e|
+        render json: {error: e.message}, status: :not_found
+      end
+      rescue_from ActiveRecord::RecordInvalid do |e|
+        render json: {error: e.message}, status: :unprocessable_entity
+      end
+
       # GET /users
       def index
         @users = User.all

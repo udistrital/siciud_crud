@@ -34,10 +34,9 @@ class Api::V1::ArpActivityReportController < ApplicationController
             # end
             #User.joins(:user_roles).where("user_roles.id = 4").user.researcher.mail
             User.joins(:user_roles).where("user_roles.id = 4").map do |user|
-              researcher = user.researcher
-              AgreementMailer.sample(researcher,@arp_activity).deliver_later
+              academic = user.researcher
+              AgreementMailer.new_activity_report(academic, @arp_activity).deliver_later
             end
-
             render json: @arp_activity_report, status: :created
           else
             render json: @arp_activity_report.errors, status: :unprocessable_entity
@@ -78,6 +77,9 @@ class Api::V1::ArpActivityReportController < ApplicationController
           set_arp_specific_goal_progress
           set_arp_general_goal_progress
         end
+
+        AgreementMailer.activity_review("siciud-cidc@correo.udistrital.edu.co ", @arp_activity,@arp_activity_report.status).deliver_later
+
         render json: @arp_activity_report
       else
         render json: @arp_activity_report.errors, status: :unprocessable_entity
@@ -130,12 +132,11 @@ class Api::V1::ArpActivityReportController < ApplicationController
   end
 
   def set_arp_activity_report
-    if
-    @arp_activity_report = @arp_activity.arp_activity_reports.find_by(id: params[:id])
+    if @arp_activity_report = @arp_activity.arp_activity_reports.find_by(id: params[:id])
     else
       render json: {"error": "No existe un reporte con el id #{ params[:id]} para la actividad #{params[:arp_activity_id]}"}, status: :unprocessable_entity
 
-      end
+    end
   end
 
   def set_arp_activity

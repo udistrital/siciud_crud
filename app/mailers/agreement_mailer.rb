@@ -5,8 +5,23 @@ class AgreementMailer < ApplicationMailer
   #
   #   en.agreement_mailer.sample.subject
   #
-  def sample(researcher,activity)
-    @greeting = activity
-    mail(to: researcher.academic_email, subject: 'El investigador ha subido un nuevo progreso en el proyecto '+ @greeting.agreement_research_project.name )
+  def new_activity_report(academic, activity)
+    @activity = activity
+    mail(to: academic.academic_email, subject: 'El investigador ha subido un nuevo progreso en el proyecto ' + @activity.agreement_research_project.name)
+  end
+
+  def activity_review(researcher, activity, status)
+    case status
+    when "inReview"
+      @status = "En revision"
+    when "rejected"
+      @status = "rechazado"
+    when "approved"
+      @status = "aprovado"
+    end
+
+
+    @activity = activity
+    mail(to: researcher, subject: 'El gestor academico ha evaluado el progreso de su proyecto ' + @activity.agreement_research_project.name)
   end
 end

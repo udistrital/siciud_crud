@@ -12,9 +12,6 @@ default: &default
   encoding: unicode
   username: postgres
   password:
-#development:
-#  <<: *default
-#  database: db/development.sqlite3
 
 development:
   <<: *default
