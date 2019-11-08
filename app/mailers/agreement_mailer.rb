@@ -5,8 +5,8 @@ class AgreementMailer < ApplicationMailer
   #
   #   en.agreement_mailer.sample.subject
   #
-  def sample(activity)
+  def sample(researcher,activity)
     @greeting = activity
-    mail to: "siciud-cidc@correo.udistrital.edu.co"
+    mail(to: researcher.academic_email, subject: 'El investigador ha subido un nuevo progreso en el proyecto '+ @greeting.agreement_research_project.name )
   end
 end

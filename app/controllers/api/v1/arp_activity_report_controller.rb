@@ -30,7 +30,14 @@ class Api::V1::ArpActivityReportController < ApplicationController
         if @arp_activity.completedPercentage < params[:completedPercentage].to_f && params[:completedPercentage].to_f <= 100
           @arp_activity_report = @arp_activity.arp_activity_reports.new(arp_activity_report_params)
           if @arp_activity_report.save
-            AgreementMailer.sample(@arp_activity).deliver_later
+            #self.object.arp_members.map do |researcher|
+            # end
+            #User.joins(:user_roles).where("user_roles.id = 4").user.researcher.mail
+            User.joins(:user_roles).where("user_roles.id = 4").map do |user|
+              researcher = user.researcher
+              AgreementMailer.sample(researcher,@arp_activity).deliver_later
+            end
+
             render json: @arp_activity_report, status: :created
           else
             render json: @arp_activity_report.errors, status: :unprocessable_entity
