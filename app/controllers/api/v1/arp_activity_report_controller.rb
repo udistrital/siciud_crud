@@ -1,7 +1,7 @@
 class Api::V1::ArpActivityReportController < ApplicationController
   before_action :set_arp_activity
   before_action :set_arp_activity_report, only: [:show, :update, :response_activity_progress]
-
+  before_action :validate_main_researcher
   before_action :set_arp_specific_goal #, only: [:report_progress]
   before_action :set_arp_general_goal #, only: [:report_progress]
 
@@ -78,7 +78,7 @@ class Api::V1::ArpActivityReportController < ApplicationController
           set_arp_general_goal_progress
         end
 
-        AgreementMailer.activity_review("siciud-cidc@correo.udistrital.edu.co ", @arp_activity,@arp_activity_report.status).deliver_later
+        AgreementMailer.activity_review(@arp_activity.agreement_research_project.agreement.arp_members.find_by(arp_role_id: 1).group_member.researcher.academic_email, @arp_activity, @arp_activity_report.status).deliver_later
 
         render json: @arp_activity_report
       else
@@ -104,6 +104,12 @@ class Api::V1::ArpActivityReportController < ApplicationController
   end
 
   private
+
+  def validate_main_researcher
+    if @arp_activity.agreement_research_project.agreement.arp_members.find_by(arp_role_id: 1).nil?
+      return render json: {"error": "El Convenio No Cuenta con un investigador principal porfavor registre uno para poder continuar"}
+    end
+  end
 
   def validate_specific_goals
     valid = @arp_specific_goals.map { |n| n.arp_activities.sum(:weight) == 100 }

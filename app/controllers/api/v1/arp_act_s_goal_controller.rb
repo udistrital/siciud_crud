@@ -4,7 +4,7 @@ class Api::V1::ArpActSGoalController < ApplicationController
   before_action :set_arp_specific_goal #, only: [:report_progress]
   before_action :set_arp_general_goal
   before_action :set_arp_act_s_goal, only: [:show, :update]
-
+  before_action :validate_main_researcher
 
   def index
     @arp_act_s_goals = @arp_specific_goal.arp_act_s_goals
@@ -53,6 +53,11 @@ class Api::V1::ArpActSGoalController < ApplicationController
 
   private
 
+  def validate_main_researcher
+    if @arp_general_goal.agreement_research_project.agreement.arp_members.find_by(arp_role_id: 1).nil?
+      return render json: {"error": "El Convenio No Cuenta con un investigador principal porfavor registre uno para poder continuar"}
+    end
+  end
 
   def set_arp_act_s_goal
     @arp_act_s_goal = @arp_specific_goal.arp_act_s_goals.find_by(id: params[:id])
