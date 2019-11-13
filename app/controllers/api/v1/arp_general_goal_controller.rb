@@ -24,6 +24,7 @@ class Api::V1::ArpGeneralGoalController < ApplicationController
 
   def create
     #byebug
+    # Se utiliza build debido a que es una relacion de uno a uno
     @arp_general_goal = @agreement_research_project.build_arp_general_goal(arp_general_goal_params)
     if @arp_general_goal.save
       render json: @arp_general_goal, status: :created

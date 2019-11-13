@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_13_150612) do
+ActiveRecord::Schema.define(version: 2019_11_13_204840) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -119,6 +119,17 @@ ActiveRecord::Schema.define(version: 2019_11_13_150612) do
     t.integer "status"
     t.text "comment"
     t.index ["arp_activity_id"], name: "index_arp_activity_reports_on_arp_activity_id"
+  end
+
+  create_table "arp_assignments", force: :cascade do |t|
+    t.string "name"
+    t.bigint "product_typology_id"
+    t.bigint "agreement_research_project_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "completedPercentage"
+    t.index ["agreement_research_project_id"], name: "index_arp_assignments_on_agreement_research_project_id"
+    t.index ["product_typology_id"], name: "index_arp_assignments_on_product_typology_id"
   end
 
   create_table "arp_expenses", force: :cascade do |t|
@@ -590,5 +601,7 @@ ActiveRecord::Schema.define(version: 2019_11_13_150612) do
     t.index ["researcher_id"], name: "index_users_on_researcher_id"
   end
 
+  add_foreign_key "arp_assignments", "agreement_research_projects"
+  add_foreign_key "arp_assignments", "product_typologies"
   add_foreign_key "users", "researchers"
 end

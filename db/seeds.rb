@@ -65,22 +65,32 @@ Role.create(name: "Estudiante")
 DocumentType.create(name: "CC")
 Genre.create(name: "Male")
 StateResearcher.create(name: "Activo")
+StateResearcher.create(name: "InActivo")
+
 ResearcherType.create(name: "Docente")
-Researcher.create(name: "Jorge",
+Researcher.create(name: "Javier",
                   document_type_id: 1,
                   faculty_id: 1,
                   curricular_project_id: 1,
                   snies_id: 1,
                   researcher_type_id: 1,
-                  codeNumber: 1564,
-                  identificationNumber: 451,
-                  lastName: "bocanegra")
+                  codeNumber: 155564,
+                  identificationNumber: 555,
+                  lastName: "Castro")
+
+  GroupMember.create(role_id: 1, researcher_id: 1, research_group_id: 1, state_researcher_id: 1)
 
 100.times do |i|
   GroupMember.create(role_id: 1, researcher_id: 1, research_group_id: i + 1, state_researcher_id: 1)
 end
 100.times do |i|
   GroupMember.create(role_id: 2, researcher_id: 1, research_group_id: i + 1, state_researcher_id: 1)
+end
+100.times do |i|
+  GmPeriod.create(initialDate: "20/10/2019", role_id: 1, group_member_id: i + 1)
+end
+100.times do |i|
+  GmPeriod.create(initialDate: "20/10/2019", role_id: 2, group_member_id: i + 101)
 end
 StateSeedbed.create(name: "Activo")
 StateSeedbed.create(name: "Inactivo")

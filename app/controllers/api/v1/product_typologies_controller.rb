@@ -9,7 +9,7 @@ class Api::V1::ProductTypologiesController < ApplicationController
 
 
   def show
-    render json: @product_typology 
+    render json: @product_typology
   end
 
 

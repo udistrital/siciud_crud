@@ -73,6 +73,7 @@ Rails.application.routes.draw do
 
       resources :arp_role, only: [:index, :show, :create]
       resources :product_typologies, only: [:index, :show, :create, :update]
+
       resources :user_roles, only: [:index, :show, :create, :update]
 
       resources :agreement_research_project, only: [] do
@@ -80,6 +81,8 @@ Rails.application.routes.draw do
         resources :arp_member, only: [:index, :show, :create]
         resources :arp_general_goal, only: [:index, :show, :create, :update]
         resources :arp_activity, only: [:index, :show, :create, :update]
+        resources :arp_assignments, only: [:index, :show, :create, :update]
+
       end
       resources :arp_general_goal, only: [] do
         resources :arp_specific_goal, only: [:index, :show, :create, :update]

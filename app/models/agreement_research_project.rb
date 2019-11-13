@@ -4,5 +4,5 @@ class AgreementResearchProject < ApplicationRecord
   has_many :arp_members
   has_one :arp_general_goal
   has_many :arp_activities
-
+  has_many :arp_assignments
 end
