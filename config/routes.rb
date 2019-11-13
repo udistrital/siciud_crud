@@ -72,7 +72,7 @@ Rails.application.routes.draw do
       end
 
       resources :arp_role, only: [:index, :show, :create]
-
+      resources :product_typologies, only: [:index, :show, :create, :update]
       resources :user_roles, only: [:index, :show, :create, :update]
 
       resources :agreement_research_project, only: [] do

@@ -1,0 +1,2 @@
+class ProductTypology < ApplicationRecord
+end

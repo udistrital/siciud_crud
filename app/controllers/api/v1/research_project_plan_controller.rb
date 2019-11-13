@@ -46,7 +46,7 @@ module Api
 
       # Use callbacks to share common setup or constraints between actions.
       def set_research_project_plan
-        @research_project_plan = @plan_period.research_project_plans.find_by(params[:id])
+        @research_project_plan = @plan_period.research_project_plans.find_by(id: params[:id])
       end
 
       # Only allow a trusted parameter "white list" through.
