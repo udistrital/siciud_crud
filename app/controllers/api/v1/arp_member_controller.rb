@@ -20,7 +20,7 @@ class Api::V1::ArpMemberController < ApplicationController
 
     #byebug
     #@arp_members = ArpMember.all
-    render json: @arp_members.order(:created_at)
+    render json: @arp_members
   end
 
   def show
