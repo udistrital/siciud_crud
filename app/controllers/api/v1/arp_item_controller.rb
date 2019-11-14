@@ -36,7 +36,7 @@ class Api::V1::ArpItemController < ApplicationController
     end
     @items.delete_if { |x| x[:inKindValue] == 0 && x[:cashValue] == 0 }
     #byebug
-    render json: @items.order(:created_at)
+    render json: @items
   end
 
   def show
