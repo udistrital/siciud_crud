@@ -8,7 +8,7 @@ module Api
       end
       #listar todas las lineas de investigacion
       def index
-        @research_focuses = ResearchFocus.all
+        @research_focuses = ResearchFocus.all.order(:created_at)
         render json: @research_focuses.includes(:faculty)
       end
 

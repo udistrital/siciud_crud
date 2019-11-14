@@ -13,7 +13,7 @@ module Api
       #Listar todos los grupos
 
       def index
-        @research_groups = ResearchGroup.all
+        @research_groups = ResearchGroup.all.order(:created_at)
         #Director .members.where("role_id='1'")
         #if params[:search].present? && !params[:search].nil?
         #Se envia al servicio de busqueda para flitrar los grupos segun los parametros

@@ -5,7 +5,7 @@ module Api
 
       # GET /researcher_formation_plans
       def index
-        @researcher_formation_plans = ResearcherFormationPlan.all
+        @researcher_formation_plans = ResearcherFormationPlan.all.order(:created_at)
 
         render json: @researcher_formation_plans
       end

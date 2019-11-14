@@ -13,7 +13,7 @@ class Api::V1::ArpSpecificGoalController < ApplicationController
 
   def index
     #Listar todos los convenios
-    @arp_specific_goal = @arp_general_goal.arp_specific_goals
+    @arp_specific_goal = @arp_general_goal.arp_specific_goals.order(:created_at)
     render json: @arp_specific_goal
   end
 

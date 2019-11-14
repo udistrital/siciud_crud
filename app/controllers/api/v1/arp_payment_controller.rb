@@ -12,7 +12,7 @@ class Api::V1::ArpPaymentController < ApplicationController
 
   def index
     @arp_payments = @arp_expense.arp_payments
-    render json: @arp_payments
+    render json: @arp_payments.order(:created_at)
   end
 
   def show

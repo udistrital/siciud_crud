@@ -13,7 +13,7 @@ module Api
       end
 
       def index
-        @seedbed_members = @research_seedbed.seedbed_members
+        @seedbed_members = @research_seedbed.seedbed_members.order(:created_at)
         render json: @seedbed_members, each_serializer: SeedbedMemberBaseSerializer
       end
 

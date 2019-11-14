@@ -13,7 +13,7 @@ module Api
       end
 
       def index
-        @arp_expenses = @contribution_rp_item.arp_expenses
+        @arp_expenses = @contribution_rp_item.arp_expenses.order(:created_at)
         render json: @arp_expenses
       end
 

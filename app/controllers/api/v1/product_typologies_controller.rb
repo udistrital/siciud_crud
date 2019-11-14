@@ -3,7 +3,7 @@ class Api::V1::ProductTypologiesController < ApplicationController
 
 
   def index
-    @product_typologies = ProductTypology.all
+    @product_typologies = ProductTypology.all.order(:created_at)
     render json: @product_typologies
   end
 

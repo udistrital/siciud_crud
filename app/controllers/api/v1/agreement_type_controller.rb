@@ -10,7 +10,7 @@ module Api
       end
 
       def index
-        @agreement_types = AgreementType.all
+        @agreement_types = AgreementType.all.order(:created_at)
         render json: @agreement_types
       end
 

@@ -8,7 +8,7 @@ module Api
       end
 
       def index
-        render json: @faculty.curricular_projects
+        render json: @faculty.curricular_projects.order(:created_at)
       end
 
       def show

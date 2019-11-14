@@ -14,7 +14,7 @@ module Api
 
       def index
         #Listar todos los convenios
-        @agreements = Agreement.all
+        @agreements = Agreement.all.order(:created_at)
         paginate json: @agreements
       end
 

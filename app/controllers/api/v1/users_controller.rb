@@ -17,7 +17,7 @@ module Api
 
       # GET /users
       def index
-        @users = User.all
+        @users = User.all.order(:created_at)
 
         render json: @users
       end

@@ -36,8 +36,11 @@ class AgreementSerializer < ActiveModel::Serializer
   end
 
   def research_groups_ids
+
     self.object.arp_members.map do |researcher|
-      researcher.group_member.research_group_id
+      if researcher.group_member
+        researcher.group_member.research_group_id
+      end
     end.uniq
   end
 end

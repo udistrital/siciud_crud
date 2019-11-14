@@ -6,7 +6,7 @@ module Api
 
       def index
         #Listar todos los convenios
-        @agreement_research_projects = @agreement.agreement_research_projects
+        @agreement_research_projects = @agreement.agreement_research_projects.order(:created_at)
         paginate json: @agreement_research_projects
       end
 

@@ -13,7 +13,7 @@ module Api
 
       #listar todos los roles de un investigador en un proyecto
       def index
-        @arp_roles = ArpRole.all
+        @arp_roles = ArpRole.all.order(:created_at)
         render json: @arp_roles
       end
 

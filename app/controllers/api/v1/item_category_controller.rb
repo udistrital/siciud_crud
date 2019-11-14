@@ -11,7 +11,7 @@ module Api
 
       def index
         #Listar todas las facultades
-        @item_categories = ItemCategory.all
+        @item_categories = ItemCategory.all.order(:created_at)
         render json: @item_categories
       end
 

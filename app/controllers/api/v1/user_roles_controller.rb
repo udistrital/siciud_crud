@@ -4,7 +4,7 @@ class Api::V1::UserRolesController < ApplicationController
 
 
   def index
-    @user_roles = UserRole.all
+    @user_roles = UserRole.all.order(:created_at)
     render json: @user_roles
   end
 

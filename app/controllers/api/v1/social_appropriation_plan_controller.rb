@@ -5,7 +5,7 @@ module Api
 
       # GET /social_appropriation_plans
       def index
-        @social_appropriation_plans = SocialAppropriationPlan.all
+        @social_appropriation_plans = SocialAppropriationPlan.all.order(:created_at)
 
         render json: @social_appropriation_plans
       end

@@ -10,7 +10,7 @@ module Api
       end
 
       def index
-        @agreement_statuses = AgreementStatus.all
+        @agreement_statuses = AgreementStatus.all.order(:created_at)
         render json: @agreement_statuses
       end
 

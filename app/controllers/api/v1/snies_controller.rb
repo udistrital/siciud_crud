@@ -9,7 +9,7 @@ module Api
 
       #Listar todas las areas de conocimiento SNIES
       def index
-        @snies = Snies.all
+        @snies = Snies.all.order(:created_at)
         render json: @snies
       end
 

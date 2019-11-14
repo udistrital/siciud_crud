@@ -6,6 +6,6 @@ class ResearchSeedbedsSearchService
         curr_research_seedbeds = curr_research_seedbeds.joins(:faculties).where("faculties.id = '%#{facultyid}%'") if facultyid.present?
         #filtrar por nombre del director
         #curr_research_seedbeds = curr_research_seedbeds.joins(members: :researcher).where("members.role_id like 1").where("researchers.name like '%#{director}%'") if director.present?
-        curr_research_seedbeds
+        curr_research_seedbeds.order(:created_at)
     end
 end

@@ -17,7 +17,7 @@ module Api
 
       def index
         #Listar todos los convenios
-        @contribution_rp_items = @agreement_research_project.contribution_rp_items
+        @contribution_rp_items = @agreement_research_project.contribution_rp_items.order(:created_at)
         render json: @contribution_rp_items
       end
 

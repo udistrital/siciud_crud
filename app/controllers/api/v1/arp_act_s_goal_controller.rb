@@ -7,7 +7,7 @@ class Api::V1::ArpActSGoalController < ApplicationController
   before_action :validate_main_researcher
 
   def index
-    @arp_act_s_goals = @arp_specific_goal.arp_act_s_goals
+    @arp_act_s_goals = @arp_specific_goal.arp_act_s_goals.order(:created_at)
     render json: @arp_act_s_goals
   end
 

@@ -9,7 +9,7 @@ module Api
 
       #listar todos los posibles estados de un grupo
       def index
-        @state_researcher = StateResearcher.all
+        @state_researcher = StateResearcher.all.order(:created_at)
         render json: @state_researcher
       end
 

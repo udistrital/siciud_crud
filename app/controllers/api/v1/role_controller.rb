@@ -9,7 +9,7 @@ module Api
 
       #listar todos los posibles estados de un grupo
       def index
-        @roles = Role.all
+        @roles = Role.all.order(:created_at)
         render json: @roles
       end
 

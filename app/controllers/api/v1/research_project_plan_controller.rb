@@ -6,7 +6,7 @@ module Api
 
       # GET /research_project_plans
       def index
-        @research_project_plans = @plan_period.research_project_plans
+        @research_project_plans = @plan_period.research_project_plans.order(:created_at)
 
         render json: @research_project_plans
       end

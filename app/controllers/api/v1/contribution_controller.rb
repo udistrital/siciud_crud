@@ -31,7 +31,7 @@ module Api
       end
 
       def index
-        @contributions = @agreement.contributions
+        @contributions = @agreement.contributions.order(:created_at)
         render json: @contributions
       end
 

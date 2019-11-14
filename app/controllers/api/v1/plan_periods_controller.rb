@@ -6,7 +6,7 @@ module Api
 
       # GET /plan_periods
       def index
-        @plan_periods = @context.plan_periods.all
+        @plan_periods = @context.plan_periods.all.order(:created_at)
 
         render json: @plan_periods
       end

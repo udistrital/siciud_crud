@@ -5,7 +5,7 @@ class Api::V1::ArpAssignmentsController < ApplicationController
 
 
   def index
-    @arp_assignment = @agreement_research_project.arp_assignments
+    @arp_assignment = @agreement_research_project.arp_assignments.order(:created_at)
     render json: @arp_assignment
   end
 

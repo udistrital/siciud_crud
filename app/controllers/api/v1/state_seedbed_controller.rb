@@ -9,7 +9,7 @@ module Api
 
       #listar todos los posibles estados de un grupo
       def index
-        @states_seedbed = StateSeedbed.all
+        @states_seedbed = StateSeedbed.all.order(:created_at)
         render json: @states_seedbed
       end
 

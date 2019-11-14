@@ -6,7 +6,7 @@ class Api::V1::FeContactController < ApplicationController
 
   def index
     #Listar todos los convenios
-    @fe_contacts = @funding_entity.fe_contacts
+    @fe_contacts = @funding_entity.fe_contacts.order(:created_at)
     paginate json: @fe_contacts
   end
 

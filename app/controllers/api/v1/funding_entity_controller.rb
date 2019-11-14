@@ -11,7 +11,7 @@ module Api
 
       def index
         #Listar todas las facultades
-        @funding_entities = FundingEntity.all
+        @funding_entities = FundingEntity.all.order(:created_at)
         paginate json: @funding_entities
       end
 

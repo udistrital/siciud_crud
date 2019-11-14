@@ -9,7 +9,7 @@ module Api
 
       def index
         #Listar todas las facultades
-        @faculties = Faculty.all
+        @faculties = Faculty.all.order(:created_at)
         render json: @faculties, adapter: nil
       end
 

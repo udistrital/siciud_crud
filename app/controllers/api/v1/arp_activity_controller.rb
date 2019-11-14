@@ -16,7 +16,7 @@ class Api::V1::ArpActivityController < ApplicationController
 
   def index
     #Listar todas las actividades
-    @arp_activities = @agreement_research_project.arp_activities
+    @arp_activities = @agreement_research_project.arp_activities.order(:created_at)
     render json: @arp_activities
   end
 

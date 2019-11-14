@@ -14,7 +14,7 @@ class Api::V1::ArpGeneralGoalController < ApplicationController
 
   def index
     #Listar todos los convenios
-    @arp_general_goal = @agreement_research_project.arp_general_goal
+    @arp_general_goal = @agreement_research_project.arp_general_goal.order(:created_at)
     render json: @arp_general_goal
   end
 

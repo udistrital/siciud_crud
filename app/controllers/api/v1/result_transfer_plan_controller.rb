@@ -5,7 +5,7 @@ module Api
 
       # GET /result_transfer_plans
       def index
-        @result_transfer_plans = ResultTransferPlan.all
+        @result_transfer_plans = ResultTransferPlan.all.order(:created_at)
 
         render json: @result_transfer_plans
       end

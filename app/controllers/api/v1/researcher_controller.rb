@@ -5,7 +5,7 @@ module Api
 
       def index
         #Listar todos los convenios
-        @researchers = Researcher.all
+        @researchers = Researcher.all.order(:created_at)
         paginate json: @researchers
       end
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_13_204840) do
+ActiveRecord::Schema.define(version: 2019_11_14_153747) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -121,8 +121,18 @@ ActiveRecord::Schema.define(version: 2019_11_13_204840) do
     t.index ["arp_activity_id"], name: "index_arp_activity_reports_on_arp_activity_id"
   end
 
-  create_table "arp_assignments", force: :cascade do |t|
+  create_table "arp_assignment_reports", force: :cascade do |t|
+    t.text "comment"
+    t.integer "percentage"
+    t.integer "status"
+    t.bigint "arp_assignment_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "name"
+    t.index ["arp_assignment_id"], name: "index_arp_assignment_reports_on_arp_assignment_id"
+  end
+
+  create_table "arp_assignments", force: :cascade do |t|
     t.bigint "product_typology_id"
     t.bigint "agreement_research_project_id"
     t.datetime "created_at", null: false
@@ -601,6 +611,7 @@ ActiveRecord::Schema.define(version: 2019_11_13_204840) do
     t.index ["researcher_id"], name: "index_users_on_researcher_id"
   end
 
+  add_foreign_key "arp_assignment_reports", "arp_assignments"
   add_foreign_key "arp_assignments", "agreement_research_projects"
   add_foreign_key "arp_assignments", "product_typologies"
   add_foreign_key "users", "researchers"

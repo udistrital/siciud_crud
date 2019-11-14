@@ -12,7 +12,7 @@ module Api
       end
 
       def index
-        @research_seedbeds = ResearchSeedbed.all
+        @research_seedbeds = ResearchSeedbed.all.order(:created_at)
         #Director .members.where("role_id='1'")
         #if params[:search].present? && !params[:search].nil?
         #Se envia al servicio de busqueda para flitrar los semilleros segun los parametros

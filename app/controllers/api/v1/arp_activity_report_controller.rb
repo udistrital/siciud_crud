@@ -18,7 +18,7 @@ class Api::V1::ArpActivityReportController < ApplicationController
 
 
   def index
-    @arp_activity_reports = @arp_activity.arp_activity_reports
+    @arp_activity_reports = @arp_activity.arp_activity_reports.order(:created_at)
     render json: @arp_activity_reports
   end
 

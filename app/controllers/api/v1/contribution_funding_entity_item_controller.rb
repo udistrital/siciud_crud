@@ -15,7 +15,7 @@ module Api
 
       #Este controlador permite asignar los aportes de cada entida por tipo de categoria
       def index
-        @contribution_funding_entity_items = @contribution.contribution_funding_entity_items
+        @contribution_funding_entity_items = @contribution.contribution_funding_entity_items.order(:created_at)
         paginate json: @contribution_funding_entity_items
       end
 
