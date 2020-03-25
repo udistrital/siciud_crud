@@ -15,6 +15,11 @@ ActiveRecord::Schema.define(version: 2019_11_14_153747) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "Agreements_GroupMembers", id: false, force: :cascade do |t|
+    t.integer "Agreement_id", null: false
+    t.integer "GroupMember_id", null: false
+  end
+
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -88,6 +93,35 @@ ActiveRecord::Schema.define(version: 2019_11_14_153747) do
   create_table "agreements_research_groups", id: false, force: :cascade do |t|
     t.integer "agreement_id", null: false
     t.integer "research_group_id", null: false
+  end
+
+  create_table "ap_activities", force: :cascade do |t|
+    t.text "activity"
+    t.integer "ap_specific_goal_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "weight"
+    t.integer "completedPercentage"
+    t.index ["ap_specific_goal_id"], name: "index_ap_activities_on_ap_specific_goal_id"
+  end
+
+  create_table "ap_general_goals", force: :cascade do |t|
+    t.text "goal"
+    t.integer "agreement_research_project_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "completedPercentage"
+    t.index ["agreement_research_project_id"], name: "index_ap_general_goals_on_agreement_research_project_id"
+  end
+
+  create_table "ap_specific_goals", force: :cascade do |t|
+    t.text "goal"
+    t.integer "ap_general_goal_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "weight"
+    t.integer "completedPercentage"
+    t.index ["ap_general_goal_id"], name: "index_ap_specific_goals_on_ap_general_goal_id"
   end
 
   create_table "arp_act_s_goals", force: :cascade do |t|
