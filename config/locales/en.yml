@@ -31,3 +31,7 @@
 
 en:
   hello: "Hello world"
+  activerecord:
+    errors:
+      messages:
+        content_type: Document is blank or is not a valid file format

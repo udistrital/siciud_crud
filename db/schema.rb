@@ -10,7 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_15_144445) do
+ActiveRecord::Schema.define(version: 2019_11_14_153747) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "Agreements_GroupMembers", id: false, force: :cascade do |t|
+    t.integer "Agreement_id", null: false
+    t.integer "GroupMember_id", null: false
+  end
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -35,17 +43,16 @@ ActiveRecord::Schema.define(version: 2019_07_15_144445) do
 
   create_table "agreement_research_projects", force: :cascade do |t|
     t.string "code"
-    t.date "year"
     t.date "startDate"
     t.date "approbationDate"
     t.date "estimatedFinishDate"
     t.date "closingDate"
-    t.integer "research_group_id"
     t.integer "agreement_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "name"
+    t.string "year"
     t.index ["agreement_id"], name: "index_agreement_research_projects_on_agreement_id"
-    t.index ["research_group_id"], name: "index_agreement_research_projects_on_research_group_id"
   end
 
   create_table "agreement_statuses", force: :cascade do |t|
@@ -66,18 +73,179 @@ ActiveRecord::Schema.define(version: 2019_07_15_144445) do
     t.date "startDate"
     t.date "finalDate"
     t.integer "agreementNumber"
-    t.integer "faculty_id"
-    t.integer "research_group_id"
     t.integer "agreement_status_id"
     t.integer "agreement_type_id"
-    t.integer "funding_entity_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "duration"
+    t.integer "availability"
+    t.integer "bizagiNumber"
+    t.text "description"
     t.index ["agreement_status_id"], name: "index_agreements_on_agreement_status_id"
     t.index ["agreement_type_id"], name: "index_agreements_on_agreement_type_id"
-    t.index ["faculty_id"], name: "index_agreements_on_faculty_id"
-    t.index ["funding_entity_id"], name: "index_agreements_on_funding_entity_id"
-    t.index ["research_group_id"], name: "index_agreements_on_research_group_id"
+  end
+
+  create_table "agreements_group_members", id: false, force: :cascade do |t|
+    t.integer "agreement_id", null: false
+    t.integer "group_member_id", null: false
+  end
+
+  create_table "agreements_research_groups", id: false, force: :cascade do |t|
+    t.integer "agreement_id", null: false
+    t.integer "research_group_id", null: false
+  end
+
+  create_table "ap_activities", force: :cascade do |t|
+    t.text "activity"
+    t.integer "ap_specific_goal_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "weight"
+    t.integer "completedPercentage"
+    t.index ["ap_specific_goal_id"], name: "index_ap_activities_on_ap_specific_goal_id"
+  end
+
+  create_table "ap_general_goals", force: :cascade do |t|
+    t.text "goal"
+    t.integer "agreement_research_project_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "completedPercentage"
+    t.index ["agreement_research_project_id"], name: "index_ap_general_goals_on_agreement_research_project_id"
+  end
+
+  create_table "ap_specific_goals", force: :cascade do |t|
+    t.text "goal"
+    t.integer "ap_general_goal_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "weight"
+    t.integer "completedPercentage"
+    t.index ["ap_general_goal_id"], name: "index_ap_specific_goals_on_ap_general_goal_id"
+  end
+
+  create_table "arp_act_s_goals", force: :cascade do |t|
+    t.integer "weight"
+    t.integer "arp_activity_id"
+    t.integer "arp_specific_goal_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["arp_activity_id"], name: "index_arp_act_s_goals_on_arp_activity_id"
+    t.index ["arp_specific_goal_id"], name: "index_arp_act_s_goals_on_arp_specific_goal_id"
+  end
+
+  create_table "arp_activities", force: :cascade do |t|
+    t.text "activity"
+    t.float "completedPercentage"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.date "startDate"
+    t.date "finishDate"
+    t.integer "agreement_research_project_id"
+    t.index ["agreement_research_project_id"], name: "index_arp_activities_on_agreement_research_project_id"
+  end
+
+  create_table "arp_activity_reports", force: :cascade do |t|
+    t.integer "arp_activity_id"
+    t.float "completedPercentage"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "status"
+    t.text "comment"
+    t.index ["arp_activity_id"], name: "index_arp_activity_reports_on_arp_activity_id"
+  end
+
+  create_table "arp_assignment_reports", force: :cascade do |t|
+    t.text "comment"
+    t.integer "percentage"
+    t.integer "status"
+    t.bigint "arp_assignment_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "name"
+    t.index ["arp_assignment_id"], name: "index_arp_assignment_reports_on_arp_assignment_id"
+  end
+
+  create_table "arp_assignments", force: :cascade do |t|
+    t.bigint "product_typology_id"
+    t.bigint "agreement_research_project_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "completedPercentage"
+    t.index ["agreement_research_project_id"], name: "index_arp_assignments_on_agreement_research_project_id"
+    t.index ["product_typology_id"], name: "index_arp_assignments_on_product_typology_id"
+  end
+
+  create_table "arp_expenses", force: :cascade do |t|
+    t.string "name"
+    t.float "totalPayed"
+    t.float "remaining"
+    t.string "description"
+    t.date "date"
+    t.boolean "is_payed"
+    t.string "code"
+    t.string "bizagiCode"
+    t.integer "contribution_rp_item_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.float "inKindValue"
+    t.float "inCashValue"
+    t.float "totalPayedInCash"
+    t.float "totalPayedInKind"
+    t.float "remainingInCash"
+    t.float "remainingInKind"
+    t.index ["contribution_rp_item_id"], name: "index_arp_expenses_on_contribution_rp_item_id"
+  end
+
+  create_table "arp_general_goals", force: :cascade do |t|
+    t.text "goal"
+    t.integer "agreement_research_project_id"
+    t.float "completedPercentage"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["agreement_research_project_id"], name: "index_arp_general_goals_on_agreement_research_project_id"
+  end
+
+  create_table "arp_members", force: :cascade do |t|
+    t.integer "arp_role_id"
+    t.integer "agreement_id"
+    t.integer "group_member_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "agreement_research_project_id"
+    t.index ["agreement_id"], name: "index_arp_members_on_agreement_id"
+    t.index ["agreement_research_project_id"], name: "index_arp_members_on_agreement_research_project_id"
+    t.index ["arp_role_id"], name: "index_arp_members_on_arp_role_id"
+    t.index ["group_member_id"], name: "index_arp_members_on_group_member_id"
+  end
+
+  create_table "arp_payments", force: :cascade do |t|
+    t.integer "inCashValue"
+    t.integer "inKindValue"
+    t.date "date"
+    t.string "bizagiCode"
+    t.integer "arp_expense_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "cdpCode"
+    t.string "rpCode"
+    t.index ["arp_expense_id"], name: "index_arp_payments_on_arp_expense_id"
+  end
+
+  create_table "arp_roles", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "arp_specific_goals", force: :cascade do |t|
+    t.text "goal"
+    t.integer "arp_general_goal_id"
+    t.float "completedPercentage"
+    t.integer "weight"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["arp_general_goal_id"], name: "index_arp_specific_goals_on_arp_general_goal_id"
   end
 
   create_table "colciencias_calls", force: :cascade do |t|
@@ -91,6 +259,45 @@ ActiveRecord::Schema.define(version: 2019_07_15_144445) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "contribution_funding_entity_items", force: :cascade do |t|
+    t.float "cashValue"
+    t.float "inKindValue"
+    t.integer "item_category_id"
+    t.integer "contribution_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["contribution_id"], name: "index_contribution_funding_entity_items_on_contribution_id"
+    t.index ["item_category_id"], name: "index_contribution_funding_entity_items_on_item_category_id"
+  end
+
+  create_table "contribution_rp_items", force: :cascade do |t|
+    t.float "cashValue"
+    t.float "inKindValue"
+    t.integer "agreement_research_project_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "contribution_funding_entity_item_id"
+    t.float "executedCash"
+    t.float "executedInKind"
+    t.float "remainingCash"
+    t.float "remainingInKind"
+    t.float "compromisedCash"
+    t.float "compromisedInKind"
+    t.index ["agreement_research_project_id"], name: "index_contribution_rp_items_on_agreement_research_project_id"
+    t.index ["contribution_funding_entity_item_id"], name: "index_contribution_rp_items_on_cont_funding_entity_item_id"
+  end
+
+  create_table "contributions", force: :cascade do |t|
+    t.integer "funding_entity_id"
+    t.integer "agreement_id"
+    t.float "inKindContribution"
+    t.float "cashContribution"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["agreement_id"], name: "index_contributions_on_agreement_id"
+    t.index ["funding_entity_id"], name: "index_contributions_on_funding_entity_id"
   end
 
   create_table "curricular_projects", force: :cascade do |t|
@@ -117,6 +324,12 @@ ActiveRecord::Schema.define(version: 2019_07_15_144445) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "entity_types", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "faculties", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -133,16 +346,61 @@ ActiveRecord::Schema.define(version: 2019_07_15_144445) do
     t.integer "faculty_id", null: false
   end
 
+  create_table "fe_contacts", force: :cascade do |t|
+    t.string "name"
+    t.string "phoneNumber"
+    t.string "mobileNumber"
+    t.string "role"
+    t.string "email"
+    t.integer "funding_entity_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "lastName"
+    t.index ["funding_entity_id"], name: "index_fe_contacts_on_funding_entity_id"
+  end
+
   create_table "funding_entities", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "country"
+    t.string "city"
+    t.string "phoneNumber"
+    t.string "mobileNumber"
+    t.integer "entity_type_id"
+    t.text "observation"
+    t.text "address"
+    t.index ["entity_type_id"], name: "index_funding_entities_on_entity_type_id"
   end
 
   create_table "genres", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "gm_periods", force: :cascade do |t|
+    t.date "initialDate"
+    t.date "finalDate"
+    t.integer "role_id"
+    t.integer "group_member_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["group_member_id"], name: "index_gm_periods_on_group_member_id"
+    t.index ["role_id"], name: "index_gm_periods_on_role_id"
+  end
+
+  create_table "group_members", force: :cascade do |t|
+    t.integer "role_id"
+    t.integer "researcher_id"
+    t.integer "research_group_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "state_researcher_id"
+    t.index ["research_group_id"], name: "index_group_members_on_research_group_id"
+    t.index ["researcher_id"], name: "index_group_members_on_researcher_id"
+    t.index ["role_id"], name: "index_group_members_on_role_id"
+    t.index ["state_researcher_id"], name: "index_group_members_on_state_researcher_id"
   end
 
   create_table "historical_colciencias_ranks", force: :cascade do |t|
@@ -156,36 +414,10 @@ ActiveRecord::Schema.define(version: 2019_07_15_144445) do
     t.index ["research_group_id"], name: "index_historical_colciencias_ranks_on_research_group_id"
   end
 
-  create_table "member_seedbeds", force: :cascade do |t|
-    t.date "initialDate"
-    t.date "finalDate"
-    t.integer "role_id"
-    t.integer "researcher_id"
-    t.integer "research_seedbed_id"
-    t.integer "state_reseacher_id"
-    t.integer "researcher_type_id"
+  create_table "item_categories", force: :cascade do |t|
+    t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["research_seedbed_id"], name: "index_member_seedbeds_on_research_seedbed_id"
-    t.index ["researcher_id"], name: "index_member_seedbeds_on_researcher_id"
-    t.index ["researcher_type_id"], name: "index_member_seedbeds_on_researcher_type_id"
-    t.index ["role_id"], name: "index_member_seedbeds_on_role_id"
-    t.index ["state_reseacher_id"], name: "index_member_seedbeds_on_state_reseacher_id"
-  end
-
-  create_table "members", force: :cascade do |t|
-    t.date "initialDate"
-    t.date "finalDate"
-    t.integer "role_id"
-    t.integer "researcher_id"
-    t.integer "research_group_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "state_researcher_id"
-    t.index ["research_group_id"], name: "index_members_on_research_group_id"
-    t.index ["researcher_id"], name: "index_members_on_researcher_id"
-    t.index ["role_id"], name: "index_members_on_role_id"
-    t.index ["state_researcher_id"], name: "index_members_on_state_researcher_id"
   end
 
   create_table "plan_periods", force: :cascade do |t|
@@ -195,6 +427,18 @@ ActiveRecord::Schema.define(version: 2019_07_15_144445) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["planable_id"], name: "index_plan_periods_on_planable_id"
+  end
+
+  create_table "product_types", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "product_typologies", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "research_focuses", force: :cascade do |t|
@@ -256,7 +500,6 @@ ActiveRecord::Schema.define(version: 2019_07_15_144445) do
     t.integer "cidcActNumber"
     t.integer "facultyActNumber"
     t.integer "state_seedbed_id"
-    t.string "mail"
     t.string "webpage"
     t.string "mission"
     t.string "vision"
@@ -264,6 +507,7 @@ ActiveRecord::Schema.define(version: 2019_07_15_144445) do
     t.integer "researcher_focus_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "email"
     t.index ["researcher_focus_id"], name: "index_research_seedbeds_on_researcher_focus_id"
     t.index ["snies_id"], name: "index_research_seedbeds_on_snies_id"
     t.index ["state_seedbed_id"], name: "index_research_seedbeds_on_state_seedbed_id"
@@ -295,19 +539,14 @@ ActiveRecord::Schema.define(version: 2019_07_15_144445) do
     t.integer "faculty_id"
     t.integer "curricular_project_id"
     t.integer "snies_id"
-    t.integer "genre_id"
-    t.string "telNumber"
-    t.string "celNumber"
-    t.string "address"
-    t.string "academicEmail"
-    t.string "personalEmail"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "researcher_type_id"
+    t.string "orcid_id"
+    t.string "academic_email"
     t.index ["curricular_project_id"], name: "index_researchers_on_curricular_project_id"
     t.index ["document_type_id"], name: "index_researchers_on_document_type_id"
     t.index ["faculty_id"], name: "index_researchers_on_faculty_id"
-    t.index ["genre_id"], name: "index_researchers_on_genre_id"
     t.index ["researcher_type_id"], name: "index_researchers_on_researcher_type_id"
     t.index ["snies_id"], name: "index_researchers_on_snies_id"
   end
@@ -326,6 +565,30 @@ ActiveRecord::Schema.define(version: 2019_07_15_144445) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "seedbed_members", force: :cascade do |t|
+    t.integer "role_id"
+    t.integer "researcher_id"
+    t.integer "research_seedbed_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "state_researcher_id"
+    t.index ["research_seedbed_id"], name: "index_seedbed_members_on_research_seedbed_id"
+    t.index ["researcher_id"], name: "index_seedbed_members_on_researcher_id"
+    t.index ["role_id"], name: "index_seedbed_members_on_role_id"
+    t.index ["state_researcher_id"], name: "index_seedbed_members_on_state_researcher_id"
+  end
+
+  create_table "sm_periods", force: :cascade do |t|
+    t.date "initialDate"
+    t.date "finalDate"
+    t.integer "role_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "seedbed_member_id"
+    t.index ["role_id"], name: "index_sm_periods_on_role_id"
+    t.index ["seedbed_member_id"], name: "index_sm_periods_on_seedbed_member_id"
   end
 
   create_table "snies", force: :cascade do |t|
@@ -363,4 +626,27 @@ ActiveRecord::Schema.define(version: 2019_07_15_144445) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "user_roles", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "user_roles_users", id: false, force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "user_role_id", null: false
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "username"
+    t.bigint "researcher_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["researcher_id"], name: "index_users_on_researcher_id"
+  end
+
+  add_foreign_key "arp_assignment_reports", "arp_assignments"
+  add_foreign_key "arp_assignments", "agreement_research_projects"
+  add_foreign_key "arp_assignments", "product_typologies"
+  add_foreign_key "users", "researchers"
 end

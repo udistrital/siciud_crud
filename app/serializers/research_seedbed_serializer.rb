@@ -2,7 +2,7 @@ class ResearchSeedbedSerializer < ActiveModel::Serializer
   include Rails.application.routes.url_helpers
   attributes :id, :name, :acronym, :description, :cidcRegistrationDate,
              :faculties, :cidcActNumber, :facultyActNumber, :facultyRegistrationDate,
-             :mail, :webpage, :mission, :vision, :curricular_projects,
+             :email, :webpage, :mission, :vision, :curricular_projects,
              :state_seedbed, :research_focuses,:snies, :facultyActDocument, :cidcActDocument,:director
 
   def faculties
@@ -26,11 +26,11 @@ class ResearchSeedbedSerializer < ActiveModel::Serializer
     #curricular_projects = self.object.curricular_projects
   end
 
-  def state_group
-    state_group = self.object.state_group
+  def state_seedbed
+    state_seedbed = self.object.state_seedbed
     {
-        id: state_group.id,
-        name: state_group.name
+        id: state_seedbed.id,
+        name: state_seedbed.name
     }
   end
 
@@ -54,15 +54,15 @@ class ResearchSeedbedSerializer < ActiveModel::Serializer
 
   def director
 
-    members = self.object.member_seedbeds.where(role_id: 1).last
+    members = self.object.seedbed_members.where(role_id: 1).last
     if members
       {
           name: members.researcher.name,
           lastName: members.researcher.lastName,
-          initialDate: members.initialDate,
-          finalDate: members.finalDate,
-          academicEmail: members.researcher.academicEmail,
-          researcherType: members.researcher.researcher_type.name
+          #initialDate: members.initialDate,
+          #finalDate: members.finalDate,
+          #academicEmail: members.researcher.academicEmail,
+         # researcherType: members.researcher.researcher_type.name
 
       }
     end
