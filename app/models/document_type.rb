@@ -1,8 +1,7 @@
 class DocumentType < ApplicationRecord
-      #Relaciones con los diferentes modelos
+  #Relaciones con los diferentes modelos
 
-    has_many :researchers
-    #Validaciones de los campos obligatorios
-    validates :name, presence: true
-
+  has_many :researchers
+  #Validaciones de los campos obligatorios
+  validates :name, presence: true
 end

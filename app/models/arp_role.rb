@@ -1,0 +1,2 @@
+class ArpRole < ApplicationRecord
+end
