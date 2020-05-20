@@ -11,7 +11,7 @@ default: &default
   #host: db
   encoding: unicode
   username: postgres
-  password:
+  password: 
 
 development:
   <<: *default

@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'call_types/index'
+  get 'call_types/create'
   namespace :api do
     namespace :v1 do
       get 'arp_assignment_reports/index'
@@ -228,6 +230,8 @@ Rails.application.routes.draw do
           resources :social_appropriation_plan
         end
       end
+
+      resources :calls, only: [:index, :show, :create]
     end
   end
 end
