@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'call_user_roles/index'
+  get 'call_user_roles/show'
   get 'call_types/index'
   get 'call_types/create'
   namespace :api do
@@ -231,7 +233,9 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :calls, only: [:index, :show, :create]
+      resources :calls, only: [:index, :show, :create, :update]
+      resources :call_types, only: [:index]
+      resources :call_user_roles, only: [:index]
     end
   end
 end

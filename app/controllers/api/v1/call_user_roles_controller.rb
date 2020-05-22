@@ -1,6 +1,6 @@
 module Api
   module V1
-    class CallTypesController < ApplicationController
+    class CallUserRolesController < ApplicationController
 
       rescue_from ActiveRecord::RecordNotFound do |e|
         render json: {error: e.message}, status: :not_found
@@ -10,13 +10,11 @@ module Api
       end
 
       def index
-        @call_type = CallType.all
-        render json: @call_type, status: :ok
+        @call_user_role = CallUserRole.all
+        render json: @call_user_role, status: :ok
       end
 
       def show
-        @call_type = CallType.find(params[:id])
-        render json: @call_type, status: :ok
       end
     end
   end
