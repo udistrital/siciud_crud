@@ -1,0 +1,2 @@
+class ThematicAxis < ApplicationRecord
+end
