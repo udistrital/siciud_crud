@@ -39,6 +39,7 @@ module Api
 
       def update
         if @call.update(call_params)
+          @call.thematic_axis_ids = (params[:call][:thematic_axis_ids]).uniq
           render json: @call, status: :ok
         else
           render json: @call.errors, status: unprocessable_entity
@@ -52,7 +53,8 @@ module Api
                                      :call_type_id,
                                      :call_user_role_id, :duration,
                                      :globalBudget, :maxBudgetPerProject,
-                                     :startDate, :directedTowards)
+                                     :startDate, :directedTowards,
+                                     thematic_axis_ids: [])
       end
 
       def set_call
