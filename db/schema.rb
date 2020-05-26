@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_26_155613) do
+ActiveRecord::Schema.define(version: 2020_05_26_195244) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -214,6 +214,17 @@ ActiveRecord::Schema.define(version: 2020_05_26_155613) do
     t.index ["arp_general_goal_id"], name: "index_arp_specific_goals_on_arp_general_goal_id"
   end
 
+  create_table "call_productions", force: :cascade do |t|
+    t.boolean "required"
+    t.integer "quantity"
+    t.bigint "call_id"
+    t.bigint "production_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["call_id"], name: "index_call_productions_on_call_id"
+    t.index ["production_id"], name: "index_call_productions_on_production_id"
+  end
+
   create_table "call_types", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -242,11 +253,6 @@ ActiveRecord::Schema.define(version: 2020_05_26_155613) do
     t.datetime "updated_at", null: false
     t.index ["call_type_id"], name: "index_calls_on_call_type_id"
     t.index ["call_user_role_id"], name: "index_calls_on_call_user_role_id"
-  end
-
-  create_table "calls_productions", id: false, force: :cascade do |t|
-    t.bigint "call_id", null: false
-    t.bigint "production_id", null: false
   end
 
   create_table "calls_thematic_axes", id: false, force: :cascade do |t|
@@ -450,8 +456,6 @@ ActiveRecord::Schema.define(version: 2020_05_26_155613) do
   create_table "productions", force: :cascade do |t|
     t.string "deliverables_name"
     t.text "indicator"
-    t.boolean "required"
-    t.integer "quantity"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -669,6 +673,8 @@ ActiveRecord::Schema.define(version: 2020_05_26_155613) do
   add_foreign_key "arp_assignment_reports", "arp_assignments"
   add_foreign_key "arp_assignments", "agreement_research_projects"
   add_foreign_key "arp_assignments", "product_typologies"
+  add_foreign_key "call_productions", "calls"
+  add_foreign_key "call_productions", "productions"
   add_foreign_key "calls", "call_types"
   add_foreign_key "calls", "call_user_roles"
   add_foreign_key "users", "researchers"

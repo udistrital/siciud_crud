@@ -1,3 +1,4 @@
 class Production < ApplicationRecord
-  has_and_belongs_to_many :calls
+  has_many :call_productions
+  has_many :calls, through: :call_productions
 end
