@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_24_001600) do
+ActiveRecord::Schema.define(version: 2020_05_26_155613) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -244,6 +244,11 @@ ActiveRecord::Schema.define(version: 2020_05_24_001600) do
     t.index ["call_user_role_id"], name: "index_calls_on_call_user_role_id"
   end
 
+  create_table "calls_productions", id: false, force: :cascade do |t|
+    t.bigint "call_id", null: false
+    t.bigint "production_id", null: false
+  end
+
   create_table "calls_thematic_axes", id: false, force: :cascade do |t|
     t.bigint "call_id", null: false
     t.bigint "thematic_axis_id", null: false
@@ -438,6 +443,15 @@ ActiveRecord::Schema.define(version: 2020_05_24_001600) do
 
   create_table "product_typologies", force: :cascade do |t|
     t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "productions", force: :cascade do |t|
+    t.string "deliverables_name"
+    t.text "indicator"
+    t.boolean "required"
+    t.integer "quantity"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

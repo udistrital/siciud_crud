@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get 'productions/index'
   get 'thematic_axes/index'
   get 'thematic_axes/create'
   get 'call_user_roles/index'
@@ -239,6 +240,7 @@ Rails.application.routes.draw do
       resources :call_types, only: [:index]
       resources :call_user_roles, only: [:index]
       resources :thematic_axes, only: [:index, :create]
+      resources :productions, only: [:index]
     end
   end
 end
