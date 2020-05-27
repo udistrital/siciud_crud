@@ -4,8 +4,12 @@ class CallSerializer < ActiveModel::Serializer
              :directedTowards, :thematic_axes, :productions
 
   def productions
-    self.object.productions.map do |production|
-      production.id
+    self.object.call_productions.map do |production_item|
+      {
+          'production_id': production_item.production_id,
+          'required': production_item.required,
+          'quantity': production_item.quantity
+      }
     end
   end
 
