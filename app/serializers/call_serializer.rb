@@ -3,6 +3,10 @@ class CallSerializer < ActiveModel::Serializer
              :duration, :globalBudget, :maxBudgetPerProject, :startDate, :closingDate,
              :directedTowards, :thematic_axes, :productions, :item_calls
 
+  def item_calls
+
+  end
+
   def productions
     self.object.call_productions.map do |production_item|
       {

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_27_171830) do
+ActiveRecord::Schema.define(version: 2020_05_27_191826) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -267,6 +267,16 @@ ActiveRecord::Schema.define(version: 2020_05_27_171830) do
     t.index ["call_user_role_id"], name: "index_calls_on_call_user_role_id"
   end
 
+  create_table "calls_required_documents", force: :cascade do |t|
+    t.boolean "required"
+    t.bigint "call_id"
+    t.bigint "required_document_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["call_id"], name: "index_calls_required_documents_on_call_id"
+    t.index ["required_document_id"], name: "index_calls_required_documents_on_required_document_id"
+  end
+
   create_table "calls_thematic_axes", id: false, force: :cascade do |t|
     t.bigint "call_id", null: false
     t.bigint "thematic_axis_id", null: false
@@ -474,6 +484,12 @@ ActiveRecord::Schema.define(version: 2020_05_27_171830) do
   create_table "productions", force: :cascade do |t|
     t.string "deliverables_name"
     t.text "indicator"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "required_documents", force: :cascade do |t|
+    t.string "document_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -697,5 +713,7 @@ ActiveRecord::Schema.define(version: 2020_05_27_171830) do
   add_foreign_key "call_productions", "productions"
   add_foreign_key "calls", "call_types"
   add_foreign_key "calls", "call_user_roles"
+  add_foreign_key "calls_required_documents", "calls"
+  add_foreign_key "calls_required_documents", "required_documents"
   add_foreign_key "users", "researchers"
 end

@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  get 'calls_required_documents/index'
+  get 'calls_required_documents/create'
+  get 'required_documents/index'
   get 'call_item_calls/index'
   get 'call_item_calls/create'
   get 'call_productions/index'
@@ -242,13 +245,15 @@ Rails.application.routes.draw do
 
       resources :calls, only: [:index, :show, :create, :update] do
         resources :call_productions, only: [:index, :create], path: 'production_items'
-        resources :call_item_calls, only: [:index, :create], path: 'items'
+        resources :call_item_calls, only: [:index, :create], path: 'call_items'
+        resources :calls_required_documents, only: [:index, :create], path: 'required_documents'
       end
       resources :call_types, only: [:index]
       resources :call_user_roles, only: [:index]
       resources :thematic_axes, only: [:index, :create]
       resources :productions, only: [:index]
       resources :item_calls, only: [:index]
+      resources :required_documents, only: [:index]
     end
   end
 end

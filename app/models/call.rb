@@ -6,6 +6,8 @@ class Call < ApplicationRecord
   has_many :productions, through: :call_productions
   has_many :call_item_calls
   has_many :item_calls, through: :call_item_calls
+  has_many :calls_required_documents
+  has_many :required_documents, through: :calls_required_documents
 
   validates :duration, :startDate, presence: true
   validates :duration, :globalBudget, :maxBudgetPerProject, numericality: {:greater_than => 0}
