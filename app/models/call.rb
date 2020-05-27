@@ -4,6 +4,8 @@ class Call < ApplicationRecord
   has_and_belongs_to_many :thematic_axes
   has_many :call_productions
   has_many :productions, through: :call_productions
+  has_many :call_item_calls
+  has_many :item_calls, through: :call_item_calls
 
   validates :duration, :startDate, presence: true
   validates :duration, :globalBudget, :maxBudgetPerProject, numericality: {:greater_than => 0}

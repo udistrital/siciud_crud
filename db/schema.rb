@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_26_195244) do
+ActiveRecord::Schema.define(version: 2020_05_27_171830) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -212,6 +212,18 @@ ActiveRecord::Schema.define(version: 2020_05_26_195244) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["arp_general_goal_id"], name: "index_arp_specific_goals_on_arp_general_goal_id"
+  end
+
+  create_table "call_item_calls", force: :cascade do |t|
+    t.float "percentage"
+    t.float "value"
+    t.float "maximum_percentage"
+    t.bigint "call_id"
+    t.bigint "item_call_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["call_id"], name: "index_call_item_calls_on_call_id"
+    t.index ["item_call_id"], name: "index_call_item_calls_on_item_call_id"
   end
 
   create_table "call_productions", force: :cascade do |t|
@@ -424,6 +436,12 @@ ActiveRecord::Schema.define(version: 2020_05_26_195244) do
     t.index ["colciencias_call_id"], name: "index_historical_colciencias_ranks_on_colciencias_call_id"
     t.index ["colciencias_category_id"], name: "index_historical_colciencias_ranks_on_colciencias_category_id"
     t.index ["research_group_id"], name: "index_historical_colciencias_ranks_on_research_group_id"
+  end
+
+  create_table "item_calls", force: :cascade do |t|
+    t.string "item"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "item_categories", force: :cascade do |t|
@@ -673,6 +691,8 @@ ActiveRecord::Schema.define(version: 2020_05_26_195244) do
   add_foreign_key "arp_assignment_reports", "arp_assignments"
   add_foreign_key "arp_assignments", "agreement_research_projects"
   add_foreign_key "arp_assignments", "product_typologies"
+  add_foreign_key "call_item_calls", "calls"
+  add_foreign_key "call_item_calls", "item_calls"
   add_foreign_key "call_productions", "calls"
   add_foreign_key "call_productions", "productions"
   add_foreign_key "calls", "call_types"
