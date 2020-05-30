@@ -2,6 +2,7 @@ module Api
   module V1
     class CallItemCallsController < ApplicationController
       before_action :set_call
+      before_action :set_item, only: [:update, :destroy]
 
       rescue_from ActiveRecord::RecordNotFound do |e|
         render json: {error: e.message}, status: :not_found
@@ -11,6 +12,8 @@ module Api
       end
 
       def index
+        @call_item_call = @call.call_item_calls
+        render json: @call_item_call, status: :ok
       end
 
       def create
@@ -45,14 +48,37 @@ module Api
         end
       end
 
+      def update
+        if @call_item_call.update(call_item_update_params)
+          render json: @call_item_call
+        else
+          render json: @call_item_call.errors, status: :unprocessable_entity
+        end
+      end
+
+      def destroy
+        @call_item_call.destroy
+      end
+
       private
 
       def call_item_params
         params.require(:call_item_call).permit(:item_call_id, :percentage, :value, :maximum_percentage)
       end
 
+      def call_item_update_params
+        params.require(:call_item_call).permit(:percentage, :value, :maximum_percentage)
+      end
+
       def set_call
         @call = Call.find(params[:call_id])
+      end
+
+      def set_item
+        @call_item_call = @call.call_item_calls.find_by(id: params[:id])
+        unless @call_item_call
+          render json: {error: "Couldn't find call item with 'id'=#{params[:id]}"}
+        end
       end
     end
   end
