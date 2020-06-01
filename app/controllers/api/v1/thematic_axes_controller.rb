@@ -1,7 +1,7 @@
 module Api
   module V1
     class ThematicAxesController < ApplicationController
-      before_action :set_call, only: [:index, :create]
+      before_action :set_call, only: [:index, :create, :destroy]
 
       rescue_from ActiveRecord::RecordNotFound do |e|
         render json: {error: e.message}, status: :not_found
@@ -34,6 +34,12 @@ module Api
           else
             render json: @thematic_axis.errors, status: :unprocessable_entity
           end
+        end
+      end
+
+      def destroy
+        if params.has_key?("call_id")
+          @call.thematic_axes.destroy(ThematicAxis.find(params[:id]))
         end
       end
 
