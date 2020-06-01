@@ -21,14 +21,19 @@ module Api
 
       def create
         if params.has_key?("call_id")
-          @thematic_axis = @call.thematic_axes.new(thematic_params)
+          if  @call.update(thematic_params)
+            @call.thematic_axis_ids = (params[:thematic_axis][:thematic_axis_ids]).uniq
+            render json: @call.thematic_axes, status: :created
+          else
+            render json: @thematic_axis.errors, status: :unprocessable_entity
+          end
         else
           @thematic_axis = ThematicAxis.new(new_thematic_params)
-        end
-        if @thematic_axis.save
-          render json: @thematic_axis, status: :created
-        else
-          render json: @thematic_axis.errors, status: :unprocessable_entity
+          if @thematic_axis.save
+            render json: @thematic_axis, status: :created
+          else
+            render json: @thematic_axis.errors, status: :unprocessable_entity
+          end
         end
       end
 
@@ -39,7 +44,7 @@ module Api
       end
 
       def thematic_params
-        params.require(:thematic_axis).permit(:id)
+        params.require(:thematic_axis).permit(thematic_axis_ids: [])
       end
 
       def set_call
