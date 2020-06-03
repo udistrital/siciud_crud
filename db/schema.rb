@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_27_191826) do
+ActiveRecord::Schema.define(version: 2020_06_03_211152) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -275,11 +275,6 @@ ActiveRecord::Schema.define(version: 2020_05_27_191826) do
     t.datetime "updated_at", null: false
     t.index ["call_id"], name: "index_calls_required_documents_on_call_id"
     t.index ["required_document_id"], name: "index_calls_required_documents_on_required_document_id"
-  end
-
-  create_table "calls_thematic_axes", id: false, force: :cascade do |t|
-    t.bigint "call_id", null: false
-    t.bigint "thematic_axis_id", null: false
   end
 
   create_table "colciencias_calls", force: :cascade do |t|
@@ -674,12 +669,6 @@ ActiveRecord::Schema.define(version: 2020_05_27_191826) do
   end
 
   create_table "state_seedbeds", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "thematic_axes", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

@@ -1,7 +1,6 @@
 class Call < ApplicationRecord
   belongs_to :call_type
   belongs_to :call_user_role
-  has_and_belongs_to_many :thematic_axes
   has_many :call_productions
   has_many :productions, through: :call_productions
   has_many :call_item_calls
