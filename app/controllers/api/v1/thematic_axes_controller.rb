@@ -12,9 +12,9 @@ module Api
 
       def index
         if params.has_key?("call_id")
-          @thematic_axis = @call.thematic_axes
+          @thematic_axis = @call.thematic_axes.order(:id)
         else
-          @thematic_axis = ThematicAxis.all
+          @thematic_axis = ThematicAxis.all.order(:id)
         end
         render json: @thematic_axis, status: :ok
       end

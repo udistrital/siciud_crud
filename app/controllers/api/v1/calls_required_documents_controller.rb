@@ -12,7 +12,7 @@ module Api
       end
 
       def index
-        @call_required_document = @call.calls_required_documents
+        @call_required_document = @call.calls_required_documents.order(:required_document_id)
         render json: @call_required_document, status: :ok
       end
 

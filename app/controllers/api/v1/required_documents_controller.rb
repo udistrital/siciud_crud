@@ -10,7 +10,7 @@ module Api
       end
 
       def index
-        @required_document = RequiredDocument.all
+        @required_document = RequiredDocument.all.order(:id)
         render json: @required_document, status: :ok
       end
     end

@@ -9,7 +9,7 @@ module Api
       end
 
       def index
-        @item_call = ItemCall.all
+        @item_call = ItemCall.all.order(:id)
         render json: @item_call, status: :ok
       end
     end

@@ -9,7 +9,7 @@ module Api
       end
 
       def index
-        @production = Production.all
+        @production = Production.all.order(:id)
         render json: @production, status: :ok
       end
     end

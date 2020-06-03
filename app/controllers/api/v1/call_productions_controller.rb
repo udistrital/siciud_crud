@@ -12,7 +12,7 @@ module Api
       end
 
       def index
-        @call_production = @call.call_productions
+        @call_production = @call.call_productions.order(:production_id)
         render json: @call_production, status: :ok
       end
 

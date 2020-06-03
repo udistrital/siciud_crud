@@ -27,7 +27,6 @@ module Api
           @call.closingDate = CallsSearchService.calculate_closing_date(@call.call_type_id,
                                                                         @call.duration,
                                                                         @call.startDate)
-          @call.thematic_axis_ids = (params[:call][:thematic_axis_ids]).uniq
           if @call.save
             render json: @call, status: :created
           else
@@ -40,7 +39,6 @@ module Api
 
       def update
         if @call.update(call_params)
-          @call.thematic_axis_ids = (params[:call][:thematic_axis_ids]).uniq
           render json: @call, status: :ok
         else
           render json: @call.errors, status: unprocessable_entity
@@ -54,8 +52,7 @@ module Api
                                      :call_type_id,
                                      :call_user_role_id, :duration,
                                      :globalBudget, :maxBudgetPerProject,
-                                     :startDate, :directedTowards,
-                                     thematic_axis_ids: [])
+                                     :startDate, :directedTowards)
       end
 
       def set_call
