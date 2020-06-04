@@ -18,6 +18,7 @@ module Api
 
       def create
         @call_item_call = @call.call_item_calls.new(call_item_params)
+        budget_project = @call.maxBudgetPerProject
 
         if @call_item_call.valid?
           validate_percentage = CallItemCallsSearchService.validate_pct_less_than_maximum_pct(
@@ -30,6 +31,8 @@ module Api
                 @call.call_item_calls, @call_item_call.percentage)
 
             if total_percentage <= 100
+              @call_item_call.value = CallItemCallsSearchService.calculate_cash_value(
+                  budget_project, @call_item_call.percentage)
               if @call_item_call.save
                 render json: @call_item_call, status: :created
               else
@@ -49,6 +52,10 @@ module Api
       end
 
       def update
+        budget_project = @call.maxBudgetPerProject
+
+        @call_item_call.value = CallItemCallsSearchService.calculate_cash_value(
+            budget_project, @call_item_call.percentage)
         if @call_item_call.update(call_item_update_params)
           render json: @call_item_call
         else
@@ -63,11 +70,11 @@ module Api
       private
 
       def call_item_params
-        params.require(:call_item_call).permit(:item_call_id, :percentage, :value, :maximum_percentage)
+        params.require(:call_item_call).permit(:item_call_id, :percentage, :maximum_percentage)
       end
 
       def call_item_update_params
-        params.require(:call_item_call).permit(:percentage, :value, :maximum_percentage)
+        params.require(:call_item_call).permit(:percentage, :maximum_percentage)
       end
 
       def set_call
