@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_03_211152) do
+ActiveRecord::Schema.define(version: 2020_06_04_203713) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -263,6 +263,7 @@ ActiveRecord::Schema.define(version: 2020_06_03_211152) do
     t.text "directedTowards"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "name"
     t.index ["call_type_id"], name: "index_calls_on_call_type_id"
     t.index ["call_user_role_id"], name: "index_calls_on_call_user_role_id"
   end

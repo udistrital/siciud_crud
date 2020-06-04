@@ -24,9 +24,8 @@ module Api
         if @call.valid?
           @call.registerDate = DateTime.now.in_time_zone(-5).to_date
           @call.callNumber = CallsSearchService.count_calls(Call, @call.registerDate)
-          @call.closingDate = CallsSearchService.calculate_closing_date(@call.call_type_id,
-                                                                        @call.duration,
-                                                                        @call.startDate)
+          @call.closingDate = CallsSearchService.calculate_closing_date(
+              @call.call_type_id, @call.deadline_for_application, @call.startDate)
           if @call.save
             render json: @call, status: :created
           else
@@ -48,7 +47,7 @@ module Api
       private
 
       def call_params
-        params.require(:call).permit(:description,
+        params.require(:call).permit(:name, :description,
                                      :call_type_id,
                                      :call_user_role_id, :duration,
                                      :globalBudget, :maxBudgetPerProject,
