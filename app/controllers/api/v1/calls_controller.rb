@@ -25,7 +25,7 @@ module Api
           @call.registerDate = DateTime.now.in_time_zone(-5).to_date
           @call.callNumber = CallsSearchService.count_calls(Call, @call.registerDate)
           @call.closingDate = CallsSearchService.calculate_closing_date(
-              @call.call_type_id, @call.deadline_for_application, @call.startDate)
+              @call.duration, @call.duration_type_id, @call.startDate)
           if @call.save
             render json: @call, status: :created
           else
@@ -37,10 +37,26 @@ module Api
       end
 
       def update
+        calculate_duration = false
+        if params['call'].has_key?('duration')
+          @call.duration = params['call']['duration']
+          calculate_duration = true
+        end
+
+        if params['call'].has_key?('duration_type_id')
+          @call.duration_type_id = params['call']['duration_type_id']
+          calculate_duration = true
+        end
+
+        if calculate_duration
+          @call.closingDate = CallsSearchService.calculate_closing_date(
+              @call.duration, @call.duration_type_id, @call.startDate)
+        end
+
         if @call.update(call_params)
           render json: @call, status: :ok
         else
-          render json: @call.errors, status: unprocessable_entity
+          render json: @call.errors, status: :unprocessable_entity
         end
       end
 
@@ -50,6 +66,7 @@ module Api
         params.require(:call).permit(:name, :description,
                                      :call_type_id,
                                      :call_user_role_id, :duration,
+                                     :duration_type_id,
                                      :globalBudget, :maxBudgetPerProject,
                                      :startDate, :directedTowards)
       end

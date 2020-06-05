@@ -5,11 +5,13 @@ class CallsSearchService
     call_count += 1
   end
 
-  def self.calculate_closing_date(call_type, duration, startDate)
-    if call_type == 1
+  def self.calculate_closing_date(duration, duration_type, startDate)
+    if duration_type == 1
+      closingDate = startDate + duration.days
+    elsif duration_type == 2
       closingDate = startDate + duration.month
     else
-      closingDate = startDate + duration.days
+      closingDate = startDate + duration.month
     end
     return closingDate
   end
