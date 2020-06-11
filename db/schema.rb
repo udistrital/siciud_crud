@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_05_155218) do
+ActiveRecord::Schema.define(version: 2020_06_10_184059) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -250,14 +250,12 @@ ActiveRecord::Schema.define(version: 2020_06_05_155218) do
   end
 
   create_table "calls", force: :cascade do |t|
-    t.string "name"
     t.integer "callNumber"
     t.date "registerDate"
     t.text "description"
     t.bigint "call_type_id"
     t.bigint "call_user_role_id"
     t.integer "duration"
-    t.bigint "duration_type_id"
     t.float "globalBudget"
     t.float "maxBudgetPerProject"
     t.date "startDate"
@@ -265,9 +263,22 @@ ActiveRecord::Schema.define(version: 2020_06_05_155218) do
     t.text "directedTowards"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "name"
+    t.bigint "duration_type_id"
     t.index ["call_type_id"], name: "index_calls_on_call_type_id"
     t.index ["call_user_role_id"], name: "index_calls_on_call_user_role_id"
     t.index ["duration_type_id"], name: "index_calls_on_duration_type_id"
+  end
+
+  create_table "calls_product_types", force: :cascade do |t|
+    t.boolean "required"
+    t.integer "quantity"
+    t.bigint "call_id"
+    t.bigint "product_type_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["call_id"], name: "index_calls_product_types_on_call_id"
+    t.index ["product_type_id"], name: "index_calls_product_types_on_product_type_id"
   end
 
   create_table "calls_required_documents", force: :cascade do |t|
@@ -712,6 +723,8 @@ ActiveRecord::Schema.define(version: 2020_06_05_155218) do
   add_foreign_key "calls", "call_types"
   add_foreign_key "calls", "call_user_roles"
   add_foreign_key "calls", "duration_types"
+  add_foreign_key "calls_product_types", "calls"
+  add_foreign_key "calls_product_types", "product_types"
   add_foreign_key "calls_required_documents", "calls"
   add_foreign_key "calls_required_documents", "required_documents"
   add_foreign_key "users", "researchers"

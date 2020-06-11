@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get 'duration_types/index'
   get 'calls_required_documents/index'
   get 'calls_required_documents/create'
   get 'required_documents/index'
@@ -253,6 +254,7 @@ Rails.application.routes.draw do
       resources :productions, only: [:index]
       resources :item_calls, only: [:index]
       resources :required_documents, only: [:index]
+      resources :duration_types, only: [:index]
     end
   end
 end
