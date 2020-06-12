@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get 'required_types/index'
   get 'calls_product_types/index'
   get 'calls_product_types/create'
   get 'calls_product_types/update'
@@ -255,10 +256,11 @@ Rails.application.routes.draw do
       end
       resources :call_types, only: [:index]
       resources :call_user_roles, only: [:index]
+      resources :duration_types, only: [:index]
       resources :product_types, only: [:index]
+      resources :required_types, only: [:index]
       resources :item_calls, only: [:index]
       resources :required_documents, only: [:index]
-      resources :duration_types, only: [:index]
     end
   end
 end
