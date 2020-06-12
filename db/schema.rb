@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_10_184059) do
+ActiveRecord::Schema.define(version: 2020_06_11_185707) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -277,6 +277,7 @@ ActiveRecord::Schema.define(version: 2020_06_10_184059) do
     t.bigint "product_type_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "alternate_indicator"
     t.index ["call_id"], name: "index_calls_product_types_on_call_id"
     t.index ["product_type_id"], name: "index_calls_product_types_on_product_type_id"
   end
@@ -486,8 +487,11 @@ ActiveRecord::Schema.define(version: 2020_06_10_184059) do
 
   create_table "product_types", force: :cascade do |t|
     t.string "name"
+    t.text "indicator"
+    t.bigint "product_typology_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["product_typology_id"], name: "index_product_types_on_product_typology_id"
   end
 
   create_table "product_typologies", force: :cascade do |t|
@@ -727,5 +731,6 @@ ActiveRecord::Schema.define(version: 2020_06_10_184059) do
   add_foreign_key "calls_product_types", "product_types"
   add_foreign_key "calls_required_documents", "calls"
   add_foreign_key "calls_required_documents", "required_documents"
+  add_foreign_key "product_types", "product_typologies"
   add_foreign_key "users", "researchers"
 end
