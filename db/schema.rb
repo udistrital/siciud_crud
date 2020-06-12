@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_11_185707) do
+ActiveRecord::Schema.define(version: 2020_06_12_050737) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -224,17 +224,6 @@ ActiveRecord::Schema.define(version: 2020_06_11_185707) do
     t.datetime "updated_at", null: false
     t.index ["call_id"], name: "index_call_item_calls_on_call_id"
     t.index ["item_call_id"], name: "index_call_item_calls_on_item_call_id"
-  end
-
-  create_table "call_productions", force: :cascade do |t|
-    t.boolean "required"
-    t.integer "quantity"
-    t.bigint "call_id"
-    t.bigint "production_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["call_id"], name: "index_call_productions_on_call_id"
-    t.index ["production_id"], name: "index_call_productions_on_production_id"
   end
 
   create_table "call_types", force: :cascade do |t|
@@ -487,22 +476,15 @@ ActiveRecord::Schema.define(version: 2020_06_11_185707) do
 
   create_table "product_types", force: :cascade do |t|
     t.string "name"
-    t.text "indicator"
-    t.bigint "product_typology_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "indicator"
+    t.bigint "product_typology_id"
     t.index ["product_typology_id"], name: "index_product_types_on_product_typology_id"
   end
 
   create_table "product_typologies", force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "productions", force: :cascade do |t|
-    t.string "deliverables_name"
-    t.text "indicator"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -722,8 +704,6 @@ ActiveRecord::Schema.define(version: 2020_06_11_185707) do
   add_foreign_key "arp_assignments", "product_typologies"
   add_foreign_key "call_item_calls", "calls"
   add_foreign_key "call_item_calls", "item_calls"
-  add_foreign_key "call_productions", "calls"
-  add_foreign_key "call_productions", "productions"
   add_foreign_key "calls", "call_types"
   add_foreign_key "calls", "call_user_roles"
   add_foreign_key "calls", "duration_types"
