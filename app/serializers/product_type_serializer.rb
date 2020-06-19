@@ -1,9 +1,3 @@
 class ProductTypeSerializer < ActiveModel::Serializer
-  attributes :id, :name, :typology, :indicator
-
-  def typology
-    self.object.product_typology.name do |prod_typology|
-      prod_typology
-    end
-  end
+  attributes :id, :name, :product_typology_id, :indicator
 end
