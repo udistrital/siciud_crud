@@ -41,11 +41,11 @@ module Api
       private
 
       def call_product_params
-        params.require(:calls_product_type).permit(:product_type_id, :required_type_id, :quantity)
+        params.require(:calls_product_type).permit(:product_type_id, :required_type_id, :quantity, :alternate_indicator)
       end
 
       def call_product_update_params
-        params.require(:calls_product_type).permit(:required_type_id, :quantity)
+        params.require(:calls_product_type).permit(:required_type_id, :quantity, :alternate_indicator)
       end
 
       def set_call
