@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_23_181228) do
+ActiveRecord::Schema.define(version: 2020_06_23_212823) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -452,12 +452,6 @@ ActiveRecord::Schema.define(version: 2020_06_23_181228) do
     t.index ["colciencias_call_id"], name: "index_historical_colciencias_ranks_on_colciencias_call_id"
     t.index ["colciencias_category_id"], name: "index_historical_colciencias_ranks_on_colciencias_category_id"
     t.index ["research_group_id"], name: "index_historical_colciencias_ranks_on_research_group_id"
-  end
-
-  create_table "item_calls", force: :cascade do |t|
-    t.string "item"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "item_categories", force: :cascade do |t|
