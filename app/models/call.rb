@@ -5,7 +5,7 @@ class Call < ApplicationRecord
 
   has_many :calls_product_types
   has_many :product_types, through: :calls_product_types
-  has_many :call_item_calls
+  has_many :call_item_categories
   has_many :item_calls, through: :call_item_calls
   has_many :calls_required_documents
   has_many :required_documents, through: :calls_required_documents

@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'call_item_categories/index'
+  get 'call_item_categories/create'
   get 'required_types/index'
   get 'calls_product_types/index'
   get 'calls_product_types/create'
@@ -251,7 +253,7 @@ Rails.application.routes.draw do
 
       resources :calls, only: [:index, :show, :create, :update] do
         resources :calls_product_types, only: [:index, :create, :update, :destroy], path: 'production_items'
-        resources :call_item_calls, only: [:index, :create, :update, :destroy], path: 'call_items'
+        resources :call_item_categories, only: [:index, :create, :update, :destroy], path: 'call_items'
         resources :calls_required_documents, only: [:index, :create, :update, :destroy], path: 'required_documents'
       end
       resources :call_types, only: [:index]

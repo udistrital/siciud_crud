@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe CallItemCallsController, type: :controller do
+RSpec.describe CallItemCategoriesController, type: :controller do
 
   describe "GET #index" do
     it "returns http success" do
