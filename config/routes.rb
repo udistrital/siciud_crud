@@ -256,6 +256,7 @@ Rails.application.routes.draw do
         resources :call_item_categories, only: [:index, :create, :update, :destroy], path: 'call_items'
         resources :calls_required_documents, only: [:index, :create, :update, :destroy], path: 'required_documents'
       end
+      put "calls/:id/attach/", to: "calls#attach"
       resources :call_types, only: [:index]
       resources :call_user_roles, only: [:index]
       resources :duration_types, only: [:index]

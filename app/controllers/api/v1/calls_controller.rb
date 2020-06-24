@@ -1,7 +1,7 @@
 module Api
   module V1
     class CallsController < ApplicationController
-      before_action :set_call, only: [:show, :update]
+      before_action :set_call, only: [:show, :update, :attach]
 
       rescue_from ActiveRecord::RecordNotFound do |e|
         render json: {error: e.message}, status: :not_found
@@ -58,6 +58,38 @@ module Api
         else
           render json: @call.errors, status: :unprocessable_entity
         end
+      end
+
+      def attach
+        params.permit(:id, :termsOfReference, :apertureResolution, :addendum)
+
+        if params[:termsOfReference]
+          if params[:termsOfReference].content_type == "application/pdf"
+            @call.termsOfReference.attach(params[:termsOfReference])
+          else
+            return render json: {"error": "El archivo de Términos de referencia debe tener el formato pdf"},
+                          status: :unprocessable_entity
+          end
+        end
+
+        if params[:apertureResolution]
+          if params[:apertureResolution].content_type == "application/pdf"
+            @call.apertureResolution.attach(params[:apertureResolution])
+          else
+            return render json: {"error": "El archivo de Resolución de apertura debe tener el formato pdf"},
+                          status: :unprocessable_entity
+          end
+        end
+
+        if params[:addendum]
+          if params[:addendum].content_type == "application/pdf"
+            @call.addendum.attach(params[:addendum])
+          else
+            return render json: {"error": "El archivo de Adendo debe tener el formato pdf"},
+                          status: :unprocessable_entity
+          end
+        end
+        render json: @call
       end
 
       private

@@ -3,6 +3,10 @@ class Call < ApplicationRecord
   belongs_to :call_user_role
   belongs_to :duration_type
 
+  has_one_attached :termsOfReference
+  has_one_attached :apertureResolution
+  has_one_attached :addendum
+
   has_many :calls_product_types
   has_many :product_types, through: :calls_product_types
   has_many :call_item_categories
