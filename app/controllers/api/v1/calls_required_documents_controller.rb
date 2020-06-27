@@ -41,13 +41,11 @@ module Api
       private
 
       def call_required_document
-        params.require(:call_required_document).permit(:required_document_id,
-                                                       :required)
+        params.require(:calls_required_document).permit(:required_document_id)
       end
 
       def call_required_update_document
-        params.require(:call_required_document).permit(:required_document_id,
-                                                       :required)
+        params.require(:calls_required_document).permit(:required)
       end
 
       def set_call
