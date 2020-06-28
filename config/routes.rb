@@ -1,4 +1,26 @@
 Rails.application.routes.draw do
+  get 'call_item_categories/index'
+  get 'call_item_categories/create'
+  get 'required_types/index'
+  get 'calls_product_types/index'
+  get 'calls_product_types/create'
+  get 'calls_product_types/update'
+  get 'product_types/index'
+  get 'duration_types/index'
+  get 'calls_required_documents/index'
+  get 'calls_required_documents/create'
+  get 'required_documents/index'
+  get 'call_item_calls/index'
+  get 'call_item_calls/create'
+  get 'call_productions/index'
+  get 'call_productions/create'
+  get 'productions/index'
+  get 'thematic_axes/index'
+  get 'thematic_axes/create'
+  get 'call_user_roles/index'
+  get 'call_user_roles/show'
+  get 'call_types/index'
+  get 'call_types/create'
   namespace :api do
     namespace :v1 do
       get 'arp_assignment_reports/index'
@@ -228,6 +250,20 @@ Rails.application.routes.draw do
           resources :social_appropriation_plan
         end
       end
+
+      resources :calls, only: [:index, :show, :create, :update] do
+        resources :calls_product_types, only: [:index, :create, :update, :destroy], path: 'production_items'
+        resources :call_item_categories, only: [:index, :create, :update, :destroy], path: 'call_items'
+        resources :calls_required_documents, only: [:index, :create, :update, :destroy], path: 'required_documents'
+      end
+      put "calls/:id/attach/", to: "calls#attach"
+      resources :call_types, only: [:index]
+      resources :call_user_roles, only: [:index]
+      resources :duration_types, only: [:index]
+      resources :product_types, only: [:index]
+      resources :required_types, only: [:index]
+      resources :item_calls, only: [:index]
+      resources :required_documents, only: [:index]
     end
   end
 end

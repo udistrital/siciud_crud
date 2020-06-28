@@ -16,4 +16,5 @@
 # end
 ActiveSupport::Inflector.inflections do |inflect|
   inflect.irregular 'focus', 'focuses'
+  inflect.irregular 'axis', 'axes'
 end

@@ -28,3 +28,6 @@
 
 # IDEA project files
 .idea/
+
+# Swagger
+swagger-ui/
