@@ -1,0 +1,2 @@
+class CallUserRole < ApplicationRecord
+end

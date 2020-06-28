@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_14_153747) do
+ActiveRecord::Schema.define(version: 2020_06_23_212823) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -248,6 +248,74 @@ ActiveRecord::Schema.define(version: 2019_11_14_153747) do
     t.index ["arp_general_goal_id"], name: "index_arp_specific_goals_on_arp_general_goal_id"
   end
 
+  create_table "call_item_categories", force: :cascade do |t|
+    t.float "percentage"
+    t.float "value"
+    t.float "maximum_percentage"
+    t.bigint "call_id"
+    t.bigint "item_category_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["call_id"], name: "index_call_item_categories_on_call_id"
+    t.index ["item_category_id"], name: "index_call_item_categories_on_item_category_id"
+  end
+
+  create_table "call_types", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "call_user_roles", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "calls", force: :cascade do |t|
+    t.integer "callNumber"
+    t.date "registerDate"
+    t.text "description"
+    t.bigint "call_type_id"
+    t.bigint "call_user_role_id"
+    t.integer "duration"
+    t.float "globalBudget"
+    t.float "maxBudgetPerProject"
+    t.date "startDate"
+    t.date "closingDate"
+    t.text "directedTowards"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "name"
+    t.bigint "duration_type_id"
+    t.index ["call_type_id"], name: "index_calls_on_call_type_id"
+    t.index ["call_user_role_id"], name: "index_calls_on_call_user_role_id"
+    t.index ["duration_type_id"], name: "index_calls_on_duration_type_id"
+  end
+
+  create_table "calls_product_types", force: :cascade do |t|
+    t.integer "quantity"
+    t.bigint "call_id"
+    t.bigint "product_type_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.text "alternate_indicator"
+    t.bigint "required_type_id"
+    t.index ["call_id"], name: "index_calls_product_types_on_call_id"
+    t.index ["product_type_id"], name: "index_calls_product_types_on_product_type_id"
+    t.index ["required_type_id"], name: "index_calls_product_types_on_required_type_id"
+  end
+
+  create_table "calls_required_documents", force: :cascade do |t|
+    t.boolean "required"
+    t.bigint "call_id"
+    t.bigint "required_document_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["call_id"], name: "index_calls_required_documents_on_call_id"
+    t.index ["required_document_id"], name: "index_calls_required_documents_on_required_document_id"
+  end
+
   create_table "colciencias_calls", force: :cascade do |t|
     t.string "name"
     t.integer "year"
@@ -319,6 +387,12 @@ ActiveRecord::Schema.define(version: 2019_11_14_153747) do
   end
 
   create_table "document_types", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "duration_types", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -433,9 +507,24 @@ ActiveRecord::Schema.define(version: 2019_11_14_153747) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "indicator"
+    t.bigint "product_typology_id"
+    t.index ["product_typology_id"], name: "index_product_types_on_product_typology_id"
   end
 
   create_table "product_typologies", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "required_documents", force: :cascade do |t|
+    t.string "document_name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "required_types", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -648,5 +737,16 @@ ActiveRecord::Schema.define(version: 2019_11_14_153747) do
   add_foreign_key "arp_assignment_reports", "arp_assignments"
   add_foreign_key "arp_assignments", "agreement_research_projects"
   add_foreign_key "arp_assignments", "product_typologies"
+  add_foreign_key "call_item_categories", "calls"
+  add_foreign_key "call_item_categories", "item_categories"
+  add_foreign_key "calls", "call_types"
+  add_foreign_key "calls", "call_user_roles"
+  add_foreign_key "calls", "duration_types"
+  add_foreign_key "calls_product_types", "calls"
+  add_foreign_key "calls_product_types", "product_types"
+  add_foreign_key "calls_product_types", "required_types"
+  add_foreign_key "calls_required_documents", "calls"
+  add_foreign_key "calls_required_documents", "required_documents"
+  add_foreign_key "product_types", "product_typologies"
   add_foreign_key "users", "researchers"
 end
