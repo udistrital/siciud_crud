@@ -1,26 +1,4 @@
 Rails.application.routes.draw do
-  get 'call_item_categories/index'
-  get 'call_item_categories/create'
-  get 'required_types/index'
-  get 'calls_product_types/index'
-  get 'calls_product_types/create'
-  get 'calls_product_types/update'
-  get 'product_types/index'
-  get 'duration_types/index'
-  get 'calls_required_documents/index'
-  get 'calls_required_documents/create'
-  get 'required_documents/index'
-  get 'call_item_calls/index'
-  get 'call_item_calls/create'
-  get 'call_productions/index'
-  get 'call_productions/create'
-  get 'productions/index'
-  get 'thematic_axes/index'
-  get 'thematic_axes/create'
-  get 'call_user_roles/index'
-  get 'call_user_roles/show'
-  get 'call_types/index'
-  get 'call_types/create'
   namespace :api do
     namespace :v1 do
       get 'arp_assignment_reports/index'
@@ -32,27 +10,14 @@ Rails.application.routes.draw do
       get "country", to: "country#index"
       get "country/:name", to: "country#show"
       resources :apidocs, only: [:index]
-      #resources :country, only: [:index, :show]
-      #get 'agreement/index'
-      #get 'agreement/show'
-      #get 'agreement/create'
-      #get 'agreement/update'
-      #get 'agreement_type/index'
-      #get 'agreement_type/show'
-      #get 'agreement_type/create'
-      #get 'agreement_status/index'
-      # get 'agreement_status/show'
 
       #Endpoint para listar los estados de los grupos de investigacion
       resources :state_group, only: [:index, :show]
-      #get "state_group/", to: "state_group#index"
       resources :state_seedbed, only: [:index, :show]
 
-      #get "state_group/:id", to: "state_group#show"
       #Enpoint para listar las lineas de investigacion
       resources :research_focus, only: [:index, :show]
-      #get "research_focus/", to: "research_focus#index"
-      #get "research_focus/:id", to: "research_focus#show"
+
       #Enpoint para actualizar los documentos de los grupos de investigacion
       put "research_group/:id/attach/", to: "research_group#attach"
       #Enpoint para actualizar los documentos de los grupos de investigacion
@@ -61,17 +26,13 @@ Rails.application.routes.draw do
       put "agreement/:id/attach/", to: "agreement#attach"
       #Enpoint para listar los snies
       resources :snies, only: [:index, :show]
-      #get "snies/", to: "snies#index"
-      #get "snies/:id", to: "snies#show"
+
       #Enpoint para listar las facultades
       resources :faculty, only: [:index, :show]
-      #get "faculty/", to: "faculty#index"
       #Enpoint para listar los proyectos curriculares las facultades
-      #get "faculty/:id", to: "faculty#show"
       # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
       get "/health", to: "health#health"
-      # end
-      #end
+
       resources :state_researcher, only: [:index, :show]
       resources :role, only: [:index, :show]
       resources :researcher, only: [:index, :show, :update, :create]
@@ -87,9 +48,6 @@ Rails.application.routes.draw do
       resources :agreement_type, only: [:index, :show, :create]
       resources :agreement, only: [:index, :show, :create, :update] do
         resources :contribution, only: [:index, :show, :create, :update]
-        # do
-        #   resources :contribution_funding_entity_item, only: [:index, :show, :create, :update]
-        # end
         resources :agreement_research_project, only: [:index, :show, :create, :update]
         get "arp_item/", to: "arp_item#index"
         get "arp_item/:id", to: "arp_item#show"
@@ -109,7 +67,6 @@ Rails.application.routes.draw do
         resources :arp_general_goal, only: [:index, :show, :create, :update]
         resources :arp_activity, only: [:index, :show, :create, :update]
         resources :arp_assignments, only: [:index, :show, :create, :update]
-
       end
       resources :arp_general_goal, only: [] do
         resources :arp_specific_goal, only: [:index, :show, :create, :update]
@@ -132,18 +89,6 @@ Rails.application.routes.draw do
       end
       resources :users, only: [:index, :show, :create, :update]
 
-
-      #get 'curricular_project/index'
-      #get 'curricular_project/show'
-      #get 'research_seedbed/index'
-      #get 'research_seedbed/show'
-      #get 'research_seedbed/create'
-      #get 'research_seedbed/update'
-
-      # get 'research_group/index'
-      # get 'research_group/show/:id'
-      # post 'research_group/create'
-      # get 'research_group/update'
       # Enpoint CRUD de los grupos des investigacion
       resources :research_group, only: [:index, :show, :create, :update] do
         #    member do

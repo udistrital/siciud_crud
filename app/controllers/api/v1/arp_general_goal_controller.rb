@@ -50,7 +50,9 @@ class Api::V1::ArpGeneralGoalController < ApplicationController
   end
 
   def set_arp_general_goal
-    @arp_general_goal = @agreement_research_project.arp_general_goal.find_by(id: params[:id])
+    # @arp_general_goal = @agreement_research_project.arp_general_goal.find_by(id: params[:id])
+    @arp_general_goal = ArpGeneralGoal.find_by(agreement_research_project_id: params[:agreement_research_project_id],
+                                               id: params[:id])
   end
 
   def arp_general_goal_params
