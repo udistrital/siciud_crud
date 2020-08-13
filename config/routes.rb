@@ -196,6 +196,7 @@ Rails.application.routes.draw do
         end
       end
 
+      # Main endpoints for Calls
       resources :calls, only: [:index, :show, :create, :update] do
         resources :calls_product_types, only: [:index, :create, :update, :destroy], path: 'production_items'
         resources :call_item_categories, only: [:index, :create, :update, :destroy], path: 'call_items'
@@ -209,6 +210,12 @@ Rails.application.routes.draw do
       resources :required_types, only: [:index]
       resources :item_calls, only: [:index]
       resources :required_documents, only: [:index]
+
+
+      # Endpoints OECD
+      resources :oecd_knowledge_areas, only: [:index, :create, :update]
+      resources :oecd_knowledge_subareas, only: [:index, :create, :update]
+      resources :oecd_disciplines, only: [:index, :create, :update]
     end
   end
 end

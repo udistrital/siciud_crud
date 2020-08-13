@@ -4,7 +4,7 @@ class ResearchGroupSerializer < ActiveModel::Serializer
              :faculties, :cidcActNumber, :facultyActNumber, :facultyRegistrationDate,
              :email, :gruplac, :webpage, :mission, :vision, :colcienciasCode, :curricular_projects,
              :state_group, :snies, :research_focuses, :facultyActDocument, :cidcActDocument, :director,
-             :historicalColciencias
+             :historicalColciencias,  :oecd_disciplines
 
   def faculties
     self.object.faculties.map do |faculty|
