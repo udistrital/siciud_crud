@@ -216,6 +216,11 @@ Rails.application.routes.draw do
       resources :oecd_knowledge_areas, only: [:index, :create, :update]
       resources :oecd_knowledge_subareas, only: [:index, :create, :update]
       resources :oecd_disciplines, only: [:index, :create, :update]
+
+      # Endpoints CINE
+      resources :cine_broad_areas, only: [:index, :create, :update]
+      resources :cine_specific_areas, only: [:index, :create, :update]
+      resources :cine_detailed_areas, only: [:index, :create, :update]
     end
   end
 end

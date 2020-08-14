@@ -39,6 +39,9 @@ module Api
         if params[:research_group].has_key?(:oecd_discipline_ids)
           @research_group.oecd_discipline_ids = (params[:research_group][:oecd_discipline_ids]).map(&:to_i).uniq
         end
+        if params[:research_group].has_key?(:cine_detailed_area_ids)
+          @research_group.cine_detailed_area_ids = (params[:research_group][:cine_detailed_area_ids]).map(&:to_i).uniq
+        end
 
         setFaculties
         #end
@@ -59,6 +62,10 @@ module Api
           if params[:research_group].has_key?(:oecd_discipline_ids)
             @research_group.oecd_discipline_ids = (params[:research_group][:oecd_discipline_ids]).map(&:to_i).uniq
           end
+          if params[:research_group].has_key?(:cine_detailed_area_ids)
+            @research_group.cine_detailed_area_ids = (params[:research_group][:cine_detailed_area_ids]).map(&:to_i).uniq
+          end
+
           setFaculties
           if @research_group.save
             render json: @research_group

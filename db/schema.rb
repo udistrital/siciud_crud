@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_13_035449) do
+ActiveRecord::Schema.define(version: 2020_08_14_055349) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -280,6 +280,36 @@ ActiveRecord::Schema.define(version: 2020_08_13_035449) do
     t.datetime "updated_at", null: false
     t.index ["call_id"], name: "index_calls_required_documents_on_call_id"
     t.index ["required_document_id"], name: "index_calls_required_documents_on_required_document_id"
+  end
+
+  create_table "cine_broad_areas", force: :cascade do |t|
+    t.string "name"
+    t.string "code"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "cine_detailed_areas", force: :cascade do |t|
+    t.string "code"
+    t.string "name"
+    t.bigint "cine_specific_area_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cine_specific_area_id"], name: "index_cine_detailed_areas_on_cine_specific_area_id"
+  end
+
+  create_table "cine_detailed_areas_research_groups", id: false, force: :cascade do |t|
+    t.bigint "research_group_id", null: false
+    t.bigint "cine_detailed_area_id", null: false
+  end
+
+  create_table "cine_specific_areas", force: :cascade do |t|
+    t.string "name"
+    t.string "code"
+    t.bigint "cine_broad_area_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cine_broad_area_id"], name: "index_cine_specific_areas_on_cine_broad_area_id"
   end
 
   create_table "colciencias_calls", force: :cascade do |t|
@@ -743,6 +773,8 @@ ActiveRecord::Schema.define(version: 2020_08_13_035449) do
   add_foreign_key "calls_product_types", "required_types"
   add_foreign_key "calls_required_documents", "calls"
   add_foreign_key "calls_required_documents", "required_documents"
+  add_foreign_key "cine_detailed_areas", "cine_specific_areas"
+  add_foreign_key "cine_specific_areas", "cine_broad_areas"
   add_foreign_key "oecd_disciplines", "oecd_knowledge_subareas"
   add_foreign_key "oecd_knowledge_subareas", "oecd_knowledge_areas"
   add_foreign_key "product_types", "product_typologies"
