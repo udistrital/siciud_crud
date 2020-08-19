@@ -89,7 +89,7 @@ Rails.application.routes.draw do
       end
       resources :users, only: [:index, :show, :create, :update]
 
-      # Enpoint CRUD de los grupos des investigacion
+      # Enpoint CRUD de los grupos de investigacion
       resources :research_group, only: [:index, :show, :create, :update] do
         #    member do
         resources :group_member, only: [:index, :show, :create]
@@ -139,10 +139,12 @@ Rails.application.routes.draw do
           # DELETE /research_group/:id/plan_periods/:id/social_appropriation_plans/:id      social_appropriation_plans#destroy    [Endpoint para eliminar un plan de apropiacion social de un plan de accion]
 
           resources :social_appropriation_plan
+
         end
-        #    end
-        # end
+
+        resources :historical_colciencias_ranks, only: [:index, :show, :create, :update]
       end
+
 
       resources :research_seedbed, only: [:index, :show, :create, :update] do
         #member do
