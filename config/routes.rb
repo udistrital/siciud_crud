@@ -145,6 +145,9 @@ Rails.application.routes.draw do
         resources :historical_colciencias_ranks, only: [:index, :show, :create, :update]
       end
 
+      resources :colciencias_calls, only: [:index, :create, :update]
+      resources :colciencias_categories, only: [:index, :create, :update]
+
 
       resources :research_seedbed, only: [:index, :show, :create, :update] do
         #member do
