@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_20_175438) do
+ActiveRecord::Schema.define(version: 2020_08_20_204714) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -661,6 +661,7 @@ ActiveRecord::Schema.define(version: 2020_08_20_175438) do
     t.integer "researcher_type_id"
     t.string "orcid_id"
     t.string "academic_email"
+    t.string "scientific_signature"
     t.index ["curricular_project_id"], name: "index_researchers_on_curricular_project_id"
     t.index ["document_type_id"], name: "index_researchers_on_document_type_id"
     t.index ["faculty_id"], name: "index_researchers_on_faculty_id"
