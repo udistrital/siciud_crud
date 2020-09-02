@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_02_071501) do
+ActiveRecord::Schema.define(version: 2020_09_02_080439) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -400,6 +400,14 @@ ActiveRecord::Schema.define(version: 2020_09_02_071501) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "faculty_ids_research_groups", force: :cascade do |t|
+    t.bigint "research_group_id"
+    t.integer "facultyId"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["research_group_id"], name: "index_faculty_ids_research_groups_on_research_group_id"
+  end
+
   create_table "fe_contacts", force: :cascade do |t|
     t.string "name"
     t.string "phoneNumber"
@@ -756,6 +764,7 @@ ActiveRecord::Schema.define(version: 2020_09_02_071501) do
   add_foreign_key "calls_required_documents", "required_documents"
   add_foreign_key "cine_detailed_areas", "cine_specific_areas"
   add_foreign_key "cine_specific_areas", "cine_broad_areas"
+  add_foreign_key "faculty_ids_research_groups", "research_groups"
   add_foreign_key "oecd_disciplines", "oecd_knowledge_subareas"
   add_foreign_key "oecd_knowledge_subareas", "oecd_knowledge_areas"
   add_foreign_key "product_types", "product_typologies"

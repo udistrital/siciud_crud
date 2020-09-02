@@ -1,7 +1,7 @@
 class ResearchGroupSerializer < ActiveModel::Serializer
   include Rails.application.routes.url_helpers
   attributes :id, :name, :acronym, :description, :cidcRegistrationDate,
-             :faculty_ids, :cidcActNumber, :facultyActNumber, :facultyRegistrationDate,
+             :facultyIds, :cidcActNumber, :facultyActNumber, :facultyRegistrationDate,
              :email, :gruplac, :webpage, :mission, :vision, :colcienciasCode, :curricular_project_ids,
              :state_group_id, :snies_id, :research_focus_ids, :facultyActDocument, :cidcActDocument,
              :director_name, :historicalColciencias, :oecd_discipline_ids, :cine_detailed_area_ids
@@ -10,6 +10,15 @@ class ResearchGroupSerializer < ActiveModel::Serializer
     members = self.object.group_members.where(role_id: 1).last
     if members
       members.researcher.name.concat(" ", members.researcher.lastName)
+    end
+  end
+
+  def facultyIds
+    faculty_id = self.object.faculty_ids_research_groups
+    if faculty_id
+      faculty_id.map do |faculty|
+        faculty.facultyId
+      end
     end
   end
 
