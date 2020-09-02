@@ -1,3 +1,4 @@
+
 class Api::V1::ArpMemberController < ApplicationController
   before_action :set_agreement_research_project
   before_action :set_arp_member, only: [:show, :update]

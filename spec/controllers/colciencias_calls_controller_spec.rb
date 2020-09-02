@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe FacultyController, type: :controller do
+RSpec.describe ColcienciasCallsController, type: :controller do
 
   describe "GET #index" do
     it "returns http success" do
@@ -9,9 +9,16 @@ RSpec.describe FacultyController, type: :controller do
     end
   end
 
-  describe "GET #show" do
+  describe "GET #create" do
     it "returns http success" do
-      get :show
+      get :create
+      expect(response).to have_http_status(:success)
+    end
+  end
+
+  describe "GET #update" do
+    it "returns http success" do
+      get :update
       expect(response).to have_http_status(:success)
     end
   end

@@ -28,7 +28,7 @@ module Api
       end
 
       def update
-        if @item_category.update(funding_entity)
+        if @item_category.update(item_category_params)
           render json: @item_category
         else
           render json: @item_category.errors, status: :unprocessable_entity

@@ -8,7 +8,7 @@ module Api
       end
 
       def index
-        render json: @faculty.curricular_projectspos
+        render json: @faculty.curricular_projects
       end
 
       def show

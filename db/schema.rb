@@ -10,15 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_23_212823) do
+ActiveRecord::Schema.define(version: 2020_09_02_080439) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "Agreements_GroupMembers", id: false, force: :cascade do |t|
-    t.integer "Agreement_id", null: false
-    t.integer "GroupMember_id", null: false
-  end
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -93,35 +88,6 @@ ActiveRecord::Schema.define(version: 2020_06_23_212823) do
   create_table "agreements_research_groups", id: false, force: :cascade do |t|
     t.integer "agreement_id", null: false
     t.integer "research_group_id", null: false
-  end
-
-  create_table "ap_activities", force: :cascade do |t|
-    t.text "activity"
-    t.integer "ap_specific_goal_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "weight"
-    t.integer "completedPercentage"
-    t.index ["ap_specific_goal_id"], name: "index_ap_activities_on_ap_specific_goal_id"
-  end
-
-  create_table "ap_general_goals", force: :cascade do |t|
-    t.text "goal"
-    t.integer "agreement_research_project_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "completedPercentage"
-    t.index ["agreement_research_project_id"], name: "index_ap_general_goals_on_agreement_research_project_id"
-  end
-
-  create_table "ap_specific_goals", force: :cascade do |t|
-    t.text "goal"
-    t.integer "ap_general_goal_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "weight"
-    t.integer "completedPercentage"
-    t.index ["ap_general_goal_id"], name: "index_ap_specific_goals_on_ap_general_goal_id"
   end
 
   create_table "arp_act_s_goals", force: :cascade do |t|
@@ -316,6 +282,36 @@ ActiveRecord::Schema.define(version: 2020_06_23_212823) do
     t.index ["required_document_id"], name: "index_calls_required_documents_on_required_document_id"
   end
 
+  create_table "cine_broad_areas", force: :cascade do |t|
+    t.string "name"
+    t.string "code"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "cine_detailed_areas", force: :cascade do |t|
+    t.string "code"
+    t.string "name"
+    t.bigint "cine_specific_area_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cine_specific_area_id"], name: "index_cine_detailed_areas_on_cine_specific_area_id"
+  end
+
+  create_table "cine_detailed_areas_research_groups", id: false, force: :cascade do |t|
+    t.bigint "research_group_id", null: false
+    t.bigint "cine_detailed_area_id", null: false
+  end
+
+  create_table "cine_specific_areas", force: :cascade do |t|
+    t.string "name"
+    t.string "code"
+    t.bigint "cine_broad_area_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cine_broad_area_id"], name: "index_cine_specific_areas_on_cine_broad_area_id"
+  end
+
   create_table "colciencias_calls", force: :cascade do |t|
     t.string "name"
     t.integer "year"
@@ -404,20 +400,12 @@ ActiveRecord::Schema.define(version: 2020_06_23_212823) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "faculties", force: :cascade do |t|
-    t.string "name"
+  create_table "faculty_ids_research_groups", force: :cascade do |t|
+    t.bigint "research_group_id"
+    t.integer "facultyId"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-  end
-
-  create_table "faculties_research_groups", id: false, force: :cascade do |t|
-    t.integer "research_group_id", null: false
-    t.integer "faculty_id", null: false
-  end
-
-  create_table "faculties_research_seedbeds", id: false, force: :cascade do |t|
-    t.integer "research_seedbed_id", null: false
-    t.integer "faculty_id", null: false
+    t.index ["research_group_id"], name: "index_faculty_ids_research_groups_on_research_group_id"
   end
 
   create_table "fe_contacts", force: :cascade do |t|
@@ -483,6 +471,8 @@ ActiveRecord::Schema.define(version: 2020_06_23_212823) do
     t.integer "research_group_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "knowledge_area"
+    t.string "knowledge_subarea"
     t.index ["colciencias_call_id"], name: "index_historical_colciencias_ranks_on_colciencias_call_id"
     t.index ["colciencias_category_id"], name: "index_historical_colciencias_ranks_on_colciencias_category_id"
     t.index ["research_group_id"], name: "index_historical_colciencias_ranks_on_research_group_id"
@@ -492,6 +482,36 @@ ActiveRecord::Schema.define(version: 2020_06_23_212823) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "oecd_disciplines", force: :cascade do |t|
+    t.string "name"
+    t.string "code"
+    t.bigint "oecd_knowledge_subarea_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["oecd_knowledge_subarea_id"], name: "index_oecd_disciplines_on_oecd_knowledge_subarea_id"
+  end
+
+  create_table "oecd_disciplines_research_groups", id: false, force: :cascade do |t|
+    t.bigint "research_group_id", null: false
+    t.bigint "oecd_discipline_id", null: false
+  end
+
+  create_table "oecd_knowledge_areas", force: :cascade do |t|
+    t.string "name"
+    t.string "code"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "oecd_knowledge_subareas", force: :cascade do |t|
+    t.string "name"
+    t.string "code"
+    t.bigint "oecd_knowledge_area_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["oecd_knowledge_area_id"], name: "index_oecd_knowledge_subareas_on_oecd_knowledge_area_id"
   end
 
   create_table "plan_periods", force: :cascade do |t|
@@ -532,10 +552,8 @@ ActiveRecord::Schema.define(version: 2020_06_23_212823) do
 
   create_table "research_focuses", force: :cascade do |t|
     t.string "name"
-    t.integer "faculty_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["faculty_id"], name: "index_research_focuses_on_faculty_id"
   end
 
   create_table "research_focuses_groups", id: false, force: :cascade do |t|
@@ -625,17 +643,14 @@ ActiveRecord::Schema.define(version: 2020_06_23_212823) do
     t.string "lastName"
     t.integer "document_type_id"
     t.string "birthPlace"
-    t.integer "faculty_id"
-    t.integer "curricular_project_id"
     t.integer "snies_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "researcher_type_id"
     t.string "orcid_id"
     t.string "academic_email"
-    t.index ["curricular_project_id"], name: "index_researchers_on_curricular_project_id"
+    t.string "scientific_signature"
     t.index ["document_type_id"], name: "index_researchers_on_document_type_id"
-    t.index ["faculty_id"], name: "index_researchers_on_faculty_id"
     t.index ["researcher_type_id"], name: "index_researchers_on_researcher_type_id"
     t.index ["snies_id"], name: "index_researchers_on_snies_id"
   end
@@ -747,6 +762,11 @@ ActiveRecord::Schema.define(version: 2020_06_23_212823) do
   add_foreign_key "calls_product_types", "required_types"
   add_foreign_key "calls_required_documents", "calls"
   add_foreign_key "calls_required_documents", "required_documents"
+  add_foreign_key "cine_detailed_areas", "cine_specific_areas"
+  add_foreign_key "cine_specific_areas", "cine_broad_areas"
+  add_foreign_key "faculty_ids_research_groups", "research_groups"
+  add_foreign_key "oecd_disciplines", "oecd_knowledge_subareas"
+  add_foreign_key "oecd_knowledge_subareas", "oecd_knowledge_areas"
   add_foreign_key "product_types", "product_typologies"
   add_foreign_key "users", "researchers"
 end
