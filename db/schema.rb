@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_20_204714) do
+ActiveRecord::Schema.define(version: 2020_09_02_071501) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -400,22 +400,6 @@ ActiveRecord::Schema.define(version: 2020_08_20_204714) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "faculties", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "faculties_research_groups", id: false, force: :cascade do |t|
-    t.integer "research_group_id", null: false
-    t.integer "faculty_id", null: false
-  end
-
-  create_table "faculties_research_seedbeds", id: false, force: :cascade do |t|
-    t.integer "research_seedbed_id", null: false
-    t.integer "faculty_id", null: false
-  end
-
   create_table "fe_contacts", force: :cascade do |t|
     t.string "name"
     t.string "phoneNumber"
@@ -560,10 +544,8 @@ ActiveRecord::Schema.define(version: 2020_08_20_204714) do
 
   create_table "research_focuses", force: :cascade do |t|
     t.string "name"
-    t.integer "faculty_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["faculty_id"], name: "index_research_focuses_on_faculty_id"
   end
 
   create_table "research_focuses_groups", id: false, force: :cascade do |t|
@@ -653,8 +635,6 @@ ActiveRecord::Schema.define(version: 2020_08_20_204714) do
     t.string "lastName"
     t.integer "document_type_id"
     t.string "birthPlace"
-    t.integer "faculty_id"
-    t.integer "curricular_project_id"
     t.integer "snies_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -662,9 +642,7 @@ ActiveRecord::Schema.define(version: 2020_08_20_204714) do
     t.string "orcid_id"
     t.string "academic_email"
     t.string "scientific_signature"
-    t.index ["curricular_project_id"], name: "index_researchers_on_curricular_project_id"
     t.index ["document_type_id"], name: "index_researchers_on_document_type_id"
-    t.index ["faculty_id"], name: "index_researchers_on_faculty_id"
     t.index ["researcher_type_id"], name: "index_researchers_on_researcher_type_id"
     t.index ["snies_id"], name: "index_researchers_on_snies_id"
   end
