@@ -31,3 +31,6 @@
 
 # Swagger
 swagger-ui/
+
+# Backups
+migrate_backup/
