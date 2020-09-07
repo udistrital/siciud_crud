@@ -1,7 +1,7 @@
 class Researcher < ApplicationRecord
   #Relaciones con los diferentes modelos
   belongs_to :document_type
-  belongs_to :faculty
+  # belongs_to :faculty
   belongs_to :curricular_project
   belongs_to :snies
   belongs_to :researcher_type

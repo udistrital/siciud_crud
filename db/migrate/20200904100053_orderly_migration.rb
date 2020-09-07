@@ -1,4 +1,4 @@
-class MigrateFinal < ActiveRecord::Migration[5.2]
+class OrderlyMigration < ActiveRecord::Migration[5.2]
   def change
       create_table "active_storage_attachments", force: :cascade do |t|
         t.string "name", null: false
