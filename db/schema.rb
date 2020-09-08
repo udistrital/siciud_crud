@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_02_080439) do
+ActiveRecord::Schema.define(version: 2020_09_07_180658) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -398,24 +398,6 @@ ActiveRecord::Schema.define(version: 2020_09_02_080439) do
     t.index ["funding_entity_id"], name: "index_contributions_on_funding_entity_id"
   end
 
-  create_table "curricular_projects", force: :cascade do |t|
-    t.string "name"
-    t.integer "faculty_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["faculty_id"], name: "index_curricular_projects_on_faculty_id"
-  end
-
-  create_table "curricular_projects_research_groups", id: false, force: :cascade do |t|
-    t.integer "research_group_id", null: false
-    t.integer "curricular_project_id", null: false
-  end
-
-  create_table "curricular_projects_research_seedbeds", id: false, force: :cascade do |t|
-    t.integer "research_seedbed_id", null: false
-    t.integer "curricular_project_id", null: false
-  end
-
   create_table "document_types", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -673,20 +655,11 @@ ActiveRecord::Schema.define(version: 2020_09_02_080439) do
   create_table "researchers", force: :cascade do |t|
     t.integer "codeNumber"
     t.integer "identificationNumber"
-    t.string "name"
-    t.string "lastName"
-    t.integer "document_type_id"
-    t.string "birthPlace"
-    t.integer "snies_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "researcher_type_id"
     t.string "orcid_id"
-    t.string "academic_email"
     t.string "scientific_signature"
-    t.index ["document_type_id"], name: "index_researchers_on_document_type_id"
-    t.index ["researcher_type_id"], name: "index_researchers_on_researcher_type_id"
-    t.index ["snies_id"], name: "index_researchers_on_snies_id"
+    t.integer "oas_researcherId"
   end
 
   create_table "result_transfer_plans", force: :cascade do |t|

@@ -1,6 +1,6 @@
 class ResearchGroupSimpleSerializer < ActiveModel::Serializer
   attributes :id, :name, :acronym, :state_group, :cidcRegistrationDate, :director_name,
-             :facultyIds, :facultyRegistrationDate, :curricular_project_ids,
+             :facultyIds, :facultyRegistrationDate,
              :research_focuses, :oecd_disciplines, :cine_detailed_areas
 
   def cine_detailed_areas
@@ -15,7 +15,7 @@ class ResearchGroupSimpleSerializer < ActiveModel::Serializer
   def director_name
     members = self.object.group_members.where(role_id: 1).last
     if members
-      members.researcher.name.concat(" ", members.researcher.lastName)
+      members.researcher
     end
   end
 
