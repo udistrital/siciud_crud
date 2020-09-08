@@ -9,8 +9,9 @@ class ResearchGroup < ApplicationRecord
   has_and_belongs_to_many :cine_detailed_areas
   belongs_to :state_group
   belongs_to :snies
-  #  belongs_to :research_focus
+
   has_many :faculty_ids_research_groups
+  has_many :curricular_prj_ids_research_groups
   has_many :group_members
   has_many :historical_colciencias_ranks
   has_many :plan_periods, as: :planable

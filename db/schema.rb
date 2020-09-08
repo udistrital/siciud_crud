@@ -10,15 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_07_180658) do
+ActiveRecord::Schema.define(version: 2020_09_08_182053) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "Agreements_GroupMembers", id: false, force: :cascade do |t|
-    t.integer "Agreement_id", null: false
-    t.integer "GroupMember_id", null: false
-  end
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -93,35 +88,6 @@ ActiveRecord::Schema.define(version: 2020_09_07_180658) do
   create_table "agreements_research_groups", id: false, force: :cascade do |t|
     t.integer "agreement_id", null: false
     t.integer "research_group_id", null: false
-  end
-
-  create_table "ap_activities", force: :cascade do |t|
-    t.text "activity"
-    t.integer "ap_specific_goal_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "weight"
-    t.integer "completedPercentage"
-    t.index ["ap_specific_goal_id"], name: "index_ap_activities_on_ap_specific_goal_id"
-  end
-
-  create_table "ap_general_goals", force: :cascade do |t|
-    t.text "goal"
-    t.integer "agreement_research_project_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "completedPercentage"
-    t.index ["agreement_research_project_id"], name: "index_ap_general_goals_on_agreement_research_project_id"
-  end
-
-  create_table "ap_specific_goals", force: :cascade do |t|
-    t.text "goal"
-    t.integer "ap_general_goal_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "weight"
-    t.integer "completedPercentage"
-    t.index ["ap_general_goal_id"], name: "index_ap_specific_goals_on_ap_general_goal_id"
   end
 
   create_table "arp_act_s_goals", force: :cascade do |t|
@@ -396,6 +362,14 @@ ActiveRecord::Schema.define(version: 2020_09_07_180658) do
     t.datetime "updated_at", null: false
     t.index ["agreement_id"], name: "index_contributions_on_agreement_id"
     t.index ["funding_entity_id"], name: "index_contributions_on_funding_entity_id"
+  end
+
+  create_table "curricular_prj_ids_research_groups", force: :cascade do |t|
+    t.bigint "research_group_id"
+    t.integer "curricular_projectId"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["research_group_id"], name: "index_curricular_prj_ids_research_groups_on_research_group_id"
   end
 
   create_table "document_types", force: :cascade do |t|
@@ -771,6 +745,7 @@ ActiveRecord::Schema.define(version: 2020_09_07_180658) do
   add_foreign_key "calls_required_documents", "required_documents"
   add_foreign_key "cine_detailed_areas", "cine_specific_areas"
   add_foreign_key "cine_specific_areas", "cine_broad_areas"
+  add_foreign_key "curricular_prj_ids_research_groups", "research_groups"
   add_foreign_key "faculty_ids_research_groups", "research_groups"
   add_foreign_key "oecd_disciplines", "oecd_knowledge_subareas"
   add_foreign_key "oecd_knowledge_subareas", "oecd_knowledge_areas"

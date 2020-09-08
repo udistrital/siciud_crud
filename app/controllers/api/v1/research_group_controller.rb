@@ -88,6 +88,9 @@ module Api
         if params[:research_group].has_key?(:facultyIds)
           setFaculties((params[:research_group][:facultyIds]).uniq)
         end
+        if params[:research_group].has_key?(:curricular_projectIds)
+          setCurricularPrj((params[:research_group][:curricular_projectIds]).uniq)
+        end
         if params[:research_group].has_key?(:oecd_discipline_ids)
           research_gr.oecd_discipline_ids = (params[:research_group][:oecd_discipline_ids]).map(&:to_i).uniq
         end
@@ -106,6 +109,16 @@ module Api
         end
       end
 
+      def setCurricularPrj(curricularprjs)
+        @research_group.curricular_prj_ids_research_groups.destroy_all
+        curricularprjs.map do |curr|
+          new_curr = @research_group.curricular_prj_ids_research_groups.new(curricular_projectId: curr)
+          if new_curr.valid?
+            new_curr.save
+          end
+        end
+      end
+
       # Use callbacks to share common setup or constraints between actions.
       def set_research_group
         @research_group = ResearchGroup.find(params[:id])
@@ -119,7 +132,6 @@ module Api
                                                :email, :colcienciasCode, :gruplac, :webpage,
                                                :mission, :vision, :facultyActDocument,
                                                :cidcActDocument, research_focus_ids: [],
-                                               historical_colciencias_ranks: [],
                                                oecd_discipline_ids: [])
       end
     end
