@@ -23,6 +23,8 @@ class OrderlyMigration < ActiveRecord::Migration[5.2]
 
       create_table "agreement_research_projects", force: :cascade do |t|
         t.string "code"
+        t.string "name"
+        t.string "year"
         t.date "startDate"
         t.date "approbationDate"
         t.date "estimatedFinishDate"
@@ -30,8 +32,6 @@ class OrderlyMigration < ActiveRecord::Migration[5.2]
         t.integer "agreement_id"
         t.datetime "created_at", null: false
         t.datetime "updated_at", null: false
-        t.string "name"
-        t.string "year"
         t.index ["agreement_id"], name: "index_agreement_research_projects_on_agreement_id"
       end
 
@@ -49,6 +49,10 @@ class OrderlyMigration < ActiveRecord::Migration[5.2]
 
       create_table "agreements", force: :cascade do |t|
         t.string "name"
+        t.text "description"
+        t.integer "duration"
+        t.integer "availability"
+        t.integer "bizagiNumber"
         t.date "registerDate"
         t.date "startDate"
         t.date "finalDate"
@@ -57,10 +61,6 @@ class OrderlyMigration < ActiveRecord::Migration[5.2]
         t.integer "agreement_type_id"
         t.datetime "created_at", null: false
         t.datetime "updated_at", null: false
-        t.integer "duration"
-        t.integer "availability"
-        t.integer "bizagiNumber"
-        t.text "description"
         t.index ["agreement_status_id"], name: "index_agreements_on_agreement_status_id"
         t.index ["agreement_type_id"], name: "index_agreements_on_agreement_type_id"
       end
@@ -88,41 +88,41 @@ class OrderlyMigration < ActiveRecord::Migration[5.2]
       create_table "arp_activities", force: :cascade do |t|
         t.text "activity"
         t.float "completedPercentage"
-        t.datetime "created_at", null: false
-        t.datetime "updated_at", null: false
         t.date "startDate"
         t.date "finishDate"
         t.integer "agreement_research_project_id"
+        t.datetime "created_at", null: false
+        t.datetime "updated_at", null: false
         t.index ["agreement_research_project_id"], name: "index_arp_activities_on_agreement_research_project_id"
       end
 
       create_table "arp_activity_reports", force: :cascade do |t|
         t.integer "arp_activity_id"
         t.float "completedPercentage"
-        t.datetime "created_at", null: false
-        t.datetime "updated_at", null: false
         t.integer "status"
         t.text "comment"
+        t.datetime "created_at", null: false
+        t.datetime "updated_at", null: false
         t.index ["arp_activity_id"], name: "index_arp_activity_reports_on_arp_activity_id"
       end
 
       create_table "arp_assignment_reports", force: :cascade do |t|
+        t.string "name"
         t.text "comment"
         t.integer "percentage"
         t.integer "status"
         t.bigint "arp_assignment_id"
         t.datetime "created_at", null: false
         t.datetime "updated_at", null: false
-        t.string "name"
         t.index ["arp_assignment_id"], name: "index_arp_assignment_reports_on_arp_assignment_id"
       end
 
       create_table "arp_assignments", force: :cascade do |t|
         t.bigint "product_typology_id"
         t.bigint "agreement_research_project_id"
+        t.integer "completedPercentage"
         t.datetime "created_at", null: false
         t.datetime "updated_at", null: false
-        t.integer "completedPercentage"
         t.index ["agreement_research_project_id"], name: "index_arp_assignments_on_agreement_research_project_id"
         t.index ["product_typology_id"], name: "index_arp_assignments_on_product_typology_id"
       end
@@ -137,14 +137,14 @@ class OrderlyMigration < ActiveRecord::Migration[5.2]
         t.string "code"
         t.string "bizagiCode"
         t.integer "contribution_rp_item_id"
-        t.datetime "created_at", null: false
-        t.datetime "updated_at", null: false
         t.float "inKindValue"
         t.float "inCashValue"
         t.float "totalPayedInCash"
         t.float "totalPayedInKind"
         t.float "remainingInCash"
         t.float "remainingInKind"
+        t.datetime "created_at", null: false
+        t.datetime "updated_at", null: false
         t.index ["contribution_rp_item_id"], name: "index_arp_expenses_on_contribution_rp_item_id"
       end
 
@@ -161,9 +161,9 @@ class OrderlyMigration < ActiveRecord::Migration[5.2]
         t.integer "arp_role_id"
         t.integer "agreement_id"
         t.integer "group_member_id"
+        t.integer "agreement_research_project_id"
         t.datetime "created_at", null: false
         t.datetime "updated_at", null: false
-        t.integer "agreement_research_project_id"
         t.index ["agreement_id"], name: "index_arp_members_on_agreement_id"
         t.index ["agreement_research_project_id"], name: "index_arp_members_on_agreement_research_project_id"
         t.index ["arp_role_id"], name: "index_arp_members_on_arp_role_id"
@@ -176,10 +176,10 @@ class OrderlyMigration < ActiveRecord::Migration[5.2]
         t.date "date"
         t.string "bizagiCode"
         t.integer "arp_expense_id"
-        t.datetime "created_at", null: false
-        t.datetime "updated_at", null: false
         t.string "cdpCode"
         t.string "rpCode"
+        t.datetime "created_at", null: false
+        t.datetime "updated_at", null: false
         t.index ["arp_expense_id"], name: "index_arp_payments_on_arp_expense_id"
       end
 
@@ -226,10 +226,12 @@ class OrderlyMigration < ActiveRecord::Migration[5.2]
       create_table "calls", force: :cascade do |t|
         t.integer "callNumber"
         t.date "registerDate"
+        t.string "name"
         t.text "description"
         t.bigint "call_type_id"
         t.bigint "call_user_role_id"
         t.integer "duration"
+        t.bigint "duration_type_id"
         t.float "globalBudget"
         t.float "maxBudgetPerProject"
         t.date "startDate"
@@ -237,8 +239,6 @@ class OrderlyMigration < ActiveRecord::Migration[5.2]
         t.text "directedTowards"
         t.datetime "created_at", null: false
         t.datetime "updated_at", null: false
-        t.string "name"
-        t.bigint "duration_type_id"
         t.index ["call_type_id"], name: "index_calls_on_call_type_id"
         t.index ["call_user_role_id"], name: "index_calls_on_call_user_role_id"
         t.index ["duration_type_id"], name: "index_calls_on_duration_type_id"
@@ -248,10 +248,10 @@ class OrderlyMigration < ActiveRecord::Migration[5.2]
         t.integer "quantity"
         t.bigint "call_id"
         t.bigint "product_type_id"
-        t.datetime "created_at", null: false
-        t.datetime "updated_at", null: false
         t.text "alternate_indicator"
         t.bigint "required_type_id"
+        t.datetime "created_at", null: false
+        t.datetime "updated_at", null: false
         t.index ["call_id"], name: "index_calls_product_types_on_call_id"
         t.index ["product_type_id"], name: "index_calls_product_types_on_product_type_id"
         t.index ["required_type_id"], name: "index_calls_product_types_on_required_type_id"
@@ -325,8 +325,6 @@ class OrderlyMigration < ActiveRecord::Migration[5.2]
         t.float "cashValue"
         t.float "inKindValue"
         t.integer "agreement_research_project_id"
-        t.datetime "created_at", null: false
-        t.datetime "updated_at", null: false
         t.integer "contribution_funding_entity_item_id"
         t.float "executedCash"
         t.float "executedInKind"
@@ -334,6 +332,8 @@ class OrderlyMigration < ActiveRecord::Migration[5.2]
         t.float "remainingInKind"
         t.float "compromisedCash"
         t.float "compromisedInKind"
+        t.datetime "created_at", null: false
+        t.datetime "updated_at", null: false
         t.index ["agreement_research_project_id"], name: "index_contribution_rp_items_on_agreement_research_project_id"
         t.index ["contribution_funding_entity_item_id"], name: "index_contribution_rp_items_on_cont_funding_entity_item_id"
       end
@@ -351,10 +351,8 @@ class OrderlyMigration < ActiveRecord::Migration[5.2]
 
       create_table "curricular_projects", force: :cascade do |t|
         t.string "name"
-        # t.integer "faculty_id"
         t.datetime "created_at", null: false
         t.datetime "updated_at", null: false
-        # t.index ["faculty_id"], name: "index_curricular_projects_on_faculty_id"
       end
 
       create_table "curricular_projects_research_groups", id: false, force: :cascade do |t|
@@ -395,6 +393,7 @@ class OrderlyMigration < ActiveRecord::Migration[5.2]
 
       create_table "fe_contacts", force: :cascade do |t|
         t.string "name"
+        t.string "lastName"
         t.string "phoneNumber"
         t.string "mobileNumber"
         t.string "role"
@@ -402,14 +401,11 @@ class OrderlyMigration < ActiveRecord::Migration[5.2]
         t.integer "funding_entity_id"
         t.datetime "created_at", null: false
         t.datetime "updated_at", null: false
-        t.string "lastName"
         t.index ["funding_entity_id"], name: "index_fe_contacts_on_funding_entity_id"
       end
 
       create_table "funding_entities", force: :cascade do |t|
         t.string "name"
-        t.datetime "created_at", null: false
-        t.datetime "updated_at", null: false
         t.string "country"
         t.string "city"
         t.string "phoneNumber"
@@ -417,6 +413,8 @@ class OrderlyMigration < ActiveRecord::Migration[5.2]
         t.integer "entity_type_id"
         t.text "observation"
         t.text "address"
+        t.datetime "created_at", null: false
+        t.datetime "updated_at", null: false
         t.index ["entity_type_id"], name: "index_funding_entities_on_entity_type_id"
       end
 
@@ -441,9 +439,9 @@ class OrderlyMigration < ActiveRecord::Migration[5.2]
         t.integer "role_id"
         t.integer "researcher_id"
         t.integer "research_group_id"
+        t.integer "state_researcher_id"
         t.datetime "created_at", null: false
         t.datetime "updated_at", null: false
-        t.integer "state_researcher_id"
         t.index ["research_group_id"], name: "index_group_members_on_research_group_id"
         t.index ["researcher_id"], name: "index_group_members_on_researcher_id"
         t.index ["role_id"], name: "index_group_members_on_role_id"
@@ -454,10 +452,10 @@ class OrderlyMigration < ActiveRecord::Migration[5.2]
         t.integer "colciencias_call_id"
         t.integer "colciencias_category_id"
         t.integer "research_group_id"
-        t.datetime "created_at", null: false
-        t.datetime "updated_at", null: false
         t.string "knowledge_area"
         t.string "knowledge_subarea"
+        t.datetime "created_at", null: false
+        t.datetime "updated_at", null: false
         t.index ["colciencias_call_id"], name: "index_historical_colciencias_ranks_on_colciencias_call_id"
         t.index ["colciencias_category_id"], name: "index_historical_colciencias_ranks_on_colciencias_category_id"
         t.index ["research_group_id"], name: "index_historical_colciencias_ranks_on_research_group_id"
@@ -510,9 +508,9 @@ class OrderlyMigration < ActiveRecord::Migration[5.2]
 
       create_table "product_types", force: :cascade do |t|
         t.string "name"
+        t.text "indicator"
         t.datetime "created_at", null: false
         t.datetime "updated_at", null: false
-        t.text "indicator"
         t.bigint "product_typology_id"
         t.index ["product_typology_id"], name: "index_product_types_on_product_typology_id"
       end
