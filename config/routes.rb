@@ -27,18 +27,13 @@ Rails.application.routes.draw do
       #Enpoint para listar los snies
       resources :snies, only: [:index, :show]
 
-      #Enpoint para listar las facultades
-      resources :faculty, only: [:index, :show]
-      #Enpoint para listar los proyectos curriculares las facultades
       # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
       get "/health", to: "health#health"
 
       resources :state_researcher, only: [:index, :show]
       resources :role, only: [:index, :show]
       resources :researcher, only: [:index, :show, :update, :create]
-      resources :faculty, only: [:index, :show] do
-        resources :curricular_project, only: [:index, :show]
-      end
+
       resources :funding_entity, only: [:index, :show, :create, :update] do
         resources :fe_contact, only: [:index, :show, :update, :create]
       end

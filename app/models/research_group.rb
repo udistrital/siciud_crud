@@ -3,7 +3,6 @@ class ResearchGroup < ApplicationRecord
   has_one_attached :facultyActDocument
   has_one_attached :cidcActDocument
 
-  has_and_belongs_to_many :curricular_projects
   has_and_belongs_to_many :research_focuses
   has_and_belongs_to_many :agreements
   has_and_belongs_to_many :oecd_disciplines
@@ -18,7 +17,6 @@ class ResearchGroup < ApplicationRecord
 
   #Validaciones de los campos obligatorios
   validates :name, :acronym, :cidcRegistrationDate,
-            :cidcActNumber, :facultyActNumber, :facultyRegistrationDate, :state_group_id,
-            :snies_id,
-            :email,:curricular_projects, presence: true
+            :cidcActNumber, :facultyActNumber, :facultyRegistrationDate,
+            :state_group_id, :snies_id, :email, presence: true
 end

@@ -23,7 +23,7 @@ module Api
                                                               params[:category])
         #end
         #Se envian los grupos en formato JSON paginados de a 10 elementos por pagina
-        paginate json: @research_groups.includes(:faculty_ids_research_groups, :curricular_projects,
+        paginate json: @research_groups.includes(:faculty_ids_research_groups,
                                                  :research_focuses, :state_group, :snies,
                                                  :cidcActDocument_attachment, :facultyActDocument_attachment),
                  each_serializer: ResearchGroupSimpleSerializer
@@ -88,9 +88,6 @@ module Api
         if params[:research_group].has_key?(:facultyIds)
           setFaculties((params[:research_group][:facultyIds]).uniq)
         end
-        if params[:research_group].has_key?(:curricular_project_ids)
-          research_gr.curricular_project_ids = (params[:research_group][:curricular_project_ids]).uniq
-        end
         if params[:research_group].has_key?(:oecd_discipline_ids)
           research_gr.oecd_discipline_ids = (params[:research_group][:oecd_discipline_ids]).map(&:to_i).uniq
         end
@@ -122,7 +119,6 @@ module Api
                                                :email, :colcienciasCode, :gruplac, :webpage,
                                                :mission, :vision, :facultyActDocument,
                                                :cidcActDocument, research_focus_ids: [],
-                                               curricular_project_ids: [],
                                                historical_colciencias_ranks: [],
                                                oecd_discipline_ids: [])
       end
