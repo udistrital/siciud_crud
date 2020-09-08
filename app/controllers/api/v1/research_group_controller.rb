@@ -128,6 +128,7 @@ module Api
       def research_group_params
         params.require(:research_group).permit(:name, :acronym, :description, :cidcRegistrationDate,
                                                :cidcActNumber, :facultyActNumber,
+                                               :director_name_tmp,
                                                :facultyRegistrationDate, :state_group_id, :snies_id,
                                                :email, :colcienciasCode, :gruplac, :webpage,
                                                :mission, :vision, :facultyActDocument,

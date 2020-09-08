@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_08_182053) do
+ActiveRecord::Schema.define(version: 2020_09_08_184012) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -574,6 +574,7 @@ ActiveRecord::Schema.define(version: 2020_09_08_182053) do
     t.string "colcienciasCode"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "director_name_tmp"
     t.index ["snies_id"], name: "index_research_groups_on_snies_id"
     t.index ["state_group_id"], name: "index_research_groups_on_state_group_id"
   end
