@@ -5,7 +5,7 @@ class ResearchGroupSerializer < ActiveModel::Serializer
              :facultyRegistrationDate, :email, :gruplac, :webpage, :mission, :vision,
              :colcienciasCode, :state_group_id, :snies_id, :research_focus_ids,
              :facultyActDocument, :cidcActDocument, :director_name_tmp, :director,
-             :historicalColciencias, :oecd_discipline_ids, :cine_detailed_area_ids
+             :oecd_discipline_ids, :cine_detailed_area_ids
 
   def director
     members = self.object.group_members.where(role_id: 1).last
