@@ -177,10 +177,10 @@ StateResearcher.create(name: "InActivo")
 30.times do
   name_aux = Faker::Name.initials
   last_name = Faker::Name.last_name
-  Researcher.create(identificationNumber: Faker::Number.number(10).to_s,
+  Researcher.create(identification_number: Faker::Number.number(10).to_s,
                     orcid_id: Faker::Alphanumeric.alphanumeric(10),
                     scientific_signature: last_name.concat(", ", name_aux),
-                    oas_researcherId: rand(1..20).to_s
+                    oas_researcher_id: rand(1..20).to_s
   )
 end
 
