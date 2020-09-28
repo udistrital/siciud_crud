@@ -28,12 +28,9 @@ ResearchFocus.create(name: "DEMO- Ingeniería Web")
 StateGroup.create(name: "Activo")
 StateGroup.create(name: "Inactivo")
 
-10.times do
-  Snies.create(
-      code: Faker::Number.number(5),
-      name: Faker::Lorem.sentence(3),
-  )
-end
+GroupType.create(name: "Grupo de Investigación")
+GroupType.create(name: "Semillero de Investigación")
+GroupType.create(name: "Redes de Investigación")
 
 30.times do
   name_rg = Faker::Company.name
@@ -51,7 +48,7 @@ end
       facultyRegistrationDate: Faker::Date.backward(50),
       facultyActNumber: Faker::Number.number(4),
       state_group_id: rand(1..2),
-      snies_id: rand(1..10),
+      snies_id: Faker::Number.number(5).to_s,
       email: Faker::Internet.email,
       gruplac: Faker::Internet.url("colciencias.com"),
       webpage: Faker::Internet.url,
@@ -59,6 +56,7 @@ end
       vision: Faker::Lorem.paragraphs.join(),
       research_focus_ids: Array.new(2) { rand(1..5) },
       colcienciasCode: Faker::Number.number(14),
+      group_type_id: rand(1..3)
   )
 end
 
@@ -186,21 +184,20 @@ StateResearcher.create(name: "Inactivo")
   )
 end
 
-15.times do |i|
-  GroupMember.create(role_id: rand(1..2),
-                     researcher_id: i + 1,
-                     research_group_id: (i+4)/4,
-                     state_researcher_id: 1
-  )
-end
-
-100.times do |i|
-  GmPeriod.create(initialDate: "20/10/2019", role_id: 1, group_member_id: i + 1)
-end
-100.times do |i|
-  GmPeriod.create(initialDate: "20/10/2019", role_id: 2, group_member_id: i + 101)
-end
-
+# 15.times do |i|
+#   GroupMember.create(role_id: rand(1..2),
+#                      researcher_id: i + 1,
+#                      research_group_id: (i+4)/4,
+#                      state_researcher_id: 1
+#   )
+# end
+#
+# 100.times do |i|
+#   GmPeriod.create(initialDate: "20/10/2019", role_id: 1, group_member_id: i + 1)
+# end
+# 100.times do |i|
+#   GmPeriod.create(initialDate: "20/10/2019", role_id: 2, group_member_id: i + 101)
+# end
 
 
 # StateSeedbed.create(name: "Activo")

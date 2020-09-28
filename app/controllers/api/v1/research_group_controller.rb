@@ -16,6 +16,7 @@ module Api
         #Director .members.where("role_id='1'")
         #if params[:search].present? && !params[:search].nil?
         #Se envia al servicio de busqueda para flitrar los grupos segun los parametros
+
         @research_groups = ResearchGroupsSearchService.search(@research_groups,
                                                               params[:name],
                                                               params[:director],
@@ -129,7 +130,8 @@ module Api
         params.require(:research_group).permit(:name, :acronym, :description, :cidcRegistrationDate,
                                                :cidcActNumber, :facultyActNumber,
                                                :director_name_tmp,
-                                               :facultyRegistrationDate, :state_group_id, :snies_id,
+                                               :facultyRegistrationDate, :state_group_id,
+                                               :group_type_id, :snies_id,
                                                :email, :colcienciasCode, :gruplac, :webpage,
                                                :mission, :vision, :facultyActDocument,
                                                :cidcActDocument, research_focus_ids: [],

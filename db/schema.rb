@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_28_171728) do
+ActiveRecord::Schema.define(version: 2020_09_28_185509) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -455,6 +455,12 @@ ActiveRecord::Schema.define(version: 2020_09_28_171728) do
     t.index ["state_researcher_id"], name: "index_group_members_on_state_researcher_id"
   end
 
+  create_table "group_types", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "historical_colciencias_ranks", force: :cascade do |t|
     t.integer "colciencias_call_id"
     t.integer "colciencias_category_id"
@@ -574,6 +580,8 @@ ActiveRecord::Schema.define(version: 2020_09_28_171728) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "snies_id"
+    t.bigint "group_type_id"
+    t.index ["group_type_id"], name: "index_research_groups_on_group_type_id"
     t.index ["state_group_id"], name: "index_research_groups_on_state_group_id"
   end
 
@@ -750,5 +758,6 @@ ActiveRecord::Schema.define(version: 2020_09_28_171728) do
   add_foreign_key "oecd_disciplines", "oecd_knowledge_subareas"
   add_foreign_key "oecd_knowledge_subareas", "oecd_knowledge_areas"
   add_foreign_key "product_types", "product_typologies"
+  add_foreign_key "research_groups", "group_types"
   add_foreign_key "users", "researchers"
 end

@@ -14,6 +14,7 @@ Rails.application.routes.draw do
       #Endpoint para listar los estados de los grupos de investigacion
       resources :state_group, only: [:index, :show]
       resources :state_seedbed, only: [:index, :show]
+      resources :group_types, only: [:index, :create, :update]
 
       #Enpoint para listar las lineas de investigacion
       resources :research_focus, only: [:index, :show]
