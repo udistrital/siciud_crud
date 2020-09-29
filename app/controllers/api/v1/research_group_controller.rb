@@ -13,24 +13,17 @@ module Api
 
       def index
         @research_groups = ResearchGroup.all.order(:created_at)
-        #Director .members.where("role_id='1'")
-        #if params[:search].present? && !params[:search].nil?
-        #Se envia al servicio de busqueda para flitrar los grupos segun los parametros
-
         @research_groups = ResearchGroupsSearchService.search(@research_groups,
                                                               params[:name],
                                                               params[:director],
-                                                              params[:facultyid],
+                                                              params[:faculty_id],
                                                               params[:category])
-        #end
-        #Se envian los grupos en formato JSON paginados de a 10 elementos por pagina
+
         paginate json: @research_groups.includes(:faculty_ids_research_groups,
                                                  :research_focuses, :state_group, :snies,
                                                  :cidcActDocument_attachment, :facultyActDocument_attachment),
                  each_serializer: ResearchGroupSimpleSerializer
       end
-
-      #Se muestra en detalle un grupo de investigacion segun un ID que se envia en el get
 
       def show
         render json: @research_group
@@ -70,14 +63,16 @@ module Api
           if (params[:facultyActDocument].content_type == "application/pdf")
             @research_group.facultyActDocument.attach(params[:facultyActDocument])
           else
-            return render json: {"error": "El acta de facultad debe ser de formato pdf"}, status: :unprocessable_entity
+            return render json: {"error": "El acta de facultad debe ser de formato pdf"},
+                          status: :unprocessable_entity
           end
         end
         if (params[:cidcActDocument])
           if (params[:cidcActDocument].content_type == "application/pdf")
             @research_group.cidcActDocument.attach(params[:cidcActDocument])
           else
-            return render json: {"error": "El acta del cidc debe ser de formato pdf"}, status: :unprocessable_entity
+            return render json: {"error": "El acta del cidc debe ser de formato pdf"},
+                          status: :unprocessable_entity
           end
         end
         render json: @research_group
@@ -86,11 +81,11 @@ module Api
       private
 
       def save_data_by_key(research_gr)
-        if params[:research_group].has_key?(:facultyIds)
-          setFaculties((params[:research_group][:facultyIds]).uniq)
+        if params[:research_group].has_key?(:faculty_ids)
+          setFaculties((params[:research_group][:faculty_ids]).uniq)
         end
-        if params[:research_group].has_key?(:curricular_projectIds)
-          setCurricularPrj((params[:research_group][:curricular_projectIds]).uniq)
+        if params[:research_group].has_key?(:curricular_project_ids)
+          setCurricularPrj((params[:research_group][:curricular_project_ids]).uniq)
         end
         if params[:research_group].has_key?(:oecd_discipline_ids)
           research_gr.oecd_discipline_ids = (params[:research_group][:oecd_discipline_ids]).map(&:to_i).uniq
@@ -103,7 +98,7 @@ module Api
       def setFaculties(faculties)
         @research_group.faculty_ids_research_groups.destroy_all
         faculties.map do |faculty|
-          new_faculty = @research_group.faculty_ids_research_groups.new(facultyId: faculty)
+          new_faculty = @research_group.faculty_ids_research_groups.new(faculty_id: faculty)
           if new_faculty.valid?
             new_faculty.save
           end
@@ -113,7 +108,7 @@ module Api
       def setCurricularPrj(curricularprjs)
         @research_group.curricular_prj_ids_research_groups.destroy_all
         curricularprjs.map do |curr|
-          new_curr = @research_group.curricular_prj_ids_research_groups.new(curricular_projectId: curr)
+          new_curr = @research_group.curricular_prj_ids_research_groups.new(curricular_project_id: curr)
           if new_curr.valid?
             new_curr.save
           end
@@ -127,14 +122,18 @@ module Api
 
       # Only allow a trusted parameter "white list" through.
       def research_group_params
-        params.require(:research_group).permit(:name, :acronym, :description, :cidcRegistrationDate,
-                                               :cidcActNumber, :facultyActNumber,
-                                               :director_name_tmp,
-                                               :facultyRegistrationDate, :state_group_id,
+        params.require(:research_group).permit(:name, :acronym, :description,
+                                               :cidc_registration_date,
+                                               :cidc_act_number,
+                                               :faculty_act_number,
+                                               :faculty_registration_date,
+                                               :state_group_id,
+                                               :email, :gruplac, :webpage,
+                                               :mission, :vision,
+                                               :colciencias_code,
                                                :group_type_id, :snies_id,
-                                               :email, :colcienciasCode, :gruplac, :webpage,
-                                               :mission, :vision, :facultyActDocument,
-                                               :cidcActDocument, research_focus_ids: [],
+                                               :faculty_act_document, :cidc_act_document,
+                                               research_focus_ids: [],
                                                oecd_discipline_ids: [])
       end
     end

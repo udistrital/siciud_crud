@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_28_185509) do
+ActiveRecord::Schema.define(version: 2020_09_28_225606) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -366,7 +366,7 @@ ActiveRecord::Schema.define(version: 2020_09_28_185509) do
 
   create_table "curricular_prj_ids_research_groups", force: :cascade do |t|
     t.bigint "research_group_id"
-    t.integer "curricular_projectId"
+    t.integer "curricular_project_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["research_group_id"], name: "index_curricular_prj_ids_research_groups_on_research_group_id"
@@ -392,7 +392,7 @@ ActiveRecord::Schema.define(version: 2020_09_28_185509) do
 
   create_table "faculty_ids_research_groups", force: :cascade do |t|
     t.bigint "research_group_id"
-    t.integer "facultyId"
+    t.integer "faculty_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["research_group_id"], name: "index_faculty_ids_research_groups_on_research_group_id"
@@ -432,8 +432,8 @@ ActiveRecord::Schema.define(version: 2020_09_28_185509) do
   end
 
   create_table "gm_periods", force: :cascade do |t|
-    t.date "initialDate"
-    t.date "finalDate"
+    t.date "initial_date"
+    t.date "final_date"
     t.integer "role_id"
     t.integer "group_member_id"
     t.datetime "created_at", null: false
@@ -566,17 +566,17 @@ ActiveRecord::Schema.define(version: 2020_09_28_185509) do
     t.string "name"
     t.string "acronym"
     t.text "description"
-    t.date "cidcRegistrationDate"
-    t.integer "cidcActNumber"
-    t.integer "facultyActNumber"
-    t.date "facultyRegistrationDate"
+    t.date "cidc_registration_date"
+    t.integer "cidc_act_number"
+    t.integer "faculty_act_number"
+    t.date "faculty_registration_date"
     t.integer "state_group_id"
     t.string "email"
     t.string "gruplac"
     t.string "webpage"
     t.text "mission"
     t.text "vision"
-    t.string "colcienciasCode"
+    t.string "colciencias_code"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "snies_id"

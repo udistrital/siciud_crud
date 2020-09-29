@@ -17,7 +17,7 @@ class ResearchGroup < ApplicationRecord
   has_many :plan_periods, as: :planable
 
   #Validaciones de los campos obligatorios
-  validates :name, :acronym, :cidcRegistrationDate,
-            :cidcActNumber, :facultyActNumber, :facultyRegistrationDate,
+  validates :name, :acronym, :cidc_registration_date,
+            :cidc_act_number, :faculty_act_number, :faculty_registration_date,
             :state_group_id, :snies_id, :email, presence: true
 end

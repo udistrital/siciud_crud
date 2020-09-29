@@ -43,10 +43,10 @@ GroupType.create(name: "Redes de Investigación")
       name: name_rg,
       acronym: acronym_rg,
       description: Faker::Lorem.paragraphs.join(),
-      cidcRegistrationDate: Faker::Date.backward(50),
-      cidcActNumber: Faker::Number.number(4),
-      facultyRegistrationDate: Faker::Date.backward(50),
-      facultyActNumber: Faker::Number.number(4),
+      cidc_registration_date: Faker::Date.backward(50),
+      cidc_act_number: Faker::Number.number(4),
+      faculty_registration_date: Faker::Date.backward(50),
+      faculty_act_number: Faker::Number.number(4),
       state_group_id: rand(1..2),
       snies_id: Faker::Number.number(5).to_s,
       email: Faker::Internet.email,
@@ -55,10 +55,12 @@ GroupType.create(name: "Redes de Investigación")
       mission: Faker::Lorem.paragraphs.join(),
       vision: Faker::Lorem.paragraphs.join(),
       research_focus_ids: Array.new(2) { rand(1..5) },
-      colcienciasCode: Faker::Number.number(14),
+      colciencias_code: Faker::Number.number(14),
       group_type_id: rand(1..3)
   )
 end
+
+puts "Grupos ok"
 
 Role.create(name: "Director")
 Role.create(name: "Estudiante")
