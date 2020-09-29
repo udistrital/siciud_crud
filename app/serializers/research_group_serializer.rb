@@ -3,7 +3,7 @@ class ResearchGroupSerializer < ActiveModel::Serializer
   attributes :id, :name, :acronym, :description, :cidc_registration_date,
              :faculty_ids, :curricular_project_ids, :cidc_act_number, :faculty_act_number,
              :faculty_registration_date, :email, :gruplac, :webpage, :mission, :vision,
-             :colciencias_code, :group_state_id, :group_state_name, :snies_id, :research_focus_ids,
+             :colciencias_code, :state_id, :state_name, :snies_id, :research_focus_ids,
              :faculty_act_document, :cidc_act_document, :document_of_establishment,
              :director, :oecd_discipline_ids, :cine_detailed_area_ids, :group_type_id,
              :group_type_name
@@ -38,7 +38,14 @@ class ResearchGroupSerializer < ActiveModel::Serializer
                     only_path: true) if self.object.faculty_act_document.attached?
   end
 
-  def group_state_name
+  def state_id
+    state = self.object.group_state
+    if state
+      state.id
+    end
+  end
+
+  def state_name
     state = self.object.group_state
     if state
       state.name
