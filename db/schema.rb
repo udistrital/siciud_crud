@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_28_225606) do
+ActiveRecord::Schema.define(version: 2020_09_29_190424) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -442,17 +442,29 @@ ActiveRecord::Schema.define(version: 2020_09_28_225606) do
     t.index ["role_id"], name: "index_gm_periods_on_role_id"
   end
 
+  create_table "gm_states", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "group_members", force: :cascade do |t|
     t.integer "role_id"
     t.integer "researcher_id"
     t.integer "research_group_id"
-    t.integer "state_researcher_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "gm_state_id"
+    t.index ["gm_state_id"], name: "index_group_members_on_gm_state_id"
     t.index ["research_group_id"], name: "index_group_members_on_research_group_id"
     t.index ["researcher_id"], name: "index_group_members_on_researcher_id"
     t.index ["role_id"], name: "index_group_members_on_role_id"
-    t.index ["state_researcher_id"], name: "index_group_members_on_state_researcher_id"
+  end
+
+  create_table "group_states", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "group_types", force: :cascade do |t|
@@ -570,7 +582,6 @@ ActiveRecord::Schema.define(version: 2020_09_28_225606) do
     t.integer "cidc_act_number"
     t.integer "faculty_act_number"
     t.date "faculty_registration_date"
-    t.integer "state_group_id"
     t.string "email"
     t.string "gruplac"
     t.string "webpage"
@@ -581,8 +592,9 @@ ActiveRecord::Schema.define(version: 2020_09_28_225606) do
     t.datetime "updated_at", null: false
     t.string "snies_id"
     t.bigint "group_type_id"
+    t.bigint "group_state_id"
+    t.index ["group_state_id"], name: "index_research_groups_on_group_state_id"
     t.index ["group_type_id"], name: "index_research_groups_on_group_type_id"
-    t.index ["state_group_id"], name: "index_research_groups_on_state_group_id"
   end
 
   create_table "research_project_plans", force: :cascade do |t|
@@ -701,18 +713,6 @@ ActiveRecord::Schema.define(version: 2020_09_28_225606) do
     t.index ["plan_period_id"], name: "index_social_appropriation_plans_on_plan_period_id"
   end
 
-  create_table "state_groups", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "state_researchers", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "state_seedbeds", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -755,9 +755,11 @@ ActiveRecord::Schema.define(version: 2020_09_28_225606) do
   add_foreign_key "cine_specific_areas", "cine_broad_areas"
   add_foreign_key "curricular_prj_ids_research_groups", "research_groups"
   add_foreign_key "faculty_ids_research_groups", "research_groups"
+  add_foreign_key "group_members", "gm_states"
   add_foreign_key "oecd_disciplines", "oecd_knowledge_subareas"
   add_foreign_key "oecd_knowledge_subareas", "oecd_knowledge_areas"
   add_foreign_key "product_types", "product_typologies"
+  add_foreign_key "research_groups", "group_states"
   add_foreign_key "research_groups", "group_types"
   add_foreign_key "users", "researchers"
 end

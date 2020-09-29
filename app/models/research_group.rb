@@ -8,7 +8,7 @@ class ResearchGroup < ApplicationRecord
   has_and_belongs_to_many :agreements
   has_and_belongs_to_many :oecd_disciplines
   has_and_belongs_to_many :cine_detailed_areas
-  belongs_to :state_group
+  belongs_to :group_state
   belongs_to :group_type
 
   has_many :faculty_ids_research_groups
@@ -20,5 +20,5 @@ class ResearchGroup < ApplicationRecord
   #Validaciones de los campos obligatorios
   validates :name, :acronym, :cidc_registration_date,
             :cidc_act_number, :faculty_act_number, :faculty_registration_date,
-            :state_group_id, :snies_id, :email, presence: true
+            :group_state_id, :snies_id, :email, presence: true
 end

@@ -1,5 +1,5 @@
 class ResearchGroupSimpleSerializer < ActiveModel::Serializer
-  attributes :id, :name, :acronym, :state_group, :cidc_registration_date, :director,
+  attributes :id, :name, :acronym, :group_state_id, :cidc_registration_date, :director,
              :faculty_ids, :curricular_project_ids, :faculty_registration_date,
              :research_focuses, :oecd_disciplines, :cine_detailed_areas
 

@@ -134,7 +134,7 @@ module Api
                                                :cidc_act_number,
                                                :faculty_act_number,
                                                :faculty_registration_date,
-                                               :state_group_id,
+                                               :group_state_id,
                                                :email, :gruplac, :webpage,
                                                :mission, :vision,
                                                :colciencias_code,

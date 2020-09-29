@@ -25,8 +25,8 @@ ResearchFocus.create(name: "DEMO- Ambientes y Herramientas Virtuales de Aprendiz
 ResearchFocus.create(name: "DEMO- Gamificación y Video juegos")
 ResearchFocus.create(name: "DEMO- Ingeniería Web")
 
-StateGroup.create(name: "Activo")
-StateGroup.create(name: "Inactivo")
+GroupState.create(name: "Activo")
+GroupState.create(name: "Inactivo")
 
 GroupType.create(name: "Grupo de Investigación")
 GroupType.create(name: "Semillero de Investigación")
@@ -47,7 +47,7 @@ GroupType.create(name: "Redes de Investigación")
       cidc_act_number: Faker::Number.number(4),
       faculty_registration_date: Faker::Date.backward(50),
       faculty_act_number: Faker::Number.number(4),
-      state_group_id: rand(1..2),
+      group_state_id: rand(1..2),
       snies_id: Faker::Number.number(5).to_s,
       email: Faker::Internet.email,
       gruplac: Faker::Internet.url("colciencias.com"),
@@ -170,9 +170,8 @@ OecdDiscipline.create(name: "Patología", code: "3A09", oecd_knowledge_subarea_i
 OecdDiscipline.create(name: "Tiene 29", code: "3B01-3B29", oecd_knowledge_subarea_id: 9)
 OecdDiscipline.create(name: "Tiene 14", code: "3C01-3C14", oecd_knowledge_subarea_id: 10)
 
-
-StateResearcher.create(name: "Activo")
-StateResearcher.create(name: "Inactivo")
+GmState.create(name: "Activo")
+GmState.create(name: "Inactivo")
 
 30.times do
   name_aux = Faker::Name.initials
@@ -190,7 +189,7 @@ end
 #   GroupMember.create(role_id: rand(1..2),
 #                      researcher_id: i + 1,
 #                      research_group_id: (i+4)/4,
-#                      state_researcher_id: 1
+#                      gm_state_id: 1
 #   )
 # end
 #

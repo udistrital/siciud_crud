@@ -3,7 +3,7 @@ class ResearchGroupSerializer < ActiveModel::Serializer
   attributes :id, :name, :acronym, :description, :cidc_registration_date,
              :faculty_ids, :curricular_project_ids, :cidc_act_number, :faculty_act_number,
              :faculty_registration_date, :email, :gruplac, :webpage, :mission, :vision,
-             :colciencias_code, :state_group_id, :snies_id, :research_focus_ids,
+             :colciencias_code, :group_state_id, :snies_id, :research_focus_ids,
              :faculty_act_document, :cidc_act_document, :document_of_establishment,
              :director, :oecd_discipline_ids, :cine_detailed_area_ids, :group_type_id
 

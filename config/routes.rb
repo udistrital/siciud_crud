@@ -12,7 +12,7 @@ Rails.application.routes.draw do
       resources :apidocs, only: [:index]
 
       #Endpoint para listar los estados de los grupos de investigacion
-      resources :state_group, only: [:index, :show]
+      resources :group_states, only: [:index, :show]
       resources :state_seedbed, only: [:index, :show]
       resources :group_types, only: [:index, :create, :update]
 
@@ -31,7 +31,7 @@ Rails.application.routes.draw do
       # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
       get "/health", to: "health#health"
 
-      resources :state_researcher, only: [:index, :show]
+      resources :gm_states, only: [:index, :show]
       resources :role, only: [:index, :show]
       resources :researcher, only: [:index, :show, :update, :create]
 
