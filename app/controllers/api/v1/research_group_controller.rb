@@ -19,9 +19,7 @@ module Api
                                                               params[:faculty_id],
                                                               params[:category])
 
-        paginate json: @research_groups.includes(:faculty_ids_research_groups,
-                                                 :research_focuses, :state_group, :snies,
-                                                 :cidcActDocument_attachment, :facultyActDocument_attachment),
+        paginate json: @research_groups,
                  each_serializer: ResearchGroupSimpleSerializer
       end
 
@@ -58,20 +56,29 @@ module Api
 
       #Añadir los documentos de Facultad y de CIDC
       def attach
-        params.permit(:facultyActDocument, :cidcActDocument)
-        if (params[:facultyActDocument])
-          if (params[:facultyActDocument].content_type == "application/pdf")
-            @research_group.facultyActDocument.attach(params[:facultyActDocument])
+        params.permit(:faculty_act_document, :cidc_act_document, :document_of_establishment)
+        msg = "debe ser formato pdf"
+        if (file = params[:faculty_act_document])
+          if (file.content_type == "application/pdf")
+            @research_group.faculty_act_document.attach(file)
           else
-            return render json: {"error": "El acta de facultad debe ser de formato pdf"},
+            return render json: {"error": "El acta de facultad #{msq}"},
                           status: :unprocessable_entity
           end
         end
-        if (params[:cidcActDocument])
-          if (params[:cidcActDocument].content_type == "application/pdf")
-            @research_group.cidcActDocument.attach(params[:cidcActDocument])
+        if (file = params[:cidc_act_document])
+          if (file.content_type == "application/pdf")
+            @research_group.cidc_act_document.attach(file)
           else
-            return render json: {"error": "El acta del cidc debe ser de formato pdf"},
+            return render json: {"error": "El acta del cidc #{msq}"},
+                          status: :unprocessable_entity
+          end
+        end
+        if (file = params[:document_of_establishment])
+          if (file.content_type == "application/pdf")
+            @research_group.document_of_establishment.attach(file)
+          else
+            return render json: {"error": "El documento de constitución #{msq}"},
                           status: :unprocessable_entity
           end
         end
@@ -132,7 +139,6 @@ module Api
                                                :mission, :vision,
                                                :colciencias_code,
                                                :group_type_id, :snies_id,
-                                               :faculty_act_document, :cidc_act_document,
                                                research_focus_ids: [],
                                                oecd_discipline_ids: [])
       end

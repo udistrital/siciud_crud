@@ -22,7 +22,7 @@ module Api
         @group_type = GroupType.new(group_type_params)
 
         if @group_type.save
-          render json: @group_type, status: :created, location: @group_type
+          render json: @group_type, status: :created
         else
           render json: @group_type.errors, status: :unprocessable_entity
         end

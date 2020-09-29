@@ -4,8 +4,8 @@ class ResearchGroupSerializer < ActiveModel::Serializer
              :faculty_ids, :curricular_project_ids, :cidc_act_number, :faculty_act_number,
              :faculty_registration_date, :email, :gruplac, :webpage, :mission, :vision,
              :colciencias_code, :state_group_id, :snies_id, :research_focus_ids,
-             :facultyActDocument, :cidcActDocument, :director,
-             :oecd_discipline_ids, :cine_detailed_area_ids, :group_type
+             :faculty_act_document, :cidc_act_document, :document_of_establishment,
+             :director, :oecd_discipline_ids, :cine_detailed_area_ids, :group_type_id
 
   def director
     members = self.object.group_members.where(role_id: 1).last
@@ -32,12 +32,19 @@ class ResearchGroupSerializer < ActiveModel::Serializer
     end
   end
 
-  def facultyActDocument
-    rails_blob_path(self.object.facultyActDocument, only_path: true) if self.object.facultyActDocument.attached?
+  def faculty_act_document
+    rails_blob_path(self.object.faculty_act_document,
+                    only_path: true) if self.object.faculty_act_document.attached?
   end
 
-  def cidcActDocument
-    rails_blob_path(self.object.cidcActDocument, only_path: true) if self.object.cidcActDocument.attached?
+  def cidc_act_document
+    rails_blob_path(self.object.cidc_act_document,
+                    only_path: true) if self.object.cidc_act_document.attached?
+  end
+
+  def document_of_establishment
+    rails_blob_path(self.object.document_of_establishment,
+                    only_path: true) if self.object.document_of_establishment.attached?
   end
 
   def historicalColciencias
