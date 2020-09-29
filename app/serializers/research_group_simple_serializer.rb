@@ -3,7 +3,7 @@ class ResearchGroupSimpleSerializer < ActiveModel::Serializer
              :faculty_act_number, :faculty_registration_date,
              :faculty_ids, :curricular_project_ids,
              :research_focuses, :oecd_disciplines, :cine_detailed_areas,
-             :group_state_id, :group_state_name, :group_type_id,
+             :state_id, :state_name, :group_type_id,
              :group_type_name, :director
 
 
@@ -41,26 +41,10 @@ class ResearchGroupSimpleSerializer < ActiveModel::Serializer
     end
   end
 
-  def group_state_name
-    state = self.object.group_state
-    if state
-      state.name
-    end
-  end
-
   def group_type_name
     type = self.object.group_type
     if type
       type.name
-    end
-  end
-
-  def oecd_disciplines
-    oecd_discipline = self.object.oecd_disciplines
-    if oecd_discipline
-      oecd_discipline.map do |od|
-        od.name
-      end
     end
   end
 
@@ -73,10 +57,26 @@ class ResearchGroupSimpleSerializer < ActiveModel::Serializer
     end
   end
 
-  def state_group
-    state_group = self.object.state_group
-    if state_group
-      state_group.name
+  def state_id
+    state = self.object.group_state
+    if state
+      state.id
+    end
+  end
+
+  def state_name
+    state = self.object.group_state
+    if state
+      state.name
+    end
+  end
+
+  def oecd_disciplines
+    oecd_discipline = self.object.oecd_disciplines
+    if oecd_discipline
+      oecd_discipline.map do |od|
+        od.name
+      end
     end
   end
 end
