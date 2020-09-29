@@ -1,7 +1,11 @@
 class ResearchGroupSimpleSerializer < ActiveModel::Serializer
-  attributes :id, :name, :acronym, :group_state_id, :cidc_registration_date, :director,
-             :faculty_ids, :curricular_project_ids, :faculty_registration_date,
-             :research_focuses, :oecd_disciplines, :cine_detailed_areas
+  attributes :id, :name, :acronym, :cidc_registration_date, :cidc_act_number,
+             :faculty_act_number, :faculty_registration_date,
+             :faculty_ids, :curricular_project_ids,
+             :research_focuses, :oecd_disciplines, :cine_detailed_areas,
+             :group_state_id, :group_state_name, :group_type_id,
+             :group_type_name, :director
+
 
   def cine_detailed_areas
     cine_detailed_area = self.object.cine_detailed_areas
@@ -34,6 +38,20 @@ class ResearchGroupSimpleSerializer < ActiveModel::Serializer
       faculty_id.map do |faculty|
         faculty.faculty_id
       end
+    end
+  end
+
+  def group_state_name
+    state = self.object.group_state
+    if state
+      state.name
+    end
+  end
+
+  def group_type_name
+    type = self.object.group_type
+    if type
+      type.name
     end
   end
 
