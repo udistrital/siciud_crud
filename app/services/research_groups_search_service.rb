@@ -10,4 +10,9 @@ class ResearchGroupsSearchService
         #curr_research_groups = curr_research_groups.joins(members: :researcher).where("members.role_id like 1").where("researchers.name like '%#{director}%'") if director.present?
         curr_research_groups.order(:created_at)
     end
+
+    def self.filter_by_type(gt_id)
+        groups = ResearchGroup.where("group_type_id = #{gt_id}") if gt_id.present?
+        groups.order(:created_at)
+    end
 end

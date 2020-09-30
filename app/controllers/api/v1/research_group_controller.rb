@@ -12,13 +12,16 @@ module Api
       end
 
       def index
-        @research_groups = ResearchGroup.all.order(:created_at)
-        @research_groups = ResearchGroupsSearchService.search(@research_groups,
-                                                              params[:name],
-                                                              params[:director],
-                                                              params[:faculty_id],
-                                                              params[:category])
-
+        if (gt_id = params[:group_type_id])
+          @research_groups = ResearchGroupsSearchService.filter_by_type(gt_id)
+        else
+          @research_groups = ResearchGroup.all.order(:created_at)
+          @research_groups = ResearchGroupsSearchService.search(@research_groups,
+                                                                params[:name],
+                                                                params[:director],
+                                                                params[:faculty_id],
+                                                                params[:category])
+        end
         paginate json: @research_groups,
                  each_serializer: ResearchGroupSimpleSerializer
       end
