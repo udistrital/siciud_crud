@@ -4,7 +4,7 @@ class ResearchGroupSimpleSerializer < ActiveModel::Serializer
              :faculty_ids, :curricular_project_ids,
              :state_id, :state_name, :group_type_id,
              :group_type_name, :director_id, :director_oas_id,
-             :research_focus_id, :oecd_discipline_ids, :cine_detailed_area_ids
+             :research_focus_ids, :oecd_discipline_ids, :cine_detailed_area_ids
 
 
   def cine_detailed_area_id
