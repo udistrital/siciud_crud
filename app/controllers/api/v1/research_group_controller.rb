@@ -22,8 +22,7 @@ module Api
                                                                 params[:faculty_id],
                                                                 params[:category])
         end
-        paginate json: @research_groups,
-                 each_serializer: ResearchGroupSimpleSerializer
+        paginate json: @research_groups
       end
 
       def show
@@ -59,7 +58,7 @@ module Api
 
       #Añadir los documentos de Facultad y de CIDC
       def attach
-        params.permit(:faculty_act_document, :cidc_act_document, :document_of_establishment)
+        params.permit(:faculty_act_document, :cidc_act_document, :establishment_document)
         msg = "debe ser formato pdf"
         if (file = params[:faculty_act_document])
           if (file.content_type == "application/pdf")
@@ -77,9 +76,9 @@ module Api
                           status: :unprocessable_entity
           end
         end
-        if (file = params[:document_of_establishment])
+        if (file = params[:establishment_document])
           if (file.content_type == "application/pdf")
-            @research_group.document_of_establishment.attach(file)
+            @research_group.establishment_document.attach(file)
           else
             return render json: {"error": "El documento de constitución #{msq}"},
                           status: :unprocessable_entity
@@ -142,6 +141,8 @@ module Api
                                                :mission, :vision,
                                                :colciencias_code,
                                                :group_type_id, :snies_id,
+                                               faculty_ids_research_groups: [],
+                                               curricular_prj_ids_research_groups: [],
                                                research_focus_ids: [],
                                                oecd_discipline_ids: [])
       end
