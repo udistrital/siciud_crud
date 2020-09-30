@@ -2,16 +2,16 @@ class ResearchGroupSimpleSerializer < ActiveModel::Serializer
   attributes :id, :name, :acronym, :cidc_registration_date, :cidc_act_number,
              :faculty_act_number, :faculty_registration_date,
              :faculty_ids, :curricular_project_ids,
-             :research_focuses, :oecd_disciplines, :cine_detailed_areas,
              :state_id, :state_name, :group_type_id,
-             :group_type_name, :director
+             :group_type_name, :director_id, :director_oas_id,
+             :research_focus_id, :oecd_discipline_ids, :cine_detailed_area_ids
 
 
-  def cine_detailed_areas
+  def cine_detailed_area_id
     cine_detailed_area = self.object.cine_detailed_areas
     if cine_detailed_area
       cine_detailed_area.map do |cda|
-        cda.name
+        cda.id
       end
     end
   end
@@ -25,10 +25,17 @@ class ResearchGroupSimpleSerializer < ActiveModel::Serializer
     end
   end
 
-  def director
+  def director_id
     members = self.object.group_members.where(role_id: 1).last
     if members
-      members.researcher
+      members.researcher.id
+    end
+  end
+
+  def director_oas_id
+    members = self.object.group_members.where(role_id: 1).last
+    if members
+      members.researcher.oas_researcher_id
     end
   end
 
@@ -48,11 +55,11 @@ class ResearchGroupSimpleSerializer < ActiveModel::Serializer
     end
   end
 
-  def research_focuses
+  def research_focus_id
     research_focus = self.object.research_focuses
     if research_focus
       research_focus.map do |rf|
-        rf.name
+        rf.id
       end
     end
   end
@@ -71,11 +78,11 @@ class ResearchGroupSimpleSerializer < ActiveModel::Serializer
     end
   end
 
-  def oecd_disciplines
+  def oecd_discipline_id
     oecd_discipline = self.object.oecd_disciplines
     if oecd_discipline
       oecd_discipline.map do |od|
-        od.name
+        od.id
       end
     end
   end
