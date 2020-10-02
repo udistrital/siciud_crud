@@ -22,13 +22,14 @@ module Api
                                                                 params[:faculty_id],
                                                                 params[:category])
         end
+
+        aux = @research_groups.includes(:group_type).paginate(:page => params[:skip],
+                                                              :per_page => params[:take])
         if params[:requireTotalCount]
           render json: {'totalCount': @research_groups.count,
-                        'data': (@research_groups.paginate(:page => params[:skip],
-                                                           :per_page => params[:take]))}
+                        'data': ActiveModelSerializers::SerializableResource.new(aux)}
         else
-          render json: {'data': (@research_groups.paginate(:page => params[:skip],
-                                                           :per_page => params[:take]))}
+          render json: {'data': ActiveModelSerializers::SerializableResource.new(aux)}
         end
 
       end
