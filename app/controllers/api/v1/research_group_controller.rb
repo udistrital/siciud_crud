@@ -22,7 +22,9 @@ module Api
                                                                 params[:faculty_id],
                                                                 params[:category])
         end
-        paginate json: @research_groups
+
+        render json: {'totalCount': @research_groups.count,
+                      'data': (paginate @research_groups)}
       end
 
       def show
