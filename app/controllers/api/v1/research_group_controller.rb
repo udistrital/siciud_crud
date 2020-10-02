@@ -23,8 +23,16 @@ module Api
                                                                 params[:category])
         end
 
-        aux = @research_groups.paginate(:page => (params[:skip].to_i + 1),
-                                        :per_page => params[:take])
+        if params[:skip] and params[:take] != 0
+          page = ((params[:skip].to_i / params[:take].to_i) + 1)
+          puts "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5"
+          puts "Page: #{page}"
+          aux = @research_groups.paginate(:page => page,
+                                          :per_page => params[:take])
+        else
+          aux = @research_groups
+        end
+
         render json: {'totalCount': @research_groups.count,
                       'data': ActiveModelSerializers::SerializableResource.new(aux)}
       end
