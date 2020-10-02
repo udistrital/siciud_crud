@@ -22,9 +22,15 @@ module Api
                                                                 params[:faculty_id],
                                                                 params[:category])
         end
+        if params[:requireTotalCount]
+          render json: {'totalCount': @research_groups.count,
+                        'data': (@research_groups.paginate(:page => params[:skip],
+                                                           :per_page => params[:take]))}
+        else
+          render json: {'data': (@research_groups.paginate(:page => params[:skip],
+                                                           :per_page => params[:take]))}
+        end
 
-        render json: {'totalCount': @research_groups.count,
-                      'data': (paginate @research_groups)}
       end
 
       def show
