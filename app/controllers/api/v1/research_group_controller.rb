@@ -25,13 +25,8 @@ module Api
 
         aux = @research_groups.paginate(:page => (params[:skip].to_i + 1),
                                         :per_page => params[:take])
-        if params[:requireTotalCount]
-          render json: {'totalCount': @research_groups.count,
-                        'data': ActiveModelSerializers::SerializableResource.new(aux)}
-        else
-          render json: {'data': ActiveModelSerializers::SerializableResource.new(aux)}
-        end
-
+        render json: {'totalCount': @research_groups.count,
+                      'data': ActiveModelSerializers::SerializableResource.new(aux)}
       end
 
       def show
