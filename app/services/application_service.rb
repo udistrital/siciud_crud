@@ -1,11 +1,30 @@
 class ApplicationService
   require 'json'
 
+  # Create the query from filter, this query is the argument
+  # to the "where", this is executed in the Model (curr_records)
+  # and return this result (curr_records type bbject)
+  def self.search_with_query(curr_records, filter)
+    query = self.filter_to_query(filter)
+    puts "Query: \n"
+    puts query
+    unless query.empty?
+      curr_records = curr_records.where("#{query}")
+    end
+    curr_records
+  end
+
+  # Create the query from filter, this query is the argument
+  # to the "order", this is executed in the Model (curr_records)
+  # and return this result (curr_records type bbject)
   def self.sort_with_query(curr_records, order_list)
     query = self.sort_to_query(order_list)
     puts "Query SORT: "
     puts query
-    curr_records.order("#{query}")
+    unless query.empty?
+      curr_records = curr_records.order("#{query}")
+    end
+    curr_records
   end
 
   # Remove text from string and parse one to array
@@ -21,15 +40,7 @@ class ApplicationService
     JSON.parse(element_str)
   end
 
-  # Create the query from filter, this query is the argument
-  # to the "where", this is executed in the Model (curr_records)
-  # and return this result (Object)
-  def self.search_with_query(curr_records, filter)
-    query = self.filter_to_query(filter)
-    puts "Query: \n"
-    puts query
-    curr_records.where("#{query}")
-  end
+
 
   private
 
@@ -104,20 +115,18 @@ class ApplicationService
     query
   end
 
+  # Hash of input words to sql words implemented by each class
+  def self.get_general_dictionary
+    nil
+  end
 
-
-
-
-
+  # Array of valid filter fields (words) implemented by each class
   def self.get_valid_filter_fields
     nil
   end
 
+  # Array of valid sort fields (words) implemented by each class
   def self.get_valid_sort_fields
-    nil
-  end
-
-  def self.get_general_dictionary
     nil
   end
 end

@@ -20,24 +20,7 @@ class ResearchGroupsSearchService < ApplicationService
 
   private
 
-  def self.get_valid_filter_fields
-    rg_fields = %w[id name acronym cidc_act_number faculty_act_number
-                email gruplac webpage colciencias_code snies_id group_type_id
-                group_state_id]
-    gt_fields = ["group_type_name"]
-    gs_fields = ["state_name"]
-    rg_fields + gt_fields + gs_fields
-  end
-
-  def self.get_valid_sort_fields
-    rg_fields = %w[id name acronym cidc_act_number faculty_act_number
-                email gruplac webpage colciencias_code snies_id group_type_id
-                group_state_id cidc_registration_date faculty_registration_date]
-    gt_fields = ["group_type_name"]
-    gs_fields = ["state_name"]
-    rg_fields + gt_fields + gs_fields
-  end
-
+  # Hash of input words to sql words implemented to ApplicationService
   def self.get_general_dictionary
     dictionary = {"id" => "research_groups.id",
                   "name" => "research_groups.name",
@@ -56,5 +39,25 @@ class ResearchGroupsSearchService < ApplicationService
                   "group_type_name" => "group_types.name",
                   "state_name" => "group_states.name"}
     dictionary
+  end
+
+  # Array of valid filter fields (words) implemented to ApplicationService
+  def self.get_valid_filter_fields
+    rg_fields = %w[id name acronym cidc_act_number faculty_act_number
+                email gruplac webpage colciencias_code snies_id group_type_id
+                group_state_id]
+    gt_fields = ["group_type_name"]
+    gs_fields = ["state_name"]
+    rg_fields + gt_fields + gs_fields
+  end
+
+  # Array of valid sort fields (words) implemented to ApplicationService
+  def self.get_valid_sort_fields
+    rg_fields = %w[id name acronym cidc_act_number faculty_act_number
+                email gruplac webpage colciencias_code snies_id group_type_id
+                group_state_id cidc_registration_date faculty_registration_date]
+    gt_fields = ["group_type_name"]
+    gs_fields = ["state_name"]
+    rg_fields + gt_fields + gs_fields
   end
 end
