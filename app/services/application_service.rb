@@ -35,24 +35,27 @@ class ApplicationService
 
   # Create the query SQL from the filter
   def self.filter_to_query(filter_list)
-    conditions = []
-    query = ""
-    filter_list.each do |filter|
-      if filter.is_a? Array and filter.size == 3
-        query = map_operator(filter[0], filter[1], filter[2])
-        unless query.nil?
-          conditions.push(query)
+    total_query = ""
+    total = self.get_valid_filter_fields
+    dictionary = self.get_general_dictionary
+
+    unless total.nil? or dictionary.nil?
+      filter_list.each do |filter|
+        if filter.is_a? Array and filter.size == 3
+          if total.include? filter[0]
+            query = map_operator(dictionary[filter[0]], filter[1], filter[2])
+            unless query.nil?
+              if total_query.empty?
+                total_query = query
+              else
+                total_query += " OR " + query
+              end
+            end
+          end
         end
       end
     end
-    conditions.each do |condition|
-      if query.empty?
-        query = condition
-      else
-        query = query + " OR " + condition
-      end
-    end
-    query
+    total_query
   end
 
   # Convert operator to query SQL
@@ -73,27 +76,48 @@ class ApplicationService
     end
   end
 
+  # Create the query SQL from the sort
   def self.sort_to_query(sort_list)
-    puts "EN el ordenador query"
-    puts sort_list
-    puts sort_list.class
-    puts "$$$$$$$$$$"
     query = ""
-    sort_list.each do |ord|
-      if ord["desc"]
-        if query.empty?
-          query = ord["selector"] + " DESC"
-        else
-          query += ", " + ord["selector"] + " DESC"
-        end
-      else
-        if query.empty?
-          query = ord["selector"] + " ASC"
-        else
-          query += ", " + ord["selector"] + " ASC"
+    total = self.get_valid_sort_fields
+    dictionary = self.get_general_dictionary
+    unless total.nil? or dictionary.nil?
+      sort_list.each do |ord|
+        if total.include? ord["selector"]
+          ord["selector"] = dictionary[ord["selector"]]
+          if ord["desc"]
+            if query.empty?
+              query = ord["selector"] + " DESC"
+            else
+              query += ", " + ord["selector"] + " DESC"
+            end
+          else
+            if query.empty?
+              query = ord["selector"] + " ASC"
+            else
+              query += ", " + ord["selector"] + " ASC"
+            end
+          end
         end
       end
     end
     query
+  end
+
+
+
+
+
+
+  def self.get_valid_filter_fields
+    nil
+  end
+
+  def self.get_valid_sort_fields
+    nil
+  end
+
+  def self.get_general_dictionary
+    nil
   end
 end

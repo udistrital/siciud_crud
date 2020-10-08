@@ -1,4 +1,5 @@
 class ResearchGroupsSearchService < ApplicationService
+
   def self.filter_by_type(curr_research_groups, gt_id)
     groups = curr_research_groups.where("group_type_id = #{gt_id}") if gt_id.present?
     groups
@@ -16,74 +17,44 @@ class ResearchGroupsSearchService < ApplicationService
     curr_research_groups.order(:created_at)
   end
 
-  def self.get_valid_fields(filter_arr)
+
+  private
+
+  def self.get_valid_filter_fields
     rg_fields = %w[id name acronym cidc_act_number faculty_act_number
                 email gruplac webpage colciencias_code snies_id group_type_id
                 group_state_id]
     gt_fields = ["group_type_name"]
     gs_fields = ["state_name"]
-
-    dictionary = {"id" => "research_groups.id",
-                  "name" => "research_groups.name",
-                  "acronym" => "research_groups.acronym",
-                  "cidc_act_number" => "research_groups.cidc_act_number",
-                  "cidc_registration_date" => "research_groups.cidc_registration_date",
-                  "faculty_act_number" => "research_groups.faculty_act_number",
-                  "faculty_registration_date" => "research_groups.faculty_registration_date",
-                  "email" => "research_groups.email",
-                  "gruplac" => "research_groups.gruplac",
-                  "webpage" => "research_groups.webpage",
-                  "colciencias_code" => "research_groups.colciencias_code",
-                  "snies_id" => "research_groups.snies_id",
-                  "group_type_id" => "research_groups.group_type_id",
-                  "group_state_id" => "research_groups.group_state_id",
-                  "group_type_name" => "group_types.name",
-                  "state_name" => "group_states.name"}
-
-    total = rg_fields + gt_fields + gs_fields
-    valid_keys = filter_arr.transpose[0] & total
-    valid_fields = []
-    filter_arr.each do |filter|
-      if filter[0].in? valid_keys
-        valid_fields.push([dictionary[filter[0]], filter[1], filter[2]])
-      end
-    end
-    valid_fields
+    rg_fields + gt_fields + gs_fields
   end
 
-  def self.validate_sort(sort_list)
+  def self.get_valid_sort_fields
     rg_fields = %w[id name acronym cidc_act_number faculty_act_number
                 email gruplac webpage colciencias_code snies_id group_type_id
                 group_state_id cidc_registration_date faculty_registration_date]
     gt_fields = ["group_type_name"]
     gs_fields = ["state_name"]
+    rg_fields + gt_fields + gs_fields
+  end
 
+  def self.get_general_dictionary
     dictionary = {"id" => "research_groups.id",
                   "name" => "research_groups.name",
                   "acronym" => "research_groups.acronym",
                   "cidc_act_number" => "research_groups.cidc_act_number",
                   "cidc_registration_date" => "research_groups.cidc_registration_date",
+                  "colciencias_code" => "research_groups.colciencias_code",
+                  "email" => "research_groups.email",
                   "faculty_act_number" => "research_groups.faculty_act_number",
                   "faculty_registration_date" => "research_groups.faculty_registration_date",
-                  "email" => "research_groups.email",
-                  "gruplac" => "research_groups.gruplac",
-                  "webpage" => "research_groups.webpage",
-                  "colciencias_code" => "research_groups.colciencias_code",
-                  "snies_id" => "research_groups.snies_id",
-                  "group_type_id" => "research_groups.group_type_id",
                   "group_state_id" => "research_groups.group_state_id",
+                  "group_type_id" => "research_groups.group_type_id",
+                  "gruplac" => "research_groups.gruplac",
+                  "snies_id" => "research_groups.snies_id",
+                  "webpage" => "research_groups.webpage",
                   "group_type_name" => "group_types.name",
                   "state_name" => "group_states.name"}
-
-    total = rg_fields + gt_fields + gs_fields
-
-    valid_fields = []
-    sort_list.each do |ord|
-      if total.include? ord["selector"]
-        ord["selector"] = dictionary[ord["selector"]]
-        valid_fields.push(ord)
-      end
-    end
-    valid_fields
+    dictionary
   end
 end

@@ -24,15 +24,11 @@ module Api
         if (filter = params[:filter])
           filter = ResearchGroupsSearchService.str2array_and_remove_str(
               filter, ['"or",'])
-          filter = ResearchGroupsSearchService.get_valid_fields(filter)
           @research_groups = ResearchGroupsSearchService.search_with_query(
               @research_groups, filter)
         end
         if (sort = params[:sort])
           order_list = ResearchGroupsSearchService.str2array_direct(sort)
-          order_list = ResearchGroupsSearchService.validate_sort(order_list)
-          puts "sort:"
-          puts order_list
           @research_groups = ResearchGroupsSearchService.sort_with_query(
               @research_groups, order_list)
         end
