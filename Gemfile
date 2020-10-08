@@ -62,3 +62,6 @@ gem 'active_model_serializers', '~> 0.10.9'
 gem 'swagger-blocks'
 gem 'active_storage_validations'
 #gem 'file_validators'
+
+# gem json used to parse string to array
+gem 'json'

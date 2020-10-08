@@ -11,28 +11,44 @@ module Api
         render json: {error: e.message}, status: :unprocessable_entity
       end
 
+      rescue_from ActiveRecord::StatementInvalid do |e|
+        render json: {error: e.message}, status: :unprocessable_entity
+      end
+
       def index
+        @research_groups = ResearchGroup.joins(:group_type, :group_state)
         if (gt_id = params[:group_type_id])
-          @research_groups = ResearchGroupsSearchService.filter_by_type(gt_id)
-        else
-          @research_groups = ResearchGroup.all.order(:created_at)
-          @research_groups = ResearchGroupsSearchService.search(@research_groups,
-                                                                params[:name],
-                                                                params[:director],
-                                                                params[:faculty_id],
-                                                                params[:category])
+          @research_groups = ResearchGroupsSearchService.filter_by_type(
+              @research_groups, gt_id)
+        end
+        if (filter = params[:filter])
+          filter = ResearchGroupsSearchService.str2array_and_remove_str(
+              filter, ['"or",'])
+          filter = ResearchGroupsSearchService.get_valid_fields(filter)
+          @research_groups = ResearchGroupsSearchService.search_with_query(
+              @research_groups, filter)
+        end
+        if (sort = params[:sort])
+          @research_groups = ResearchGroupsSearchService.filter_records(
+              @research_groups, filter)
         end
 
         if params[:skip] and params[:take] != 0
           page = ((params[:skip].to_i / params[:take].to_i) + 1)
-          puts "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5"
-          puts "Page: #{page}"
           aux = @research_groups.paginate(:page => page,
                                           :per_page => params[:take])
         else
           aux = @research_groups
+          # cidc_act_document
+          # cine_detailed_area_ids
+          # curricular_project_ids
+          # establishment_document
+          # faculty_act_document
+          # faculty_ids
+          # historical_colciencias
+          # oecd_discipline_ids
+          # research_focus_ids
         end
-
         render json: {'totalCount': @research_groups.count,
                       'data': ActiveModelSerializers::SerializableResource.new(aux)}
       end
