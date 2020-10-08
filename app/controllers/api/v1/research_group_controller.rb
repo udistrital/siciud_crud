@@ -29,8 +29,12 @@ module Api
               @research_groups, filter)
         end
         if (sort = params[:sort])
-          @research_groups = ResearchGroupsSearchService.filter_records(
-              @research_groups, filter)
+          order_list = ResearchGroupsSearchService.str2array_direct(sort)
+          order_list = ResearchGroupsSearchService.validate_sort(order_list)
+          puts "sort:"
+          puts order_list
+          @research_groups = ResearchGroupsSearchService.sort_with_query(
+              @research_groups, order_list)
         end
 
         if params[:skip] and params[:take] != 0
