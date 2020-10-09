@@ -33,24 +33,32 @@ module Api
               @research_groups, order_list)
         end
 
-        if params[:skip] and params[:take] != 0
-          page = ((params[:skip].to_i / params[:take].to_i) + 1)
-          aux = @research_groups.paginate(:page => page,
-                                          :per_page => params[:take])
+        # cidc_act_document
+        # cine_detailed_area_ids
+        # curricular_project_ids
+        # establishment_document
+        # faculty_act_document
+        # faculty_ids
+        # historical_colciencias
+        # oecd_discipline_ids
+        # research_focus_ids
+
+        if (group = params[:group])
+          group = ResearchGroupsSearchService.str2array_direct(group)
+          response = ResearchGroupsSearchService.group_with_query(@research_groups, group)
+          render json: {'totalCount': @research_groups.count,
+                        'data': response}
         else
-          aux = @research_groups
-          # cidc_act_document
-          # cine_detailed_area_ids
-          # curricular_project_ids
-          # establishment_document
-          # faculty_act_document
-          # faculty_ids
-          # historical_colciencias
-          # oecd_discipline_ids
-          # research_focus_ids
+          if params[:skip] and params[:take] != 0
+            page = ((params[:skip].to_i / params[:take].to_i) + 1)
+            aux = @research_groups.paginate(:page => page,
+                                            :per_page => params[:take])
+          else
+            aux = @research_groups
+          end
+          render json: {'totalCount': @research_groups.count,
+                        'data': ActiveModelSerializers::SerializableResource.new(aux)}
         end
-        render json: {'totalCount': @research_groups.count,
-                      'data': ActiveModelSerializers::SerializableResource.new(aux)}
       end
 
       def show
