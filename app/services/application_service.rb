@@ -90,6 +90,7 @@ class ApplicationService
             puts aux_where
             if group.total_per_gf > 0
               items = curr_records.where("#{aux_where}")
+              items = ActiveModelSerializers::SerializableResource.new(items)
             else
               items = nil
             end
