@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_30_152249) do
+ActiveRecord::Schema.define(version: 2020_10_09_223700) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -593,6 +593,7 @@ ActiveRecord::Schema.define(version: 2020_09_30_152249) do
     t.string "snies_id"
     t.bigint "group_type_id"
     t.bigint "group_state_id"
+    t.boolean "interinstitutional"
     t.index ["group_state_id"], name: "index_research_groups_on_group_state_id"
     t.index ["group_type_id"], name: "index_research_groups_on_group_type_id"
   end

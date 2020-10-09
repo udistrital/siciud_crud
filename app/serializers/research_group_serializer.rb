@@ -9,6 +9,7 @@ class ResearchGroupSerializer < ActiveModel::Serializer
              :establishment_document, :email, :faculty_act_document,
              :faculty_act_number, :faculty_ids, :faculty_registration_date,
              :group_type_id, :group_type_name, :gruplac, :historical_colciencias,
+             :interinstitutional,
              :mission,
 
              :oecd_discipline_ids, :research_focus_ids,

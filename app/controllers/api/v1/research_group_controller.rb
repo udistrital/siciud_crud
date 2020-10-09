@@ -174,6 +174,7 @@ module Api
                                                :faculty_registration_date,
                                                :group_state_id,
                                                :email, :gruplac, :webpage,
+                                               :interinstitutional,
                                                :mission, :vision,
                                                :colciencias_code,
                                                :group_type_id, :snies_id,
