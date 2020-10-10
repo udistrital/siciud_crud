@@ -3,19 +3,19 @@ class ApplicationService
 
   # [{"selector":"group_type_name","desc":false,"isExpanded":true},
   # {"selector":"state_name","desc":false,"isExpanded":false}]
-  def self.group_with_query(curr_records, group_list)
+  def self.group_with_query(curr_records, group_list, order_list)
     group_list = self.validate_and_rename_fields(group_list)
     puts "Lista group:"
     puts group_list
     puts "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
     puts "Entre a la recursiva"
-    result = self.recursiva(curr_records, group_list)
+    result = self.recursiva(curr_records, group_list, "",order_list)
     puts "Salí de la recursiva"
     puts "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
     result
   end
 
-  def self.recursiva(curr_records, group_list, general_where_query = "")
+  def self.recursiva(curr_records, group_list, general_where_query = "", order_list=[])
     if group_list.is_a? Array
       puts "Soy array"
       puts "Tengo #{group_list.size} group list: "
@@ -64,7 +64,8 @@ class ApplicationService
                             'key': group.grouping_field,
                             'items': self.recursiva(curr_records,
                                                     aux_group_list,
-                                                    aux_where),
+                                                    aux_where,
+                                                    order_list),
                             'count': group.total_per_gf})
           else
             puts "Agregando uno al result - no recursivo"
@@ -89,6 +90,16 @@ class ApplicationService
             puts "Real query hijos:"
             puts aux_where
             if group.total_per_gf > 0
+              # if order_list.empty?
+              #   puts "Order vacio"
+              #   items = curr_records.where("#{aux_where}")
+              # else
+              #   puts "order con algo"
+              #   aux_query = self.sort_to_query(order_list)
+              #   puts aux_query
+              #   items = curr_records.where("#{aux_where}")
+              #   # items = curr_records.where("#{aux_where}").order("#{aux_query}")
+              # end
               items = curr_records.where("#{aux_where}")
               items = ActiveModelSerializers::SerializableResource.new(items)
             else

@@ -27,11 +27,6 @@ module Api
           @research_groups = ResearchGroupsSearchService.search_with_query(
               @research_groups, filter)
         end
-        if (sort = params[:sort])
-          order_list = ResearchGroupsSearchService.str2array_direct(sort)
-          @research_groups = ResearchGroupsSearchService.sort_with_query(
-              @research_groups, order_list)
-        end
 
         # cidc_act_document
         # cine_detailed_area_ids
@@ -44,11 +39,21 @@ module Api
         # research_focus_ids
 
         if (group = params[:group])
+          # order_list = []
+          # if (sort = params[:sort])
+          #   order_list = ResearchGroupsSearchService.str2array_direct(sort)
+          # end
           group = ResearchGroupsSearchService.str2array_direct(group)
-          response = ResearchGroupsSearchService.group_with_query(@research_groups, group)
+          response = ResearchGroupsSearchService.group_with_query(@research_groups, group, [])
           render json: {'totalCount': @research_groups.count,
                         'data': response}
         else
+          if (sort = params[:sort])
+            order_list = ResearchGroupsSearchService.str2array_direct(sort)
+            @research_groups = ResearchGroupsSearchService.sort_with_query(
+                @research_groups, order_list)
+          end
+
           if params[:skip] and params[:take] != 0
             page = ((params[:skip].to_i / params[:take].to_i) + 1)
             aux = @research_groups.paginate(:page => page,
