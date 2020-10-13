@@ -225,10 +225,6 @@ Rails.application.routes.draw do
       resources :cine_broad_areas, only: [:index, :create, :update]
       resources :cine_specific_areas, only: [:index, :create, :update]
       resources :cine_detailed_areas, only: [:index, :create, :update]
-
-      # get '*path', to: redirect('/'), constraints: lambda { |req|
-      #   req.path.exclude? 'rails/active_storage'
-      # }
     end
   end
 end
