@@ -2,20 +2,15 @@ class ResearchGroupSerializer < ActiveModel::Serializer
   include Rails.application.routes.url_helpers
   attributes :id, :name, :acronym, :cidc_act_document, :cidc_act_number,
              :cidc_registration_date,
-
              :cine_detailed_area_ids,
-
              :colciencias_code, :curricular_project_ids, :description,
              :establishment_document, :email, :faculty_act_document,
              :faculty_act_number, :faculty_ids, :faculty_registration_date,
              :group_type_id, :group_type_name, :gruplac, :historical_colciencias,
              :interinstitutional,
              :mission,
-
              :oecd_discipline_ids, :research_focus_ids,
-
              :snies_id, :state_id, :state_name, :vision, :webpage
-
 
   def cidc_act_document
     rails_blob_path(self.object.cidc_act_document,

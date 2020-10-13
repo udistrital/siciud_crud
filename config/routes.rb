@@ -11,6 +11,9 @@ Rails.application.routes.draw do
       get "country/:name", to: "country#show"
       resources :apidocs, only: [:index]
 
+      # Endpoint para listar las unidades de investigacion
+      resources :research_unit, only: [:index, :show]
+
       #Endpoint para listar los estados de los grupos de investigacion
       resources :group_states, only: [:index, :show]
       resources :state_seedbed, only: [:index, :show]
@@ -222,6 +225,10 @@ Rails.application.routes.draw do
       resources :cine_broad_areas, only: [:index, :create, :update]
       resources :cine_specific_areas, only: [:index, :create, :update]
       resources :cine_detailed_areas, only: [:index, :create, :update]
+
+      # get '*path', to: redirect('/'), constraints: lambda { |req|
+      #   req.path.exclude? 'rails/active_storage'
+      # }
     end
   end
 end

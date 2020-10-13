@@ -4,6 +4,20 @@
 # or operating system, you probably want to add a global ignore instead:
 #   git config --global core.excludesfile '~/.gitignore_global'
 
+# Custom
+#Custom
+*.bk
+*.bk.*
+*.code-workspace
+*.credentials
+*.gitignore
+*.txt
+.gitignore
+/config/database.yml
+public/swagger
+run.sh
+swagger
+
 # Ignore bundler config.
 /.bundle
 
