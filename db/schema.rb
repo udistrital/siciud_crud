@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_12_141035) do
+ActiveRecord::Schema.define(version: 2020_10_19_141030) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -77,7 +77,6 @@ ActiveRecord::Schema.define(version: 2020_10_12_141035) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["agreement_status_id"], name: "index_agreements_on_agreement_status_id"
-    t.index ["agreement_type_id"], name: "index_agreements_on_agreement_type_id"
   end
 
   create_table "agreements_group_members", id: false, force: :cascade do |t|
@@ -109,16 +108,6 @@ ActiveRecord::Schema.define(version: 2020_10_12_141035) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["agreement_research_project_id"], name: "index_arp_activities_on_agreement_research_project_id"
-  end
-
-  create_table "arp_activity_reports", force: :cascade do |t|
-    t.integer "arp_activity_id"
-    t.float "completedPercentage"
-    t.integer "status"
-    t.text "comment"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["arp_activity_id"], name: "index_arp_activity_reports_on_arp_activity_id"
   end
 
   create_table "arp_assignment_reports", force: :cascade do |t|
@@ -431,6 +420,31 @@ ActiveRecord::Schema.define(version: 2020_10_12_141035) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "geo_city", id: :integer, default: nil, force: :cascade do |t|
+    t.integer "state_id", null: false
+    t.string "name", limit: 255
+    t.string "code", limit: 10
+    t.float "latitude"
+    t.float "longitude"
+    t.index ["id"], name: "index_geo_city_id"
+  end
+
+  create_table "geo_country", id: :integer, default: nil, force: :cascade do |t|
+    t.string "name", limit: 255
+    t.string "iso2", limit: 2
+    t.string "iso3", limit: 3
+    t.string "capital_name", limit: 255
+    t.string "currency", limit: 10
+    t.index ["id"], name: "index_geo_country_id"
+  end
+
+  create_table "geo_state", id: :integer, default: nil, force: :cascade do |t|
+    t.integer "country_id", null: false
+    t.string "name", limit: 255
+    t.string "code", limit: 10
+    t.index ["id"], name: "index_geo_state_id"
+  end
+
   create_table "gm_periods", force: :cascade do |t|
     t.date "initial_date"
     t.date "final_date"
@@ -739,23 +753,10 @@ ActiveRecord::Schema.define(version: 2020_10_12_141035) do
     t.index ["researcher_id"], name: "index_users_on_researcher_id"
   end
 
-  add_foreign_key "arp_assignment_reports", "arp_assignments"
-  add_foreign_key "arp_assignments", "agreement_research_projects"
-  add_foreign_key "arp_assignments", "product_typologies"
-  add_foreign_key "call_item_categories", "calls"
-  add_foreign_key "call_item_categories", "item_categories"
-  add_foreign_key "calls", "call_types"
-  add_foreign_key "calls", "call_user_roles"
-  add_foreign_key "calls", "duration_types"
-  add_foreign_key "calls_product_types", "calls"
-  add_foreign_key "calls_product_types", "product_types"
-  add_foreign_key "calls_product_types", "required_types"
-  add_foreign_key "calls_required_documents", "calls"
-  add_foreign_key "calls_required_documents", "required_documents"
-  add_foreign_key "cine_detailed_areas", "cine_specific_areas"
-  add_foreign_key "cine_specific_areas", "cine_broad_areas"
   add_foreign_key "curricular_prj_ids_research_groups", "research_groups"
   add_foreign_key "faculty_ids_research_groups", "research_groups"
+  add_foreign_key "geo_city", "geo_state", column: "state_id", name: "fk_city_state", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "geo_state", "geo_country", column: "country_id", name: "fk_state_country", on_update: :cascade, on_delete: :cascade
   add_foreign_key "group_members", "gm_states"
   add_foreign_key "oecd_disciplines", "oecd_knowledge_subareas"
   add_foreign_key "oecd_knowledge_subareas", "oecd_knowledge_areas"
