@@ -1,0 +1,2 @@
+class PatentState < ApplicationRecord
+end
