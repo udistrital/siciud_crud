@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_19_223706) do
+ActiveRecord::Schema.define(version: 2020_10_21_163802) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -571,6 +571,19 @@ ActiveRecord::Schema.define(version: 2020_10_19_223706) do
     t.index ["research_group_id"], name: "index_int_participants_on_research_group_id"
   end
 
+  create_table "ip_livestock_breeds", force: :cascade do |t|
+    t.string "name"
+    t.date "publication_date"
+    t.string "consecutive_number_ma"
+    t.text "observation"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_ip_livestock_breeds_on_category_id"
+    t.index ["research_group_id"], name: "index_ip_livestock_breeds_on_research_group_id"
+  end
+
   create_table "item_categories", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -874,6 +887,28 @@ ActiveRecord::Schema.define(version: 2020_10_19_223706) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "scientific_notes", force: :cascade do |t|
+    t.string "title"
+    t.string "journal_title"
+    t.date "publication_date"
+    t.string "volume"
+    t.integer "number_of_pages"
+    t.integer "initial_page"
+    t.integer "final_page"
+    t.string "issn"
+    t.string "url"
+    t.string "doi"
+    t.text "observation"
+    t.bigint "category_id"
+    t.bigint "journal_id"
+    t.bigint "research_group_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_scientific_notes_on_category_id"
+    t.index ["journal_id"], name: "index_scientific_notes_on_journal_id"
+    t.index ["research_group_id"], name: "index_scientific_notes_on_research_group_id"
+  end
+
   create_table "seedbed_members", force: :cascade do |t|
     t.integer "role_id"
     t.integer "researcher_id"
@@ -990,6 +1025,8 @@ ActiveRecord::Schema.define(version: 2020_10_19_223706) do
   add_foreign_key "group_members", "gm_states"
   add_foreign_key "int_participants", "participant_types"
   add_foreign_key "int_participants", "research_groups"
+  add_foreign_key "ip_livestock_breeds", "categories"
+  add_foreign_key "ip_livestock_breeds", "research_groups"
   add_foreign_key "new_animal_breeds", "categories"
   add_foreign_key "new_animal_breeds", "cycle_types"
   add_foreign_key "new_animal_breeds", "petition_statuses"
@@ -1010,6 +1047,9 @@ ActiveRecord::Schema.define(version: 2020_10_19_223706) do
   add_foreign_key "research_creation_works", "research_groups"
   add_foreign_key "research_groups", "group_states"
   add_foreign_key "research_groups", "group_types"
+  add_foreign_key "scientific_notes", "categories"
+  add_foreign_key "scientific_notes", "journals"
+  add_foreign_key "scientific_notes", "research_groups"
   add_foreign_key "users", "researchers"
   add_foreign_key "vegetable_varieties", "categories"
   add_foreign_key "vegetable_varieties", "cycle_types"
