@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_21_163802) do
+ActiveRecord::Schema.define(version: 2020_10_21_213123) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -219,6 +219,8 @@ ActiveRecord::Schema.define(version: 2020_10_21_163802) do
     t.boolean "is_national"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "research_creation_work_id"
+    t.index ["research_creation_work_id"], name: "index_awards_on_research_creation_work_id"
   end
 
   create_table "book_chapters", force: :cascade do |t|
@@ -755,13 +757,11 @@ ActiveRecord::Schema.define(version: 2020_10_21_163802) do
     t.string "registered_project_title"
     t.string "url"
     t.text "observation"
-    t.bigint "award_id"
     t.bigint "knwl_spec_area_id"
     t.bigint "category_id"
     t.bigint "research_group_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["award_id"], name: "index_research_creation_works_on_award_id"
     t.index ["category_id"], name: "index_research_creation_works_on_category_id"
     t.index ["knwl_spec_area_id"], name: "index_research_creation_works_on_knwl_spec_area_id"
     t.index ["research_group_id"], name: "index_research_creation_works_on_research_group_id"
@@ -1000,6 +1000,7 @@ ActiveRecord::Schema.define(version: 2020_10_21_163802) do
   add_foreign_key "arp_assignment_reports", "arp_assignments"
   add_foreign_key "arp_assignments", "agreement_research_projects"
   add_foreign_key "arp_assignments", "product_typologies"
+  add_foreign_key "awards", "research_creation_works"
   add_foreign_key "book_chapters", "categories"
   add_foreign_key "book_chapters", "editorials"
   add_foreign_key "book_chapters", "research_groups"
@@ -1041,7 +1042,6 @@ ActiveRecord::Schema.define(version: 2020_10_21_163802) do
   add_foreign_key "patents", "patent_states"
   add_foreign_key "patents", "research_groups"
   add_foreign_key "product_types", "product_typologies"
-  add_foreign_key "research_creation_works", "awards"
   add_foreign_key "research_creation_works", "categories"
   add_foreign_key "research_creation_works", "knwl_spec_areas"
   add_foreign_key "research_creation_works", "research_groups"
