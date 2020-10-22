@@ -73,6 +73,7 @@ module Api
       def create
         #Crear el grupo de investigacion con los parametros que se envian
         @research_group = ResearchGroup.new(research_group_params)
+        params.permit(:faculty_ids, :curricular_project_ids)
         save_data_by_key(@research_group)
         if @research_group.save
           render json: @research_group, status: :created
@@ -85,6 +86,7 @@ module Api
 
       def update
         if @research_group.update(research_group_params)
+          params.permit(:faculty_ids, :curricular_project_ids)
           save_data_by_key(@research_group)
 
           if @research_group.save
@@ -131,11 +133,11 @@ module Api
       private
 
       def save_data_by_key(research_gr)
-        if params[:research_group].has_key?(:faculty_ids_research_group_ids)
-          setFaculties((params[:research_group][:faculty_ids_research_group_ids]).uniq)
+        if params[:research_group].has_key?(:faculty_ids)
+          setFaculties((params[:research_group][:faculty_ids]).uniq)
         end
-        if params[:research_group].has_key?(:curricular_prj_ids_research_group_ids)
-          setCurricularPrj((params[:research_group][:curricular_prj_ids_research_group_ids]).uniq)
+        if params[:research_group].has_key?(:curricular_project_ids)
+          setCurricularPrj((params[:research_group][:curricular_project_ids]).uniq)
         end
         if params[:research_group].has_key?(:oecd_discipline_ids)
           research_gr.oecd_discipline_ids = (params[:research_group][:oecd_discipline_ids]).map(&:to_i).uniq
@@ -185,8 +187,6 @@ module Api
                                                 :cine_specific_area_id,
                                                :colciencias_code,
                                                :group_type_id, :snies_id,
-                                               faculty_ids_research_groups: [],
-                                               curricular_prj_ids_research_groups: [],
                                                research_focus_ids: [],
                                                oecd_discipline_ids: [])
       end
