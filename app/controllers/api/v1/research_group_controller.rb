@@ -181,6 +181,8 @@ module Api
                                                :email, :gruplac, :webpage,
                                                :interinstitutional,
                                                :mission, :vision,
+                                                :cine_broad_area_id,
+                                                :cine_specific_area_id,
                                                :colciencias_code,
                                                :group_type_id, :snies_id,
                                                faculty_ids_research_groups: [],

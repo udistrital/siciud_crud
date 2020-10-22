@@ -20,5 +20,6 @@ class ResearchGroup < ApplicationRecord
   #Validaciones de los campos obligatorios
   validates :name, :acronym, :cidc_registration_date,
             :cidc_act_number, :faculty_act_number, :faculty_registration_date,
-            :group_state_id, :snies_id, :email, presence: true
+            :group_state_id, presence: true
+            # , :snies_id, :email
 end

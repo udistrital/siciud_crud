@@ -8,6 +8,7 @@
 *.bk*
 *.txt
 *.code-workspace
+/public/storage
 
 # Ignore bundler config.
 /.bundle
