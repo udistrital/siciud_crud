@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_19_141030) do
+ActiveRecord::Schema.define(version: 2020_10_21_213123) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -110,6 +110,16 @@ ActiveRecord::Schema.define(version: 2020_10_19_141030) do
     t.index ["agreement_research_project_id"], name: "index_arp_activities_on_agreement_research_project_id"
   end
 
+  create_table "arp_activity_reports", force: :cascade do |t|
+    t.integer "arp_activity_id"
+    t.float "completedPercentage"
+    t.integer "status"
+    t.text "comment"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["arp_activity_id"], name: "index_arp_activity_reports_on_arp_activity_id"
+  end
+
   create_table "arp_assignment_reports", force: :cascade do |t|
     t.string "name"
     t.text "comment"
@@ -203,6 +213,49 @@ ActiveRecord::Schema.define(version: 2020_10_19_141030) do
     t.index ["arp_general_goal_id"], name: "index_arp_specific_goals_on_arp_general_goal_id"
   end
 
+  create_table "awards", force: :cascade do |t|
+    t.string "name"
+    t.boolean "is_national"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "research_creation_work_id"
+    t.index ["research_creation_work_id"], name: "index_awards_on_research_creation_work_id"
+  end
+
+  create_table "book_chapters", force: :cascade do |t|
+    t.string "book_title"
+    t.string "title"
+    t.date "publication_date"
+    t.string "isbn"
+    t.string "doi"
+    t.string "url"
+    t.text "observation"
+    t.bigint "category_id"
+    t.bigint "editorial_id"
+    t.bigint "research_group_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_book_chapters_on_category_id"
+    t.index ["editorial_id"], name: "index_book_chapters_on_editorial_id"
+    t.index ["research_group_id"], name: "index_book_chapters_on_research_group_id"
+  end
+
+  create_table "books", force: :cascade do |t|
+    t.string "title"
+    t.date "publication_date"
+    t.string "isbn"
+    t.string "url"
+    t.text "observation"
+    t.bigint "category_id"
+    t.bigint "editorial_id"
+    t.bigint "research_group_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_books_on_category_id"
+    t.index ["editorial_id"], name: "index_books_on_editorial_id"
+    t.index ["research_group_id"], name: "index_books_on_research_group_id"
+  end
+
   create_table "call_item_categories", force: :cascade do |t|
     t.float "percentage"
     t.float "value"
@@ -269,6 +322,14 @@ ActiveRecord::Schema.define(version: 2020_10_19_141030) do
     t.datetime "updated_at", null: false
     t.index ["call_id"], name: "index_calls_required_documents_on_call_id"
     t.index ["required_document_id"], name: "index_calls_required_documents_on_required_document_id"
+  end
+
+  create_table "categories", force: :cascade do |t|
+    t.string "name"
+    t.bigint "product_type_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_type_id"], name: "index_categories_on_product_type_id"
   end
 
   create_table "cine_broad_areas", force: :cascade do |t|
@@ -361,6 +422,12 @@ ActiveRecord::Schema.define(version: 2020_10_19_141030) do
     t.index ["research_group_id"], name: "index_curricular_prj_ids_research_groups_on_research_group_id"
   end
 
+  create_table "cycle_types", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "document_types", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -373,10 +440,28 @@ ActiveRecord::Schema.define(version: 2020_10_19_141030) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "editorials", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "entity_types", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "ext_participants", force: :cascade do |t|
+    t.string "first_name"
+    t.string "last_name"
+    t.string "producible_type"
+    t.bigint "producible_id"
+    t.bigint "participant_type_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["participant_type_id"], name: "index_ext_participants_on_participant_type_id"
+    t.index ["producible_type", "producible_id"], name: "index_ext_participants_on_producible_type_and_producible_id"
   end
 
   create_table "faculty_ids_research_groups", force: :cascade do |t|
@@ -500,10 +585,63 @@ ActiveRecord::Schema.define(version: 2020_10_19_141030) do
     t.index ["research_group_id"], name: "index_historical_colciencias_ranks_on_research_group_id"
   end
 
+  create_table "int_participants", force: :cascade do |t|
+    t.string "producible_type"
+    t.bigint "producible_id"
+    t.bigint "research_group_id"
+    t.bigint "participant_type_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["participant_type_id"], name: "index_int_participants_on_participant_type_id"
+    t.index ["producible_type", "producible_id"], name: "index_int_participants_on_producible_type_and_producible_id"
+    t.index ["research_group_id"], name: "index_int_participants_on_research_group_id"
+  end
+
+  create_table "ip_livestock_breeds", force: :cascade do |t|
+    t.string "name"
+    t.date "publication_date"
+    t.string "consecutive_number_ma"
+    t.text "observation"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_ip_livestock_breeds_on_category_id"
+    t.index ["research_group_id"], name: "index_ip_livestock_breeds_on_research_group_id"
+  end
+
   create_table "item_categories", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "journals", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "knwl_spec_areas", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "new_animal_breeds", force: :cascade do |t|
+    t.string "name"
+    t.date "date"
+    t.text "observation"
+    t.bigint "cycle_type_id"
+    t.bigint "petition_status_id"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_new_animal_breeds_on_category_id"
+    t.index ["cycle_type_id"], name: "index_new_animal_breeds_on_cycle_type_id"
+    t.index ["petition_status_id"], name: "index_new_animal_breeds_on_petition_status_id"
+    t.index ["research_group_id"], name: "index_new_animal_breeds_on_research_group_id"
   end
 
   create_table "oecd_disciplines", force: :cascade do |t|
@@ -534,6 +672,70 @@ ActiveRecord::Schema.define(version: 2020_10_19_141030) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["oecd_knowledge_area_id"], name: "index_oecd_knowledge_subareas_on_oecd_knowledge_area_id"
+  end
+
+  create_table "paper_types", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "papers", force: :cascade do |t|
+    t.string "title"
+    t.date "publication_date"
+    t.date "approval_date"
+    t.string "volume"
+    t.integer "number_of_pages"
+    t.integer "initial_page"
+    t.integer "final_page"
+    t.string "issn"
+    t.string "url"
+    t.string "doi"
+    t.text "observation"
+    t.bigint "category_id"
+    t.bigint "journal_id"
+    t.bigint "paper_type_id"
+    t.bigint "research_group_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_papers_on_category_id"
+    t.index ["journal_id"], name: "index_papers_on_journal_id"
+    t.index ["paper_type_id"], name: "index_papers_on_paper_type_id"
+    t.index ["research_group_id"], name: "index_papers_on_research_group_id"
+  end
+
+  create_table "participant_types", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "patent_states", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "patents", force: :cascade do |t|
+    t.string "patent_number"
+    t.string "title"
+    t.date "date_of_obtaining"
+    t.string "industrial_publication_gazette"
+    t.text "observation"
+    t.bigint "category_id"
+    t.bigint "patent_state_id"
+    t.bigint "research_group_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_patents_on_category_id"
+    t.index ["patent_state_id"], name: "index_patents_on_patent_state_id"
+    t.index ["research_group_id"], name: "index_patents_on_research_group_id"
+  end
+
+  create_table "petition_statuses", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "plan_periods", force: :cascade do |t|
@@ -572,6 +774,28 @@ ActiveRecord::Schema.define(version: 2020_10_19_141030) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "research_creation_works", force: :cascade do |t|
+    t.string "title"
+    t.date "creation_and_selection_date"
+    t.string "nature_of_work"
+    t.string "registered_project_title"
+    t.string "url"
+    t.text "observation"
+    t.bigint "knwl_spec_area_id"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_research_creation_works_on_category_id"
+    t.index ["knwl_spec_area_id"], name: "index_research_creation_works_on_knwl_spec_area_id"
+    t.index ["research_group_id"], name: "index_research_creation_works_on_research_group_id"
+  end
+
+  create_table "research_creation_works_work_types", id: false, force: :cascade do |t|
+    t.bigint "work_type_id", null: false
+    t.bigint "research_creation_work_id", null: false
+  end
+
   create_table "research_focuses", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -608,6 +832,10 @@ ActiveRecord::Schema.define(version: 2020_10_19_141030) do
     t.bigint "group_type_id"
     t.bigint "group_state_id"
     t.boolean "interinstitutional"
+    t.bigint "cine_broad_area_id"
+    t.bigint "cine_specific_area_id"
+    t.index ["cine_broad_area_id"], name: "index_research_groups_on_cine_broad_area_id"
+    t.index ["cine_specific_area_id"], name: "index_research_groups_on_cine_specific_area_id"
     t.index ["group_state_id"], name: "index_research_groups_on_group_state_id"
     t.index ["group_type_id"], name: "index_research_groups_on_group_type_id"
   end
@@ -687,6 +915,28 @@ ActiveRecord::Schema.define(version: 2020_10_19_141030) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "scientific_notes", force: :cascade do |t|
+    t.string "title"
+    t.string "journal_title"
+    t.date "publication_date"
+    t.string "volume"
+    t.integer "number_of_pages"
+    t.integer "initial_page"
+    t.integer "final_page"
+    t.string "issn"
+    t.string "url"
+    t.string "doi"
+    t.text "observation"
+    t.bigint "category_id"
+    t.bigint "journal_id"
+    t.bigint "research_group_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_scientific_notes_on_category_id"
+    t.index ["journal_id"], name: "index_scientific_notes_on_journal_id"
+    t.index ["research_group_id"], name: "index_scientific_notes_on_research_group_id"
+  end
+
   create_table "seedbed_members", force: :cascade do |t|
     t.integer "role_id"
     t.integer "researcher_id"
@@ -753,15 +1003,62 @@ ActiveRecord::Schema.define(version: 2020_10_19_141030) do
     t.index ["researcher_id"], name: "index_users_on_researcher_id"
   end
 
+  create_table "vegetable_varieties", force: :cascade do |t|
+    t.string "name"
+    t.date "date"
+    t.text "observation"
+    t.bigint "cycle_type_id"
+    t.bigint "petition_status_id"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_vegetable_varieties_on_category_id"
+    t.index ["cycle_type_id"], name: "index_vegetable_varieties_on_cycle_type_id"
+    t.index ["petition_status_id"], name: "index_vegetable_varieties_on_petition_status_id"
+    t.index ["research_group_id"], name: "index_vegetable_varieties_on_research_group_id"
+  end
+
+  create_table "work_types", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_foreign_key "awards", "research_creation_works"
+  add_foreign_key "book_chapters", "categories"
+  add_foreign_key "book_chapters", "editorials"
+  add_foreign_key "books", "categories"
+  add_foreign_key "books", "editorials"
   add_foreign_key "curricular_prj_ids_research_groups", "research_groups"
+  add_foreign_key "ext_participants", "participant_types"
   add_foreign_key "faculty_ids_research_groups", "research_groups"
   add_foreign_key "geo_city", "geo_state", column: "state_id", name: "fk_city_state", on_update: :cascade, on_delete: :cascade
   add_foreign_key "geo_state", "geo_country", column: "country_id", name: "fk_state_country", on_update: :cascade, on_delete: :cascade
   add_foreign_key "group_members", "gm_states"
+  add_foreign_key "int_participants", "participant_types"
+  add_foreign_key "ip_livestock_breeds", "categories"
+  add_foreign_key "new_animal_breeds", "categories"
+  add_foreign_key "new_animal_breeds", "cycle_types"
+  add_foreign_key "new_animal_breeds", "petition_statuses"
   add_foreign_key "oecd_disciplines", "oecd_knowledge_subareas"
   add_foreign_key "oecd_knowledge_subareas", "oecd_knowledge_areas"
+  add_foreign_key "papers", "categories"
+  add_foreign_key "papers", "journals"
+  add_foreign_key "papers", "paper_types"
+  add_foreign_key "patents", "categories"
+  add_foreign_key "patents", "patent_states"
   add_foreign_key "product_types", "product_typologies"
+  add_foreign_key "research_creation_works", "categories"
+  add_foreign_key "research_creation_works", "knwl_spec_areas"
+  add_foreign_key "research_groups", "cine_broad_areas"
+  add_foreign_key "research_groups", "cine_specific_areas"
   add_foreign_key "research_groups", "group_states"
   add_foreign_key "research_groups", "group_types"
+  add_foreign_key "scientific_notes", "categories"
+  add_foreign_key "scientific_notes", "journals"
   add_foreign_key "users", "researchers"
+  add_foreign_key "vegetable_varieties", "categories"
+  add_foreign_key "vegetable_varieties", "cycle_types"
+  add_foreign_key "vegetable_varieties", "petition_statuses"
 end

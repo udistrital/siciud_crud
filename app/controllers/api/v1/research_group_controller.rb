@@ -131,11 +131,11 @@ module Api
       private
 
       def save_data_by_key(research_gr)
-        if params[:research_group].has_key?(:faculty_ids)
-          setFaculties((params[:research_group][:faculty_ids]).uniq)
+        if params[:research_group].has_key?(:faculty_ids_research_group_ids)
+          setFaculties((params[:research_group][:faculty_ids_research_group_ids]).uniq)
         end
-        if params[:research_group].has_key?(:curricular_project_ids)
-          setCurricularPrj((params[:research_group][:curricular_project_ids]).uniq)
+        if params[:research_group].has_key?(:curricular_prj_ids_research_group_ids)
+          setCurricularPrj((params[:research_group][:curricular_prj_ids_research_group_ids]).uniq)
         end
         if params[:research_group].has_key?(:oecd_discipline_ids)
           research_gr.oecd_discipline_ids = (params[:research_group][:oecd_discipline_ids]).map(&:to_i).uniq
