@@ -74,6 +74,7 @@ module Api
       def create
         #Crear el grupo de investigacion con los parametros que se envian
         @research_group = ResearchGroup.new(research_group_params)
+        params.permit(:faculty_ids, :curricular_project_ids)
         save_data_by_key(@research_group)
         if @research_group.save
           render json: @research_group, status: :created
@@ -86,6 +87,7 @@ module Api
 
       def update
         if @research_group.update(research_group_params)
+          params.permit(:faculty_ids, :curricular_project_ids)
           save_data_by_key(@research_group)
 
           if @research_group.save
@@ -182,10 +184,10 @@ module Api
                                                :email, :gruplac, :webpage,
                                                :interinstitutional,
                                                :mission, :vision,
+                                                :cine_broad_area_id,
+                                                :cine_specific_area_id,
                                                :colciencias_code,
                                                :group_type_id, :snies_id,
-                                               faculty_ids_research_groups: [],
-                                               curricular_prj_ids_research_groups: [],
                                                research_focus_ids: [],
                                                oecd_discipline_ids: [])
       end

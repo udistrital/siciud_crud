@@ -77,7 +77,6 @@ ActiveRecord::Schema.define(version: 2020_10_21_213123) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["agreement_status_id"], name: "index_agreements_on_agreement_status_id"
-    t.index ["agreement_type_id"], name: "index_agreements_on_agreement_type_id"
   end
 
   create_table "agreements_group_members", id: false, force: :cascade do |t|
@@ -506,6 +505,31 @@ ActiveRecord::Schema.define(version: 2020_10_21_213123) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "geo_city", id: :integer, default: nil, force: :cascade do |t|
+    t.integer "state_id", null: false
+    t.string "name", limit: 255
+    t.string "code", limit: 10
+    t.float "latitude"
+    t.float "longitude"
+    t.index ["id"], name: "index_geo_city_id"
+  end
+
+  create_table "geo_country", id: :integer, default: nil, force: :cascade do |t|
+    t.string "name", limit: 255
+    t.string "iso2", limit: 2
+    t.string "iso3", limit: 3
+    t.string "capital_name", limit: 255
+    t.string "currency", limit: 10
+    t.index ["id"], name: "index_geo_country_id"
+  end
+
+  create_table "geo_state", id: :integer, default: nil, force: :cascade do |t|
+    t.integer "country_id", null: false
+    t.string "name", limit: 255
+    t.string "code", limit: 10
+    t.index ["id"], name: "index_geo_state_id"
+  end
+
   create_table "gm_periods", force: :cascade do |t|
     t.date "initial_date"
     t.date "final_date"
@@ -808,6 +832,10 @@ ActiveRecord::Schema.define(version: 2020_10_21_213123) do
     t.bigint "group_type_id"
     t.bigint "group_state_id"
     t.boolean "interinstitutional"
+    t.bigint "cine_broad_area_id"
+    t.bigint "cine_specific_area_id"
+    t.index ["cine_broad_area_id"], name: "index_research_groups_on_cine_broad_area_id"
+    t.index ["cine_specific_area_id"], name: "index_research_groups_on_cine_specific_area_id"
     t.index ["group_state_id"], name: "index_research_groups_on_group_state_id"
     t.index ["group_type_id"], name: "index_research_groups_on_group_type_id"
   end
@@ -1023,6 +1051,8 @@ ActiveRecord::Schema.define(version: 2020_10_21_213123) do
   add_foreign_key "curricular_prj_ids_research_groups", "research_groups"
   add_foreign_key "ext_participants", "participant_types"
   add_foreign_key "faculty_ids_research_groups", "research_groups"
+  add_foreign_key "geo_city", "geo_state", column: "state_id", name: "fk_city_state", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "geo_state", "geo_country", column: "country_id", name: "fk_state_country", on_update: :cascade, on_delete: :cascade
   add_foreign_key "group_members", "gm_states"
   add_foreign_key "int_participants", "participant_types"
   add_foreign_key "int_participants", "research_groups"
@@ -1045,6 +1075,8 @@ ActiveRecord::Schema.define(version: 2020_10_21_213123) do
   add_foreign_key "research_creation_works", "categories"
   add_foreign_key "research_creation_works", "knwl_spec_areas"
   add_foreign_key "research_creation_works", "research_groups"
+  add_foreign_key "research_groups", "cine_broad_areas"
+  add_foreign_key "research_groups", "cine_specific_areas"
   add_foreign_key "research_groups", "group_states"
   add_foreign_key "research_groups", "group_types"
   add_foreign_key "scientific_notes", "categories"
