@@ -1,0 +1,2 @@
+class CycleType < ApplicationRecord
+end

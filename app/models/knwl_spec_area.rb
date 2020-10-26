@@ -1,0 +1,2 @@
+class KnwlSpecArea < ApplicationRecord
+end

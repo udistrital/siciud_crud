@@ -56,7 +56,6 @@ Rails.application.routes.draw do
       end
 
       resources :arp_role, only: [:index, :show, :create]
-      resources :product_typologies, only: [:index, :show, :create, :update]
 
       resources :user_roles, only: [:index, :show, :create, :update]
 
@@ -142,6 +141,65 @@ Rails.application.routes.draw do
         end
 
         resources :historical_colciencias_ranks, only: [:index, :show, :create, :update]
+
+
+        # PRODUCTS ENDPOINTS BY TYPOLOGY
+        # New generation products endpoints
+        # Book
+        resources :books, only: [:index, :show, :create, :update]
+        put "books/:id/attach/", to: "books#attach"
+
+        resources :book_chapters, only: [:index, :show, :create, :update]
+        put "book_chapters/:id/attach/", to: "book_chapters#attach"
+
+        resources :ip_livestock_breeds, only: [:index, :show, :create, :update]
+        put "ip_livestock_breeds/:id/attach/", to: "ip_livestock_breeds#attach"
+
+        resources :new_animal_breeds, only: [:index, :show, :create, :update]
+        put "new_animal_breeds/:id/attach/", to: "new_animal_breeds#attach"
+
+        resources :papers, only: [:index, :show, :create, :update]
+        put "papers/:id/attach/", to: "papers#attach"
+
+        resources :patents, only: [:index, :show, :create, :update]
+        put "patents/:id/attach/", to: "patents#attach"
+
+        resources :research_creation_works, only: [:index, :show, :create, :update]
+        put "research_creation_works/:id/attach/", to: "research_creation_works#attach"
+
+        resources :scientific_notes, only: [:index, :show, :create, :update]
+        put "scientific_notes/:id/attach/", to: "scientific_notes#attach"
+
+        resources :vegetable_varieties, only: [:index, :show, :create, :update]
+        put "vegetable_varieties/:id/attach/", to: "vegetable_varieties#attach"
+      end
+
+      # RESEARCH UNIT PRODUCT ENDPOINTS
+      ## Participants in product creation
+      resources :books, :book_chapters, :ip_livestock_breeds, :new_animal_breeds,
+                :papers, :patents, :research_creation_works, :scientific_notes,
+                :vegetable_varieties, only: [] do
+        resources :ext_participants, only: [:index, :show, :create, :update]
+        resources :int_participants, only: [:index, :show, :create, :update]
+      end
+
+      ## General
+      resources :product_typologies, only: [:index, :show, :create, :update]
+      resources :product_types, only: [:index, :show, :create, :update]
+      resources :categories, only: [:index, :show, :create, :update]
+      resources :cycle_types, only: [:index, :show, :create, :update]
+      resources :editorials, only: [:index, :show, :create, :update]
+      resources :journals, only: [:index, :show, :create, :update]
+      resources :knwl_spec_areas, only: [:index, :show, :create, :update]
+      resources :paper_types, only: [:index, :show, :create, :update]
+      resources :participant_types, only: [:index, :show, :create, :update]
+      resources :patent_states, only: [:index, :show, :create, :update]
+      resources :petition_statuses, only: [:index, :show, :create, :update]
+      resources :work_types, only: [:index, :show, :create, :update]
+
+      ## Endpoints research_creation_works
+      resources :research_creation_works, only: [] do
+        resources :awards, only: [:index, :show, :create, :update]
       end
 
       resources :colciencias_calls, only: [:index, :create, :update]
@@ -210,7 +268,6 @@ Rails.application.routes.draw do
       resources :call_types, only: [:index]
       resources :call_user_roles, only: [:index]
       resources :duration_types, only: [:index]
-      resources :product_types, only: [:index]
       resources :required_types, only: [:index]
       resources :item_calls, only: [:index]
       resources :required_documents, only: [:index]
@@ -220,6 +277,7 @@ Rails.application.routes.draw do
       resources :oecd_knowledge_areas, only: [:index, :create, :update]
       resources :oecd_knowledge_subareas, only: [:index, :create, :update]
       resources :oecd_disciplines, only: [:index, :create, :update]
+
 
       # Endpoints CINE
       resources :cine_broad_areas, only: [:index, :create, :update]
