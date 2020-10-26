@@ -1,26 +1,4 @@
 Rails.application.routes.draw do
-  resources :awards
-  resources :book_chapters
-  resources :books
-  resources :categories
-  resources :cycle_types
-  resources :editorials
-  resources :ext_participants
-  resources :int_participants
-  resources :ip_livestock_breeds
-  resources :journals
-  resources :knwl_spec_areas
-  resources :new_animal_breeds
-  resources :paper_types
-  resources :papers
-  resources :participant_types
-  resources :patent_states
-  resources :patents
-  resources :petition_statuses
-  resources :research_creation_works
-  resources :scientific_notes
-  resources :vegetable_varieties
-  resources :work_types
   namespace :api do
     namespace :v1 do
       get 'arp_assignment_reports/index'
@@ -78,7 +56,6 @@ Rails.application.routes.draw do
       end
 
       resources :arp_role, only: [:index, :show, :create]
-      resources :product_typologies, only: [:index, :show, :create, :update]
 
       resources :user_roles, only: [:index, :show, :create, :update]
 
@@ -165,18 +142,65 @@ Rails.application.routes.draw do
 
         resources :historical_colciencias_ranks, only: [:index, :show, :create, :update]
 
-        # Endpoints products
-        resources :product_typologies, only: [:index, :show, :create, :update] do
 
-        end
+        # PRODUCTS ENDPOINTS BY TYPOLOGY
+        # New generation products endpoints
+        # Book
+        resources :books, only: [:index, :show, :create, :update]
+        put "books/:id/attach/", to: "books#attach"
+
+        resources :book_chapters, only: [:index, :show, :create, :update]
+        put "book_chapters/:id/attach/", to: "book_chapters#attach"
+
+        resources :ip_livestock_breeds, only: [:index, :show, :create, :update]
+        put "ip_livestock_breeds/:id/attach/", to: "ip_livestock_breeds#attach"
+
+        resources :new_animal_breeds, only: [:index, :show, :create, :update]
+        put "new_animal_breeds/:id/attach/", to: "new_animal_breeds#attach"
+
+        resources :papers, only: [:index, :show, :create, :update]
+        put "papers/:id/attach/", to: "papers#attach"
+
+        resources :patents, only: [:index, :show, :create, :update]
+        put "patents/:id/attach/", to: "patents#attach"
+
+        resources :research_creation_works, only: [:index, :show, :create, :update]
+        put "research_creation_works/:id/attach/", to: "research_creation_works#attach"
+
+        resources :scientific_notes, only: [:index, :show, :create, :update]
+        put "scientific_notes/:id/attach/", to: "scientific_notes#attach"
+
+        resources :vegetable_varieties, only: [:index, :show, :create, :update]
+        put "vegetable_varieties/:id/attach/", to: "vegetable_varieties#attach"
       end
 
-      # Endpoints products of research units
-      resources :product_types, only: [:index]
+      # RESEARCH UNIT PRODUCT ENDPOINTS
+      ## Participants in product creation
+      resources :books, :book_chapters, :ip_livestock_breeds, :new_animal_breeds,
+                :papers, :patents, :research_creation_works, :scientific_notes,
+                :vegetable_varieties, only: [] do
+        resources :ext_participants, only: [:index, :show, :create, :update]
+        resources :int_participants, only: [:index, :show, :create, :update]
+      end
 
-      # Endpoints research_creation_works
-      resources :research_creation_works, only: [:index, :create, :update]
-      put "research_creation_works/:id/attach/", to: "research_creation_works#attach"
+      ## General
+      resources :product_typologies, only: [:index, :show, :create, :update]
+      resources :product_types, only: [:index, :show, :create, :update]
+      resources :categories, only: [:index, :show, :create, :update]
+      resources :cycle_types, only: [:index, :show, :create, :update]
+      resources :editorials, only: [:index, :show, :create, :update]
+      resources :journals, only: [:index, :show, :create, :update]
+      resources :knwl_spec_areas, only: [:index, :show, :create, :update]
+      resources :paper_types, only: [:index, :show, :create, :update]
+      resources :participant_types, only: [:index, :show, :create, :update]
+      resources :patent_states, only: [:index, :show, :create, :update]
+      resources :petition_statuses, only: [:index, :show, :create, :update]
+      resources :work_types, only: [:index, :show, :create, :update]
+
+      ## Endpoints research_creation_works
+      resources :research_creation_works, only: [] do
+        resources :awards, only: [:index, :show, :create, :update]
+      end
 
       resources :colciencias_calls, only: [:index, :create, :update]
       resources :colciencias_categories, only: [:index, :create, :update]
