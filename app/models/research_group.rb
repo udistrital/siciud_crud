@@ -17,9 +17,11 @@ class ResearchGroup < ApplicationRecord
   has_many :historical_colciencias_ranks
   has_many :plan_periods, as: :planable
 
+  # Products
+  has_many :books
+
   #Validaciones de los campos obligatorios
   validates :name, :acronym, :cidc_registration_date,
             :cidc_act_number, :faculty_act_number, :faculty_registration_date,
             :group_state_id, presence: true
-            # , :snies_id, :email
 end

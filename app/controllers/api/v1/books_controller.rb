@@ -1,6 +1,7 @@
 module Api
   module V1
     class BooksController < ApplicationController
+      before_action :set_research_group
       before_action :set_book, only: [:show, :update, :attach]
 
       # Handling of database exceptions
@@ -12,31 +13,34 @@ module Api
         render json: {error: e.message}, status: :unprocessable_entity
       end
 
-      # GET /books
+      # GET /research_group/:id/books
       def index
-        @books = Book.all
-
+        @books = @research_group.books
         render json: @books
       end
 
-      # GET /books/1
+      # GET /research_group/:id/books/1
       def show
         render json: @book
       end
 
-      # POST /books
+      # POST /research_group/:id/books
       def create
-        @book = Book.new(book_params)
+        @book = @research_group.books.new(book_params)
+
         params.permit(:editorial_name)
         editorial_name = params[:book][:editorial_name]
-        editorial = Editorial.where('lower(name) = ?', editorial_name.downcase).first
-        if editorial.nil?
-          editorial = Editorial.new(name: editorial_name)
-          if !editorial.save
-            render json: editorial.errors, status: :unprocessable_entity
+        if editorial_name.is_a? String
+          editorial_name = editorial_name.strip
+          editorial = Editorial.where('lower(name) = ?', editorial_name.downcase).first
+          if editorial.nil?
+            editorial = Editorial.new(name: editorial_name)
+            if !editorial.save
+              render json: editorial.errors, status: :unprocessable_entity
+            end
           end
+          @book.editorial = editorial
         end
-        @book.editorial = editorial
         if @book.save
           render json: @book, status: :created
         else
@@ -44,7 +48,7 @@ module Api
         end
       end
 
-      # PATCH/PUT /books/1
+      # PATCH/PUT /research_group/:id/books/1
       def update
         if @book.update(book_params)
           render json: @book
@@ -53,14 +57,14 @@ module Api
         end
       end
 
-      # PUT /books/1/attach
+      # PUT /research_group/:id/books/1/attach
       def attach
         params.permit(:book_document)
         if (file = params[:book_document])
           if (file.content_type == "application/pdf")
-            @research_creation_work.book_document.attach(file)
+            @book.book_document.attach(file)
           else
-            return render json: {'error': 'El acta del cidc debe ser formato pdf.'},
+            return render json: {'error': 'El libro debe ser formato pdf.'},
                           status: :unprocessable_entity
           end
         end
@@ -73,12 +77,14 @@ module Api
         @book = Book.find(params[:id])
       end
 
+      def set_research_group
+        @research_group = ResearchGroup.find(params[:research_group_id])
+      end
+
       # Only allow a trusted parameter "white list" through.
       def book_params
         params.require(:book).permit(:title, :publication_date, :isbn, :url,
-                                     :observation, :category_id,
-                                     # :editorial_id,
-                                     :research_group_id)
+                                     :observation, :category_id)
       end
     end
   end
