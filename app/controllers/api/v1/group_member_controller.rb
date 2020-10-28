@@ -4,7 +4,7 @@ module Api
       include Swagger::GroupMemberApi
 
       before_action :set_research_group
-      before_action :set_group_member, only: [:show, :update, :destroy, :deactivate]
+      before_action :set_group_member, only: [:show, :deactivate]
 
       rescue_from ActiveRecord::RecordNotFound do |e|
         render json: {error: e.message}, status: :not_found
@@ -44,7 +44,7 @@ module Api
       def deactivate
         @gm_period = @group_member.gm_periods.last
         @gm_period.final_date = DateTime.now.in_time_zone(-5).to_date
-        @group_member.state_researcher_id = 2
+        @group_member.gm_state_id = 2
         if @group_member.save && @gm_period.save
           render json: @group_member
         else
