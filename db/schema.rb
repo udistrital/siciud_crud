@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_21_213123) do
+ActiveRecord::Schema.define(version: 2020_10_28_143745) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -834,10 +834,14 @@ ActiveRecord::Schema.define(version: 2020_10_21_213123) do
     t.boolean "interinstitutional"
     t.bigint "cine_broad_area_id"
     t.bigint "cine_specific_area_id"
+    t.bigint "oecd_knowledge_subarea_id"
+    t.bigint "oecd_knowledge_area_id"
     t.index ["cine_broad_area_id"], name: "index_research_groups_on_cine_broad_area_id"
     t.index ["cine_specific_area_id"], name: "index_research_groups_on_cine_specific_area_id"
     t.index ["group_state_id"], name: "index_research_groups_on_group_state_id"
     t.index ["group_type_id"], name: "index_research_groups_on_group_type_id"
+    t.index ["oecd_knowledge_area_id"], name: "index_research_groups_on_oecd_knowledge_area_id"
+    t.index ["oecd_knowledge_subarea_id"], name: "index_research_groups_on_oecd_knowledge_subarea_id"
   end
 
   create_table "research_project_plans", force: :cascade do |t|
@@ -1079,6 +1083,8 @@ ActiveRecord::Schema.define(version: 2020_10_21_213123) do
   add_foreign_key "research_groups", "cine_specific_areas"
   add_foreign_key "research_groups", "group_states"
   add_foreign_key "research_groups", "group_types"
+  add_foreign_key "research_groups", "oecd_knowledge_areas"
+  add_foreign_key "research_groups", "oecd_knowledge_subareas"
   add_foreign_key "scientific_notes", "categories"
   add_foreign_key "scientific_notes", "journals"
   add_foreign_key "scientific_notes", "research_groups"
