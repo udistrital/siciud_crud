@@ -9,7 +9,8 @@ class ResearchGroupSerializer < ActiveModel::Serializer
              :faculty_act_number, :faculty_ids, :faculty_registration_date,
              :group_type_id, :group_type_name, :gruplac, :historical_colciencias,
              :interinstitutional,
-             :mission,
+             :mission, :oecd_knowledge_subarea_id,
+             :oecd_knowledge_area_id,
              :oecd_discipline_ids, :research_focus_ids,
              :snies_id, :state_id, :state_name, :vision, :webpage
 

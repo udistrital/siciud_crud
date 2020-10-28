@@ -179,10 +179,12 @@ module Api
                                                :email, :gruplac, :webpage,
                                                :interinstitutional,
                                                :mission, :vision,
-                                                :cine_broad_area_id,
-                                                :cine_specific_area_id,
+                                               :cine_broad_area_id,
+                                               :cine_specific_area_id,
                                                :colciencias_code,
                                                :group_type_id, :snies_id,
+                                               :oecd_knowledge_subarea_id,
+                                               :oecd_knowledge_area_id,
                                                research_focus_ids: [],
                                                oecd_discipline_ids: [])
       end

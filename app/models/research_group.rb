@@ -4,12 +4,17 @@ class ResearchGroup < ApplicationRecord
   has_one_attached :cidc_act_document
   has_one_attached :establishment_document
 
+  belongs_to :group_state
+  belongs_to :group_type
+  belongs_to :cine_broad_area
+  belongs_to :cine_specific_area
+  belongs_to :oecd_knowledge_area
+  belongs_to :oecd_knowledge_subarea
+
   has_and_belongs_to_many :research_focuses
   has_and_belongs_to_many :agreements
   has_and_belongs_to_many :oecd_disciplines
   has_and_belongs_to_many :cine_detailed_areas
-  belongs_to :group_state
-  belongs_to :group_type
 
   has_many :faculty_ids_research_groups
   has_many :curricular_prj_ids_research_groups
