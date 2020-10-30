@@ -2,7 +2,7 @@
 
 /* Data for the 'public.geo_country' table  (Records 1 - 248) */
 
-INSERT INTO public.geo_country ("id", "name", "iso2", "iso3", "capital_name", "currency")
+INSERT INTO public.geo_countries ("id", "name", "iso2", "iso3", "capital_name", "currency")
 VALUES
   (1, E'Afghanistan', E'AF', E'AFG', E'Kabul', E'AFN'),
   (2, E'Aland Islands', E'AX', E'ALA', E'Mariehamn', E'EUR'),

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_28_202559) do
+ActiveRecord::Schema.define(version: 2020_10_30_194704) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -77,6 +77,7 @@ ActiveRecord::Schema.define(version: 2020_10_28_202559) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["agreement_status_id"], name: "index_agreements_on_agreement_status_id"
+    t.index ["agreement_type_id"], name: "index_agreements_on_agreement_type_id"
   end
 
   create_table "agreements_group_members", id: false, force: :cascade do |t|
@@ -505,29 +506,28 @@ ActiveRecord::Schema.define(version: 2020_10_28_202559) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "geo_city", id: :integer, default: nil, force: :cascade do |t|
-    t.integer "state_id", null: false
-    t.string "name", limit: 255
+  create_table "geo_cities", force: :cascade do |t|
+    t.string "name"
     t.string "code", limit: 10
     t.float "latitude"
     t.float "longitude"
-    t.index ["id"], name: "index_geo_city_id"
+    t.bigint "geo_state_id"
+    t.index ["geo_state_id"], name: "index_geo_cities_on_geo_state_id"
   end
 
-  create_table "geo_country", id: :integer, default: nil, force: :cascade do |t|
-    t.string "name", limit: 255
+  create_table "geo_countries", force: :cascade do |t|
+    t.string "name"
     t.string "iso2", limit: 2
     t.string "iso3", limit: 3
     t.string "capital_name", limit: 255
     t.string "currency", limit: 10
-    t.index ["id"], name: "index_geo_country_id"
   end
 
-  create_table "geo_state", id: :integer, default: nil, force: :cascade do |t|
-    t.integer "country_id", null: false
-    t.string "name", limit: 255
+  create_table "geo_states", force: :cascade do |t|
+    t.string "name"
     t.string "code", limit: 10
-    t.index ["id"], name: "index_geo_state_id"
+    t.bigint "geo_country_id"
+    t.index ["geo_country_id"], name: "index_geo_states_on_geo_country_id"
   end
 
   create_table "gm_periods", force: :cascade do |t|
@@ -1055,8 +1055,8 @@ ActiveRecord::Schema.define(version: 2020_10_28_202559) do
   add_foreign_key "curricular_prj_ids_research_groups", "research_groups"
   add_foreign_key "ext_participants", "participant_types"
   add_foreign_key "faculty_ids_research_groups", "research_groups"
-  add_foreign_key "geo_city", "geo_state", column: "state_id", name: "fk_city_state", on_update: :cascade, on_delete: :cascade
-  add_foreign_key "geo_state", "geo_country", column: "country_id", name: "fk_state_country", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "geo_cities", "geo_states"
+  add_foreign_key "geo_states", "geo_countries"
   add_foreign_key "group_members", "gm_states"
   add_foreign_key "int_participants", "participant_types"
   add_foreign_key "int_participants", "research_groups"
@@ -1093,4 +1093,73 @@ ActiveRecord::Schema.define(version: 2020_10_28_202559) do
   add_foreign_key "vegetable_varieties", "cycle_types"
   add_foreign_key "vegetable_varieties", "petition_statuses"
   add_foreign_key "vegetable_varieties", "research_groups"
+
+  create_view "research_units", sql_definition: <<-SQL
+      SELECT rg.id,
+      rg.name,
+      rg.acronym,
+      rg.description,
+      rg.cidc_registration_date,
+      rg.cidc_act_number,
+      rg.faculty_act_number,
+      rg.faculty_registration_date,
+      rg.email,
+      rg.gruplac,
+      rg.webpage,
+      rg.mission,
+      rg.vision,
+      rg.colciencias_code,
+      rg.snies_id,
+      rg.group_type_id,
+      ( SELECT group_types.name
+             FROM group_types
+            WHERE (group_types.id = rg.group_type_id)) AS group_type_name,
+      rg.group_state_id,
+      ( SELECT group_states.name
+             FROM group_states
+            WHERE (group_states.id = rg.group_state_id)) AS group_state_name,
+      rg.interinstitutional,
+      ARRAY( SELECT group_members.researcher_id
+             FROM group_members
+            WHERE (group_members.research_group_id = rg.id)) AS member_ids,
+      ARRAY( SELECT faculty_ids_research_groups.faculty_id
+             FROM faculty_ids_research_groups
+            WHERE (faculty_ids_research_groups.research_group_id = rg.id)) AS faculty_ids,
+      rg.cine_broad_area_id,
+      ( SELECT cine_broad_areas.name
+             FROM cine_broad_areas
+            WHERE (cine_broad_areas.id = rg.cine_broad_area_id)) AS cine_broad_area_name,
+      rg.cine_specific_area_id,
+      ( SELECT cine_specific_areas.name
+             FROM cine_specific_areas
+            WHERE (cine_specific_areas.id = rg.cine_specific_area_id)) AS cine_specific_area_name,
+      ARRAY( SELECT cine_detailed_areas_research_groups.cine_detailed_area_id
+             FROM cine_detailed_areas_research_groups
+            WHERE (cine_detailed_areas_research_groups.research_group_id = rg.id)) AS cine_detailed_area_ids,
+      ARRAY( SELECT curricular_prj_ids_research_groups.curricular_project_id
+             FROM curricular_prj_ids_research_groups
+            WHERE (curricular_prj_ids_research_groups.research_group_id = rg.id)) AS curricular_project_ids,
+      ARRAY( SELECT oecd_disciplines_research_groups.oecd_discipline_id
+             FROM oecd_disciplines_research_groups
+            WHERE (oecd_disciplines_research_groups.research_group_id = rg.id)) AS oecd_discipline_ids,
+      ARRAY( SELECT research_focuses_groups.research_focus_id
+             FROM research_focuses_groups
+            WHERE (research_focuses_groups.research_group_id = rg.id)) AS research_focus_ids,
+      rg.created_at,
+      rg.updated_at
+     FROM research_groups rg;
+  SQL
+  create_view "geo_cities_by_countries", sql_definition: <<-SQL
+      SELECT gcity.id,
+      gcity.name,
+      gcity.code,
+      gcity.latitude,
+      gcity.longitude,
+      gcountry.id AS geo_country_id,
+      gs.id AS geo_state_id,
+      gs.name AS geo_state_name
+     FROM ((geo_countries gcountry
+       JOIN geo_states gs ON ((gs.geo_country_id = gcountry.id)))
+       JOIN geo_cities gcity ON ((gcity.geo_state_id = gs.id)));
+  SQL
 end

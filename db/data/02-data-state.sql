@@ -1,8 +1,8 @@
 ﻿BEGIN;
 
-/* Data for the 'public.geo_state' table  (Records 1 - 500) */
+/* Data for the 'public.geo_states' table  (Records 1 - 500) */
 
-INSERT INTO public.geo_state ("id", "country_id", "name", "code")
+INSERT INTO public.geo_states ("id", "geo_country_id", "name", "code")
 VALUES
   (3901, 1, E'Badakhshan', E'BDS'),
   (3871, 1, E'Badghis', E'BDG'),
@@ -509,9 +509,9 @@ COMMIT;
 
 BEGIN;
 
-/* Data for the 'public.geo_state' table  (Records 501 - 1000) */
+/* Data for the 'public.geo_states' table  (Records 501 - 1000) */
 
-INSERT INTO public.geo_state ("id", "country_id", "name", "code")
+INSERT INTO public.geo_states ("id", "geo_country_id", "name", "code")
 VALUES
   (461, 28, E'Tuzla Canton', E'03'),
   (465, 28, E'Una-Sana Canton', E'01'),
@@ -1018,9 +1018,9 @@ COMMIT;
 
 BEGIN;
 
-/* Data for the 'public.geo_state' table  (Records 1001 - 1500) */
+/* Data for the 'public.geo_states' table  (Records 1001 - 1500) */
 
-INSERT INTO public.geo_state ("id", "country_id", "name", "code")
+INSERT INTO public.geo_states ("id", "geo_country_id", "name", "code")
 VALUES
   (4643, 58, E'Mladá Boleslav', E'207'),
   (4600, 58, E'Moravian-Silesian Region', E'80'),
@@ -1527,9 +1527,9 @@ COMMIT;
 
 BEGIN;
 
-/* Data for the 'public.geo_state' table  (Records 1501 - 2000) */
+/* Data for the 'public.geo_states' table  (Records 1501 - 2000) */
 
-INSERT INTO public.geo_state ("id", "country_id", "name", "code")
+INSERT INTO public.geo_states ("id", "geo_country_id", "name", "code")
 VALUES
   (4123, 95, E'Artibonite', E'AR'),
   (4125, 95, E'Centre', E'CE'),
@@ -2036,9 +2036,9 @@ COMMIT;
 
 BEGIN;
 
-/* Data for the 'public.geo_state' table  (Records 2001 - 2500) */
+/* Data for the 'public.geo_states' table  (Records 2001 - 2500) */
 
-INSERT INTO public.geo_state ("id", "country_id", "name", "code")
+INSERT INTO public.geo_states ("id", "geo_country_id", "name", "code")
 VALUES
   (183, 113, E'Trans-Nzoia', E'42'),
   (206, 113, E'Turkana County', E'43'),
@@ -2545,9 +2545,9 @@ COMMIT;
 
 BEGIN;
 
-/* Data for the 'public.geo_state' table  (Records 2501 - 3000) */
+/* Data for the 'public.geo_states' table  (Records 2501 - 3000) */
 
-INSERT INTO public.geo_state ("id", "country_id", "name", "code")
+INSERT INTO public.geo_states ("id", "geo_country_id", "name", "code")
 VALUES
   (2588, 133, E'North', E'NO'),
   (2602, 133, E'Raa Atoll', E'13'),
@@ -3054,9 +3054,9 @@ COMMIT;
 
 BEGIN;
 
-/* Data for the 'public.geo_state' table  (Records 3001 - 3500) */
+/* Data for the 'public.geo_states' table  (Records 3001 - 3500) */
 
-INSERT INTO public.geo_state ("id", "country_id", "name", "code")
+INSERT INTO public.geo_states ("id", "geo_country_id", "name", "code")
 VALUES
   (3171, 167, E'Khyber Pakhtunkhwa', E'KP'),
   (3176, 167, E'Punjab', E'PB'),
@@ -3563,9 +3563,9 @@ COMMIT;
 
 BEGIN;
 
-/* Data for the 'public.geo_state' table  (Records 3501 - 4000) */
+/* Data for the 'public.geo_states' table  (Records 3501 - 4000) */
 
-INSERT INTO public.geo_state ("id", "country_id", "name", "code")
+INSERT INTO public.geo_states ("id", "geo_country_id", "name", "code")
 VALUES
   (913, 198, E'Western Area', E'W'),
   (4651, 199, E'Central Singapore Community Development Council', E'01'),
@@ -4072,9 +4072,9 @@ COMMIT;
 
 BEGIN;
 
-/* Data for the 'public.geo_state' table  (Records 4001 - 4500) */
+/* Data for the 'public.geo_states' table  (Records 4001 - 4500) */
 
-INSERT INTO public.geo_state ("id", "country_id", "name", "code")
+INSERT INTO public.geo_states ("id", "geo_country_id", "name", "code")
 VALUES
   (1480, 218, E'Njombe Region', E'29'),
   (1488, 218, E'North Pemba Region', E'06'),
@@ -4581,9 +4581,9 @@ COMMIT;
 
 BEGIN;
 
-/* Data for the 'public.geo_state' table  (Records 4501 - 4873) */
+/* Data for the 'public.geo_states' table  (Records 4501 - 4873) */
 
-INSERT INTO public.geo_state ("id", "country_id", "name", "code")
+INSERT INTO public.geo_states ("id", "geo_country_id", "name", "code")
 VALUES
   (2371, 232, E'Kirklees', E'KIR'),
   (2330, 232, E'Knowsley', E'KWL'),

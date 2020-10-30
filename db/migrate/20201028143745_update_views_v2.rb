@@ -1,6 +1,8 @@
 class UpdateViewsV2 < ActiveRecord::Migration[5.2]
   def up
     execute <<-SQL
+      DROP VIEW IF EXISTS geo_cities;
+			DROP VIEW IF EXISTS research_units;
 			CREATE VIEW research_units AS
 				SELECT
 					rg.id,

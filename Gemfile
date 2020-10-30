@@ -65,3 +65,6 @@ gem 'active_storage_validations'
 
 # gem json used to parse string to array
 gem 'json'
+
+# gem scenic used to  database views
+gem 'scenic'

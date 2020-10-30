@@ -4,24 +4,8 @@
 class CreateViews < ActiveRecord::Migration[5.2]
   def up
 		execute <<-SQL
-			CREATE VIEW geo_cities AS
-				SELECT
-					st.country_id,
-					co.name AS country_name,
-					co.iso2 AS country_iso2,
-					co.iso3 AS country_iso3,
-					co.capital_name AS country_capital_name,
-					co.currency AS country_currency,
-					ci.state_id,
-					st.name AS state_name,
-					st.code AS state_code,
-					ci.id AS city_id,
-					ci.name AS city_name,
-					ci.latitude AS city_latitude,
-					ci.longitude AS city_longitude
-				FROM ((geo_state st
-					LEFT JOIN geo_country co ON ((st.country_id = co.id)))
-					RIGHT JOIN geo_city ci ON ((st.id = ci.state_id)));
+      DROP VIEW IF EXISTS geo_cities;
+			DROP VIEW IF EXISTS research_units;
 			CREATE VIEW research_units AS
 				SELECT
 					rg.id,

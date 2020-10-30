@@ -11,6 +11,18 @@ Rails.application.routes.draw do
       get "country/:name", to: "country#show"
       resources :apidocs, only: [:index]
 
+      # General endpoints
+      # Geo endpoints
+      resources :geo_countries, only: [:index, :show] do
+        resources :geo_states, only: [:index, :show]
+        resources :geo_cities_by_countries, only: [:index]
+      end
+
+      resources :geo_states, only: [:index, :show] do
+        resources :geo_cities, only: [:index, :show]
+      end
+
+
       # Endpoint para listar las unidades de investigacion
       resources :research_unit, only: [:index, :show]
 
