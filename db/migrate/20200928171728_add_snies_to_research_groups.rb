@@ -1,5 +1,0 @@
-class AddSniesToResearchGroups < ActiveRecord::Migration[5.2]
-  def change
-    add_column :research_groups, :snies_id, :string
-  end
-end
