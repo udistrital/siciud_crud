@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_30_194704) do
+ActiveRecord::Schema.define(version: 2020_11_03_165208) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -588,13 +588,13 @@ ActiveRecord::Schema.define(version: 2020_10_30_194704) do
   create_table "int_participants", force: :cascade do |t|
     t.string "producible_type"
     t.bigint "producible_id"
-    t.bigint "research_group_id"
     t.bigint "participant_type_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "researcher_id"
     t.index ["participant_type_id"], name: "index_int_participants_on_participant_type_id"
     t.index ["producible_type", "producible_id"], name: "index_int_participants_on_producible_type_and_producible_id"
-    t.index ["research_group_id"], name: "index_int_participants_on_research_group_id"
+    t.index ["researcher_id"], name: "index_int_participants_on_researcher_id"
   end
 
   create_table "ip_livestock_breeds", force: :cascade do |t|
@@ -1059,7 +1059,7 @@ ActiveRecord::Schema.define(version: 2020_10_30_194704) do
   add_foreign_key "geo_states", "geo_countries"
   add_foreign_key "group_members", "gm_states"
   add_foreign_key "int_participants", "participant_types"
-  add_foreign_key "int_participants", "research_groups"
+  add_foreign_key "int_participants", "researchers"
   add_foreign_key "ip_livestock_breeds", "categories"
   add_foreign_key "ip_livestock_breeds", "research_groups"
   add_foreign_key "new_animal_breeds", "categories"

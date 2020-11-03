@@ -1,0 +1,69 @@
+module Api
+  module V1
+    class IntParticipantsController < ApplicationController
+      before_action :set_context
+      before_action :set_int_participant, only: [:show, :update]
+
+      # Handling of database exceptions
+      rescue_from ActiveRecord::RecordNotFound do |e|
+        render json: {error: e.message}, status: :not_found
+      end
+
+      rescue_from ActiveRecord::RecordInvalid do |e|
+        render json: {error: e.message}, status: :unprocessable_entity
+      end
+
+      # GET context/:id/int_participants
+      def index
+        @int_participants = @context.int_participants.all.order(:id)
+
+        render json: @int_participants
+      end
+
+      # GET context/:id/int_participants/1
+      def show
+        render json: @int_participant
+      end
+
+      # POST context/:id/int_participants
+      def create
+        @int_participant = @context.int_participants.new(int_participant_params)
+
+        if @int_participant.save
+          render json: @int_participant, status: :created
+        else
+          render json: @int_participant.errors, status: :unprocessable_entity
+        end
+      end
+
+      # PATCH/PUT context/:id/int_participants/1
+      def update
+        if @int_participant.update(int_participant_params)
+          render json: @int_participant
+        else
+          render json: @int_participant.errors, status: :unprocessable_entity
+        end
+      end
+
+      private
+
+      # Use callbacks to share common setup or constraints between actions.
+      def set_int_participant
+        @int_participant = @context.int_participants.find(params[:id])
+      end
+
+      # Only allow a trusted parameter "white list" through.
+      def int_participant_params
+        params.require(:int_participant).permit(:researcher_id,
+                                                :participant_type_id)
+      end
+
+      def set_context
+        if params[:book_id]
+          id = params[:book_id]
+          @context = Book.find(id)
+        end
+      end
+    end
+  end
+end
