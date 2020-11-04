@@ -6,10 +6,10 @@ class ResearchGroup < ApplicationRecord
 
   belongs_to :group_state
   belongs_to :group_type
-  belongs_to :cine_broad_area
-  belongs_to :cine_specific_area
-  belongs_to :oecd_knowledge_area
-  belongs_to :oecd_knowledge_subarea
+  belongs_to :cine_broad_area, optional: true
+  belongs_to :cine_specific_area, optional: true
+  belongs_to :oecd_knowledge_area, optional: true
+  belongs_to :oecd_knowledge_subarea, optional: true
 
   has_and_belongs_to_many :research_focuses
   has_and_belongs_to_many :agreements

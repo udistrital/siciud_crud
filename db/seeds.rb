@@ -32,35 +32,35 @@ GroupType.create(name: "Grupo de Investigación")
 GroupType.create(name: "Semillero de Investigación")
 GroupType.create(name: "Redes de Investigación")
 
-30.times do
-  name_rg = Faker::Company.name
-  acronym_rg = ""
-  name_rg.split.each do |word|
-    acronym_rg += word[0]
-  end
+# 30.times do
+#   name_rg = Faker::Company.name
+#   acronym_rg = ""
+#   name_rg.split.each do |word|
+#     acronym_rg += word[0]
+#   end
+#
+#   ResearchGroup.create(
+#       name: name_rg,
+#       acronym: acronym_rg,
+#       description: Faker::Lorem.paragraphs.join(),
+#       cidc_registration_date: Faker::Date.backward(50),
+#       cidc_act_number: Faker::Alphanumeric.alphanumeric(10),
+#       faculty_registration_date: Faker::Date.backward(50),
+#       faculty_act_number: Faker::Alphanumeric.alphanumeric(10),
+#       group_state_id: rand(1..2),
+#       snies_id: Faker::Number.number(5).to_s,
+#       email: Faker::Internet.email,
+#       gruplac: Faker::Internet.url("colciencias.com"),
+#       webpage: Faker::Internet.url,
+#       mission: Faker::Lorem.paragraphs.join(),
+#       vision: Faker::Lorem.paragraphs.join(),
+#       research_focus_ids: Array.new(2) { rand(1..5) },
+#       colciencias_code: Faker::Number.number(14),
+#       group_type_id: rand(1..3)
+#   )
+# end
 
-  ResearchGroup.create(
-      name: name_rg,
-      acronym: acronym_rg,
-      description: Faker::Lorem.paragraphs.join(),
-      cidc_registration_date: Faker::Date.backward(50),
-      cidc_act_number: Faker::Alphanumeric.alphanumeric(10),
-      faculty_registration_date: Faker::Date.backward(50),
-      faculty_act_number: Faker::Alphanumeric.alphanumeric(10),
-      group_state_id: rand(1..2),
-      snies_id: Faker::Number.number(5).to_s,
-      email: Faker::Internet.email,
-      gruplac: Faker::Internet.url("colciencias.com"),
-      webpage: Faker::Internet.url,
-      mission: Faker::Lorem.paragraphs.join(),
-      vision: Faker::Lorem.paragraphs.join(),
-      research_focus_ids: Array.new(2) { rand(1..5) },
-      colciencias_code: Faker::Number.number(14),
-      group_type_id: rand(1..3)
-  )
-end
-
-puts "Grupos ok"
+# puts "Grupos ok"
 
 Role.create(name: "Director")
 Role.create(name: "Estudiante")
