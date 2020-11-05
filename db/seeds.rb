@@ -173,10 +173,38 @@ OecdDiscipline.create(name: "Tiene 14", code: "3C01-3C14", oecd_knowledge_subare
 GmState.create(name: "Activo")
 GmState.create(name: "Inactivo")
 
-30.times do
+
+# Researchers
+# 30.times do
+#   name_aux = Faker::Name.initials
+#   last_name = Faker::Name.last_name
+#   Researcher.create(identification_number: Faker::Number.number(10).to_s,
+#                     orcid_id: Faker::Alphanumeric.alphanumeric(10),
+#                     scientific_signature: last_name.concat(", ", name_aux),
+#                     oas_researcher_id: rand(1..20).to_s,
+#                     mobile_number: Faker::PhoneNumber.cell_phone_with_country_code,
+#                     address: Faker::Address.full_address
+#   )
+# end
+
+puts "Removiendo investigadores ..."
+Researcher.destroy_all
+cc_list = ['1010093421', '1010166438', '1010188959',
+           '1012327463', '1013635157', '1013664602',
+           '1014207424', '1014227755', '1014241932',
+           '1015392782', '1015398879', '1015405008',
+           '1015412797', '1015423887', '1015433690',
+           '1016003847', '1016016586', '1016040540',
+           '1016042854', '1016073257', '1016081278',
+           '1018407635', '1018414696', '1018419855',
+           '1018421469', '1018426304', '1018442181',
+           '1018445597', '1018454586', '1018457937',
+           '79602309'
+]
+cc_list.each do |cc_unit|
   name_aux = Faker::Name.initials
   last_name = Faker::Name.last_name
-  Researcher.create(identification_number: Faker::Number.number(10).to_s,
+  Researcher.create(identification_number: cc_unit,
                     orcid_id: Faker::Alphanumeric.alphanumeric(10),
                     scientific_signature: last_name.concat(", ", name_aux),
                     oas_researcher_id: rand(1..20).to_s,
@@ -184,6 +212,9 @@ GmState.create(name: "Inactivo")
                     address: Faker::Address.full_address
   )
 end
+
+puts "#{cc_list.length} investigadores agregados"
+
 
 # 15.times do |i|
 #   GroupMember.create(role_id: rand(1..2),
