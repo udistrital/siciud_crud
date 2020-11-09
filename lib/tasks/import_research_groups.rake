@@ -48,6 +48,7 @@ namespace :import_research_groups do
 #         2
 #         end
 	groups = ResearchGroup.create(
+    	id: row[:cgsid],
 		name: row[:cgsnombre],
 		acronym: row[:cgssiglas],
 		group_state_id: row[:cgsestado],
