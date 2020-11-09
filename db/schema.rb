@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_06_231225) do
+ActiveRecord::Schema.define(version: 2020_11_09_140402) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -850,6 +850,7 @@ ActiveRecord::Schema.define(version: 2020_11_06_231225) do
     t.bigint "cine_specific_area_id"
     t.bigint "oecd_knowledge_subarea_id"
     t.bigint "oecd_knowledge_area_id"
+    t.integer "legacy_siciud_id"
     t.index ["cine_broad_area_id"], name: "index_research_groups_on_cine_broad_area_id"
     t.index ["cine_specific_area_id"], name: "index_research_groups_on_cine_specific_area_id"
     t.index ["group_state_id"], name: "index_research_groups_on_group_state_id"

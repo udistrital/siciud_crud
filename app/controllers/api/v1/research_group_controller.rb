@@ -185,6 +185,7 @@ module Api
                                                :group_type_id, :snies_id,
                                                :oecd_knowledge_subarea_id,
                                                :oecd_knowledge_area_id,
+                                               :legacy_siciud_id,
                                                research_focus_ids: [],
                                                oecd_discipline_ids: [])
       end
