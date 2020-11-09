@@ -161,6 +161,7 @@ Rails.application.routes.draw do
         resources :books, only: [:index, :show, :create, :update]
         put "books/:id/attach/", to: "books#attach"
 
+        # Book chapter
         resources :book_chapters, only: [:index, :show, :create, :update]
         put "book_chapters/:id/attach/", to: "book_chapters#attach"
 

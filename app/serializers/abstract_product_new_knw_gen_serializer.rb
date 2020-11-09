@@ -1,0 +1,106 @@
+class AbstractProductNewKnwGenSerializer < ActiveModel::Serializer
+
+  def category_name
+    category = self.object.category
+    if category
+      category.name
+    end
+  end
+
+  def editorial_name
+    editorial = self.object.editorial
+    if editorial
+      editorial.name
+    end
+  end
+
+  # GEOS
+
+  def geo_city_name
+    # Publication city name
+    city = self.object.geo_city
+    if city
+      city.name
+    end
+  end
+
+  def geo_state_id
+    # Publication state id
+    city = self.object.geo_city
+    if city
+      city.geo_state_id
+    end
+  end
+
+  def geo_state_name
+    # Publication state name
+    city = self.object.geo_city
+    if city
+      state = city.geo_state
+      if state
+        state.name
+      end
+    end
+  end
+
+  def geo_country_id
+    # Publication country id
+    city = self.object.geo_city
+    if city
+      state = city.geo_state
+      if state
+        country = state.geo_country
+        if country
+          country.id
+        end
+      end
+    end
+  end
+
+  def geo_country_name
+    # Publication country name
+    city = self.object.geo_city
+    if city
+      state = city.geo_state
+      if state
+        country = state.geo_country
+        if country
+          country.name
+        end
+      end
+    end
+  end
+
+
+  # PARTICIPANTS
+
+  def int_participants
+    participants = self.object.int_participants
+    if participants
+      participants.map do |participant|
+        {
+            id: participant.id,
+            participant_type_id: participant.participant_type.id,
+            participant_type_name: participant.participant_type.name,
+            researcher_id: participant.researcher.id,
+            oas_researcher_id: participant.researcher.oas_researcher_id
+        }
+      end
+    end
+  end
+
+  def ext_participants
+    participants = self.object.ext_participants
+    if participants
+      participants.map do |participant|
+        {
+            id: participant.id,
+            first_name: participant.first_name,
+            last_name: participant.last_name,
+            participant_type_id: participant.participant_type.id,
+            participant_type_name: participant.participant_type.name,
+        }
+      end
+    end
+  end
+end

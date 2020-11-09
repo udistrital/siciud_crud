@@ -1,51 +1,66 @@
-class PapersController < ApplicationController
-  before_action :set_paper, only: [:show, :update, :destroy]
+module Api
+  module V1
+    class PapersController < AbstractProductResearchUnitController
+      before_action :set_research_group
+      before_action :set_paper, only: [:show, :update, :attach]
 
-  # GET /papers
-  def index
-    @papers = Paper.all
+      # GET /research_group/:id/papers
+      def index
+        @papers = @research_group.papers
+        render json: @papers
+      end
 
-    render json: @papers
-  end
+      # GET /research_group/:id/papers/1
+      def show
+        render json: @paper
+      end
 
-  # GET /papers/1
-  def show
-    render json: @paper
-  end
+      # POST /research_group/:id/papers
+      def create
+        @paper = @research_group.papers.new(paper_params)
+        if @paper.save
+          render json: @paper, status: :created
+        else
+          render json: @paper.errors, status: :unprocessable_entity
+        end
+      end
 
-  # POST /papers
-  def create
-    @paper = Paper.new(paper_params)
+      # PATCH/PUT /research_group/:id/papers/1
+      def update
+        if @paper.update(paper_params)
+          render json: @paper
+        else
+          render json: @paper.errors, status: :unprocessable_entity
+        end
+      end
 
-    if @paper.save
-      render json: @paper, status: :created, location: @paper
-    else
-      render json: @paper.errors, status: :unprocessable_entity
+      # PUT /research_group/:id/papers/1/attach
+      def attach
+        params.permit(:paper_document)
+        if (file = params[:paper_document])
+          if file.content_type == "application/pdf"
+            @paper.paper_document.attach(file)
+          else
+            return render json: {'error': 'El artículo debe ser formato pdf.'},
+                          status: :unprocessable_entity
+          end
+        end
+      end
+
+      private
+      # Use callbacks to share common setup or constraints between actions.
+      def set_paper
+        @paper = @research_group.papers.find(params[:id])
+      end
+
+      # Only allow a trusted parameter "white list" through.
+      def paper_params
+        params.require(:paper).permit(:title, :publication_date, :approval_date,
+                                      :volume, :number_of_pages, :initial_page,
+                                      :final_page, :issn, :url, :doi, :observation,
+                                      :category_id, :journal_id, :paper_type_id,
+                                      :geo_city_id)
+      end
     end
   end
-
-  # PATCH/PUT /papers/1
-  def update
-    if @paper.update(paper_params)
-      render json: @paper
-    else
-      render json: @paper.errors, status: :unprocessable_entity
-    end
-  end
-
-  # DELETE /papers/1
-  def destroy
-    @paper.destroy
-  end
-
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_paper
-      @paper = Paper.find(params[:id])
-    end
-
-    # Only allow a trusted parameter "white list" through.
-    def paper_params
-      params.require(:paper).permit(:title, :publication_date, :approval_date, :volume, :number_of_pages, :initial_page, :final_page, :issn, :url, :doi, :observation, :category_id, :journal_id, :paper_type_id, :research_group_id)
-    end
 end

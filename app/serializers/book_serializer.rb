@@ -1,6 +1,7 @@
-class BookSerializer < ActiveModel::Serializer
-  attributes :id, :title, :publication_date, :isbn, :url, :observation
-  has_one :category
-  has_one :editorial
-  has_one :research_group
+class BookSerializer < AbstractProductNewKnwGenSerializer
+  attributes :id, :title, :publication_date, :isbn, :url, :observation,
+             :category_id, :category_name, :editorial_id, :editorial_name,
+             :research_group_id, :int_participants, :ext_participants,
+             :geo_city_id, :geo_city_name, :geo_state_id, :geo_state_name,
+             :geo_country_id, :geo_country_name
 end

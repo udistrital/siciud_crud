@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_03_165208) do
+ActiveRecord::Schema.define(version: 2020_11_06_231225) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -236,8 +236,10 @@ ActiveRecord::Schema.define(version: 2020_11_03_165208) do
     t.bigint "research_group_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "geo_city_id"
     t.index ["category_id"], name: "index_book_chapters_on_category_id"
     t.index ["editorial_id"], name: "index_book_chapters_on_editorial_id"
+    t.index ["geo_city_id"], name: "index_book_chapters_on_geo_city_id"
     t.index ["research_group_id"], name: "index_book_chapters_on_research_group_id"
   end
 
@@ -252,8 +254,10 @@ ActiveRecord::Schema.define(version: 2020_11_03_165208) do
     t.bigint "research_group_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "geo_city_id"
     t.index ["category_id"], name: "index_books_on_category_id"
     t.index ["editorial_id"], name: "index_books_on_editorial_id"
+    t.index ["geo_city_id"], name: "index_books_on_geo_city_id"
     t.index ["research_group_id"], name: "index_books_on_research_group_id"
   end
 
@@ -606,7 +610,9 @@ ActiveRecord::Schema.define(version: 2020_11_03_165208) do
     t.bigint "research_group_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "geo_city_id"
     t.index ["category_id"], name: "index_ip_livestock_breeds_on_category_id"
+    t.index ["geo_city_id"], name: "index_ip_livestock_breeds_on_geo_city_id"
     t.index ["research_group_id"], name: "index_ip_livestock_breeds_on_research_group_id"
   end
 
@@ -638,8 +644,10 @@ ActiveRecord::Schema.define(version: 2020_11_03_165208) do
     t.bigint "research_group_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "geo_city_id"
     t.index ["category_id"], name: "index_new_animal_breeds_on_category_id"
     t.index ["cycle_type_id"], name: "index_new_animal_breeds_on_cycle_type_id"
+    t.index ["geo_city_id"], name: "index_new_animal_breeds_on_geo_city_id"
     t.index ["petition_status_id"], name: "index_new_animal_breeds_on_petition_status_id"
     t.index ["research_group_id"], name: "index_new_animal_breeds_on_research_group_id"
   end
@@ -698,7 +706,9 @@ ActiveRecord::Schema.define(version: 2020_11_03_165208) do
     t.bigint "research_group_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "geo_city_id"
     t.index ["category_id"], name: "index_papers_on_category_id"
+    t.index ["geo_city_id"], name: "index_papers_on_geo_city_id"
     t.index ["journal_id"], name: "index_papers_on_journal_id"
     t.index ["paper_type_id"], name: "index_papers_on_paper_type_id"
     t.index ["research_group_id"], name: "index_papers_on_research_group_id"
@@ -727,7 +737,9 @@ ActiveRecord::Schema.define(version: 2020_11_03_165208) do
     t.bigint "research_group_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "geo_city_id"
     t.index ["category_id"], name: "index_patents_on_category_id"
+    t.index ["geo_city_id"], name: "index_patents_on_geo_city_id"
     t.index ["patent_state_id"], name: "index_patents_on_patent_state_id"
     t.index ["research_group_id"], name: "index_patents_on_research_group_id"
   end
@@ -786,7 +798,9 @@ ActiveRecord::Schema.define(version: 2020_11_03_165208) do
     t.bigint "research_group_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "geo_city_id"
     t.index ["category_id"], name: "index_research_creation_works_on_category_id"
+    t.index ["geo_city_id"], name: "index_research_creation_works_on_geo_city_id"
     t.index ["knwl_spec_area_id"], name: "index_research_creation_works_on_knwl_spec_area_id"
     t.index ["research_group_id"], name: "index_research_creation_works_on_research_group_id"
   end
@@ -936,7 +950,9 @@ ActiveRecord::Schema.define(version: 2020_11_03_165208) do
     t.bigint "research_group_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "geo_city_id"
     t.index ["category_id"], name: "index_scientific_notes_on_category_id"
+    t.index ["geo_city_id"], name: "index_scientific_notes_on_geo_city_id"
     t.index ["journal_id"], name: "index_scientific_notes_on_journal_id"
     t.index ["research_group_id"], name: "index_scientific_notes_on_research_group_id"
   end
@@ -1017,8 +1033,10 @@ ActiveRecord::Schema.define(version: 2020_11_03_165208) do
     t.bigint "research_group_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "geo_city_id"
     t.index ["category_id"], name: "index_vegetable_varieties_on_category_id"
     t.index ["cycle_type_id"], name: "index_vegetable_varieties_on_cycle_type_id"
+    t.index ["geo_city_id"], name: "index_vegetable_varieties_on_geo_city_id"
     t.index ["petition_status_id"], name: "index_vegetable_varieties_on_petition_status_id"
     t.index ["research_group_id"], name: "index_vegetable_varieties_on_research_group_id"
   end
@@ -1035,9 +1053,11 @@ ActiveRecord::Schema.define(version: 2020_11_03_165208) do
   add_foreign_key "awards", "research_creation_works"
   add_foreign_key "book_chapters", "categories"
   add_foreign_key "book_chapters", "editorials"
+  add_foreign_key "book_chapters", "geo_cities"
   add_foreign_key "book_chapters", "research_groups"
   add_foreign_key "books", "categories"
   add_foreign_key "books", "editorials"
+  add_foreign_key "books", "geo_cities"
   add_foreign_key "books", "research_groups"
   add_foreign_key "call_item_categories", "calls"
   add_foreign_key "call_item_categories", "item_categories"
@@ -1061,22 +1081,27 @@ ActiveRecord::Schema.define(version: 2020_11_03_165208) do
   add_foreign_key "int_participants", "participant_types"
   add_foreign_key "int_participants", "researchers"
   add_foreign_key "ip_livestock_breeds", "categories"
+  add_foreign_key "ip_livestock_breeds", "geo_cities"
   add_foreign_key "ip_livestock_breeds", "research_groups"
   add_foreign_key "new_animal_breeds", "categories"
   add_foreign_key "new_animal_breeds", "cycle_types"
+  add_foreign_key "new_animal_breeds", "geo_cities"
   add_foreign_key "new_animal_breeds", "petition_statuses"
   add_foreign_key "new_animal_breeds", "research_groups"
   add_foreign_key "oecd_disciplines", "oecd_knowledge_subareas"
   add_foreign_key "oecd_knowledge_subareas", "oecd_knowledge_areas"
   add_foreign_key "papers", "categories"
+  add_foreign_key "papers", "geo_cities"
   add_foreign_key "papers", "journals"
   add_foreign_key "papers", "paper_types"
   add_foreign_key "papers", "research_groups"
   add_foreign_key "patents", "categories"
+  add_foreign_key "patents", "geo_cities"
   add_foreign_key "patents", "patent_states"
   add_foreign_key "patents", "research_groups"
   add_foreign_key "product_types", "product_typologies"
   add_foreign_key "research_creation_works", "categories"
+  add_foreign_key "research_creation_works", "geo_cities"
   add_foreign_key "research_creation_works", "knwl_spec_areas"
   add_foreign_key "research_creation_works", "research_groups"
   add_foreign_key "research_groups", "cine_broad_areas"
@@ -1086,11 +1111,13 @@ ActiveRecord::Schema.define(version: 2020_11_03_165208) do
   add_foreign_key "research_groups", "oecd_knowledge_areas"
   add_foreign_key "research_groups", "oecd_knowledge_subareas"
   add_foreign_key "scientific_notes", "categories"
+  add_foreign_key "scientific_notes", "geo_cities"
   add_foreign_key "scientific_notes", "journals"
   add_foreign_key "scientific_notes", "research_groups"
   add_foreign_key "users", "researchers"
   add_foreign_key "vegetable_varieties", "categories"
   add_foreign_key "vegetable_varieties", "cycle_types"
+  add_foreign_key "vegetable_varieties", "geo_cities"
   add_foreign_key "vegetable_varieties", "petition_statuses"
   add_foreign_key "vegetable_varieties", "research_groups"
 

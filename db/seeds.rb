@@ -63,6 +63,7 @@ GroupType.create(name: "Redes de Investigación")
 # puts "Grupos ok"
 
 Role.create(name: "Director")
+Role.create(name: "Coinvestigador")
 Role.create(name: "Estudiante")
 
 CineBroadArea.create(name: "Programas y certificaciones genéricos", code: "00")
@@ -189,18 +190,13 @@ GmState.create(name: "Inactivo")
 
 puts "Removiendo investigadores ..."
 Researcher.destroy_all
-cc_list = ['1010093421', '1010166438', '1010188959',
-           '1012327463', '1013635157', '1013664602',
-           '1014207424', '1014227755', '1014241932',
-           '1015392782', '1015398879', '1015405008',
-           '1015412797', '1015423887', '1015433690',
-           '1016003847', '1016016586', '1016040540',
-           '1016042854', '1016073257', '1016081278',
-           '1018407635', '1018414696', '1018419855',
-           '1018421469', '1018426304', '1018442181',
-           '1018445597', '1018454586', '1018457937',
-           '79602309'
-]
+cc_list = %w[1010093421 1010166438 1010188959 1012327463
+1013635157 1013664602 1014207424 1014227755 1014241932
+1015392782 1015398879 1015405008 1015412797 1015423887
+1015433690 1016003847 1016016586 1016040540 1016042854
+1016073257 1016081278 1018407635 1018414696 1018419855
+1018421469 1018426304 1018442181 1018445597 1018454586
+1018457937 79602309]
 cc_list.each do |cc_unit|
   name_aux = Faker::Name.initials
   last_name = Faker::Name.last_name
@@ -214,6 +210,59 @@ cc_list.each do |cc_unit|
 end
 
 puts "#{cc_list.length} investigadores agregados"
+
+puts "Agregando director al primer y segundo grupo"
+gm_new = GroupMember.create(role_id: 1,
+                            researcher_id: Researcher.first.id,
+                            research_group_id: ResearchGroup.first.id,
+                            gm_state_id: 1
+)
+GmPeriod.create(initialDate: "20/10/2020", role_id: 1, group_member_id: gm_new.id)
+
+gm_new = GroupMember.create(role_id: 1,
+                            researcher_id: Researcher.second.id,
+                            research_group_id: ResearchGroup.second.id,
+                            gm_state_id: 1
+)
+GmPeriod.create(initialDate: "20/10/2020", role_id: 1, group_member_id: gm_new.id)
+
+puts "Agregando coinvestigadores al primer y segundo grupo"
+4.times do
+  gm_new = GroupMember.create(role_id: 2,
+                              researcher_id: rand(2..10),
+                              research_group_id: ResearchGroup.first.id,
+                              gm_state_id: 1
+  )
+  GmPeriod.create(initialDate: "21/10/2020", role_id: 2, group_member_id: gm_new.id)
+end
+
+4.times do
+  gm_new = GroupMember.create(role_id: 2,
+                              researcher_id: rand(5..13),
+                              research_group_id: ResearchGroup.second.id,
+                              gm_state_id: 1
+  )
+  GmPeriod.create(initialDate: "21/10/2020", role_id: 2, group_member_id: gm_new.id)
+end
+
+puts "Agregando estudiantes al primer y segundo grupo"
+10.times do |i|
+  gm_new = GroupMember.create(role_id: 3,
+                              researcher_id: i + 10,
+                              research_group_id: ResearchGroup.first.id,
+                              gm_state_id: 1
+  )
+  GmPeriod.create(initialDate: "22/10/2020", role_id: 3, group_member_id: gm_new.id)
+end
+
+10.times do |i|
+  gm_new = GroupMember.create(role_id: 3,
+                              researcher_id: i + 20,
+                              research_group_id: ResearchGroup.second.id,
+                              gm_state_id: 1
+  )
+  GmPeriod.create(initialDate: "22/10/2020", role_id: 3, group_member_id: gm_new.id)
+end
 
 
 # 15.times do |i|

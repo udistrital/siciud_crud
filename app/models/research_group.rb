@@ -24,6 +24,14 @@ class ResearchGroup < ApplicationRecord
 
   # Products
   has_many :books
+  has_many :book_chapters
+  has_many :ip_livestock_breeds
+  has_many :new_animal_breeds
+  has_many :papers
+  has_many :patents
+  has_many :research_creation_works
+  has_many :scientific_notes
+  has_many :vegetable_varieties
 
   #Validaciones de los campos obligatorios
   validates :name, :acronym, :cidc_registration_date,
