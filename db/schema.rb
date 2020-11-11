@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_09_140402) do
+ActiveRecord::Schema.define(version: 2020_11_11_173815) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -527,6 +527,11 @@ ActiveRecord::Schema.define(version: 2020_11_09_140402) do
     t.string "currency", limit: 10
   end
 
+  create_table "geo_countries_patents", id: false, force: :cascade do |t|
+    t.bigint "geo_country_id", null: false
+    t.bigint "patent_id", null: false
+  end
+
   create_table "geo_states", force: :cascade do |t|
     t.string "name"
     t.string "code", limit: 10
@@ -737,9 +742,7 @@ ActiveRecord::Schema.define(version: 2020_11_09_140402) do
     t.bigint "research_group_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "geo_city_id"
     t.index ["category_id"], name: "index_patents_on_category_id"
-    t.index ["geo_city_id"], name: "index_patents_on_geo_city_id"
     t.index ["patent_state_id"], name: "index_patents_on_patent_state_id"
     t.index ["research_group_id"], name: "index_patents_on_research_group_id"
   end
@@ -1097,7 +1100,6 @@ ActiveRecord::Schema.define(version: 2020_11_09_140402) do
   add_foreign_key "papers", "paper_types"
   add_foreign_key "papers", "research_groups"
   add_foreign_key "patents", "categories"
-  add_foreign_key "patents", "geo_cities"
   add_foreign_key "patents", "patent_states"
   add_foreign_key "patents", "research_groups"
   add_foreign_key "product_types", "product_typologies"
@@ -1176,18 +1178,5 @@ ActiveRecord::Schema.define(version: 2020_11_09_140402) do
       rg.created_at,
       rg.updated_at
      FROM research_groups rg;
-  SQL
-  create_view "geo_cities_by_countries", sql_definition: <<-SQL
-      SELECT gcity.id,
-      gcity.name,
-      gcity.code,
-      gcity.latitude,
-      gcity.longitude,
-      gcountry.id AS geo_country_id,
-      gs.id AS geo_state_id,
-      gs.name AS geo_state_name
-     FROM ((geo_countries gcountry
-       JOIN geo_states gs ON ((gs.geo_country_id = gcountry.id)))
-       JOIN geo_cities gcity ON ((gcity.geo_state_id = gs.id)));
   SQL
 end

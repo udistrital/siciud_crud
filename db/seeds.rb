@@ -281,6 +281,36 @@ if flag_rg.nil?
 
   ParticipantType.create(name: "Autor")
   ParticipantType.create(name: "Co-autor")
+  ParticipantType.create(name: "Titular")
+
+  CycleType.create(name: "Corto")
+  CycleType.create(name: "Largo")
+
+  PetitionStatus.create(name: "En proceso")
+  PetitionStatus.create(name: "Obtenida")
+
+  PatentState.create(name: "Solicitud")
+  PatentState.create(name: "Bajo examen de patentabilidad")
+  PatentState.create(name: "Otorgada")
+  PatentState.create(name: "Negada/Abandonada")
+
+  WorkType.create(name: "Plano")
+  WorkType.create(name: "Textos")
+  WorkType.create(name: "Bocetos")
+  WorkType.create(name: "Modelaciones 2D,3D,4D")
+  WorkType.create(name: "Maquetas")
+  WorkType.create(name: "Fotografías")
+  WorkType.create(name: "Realización")
+  WorkType.create(name: "Obras acabadas")
+  WorkType.create(name: "Grabaciones")
+  WorkType.create(name: "Filmaciones")
+  WorkType.create(name: "Videos")
+  WorkType.create(name: "Animaciones")
+  WorkType.create(name: "Evidencias de Montaje")
+
+  KnwlSpecArea.create(name: "Creacion efimera")
+  KnwlSpecArea.create(name: "Creacion permanente")
+  KnwlSpecArea.create(name: "Creacion procesual")
 end
 
 

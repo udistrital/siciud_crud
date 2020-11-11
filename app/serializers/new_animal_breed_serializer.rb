@@ -1,4 +1,4 @@
-class NewAnimalBreedSerializer < ActiveModel::Serializer
+class NewAnimalBreedSerializer < AbstractProductNewKnwGenSerializer
   attributes :id, :name, :date, :observation, :cycle_type_id,
              :cycle_type_name, :petition_status_id, :petition_status_name,
              :category_id, :category_name, :research_group_id,

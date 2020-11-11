@@ -26,51 +26,35 @@ class AbstractProductNewKnwGenSerializer < ActiveModel::Serializer
 
   def geo_state_id
     # Publication state id
-    city = self.object.geo_city
-    if city
-      city.geo_state_id
+    state = self.object.geo_state
+    if state
+      state.id
     end
   end
 
   def geo_state_name
     # Publication state name
-    city = self.object.geo_city
-    if city
-      state = city.geo_state
-      if state
-        state.name
-      end
+    state = self.object.geo_state
+    if state
+      state.name
     end
   end
 
   def geo_country_id
     # Publication country id
-    city = self.object.geo_city
-    if city
-      state = city.geo_state
-      if state
-        country = state.geo_country
-        if country
-          country.id
-        end
-      end
+    country = self.object.geo_country
+    if country
+      country.id
     end
   end
 
   def geo_country_name
     # Publication country name
-    city = self.object.geo_city
-    if city
-      state = city.geo_state
-      if state
-        country = state.geo_country
-        if country
-          country.name
-        end
-      end
+    country = self.object.geo_country
+    if country
+      country.name
     end
   end
-
 
   # PARTICIPANTS
 

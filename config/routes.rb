@@ -172,19 +172,10 @@ Rails.application.routes.draw do
         put "new_animal_breeds/:id/attach/", to: "new_animal_breeds#attach"
 
         resources :papers, only: [:index, :show, :create, :update]
-        put "papers/:id/attach/", to: "papers#attach"
-
         resources :patents, only: [:index, :show, :create, :update]
-        put "patents/:id/attach/", to: "patents#attach"
-
         resources :research_creation_works, only: [:index, :show, :create, :update]
-        put "research_creation_works/:id/attach/", to: "research_creation_works#attach"
-
         resources :scientific_notes, only: [:index, :show, :create, :update]
-        put "scientific_notes/:id/attach/", to: "scientific_notes#attach"
-
         resources :vegetable_varieties, only: [:index, :show, :create, :update]
-        put "vegetable_varieties/:id/attach/", to: "vegetable_varieties#attach"
       end
 
       # RESEARCH UNIT PRODUCT ENDPOINTS
