@@ -3,7 +3,7 @@ class ResearchCreationWork < ApplicationRecord
   belongs_to :category
   belongs_to :research_group
 
-  has_many :award
+  has_many :awards
   has_and_belongs_to_many :work_types
 
   # Publication place
