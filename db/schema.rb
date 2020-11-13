@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_11_173815) do
+ActiveRecord::Schema.define(version: 2020_11_13_153010) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1014,17 +1014,16 @@ ActiveRecord::Schema.define(version: 2020_11_11_173815) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "user_roles_users", id: false, force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.bigint "user_role_id", null: false
-  end
-
   create_table "users", force: :cascade do |t|
-    t.string "username"
-    t.bigint "researcher_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["researcher_id"], name: "index_users_on_researcher_id"
+    t.string "identification_number"
+    t.string "oas_user_id"
+    t.bigint "user_role_id"
+    t.boolean "active"
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.index ["user_role_id"], name: "index_users_on_user_role_id"
   end
 
   create_table "vegetable_varieties", force: :cascade do |t|
@@ -1117,7 +1116,7 @@ ActiveRecord::Schema.define(version: 2020_11_11_173815) do
   add_foreign_key "scientific_notes", "geo_cities"
   add_foreign_key "scientific_notes", "journals"
   add_foreign_key "scientific_notes", "research_groups"
-  add_foreign_key "users", "researchers"
+  add_foreign_key "users", "user_roles"
   add_foreign_key "vegetable_varieties", "categories"
   add_foreign_key "vegetable_varieties", "cycle_types"
   add_foreign_key "vegetable_varieties", "geo_cities"

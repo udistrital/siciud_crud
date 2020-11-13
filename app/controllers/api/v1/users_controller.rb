@@ -7,17 +7,13 @@ module Api
       rescue_from Exception do |e|
         render json: {error: e.message}, status: :internal_error
       end
-      #Manejo de excepciones
-      rescue_from ActiveRecord::RecordNotFound do |e|
-        render json: {error: e.message}, status: :not_found
-      end
-      rescue_from ActiveRecord::RecordInvalid do |e|
-        render json: {error: e.message}, status: :unprocessable_entity
-      end
 
       # GET /users
       def index
         @users = User.all.order(:created_at)
+        if (user_id = params[:identification_number])
+          @users = User.where("users.identification_number = '#{user_id}'")
+        end
 
         render json: @users
       end
@@ -30,7 +26,7 @@ module Api
       # POST /users
       def create
         @user = User.new(user_params)
-
+        @user.active = true
         if @user.save
           render json: @user, status: :created
         else
@@ -57,7 +53,8 @@ module Api
 
       # Only allow a trusted parameter "white list" through.
       def user_params
-        params.require(:user).permit(:username, :researcher_id, user_role_ids: [])
+        params.require(:user).permit(:identification_number, :oas_user_id,
+                                     :user_role_id)
       end
     end
   end
