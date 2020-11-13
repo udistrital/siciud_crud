@@ -65,8 +65,12 @@ if flag_rg.nil?
 # puts "Grupos ok"
 
   Role.create(name: "Director")
-  Role.create(name: "Coinvestigador")
+  Role.create(name: "Docente")
   Role.create(name: "Estudiante")
+  Role.create(name: "Egresado")
+  Role.create(name: "Líder semillero")
+  Role.create(name: "Invitado")
+  Role.create(name: "Sin asignar")
 
   CineBroadArea.create(name: "Programas y certificaciones genéricos", code: "00")
   CineBroadArea.create(name: "Educación", code: "01")
@@ -311,6 +315,12 @@ if flag_rg.nil?
   KnwlSpecArea.create(name: "Creacion efimera")
   KnwlSpecArea.create(name: "Creacion permanente")
   KnwlSpecArea.create(name: "Creacion procesual")
+
+  UserRole.create(name: "Administrador")
+  UserRole.create(name: "Gestor")
+  UserRole.create(name: "Editor")
+  UserRole.create(name: "Lector")
+  UserRole.create(name: "Integrante")
 end
 
 
