@@ -1,5 +1,6 @@
 SELECT
     rg.id,
+    rg.legacy_siciud_id,
     rg.name,
     rg.acronym,
     rg.description,
@@ -27,9 +28,10 @@ SELECT
     (SELECT name FROM public.cine_specific_areas WHERE id = rg.cine_specific_area_id) AS cine_specific_area_name,
     ARRAY(SELECT cine_detailed_area_id FROM public.cine_detailed_areas_research_groups WHERE research_group_id = rg.id) AS cine_detailed_area_ids,
     ARRAY(SELECT curricular_project_id FROM public.curricular_prj_ids_research_groups WHERE research_group_id = rg.id) AS curricular_project_ids,
-    rg.oecd_knowledge_subarea_id,
     ARRAY(SELECT oecd_discipline_id FROM public.oecd_disciplines_research_groups WHERE research_group_id = rg.id) AS oecd_discipline_ids,
     ARRAY(SELECT research_focus_id FROM public.research_focuses_groups WHERE research_group_id = rg.id) AS research_focus_ids,
     rg.created_at,
-    rg.updated_at
+    rg.updated_at,
+    rg.created_by,
+    rg.updated_by
 FROM public.research_groups rg;

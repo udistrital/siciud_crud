@@ -7,6 +7,8 @@ module Api
       # GET /research_group/:id/books
       def index
         @books = @research_group.books
+        # docs = [:book_document]
+        # @books = DxService.load(@books, params, docs)
         render json: @books
       end
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_14_195410) do
+ActiveRecord::Schema.define(version: 2020_11_15_020544) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -255,6 +255,9 @@ ActiveRecord::Schema.define(version: 2020_11_14_195410) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "geo_city_id"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
     t.index ["category_id"], name: "index_books_on_category_id"
     t.index ["editorial_id"], name: "index_books_on_editorial_id"
     t.index ["geo_city_id"], name: "index_books_on_geo_city_id"
@@ -854,6 +857,8 @@ ActiveRecord::Schema.define(version: 2020_11_14_195410) do
     t.bigint "oecd_knowledge_subarea_id"
     t.bigint "oecd_knowledge_area_id"
     t.integer "legacy_siciud_id"
+    t.bigint "created_by"
+    t.bigint "updated_by"
     t.string "cidc_act_document"
     t.string "establishment_document"
     t.string "faculty_act_document"
@@ -1128,6 +1133,7 @@ ActiveRecord::Schema.define(version: 2020_11_14_195410) do
 
   create_view "research_units", sql_definition: <<-SQL
       SELECT rg.id,
+      rg.legacy_siciud_id,
       rg.name,
       rg.acronym,
       rg.description,
@@ -1171,7 +1177,6 @@ ActiveRecord::Schema.define(version: 2020_11_14_195410) do
       ARRAY( SELECT curricular_prj_ids_research_groups.curricular_project_id
              FROM curricular_prj_ids_research_groups
             WHERE (curricular_prj_ids_research_groups.research_group_id = rg.id)) AS curricular_project_ids,
-      rg.oecd_knowledge_subarea_id,
       ARRAY( SELECT oecd_disciplines_research_groups.oecd_discipline_id
              FROM oecd_disciplines_research_groups
             WHERE (oecd_disciplines_research_groups.research_group_id = rg.id)) AS oecd_discipline_ids,
@@ -1182,7 +1187,9 @@ ActiveRecord::Schema.define(version: 2020_11_14_195410) do
       rg.establishment_document,
       rg.faculty_act_document,
       rg.created_at,
-      rg.updated_at
+      rg.updated_at,
+      rg.created_by,
+      rg.updated_by
      FROM research_groups rg;
   SQL
 end
