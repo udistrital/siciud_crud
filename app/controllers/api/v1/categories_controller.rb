@@ -3,18 +3,13 @@ module Api
     class CategoriesController < ApplicationController
       before_action :set_category, only: [:show, :update]
 
-      # Handling of database exceptions
-      rescue_from ActiveRecord::RecordNotFound do |e|
-        render json: {error: e.message}, status: :not_found
-      end
-
-      rescue_from ActiveRecord::RecordInvalid do |e|
-        render json: {error: e.message}, status: :unprocessable_entity
-      end
-
       # GET /categories
       def index
+        params.permit(:product_type_id)
         @categories = Category.all
+        if (pro_type_id = params[:product_type_id])
+          @categories = @categories.where("product_type_id = #{pro_type_id}")
+        end
 
         render json: @categories
       end
