@@ -4,12 +4,10 @@
 class ResearchUnit < ApplicationRecord
   # https://stackoverflow.com/a/56701621
   # ActiveStorage::Current.host = request.base_url
-  attribute :cidc_act_document, :default => nil
-  attribute :faculty_act_document, :default => nil
-  attribute :establishment_document, :default => nil
-  
+  # attribute :cidc_act_document, :default => nil
+  # attribute :faculty_act_document, :default => nil
+  # attribute :establishment_document, :default => nil
   self.primary_key = :id
-
   def readonly?
     true
   end

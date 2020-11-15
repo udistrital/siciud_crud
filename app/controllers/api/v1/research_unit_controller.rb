@@ -5,7 +5,8 @@ module Api
       before_action :set_research_unit, only: [:show, :attach]
 
       def index
-        docs = ['cidc_act_document', 'faculty_act_document', 'establishment_document']
+        # docs = ['cidc_act_document', 'faculty_act_document', 'establishment_document']
+        docs = []
         @items = DxService.load(ResearchUnit, params, docs)
         render json: @items
       end
