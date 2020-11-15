@@ -32,6 +32,9 @@ SELECT
     rg.oecd_knowledge_subarea_id,
     ARRAY(SELECT oecd_discipline_id FROM public.oecd_disciplines_research_groups WHERE research_group_id = rg.id) AS oecd_discipline_ids,
     ARRAY(SELECT research_focus_id FROM public.research_focuses_groups WHERE research_group_id = rg.id) AS research_focus_ids,
+    rg.cidc_act_document,
+    rg.establishment_document,
+    rg.faculty_act_document,
     rg.created_at,
     rg.updated_at
 FROM public.research_groups rg;

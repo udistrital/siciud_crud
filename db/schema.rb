@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_13_153010) do
+ActiveRecord::Schema.define(version: 2020_11_14_195410) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -854,6 +854,9 @@ ActiveRecord::Schema.define(version: 2020_11_13_153010) do
     t.bigint "oecd_knowledge_subarea_id"
     t.bigint "oecd_knowledge_area_id"
     t.integer "legacy_siciud_id"
+    t.string "cidc_act_document"
+    t.string "establishment_document"
+    t.string "faculty_act_document"
     t.index ["cine_broad_area_id"], name: "index_research_groups_on_cine_broad_area_id"
     t.index ["cine_specific_area_id"], name: "index_research_groups_on_cine_specific_area_id"
     t.index ["group_state_id"], name: "index_research_groups_on_group_state_id"
@@ -1175,6 +1178,9 @@ ActiveRecord::Schema.define(version: 2020_11_13_153010) do
       ARRAY( SELECT research_focuses_groups.research_focus_id
              FROM research_focuses_groups
             WHERE (research_focuses_groups.research_group_id = rg.id)) AS research_focus_ids,
+      rg.cidc_act_document,
+      rg.establishment_document,
+      rg.faculty_act_document,
       rg.created_at,
       rg.updated_at
      FROM research_groups rg;
