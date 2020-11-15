@@ -231,7 +231,6 @@ if flag_rg.nil?
   Category.create(name: "C", product_type_id: p_type.id)
   Category.create(name: "D", product_type_id: p_type.id)
   Category.create(name: "No indexado", product_type_id: p_type.id)
-  Category.create(name: "", product_type_id: p_type.id)
 
   PaperType.create(name: "Artículo científico")
   PaperType.create(name: "Artículo de revisión")
