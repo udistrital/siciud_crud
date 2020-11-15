@@ -1168,6 +1168,7 @@ ActiveRecord::Schema.define(version: 2020_11_13_153010) do
       ARRAY( SELECT curricular_prj_ids_research_groups.curricular_project_id
              FROM curricular_prj_ids_research_groups
             WHERE (curricular_prj_ids_research_groups.research_group_id = rg.id)) AS curricular_project_ids,
+      rg.oecd_knowledge_subarea_id,
       ARRAY( SELECT oecd_disciplines_research_groups.oecd_discipline_id
              FROM oecd_disciplines_research_groups
             WHERE (oecd_disciplines_research_groups.research_group_id = rg.id)) AS oecd_discipline_ids,

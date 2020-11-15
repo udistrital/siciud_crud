@@ -6,7 +6,7 @@
 #
 default: &default
   adapter: postgresql
-  database: siciud-v2
+  database: siciud_v2
   encoding: unicode
   host: 192.168.0.7
   port: 3505
