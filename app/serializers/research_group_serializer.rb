@@ -12,12 +12,13 @@ class ResearchGroupSerializer < ActiveModel::Serializer
              :mission, :oecd_knowledge_subarea_id,
              :oecd_knowledge_area_id,
              :oecd_discipline_ids, :research_focus_ids,
-             :snies_id, :state_id, :state_name, :vision, :webpage
+             :snies_id, :state_id, :state_name, :vision, :webpage,
+             :created_by, :updated_by, :created_at, :updated_at
 
-  def cidc_act_document
-    rails_blob_path(self.object.cidc_act_document,
-                    only_path: true) if self.object.cidc_act_document.attached?
-  end
+  # def cidc_act_document
+  #   rails_blob_path(self.object.cidc_act_document,
+  #                   only_path: true) if self.object.cidc_act_document.attached?
+  # end
 
   def curricular_project_ids
     curr_prj = self.object.curricular_prj_ids_research_groups
@@ -42,15 +43,15 @@ class ResearchGroupSerializer < ActiveModel::Serializer
     end
   end
 
-  def establishment_document
-    rails_blob_path(self.object.establishment_document,
-                    only_path: true) if self.object.establishment_document.attached?
-  end
-
-  def faculty_act_document
-    rails_blob_path(self.object.faculty_act_document,
-                    only_path: true) if self.object.faculty_act_document.attached?
-  end
+  # def establishment_document
+  #   rails_blob_path(self.object.establishment_document,
+  #                   only_path: true) if self.object.establishment_document.attached?
+  # end
+  #
+  # def faculty_act_document
+  #   rails_blob_path(self.object.faculty_act_document,
+  #                   only_path: true) if self.object.faculty_act_document.attached?
+  # end
 
   def faculty_ids
     faculty_id = self.object.faculty_ids_research_groups

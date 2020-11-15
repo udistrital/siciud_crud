@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_15_020544) do
+ActiveRecord::Schema.define(version: 2020_11_15_022615) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1177,6 +1177,14 @@ ActiveRecord::Schema.define(version: 2020_11_15_020544) do
       ARRAY( SELECT curricular_prj_ids_research_groups.curricular_project_id
              FROM curricular_prj_ids_research_groups
             WHERE (curricular_prj_ids_research_groups.research_group_id = rg.id)) AS curricular_project_ids,
+      rg.oecd_knowledge_area_id,
+      ( SELECT oecd_knowledge_areas.name
+             FROM oecd_knowledge_areas
+            WHERE (oecd_knowledge_areas.id = rg.oecd_knowledge_area_id)) AS oecd_knowledge_area_name,
+      rg.oecd_knowledge_subarea_id,
+      ( SELECT oecd_knowledge_subareas.name
+             FROM oecd_knowledge_subareas
+            WHERE (oecd_knowledge_subareas.id = rg.oecd_knowledge_subarea_id)) AS oecd_knowledge_subarea_name,
       ARRAY( SELECT oecd_disciplines_research_groups.oecd_discipline_id
              FROM oecd_disciplines_research_groups
             WHERE (oecd_disciplines_research_groups.research_group_id = rg.id)) AS oecd_discipline_ids,
