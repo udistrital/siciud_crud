@@ -186,6 +186,9 @@ module Api
                                                :oecd_knowledge_subarea_id,
                                                :oecd_knowledge_area_id,
                                                :legacy_siciud_id,
+                                               :created_by, :updated_by,
+                                               :cidc_act_document, :establishment_document,
+                                               :faculty_act_document,
                                                research_focus_ids: [],
                                                oecd_discipline_ids: [])
       end

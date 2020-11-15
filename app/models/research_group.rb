@@ -1,8 +1,8 @@
 class ResearchGroup < ApplicationRecord
   #Relaciones con los documentos y con los diferentes modelos
-  has_one_attached :faculty_act_document
-  has_one_attached :cidc_act_document
-  has_one_attached :establishment_document
+  # has_one_attached :faculty_act_document
+  # has_one_attached :cidc_act_document
+  # has_one_attached :establishment_document
 
   belongs_to :group_state
   belongs_to :group_type
