@@ -19,6 +19,10 @@ namespace :import_researchers do
     researcher = Researcher.create(
         identification_number: row[:documento]
     )
+    user = User.create(
+        identification_number: row[:documento]
+        #Created_by
+    )
     puts "Researcher with doc: '#{researcher.identification_number}' created"
 end
 puts "Researcher data successfully imported!"
