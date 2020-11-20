@@ -12,7 +12,7 @@ class IpLivestockBreed < ApplicationRecord
   has_many :int_participants, as: :producible
   has_many :ext_participants, as: :producible
 
-  # Documents
-  has_one_attached :certificate_ma_document
-  has_one_attached :ip_livestock_breed_document
+  # Tracking inherited from ApplicationRecord, fields:
+  # created_by and updated_by, see application_record.rb
+  validates :created_by, presence: true, allow_nil: false
 end

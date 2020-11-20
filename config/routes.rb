@@ -159,7 +159,6 @@ Rails.application.routes.draw do
         # New generation products endpoints
         # Book
         resources :books, only: [:index, :show, :create, :update]
-        put "books/:id/attach/", to: "books#attach"
 
         # Book chapter
         resources :book_chapters, only: [:index, :show, :create, :update]

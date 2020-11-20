@@ -1,6 +1,11 @@
-class IntParticipantSerializer < ActiveModel::Serializer
-  attributes :id
-  has_one :producible
-  has_one :researcher
-  has_one :participant_type
+class IntParticipantSerializer < AbstractProductNewKnwGenSerializer
+  attributes :id, :participant_type_id, :participant_type_name,
+             :researcher_id, :oas_researcher_id
+
+  def oas_researcher_id
+    researcher = self.object.researcher
+    if researcher
+      researcher.oas_researcher_id
+    end
+  end
 end

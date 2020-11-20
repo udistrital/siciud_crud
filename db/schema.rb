@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_15_022615) do
+ActiveRecord::Schema.define(version: 2020_11_20_214925) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -237,10 +237,16 @@ ActiveRecord::Schema.define(version: 2020_11_15_022615) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "geo_city_id"
+    t.string "book_chapter_document"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
     t.index ["category_id"], name: "index_book_chapters_on_category_id"
+    t.index ["created_by"], name: "index_book_chapters_on_created_by"
     t.index ["editorial_id"], name: "index_book_chapters_on_editorial_id"
     t.index ["geo_city_id"], name: "index_book_chapters_on_geo_city_id"
     t.index ["research_group_id"], name: "index_book_chapters_on_research_group_id"
+    t.index ["updated_by"], name: "index_book_chapters_on_updated_by"
   end
 
   create_table "books", force: :cascade do |t|
@@ -258,10 +264,13 @@ ActiveRecord::Schema.define(version: 2020_11_15_022615) do
     t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
+    t.string "book_document"
     t.index ["category_id"], name: "index_books_on_category_id"
+    t.index ["created_by"], name: "index_books_on_created_by"
     t.index ["editorial_id"], name: "index_books_on_editorial_id"
     t.index ["geo_city_id"], name: "index_books_on_geo_city_id"
     t.index ["research_group_id"], name: "index_books_on_research_group_id"
+    t.index ["updated_by"], name: "index_books_on_updated_by"
   end
 
   create_table "call_item_categories", force: :cascade do |t|
@@ -452,6 +461,11 @@ ActiveRecord::Schema.define(version: 2020_11_15_022615) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.index ["created_by"], name: "index_editorials_on_created_by"
+    t.index ["updated_by"], name: "index_editorials_on_updated_by"
   end
 
   create_table "entity_types", force: :cascade do |t|
@@ -619,9 +633,16 @@ ActiveRecord::Schema.define(version: 2020_11_15_022615) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "geo_city_id"
+    t.string "certificate_ma_document"
+    t.string "ip_livestock_breed_document"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
     t.index ["category_id"], name: "index_ip_livestock_breeds_on_category_id"
+    t.index ["created_by"], name: "index_ip_livestock_breeds_on_created_by"
     t.index ["geo_city_id"], name: "index_ip_livestock_breeds_on_geo_city_id"
     t.index ["research_group_id"], name: "index_ip_livestock_breeds_on_research_group_id"
+    t.index ["updated_by"], name: "index_ip_livestock_breeds_on_updated_by"
   end
 
   create_table "item_categories", force: :cascade do |t|
@@ -653,11 +674,18 @@ ActiveRecord::Schema.define(version: 2020_11_15_022615) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "geo_city_id"
+    t.string "ccb_ica_document"
+    t.string "new_animal_breed_document"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
     t.index ["category_id"], name: "index_new_animal_breeds_on_category_id"
+    t.index ["created_by"], name: "index_new_animal_breeds_on_created_by"
     t.index ["cycle_type_id"], name: "index_new_animal_breeds_on_cycle_type_id"
     t.index ["geo_city_id"], name: "index_new_animal_breeds_on_geo_city_id"
     t.index ["petition_status_id"], name: "index_new_animal_breeds_on_petition_status_id"
     t.index ["research_group_id"], name: "index_new_animal_breeds_on_research_group_id"
+    t.index ["updated_by"], name: "index_new_animal_breeds_on_updated_by"
   end
 
   create_table "oecd_disciplines", force: :cascade do |t|
@@ -1066,10 +1094,14 @@ ActiveRecord::Schema.define(version: 2020_11_15_022615) do
   add_foreign_key "book_chapters", "editorials"
   add_foreign_key "book_chapters", "geo_cities"
   add_foreign_key "book_chapters", "research_groups"
+  add_foreign_key "book_chapters", "users", column: "created_by"
+  add_foreign_key "book_chapters", "users", column: "updated_by"
   add_foreign_key "books", "categories"
   add_foreign_key "books", "editorials"
   add_foreign_key "books", "geo_cities"
   add_foreign_key "books", "research_groups"
+  add_foreign_key "books", "users", column: "created_by"
+  add_foreign_key "books", "users", column: "updated_by"
   add_foreign_key "call_item_categories", "calls"
   add_foreign_key "call_item_categories", "item_categories"
   add_foreign_key "calls", "call_types"
@@ -1084,6 +1116,8 @@ ActiveRecord::Schema.define(version: 2020_11_15_022615) do
   add_foreign_key "cine_detailed_areas", "cine_specific_areas"
   add_foreign_key "cine_specific_areas", "cine_broad_areas"
   add_foreign_key "curricular_prj_ids_research_groups", "research_groups"
+  add_foreign_key "editorials", "users", column: "created_by"
+  add_foreign_key "editorials", "users", column: "updated_by"
   add_foreign_key "ext_participants", "participant_types"
   add_foreign_key "faculty_ids_research_groups", "research_groups"
   add_foreign_key "geo_cities", "geo_states"
@@ -1094,11 +1128,15 @@ ActiveRecord::Schema.define(version: 2020_11_15_022615) do
   add_foreign_key "ip_livestock_breeds", "categories"
   add_foreign_key "ip_livestock_breeds", "geo_cities"
   add_foreign_key "ip_livestock_breeds", "research_groups"
+  add_foreign_key "ip_livestock_breeds", "users", column: "created_by"
+  add_foreign_key "ip_livestock_breeds", "users", column: "updated_by"
   add_foreign_key "new_animal_breeds", "categories"
   add_foreign_key "new_animal_breeds", "cycle_types"
   add_foreign_key "new_animal_breeds", "geo_cities"
   add_foreign_key "new_animal_breeds", "petition_statuses"
   add_foreign_key "new_animal_breeds", "research_groups"
+  add_foreign_key "new_animal_breeds", "users", column: "created_by"
+  add_foreign_key "new_animal_breeds", "users", column: "updated_by"
   add_foreign_key "oecd_disciplines", "oecd_knowledge_subareas"
   add_foreign_key "oecd_knowledge_subareas", "oecd_knowledge_areas"
   add_foreign_key "papers", "categories"
@@ -1199,5 +1237,124 @@ ActiveRecord::Schema.define(version: 2020_11_15_022615) do
       rg.created_by,
       rg.updated_by
      FROM research_groups rg;
+  SQL
+  create_view "complete_books", sql_definition: <<-SQL
+      SELECT b.id,
+      b.title,
+      b.book_document,
+      b.category_id,
+      c.name AS category_name,
+      b.editorial_id,
+      e.name AS editorial_name,
+      b.geo_city_id,
+      gcity.name AS geo_city_name,
+      gs.geo_country_id,
+      gctry.name AS geo_country_name,
+      gcity.geo_state_id,
+      gs.name AS geo_state_name,
+      b.isbn,
+      b.observation,
+      b.publication_date,
+      b.url,
+      b.active,
+      b.created_by,
+      b.updated_by,
+      b.created_at,
+      b.updated_at
+     FROM (((((books b
+       JOIN categories c ON ((b.category_id = c.id)))
+       JOIN editorials e ON ((b.editorial_id = e.id)))
+       JOIN geo_cities gcity ON ((b.geo_city_id = gcity.id)))
+       JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
+       JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_ipl_breeds", sql_definition: <<-SQL
+      SELECT iplb.id,
+      iplb.name,
+      iplb.category_id,
+      c.name AS category_name,
+      iplb.certificate_ma_document,
+      iplb.consecutive_number_ma,
+      iplb.geo_city_id,
+      gcity.name AS geo_city_name,
+      gs.geo_country_id,
+      gctry.name AS geo_country_name,
+      gcity.geo_state_id,
+      gs.name AS geo_state_name,
+      iplb.ip_livestock_breed_document,
+      iplb.observation,
+      iplb.publication_date,
+      iplb.active,
+      iplb.created_by,
+      iplb.updated_by,
+      iplb.created_at,
+      iplb.updated_at
+     FROM ((((ip_livestock_breeds iplb
+       JOIN categories c ON ((iplb.category_id = c.id)))
+       JOIN geo_cities gcity ON ((iplb.geo_city_id = gcity.id)))
+       JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
+       JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_book_chapters", sql_definition: <<-SQL
+      SELECT bc.id,
+      bc.book_title,
+      bc.title,
+      bc.book_chapter_document,
+      bc.category_id,
+      c.name AS category_name,
+      bc.doi,
+      bc.editorial_id,
+      e.name AS editorial_name,
+      bc.geo_city_id,
+      gcity.name AS geo_city_name,
+      gs.geo_country_id,
+      gctry.name AS geo_country_name,
+      gcity.geo_state_id,
+      gs.name AS geo_state_name,
+      bc.isbn,
+      bc.observation,
+      bc.publication_date,
+      bc.url,
+      bc.active,
+      bc.created_by,
+      bc.updated_by,
+      bc.created_at,
+      bc.updated_at
+     FROM (((((book_chapters bc
+       JOIN categories c ON ((bc.category_id = c.id)))
+       JOIN editorials e ON ((bc.editorial_id = e.id)))
+       JOIN geo_cities gcity ON ((bc.geo_city_id = gcity.id)))
+       JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
+       JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_new_animal_bs", sql_definition: <<-SQL
+      SELECT nab.id,
+      nab.name,
+      nab.category_id,
+      c.name AS category_name,
+      nab.cycle_type_id,
+      ct.name AS cycle_type_name,
+      nab.date,
+      nab.geo_city_id,
+      gcity.name AS geo_city_name,
+      gs.geo_country_id,
+      gctry.name AS geo_country_name,
+      gcity.geo_state_id,
+      gs.name AS geo_state_name,
+      nab.observation,
+      nab.petition_status_id,
+      ps.name AS petition_status_name,
+      nab.active,
+      nab.created_by,
+      nab.updated_by,
+      nab.created_at,
+      nab.updated_at
+     FROM ((((((new_animal_breeds nab
+       JOIN categories c ON ((nab.category_id = c.id)))
+       JOIN cycle_types ct ON ((nab.cycle_type_id = ct.id)))
+       JOIN geo_cities gcity ON ((nab.geo_city_id = gcity.id)))
+       JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
+       JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
+       JOIN petition_statuses ps ON ((nab.petition_status_id = ps.id)));
   SQL
 end

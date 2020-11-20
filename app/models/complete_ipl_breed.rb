@@ -1,0 +1,2 @@
+class CompleteIplBreed < ApplicationRecord
+end

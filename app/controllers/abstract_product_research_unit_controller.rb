@@ -2,7 +2,7 @@ class AbstractProductResearchUnitController < ApplicationController
 
   private
 
-  def set_editorial(editorial_name)
+  def set_editorial(editorial_name, created_by_user, updated_by_user)
     params.permit(:editorial_name)
     editorial = nil
     if editorial_name.is_a? String
@@ -10,16 +10,19 @@ class AbstractProductResearchUnitController < ApplicationController
       editorial_name = editorial_name.downcase
       editorial = Editorial.where('lower(name) = ?', editorial_name).first
       if editorial.nil?
-        editorial = Editorial.new(name: editorial_name.titleize)
+        editorial = Editorial.new(name: editorial_name.titleize,
+                                  created_by: created_by_user,
+                                  updated_by: updated_by_user)
         unless editorial.save
-          render json: editorial.errors, status: :unprocessable_entity
+          render json: {error: editorial.errors, method: 'set_editorial'},
+                 status: :unprocessable_entity and return
         end
       end
     end
     editorial
   end
 
-  def set_journal(journal_name)
+  def set_journal(journal_name, created_by_user, updated_by_user)
     params.permit(:journal_name)
     journal = nil
     if journal_name.is_a? String
@@ -27,7 +30,9 @@ class AbstractProductResearchUnitController < ApplicationController
       journal_name = journal_name.downcase
       journal = Journal.where('lower(name) = ?', journal_name).first
       if journal.nil?
-        journal = Journal.new(name: journal_name.titleize)
+        journal = Journal.new(name: journal_name.titleize,
+                              created_by: created_by_user,
+                              updated_by: updated_by_user)
         unless journal.save
           render json: journal.errors, status: :unprocessable_entity
         end

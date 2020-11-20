@@ -1,14 +1,18 @@
 module Api
   module V1
     class BooksController < AbstractProductResearchUnitController
-      before_action :set_research_group
-      before_action :set_book, only: [:show, :update, :attach]
+      before_action only: [:create] do
+        validate_created_by(book_params)
+      end
+      before_action only: [:create, :update] do
+        validate_updated_by(book_params)
+      end
+      before_action :set_research_group, only: [:index, :show, :create, :update]
+      before_action :set_book, only: [:show, :update]
 
       # GET /research_group/:id/books
       def index
-        @books = @research_group.books
-        # docs = [:book_document]
-        # @books = DxService.load(@books, params, docs)
+        @books = DxService.load(CompleteBook, params)
         render json: @books
       end
 
@@ -19,10 +23,20 @@ module Api
 
       # POST /research_group/:id/books
       def create
-        @book = @research_group.books.new(book_params)
-        editorial = set_editorial(params[:book][:editorial_name])
+        @book = @research_group.books.new(
+            book_params.except(:editorial_name, :created_by, :updated_by)
+        )
+
+        # Add user in created_by and updated_by
+        @book.created_by = @created_by_user
+        @book.updated_by = @updated_by_user
+
+        editorial = set_editorial(params[:book][:editorial_name],
+                                  @book.created_by, @book.updated_by)
         if editorial
           @book.editorial = editorial
+        else
+          return
         end
 
         if @book.save
@@ -34,23 +48,21 @@ module Api
 
       # PATCH/PUT /research_group/:id/books/1
       def update
-        if @book.update(book_params)
+        # Update user of updated_by
+        @book.updated_by = @updated_by_user
+
+        editorial = set_editorial(params[:book][:editorial_name],
+                                  @book.created_by, @book.updated_by)
+        if editorial
+          @book.editorial = editorial
+        else
+          return
+        end
+        if @book.update(book_params.except(:editorial_name, :created_by,
+                                           :updated_by))
           render json: @book
         else
           render json: @book.errors, status: :unprocessable_entity
-        end
-      end
-
-      # PUT /research_group/:id/books/1/attach
-      def attach
-        params.permit(:book_document)
-        if (file = params[:book_document])
-          if file.content_type == "application/pdf"
-            @book.book_document.attach(file)
-          else
-            return render json: {'error': 'El libro debe ser formato pdf.'},
-                          status: :unprocessable_entity
-          end
         end
       end
 
@@ -65,7 +77,9 @@ module Api
       def book_params
         params.require(:book).permit(:title, :publication_date, :isbn,
                                      :url, :observation, :category_id,
-                                     :geo_city_id)
+                                     :geo_city_id, :book_document,
+                                     :editorial_name, :active,
+                                     :created_by, :updated_by)
       end
     end
   end
