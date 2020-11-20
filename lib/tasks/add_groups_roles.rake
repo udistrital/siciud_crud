@@ -10,10 +10,7 @@ namespace :add_group_roles do
         3 => 'Estudiante',
         4 => 'Egresado',
         5 => 'Lider semillero',
-        6 => 'Invitado',
-        7 => 'Sin asignar',
-        8 => 'Sin asignar',
-        9 => 'Sin asignar',
+        6 => 'Invitado'
         }
     roles.each do | roleId, roleName |
 	role = Role.create(

@@ -23,8 +23,20 @@ namespace :import_research_groups_members do
             else
             2
             end
+    		role_id = case row[:idpapel]
+            when "7"
+            0
+            when "8"
+            0
+            when "9"
+            0
+            when "10"
+            0
+            else
+            row[:idpapel]
+            end
 	member = GroupMember.create(
-		role_id: row[:idpapel],
+		role_id: role_id,
 		researcher_id: researcher.id,
 		research_group_id: row[:idGrupoSemillero],
 		gm_state_id: gm_state_id
@@ -35,7 +47,8 @@ namespace :import_research_groups_members do
 #         final_date: row[:fechaSalida]
 #         role_id: row[:idpapel]
 #         group_member_id: member.id,
-#     )
+# #     )
+# Model is GmPeriod
 end
 puts "Member data successfully imported!"
 end

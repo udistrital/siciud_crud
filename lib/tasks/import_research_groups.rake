@@ -3,7 +3,9 @@ namespace :import_research_groups do
 	desc "Import research_groups data from spreadsheet"
 	task data: :environment do
 		puts 'Cleaning up Model'
+		FacultyIdsResearchGroup.destroy_all
 		ResearchGroup.destroy_all
+		ActiveRecord::Base.connection.reset_pk_sequence!('faculty_ids_research_groups')
 		ActiveRecord::Base.connection.reset_pk_sequence!('research_groups')
 		CSV.foreach('lib/data/cidc_grup_semill-12-10-2020v3.csv', {:headers => [
 		:cgsid,
@@ -30,23 +32,20 @@ namespace :import_research_groups do
 		]
 	}
 ) do |row|
-# 		group_type_id = case row[:group_type]
-#         when "Grupo"
-#         1
-#         when "Semillero"
-#         2
-#         else
-#         1
-#         end
-#
-# 		group_state_id = case row[:group_state]
-#         when "Activo"
-#         1
-#         when "Inactivo"
-#         2
-#         else
-#         2
-#         end
+		faculty_id = case row[:cgsfacultad]
+        when "1"
+        66 #Tecnologica
+        when "2"
+        14 #Ingenieria
+        when "3"
+        65 #MedioAmbiente
+        when "4"
+        17 #CienciasEducacion
+        when "5"
+        35 #Artes
+        else
+        row[:cgsfacultad]
+        end
 	groups = ResearchGroup.create(
     	id: row[:cgsid],
 		name: row[:cgsnombre],
@@ -65,7 +64,11 @@ namespace :import_research_groups do
 		# extranotes: row[:cgsobservaciones],
 		mission: row[:cgsmision],
         vision: row[:cgsvision],
-        description: row[:cgsdescripcion]
+        description: row[:cgsdescripcion],
+	)
+	faculties =	FacultyIdsResearchGroup.create(
+	    research_group_id:row[:cgsid],
+	    faculty_id:	faculty_id
 	)
 	puts "Importing research group: '#{groups.name}'"
 end
