@@ -1,12 +1,16 @@
 module Api
   module V1
     class ResearchCreationWorksController < AbstractProductResearchUnitController
+      before_action only: [:create, :update] do
+        validate_created_by(research_creation_work_params)
+        validate_updated_by(research_creation_work_params)
+      end
       before_action :set_research_group
       before_action :set_research_creation_work, only: [:show, :update]
 
       # GET /research_group/:id/research_creation_works
       def index
-        @research_creation_works = @research_group.research_creation_works
+        @research_creation_works = DxService.load(CompleteResearchCw, params)
 
         render json: @research_creation_works
       end
@@ -30,10 +34,20 @@ module Api
 
       # PATCH/PUT /research_group/:id/research_creation_works/1
       def update
-        if @research_creation_work.update(research_creation_work_params)
-          render json: @research_creation_work
+        if @research_creation_work.created_by.nil?
+          # Update user of created_by only this is nil
+          if @research_creation_work.update(research_creation_work_params)
+            render json: @research_creation_work
+          else
+            render json: @research_creation_work.errors, status: :unprocessable_entity
+          end
         else
-          render json: @research_creation_work.errors, status: :unprocessable_entity
+          if @research_creation_work.update(research_creation_work_params.except(
+              :created_by))
+            render json: @research_creation_work
+          else
+            render json: @research_creation_work.errors, status: :unprocessable_entity
+          end
         end
       end
 
@@ -46,12 +60,12 @@ module Api
 
       # Only allow a trusted parameter "white list" through.
       def research_creation_work_params
-        params.require(:research_creation_work).permit(:title, :creation_and_selection_date,
-                                                       :nature_of_work,
-                                                       :registered_project_title,
-                                                       :url, :observation, :knwl_spec_area_id,
-                                                       :category_id, :geo_city_id,
-                                                       work_type_ids: [])
+        params.require(:research_creation_work).permit(
+            :title, :creation_and_selection_date, :nature_of_work,
+            :registered_project_title, :url, :observation, :knwl_spec_area_id,
+            :category_id, :geo_city_id, :certificate_work_document, :active,
+            :created_by, :updated_by, work_type_ids: []
+        )
       end
     end
   end

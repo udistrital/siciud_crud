@@ -1,12 +1,16 @@
 module Api
   module V1
     class ScientificNotesController < AbstractProductResearchUnitController
+      before_action only: [:create, :update] do
+        validate_created_by(scientific_note_params)
+        validate_updated_by(scientific_note_params)
+      end
       before_action :set_research_group
       before_action :set_scientific_note, only: [:show, :update]
 
       # GET /research_group/:id/scientific_notes
       def index
-        @scientific_notes = @research_group.scientific_notes
+        @scientific_notes = DxService.load(CompleteScientificNote, params)
 
         render json: @scientific_notes
       end
@@ -18,10 +22,15 @@ module Api
 
       # POST /research_group/:id/scientific_notes
       def create
-        @scientific_note = @research_group.scientific_notes.new(scientific_note_params)
-        journal = set_journal(params[:scientific_note][:journal_name])
+        @scientific_note = @research_group.scientific_notes.new(
+            scientific_note_params.except(:journal_name))
+        journal = set_journal(params[:scientific_note][:journal_name],
+                              @scientific_note.created_by,
+                              @scientific_note.updated_by)
         if journal
           @scientific_note.journal = journal
+        else
+          return
         end
 
         if @scientific_note.save
@@ -33,10 +42,28 @@ module Api
 
       # PATCH/PUT /research_group/:id/scientific_notes/1
       def update
-        if @scientific_note.update(scientific_note_params)
-          render json: @scientific_note
+        journal = set_journal(params[:scientific_note][:journal_name],
+                              @scientific_note.created_by,
+                              @scientific_note.updated_by)
+        if journal
+          @scientific_note.journal = journal
         else
-          render json: @scientific_note.errors, status: :unprocessable_entity
+          return
+        end
+        if @scientific_note.created_by.nil?
+          # Update user of created_by only this is nil
+          if @scientific_note.update(scientific_note_params.except(:journal_name))
+            render json: @scientific_note
+          else
+            render json: @scientific_note.errors, status: :unprocessable_entity
+          end
+        else
+          if @scientific_note.update(scientific_note_params.except(:journal_name,
+                                                                   :created_by))
+            render json: @scientific_note
+          else
+            render json: @scientific_note.errors, status: :unprocessable_entity
+          end
         end
       end
 
@@ -50,11 +77,11 @@ module Api
 
       # Only allow a trusted parameter "white list" through.
       def scientific_note_params
-        params.require(:scientific_note).permit(:title, :journal_title, :publication_date,
-                                                :volume, :number_of_pages, :initial_page,
-                                                :final_page, :issn, :url, :doi,
-                                                :observation, :category_id,
-                                                :geo_city_id)
+        params.require(:scientific_note).permit(
+            :title, :journal_title, :publication_date, :approval_date, :volume,
+            :number_of_pages, :initial_page, :final_page, :issn, :url, :doi,
+            :observation, :category_id, :geo_city_id, :journal_name, :active,
+            :created_by, :updated_by)
       end
     end
   end

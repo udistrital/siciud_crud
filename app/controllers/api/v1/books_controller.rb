@@ -1,10 +1,8 @@
 module Api
   module V1
     class BooksController < AbstractProductResearchUnitController
-      before_action only: [:create] do
-        validate_created_by(book_params)
-      end
       before_action only: [:create, :update] do
+        validate_created_by(book_params)
         validate_updated_by(book_params)
       end
       before_action :set_research_group, only: [:index, :show, :create, :update]
@@ -24,12 +22,8 @@ module Api
       # POST /research_group/:id/books
       def create
         @book = @research_group.books.new(
-            book_params.except(:editorial_name, :created_by, :updated_by)
+            book_params.except(:editorial_name)
         )
-
-        # Add user in created_by and updated_by
-        @book.created_by = @created_by_user
-        @book.updated_by = @updated_by_user
 
         editorial = set_editorial(params[:book][:editorial_name],
                                   @book.created_by, @book.updated_by)
@@ -48,9 +42,6 @@ module Api
 
       # PATCH/PUT /research_group/:id/books/1
       def update
-        # Update user of updated_by
-        @book.updated_by = @updated_by_user
-
         editorial = set_editorial(params[:book][:editorial_name],
                                   @book.created_by, @book.updated_by)
         if editorial
@@ -58,11 +49,20 @@ module Api
         else
           return
         end
-        if @book.update(book_params.except(:editorial_name, :created_by,
-                                           :updated_by))
-          render json: @book
+
+        if @book.created_by.nil?
+          # Update user of created_by only this is nil
+          if @book.update(book_params.except(:editorial_name))
+            render json: @book
+          else
+            render json: @book.errors, status: :unprocessable_entity
+          end
         else
-          render json: @book.errors, status: :unprocessable_entity
+          if @book.update(book_params.except(:editorial_name, :created_by))
+            render json: @book
+          else
+            render json: @book.errors, status: :unprocessable_entity
+          end
         end
       end
 

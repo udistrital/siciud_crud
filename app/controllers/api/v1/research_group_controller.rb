@@ -1,17 +1,13 @@
 module Api
   module V1
     class ResearchGroupController < ApplicationController
+      before_action only: [:create, :update] do
+        validate_created_by(research_group_params)
+        validate_updated_by(research_group_params)
+      end
       before_action :set_research_group, only: [:show, :update, :attach]
 
       # Handling of database exceptions
-      rescue_from ActiveRecord::RecordNotFound do |e|
-        render json: {error: e.message}, status: :not_found
-      end
-
-      rescue_from ActiveRecord::RecordInvalid do |e|
-        render json: {error: e.message}, status: :unprocessable_entity
-      end
-
       rescue_from ActiveRecord::StatementInvalid do |e|
         render json: {error: e.message}, status: :unprocessable_entity
       end
@@ -58,7 +54,6 @@ module Api
       end
 
       def create
-        #Crear el grupo de investigacion con los parametros que se envian
         @research_group = ResearchGroup.new(research_group_params)
 
         params.permit(:faculty_ids, :curricular_project_ids)
@@ -71,52 +66,35 @@ module Api
         end
       end
 
-      #Se intenta actualizar el semillero con la informacion enviada en los parametros
-
       def update
-        if @research_group.update(research_group_params)
-          params.permit(:faculty_ids, :curricular_project_ids)
-          @research_group = save_data_by_key(@research_group)
+        if @research_group.created_by.nil?
+          # Update user of created_by only this is nil
+          if @research_group.update(research_group_params)
+            params.permit(:faculty_ids, :curricular_project_ids)
+            @research_group = save_data_by_key(@research_group)
 
-          if @research_group.save
-            render json: @research_group
+            if @research_group.save
+              render json: @research_group
+            else
+              render json: @research_group.errors, status: :unprocessable_entity
+            end
           else
             render json: @research_group.errors, status: :unprocessable_entity
           end
         else
-          render json: @research_group.errors, status: :unprocessable_entity
-        end
-      end
+          if @research_group.update(research_group_params.except(:created_by))
+            params.permit(:faculty_ids, :curricular_project_ids)
+            @research_group = save_data_by_key(@research_group)
 
-      #Añadir los documentos de Facultad y de CIDC
-      def attach
-        params.permit(:faculty_act_document, :cidc_act_document, :establishment_document)
-        msg = "debe ser formato pdf"
-        if (file = params[:faculty_act_document])
-          if (file.content_type == "application/pdf")
-            @research_group.faculty_act_document.attach(file)
+            if @research_group.save
+              render json: @research_group
+            else
+              render json: @research_group.errors, status: :unprocessable_entity
+            end
           else
-            return render json: {"error": "El acta de facultad #{msq}"},
-                          status: :unprocessable_entity
+            render json: @research_group.errors, status: :unprocessable_entity
           end
         end
-        if (file = params[:cidc_act_document])
-          if (file.content_type == "application/pdf")
-            @research_group.cidc_act_document.attach(file)
-          else
-            return render json: {"error": "El acta del cidc #{msq}"},
-                          status: :unprocessable_entity
-          end
-        end
-        if (file = params[:establishment_document])
-          if (file.content_type == "application/pdf")
-            @research_group.establishment_document.attach(file)
-          else
-            return render json: {"error": "El documento de constitución #{msq}"},
-                          status: :unprocessable_entity
-          end
-        end
-        render json: @research_group
       end
 
       private

@@ -1,9 +1,4 @@
 class ResearchGroup < ApplicationRecord
-  #Relaciones con los documentos y con los diferentes modelos
-  # has_one_attached :faculty_act_document
-  # has_one_attached :cidc_act_document
-  # has_one_attached :establishment_document
-
   belongs_to :group_state
   belongs_to :group_type
   belongs_to :cine_broad_area, optional: true
@@ -37,4 +32,9 @@ class ResearchGroup < ApplicationRecord
   validates :name, :acronym, :cidc_registration_date,
             :cidc_act_number, :faculty_act_number, :faculty_registration_date,
             :group_state_id, presence: true
+
+  # Tracking inherited from ApplicationRecord, fields:
+  # created_by and updated_by, see application_record.rb
+  validates :created_by, presence: true, allow_nil: false
+  validates :updated_by, presence: true, allow_nil: false, on: :update
 end

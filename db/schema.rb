@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_20_214925) do
+ActiveRecord::Schema.define(version: 2020_11_24_210456) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -655,6 +655,11 @@ ActiveRecord::Schema.define(version: 2020_11_20_214925) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.index ["created_by"], name: "index_journals_on_created_by"
+    t.index ["updated_by"], name: "index_journals_on_updated_by"
   end
 
   create_table "knwl_spec_areas", force: :cascade do |t|
@@ -743,11 +748,17 @@ ActiveRecord::Schema.define(version: 2020_11_20_214925) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "geo_city_id"
+    t.string "paper_document"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
     t.index ["category_id"], name: "index_papers_on_category_id"
+    t.index ["created_by"], name: "index_papers_on_created_by"
     t.index ["geo_city_id"], name: "index_papers_on_geo_city_id"
     t.index ["journal_id"], name: "index_papers_on_journal_id"
     t.index ["paper_type_id"], name: "index_papers_on_paper_type_id"
     t.index ["research_group_id"], name: "index_papers_on_research_group_id"
+    t.index ["updated_by"], name: "index_papers_on_updated_by"
   end
 
   create_table "participant_types", force: :cascade do |t|
@@ -773,9 +784,15 @@ ActiveRecord::Schema.define(version: 2020_11_20_214925) do
     t.bigint "research_group_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "patent_certificate_document"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
     t.index ["category_id"], name: "index_patents_on_category_id"
+    t.index ["created_by"], name: "index_patents_on_created_by"
     t.index ["patent_state_id"], name: "index_patents_on_patent_state_id"
     t.index ["research_group_id"], name: "index_patents_on_research_group_id"
+    t.index ["updated_by"], name: "index_patents_on_updated_by"
   end
 
   create_table "petition_statuses", force: :cascade do |t|
@@ -833,10 +850,16 @@ ActiveRecord::Schema.define(version: 2020_11_20_214925) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "geo_city_id"
+    t.string "certificate_work_document"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
     t.index ["category_id"], name: "index_research_creation_works_on_category_id"
+    t.index ["created_by"], name: "index_research_creation_works_on_created_by"
     t.index ["geo_city_id"], name: "index_research_creation_works_on_geo_city_id"
     t.index ["knwl_spec_area_id"], name: "index_research_creation_works_on_knwl_spec_area_id"
     t.index ["research_group_id"], name: "index_research_creation_works_on_research_group_id"
+    t.index ["updated_by"], name: "index_research_creation_works_on_updated_by"
   end
 
   create_table "research_creation_works_work_types", id: false, force: :cascade do |t|
@@ -892,10 +915,12 @@ ActiveRecord::Schema.define(version: 2020_11_20_214925) do
     t.string "faculty_act_document"
     t.index ["cine_broad_area_id"], name: "index_research_groups_on_cine_broad_area_id"
     t.index ["cine_specific_area_id"], name: "index_research_groups_on_cine_specific_area_id"
+    t.index ["created_by"], name: "index_research_groups_on_created_by"
     t.index ["group_state_id"], name: "index_research_groups_on_group_state_id"
     t.index ["group_type_id"], name: "index_research_groups_on_group_type_id"
     t.index ["oecd_knowledge_area_id"], name: "index_research_groups_on_oecd_knowledge_area_id"
     t.index ["oecd_knowledge_subarea_id"], name: "index_research_groups_on_oecd_knowledge_subarea_id"
+    t.index ["updated_by"], name: "index_research_groups_on_updated_by"
   end
 
   create_table "research_project_plans", force: :cascade do |t|
@@ -991,10 +1016,17 @@ ActiveRecord::Schema.define(version: 2020_11_20_214925) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "geo_city_id"
+    t.date "approval_date"
+    t.string "scientific_note_document"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
     t.index ["category_id"], name: "index_scientific_notes_on_category_id"
+    t.index ["created_by"], name: "index_scientific_notes_on_created_by"
     t.index ["geo_city_id"], name: "index_scientific_notes_on_geo_city_id"
     t.index ["journal_id"], name: "index_scientific_notes_on_journal_id"
     t.index ["research_group_id"], name: "index_scientific_notes_on_research_group_id"
+    t.index ["updated_by"], name: "index_scientific_notes_on_updated_by"
   end
 
   create_table "seedbed_members", force: :cascade do |t|
@@ -1059,6 +1091,8 @@ ActiveRecord::Schema.define(version: 2020_11_20_214925) do
     t.boolean "active"
     t.bigint "created_by"
     t.bigint "updated_by"
+    t.index ["created_by"], name: "index_users_on_created_by"
+    t.index ["updated_by"], name: "index_users_on_updated_by"
     t.index ["user_role_id"], name: "index_users_on_user_role_id"
   end
 
@@ -1073,11 +1107,17 @@ ActiveRecord::Schema.define(version: 2020_11_20_214925) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "geo_city_id"
+    t.string "vegetable_variety_document"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
     t.index ["category_id"], name: "index_vegetable_varieties_on_category_id"
+    t.index ["created_by"], name: "index_vegetable_varieties_on_created_by"
     t.index ["cycle_type_id"], name: "index_vegetable_varieties_on_cycle_type_id"
     t.index ["geo_city_id"], name: "index_vegetable_varieties_on_geo_city_id"
     t.index ["petition_status_id"], name: "index_vegetable_varieties_on_petition_status_id"
     t.index ["research_group_id"], name: "index_vegetable_varieties_on_research_group_id"
+    t.index ["updated_by"], name: "index_vegetable_varieties_on_updated_by"
   end
 
   create_table "work_types", force: :cascade do |t|
@@ -1130,6 +1170,8 @@ ActiveRecord::Schema.define(version: 2020_11_20_214925) do
   add_foreign_key "ip_livestock_breeds", "research_groups"
   add_foreign_key "ip_livestock_breeds", "users", column: "created_by"
   add_foreign_key "ip_livestock_breeds", "users", column: "updated_by"
+  add_foreign_key "journals", "users", column: "created_by"
+  add_foreign_key "journals", "users", column: "updated_by"
   add_foreign_key "new_animal_breeds", "categories"
   add_foreign_key "new_animal_breeds", "cycle_types"
   add_foreign_key "new_animal_breeds", "geo_cities"
@@ -1144,30 +1186,44 @@ ActiveRecord::Schema.define(version: 2020_11_20_214925) do
   add_foreign_key "papers", "journals"
   add_foreign_key "papers", "paper_types"
   add_foreign_key "papers", "research_groups"
+  add_foreign_key "papers", "users", column: "created_by"
+  add_foreign_key "papers", "users", column: "updated_by"
   add_foreign_key "patents", "categories"
   add_foreign_key "patents", "patent_states"
   add_foreign_key "patents", "research_groups"
+  add_foreign_key "patents", "users", column: "created_by"
+  add_foreign_key "patents", "users", column: "updated_by"
   add_foreign_key "product_types", "product_typologies"
   add_foreign_key "research_creation_works", "categories"
   add_foreign_key "research_creation_works", "geo_cities"
   add_foreign_key "research_creation_works", "knwl_spec_areas"
   add_foreign_key "research_creation_works", "research_groups"
+  add_foreign_key "research_creation_works", "users", column: "created_by"
+  add_foreign_key "research_creation_works", "users", column: "updated_by"
   add_foreign_key "research_groups", "cine_broad_areas"
   add_foreign_key "research_groups", "cine_specific_areas"
   add_foreign_key "research_groups", "group_states"
   add_foreign_key "research_groups", "group_types"
   add_foreign_key "research_groups", "oecd_knowledge_areas"
   add_foreign_key "research_groups", "oecd_knowledge_subareas"
+  add_foreign_key "research_groups", "users", column: "created_by"
+  add_foreign_key "research_groups", "users", column: "updated_by"
   add_foreign_key "scientific_notes", "categories"
   add_foreign_key "scientific_notes", "geo_cities"
   add_foreign_key "scientific_notes", "journals"
   add_foreign_key "scientific_notes", "research_groups"
+  add_foreign_key "scientific_notes", "users", column: "created_by"
+  add_foreign_key "scientific_notes", "users", column: "updated_by"
   add_foreign_key "users", "user_roles"
+  add_foreign_key "users", "users", column: "created_by"
+  add_foreign_key "users", "users", column: "updated_by"
   add_foreign_key "vegetable_varieties", "categories"
   add_foreign_key "vegetable_varieties", "cycle_types"
   add_foreign_key "vegetable_varieties", "geo_cities"
   add_foreign_key "vegetable_varieties", "petition_statuses"
   add_foreign_key "vegetable_varieties", "research_groups"
+  add_foreign_key "vegetable_varieties", "users", column: "created_by"
+  add_foreign_key "vegetable_varieties", "users", column: "updated_by"
 
   create_view "research_units", sql_definition: <<-SQL
       SELECT rg.id,
@@ -1356,5 +1412,163 @@ ActiveRecord::Schema.define(version: 2020_11_20_214925) do
        JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
        JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
        JOIN petition_statuses ps ON ((nab.petition_status_id = ps.id)));
+  SQL
+  create_view "complete_papers", sql_definition: <<-SQL
+      SELECT p.id,
+      p.title,
+      p.approval_date,
+      p.category_id,
+      c.name AS category_name,
+      p.doi,
+      p.final_page,
+      p.geo_city_id,
+      gcity.name AS geo_city_name,
+      gs.geo_country_id,
+      gctry.name AS geo_country_name,
+      gcity.geo_state_id,
+      gs.name AS geo_state_name,
+      p.initial_page,
+      p.issn,
+      p.journal_id,
+      j.name AS journal_name,
+      p.number_of_pages,
+      p.observation,
+      p.paper_type_id,
+      pt.name AS paper_type_name,
+      p.publication_date,
+      p.url,
+      p.volume,
+      p.active,
+      p.created_by,
+      p.updated_by,
+      p.created_at,
+      p.updated_at
+     FROM ((((((papers p
+       JOIN categories c ON ((p.category_id = c.id)))
+       JOIN geo_cities gcity ON ((p.geo_city_id = gcity.id)))
+       JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
+       JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
+       JOIN journals j ON ((p.journal_id = j.id)))
+       JOIN paper_types pt ON ((p.paper_type_id = pt.id)));
+  SQL
+  create_view "complete_patents", sql_definition: <<-SQL
+      SELECT p.id,
+      p.title,
+      p.category_id,
+      c.name AS category_name,
+      p.date_of_obtaining,
+      ARRAY( SELECT gcp.geo_country_id
+             FROM geo_countries_patents gcp
+            WHERE (p.id = gcp.patent_id)) AS geo_country_ids,
+      p.industrial_publication_gazette,
+      p.observation,
+      p.patent_certificate_document,
+      p.patent_number,
+      p.patent_state_id,
+      ps.name AS patent_state_name,
+      p.active,
+      p.created_by,
+      p.updated_by,
+      p.created_at,
+      p.updated_at
+     FROM ((patents p
+       JOIN categories c ON ((p.category_id = c.id)))
+       JOIN patent_states ps ON ((p.patent_state_id = ps.id)));
+  SQL
+  create_view "complete_research_cws", sql_definition: <<-SQL
+      SELECT rcw.id,
+      rcw.title,
+      rcw.category_id,
+      c.name AS category_name,
+      rcw.creation_and_selection_date,
+      rcw.geo_city_id,
+      gcity.name AS geo_city_name,
+      gs.geo_country_id,
+      gctry.name AS geo_country_name,
+      gcity.geo_state_id,
+      gs.name AS geo_state_name,
+      rcw.knwl_spec_area_id,
+      ksa.name AS knwl_spec_area_name,
+      rcw.nature_of_work,
+      rcw.observation,
+      rcw.registered_project_title,
+      rcw.url,
+      ARRAY( SELECT rcwwt.work_type_id
+             FROM research_creation_works_work_types rcwwt
+            WHERE (rcw.id = rcwwt.research_creation_work_id)) AS work_type_ids,
+      rcw.active,
+      rcw.created_by,
+      rcw.updated_by,
+      rcw.created_at,
+      rcw.updated_at
+     FROM (((((research_creation_works rcw
+       JOIN categories c ON ((rcw.category_id = c.id)))
+       JOIN geo_cities gcity ON ((rcw.geo_city_id = gcity.id)))
+       JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
+       JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
+       JOIN knwl_spec_areas ksa ON ((rcw.knwl_spec_area_id = ksa.id)));
+  SQL
+  create_view "complete_scientific_notes", sql_definition: <<-SQL
+      SELECT sn.id,
+      sn.title,
+      sn.approval_date,
+      sn.category_id,
+      gcity.name AS geo_city_name,
+      gs.geo_country_id,
+      gctry.name AS geo_country_name,
+      gcity.geo_state_id,
+      gs.name AS geo_state_name,
+      sn.initial_page,
+      sn.issn,
+      sn.journal_id,
+      j.name AS journal_name,
+      sn.journal_title,
+      sn.number_of_pages,
+      sn.observation,
+      sn.publication_date,
+      sn.url,
+      sn.volume,
+      sn.active,
+      sn.created_by,
+      sn.updated_by,
+      sn.created_at,
+      sn.updated_at
+     FROM (((((scientific_notes sn
+       JOIN categories c ON ((sn.category_id = c.id)))
+       JOIN geo_cities gcity ON ((sn.geo_city_id = gcity.id)))
+       JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
+       JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
+       JOIN journals j ON ((sn.journal_id = j.id)));
+  SQL
+  create_view "complete_vegetable_varieties", sql_definition: <<-SQL
+      SELECT vv.id,
+      vv.name,
+      vv.category_id,
+      c.name AS category_name,
+      vv.cycle_type_id,
+      ct.name AS cycle_type_name,
+      vv.date,
+      vv.geo_city_id,
+      gcity.name AS geo_city_name,
+      gs.geo_country_id,
+      gctry.name AS geo_country_name,
+      gcity.geo_state_id,
+      gs.name AS geo_state_name,
+      vv.observation,
+      vv.petition_status_id,
+      ps.name AS petition_status_name,
+      vv.vegetable_variety_document,
+      vv.active,
+      vv.created_by,
+      vv.updated_by,
+      vv.created_at,
+      vv.updated_at
+     FROM ((((((vegetable_varieties vv
+       JOIN categories c ON ((vv.category_id = c.id)))
+       JOIN cycle_types ct ON ((vv.cycle_type_id = ct.id)))
+       JOIN geo_cities gcity ON ((vv.geo_city_id = gcity.id)))
+       JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
+       JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
+       JOIN petition_statuses ps ON ((vv.petition_status_id = ps.id)));
   SQL
 end

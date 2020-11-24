@@ -1,10 +1,8 @@
 module Api
   module V1
     class BookChaptersController < AbstractProductResearchUnitController
-      before_action only: [:create] do
-        validate_created_by(book_chapter_params)
-      end
       before_action only: [:create, :update] do
+        validate_created_by(book_chapter_params)
         validate_updated_by(book_chapter_params)
       end
 
@@ -25,13 +23,8 @@ module Api
       # POST /research_group/:id/book_chapters
       def create
         @book_chapter = @research_group.book_chapters.new(
-            book_chapter_params.except(:editorial_name, :created_by,
-                                       :updated_by)
+            book_chapter_params.except(:editorial_name)
         )
-
-        # Add user in created_by and updated_by
-        @book_chapter.created_by = @created_by_user
-        @book_chapter.updated_by = @updated_by_user
 
         editorial = set_editorial(params[:book_chapter][:editorial_name],
                                   @book_chapter.created_by,
@@ -51,9 +44,6 @@ module Api
 
       # PATCH/PUT /research_group/:id/book_chapters/1
       def update
-        # Update user of updated_by
-        @book_chapter.updated_by = @updated_by_user
-
         editorial = set_editorial(params[:book_chapter][:editorial_name],
                                   @book_chapter.created_by,
                                   @book_chapter.updated_by)
@@ -63,13 +53,20 @@ module Api
           return
         end
 
-        if @book_chapter.update(book_chapter_params.except(:editorial_name,
-                                                           :created_by,
-                                                           :updated_by)
-        )
-          render json: @book_chapter
+        if @book_chapter.created_by.nil?
+          # Update user of created_by only this is nil
+          if @book_chapter.update(book_chapter_params.except(:editorial_name))
+            render json: @book_chapter
+          else
+            render json: @book_chapter.errors, status: :unprocessable_entity
+          end
         else
-          render json: @book_chapter.errors, status: :unprocessable_entity
+          if @book_chapter.update(book_chapter_params.except(:editorial_name,
+                                                             :created_by))
+            render json: @book_chapter
+          else
+            render json: @book_chapter.errors, status: :unprocessable_entity
+          end
         end
       end
 

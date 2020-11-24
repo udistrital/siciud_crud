@@ -1,9 +1,11 @@
 class PaperSerializer < AbstractProductNewKnwGenSerializer
-  attributes :id, :title, :publication_date, :approval_date, :volume,
-             :number_of_pages, :initial_page, :final_page, :issn, :url, :doi,
-             :observation, :category_id, :category_name, :journal_id, :journal_name,
-             :paper_type_id, :paper_type_name, :research_group_id, :int_participants,
-             :ext_participants
+  attributes :id, :title, :approval_date, :category_id, :category_name, :doi,
+             :final_page, :geo_city_id, :geo_city_name, :geo_country_id,
+             :geo_country_name, :geo_state_id, :geo_state_name, :initial_page,
+             :issn, :journal_id, :journal_name, :number_of_pages, :observation,
+             :paper_type_id, :paper_type_name, :publication_date, :url,
+             :volume, :active, :created_by, :updated_by, :created_at, :updated_at
+
 
   def journal_name
     journal = self.object.journal

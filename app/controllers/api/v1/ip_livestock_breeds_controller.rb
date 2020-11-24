@@ -1,10 +1,8 @@
 module Api
   module V1
     class IpLivestockBreedsController < AbstractProductResearchUnitController
-      before_action only: [:create] do
-        validate_created_by(ip_livestock_breed_params)
-      end
       before_action only: [:create, :update] do
+        validate_created_by(ip_livestock_breed_params)
         validate_updated_by(ip_livestock_breed_params)
       end
       before_action :set_research_group, only: [:index, :show, :create, :update]
@@ -24,12 +22,7 @@ module Api
       # POST /research_group/:id/ip_livestock_breeds
       def create
         @ip_livestock_breed = @research_group.ip_livestock_breeds.new(
-            ip_livestock_breed_params.except(:created_by, :updated_by)
-        )
-
-        # Add user in created_by and updated_by
-        @ip_livestock_breed.created_by = @created_by_user
-        @ip_livestock_breed.updated_by = @updated_by_user
+            ip_livestock_breed_params)
 
         if @ip_livestock_breed.save
           render json: @ip_livestock_breed, status: :created
@@ -40,14 +33,20 @@ module Api
 
       # PATCH/PUT /research_group/:id/ip_livestock_breeds/1
       def update
-        # Update user of updated_by
-        @ip_livestock_breed.updated_by = @updated_by_user
-        if @ip_livestock_breed.update(ip_livestock_breed_params.except(
-            :created_by, :updated_by)
-        )
-          render json: @ip_livestock_breed
+        if @ip_livestock_breed.created_by.nil?
+          # Update user of created_by only this is nil
+          if @ip_livestock_breed.update(ip_livestock_breed_params)
+            render json: @ip_livestock_breed
+          else
+            render json: @ip_livestock_breed.errors, status: :unprocessable_entity
+          end
         else
-          render json: @ip_livestock_breed.errors, status: :unprocessable_entity
+          if @ip_livestock_breed.update(ip_livestock_breed_params.except(
+              :created_by))
+            render json: @ip_livestock_breed
+          else
+            render json: @ip_livestock_breed.errors, status: :unprocessable_entity
+          end
         end
       end
 
