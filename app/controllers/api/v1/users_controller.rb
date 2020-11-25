@@ -14,7 +14,7 @@ module Api
 
       # GET /users
       def index
-        @users = User.all
+        @users = DxService.load(User, params)
         if (user_id = params[:identification_number])
           @users = User.where("users.identification_number = '#{user_id}'")
         end
