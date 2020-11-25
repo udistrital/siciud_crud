@@ -68,8 +68,9 @@ SICIUD_CRUD_API_PORT=[puerto de ejecucion]
 
 
 # Modelo de Datos
-![image](https://github.com/edissonca/siciud-backend.git/blob/GROUP-OO3/docs/research-unit-ER.png).
-[Modelo de Datos API SICIUD](https://github.com/edissonca/siciud-backend.git/blob/GROUP-OO3/docs/research-unit-ER.png)
+![entrada](https://github.com/edissonca/siciud-backend/blob/GROUP-003/docs/research-unit-ER.png)
+
+[Modelo de Datos API SICIUD](https://github.com/edissonca/siciud-backend/blob/GROUP-003/docs/research-unit-ER.png)
 
 # Licencia
 
