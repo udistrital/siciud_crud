@@ -1,11 +1,7 @@
 module Api
   module V1
     class ResearchGroupController < ApplicationController
-      before_action only: [:create, :update] do
-        validate_created_by(research_group_params)
-        validate_updated_by(research_group_params)
-      end
-      before_action :set_research_group, only: [:show, :update, :attach]
+      before_action :set_research_group, only: [:show, :update]
 
       # Handling of database exceptions
       rescue_from ActiveRecord::StatementInvalid do |e|
@@ -56,6 +52,10 @@ module Api
       def create
         @research_group = ResearchGroup.new(research_group_params)
 
+        unless @research_group.valid?
+          puts "\n\n-->Es invalido"
+          render json: @research_group.errors, status: :unprocessable_entity and return
+        end
         params.permit(:faculty_ids, :curricular_project_ids)
         @research_group = save_data_by_key(@research_group)
 
@@ -122,10 +122,7 @@ module Api
       def setFaculties(faculties, research_gr)
         research_gr.faculty_ids_research_groups.destroy_all
         faculties.map do |faculty|
-          new_faculty = research_gr.faculty_ids_research_groups.new(faculty_id: faculty)
-          if new_faculty.valid?
-            new_faculty.save
-          end
+          research_gr.faculty_ids_research_groups.new(faculty_id: faculty)
         end
         research_gr
       end
@@ -133,10 +130,7 @@ module Api
       def setCurricularPrj(curricularprjs, research_gr)
         research_gr.curricular_prj_ids_research_groups.destroy_all
         curricularprjs.map do |curr|
-          new_curr = research_gr.curricular_prj_ids_research_groups.new(curricular_project_id: curr)
-          if new_curr.valid?
-            new_curr.save
-          end
+          research_gr.curricular_prj_ids_research_groups.new(curricular_project_id: curr)
         end
         research_gr
       end
