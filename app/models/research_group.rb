@@ -6,27 +6,27 @@ class ResearchGroup < ApplicationRecord
   belongs_to :oecd_knowledge_area, optional: true
   belongs_to :oecd_knowledge_subarea, optional: true
 
-  has_and_belongs_to_many :research_focuses
-  has_and_belongs_to_many :agreements
-  has_and_belongs_to_many :oecd_disciplines
-  has_and_belongs_to_many :cine_detailed_areas
+  has_and_belongs_to_many :research_focuses, dependent: :destroy
+  has_and_belongs_to_many :agreements, dependent: :destroy
+  has_and_belongs_to_many :oecd_disciplines, dependent: :destroy
+  has_and_belongs_to_many :cine_detailed_areas, dependent: :destroy
 
-  has_many :faculty_ids_research_groups
-  has_many :curricular_prj_ids_research_groups
-  has_many :group_members
-  has_many :historical_colciencias_ranks
-  has_many :plan_periods, as: :planable
+  has_many :faculty_ids_research_groups, dependent: :destroy
+  has_many :curricular_prj_ids_research_groups, dependent: :destroy
+  has_many :group_members, dependent: :destroy
+  has_many :historical_colciencias_ranks, dependent: :destroy
+  has_many :plan_periods, as: :planable, dependent: :destroy
 
   # Products
-  has_many :books
-  has_many :book_chapters
-  has_many :ip_livestock_breeds
-  has_many :new_animal_breeds
-  has_many :papers
-  has_many :patents
-  has_many :research_creation_works
-  has_many :scientific_notes
-  has_many :vegetable_varieties
+  has_many :books, dependent: :destroy
+  has_many :book_chapters, dependent: :destroy
+  has_many :ip_livestock_breeds, dependent: :destroy
+  has_many :new_animal_breeds, dependent: :destroy
+  has_many :papers, dependent: :destroy
+  has_many :patents, dependent: :destroy
+  has_many :research_creation_works, dependent: :destroy
+  has_many :scientific_notes, dependent: :destroy
+  has_many :vegetable_varieties, dependent: :destroy
 
   #Validaciones de los campos obligatorios
   validates :name, :acronym, :cidc_registration_date,

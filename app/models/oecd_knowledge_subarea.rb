@@ -1,6 +1,6 @@
 class OecdKnowledgeSubarea < ApplicationRecord
   belongs_to :oecd_knowledge_area
-  has_many :research_groups
+  has_many :research_groups, dependent: :destroy
 
   validates :name, :code, uniqueness: true, exclusion: [nil, ""]
 
