@@ -35,30 +35,8 @@ class ResearchGroup < ApplicationRecord
 
   # Tracking inherited from ApplicationRecord, fields:
   # created_by and updated_by, see application_record.rb
+  # Too validate_created_by, validate_updated_by methods
   validates :created_by, presence: true, allow_nil: false
   validates :updated_by, presence: true, allow_nil: false, on: :update
-
   validate :validate_created_by, :validate_updated_by
-
-  def validate_created_by
-    user_id = self.created_by
-    if user_id and not user_id.blank?
-      begin
-        User.find(user_id)
-      rescue ActiveRecord::RecordNotFound => e
-        errors.add(:created_by, "Usuario no encontrado con 'created_by': #{user_id}")
-      end
-    end
-  end
-
-  def validate_updated_by
-    user_id = self.updated_by
-    if user_id and not user_id.blank?
-      begin
-        User.find(user_id)
-      rescue ActiveRecord::RecordNotFound => e
-        errors.add(:updated_by, "Usuario no encontrado con 'updated_by': #{user_id}")
-      end
-    end
-  end
 end

@@ -2,7 +2,10 @@ class User < ApplicationRecord
   belongs_to :user_role
 
   validates :user_role, presence: true
-  validates :identification_number, :oas_user_id, uniqueness: true
+  validates :identification_number, uniqueness: {
+      scope: [:user_role_id, :oas_user_id],
+      message: 'should only one identification_number and oas_user_id per user role'
+  }
 
   # Tracking inherited from ApplicationRecord, fields:
   # created_by and updated_by, see application_record.rb

@@ -11,4 +11,26 @@ class ApplicationRecord < ActiveRecord::Base
   belongs_to :user, foreign_key: 'updated_by', optional: true
   # belongs_to :created_by, class_name: "User", foreign_key: 'created_by', optional: true
   # belongs_to :updated_by, class_name: "User", foreign_key: 'updated_by', optional: true
+
+  def validate_created_by
+    user_id = self.created_by
+    if user_id and not user_id.blank?
+      begin
+        User.find(user_id)
+      rescue ActiveRecord::RecordNotFound => e
+        errors.add(:created_by, "#{e}, exactly 'created_by': #{user_id}")
+      end
+    end
+  end
+
+  def validate_updated_by
+    user_id = self.updated_by
+    if user_id and not user_id.blank?
+      begin
+        User.find(user_id)
+      rescue ActiveRecord::RecordNotFound => e
+        errors.add(:updated_by, "#{e}, exactly 'updated_by': #{user_id}")
+      end
+    end
+  end
 end
