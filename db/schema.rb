@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_24_210456) do
+ActiveRecord::Schema.define(version: 2020_11_27_055539) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -699,7 +699,12 @@ ActiveRecord::Schema.define(version: 2020_11_24_210456) do
     t.bigint "oecd_knowledge_subarea_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.index ["created_by"], name: "index_oecd_disciplines_on_created_by"
     t.index ["oecd_knowledge_subarea_id"], name: "index_oecd_disciplines_on_oecd_knowledge_subarea_id"
+    t.index ["updated_by"], name: "index_oecd_disciplines_on_updated_by"
   end
 
   create_table "oecd_disciplines_research_groups", id: false, force: :cascade do |t|
@@ -712,6 +717,11 @@ ActiveRecord::Schema.define(version: 2020_11_24_210456) do
     t.string "code"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.index ["created_by"], name: "index_oecd_knowledge_areas_on_created_by"
+    t.index ["updated_by"], name: "index_oecd_knowledge_areas_on_updated_by"
   end
 
   create_table "oecd_knowledge_subareas", force: :cascade do |t|
@@ -720,7 +730,12 @@ ActiveRecord::Schema.define(version: 2020_11_24_210456) do
     t.bigint "oecd_knowledge_area_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.index ["created_by"], name: "index_oecd_knowledge_subareas_on_created_by"
     t.index ["oecd_knowledge_area_id"], name: "index_oecd_knowledge_subareas_on_oecd_knowledge_area_id"
+    t.index ["updated_by"], name: "index_oecd_knowledge_subareas_on_updated_by"
   end
 
   create_table "paper_types", force: :cascade do |t|
@@ -1180,7 +1195,13 @@ ActiveRecord::Schema.define(version: 2020_11_24_210456) do
   add_foreign_key "new_animal_breeds", "users", column: "created_by"
   add_foreign_key "new_animal_breeds", "users", column: "updated_by"
   add_foreign_key "oecd_disciplines", "oecd_knowledge_subareas"
+  add_foreign_key "oecd_disciplines", "users", column: "created_by"
+  add_foreign_key "oecd_disciplines", "users", column: "updated_by"
+  add_foreign_key "oecd_knowledge_areas", "users", column: "created_by"
+  add_foreign_key "oecd_knowledge_areas", "users", column: "updated_by"
   add_foreign_key "oecd_knowledge_subareas", "oecd_knowledge_areas"
+  add_foreign_key "oecd_knowledge_subareas", "users", column: "created_by"
+  add_foreign_key "oecd_knowledge_subareas", "users", column: "updated_by"
   add_foreign_key "papers", "categories"
   add_foreign_key "papers", "geo_cities"
   add_foreign_key "papers", "journals"
@@ -1388,6 +1409,7 @@ ActiveRecord::Schema.define(version: 2020_11_24_210456) do
       nab.name,
       nab.category_id,
       c.name AS category_name,
+      nab.ccb_ica_document,
       nab.cycle_type_id,
       ct.name AS cycle_type_name,
       nab.date,
@@ -1397,6 +1419,7 @@ ActiveRecord::Schema.define(version: 2020_11_24_210456) do
       gctry.name AS geo_country_name,
       gcity.geo_state_id,
       gs.name AS geo_state_name,
+      nab.new_animal_breed_document,
       nab.observation,
       nab.petition_status_id,
       ps.name AS petition_status_name,
