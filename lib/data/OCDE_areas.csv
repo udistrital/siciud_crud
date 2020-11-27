@@ -18,17 +18,17 @@
 1,Ciencias Naturales,1D,Ciencias Químicas,1D05,Electroquímica
 1,Ciencias Naturales,1D,Ciencias Químicas,1D06,Química de los coloides
 1,Ciencias Naturales,1D,Ciencias Químicas,1D07,Química analítica
-1,Ciencias Naturales,1E,Ciencias de la Tierra y Medioambientales,10,Geociencias (multidisciplinario)
-1,Ciencias Naturales,1E,Ciencias de la Tierra y Medioambientales,100,Mineralogía
-1,Ciencias Naturales,1E,Ciencias de la Tierra y Medioambientales,1000,Paleontología
-1,Ciencias Naturales,1E,Ciencias de la Tierra y Medioambientales,10000,Geoquímica y geofísica
-1,Ciencias Naturales,1E,Ciencias de la Tierra y Medioambientales,100000,Geografía física
-1,Ciencias Naturales,1E,Ciencias de la Tierra y Medioambientales,1000000,Geología
-1,Ciencias Naturales,1E,Ciencias de la Tierra y Medioambientales,10000000,Vulcanología
-1,Ciencias Naturales,1E,Ciencias de la Tierra y Medioambientales,100000000,Ciencias del medio ambiente (aspectos sociales en 5.G)
-1,Ciencias Naturales,1E,Ciencias de la Tierra y Medioambientales,1000000000,Meteorología y ciencias atmosféricas
-1,Ciencias Naturales,1E,Ciencias de la Tierra y Medioambientales,10000000000,Investigación del clima
-1,Ciencias Naturales,1E,Ciencias de la Tierra y Medioambientales,100000000000,"Oceanografía, hidrología y recursos del agua"
+1,Ciencias Naturales,1E,Ciencias de la Tierra y Medioambientales,1E01,Geociencias (multidisciplinario)
+1,Ciencias Naturales,1E,Ciencias de la Tierra y Medioambientales,1E02,Mineralogía
+1,Ciencias Naturales,1E,Ciencias de la Tierra y Medioambientales,1E03,Paleontología
+1,Ciencias Naturales,1E,Ciencias de la Tierra y Medioambientales,1E04,Geoquímica y geofísica
+1,Ciencias Naturales,1E,Ciencias de la Tierra y Medioambientales,1E05,Geografía física
+1,Ciencias Naturales,1E,Ciencias de la Tierra y Medioambientales,1E06,Geología
+1,Ciencias Naturales,1E,Ciencias de la Tierra y Medioambientales,1E07,Vulcanología
+1,Ciencias Naturales,1E,Ciencias de la Tierra y Medioambientales,1E08,Ciencias del medio ambiente (aspectos sociales en 5.G)
+1,Ciencias Naturales,1E,Ciencias de la Tierra y Medioambientales,1E09,Meteorología y ciencias atmosféricas
+1,Ciencias Naturales,1E,Ciencias de la Tierra y Medioambientales,1E10,Investigación del clima
+1,Ciencias Naturales,1E,Ciencias de la Tierra y Medioambientales,1E11,"Oceanografía, hidrología y recursos del agua"
 1,Ciencias Naturales,1F,Ciencias Biológicas,1F01,Biología celular y microbiología
 1,Ciencias Naturales,1F,Ciencias Biológicas,1F02,Virología
 1,Ciencias Naturales,1F,Ciencias Biológicas,1F03,Bioquímica y biología molecular
@@ -65,12 +65,12 @@
 2,Ingeniería y tecnología,2C,Ingeniería Mecánica,2C06,Ingeniería del audio
 2,Ingeniería y tecnología,2D,Ingeniería Química,2D01,Ingeniería química (plantas y productos)
 2,Ingeniería y tecnología,2D,Ingeniería Química,2D02,Ingeniería de procesos
-2,Ingeniería y tecnología,2E,Ingeniería de Materiales,20,Ingeniería mecánica
-2,Ingeniería y tecnología,2E,Ingeniería de Materiales,200,Cerámicos
-2,Ingeniería y tecnología,2E,Ingeniería de Materiales,2000,Recubrimiento de películas
-2,Ingeniería y tecnología,2E,Ingeniería de Materiales,20000,"Compuestos (laminados, plásticos reforzados, fibra sintéticas y naturales, e ECA.)"
-2,Ingeniería y tecnología,2E,Ingeniería de Materiales,200000,Papel y madera
-2,Ingeniería y tecnología,2E,Ingeniería de Materiales,2000000,Textiles (Nanomateriales en 2.J y biomateriales en 2.I)
+2,Ingeniería y tecnología,2E,Ingeniería de Materiales,2E01,Ingeniería mecánica
+2,Ingeniería y tecnología,2E,Ingeniería de Materiales,2E02,Cerámicos
+2,Ingeniería y tecnología,2E,Ingeniería de Materiales,2E03,Recubrimiento de películas
+2,Ingeniería y tecnología,2E,Ingeniería de Materiales,2E04,"Compuestos (laminados, plásticos reforzados, fibra sintéticas y naturales, e ECA.)"
+2,Ingeniería y tecnología,2E,Ingeniería de Materiales,2E05,Papel y madera
+2,Ingeniería y tecnología,2E,Ingeniería de Materiales,2E06,Textiles (Nanomateriales en 2.J y biomateriales en 2.I)
 2,Ingeniería y tecnología,2F,Ingeniería Médica,2F01,Ingeniería médica
 2,Ingeniería y tecnología,2F,Ingeniería Médica,2F02,"Tecnología médica de laboratorio(análisis de muestras, tecnologías para el diagnóstico)"
 2,Ingeniería y tecnología,2G,Ingeniería Ambiental,2G01,Ingeniería ambiental y geológica
@@ -148,9 +148,9 @@
 3,Ciencias Médicas y de la Salud,3D,Biotecnología en Salud,3D02,"Tecnologías para la manipulación de células, tejidos, órganos o el organismo(reproducción asistida)"
 3,Ciencias Médicas y de la Salud,3D,Biotecnología en Salud,3D03,"Tecnología para la identificación y funcionamiento del ADN, proteínas y encimas y como influencian la enfermedad)"
 3,Ciencias Médicas y de la Salud,3D,Biotecnología en Salud,3D04,"Biomateriales (relacionados con implantes, dispositivos, sensores)"
-3,Ciencias Médicas y de la Salud,3E,Otras Ciencias Médicas,30,Forénsicas
-3,Ciencias Médicas y de la Salud,3E,Otras Ciencias Médicas,300,Otras ciencias médicas
-3,Ciencias Médicas y de la Salud,3E,Otras Ciencias Médicas,3000,Fonoaudiología
+3,Ciencias Médicas y de la Salud,3E,Otras Ciencias Médicas,3E01,Forénsicas
+3,Ciencias Médicas y de la Salud,3E,Otras Ciencias Médicas,3E02,Otras ciencias médicas
+3,Ciencias Médicas y de la Salud,3E,Otras Ciencias Médicas,3E03,Fonoaudiología
 4,Ciencias Agrícolas,4A,"Agricultura,Silvicultura y Pesca",4A01,Agricultura
 4,Ciencias Agrícolas,4A,"Agricultura,Silvicultura y Pesca",4A02,Forestal
 4,Ciencias Agrícolas,4A,"Agricultura,Silvicultura y Pesca",4A03,Pesca
@@ -164,7 +164,7 @@
 4,Ciencias Agrícolas,4D,Biotecnología Agrícola,4D01,Biotecnología agrícola y de alimentos
 4,Ciencias Agrícolas,4D,Biotecnología Agrícola,4D02,"Tecnología MG (sembradíos y ganado), clonamiento de ganado, selección asistida, diagnóstico (con chips ADN, biosensores)"
 4,Ciencias Agrícolas,4D,Biotecnología Agrícola,4D03,Ética relacionada a la biotecnología agrícola
-4,Ciencias Agrícolas,4E,Otras Ciencias Agrícolas,40,Otras ciencias Agrícolas
+4,Ciencias Agrícolas,4E,Otras Ciencias Agrícolas,4E01,Otras ciencias Agrícolas
 5,Ciencias Sociales,5A,Psicología,5A01,Psicología (incluye relaciones hombremáquina)
 5,Ciencias Sociales,5A,Psicología,5A02,"Psicología (incluye terapias de aprendizaje, habla, visual y otras discapacidades físicas y mentales)"
 5,Ciencias Sociales,5B,Economía y Negocios,5B01,Economía
@@ -178,8 +178,8 @@
 5,Ciencias Sociales,5D,Sociología,5D03,Antropología
 5,Ciencias Sociales,5D,Sociología,5D04,Etnografía
 5,Ciencias Sociales,5D,Sociología,5D05,"Temas especiales (Estudios de Género, Temas Sociales, Estudios de la Familia, Trabajo Social)"
-5,Ciencias Sociales,5E,Derecho,50,Derecho
-5,Ciencias Sociales,5E,Derecho,500,Penal
+5,Ciencias Sociales,5E,Derecho,5E01,Derecho
+5,Ciencias Sociales,5E,Derecho,5E02,Penal
 5,Ciencias Sociales,5F,Ciencias Políticas,5F01,Ciencias políticas
 5,Ciencias Sociales,5F,Ciencias Políticas,5F02,Administración pública
 5,Ciencias Sociales,5F,Ciencias Políticas,5F03,Teoría organizacional
@@ -212,6 +212,6 @@
 6,Humanidades,6D,Arte,6D06,Artes audiovisuales
 6,Humanidades,6D,Arte,6D07,Arquitectura y urbanismo
 6,Humanidades,6D,Arte,6D08,Diseño
-6,Humanidades,6E,Otras humanidades,60,Otras Humanidades (Estudios del folclor)
-6,Humanidades,6E,Otras humanidades,600,Filosofía
-6,Humanidades,6E,Otras humanidades,6000,Teología
+6,Humanidades,6E,Otras humanidades,6E01,Otras Humanidades (Estudios del folclor)
+6,Humanidades,6E,Otras humanidades,6E02,Filosofía
+6,Humanidades,6E,Otras humanidades,6E03,Teología
