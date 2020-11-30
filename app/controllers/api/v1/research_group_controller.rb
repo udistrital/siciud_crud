@@ -53,7 +53,6 @@ module Api
         @research_group = ResearchGroup.new(research_group_params)
 
         unless @research_group.valid?
-          puts "\n\n-->Es invalido"
           render json: @research_group.errors, status: :unprocessable_entity and return
         end
         params.permit(:faculty_ids, :curricular_project_ids)
