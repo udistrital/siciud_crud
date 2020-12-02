@@ -1,16 +1,14 @@
 module Api
   module V1
     class PapersController < AbstractProductResearchUnitController
-      before_action only: [:create, :update] do
-        validate_created_by(paper_params)
-        validate_updated_by(paper_params)
-      end
       before_action :set_research_group, only: [:index, :show, :create, :update]
       before_action :set_paper, only: [:show, :update]
 
       # GET /research_group/:id/papers
       def index
-        @papers = DxService.load(CompletePaper, params)
+        list_papers = CompletePaper.where(
+            research_group_id: params[:research_group_id])
+        @papers = DxService.load(list_papers, params)
         render json: @papers
       end
 

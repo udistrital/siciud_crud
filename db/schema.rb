@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_30_213155) do
+ActiveRecord::Schema.define(version: 2020_12_02_213244) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1315,30 +1315,34 @@ ActiveRecord::Schema.define(version: 2020_11_30_213155) do
       rg.updated_by
      FROM research_groups rg;
   SQL
-  create_view "complete_ipl_breeds", sql_definition: <<-SQL
-      SELECT iplb.id,
-      iplb.name,
-      iplb.category_id,
+  create_view "complete_books", sql_definition: <<-SQL
+      SELECT b.id,
+      b.title,
+      b.book_document,
+      b.category_id,
       c.name AS category_name,
-      iplb.certificate_ma_document,
-      iplb.consecutive_number_ma,
-      iplb.geo_city_id,
+      b.editorial_id,
+      e.name AS editorial_name,
+      b.geo_city_id,
       gcity.name AS geo_city_name,
       gs.geo_country_id,
       gctry.name AS geo_country_name,
       gcity.geo_state_id,
       gs.name AS geo_state_name,
-      iplb.ip_livestock_breed_document,
-      iplb.observation,
-      iplb.publication_date,
-      iplb.active,
-      iplb.created_by,
-      iplb.updated_by,
-      iplb.created_at,
-      iplb.updated_at
-     FROM ((((ip_livestock_breeds iplb
-       JOIN categories c ON ((iplb.category_id = c.id)))
-       JOIN geo_cities gcity ON ((iplb.geo_city_id = gcity.id)))
+      b.isbn,
+      b.observation,
+      b.publication_date,
+      b.research_group_id,
+      b.url,
+      b.active,
+      b.created_by,
+      b.updated_by,
+      b.created_at,
+      b.updated_at
+     FROM (((((books b
+       JOIN categories c ON ((b.category_id = c.id)))
+       JOIN editorials e ON ((b.editorial_id = e.id)))
+       JOIN geo_cities gcity ON ((b.geo_city_id = gcity.id)))
        JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
        JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
   SQL
@@ -1361,6 +1365,7 @@ ActiveRecord::Schema.define(version: 2020_11_30_213155) do
       bc.isbn,
       bc.observation,
       bc.publication_date,
+      bc.research_group_id,
       bc.url,
       bc.active,
       bc.created_by,
@@ -1371,6 +1376,34 @@ ActiveRecord::Schema.define(version: 2020_11_30_213155) do
        JOIN categories c ON ((bc.category_id = c.id)))
        JOIN editorials e ON ((bc.editorial_id = e.id)))
        JOIN geo_cities gcity ON ((bc.geo_city_id = gcity.id)))
+       JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
+       JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_ipl_breeds", sql_definition: <<-SQL
+      SELECT iplb.id,
+      iplb.name,
+      iplb.category_id,
+      c.name AS category_name,
+      iplb.certificate_ma_document,
+      iplb.consecutive_number_ma,
+      iplb.geo_city_id,
+      gcity.name AS geo_city_name,
+      gs.geo_country_id,
+      gctry.name AS geo_country_name,
+      gcity.geo_state_id,
+      gs.name AS geo_state_name,
+      iplb.ip_livestock_breed_document,
+      iplb.observation,
+      iplb.publication_date,
+      iplb.research_group_id,
+      iplb.active,
+      iplb.created_by,
+      iplb.updated_by,
+      iplb.created_at,
+      iplb.updated_at
+     FROM ((((ip_livestock_breeds iplb
+       JOIN categories c ON ((iplb.category_id = c.id)))
+       JOIN geo_cities gcity ON ((iplb.geo_city_id = gcity.id)))
        JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
        JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
   SQL
@@ -1393,6 +1426,7 @@ ActiveRecord::Schema.define(version: 2020_11_30_213155) do
       nab.observation,
       nab.petition_status_id,
       ps.name AS petition_status_name,
+      nab.research_group_id,
       nab.active,
       nab.created_by,
       nab.updated_by,
@@ -1429,6 +1463,7 @@ ActiveRecord::Schema.define(version: 2020_11_30_213155) do
       p.paper_type_id,
       pt.name AS paper_type_name,
       p.publication_date,
+      p.research_group_id,
       p.url,
       p.volume,
       p.active,
@@ -1459,6 +1494,7 @@ ActiveRecord::Schema.define(version: 2020_11_30_213155) do
       p.patent_number,
       p.patent_state_id,
       ps.name AS patent_state_name,
+      p.research_group_id,
       p.active,
       p.created_by,
       p.updated_by,
@@ -1489,6 +1525,7 @@ ActiveRecord::Schema.define(version: 2020_11_30_213155) do
       ARRAY( SELECT rcwwt.work_type_id
              FROM research_creation_works_work_types rcwwt
             WHERE (rcw.id = rcwwt.research_creation_work_id)) AS work_type_ids,
+      rcw.research_group_id,
       rcw.active,
       rcw.created_by,
       rcw.updated_by,
@@ -1519,6 +1556,7 @@ ActiveRecord::Schema.define(version: 2020_11_30_213155) do
       sn.number_of_pages,
       sn.observation,
       sn.publication_date,
+      sn.research_group_id,
       sn.url,
       sn.volume,
       sn.active,
@@ -1550,6 +1588,7 @@ ActiveRecord::Schema.define(version: 2020_11_30_213155) do
       vv.observation,
       vv.petition_status_id,
       ps.name AS petition_status_name,
+      vv.research_group_id,
       vv.vegetable_variety_document,
       vv.active,
       vv.created_by,
@@ -1563,36 +1602,5 @@ ActiveRecord::Schema.define(version: 2020_11_30_213155) do
        JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
        JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
        JOIN petition_statuses ps ON ((vv.petition_status_id = ps.id)));
-  SQL
-  create_view "complete_books", sql_definition: <<-SQL
-      SELECT b.id,
-      b.title,
-      b.book_document,
-      b.category_id,
-      c.name AS category_name,
-      b.editorial_id,
-      e.name AS editorial_name,
-      b.geo_city_id,
-      gcity.name AS geo_city_name,
-      gs.geo_country_id,
-      gctry.name AS geo_country_name,
-      gcity.geo_state_id,
-      gs.name AS geo_state_name,
-      b.isbn,
-      b.observation,
-      b.publication_date,
-      b.research_group_id,
-      b.url,
-      b.active,
-      b.created_by,
-      b.updated_by,
-      b.created_at,
-      b.updated_at
-     FROM (((((books b
-       JOIN categories c ON ((b.category_id = c.id)))
-       JOIN editorials e ON ((b.editorial_id = e.id)))
-       JOIN geo_cities gcity ON ((b.geo_city_id = gcity.id)))
-       JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
-       JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
   SQL
 end

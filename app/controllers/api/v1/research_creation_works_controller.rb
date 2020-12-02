@@ -1,17 +1,14 @@
 module Api
   module V1
     class ResearchCreationWorksController < AbstractProductResearchUnitController
-      before_action only: [:create, :update] do
-        validate_created_by(research_creation_work_params)
-        validate_updated_by(research_creation_work_params)
-      end
       before_action :set_research_group
       before_action :set_research_creation_work, only: [:show, :update]
 
       # GET /research_group/:id/research_creation_works
       def index
-        @research_creation_works = DxService.load(CompleteResearchCw, params)
-
+        rcws = CompleteResearchCw.where(
+            research_group_id: params[:research_group_id])
+        @research_creation_works = DxService.load(rcws, params)
         render json: @research_creation_works
       end
 

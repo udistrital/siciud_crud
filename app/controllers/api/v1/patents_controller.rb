@@ -1,16 +1,14 @@
 module Api
   module V1
     class PatentsController < AbstractProductResearchUnitController
-      before_action only: [:create, :update] do
-        validate_created_by(patent_params)
-        validate_updated_by(patent_params)
-      end
       before_action :set_research_group, only: [:index, :show, :create, :update]
       before_action :set_patent, only: [:show, :update]
 
       # GET /research_group/:id/patents
       def index
-        @patents = DxService.load(CompletePatent, params)
+        list_patents = CompletePatent.where(
+            research_group_id: params[:research_group_id])
+        @patents = DxService.load(list_patents, params)
         render json: @patents
       end
 

@@ -1,16 +1,14 @@
 module Api
   module V1
     class NewAnimalBreedsController < AbstractProductResearchUnitController
-      before_action only: [:create, :update] do
-        validate_created_by(new_animal_breed_params)
-        validate_updated_by(new_animal_breed_params)
-      end
       before_action :set_research_group, only: [:index, :show, :create, :update]
       before_action :set_new_animal_breed, only: [:show, :update]
 
       # GET /research_group/:id/new_animal_breeds
       def index
-        @new_animal_breeds = DxService.load(CompleteNewAnimalB, params)
+        nabs = CompleteNewAnimalB.where(
+            research_group_id: params[:research_group_id])
+        @new_animal_breeds = DxService.load(nabs, params)
         render json: @new_animal_breeds
       end
 

@@ -1,17 +1,14 @@
 module Api
   module V1
     class VegetableVarietiesController < AbstractProductResearchUnitController
-      before_action only: [:create, :update] do
-        validate_created_by(vegetable_variety_params)
-        validate_updated_by(vegetable_variety_params)
-      end
       before_action :set_research_group
       before_action :set_vegetable_variety, only: [:show, :update]
 
       # GET /research_group/:id/vegetable_varieties
       def index
-        @vegetable_varieties = DxService.load(CompleteVegetableVariety, params)
-
+        v_varieties = CompleteVegetableVariety.where(
+            research_group_id: params[:research_group_id])
+        @vegetable_varieties = DxService.load(v_varieties, params)
         render json: @vegetable_varieties
       end
 

@@ -1,17 +1,14 @@
 module Api
   module V1
     class BookChaptersController < AbstractProductResearchUnitController
-      before_action only: [:create, :update] do
-        validate_created_by(book_chapter_params)
-        validate_updated_by(book_chapter_params)
-      end
-
       before_action :set_research_group, only: [:index, :show, :create, :update]
       before_action :set_book_chapter, only: [:show, :update]
 
       # GET /research_group/:id/book_chapters
       def index
-        @book_chapters = DxService.load(CompleteBookChapter, params)
+        book_chapters_by_ru = CompleteBookChapter.where(
+            research_group_id: params[:research_group_id])
+        @book_chapters = DxService.load(book_chapters_by_ru, params)
         render json: @book_chapters
       end
 

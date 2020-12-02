@@ -1,16 +1,14 @@
 module Api
   module V1
     class IpLivestockBreedsController < AbstractProductResearchUnitController
-      before_action only: [:create, :update] do
-        validate_created_by(ip_livestock_breed_params)
-        validate_updated_by(ip_livestock_breed_params)
-      end
       before_action :set_research_group, only: [:index, :show, :create, :update]
       before_action :set_ip_livestock_breed, only: [:show, :update]
 
       # GET /research_group/:id/ip_livestock_breeds
       def index
-        @ip_livestock_breeds = DxService.load(CompleteIplBreed, params)
+        ipl_breeds = CompleteIplBreed.where(
+            research_group_id: params[:research_group_id])
+        @ip_livestock_breeds = DxService.load(ipl_breeds, params)
         render json: @ip_livestock_breeds
       end
 

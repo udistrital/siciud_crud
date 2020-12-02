@@ -1,17 +1,14 @@
 module Api
   module V1
     class ScientificNotesController < AbstractProductResearchUnitController
-      before_action only: [:create, :update] do
-        validate_created_by(scientific_note_params)
-        validate_updated_by(scientific_note_params)
-      end
       before_action :set_research_group
       before_action :set_scientific_note, only: [:show, :update]
 
       # GET /research_group/:id/scientific_notes
       def index
-        @scientific_notes = DxService.load(CompleteScientificNote, params)
-
+        sc_notes = CompleteScientificNote.where(
+            research_group_id: params[:research_group_id])
+        @scientific_notes = DxService.load(sc_notes, params)
         render json: @scientific_notes
       end
 
