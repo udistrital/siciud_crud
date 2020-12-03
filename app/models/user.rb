@@ -12,6 +12,7 @@ class User < ApplicationRecord
   validates :created_by, presence: true, allow_nil: true, if: :user_role_admin?
   validates :created_by, presence: true, allow_nil: false, unless: :user_role_admin?
   validates :updated_by, presence: true, allow_nil: false, on: :update
+  validate :validate_created_by, :validate_updated_by
 
   def user_role_admin?
     user_role.id == 1

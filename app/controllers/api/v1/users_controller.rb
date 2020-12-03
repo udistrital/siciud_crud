@@ -1,12 +1,7 @@
 module Api
   module V1
     class UsersController < ApplicationController
-      before_action only: [:create, :update] do
-        validate_created_by(user_params)
-        validate_updated_by(user_params)
-      end
       before_action :set_user, only: [:show, :update]
-      #User.joins(:user_roles).where("user_roles.id = 4").first.researcher.mail
 
       rescue_from Exception do |e|
         render json: {error: e.message}, status: :internal_error
@@ -14,11 +9,11 @@ module Api
 
       # GET /users
       def index
-        @users = DxService.load(User, params)
         if (user_id = params[:identification_number])
           @users = User.where("users.identification_number = '#{user_id}'")
+        else
+          @users = DxService.load(User, params)
         end
-
         render json: @users
       end
 
