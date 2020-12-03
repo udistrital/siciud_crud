@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_02_213244) do
+ActiveRecord::Schema.define(version: 2020_12_03_222747) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -220,7 +220,12 @@ ActiveRecord::Schema.define(version: 2020_12_02_213244) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "research_creation_work_id"
+    t.boolean "active"
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.index ["created_by"], name: "index_awards_on_created_by"
     t.index ["research_creation_work_id"], name: "index_awards_on_research_creation_work_id"
+    t.index ["updated_by"], name: "index_awards_on_updated_by"
   end
 
   create_table "book_chapters", force: :cascade do |t|
@@ -346,7 +351,12 @@ ActiveRecord::Schema.define(version: 2020_12_02_213244) do
     t.bigint "product_type_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "active"
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.index ["created_by"], name: "index_categories_on_created_by"
     t.index ["product_type_id"], name: "index_categories_on_product_type_id"
+    t.index ["updated_by"], name: "index_categories_on_updated_by"
   end
 
   create_table "cine_broad_areas", force: :cascade do |t|
@@ -354,6 +364,11 @@ ActiveRecord::Schema.define(version: 2020_12_02_213244) do
     t.string "code"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "active"
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.index ["created_by"], name: "index_cine_broad_areas_on_created_by"
+    t.index ["updated_by"], name: "index_cine_broad_areas_on_updated_by"
   end
 
   create_table "cine_detailed_areas", force: :cascade do |t|
@@ -362,7 +377,12 @@ ActiveRecord::Schema.define(version: 2020_12_02_213244) do
     t.bigint "cine_specific_area_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "active"
+    t.bigint "created_by"
+    t.bigint "updated_by"
     t.index ["cine_specific_area_id"], name: "index_cine_detailed_areas_on_cine_specific_area_id"
+    t.index ["created_by"], name: "index_cine_detailed_areas_on_created_by"
+    t.index ["updated_by"], name: "index_cine_detailed_areas_on_updated_by"
   end
 
   create_table "cine_detailed_areas_research_groups", id: false, force: :cascade do |t|
@@ -376,7 +396,12 @@ ActiveRecord::Schema.define(version: 2020_12_02_213244) do
     t.bigint "cine_broad_area_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "active"
+    t.bigint "created_by"
+    t.bigint "updated_by"
     t.index ["cine_broad_area_id"], name: "index_cine_specific_areas_on_cine_broad_area_id"
+    t.index ["created_by"], name: "index_cine_specific_areas_on_created_by"
+    t.index ["updated_by"], name: "index_cine_specific_areas_on_updated_by"
   end
 
   create_table "colciencias_calls", force: :cascade do |t|
@@ -993,8 +1018,16 @@ ActiveRecord::Schema.define(version: 2020_12_02_213244) do
     t.string "scientific_signature"
     t.string "identification_number"
     t.string "oas_researcher_id"
-    t.string "mobile_number"
+    t.string "mobile_number_one"
     t.string "address"
+    t.string "mobile_number_two"
+    t.string "phone_number_one"
+    t.string "phone_number_two"
+    t.boolean "active"
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.index ["created_by"], name: "index_researchers_on_created_by"
+    t.index ["updated_by"], name: "index_researchers_on_updated_by"
   end
 
   create_table "result_transfer_plans", force: :cascade do |t|
@@ -1145,6 +1178,8 @@ ActiveRecord::Schema.define(version: 2020_12_02_213244) do
   add_foreign_key "arp_assignments", "agreement_research_projects"
   add_foreign_key "arp_assignments", "product_typologies"
   add_foreign_key "awards", "research_creation_works"
+  add_foreign_key "awards", "users", column: "created_by"
+  add_foreign_key "awards", "users", column: "updated_by"
   add_foreign_key "book_chapters", "categories"
   add_foreign_key "book_chapters", "editorials"
   add_foreign_key "book_chapters", "geo_cities"
@@ -1168,8 +1203,16 @@ ActiveRecord::Schema.define(version: 2020_12_02_213244) do
   add_foreign_key "calls_required_documents", "calls"
   add_foreign_key "calls_required_documents", "required_documents"
   add_foreign_key "categories", "product_types"
+  add_foreign_key "categories", "users", column: "created_by"
+  add_foreign_key "categories", "users", column: "updated_by"
+  add_foreign_key "cine_broad_areas", "users", column: "created_by"
+  add_foreign_key "cine_broad_areas", "users", column: "updated_by"
   add_foreign_key "cine_detailed_areas", "cine_specific_areas"
+  add_foreign_key "cine_detailed_areas", "users", column: "created_by"
+  add_foreign_key "cine_detailed_areas", "users", column: "updated_by"
   add_foreign_key "cine_specific_areas", "cine_broad_areas"
+  add_foreign_key "cine_specific_areas", "users", column: "created_by"
+  add_foreign_key "cine_specific_areas", "users", column: "updated_by"
   add_foreign_key "curricular_prj_ids_research_groups", "research_groups"
   add_foreign_key "editorials", "users", column: "created_by"
   add_foreign_key "editorials", "users", column: "updated_by"
@@ -1229,6 +1272,8 @@ ActiveRecord::Schema.define(version: 2020_12_02_213244) do
   add_foreign_key "research_groups", "oecd_knowledge_subareas"
   add_foreign_key "research_groups", "users", column: "created_by"
   add_foreign_key "research_groups", "users", column: "updated_by"
+  add_foreign_key "researchers", "users", column: "created_by"
+  add_foreign_key "researchers", "users", column: "updated_by"
   add_foreign_key "scientific_notes", "categories"
   add_foreign_key "scientific_notes", "geo_cities"
   add_foreign_key "scientific_notes", "journals"
