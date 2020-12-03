@@ -5,7 +5,7 @@ class NewAnimalBreed < ApplicationRecord
   belongs_to :research_group
 
   # Publication place
-  belongs_to :geo_city
+  belongs_to :geo_city, optional: true
   has_one :geo_state, through: :geo_city
   has_one :geo_country, through: :geo_state
 

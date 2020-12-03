@@ -7,7 +7,7 @@ class ResearchCreationWork < ApplicationRecord
   has_and_belongs_to_many :work_types
 
   # Publication place
-  belongs_to :geo_city
+  belongs_to :geo_city, optional: true
   has_one :geo_state, through: :geo_city
   has_one :geo_country, through: :geo_state
 
