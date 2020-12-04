@@ -1,6 +1,6 @@
 class AddTrackingToAwards < ActiveRecord::Migration[5.2]
   def change
-    add_column :awards, :active, :boolean
+    add_column :awards, :active, :boolean, default: true
 
     add_column :awards, :created_by, :bigint
     add_index :awards, :created_by

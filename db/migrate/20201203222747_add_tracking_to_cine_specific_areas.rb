@@ -1,6 +1,6 @@
 class AddTrackingToCineSpecificAreas < ActiveRecord::Migration[5.2]
   def change
-    add_column :cine_specific_areas, :active, :boolean
+    add_column :cine_specific_areas, :active, :boolean, default: true
 
     add_column :cine_specific_areas, :created_by, :bigint
     add_index :cine_specific_areas, :created_by

@@ -1,6 +1,6 @@
 class AddTrackingToResearchers < ActiveRecord::Migration[5.2]
   def change
-    add_column :researchers, :active, :boolean
+    add_column :researchers, :active, :boolean, default: true
 
     add_column :researchers, :created_by, :bigint
     add_index :researchers, :created_by

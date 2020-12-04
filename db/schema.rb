@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_03_222747) do
+ActiveRecord::Schema.define(version: 2020_12_04_203318) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -220,7 +220,7 @@ ActiveRecord::Schema.define(version: 2020_12_03_222747) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "research_creation_work_id"
-    t.boolean "active"
+    t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
     t.index ["created_by"], name: "index_awards_on_created_by"
@@ -351,7 +351,7 @@ ActiveRecord::Schema.define(version: 2020_12_03_222747) do
     t.bigint "product_type_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "active"
+    t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
     t.index ["created_by"], name: "index_categories_on_created_by"
@@ -364,7 +364,7 @@ ActiveRecord::Schema.define(version: 2020_12_03_222747) do
     t.string "code"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "active"
+    t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
     t.index ["created_by"], name: "index_cine_broad_areas_on_created_by"
@@ -377,7 +377,7 @@ ActiveRecord::Schema.define(version: 2020_12_03_222747) do
     t.bigint "cine_specific_area_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "active"
+    t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
     t.index ["cine_specific_area_id"], name: "index_cine_detailed_areas_on_cine_specific_area_id"
@@ -396,7 +396,7 @@ ActiveRecord::Schema.define(version: 2020_12_03_222747) do
     t.bigint "cine_broad_area_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "active"
+    t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
     t.index ["cine_broad_area_id"], name: "index_cine_specific_areas_on_cine_broad_area_id"
@@ -409,12 +409,22 @@ ActiveRecord::Schema.define(version: 2020_12_03_222747) do
     t.integer "year"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.index ["created_by"], name: "index_colciencias_calls_on_created_by"
+    t.index ["updated_by"], name: "index_colciencias_calls_on_updated_by"
   end
 
   create_table "colciencias_categories", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.index ["created_by"], name: "index_colciencias_categories_on_created_by"
+    t.index ["updated_by"], name: "index_colciencias_categories_on_updated_by"
   end
 
   create_table "contribution_funding_entity_items", force: :cascade do |t|
@@ -468,6 +478,11 @@ ActiveRecord::Schema.define(version: 2020_12_03_222747) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.index ["created_by"], name: "index_cycle_types_on_created_by"
+    t.index ["updated_by"], name: "index_cycle_types_on_updated_by"
   end
 
   create_table "document_types", force: :cascade do |t|
@@ -507,8 +522,13 @@ ActiveRecord::Schema.define(version: 2020_12_03_222747) do
     t.bigint "participant_type_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.index ["created_by"], name: "index_ext_participants_on_created_by"
     t.index ["participant_type_id"], name: "index_ext_participants_on_participant_type_id"
     t.index ["producible_type", "producible_id"], name: "index_ext_participants_on_producible_type_and_producible_id"
+    t.index ["updated_by"], name: "index_ext_participants_on_updated_by"
   end
 
   create_table "faculty_ids_research_groups", force: :cascade do |t|
@@ -558,7 +578,14 @@ ActiveRecord::Schema.define(version: 2020_12_03_222747) do
     t.float "latitude"
     t.float "longitude"
     t.bigint "geo_state_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.index ["created_by"], name: "index_geo_cities_on_created_by"
     t.index ["geo_state_id"], name: "index_geo_cities_on_geo_state_id"
+    t.index ["updated_by"], name: "index_geo_cities_on_updated_by"
   end
 
   create_table "geo_countries", force: :cascade do |t|
@@ -567,6 +594,13 @@ ActiveRecord::Schema.define(version: 2020_12_03_222747) do
     t.string "iso3", limit: 3
     t.string "capital_name", limit: 255
     t.string "currency", limit: 10
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.index ["created_by"], name: "index_geo_countries_on_created_by"
+    t.index ["updated_by"], name: "index_geo_countries_on_updated_by"
   end
 
   create_table "geo_countries_patents", id: false, force: :cascade do |t|
@@ -578,7 +612,14 @@ ActiveRecord::Schema.define(version: 2020_12_03_222747) do
     t.string "name"
     t.string "code", limit: 10
     t.bigint "geo_country_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.index ["created_by"], name: "index_geo_states_on_created_by"
     t.index ["geo_country_id"], name: "index_geo_states_on_geo_country_id"
+    t.index ["updated_by"], name: "index_geo_states_on_updated_by"
   end
 
   create_table "gm_periods", force: :cascade do |t|
@@ -1023,7 +1064,7 @@ ActiveRecord::Schema.define(version: 2020_12_03_222747) do
     t.string "mobile_number_two"
     t.string "phone_number_one"
     t.string "phone_number_two"
-    t.boolean "active"
+    t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
     t.index ["created_by"], name: "index_researchers_on_created_by"
@@ -1213,13 +1254,27 @@ ActiveRecord::Schema.define(version: 2020_12_03_222747) do
   add_foreign_key "cine_specific_areas", "cine_broad_areas"
   add_foreign_key "cine_specific_areas", "users", column: "created_by"
   add_foreign_key "cine_specific_areas", "users", column: "updated_by"
+  add_foreign_key "colciencias_calls", "users", column: "created_by"
+  add_foreign_key "colciencias_calls", "users", column: "updated_by"
+  add_foreign_key "colciencias_categories", "users", column: "created_by"
+  add_foreign_key "colciencias_categories", "users", column: "updated_by"
   add_foreign_key "curricular_prj_ids_research_groups", "research_groups"
+  add_foreign_key "cycle_types", "users", column: "created_by"
+  add_foreign_key "cycle_types", "users", column: "updated_by"
   add_foreign_key "editorials", "users", column: "created_by"
   add_foreign_key "editorials", "users", column: "updated_by"
   add_foreign_key "ext_participants", "participant_types"
+  add_foreign_key "ext_participants", "users", column: "created_by"
+  add_foreign_key "ext_participants", "users", column: "updated_by"
   add_foreign_key "faculty_ids_research_groups", "research_groups"
   add_foreign_key "geo_cities", "geo_states"
+  add_foreign_key "geo_cities", "users", column: "created_by"
+  add_foreign_key "geo_cities", "users", column: "updated_by"
+  add_foreign_key "geo_countries", "users", column: "created_by"
+  add_foreign_key "geo_countries", "users", column: "updated_by"
   add_foreign_key "geo_states", "geo_countries"
+  add_foreign_key "geo_states", "users", column: "created_by"
+  add_foreign_key "geo_states", "users", column: "updated_by"
   add_foreign_key "group_members", "gm_states"
   add_foreign_key "int_participants", "participant_types"
   add_foreign_key "int_participants", "researchers"
