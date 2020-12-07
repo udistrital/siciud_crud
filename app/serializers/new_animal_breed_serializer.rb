@@ -4,7 +4,8 @@ class NewAnimalBreedSerializer < AbstractProductNewKnwGenSerializer
              :geo_city_name, :geo_country_id, :geo_country_name, :geo_state_id,
              :geo_state_name, :new_animal_breed_document,
              :observation, :petition_status_id, :petition_status_name,
-             :active, :created_by, :updated_by, :created_at, :updated_at
+             :research_group_id, :active, :created_by, :updated_by, :created_at,
+             :updated_at
 
   def cycle_type_name
     cycle_type = self.object.cycle_type
