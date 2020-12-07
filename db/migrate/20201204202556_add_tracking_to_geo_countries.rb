@@ -1,7 +1,7 @@
 class AddTrackingToGeoCountries < ActiveRecord::Migration[5.2]
   def change
     change_table :geo_countries do |t|
-      t.timestamps
+      t.timestamps default: -> {'CURRENT_TIMESTAMP'}
     end
     add_column :geo_countries, :active, :boolean, default: true
 

@@ -1,7 +1,7 @@
 class AddTrackingToGeoStates < ActiveRecord::Migration[5.2]
   def change
     change_table :geo_states do |t|
-      t.timestamps
+      t.timestamps default: -> {'CURRENT_TIMESTAMP'}
     end
     add_column :geo_states, :active, :boolean, default: true
 

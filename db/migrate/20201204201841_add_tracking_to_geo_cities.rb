@@ -1,7 +1,7 @@
 class AddTrackingToGeoCities < ActiveRecord::Migration[5.2]
   def change
     change_table :geo_cities do |t|
-      t.timestamps
+      t.timestamps default: -> {'CURRENT_TIMESTAMP'}
     end
     add_column :geo_cities, :active, :boolean, default: true
 

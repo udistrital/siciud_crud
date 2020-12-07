@@ -154,7 +154,7 @@ if flag_rg.nil?
                       orcid_id: Faker::Alphanumeric.alphanumeric(10),
                       scientific_signature: last_name.concat(", ", name_aux),
                       oas_researcher_id: rand(1..20).to_s,
-                      mobile_number: Faker::PhoneNumber.cell_phone_with_country_code,
+                      mobile_number_one: Faker::PhoneNumber.cell_phone_with_country_code,
                       address: Faker::Address.full_address
     )
   end

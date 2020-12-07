@@ -578,8 +578,8 @@ ActiveRecord::Schema.define(version: 2020_12_04_203318) do
     t.float "latitude"
     t.float "longitude"
     t.bigint "geo_state_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
@@ -594,8 +594,8 @@ ActiveRecord::Schema.define(version: 2020_12_04_203318) do
     t.string "iso3", limit: 3
     t.string "capital_name", limit: 255
     t.string "currency", limit: 10
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
@@ -612,8 +612,8 @@ ActiveRecord::Schema.define(version: 2020_12_04_203318) do
     t.string "name"
     t.string "code", limit: 10
     t.bigint "geo_country_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
