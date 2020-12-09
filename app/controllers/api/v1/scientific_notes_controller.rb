@@ -75,7 +75,7 @@ module Api
       # Only allow a trusted parameter "white list" through.
       def scientific_note_params
         params.require(:scientific_note).permit(
-            :title, :journal_title, :publication_date, :approval_date, :volume,
+            :title, :publication_date, :approval_date, :volume,
             :number_of_pages, :initial_page, :final_page, :issn, :url, :doi,
             :observation, :category_id, :geo_city_id, :journal_name, :active,
             :created_by, :updated_by)
