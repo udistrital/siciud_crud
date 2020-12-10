@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_09_154409) do
+ActiveRecord::Schema.define(version: 2020_12_10_160752) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -627,54 +627,86 @@ ActiveRecord::Schema.define(version: 2020_12_09_154409) do
     t.date "final_date"
     t.integer "role_id"
     t.integer "group_member_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.index ["created_by"], name: "index_gm_periods_on_created_by"
     t.index ["group_member_id"], name: "index_gm_periods_on_group_member_id"
     t.index ["role_id"], name: "index_gm_periods_on_role_id"
+    t.index ["updated_by"], name: "index_gm_periods_on_updated_by"
   end
 
   create_table "gm_states", force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.index ["created_by"], name: "index_gm_states_on_created_by"
+    t.index ["updated_by"], name: "index_gm_states_on_updated_by"
   end
 
   create_table "group_members", force: :cascade do |t|
     t.integer "role_id"
     t.integer "researcher_id"
     t.integer "research_group_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.bigint "gm_state_id"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.index ["created_by"], name: "index_group_members_on_created_by"
     t.index ["gm_state_id"], name: "index_group_members_on_gm_state_id"
     t.index ["research_group_id"], name: "index_group_members_on_research_group_id"
     t.index ["researcher_id"], name: "index_group_members_on_researcher_id"
     t.index ["role_id"], name: "index_group_members_on_role_id"
+    t.index ["updated_by"], name: "index_group_members_on_updated_by"
   end
 
   create_table "group_states", force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.index ["created_by"], name: "index_group_states_on_created_by"
+    t.index ["updated_by"], name: "index_group_states_on_updated_by"
   end
 
   create_table "group_types", force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.index ["created_by"], name: "index_group_types_on_created_by"
+    t.index ["updated_by"], name: "index_group_types_on_updated_by"
   end
 
   create_table "historical_colciencias_ranks", force: :cascade do |t|
     t.integer "colciencias_call_id"
     t.integer "colciencias_category_id"
     t.integer "research_group_id"
-    t.string "knowledge_area"
-    t.string "knowledge_subarea"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.bigint "oecd_knowledge_area_id"
+    t.bigint "oecd_knowledge_subarea_id"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
     t.index ["colciencias_call_id"], name: "index_historical_colciencias_ranks_on_colciencias_call_id"
     t.index ["colciencias_category_id"], name: "index_historical_colciencias_ranks_on_colciencias_category_id"
+    t.index ["created_by"], name: "index_historical_colciencias_ranks_on_created_by"
+    t.index ["oecd_knowledge_area_id"], name: "index_historical_colciencias_ranks_on_oecd_knowledge_area_id"
+    t.index ["oecd_knowledge_subarea_id"], name: "index_historical_colciencias_ranks_on_oecd_knowledge_subarea_id"
     t.index ["research_group_id"], name: "index_historical_colciencias_ranks_on_research_group_id"
+    t.index ["updated_by"], name: "index_historical_colciencias_ranks_on_updated_by"
   end
 
   create_table "int_participants", force: :cascade do |t|
@@ -1274,7 +1306,21 @@ ActiveRecord::Schema.define(version: 2020_12_09_154409) do
   add_foreign_key "geo_states", "geo_countries"
   add_foreign_key "geo_states", "users", column: "created_by"
   add_foreign_key "geo_states", "users", column: "updated_by"
+  add_foreign_key "gm_periods", "users", column: "created_by"
+  add_foreign_key "gm_periods", "users", column: "updated_by"
+  add_foreign_key "gm_states", "users", column: "created_by"
+  add_foreign_key "gm_states", "users", column: "updated_by"
   add_foreign_key "group_members", "gm_states"
+  add_foreign_key "group_members", "users", column: "created_by"
+  add_foreign_key "group_members", "users", column: "updated_by"
+  add_foreign_key "group_states", "users", column: "created_by"
+  add_foreign_key "group_states", "users", column: "updated_by"
+  add_foreign_key "group_types", "users", column: "created_by"
+  add_foreign_key "group_types", "users", column: "updated_by"
+  add_foreign_key "historical_colciencias_ranks", "oecd_knowledge_areas"
+  add_foreign_key "historical_colciencias_ranks", "oecd_knowledge_subareas"
+  add_foreign_key "historical_colciencias_ranks", "users", column: "created_by"
+  add_foreign_key "historical_colciencias_ranks", "users", column: "updated_by"
   add_foreign_key "int_participants", "participant_types"
   add_foreign_key "int_participants", "researchers"
   add_foreign_key "ip_livestock_breeds", "categories"
@@ -1637,38 +1683,6 @@ ActiveRecord::Schema.define(version: 2020_12_09_154409) do
        LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
        LEFT JOIN knwl_spec_areas ksa ON ((rcw.knwl_spec_area_id = ksa.id)));
   SQL
-  create_view "complete_scientific_notes", sql_definition: <<-SQL
-      SELECT sn.id,
-      sn.title,
-      sn.approval_date,
-      sn.category_id,
-      gcity.name AS geo_city_name,
-      gs.geo_country_id,
-      gctry.name AS geo_country_name,
-      gcity.geo_state_id,
-      gs.name AS geo_state_name,
-      sn.initial_page,
-      sn.issn,
-      sn.journal_id,
-      j.name AS journal_name,
-      sn.number_of_pages,
-      sn.observation,
-      sn.publication_date,
-      sn.research_group_id,
-      sn.url,
-      sn.volume,
-      sn.active,
-      sn.created_by,
-      sn.updated_by,
-      sn.created_at,
-      sn.updated_at
-     FROM (((((scientific_notes sn
-       LEFT JOIN categories c ON ((sn.category_id = c.id)))
-       LEFT JOIN geo_cities gcity ON ((sn.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
-       LEFT JOIN journals j ON ((sn.journal_id = j.id)));
-  SQL
   create_view "complete_vegetable_varieties", sql_definition: <<-SQL
       SELECT vv.id,
       vv.name,
@@ -1700,5 +1714,41 @@ ActiveRecord::Schema.define(version: 2020_12_09_154409) do
        LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
        LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
        LEFT JOIN petition_statuses ps ON ((vv.petition_status_id = ps.id)));
+  SQL
+  create_view "complete_scientific_notes", sql_definition: <<-SQL
+      SELECT sn.id,
+      sn.title,
+      sn.approval_date,
+      sn.category_id,
+      c.name AS category_name,
+      sn.doi,
+      sn.final_page,
+      sn.geo_city_id,
+      gcity.name AS geo_city_name,
+      gs.geo_country_id,
+      gctry.name AS geo_country_name,
+      gcity.geo_state_id,
+      gs.name AS geo_state_name,
+      sn.initial_page,
+      sn.issn,
+      sn.journal_id,
+      j.name AS journal_name,
+      sn.number_of_pages,
+      sn.observation,
+      sn.publication_date,
+      sn.research_group_id,
+      sn.url,
+      sn.volume,
+      sn.active,
+      sn.created_by,
+      sn.updated_by,
+      sn.created_at,
+      sn.updated_at
+     FROM (((((scientific_notes sn
+       LEFT JOIN categories c ON ((sn.category_id = c.id)))
+       LEFT JOIN geo_cities gcity ON ((sn.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
+       LEFT JOIN journals j ON ((sn.journal_id = j.id)));
   SQL
 end
