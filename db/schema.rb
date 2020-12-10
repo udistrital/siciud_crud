@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_10_160752) do
+ActiveRecord::Schema.define(version: 2020_12_10_205735) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -469,9 +469,14 @@ ActiveRecord::Schema.define(version: 2020_12_10_160752) do
   create_table "curricular_prj_ids_research_groups", force: :cascade do |t|
     t.bigint "research_group_id"
     t.integer "curricular_project_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.index ["created_by"], name: "index_curricular_prj_ids_research_groups_on_created_by"
     t.index ["research_group_id"], name: "index_curricular_prj_ids_research_groups_on_research_group_id"
+    t.index ["updated_by"], name: "index_curricular_prj_ids_research_groups_on_updated_by"
   end
 
   create_table "cycle_types", force: :cascade do |t|
@@ -534,9 +539,14 @@ ActiveRecord::Schema.define(version: 2020_12_10_160752) do
   create_table "faculty_ids_research_groups", force: :cascade do |t|
     t.bigint "research_group_id"
     t.integer "faculty_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.index ["created_by"], name: "index_faculty_ids_research_groups_on_created_by"
     t.index ["research_group_id"], name: "index_faculty_ids_research_groups_on_research_group_id"
+    t.index ["updated_by"], name: "index_faculty_ids_research_groups_on_updated_by"
   end
 
   create_table "fe_contacts", force: :cascade do |t|
@@ -713,12 +723,17 @@ ActiveRecord::Schema.define(version: 2020_12_10_160752) do
     t.string "producible_type"
     t.bigint "producible_id"
     t.bigint "participant_type_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.bigint "researcher_id"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.index ["created_by"], name: "index_int_participants_on_created_by"
     t.index ["participant_type_id"], name: "index_int_participants_on_participant_type_id"
     t.index ["producible_type", "producible_id"], name: "index_int_participants_on_producible_type_and_producible_id"
     t.index ["researcher_id"], name: "index_int_participants_on_researcher_id"
+    t.index ["updated_by"], name: "index_int_participants_on_updated_by"
   end
 
   create_table "ip_livestock_breeds", force: :cascade do |t|
@@ -762,8 +777,13 @@ ActiveRecord::Schema.define(version: 2020_12_10_160752) do
 
   create_table "knwl_spec_areas", force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.index ["created_by"], name: "index_knwl_spec_areas_on_created_by"
+    t.index ["updated_by"], name: "index_knwl_spec_areas_on_updated_by"
   end
 
   create_table "new_animal_breeds", force: :cascade do |t|
@@ -838,8 +858,13 @@ ActiveRecord::Schema.define(version: 2020_12_10_160752) do
 
   create_table "paper_types", force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.index ["created_by"], name: "index_paper_types_on_created_by"
+    t.index ["updated_by"], name: "index_paper_types_on_updated_by"
   end
 
   create_table "papers", force: :cascade do |t|
@@ -876,14 +901,24 @@ ActiveRecord::Schema.define(version: 2020_12_10_160752) do
 
   create_table "participant_types", force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.index ["created_by"], name: "index_participant_types_on_created_by"
+    t.index ["updated_by"], name: "index_participant_types_on_updated_by"
   end
 
   create_table "patent_states", force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.index ["created_by"], name: "index_patent_states_on_created_by"
+    t.index ["updated_by"], name: "index_patent_states_on_updated_by"
   end
 
   create_table "patents", force: :cascade do |t|
@@ -910,8 +945,13 @@ ActiveRecord::Schema.define(version: 2020_12_10_160752) do
 
   create_table "petition_statuses", force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.index ["created_by"], name: "index_petition_statuses_on_created_by"
+    t.index ["updated_by"], name: "index_petition_statuses_on_updated_by"
   end
 
   create_table "plan_periods", force: :cascade do |t|
@@ -926,16 +966,26 @@ ActiveRecord::Schema.define(version: 2020_12_10_160752) do
   create_table "product_types", force: :cascade do |t|
     t.string "name"
     t.text "indicator"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.bigint "product_typology_id"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.index ["created_by"], name: "index_product_types_on_created_by"
     t.index ["product_typology_id"], name: "index_product_types_on_product_typology_id"
+    t.index ["updated_by"], name: "index_product_types_on_updated_by"
   end
 
   create_table "product_typologies", force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.index ["created_by"], name: "index_product_typologies_on_created_by"
+    t.index ["updated_by"], name: "index_product_typologies_on_updated_by"
   end
 
   create_table "required_documents", force: :cascade do |t|
@@ -982,8 +1032,13 @@ ActiveRecord::Schema.define(version: 2020_12_10_160752) do
 
   create_table "research_focuses", force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.index ["created_by"], name: "index_research_focuses_on_created_by"
+    t.index ["updated_by"], name: "index_research_focuses_on_updated_by"
   end
 
   create_table "research_focuses_groups", id: false, force: :cascade do |t|
@@ -1115,8 +1170,13 @@ ActiveRecord::Schema.define(version: 2020_12_10_160752) do
 
   create_table "roles", force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.index ["created_by"], name: "index_roles_on_created_by"
+    t.index ["updated_by"], name: "index_roles_on_updated_by"
   end
 
   create_table "scientific_notes", force: :cascade do |t|
@@ -1198,8 +1258,13 @@ ActiveRecord::Schema.define(version: 2020_12_10_160752) do
 
   create_table "user_roles", force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.index ["created_by"], name: "index_user_roles_on_created_by"
+    t.index ["updated_by"], name: "index_user_roles_on_updated_by"
   end
 
   create_table "users", force: :cascade do |t|
@@ -1242,8 +1307,13 @@ ActiveRecord::Schema.define(version: 2020_12_10_160752) do
 
   create_table "work_types", force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.index ["created_by"], name: "index_work_types_on_created_by"
+    t.index ["updated_by"], name: "index_work_types_on_updated_by"
   end
 
   add_foreign_key "arp_assignment_reports", "arp_assignments"
@@ -1290,6 +1360,8 @@ ActiveRecord::Schema.define(version: 2020_12_10_160752) do
   add_foreign_key "colciencias_categories", "users", column: "created_by"
   add_foreign_key "colciencias_categories", "users", column: "updated_by"
   add_foreign_key "curricular_prj_ids_research_groups", "research_groups"
+  add_foreign_key "curricular_prj_ids_research_groups", "users", column: "created_by"
+  add_foreign_key "curricular_prj_ids_research_groups", "users", column: "updated_by"
   add_foreign_key "cycle_types", "users", column: "created_by"
   add_foreign_key "cycle_types", "users", column: "updated_by"
   add_foreign_key "editorials", "users", column: "created_by"
@@ -1298,6 +1370,8 @@ ActiveRecord::Schema.define(version: 2020_12_10_160752) do
   add_foreign_key "ext_participants", "users", column: "created_by"
   add_foreign_key "ext_participants", "users", column: "updated_by"
   add_foreign_key "faculty_ids_research_groups", "research_groups"
+  add_foreign_key "faculty_ids_research_groups", "users", column: "created_by"
+  add_foreign_key "faculty_ids_research_groups", "users", column: "updated_by"
   add_foreign_key "geo_cities", "geo_states"
   add_foreign_key "geo_cities", "users", column: "created_by"
   add_foreign_key "geo_cities", "users", column: "updated_by"
@@ -1323,6 +1397,8 @@ ActiveRecord::Schema.define(version: 2020_12_10_160752) do
   add_foreign_key "historical_colciencias_ranks", "users", column: "updated_by"
   add_foreign_key "int_participants", "participant_types"
   add_foreign_key "int_participants", "researchers"
+  add_foreign_key "int_participants", "users", column: "created_by"
+  add_foreign_key "int_participants", "users", column: "updated_by"
   add_foreign_key "ip_livestock_breeds", "categories"
   add_foreign_key "ip_livestock_breeds", "geo_cities"
   add_foreign_key "ip_livestock_breeds", "research_groups"
@@ -1330,6 +1406,8 @@ ActiveRecord::Schema.define(version: 2020_12_10_160752) do
   add_foreign_key "ip_livestock_breeds", "users", column: "updated_by"
   add_foreign_key "journals", "users", column: "created_by"
   add_foreign_key "journals", "users", column: "updated_by"
+  add_foreign_key "knwl_spec_areas", "users", column: "created_by"
+  add_foreign_key "knwl_spec_areas", "users", column: "updated_by"
   add_foreign_key "new_animal_breeds", "categories"
   add_foreign_key "new_animal_breeds", "cycle_types"
   add_foreign_key "new_animal_breeds", "geo_cities"
@@ -1345,6 +1423,8 @@ ActiveRecord::Schema.define(version: 2020_12_10_160752) do
   add_foreign_key "oecd_knowledge_subareas", "oecd_knowledge_areas"
   add_foreign_key "oecd_knowledge_subareas", "users", column: "created_by"
   add_foreign_key "oecd_knowledge_subareas", "users", column: "updated_by"
+  add_foreign_key "paper_types", "users", column: "created_by"
+  add_foreign_key "paper_types", "users", column: "updated_by"
   add_foreign_key "papers", "categories"
   add_foreign_key "papers", "geo_cities"
   add_foreign_key "papers", "journals"
@@ -1352,18 +1432,30 @@ ActiveRecord::Schema.define(version: 2020_12_10_160752) do
   add_foreign_key "papers", "research_groups"
   add_foreign_key "papers", "users", column: "created_by"
   add_foreign_key "papers", "users", column: "updated_by"
+  add_foreign_key "participant_types", "users", column: "created_by"
+  add_foreign_key "participant_types", "users", column: "updated_by"
+  add_foreign_key "patent_states", "users", column: "created_by"
+  add_foreign_key "patent_states", "users", column: "updated_by"
   add_foreign_key "patents", "categories"
   add_foreign_key "patents", "patent_states"
   add_foreign_key "patents", "research_groups"
   add_foreign_key "patents", "users", column: "created_by"
   add_foreign_key "patents", "users", column: "updated_by"
+  add_foreign_key "petition_statuses", "users", column: "created_by"
+  add_foreign_key "petition_statuses", "users", column: "updated_by"
   add_foreign_key "product_types", "product_typologies"
+  add_foreign_key "product_types", "users", column: "created_by"
+  add_foreign_key "product_types", "users", column: "updated_by"
+  add_foreign_key "product_typologies", "users", column: "created_by"
+  add_foreign_key "product_typologies", "users", column: "updated_by"
   add_foreign_key "research_creation_works", "categories"
   add_foreign_key "research_creation_works", "geo_cities"
   add_foreign_key "research_creation_works", "knwl_spec_areas"
   add_foreign_key "research_creation_works", "research_groups"
   add_foreign_key "research_creation_works", "users", column: "created_by"
   add_foreign_key "research_creation_works", "users", column: "updated_by"
+  add_foreign_key "research_focuses", "users", column: "created_by"
+  add_foreign_key "research_focuses", "users", column: "updated_by"
   add_foreign_key "research_groups", "cine_broad_areas"
   add_foreign_key "research_groups", "cine_specific_areas"
   add_foreign_key "research_groups", "group_states"
@@ -1374,12 +1466,16 @@ ActiveRecord::Schema.define(version: 2020_12_10_160752) do
   add_foreign_key "research_groups", "users", column: "updated_by"
   add_foreign_key "researchers", "users", column: "created_by"
   add_foreign_key "researchers", "users", column: "updated_by"
+  add_foreign_key "roles", "users", column: "created_by"
+  add_foreign_key "roles", "users", column: "updated_by"
   add_foreign_key "scientific_notes", "categories"
   add_foreign_key "scientific_notes", "geo_cities"
   add_foreign_key "scientific_notes", "journals"
   add_foreign_key "scientific_notes", "research_groups"
   add_foreign_key "scientific_notes", "users", column: "created_by"
   add_foreign_key "scientific_notes", "users", column: "updated_by"
+  add_foreign_key "user_roles", "users", column: "created_by"
+  add_foreign_key "user_roles", "users", column: "updated_by"
   add_foreign_key "users", "user_roles"
   add_foreign_key "users", "users", column: "created_by"
   add_foreign_key "users", "users", column: "updated_by"
@@ -1390,6 +1486,8 @@ ActiveRecord::Schema.define(version: 2020_12_10_160752) do
   add_foreign_key "vegetable_varieties", "research_groups"
   add_foreign_key "vegetable_varieties", "users", column: "created_by"
   add_foreign_key "vegetable_varieties", "users", column: "updated_by"
+  add_foreign_key "work_types", "users", column: "created_by"
+  add_foreign_key "work_types", "users", column: "updated_by"
 
   create_view "research_units", sql_definition: <<-SQL
       SELECT rg.id,
