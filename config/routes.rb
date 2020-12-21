@@ -4,7 +4,7 @@ Rails.application.routes.draw do
       get 'arp_assignment_reports/index'
     end
   end
-  get "/api" => redirect("/swagger/dist/index.html?url=/api/v1/apidocs/")
+  get "/api" => redirect("/api/v1/apidocs/")
   namespace :api do
     namespace :v1 do
       get "country", to: "country#index"
