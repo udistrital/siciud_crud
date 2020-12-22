@@ -1,16 +1,17 @@
-require 'csv'
 namespace :import_oecd do
   desc "Import/Create knowledge areas OECD"
   task load_data: :environment do
-    task_logger = Logger.new('log/task_import_oecd.log')
-    task_logger.level = Logger::DEBUG
-    task_logger.datetime_format = "%Y-%m-%d %H:%M:%S"
+    require 'csv'
+    require './lib/tasks/logging_util'
+    include LoggingUtil
+    logger_custom = LoggingUtil::LoggerCustom.new('log/task_import_oecd.log')
+    task_logger = logger_custom.get_logger
     superadmin_id = nil
     area = nil
     subarea = nil
 
     begin
-      print_message('Removing old knowledge areas and reset_pk_sequence', task_logger)
+      print_message('OCDE - Removing old knowledge areas and reset_pk_sequence', task_logger)
       OecdDiscipline.destroy_all
       OecdKnowledgeSubarea.destroy_all
       OecdKnowledgeArea.destroy_all
@@ -18,11 +19,11 @@ namespace :import_oecd do
       ActiveRecord::Base.connection.reset_pk_sequence!('oecd_knowledge_subareas')
       ActiveRecord::Base.connection.reset_pk_sequence!('oecd_knowledge_areas')
     rescue Exception => e
-      print_error_message_and_exit("Error removing all the old knowledge areas. #{e}",
+      print_error_message_and_exit("OCDE - Error removing all the old knowledge areas. #{e}",
                                    task_logger)
     end
 
-    print_message('Established or created superadmin to create Knowledge Areas', task_logger)
+    print_message('OECD - Established or created superadmin to create Knowledge Areas', task_logger)
     begin
       superadmin = User.where(user_role_id: 1, identification_number: '1234567890',
                               oas_user_id: nil).limit(1)[0]
@@ -77,7 +78,7 @@ namespace :import_oecd do
         end
         discipline = OecdDiscipline.create!(name: row[:disciplina], code: row[:codigodisciplina],
                                oecd_knowledge_subarea_id: subarea.id, created_by: superadmin_id)
-        print_message("Imported/Created Discipline #{discipline.name} with ID #{discipline.id} and its subareas",
+        print_message("Imported/Created Discipline #{discipline.name} with ID #{discipline.id}",
                       task_logger)
       rescue Exception => ex
         print_error_message_and_exit("Error importing/creating knowledge areas. #{ex}", task_logger)
@@ -85,18 +86,5 @@ namespace :import_oecd do
       end
     end
     print_message('OECD data successfully imported!', task_logger)
-  end
-
-  def print_message(msg, task_logger)
-    task_logger.debug msg
-    puts msg
-  end
-
-  def print_error_message_and_exit(msg, task_logger)
-    task_logger.error msg
-    puts msg
-    task_logger.debug "Task stopped!!!\n\n"
-    puts "Task stopped!!!\n\n"
-    exit
   end
 end
