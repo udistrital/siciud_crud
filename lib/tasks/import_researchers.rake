@@ -30,14 +30,14 @@ namespace :import_researchers do
         mobile_number_one: row[:celular],
         mobile_number_two: row[:celular2],
         address: row[:direccion],
-        created_by: '123456789',
-        updated_by: '123456789',
-        created_at: '21/12/2020',
-        updated_at: '21/12/2020'
+        created_by: User.find_by(identification_number: '1234567890').id,
+        updated_by: User.find_by(identification_number: '1234567890').id
     )
     user = User.create(
-        identification_number: row[:documento]
-        #Created_by
+        identification_number: row[:documento],
+        created_by: User.find_by(identification_number: '1234567890').id,
+        updated_by: User.find_by(identification_number: '1234567890').id,
+        user_role_id: 5
     )
     puts "Researcher with doc: '#{researcher.identification_number}' created"
 end
