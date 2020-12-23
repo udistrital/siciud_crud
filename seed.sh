@@ -5,10 +5,11 @@ rake db:migrate
 rake db:seed
 
 # import data
-rake add_groups_roles:data
 rake import_oecd:load_data
-rake import_researchers:data
+rake import_cine:load_data
 rake import_research_groups:data
+rake add_group_roles:data
+rake import_researchers:data
 rake import_research_groups_members:data
 
 # NOTE: 202011092136: 'postgresql-client' se requiere en la máquina:
