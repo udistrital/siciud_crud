@@ -3,10 +3,26 @@ module Api
     class ResearcherController < ApplicationController
       before_action :set_researcher, only: [:show, :update]
 
+      rescue_from ActiveRecord::RecordNotFound do |e|
+        render json: {error: e.message}, status: :not_found
+      end
+      rescue_from ActiveRecord::RecordInvalid do |e|
+        render json: {error: e.message}, status: :unprocessable_entity
+      end
+
       def index
-        #Listar todos los convenios
         @researchers = Researcher.all.order(:created_at)
-        paginate json: @researchers
+        if (id_number = params[:identification_number])
+          @researchers = ResearcherSearchService.search_researcher(@researchers,
+                                                                   id_number)
+          if @researchers.empty?
+            render json: {'message': 'Usuario no existe'}, status: :not_found
+          else
+            render json: @researchers
+          end
+        else
+          paginate json: @researchers
+        end
       end
 
       def show
@@ -37,8 +53,10 @@ module Api
       end
 
       def researcher_params
-        params.require(:researcher).permit(:codeNumber, :identificationNumber, :name, :lastName, :document_type_id, :birthPlace, :faculty_id, :curricular_project_id,
-                                           :snies_id, :genre_id, :telNumber, :celNumber, :address, :academic_email, :personalEmail, :researcher_type_id, :orcid_id)
+        params.require(:researcher).permit(:identification_number,
+                                           :orcid_id, :scientific_signature,
+                                           :oas_researcher_id, :mobile_number,
+                                           :address)
       end
     end
   end

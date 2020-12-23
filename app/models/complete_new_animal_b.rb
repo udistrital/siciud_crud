@@ -1,0 +1,2 @@
+class CompleteNewAnimalB < ApplicationRecord
+end

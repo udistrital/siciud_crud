@@ -1,87 +1,80 @@
-class ResearchGroupSerializer < ActiveModel::Serializer
-  include Rails.application.routes.url_helpers
-  attributes :id, :name, :acronym, :description, :cidcRegistrationDate,
-             :faculties, :cidcActNumber, :facultyActNumber, :facultyRegistrationDate,
-             :email, :gruplac, :webpage, :mission, :vision, :colcienciasCode, :curricular_projects,
-             :state_group, :snies, :research_focuses, :facultyActDocument, :cidcActDocument, :director,
-             :historicalColciencias
+class ResearchGroupSerializer < AbstractGeneralSerializer
+  attributes :id, :name, :acronym, :cidc_act_document, :cidc_act_number,
+             :cidc_registration_date,
+             :cine_detailed_area_ids,
+             :cine_broad_area_id, :cine_specific_area_id,
+             :colciencias_code, :curricular_project_ids, :description,
+             :establishment_document, :email, :faculty_act_document,
+             :faculty_act_number, :faculty_ids, :faculty_registration_date,
+             :group_type_id, :group_type_name, :gruplac, :historical_colciencias,
+             :interinstitutional, :legacy_siciud_id,
+             :mission, :oecd_knowledge_subarea_id,
+             :oecd_knowledge_area_id,
+             :oecd_discipline_ids, :research_focus_ids,
+             :snies_id, :state_id, :state_name, :vision, :webpage,
+             :created_by, :updated_by, :created_at, :updated_at
 
-  def faculties
-    self.object.faculties.map do |faculty|
-      {
-        id: faculty.id,
-        name: faculty.name,
-      }
+  def curricular_project_ids
+    curr_prj = self.object.curricular_prj_ids_research_groups
+    if curr_prj
+      curr_prj.map do |curr|
+        curr.curricular_project_id
+      end
     end
-    #faculties = self.object.faculties
   end
 
-  def curricular_projects
-    self.object.curricular_projects.map do |curricular_project|
-      {
-        id: curricular_project.id,
-        name: curricular_project.name,
-        faculty_id: curricular_project.faculty_id,
-      }
-    end
-    #curricular_projects = self.object.curricular_projects
-  end
-
-  def state_group
-    state_group = self.object.state_group
-    {
-      id: state_group.id,
-      name: state_group.name,
-    }
-  end
-
-  def snies
-    snies = self.object.snies
-    snies.name
-  end
-
-  def research_focuses
-    self.object.research_focuses.map do |research_focus|
-      {
-        id: research_focus.id,
-        name: research_focus.name,
-        faculty_id: research_focus.faculty_id,
-      }
-    end
-    #    research_focuses = self.object.research_focuses
-
-  end
-
-  def director
+  def director_id
     members = self.object.group_members.where(role_id: 1).last
     if members
-      {
-        name: members.researcher.name,
-        lastName: members.researcher.lastName,
-        #initialDate: members.initialDate,
-        #finalDate: members.finalDate,
-       # researcherType: members.researcher.researcher_type.name,
-
-      }
+      members.researcher.id
     end
   end
 
-  def facultyActDocument
-    rails_blob_path(self.object.facultyActDocument, only_path: true) if self.object.facultyActDocument.attached?
+  def director_oas_id
+    members = self.object.group_members.where(role_id: 1).last
+    if members
+      members.researcher.oas_researcher_id
+    end
   end
 
-  def cidcActDocument
-    rails_blob_path(self.object.cidcActDocument, only_path: true) if self.object.cidcActDocument.attached?
+  def faculty_ids
+    faculty_id = self.object.faculty_ids_research_groups
+    if faculty_id
+      faculty_id.map do |faculty|
+        faculty.faculty_id
+      end
+    end
   end
 
-  def historicalColciencias
+  def group_type_name
+    type = self.object.group_type
+    if type
+      type.name
+    end
+  end
+
+  def historical_colciencias
     if self.object.historical_colciencias_ranks
       self.object.historical_colciencias_ranks.map do |rank|
         {
-          call: rank.colciencias_call,
-          rank: rank.colciencias_category,
+            call: rank.colciencias_call,
+            rank: rank.colciencias_category,
         }
       end
+    end
+  end
+
+  def state_id
+    state = self.object.group_state
+    if state
+      state.id
+    end
+  end
+
+  def state_name
+    state = self.object.group_state
+    if state
+      state.name
     end
   end
 end

@@ -6,146 +6,397 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 require "faker"
-5.times do
-  Faculty.create(
-    name: Faker::University.name,
+
+
+#########################################################################################
+#             Necesarios para el modulo de grupos                                       #
+#########################################################################################
+flag_rg = ResearchGroup.first
+
+if flag_rg.nil?
+  ResearchFocus.create(name: "DEMO- Genética de la Conservación, Ornitología")
+  ResearchFocus.create(name: "DEMO- Biologia Molecular")
+  ResearchFocus.create(name: "DEMO- Limnologia Ecologia")
+  ResearchFocus.create(name: "DEMO- Mutagenesis y genómica")
+  ResearchFocus.create(name: "DEMO- DESARROLLO DE SATELITES")
+  ResearchFocus.create(name: "DEMO- ESTRATEGIAS EN CANNABIS MEDICINAL")
+  ResearchFocus.create(name: "DEMO- GESTIÓN Y SISTEMAS DE INFORMACIÓN EN SALUD")
+  ResearchFocus.create(name: "DEMO- LINEA DE INVESTIGACION EN TELESALUD Y TELEMEDICINA")
+  ResearchFocus.create(name: "DEMO- REDES DE NUEVA GENERACIÓN")
+  ResearchFocus.create(name: "DEMO- Ambientes y Herramientas Virtuales de Aprendizaje")
+  ResearchFocus.create(name: "DEMO- Gamificación y Video juegos")
+  ResearchFocus.create(name: "DEMO- Ingeniería Web")
+
+  GroupState.create(name: "Activo")
+  GroupState.create(name: "Inactivo")
+
+  GroupType.create(name: "Grupo de Investigación")
+  GroupType.create(name: "Semillero de Investigación")
+  GroupType.create(name: "Redes de Investigación")
+
+# 30.times do
+#   name_rg = Faker::Company.name
+#   acronym_rg = ""
+#   name_rg.split.each do |word|
+#     acronym_rg += word[0]
+#   end
+#
+#   ResearchGroup.create(
+#       name: name_rg,
+#       acronym: acronym_rg,
+#       description: Faker::Lorem.paragraphs.join(),
+#       cidc_registration_date: Faker::Date.backward(50),
+#       cidc_act_number: Faker::Alphanumeric.alphanumeric(10),
+#       faculty_registration_date: Faker::Date.backward(50),
+#       faculty_act_number: Faker::Alphanumeric.alphanumeric(10),
+#       group_state_id: rand(1..2),
+#       snies_id: Faker::Number.number(5).to_s,
+#       email: Faker::Internet.email,
+#       gruplac: Faker::Internet.url("colciencias.com"),
+#       webpage: Faker::Internet.url,
+#       mission: Faker::Lorem.paragraphs.join(),
+#       vision: Faker::Lorem.paragraphs.join(),
+#       research_focus_ids: Array.new(2) { rand(1..5) },
+#       colciencias_code: Faker::Number.number(14),
+#       group_type_id: rand(1..3)
+#   )
+# end
+
+# puts "Grupos ok"
+
+  Role.create(name: "Director")
+  Role.create(name: "Docente")
+  Role.create(name: "Estudiante")
+  Role.create(name: "Egresado")
+  Role.create(name: "Líder semillero")
+  Role.create(name: "Invitado")
+  Role.create(name: "Sin asignar")
+
+  CineBroadArea.create(name: "Programas y certificaciones genéricos", code: "00")
+  CineBroadArea.create(name: "Educación", code: "01")
+  CineBroadArea.create(name: "Artes y Humanidades", code: "02")
+  CineBroadArea.create(name: "Ciencias Sociales, periodismo e información", code: "03")
+  CineBroadArea.create(name: "Administración de Empresas y Drecho", code: "04")
+  CineBroadArea.create(name: "Ciencias Naturales, Matemáticas y Estadística", code: "05")
+  CineBroadArea.create(name: "Tecnologías de la Información y la Comunicación (TIC)", code: "06")
+  CineBroadArea.create(name: "Ingeniería, Industria y Construcción", code: "07")
+  CineBroadArea.create(name: "Agropecuario, Silvicultura, Pesca y Veterinaria", code: "08")
+  CineBroadArea.create(name: "Salud y Bienestar", code: "09")
+  CineBroadArea.create(name: "Servicios", code: "10")
+
+  CineSpecificArea.create(name: "Programas y certificaciones básicos", code: "001", cine_broad_area_id: 1)
+  CineSpecificArea.create(name: "Alfabetización y Aritmética Elemental", code: "002", cine_broad_area_id: 1)
+  CineSpecificArea.create(name: "Competencias personales y desarrollo", code: "003", cine_broad_area_id: 1)
+  CineSpecificArea.create(name: "Educación", code: "011", cine_broad_area_id: 2)
+  CineSpecificArea.create(name: "Programas y certificaciones interdisciplinarios relativos a educación", code: "018", cine_broad_area_id: 2)
+  CineSpecificArea.create(name: "Artes", code: "021", cine_broad_area_id: 3)
+  CineSpecificArea.create(name: "Humanidades (excepto idiomas)", code: "022", cine_broad_area_id: 3)
+  CineSpecificArea.create(name: "Idiomas", code: "023", cine_broad_area_id: 3)
+  CineSpecificArea.create(name: "Programas y certificaciones Interdisciplinarios relativos a Artes y Humanidades", code: "028", cine_broad_area_id: 3)
+  CineSpecificArea.create(name: "Ciencias Sociales  y del Comportamiento", code: "031", cine_broad_area_id: 4)
+
+  CineDetailedArea.create(name: "Programas y certificaciones básicos", code: "0011", cine_specific_area_id: 1)
+  CineDetailedArea.create(name: "Alfabetización y Aritmética Elemental", code: "0021", cine_specific_area_id: 2)
+  CineDetailedArea.create(name: "Competencias personales y desarrollo", code: "0031", cine_specific_area_id: 3)
+  CineDetailedArea.create(name: "Ciencias de la educación", code: "0111", cine_specific_area_id: 4)
+  CineDetailedArea.create(name: "Formación para docentes de educación preprimaria", code: "0112", cine_specific_area_id: 4)
+  CineDetailedArea.create(name: "Formación para docentes sin asignatura de especialización", code: "0113", cine_specific_area_id: 4)
+  CineDetailedArea.create(name: "Formación para docentes con asignatura de especialización", code: "0114", cine_specific_area_id: 4)
+  CineDetailedArea.create(name: "Educación no clasificada en otra parte", code: "0119", cine_specific_area_id: 4)
+  CineDetailedArea.create(name: "Programas y certificaciones interdisciplinarios relativos a educación", code: "0188", cine_specific_area_id: 5)
+  CineDetailedArea.create(name: "Técnicas Audiovisuales y Producción para Medios de Comunicación", code: "0211", cine_specific_area_id: 6)
+  CineDetailedArea.create(name: "Diseño Industrial de Moda e Interioes", code: "0212", cine_specific_area_id: 6)
+  CineDetailedArea.create(name: "Bellas Artes", code: "0213", cine_specific_area_id: 6)
+  CineDetailedArea.create(name: "Artesanías", code: "0214", cine_specific_area_id: 6)
+  CineDetailedArea.create(name: "Música y Artes Escénicas", code: "0215", cine_specific_area_id: 6)
+  CineDetailedArea.create(name: "Artes no clasificadas en otra parte", code: "0219", cine_specific_area_id: 6)
+  CineDetailedArea.create(name: "Religión y Teología", code: "0221", cine_specific_area_id: 7)
+  CineDetailedArea.create(name: "Historia y Arqueología", code: "0222", cine_specific_area_id: 7)
+  CineDetailedArea.create(name: "Filosofía y Ética", code: "0223", cine_specific_area_id: 7)
+  CineDetailedArea.create(name: "Humanidades (excepto idiomas) no clasificados en otra parte", code: "0229", cine_specific_area_id: 7)
+  CineDetailedArea.create(name: "Adquisición del lenguaje", code: "0231", cine_specific_area_id: 8)
+  CineDetailedArea.create(name: "Literatura y Lingüistica", code: "0232", cine_specific_area_id: 8)
+  CineDetailedArea.create(name: "Idiomas no clasificados en otra parte", code: "0239", cine_specific_area_id: 8)
+  CineDetailedArea.create(name: "Programas y certificaciones Interdisciplinarios relativos a Artes y Humanidades", code: "0288", cine_specific_area_id: 9)
+  CineDetailedArea.create(name: "Economía", code: "0311", cine_specific_area_id: 10)
+  CineDetailedArea.create(name: "Ciencias Políticas y Educación Cívica", code: "0312", cine_specific_area_id: 10)
+
+  GmState.create(name: "Activo")
+  GmState.create(name: "Inactivo")
+
+
+# Researchers
+# 30.times do
+#   name_aux = Faker::Name.initials
+#   last_name = Faker::Name.last_name
+#   Researcher.create(identification_number: Faker::Number.number(10).to_s,
+#                     orcid_id: Faker::Alphanumeric.alphanumeric(10),
+#                     scientific_signature: last_name.concat(", ", name_aux),
+#                     oas_researcher_id: rand(1..20).to_s,
+#                     mobile_number: Faker::PhoneNumber.cell_phone_with_country_code,
+#                     address: Faker::Address.full_address
+#   )
+# end
+
+  puts "Removiendo investigadores ..."
+  Researcher.destroy_all
+  cc_list = %w[1010093421 1010166438 1010188959 1012327463
+1013635157 1013664602 1014207424 1014227755 1014241932
+1015392782 1015398879 1015405008 1015412797 1015423887
+1015433690 1016003847 1016016586 1016040540 1016042854
+1016073257 1016081278 1018407635 1018414696 1018419855
+1018421469 1018426304 1018442181 1018445597 1018454586
+1018457937 79602309]
+  cc_list.each do |cc_unit|
+    name_aux = Faker::Name.initials
+    last_name = Faker::Name.last_name
+    Researcher.create(identification_number: cc_unit,
+                      orcid_id: Faker::Alphanumeric.alphanumeric(10),
+                      scientific_signature: last_name.concat(", ", name_aux),
+                      oas_researcher_id: rand(1..20).to_s,
+                      mobile_number_one: Faker::PhoneNumber.cell_phone_with_country_code,
+                      address: Faker::Address.full_address
+    )
+  end
+
+  puts "#{cc_list.length} investigadores agregados"
+
+  puts "Agregando las tipologías"
+  ProductTypology.create(name: "Generación de Nuevo Conocimiento")
+  ProductTypology.create(name: "Apropiación Social del Conocimiento")
+  ProductTypology.create(name: "Desarrollo Tecnológico e Innovación")
+  ProductTypology.create(name: "Productos de actividades relacionadas con la Formación de Recurso Humano para la CTel")
+
+  puts "Agregando los tipos de producto de generación de nuevo conocimiento"
+  p_type = ProductType.create(name: "Artículo", product_typology_id: 1)
+  Category.create(name: "A1", product_type_id: p_type.id)
+  Category.create(name: "A2", product_type_id: p_type.id)
+  Category.create(name: "B", product_type_id: p_type.id)
+  Category.create(name: "C", product_type_id: p_type.id)
+  Category.create(name: "D", product_type_id: p_type.id)
+  Category.create(name: "No indexado", product_type_id: p_type.id)
+
+  PaperType.create(name: "Artículo científico")
+  PaperType.create(name: "Artículo de revisión")
+
+
+  p_type = ProductType.create(name: "Libro", product_typology_id: 1)
+  Category.create(name: "A1", product_type_id: p_type.id)
+  Category.create(name: "A", product_type_id: p_type.id)
+  Category.create(name: "B", product_type_id: p_type.id)
+
+
+  p_type = ProductType.create(name: "Capítulo en libro", product_typology_id: 1)
+  Category.create(name: "A1", product_type_id: p_type.id)
+  Category.create(name: "A", product_type_id: p_type.id)
+  Category.create(name: "B", product_type_id: p_type.id)
+
+
+  p_type = ProductType.create(name: "Notas Científicas", product_typology_id: 1)
+  p_type = ProductType.create(name: "Patentes", product_typology_id: 1)
+  Category.create(name: "Patente de Inversion - Modelo de utilidad - A", product_type_id: p_type.id)
+  Category.create(name: "Patente de Inversion - Modelo de utilidad solicitada y con concepto de examen B", product_type_id: p_type.id)
+  Category.create(name: "Patente de Inversion - Modelo de utilidad solicitada y con concepto de explotación C", product_type_id: p_type.id)
+
+
+  p_type = ProductType.create(name: "Variedad Vegetal", product_typology_id: 1)
+  Category.create(name: "VV_A1", product_type_id: p_type.id)
+  Category.create(name: "VV_A2", product_type_id: p_type.id)
+  Category.create(name: "VV_A3", product_type_id: p_type.id)
+  Category.create(name: "VV_A4", product_type_id: p_type.id)
+  Category.create(name: "VV_B1", product_type_id: p_type.id)
+  Category.create(name: "VV_B2", product_type_id: p_type.id)
+  Category.create(name: "VV_B3", product_type_id: p_type.id)
+  Category.create(name: "VV_B4", product_type_id: p_type.id)
+
+
+  p_type = ProductType.create(name: "Nueva raza animal", product_typology_id: 1)
+  Category.create(name: "VA_A", product_type_id: p_type.id)
+
+
+  p_type = ProductType.create(name: "Poblaciones mejoradas de razas pecuarias",
+                              product_typology_id: 1)
+  Category.create(name: "VA_B", product_type_id: p_type.id)
+
+
+  p_type = ProductType.create(name: "Obras o productos de investigación-creación en Artes Arquitectura y Diseño",
+                              product_typology_id: 1)
+  Category.create(name: "AAD A1", product_type_id: p_type.id)
+  Category.create(name: "AAD A", product_type_id: p_type.id)
+  Category.create(name: "AAD B", product_type_id: p_type.id)
+  Category.create(name: "AAD C", product_type_id: p_type.id)
+
+  ParticipantType.create(name: "Autor")
+  ParticipantType.create(name: "Co-autor")
+  ParticipantType.create(name: "Titular")
+
+  CycleType.create(name: "Corto")
+  CycleType.create(name: "Largo")
+
+  PetitionStatus.create(name: "En proceso")
+  PetitionStatus.create(name: "Obtenida")
+
+  PatentState.create(name: "Solicitud")
+  PatentState.create(name: "Bajo examen de patentabilidad")
+  PatentState.create(name: "Otorgada")
+  PatentState.create(name: "Negada/Abandonada")
+
+  WorkType.create(name: "Plano")
+  WorkType.create(name: "Textos")
+  WorkType.create(name: "Bocetos")
+  WorkType.create(name: "Modelaciones 2D,3D,4D")
+  WorkType.create(name: "Maquetas")
+  WorkType.create(name: "Fotografías")
+  WorkType.create(name: "Realización")
+  WorkType.create(name: "Obras acabadas")
+  WorkType.create(name: "Grabaciones")
+  WorkType.create(name: "Filmaciones")
+  WorkType.create(name: "Videos")
+  WorkType.create(name: "Animaciones")
+  WorkType.create(name: "Evidencias de Montaje")
+
+  KnwlSpecArea.create(name: "Creacion efimera")
+  KnwlSpecArea.create(name: "Creacion permanente")
+  KnwlSpecArea.create(name: "Creacion procesual")
+
+  UserRole.create(name: "Administrador")
+  UserRole.create(name: "Gestor")
+  UserRole.create(name: "Editor")
+  UserRole.create(name: "Lector")
+  UserRole.create(name: "Integrante")
+end
+
+
+
+
+#########################################################
+# Validando
+unless flag_rg.nil?
+  puts "Agregando director al primer y segundo grupo"
+  gm_new = GroupMember.create(role_id: 1,
+                              researcher_id: Researcher.first.id,
+                              research_group_id: ResearchGroup.first.id,
+                              gm_state_id: 1
   )
-end
+  GmPeriod.create(initial_date: "20/10/2020", role_id: 1, group_member_id: gm_new.id)
 
-15.times do
-  CurricularProject.create(
-    name: Faker::University.suffix,
-    faculty_id: rand(1..5),
+  gm_new = GroupMember.create(role_id: 1,
+                              researcher_id: Researcher.second.id,
+                              research_group_id: ResearchGroup.second.id,
+                              gm_state_id: 1
   )
-end
+  GmPeriod.create(initial_date: "20/10/2020", role_id: 1, group_member_id: gm_new.id)
 
-10.times do
-  ResearchFocus.create(
-    name: Faker::Lorem.sentence(3),
-    faculty_id: rand(1..5),
-  )
-end
+  puts "Agregando coinvestigadores al primer y segundo grupo"
+  4.times do
+    gm_new = GroupMember.create(role_id: 2,
+                                researcher_id: rand(2..10),
+                                research_group_id: ResearchGroup.first.id,
+                                gm_state_id: 1
+    )
+    GmPeriod.create(initial_date: "21/10/2020", role_id: 2, group_member_id: gm_new.id)
+  end
 
-StateGroup.create(name: "Activo")
-StateGroup.create(name: "Inactivo")
+  4.times do
+    gm_new = GroupMember.create(role_id: 2,
+                                researcher_id: rand(5..13),
+                                research_group_id: ResearchGroup.second.id,
+                                gm_state_id: 1
+    )
+    GmPeriod.create(initial_date: "21/10/2020", role_id: 2, group_member_id: gm_new.id)
+  end
 
-10.times do
-  Snies.create(
-    code: Faker::Number.number(5),
-    name: Faker::Lorem.sentence(3),
-  )
-end
+  puts "Agregando estudiantes al primer y segundo grupo"
+  10.times do |i|
+    gm_new = GroupMember.create(role_id: 3,
+                                researcher_id: i + 10,
+                                research_group_id: ResearchGroup.first.id,
+                                gm_state_id: 1
+    )
+    GmPeriod.create(initial_date: "22/10/2020", role_id: 3, group_member_id: gm_new.id)
+  end
 
-100.times do
-  ResearchGroup.create(
-    name: Faker::Company.name,
-    acronym: Faker::Company.suffix,
-    description: Faker::Lorem.paragraphs,
-    faculty_ids: Array.new(2) { rand(1..5) },
-    curricular_project_ids: Array.new(2) { rand(1..15) },
-    cidcRegistrationDate: Faker::Date.backward(50),
-    cidcActNumber: Faker::Number.number(4),
-    facultyRegistrationDate: Faker::Date.backward(50),
-    facultyActNumber: Faker::Number.number(4),
-    state_group_id: rand(1..2),
-    snies_id: rand(1..10),
-    email: Faker::Internet.email,
-    gruplac: Faker::Internet.url("colciencias.com"),
-    webpage: Faker::Internet.url,
-    mission: Faker::Lorem.paragraphs,
-    vision: Faker::Lorem.paragraphs,
-    research_focus_ids: Array.new(2) { rand(1..5) },
-    colcienciasCode: Faker::Number.number(4),
-
-  )
-end
-
-Role.create(name: "Director")
-Role.create(name: "Estudiante")
-DocumentType.create(name: "CC")
-Genre.create(name: "Male")
-StateResearcher.create(name: "Activo")
-StateResearcher.create(name: "InActivo")
-
-ResearcherType.create(name: "Docente")
-Researcher.create(name: "Javier",
-                  document_type_id: 1,
-                  faculty_id: 1,
-                  curricular_project_id: 1,
-                  snies_id: 1,
-                  researcher_type_id: 1,
-                  codeNumber: 155564,
-                  identificationNumber: 555,
-                  lastName: "Castro")
-
-  GroupMember.create(role_id: 1, researcher_id: 1, research_group_id: 1, state_researcher_id: 1)
-
-100.times do |i|
-  GroupMember.create(role_id: 1, researcher_id: 1, research_group_id: i + 1, state_researcher_id: 1)
-end
-100.times do |i|
-  GroupMember.create(role_id: 2, researcher_id: 1, research_group_id: i + 1, state_researcher_id: 1)
-end
-100.times do |i|
-  GmPeriod.create(initialDate: "20/10/2019", role_id: 1, group_member_id: i + 1)
-end
-100.times do |i|
-  GmPeriod.create(initialDate: "20/10/2019", role_id: 2, group_member_id: i + 101)
-end
-StateSeedbed.create(name: "Activo")
-StateSeedbed.create(name: "Inactivo")
-100.times do
-  ResearchSeedbed.create(
-    name: Faker::Company.name,
-    acronym: Faker::Company.suffix,
-    description: Faker::Lorem.paragraphs,
-    faculty_ids: Array.new(2) { rand(1..5) },
-    curricular_project_ids: Array.new(2) { rand(1..15) },
-    cidcRegistrationDate: Faker::Date.backward(50),
-    cidcActNumber: Faker::Number.number(4),
-    facultyRegistrationDate: Faker::Date.backward(50),
-    facultyActNumber: Faker::Number.number(4),
-    state_seedbed_id: rand(1..2),
-    snies_id: rand(1..10),
-    email: Faker::Internet.email,
-    webpage: Faker::Internet.url,
-    mission: Faker::Lorem.paragraphs,
-    vision: Faker::Lorem.paragraphs,
-    research_focus_ids: Array.new(2) { rand(1..5) },
-  )
+  10.times do |i|
+    gm_new = GroupMember.create(role_id: 3,
+                                researcher_id: i + 20,
+                                research_group_id: ResearchGroup.second.id,
+                                gm_state_id: 1
+    )
+    GmPeriod.create(initial_date: "22/10/2020", role_id: 3, group_member_id: gm_new.id)
+  end
 end
 
 
-EntityType.create(name: "Publica")
-EntityType.create(name: "Privada")
-EntityType.create(name: "Mixta")
-AgreementStatus.create(name: "Activo")
-AgreementStatus.create(name: "Inactivo")
-AgreementStatus.create(name: "Aprobado")
-AgreementStatus.create(name: "Vigente")
-AgreementStatus.create(name: "Finalizado")
-AgreementStatus.create(name: "Cancelado")
-AgreementStatus.create(name: "En prueba")
-AgreementStatus.create(name: "Aplazado")
-AgreementStatus.create(name: "En proceso de finalizacion")
-AgreementType.create(name: "Marco")
-AgreementType.create(name: "Especifico")
-AgreementType.create(name: "Acuerdo de Cooperacion")
-AgreementType.create(name: "Contrato")
-AgreementType.create(name: "Inter Administrativo")
-Agreement.create(name: "Prueba", startDate: "2019-09-10", finalDate: "2019-09-10", agreementNumber: 5200, agreement_status_id: 1, agreement_type_id: 1, duration: 2, availability: 300, bizagiNumber: 300, description: "Acuerdo")
-FundingEntity.create(name: "Colciencias", entity_type_id: 1,country: "Colombia",city: "Bogota",mobileNumber:503241,address:"Cra 88")
-Contribution.create(funding_entity_id: 1, agreement_id: 1, inKindContribution: 50000, cashContribution: 50000)
-Contribution.create(funding_entity_id: 1, agreement_id: 1, inKindContribution: 50000, cashContribution: 50000)
-ArpRole.create(name: "Investigador Principal")
-ArpRole.create(name: "CoInvestigador")
-ArpRole.create(name: "Auxiliar de investigacion")
-ArpRole.create(name: "Estudiante de pregrado")
-ArpRole.create(name: "Estudiante de maestria")
-ArpRole.create(name: "Estudiante de doctorado")
-ArpRole.create(name: "Joven investigador")
-ProductType.create(name:"Articulo")
-ProductType.create(name:"Capitulo de libro")
-ProductType.create(name:"Libro")
+# 15.times do |i|
+#   GroupMember.create(role_id: rand(1..2),
+#                      researcher_id: i + 1,
+#                      research_group_id: (i+4)/4,
+#                      gm_state_id: 1
+#   )
+# end
+#
+# 100.times do |i|
+#   GmPeriod.create(initialDate: "20/10/2019", role_id: 1, group_member_id: i + 1)
+# end
+# 100.times do |i|
+#   GmPeriod.create(initialDate: "20/10/2019", role_id: 2, group_member_id: i + 101)
+# end
+
+
+# StateSeedbed.create(name: "Activo")
+# StateSeedbed.create(name: "Inactivo")
+# 100.times do
+#   ResearchSeedbed.create(
+#     name: Faker::Company.name,
+#     acronym: Faker::Company.suffix,
+#     description: Faker::Lorem.paragraphs,
+#     # faculty_ids: Array.new(2) { rand(1..5) },
+#     curricular_project_ids: Array.new(2) { rand(1..15) },
+#     cidcRegistrationDate: Faker::Date.backward(50),
+#     cidcActNumber: Faker::Number.number(4),
+#     facultyRegistrationDate: Faker::Date.backward(50),
+#     facultyActNumber: Faker::Number.number(4),
+#     state_seedbed_id: rand(1..2),
+#     snies_id: rand(1..10),
+#     email: Faker::Internet.email,
+#     webpage: Faker::Internet.url,
+#     mission: Faker::Lorem.paragraphs,
+#     vision: Faker::Lorem.paragraphs,
+#     research_focus_ids: Array.new(2) { rand(1..5) },
+#   )
+# end
+#
+#
+# EntityType.create(name: "Publica")
+# EntityType.create(name: "Privada")
+# EntityType.create(name: "Mixta")
+# AgreementStatus.create(name: "Activo")
+# AgreementStatus.create(name: "Inactivo")
+# AgreementStatus.create(name: "Aprobado")
+# AgreementStatus.create(name: "Vigente")
+# AgreementStatus.create(name: "Finalizado")
+# AgreementStatus.create(name: "Cancelado")
+# AgreementStatus.create(name: "En prueba")
+# AgreementStatus.create(name: "Aplazado")
+# AgreementStatus.create(name: "En proceso de finalizacion")
+# AgreementType.create(name: "Marco")
+# AgreementType.create(name: "Especifico")
+# AgreementType.create(name: "Acuerdo de Cooperacion")
+# AgreementType.create(name: "Contrato")
+# AgreementType.create(name: "Inter Administrativo")
+# Agreement.create(name: "Prueba", startDate: "2019-09-10", finalDate: "2019-09-10", agreementNumber: 5200, agreement_status_id: 1, agreement_type_id: 1, duration: 2, availability: 300, bizagiNumber: 300, description: "Acuerdo")
+# FundingEntity.create(name: "Colciencias", entity_type_id: 1,country: "Colombia",city: "Bogota",mobileNumber:503241,address:"Cra 88")
+# Contribution.create(funding_entity_id: 1, agreement_id: 1, inKindContribution: 50000, cashContribution: 50000)
+# Contribution.create(funding_entity_id: 1, agreement_id: 1, inKindContribution: 50000, cashContribution: 50000)
+# ArpRole.create(name: "Investigador Principal")
+# ArpRole.create(name: "CoInvestigador")
+# ArpRole.create(name: "Auxiliar de investigacion")
+# ArpRole.create(name: "Estudiante de pregrado")
+# ArpRole.create(name: "Estudiante de maestria")
+# ArpRole.create(name: "Estudiante de doctorado")
+# ArpRole.create(name: "Joven investigador")
+# ProductType.create(name:"Articulo")
+# ProductType.create(name:"Capitulo de libro")
+# ProductType.create(name:"Libro")
 
 puts "Seed complete"

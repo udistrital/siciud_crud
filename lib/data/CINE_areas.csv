@@ -1,0 +1,111 @@
+00,Programas y certificaciones genéricos,001,Programas y certificaciones básicos,0011,Programas y certificaciones básicos
+00,Programas y certificaciones genéricos,002,Alfabetización y Aritmética Elemental,0021,Alfabetización y Aritmética Elemental
+00,Programas y certificaciones genéricos,003,Competencias personales y desarrollo,0031,Competencias personales y desarrollo
+01,Educación,011,Educación,0111,Ciencias de la educación
+01,Educación,011,Educación,0112,Formación para docentes de educación preprimaria
+01,Educación,011,Educación,0113,Formación para docentes sin asignatura de especialización
+01,Educación,011,Educación,0114,Formación para docentes con asignatura de especialización
+01,Educación,011,Educación,0119,Educación no clasificada en otra parte
+01,Educación,018,Educación,0188,Programas y certificaciones interdisciplinarios relativos a educación
+02,Artes y Humanidades,021,Artes,0211,Técnicas Audiovisuales y Producción para Medios de Comunicación
+02,Artes y Humanidades,021,Artes,0212,"Diseño Industrial, de Moda e Interiores"
+02,Artes y Humanidades,021,Artes,0213,Bellas Artes
+02,Artes y Humanidades,021,Artes,0214,Artesanías
+02,Artes y Humanidades,021,Artes,0215,Música y Artes Escénicas
+02,Artes y Humanidades,021,Artes,0219,Artes no clasificadas en otra parte
+02,Artes y Humanidades,022,Humanidades (excepto idiomas),0221,Religión y Teología
+02,Artes y Humanidades,022,Humanidades (excepto idiomas),0222,Historia y Arqueología
+02,Artes y Humanidades,022,Humanidades (excepto idiomas),0223,Filosofía y Ética
+02,Artes y Humanidades,022,Humanidades (excepto idiomas),0229,Humanidades (excepto idiomas) no clasificasdos en otra parte
+02,Artes y Humanidades,023,Idiomas,0231,Adquisición del lenguaje
+02,Artes y Humanidades,023,Idiomas,0232,Literatura y Lingüística
+02,Artes y Humanidades,023,Idiomas,0239,Idiomas no clasificados en otra parte
+02,Artes y Humanidades,028,Programas y certificaciones Interdisciplinarios relativos a Artes y Humanidades,0288,Programas y certificaciones Interdisciplinarios relativos a Artes y Humanidades
+03,"Ciencias Sociales, Periodismo e Información",031,Ciencias Sociales y del Comportamiento,0311,Economía
+03,"Ciencias Sociales, Periodismo e Información",031,Ciencias Sociales y del Comportamiento,0312,Ciencias Políticas y Educación Cívica
+03,"Ciencias Sociales, Periodismo e Información",031,Ciencias Sociales y del Comportamiento,0313,Psicología
+03,"Ciencias Sociales, Periodismo e Información",031,Ciencias Sociales y del Comportamiento,0314,"Sociología, Antropología y Estudios Culturales"
+03,"Ciencias Sociales, Periodismo e Información",031,Ciencias Sociales y del Comportamiento,0315,Trabajo Social
+03,"Ciencias Sociales, Periodismo e Información",031,Ciencias Sociales y del Comportamiento,0319,Ciencias Sociales y del Comportamiento no clasificados
+03,"Ciencias Sociales, Periodismo e Información",032,Periodismo e Información,0321,"Periodismo, Comunicación y Reportajes"
+03,"Ciencias Sociales, Periodismo e Información",032,Periodismo e Información,0322,"Bibliotecología, Información y Archivología"
+03,"Ciencias Sociales, Periodismo e Información",032,Periodismo e Información,0329,Periodismo e Información no clasificados en otra parte
+03,"Ciencias Sociales, Periodismo e Información",038,"Programas y Certificaciones interdisciplinarios relativos a Ciencias Sociales, Periodismo e Información",0388,"Programas y Certificaciones interdisciplinarios relativos a Ciencias Sociales, Periodismo e Información"
+04,Administración de Empresas y Derecho,041,Educación Comercial y Administración,0411,Contabilidad e Impuestos
+04,Administración de Empresas y Derecho,041,Educación Comercial y Administración,0412,"Gestión Financiera, Admistración Bancaria y Seguros"
+04,Administración de Empresas y Derecho,041,Educación Comercial y Administración,0413,Gestión y Administración
+04,Administración de Empresas y Derecho,041,Educación Comercial y Administración,0414,Mercadotecnia y Publicidad
+04,Administración de Empresas y Derecho,041,Educación Comercial y Administración,0415,Secretariado y Trabajo de oficina
+04,Administración de Empresas y Derecho,041,Educación Comercial y Administración,0416,Ventas al por mayor y al por menor
+04,Administración de Empresas y Derecho,041,Educación Comercial y Administración,0417,Coompetencias laborales
+04,Administración de Empresas y Derecho,041,Educación Comercial y Administración,0419,Educación comercial y Administración no clasificados en otra parte
+04,Administración de Empresas y Derecho,042,Derecho,0421,Derecho
+04,Administración de Empresas y Derecho,048,Programas y Certificaciones interdisciplinarios relativos a Administración de Empresas y Derecho,0488,Programas y Certificaciones interdisciplinarios relativos a Administración de Empresas y Derecho
+05,"Ciencias Naturales, Matemáticas y Estadística",051,Ciencias Biológicas y afines,0511,Biología
+05,"Ciencias Naturales, Matemáticas y Estadística",051,Ciencias Biológicas y afines,0512,Bioquímica
+05,"Ciencias Naturales, Matemáticas y Estadística",051,Ciencias Biológicas y afines,0519,Ciencias Biológicas y afines no clasificados en otra parte
+05,"Ciencias Naturales, Matemáticas y Estadística",052,Medio Ambiente,0521,Ciencias del Medio Ambiente
+05,"Ciencias Naturales, Matemáticas y Estadística",052,Medio Ambiente,0522,Medio Ambiente natural y Vida silvestre
+05,"Ciencias Naturales, Matemáticas y Estadística",052,Medio Ambiente,0529,Medio Ambiente no clasificados en otra parte
+05,"Ciencias Naturales, Matemáticas y Estadística",053,Ciencias Físicas,0531,Química
+05,"Ciencias Naturales, Matemáticas y Estadística",053,Ciencias Físicas,0532,Ciencias de la Tierra
+05,"Ciencias Naturales, Matemáticas y Estadística",053,Ciencias Físicas,0533,Física
+05,"Ciencias Naturales, Matemáticas y Estadística",053,Ciencias Físicas,0539,Ciencias Físicas no clasidicadas en otra parte
+05,"Ciencias Naturales, Matemáticas y Estadística",054,Matemáticas y Estadística,0541,Matemáticas
+05,"Ciencias Naturales, Matemáticas y Estadística",054,Matemáticas y Estadística,0542,Estadística
+05,"Ciencias Naturales, Matemáticas y Estadística",058,"Programas y Certificaciones interdisciplinarios relativos a Ciencias Naturales, Matemáticas y Estadística",0588,"Programas y Certificaciones interdisciplinarios relativos a Ciencias Naturales, Matemáticas y Estadística"
+06,Tecnologías de la Información y la Comunicación (TIC),061,Tecnologías de la Información y la Comunicación (TIC),0611,Uso de computadores
+06,Tecnologías de la Información y la Comunicación (TIC),061,Tecnologías de la Información y la Comunicación (TIC),0612,Diseño y Administración de Redes y Bases de datos
+06,Tecnologías de la Información y la Comunicación (TIC),061,Tecnologías de la Información y la Comunicación (TIC),0613,Desarrollo y Anáñisis de software y Aplicaciones
+06,Tecnologías de la Información y la Comunicación (TIC),061,Tecnologías de la Información y la Comunicación (TIC),0619,Tecnologías de la Información y la Comunicación (TIC) no clasificados en otra parte
+06,Tecnologías de la Información y la Comunicación (TIC),068,Tecnologías de la Información y la Comunicación (TIC),0688,Programsa y Certificaciones interdisciplinarios relativos a Tecnologías de la Información y la Comunicación (TIC)
+07,"Ingeniería, Industria y Construcción",071,Ingeniería y profesiones afines,0711,Ingeniería y Procesos Químicos
+07,"Ingeniería, Industria y Construcción",071,Ingeniería y profesiones afines,0712,Tecnología de protección del medio ambiente
+07,"Ingeniería, Industria y Construcción",071,Ingeniería y profesiones afines,0713,Electricidad y Energía
+07,"Ingeniería, Industria y Construcción",071,Ingeniería y profesiones afines,0714,Electrónica y Automatización
+07,"Ingeniería, Industria y Construcción",071,Ingeniería y profesiones afines,0715,Mecánica y profesiones afines a la Metalistería
+07,"Ingeniería, Industria y Construcción",071,Ingeniería y profesiones afines,0716,"Vehículos, Barcos y Aeronaves de motor"
+07,"Ingeniería, Industria y Construcción",071,Ingeniería y profesiones afines,0719,Ingeniería y profesiones afines no clasificadas en otra parte
+07,"Ingeniería, Industria y Construcción",072,Industria y Procesamiento,0721,Procesamiento de alimentos
+07,"Ingeniería, Industria y Construcción",072,Industria y Procesamiento,0722,"Materialess (vidrio, papel, plástico y madera)"
+07,"Ingeniería, Industria y Construcción",072,Industria y Procesamiento,0723,"Productos textiles (ropa, clazado y artículos de cuero)"
+07,"Ingeniería, Industria y Construcción",072,Industria y Procesamiento,0724,Minería y Extracción
+07,"Ingeniería, Industria y Construcción",072,Industria y Procesamiento,0729,Industria y Procesamiento no clasificados en otra parte
+07,"Ingeniería, Industria y Construcción",073,Arquitectura y Construcción,0731,Arquitectura y Urbanismo
+07,"Ingeniería, Industria y Construcción",073,Arquitectura y Construcción,0732,Construcción e Ingeniería Civil
+07,"Ingeniería, Industria y Construcción",078,"Programas y Certificaciones interdisciplinarios relativos a Ingeniería, Industria y Construcción",0788,"Programas y Certificaciones interdisciplinarios relativos a Ingeniería, Industria y Construcción"
+08,"Agropecuario, Silvicultura, Pesca y Veterinaria",081,Agropecuario,0811,Producción Agrícola y Ganadera
+08,"Agropecuario, Silvicultura, Pesca y Veterinaria",081,Agropecuario,0812,"Horticultura (técnicas de huertas, invernaderos, viveros y jardines)"
+08,"Agropecuario, Silvicultura, Pesca y Veterinaria",081,Agropecuario,0819,Agropecuario no clasificado en otra parte
+08,"Agropecuario, Silvicultura, Pesca y Veterinaria",082,Silvicultura,0821,Silvicultura
+08,"Agropecuario, Silvicultura, Pesca y Veterinaria",083,Pesca,0831,Pesca
+08,"Agropecuario, Silvicultura, Pesca y Veterinaria",084,Veterinaria,0841,Veterinaria
+08,"Agropecuario, Silvicultura, Pesca y Veterinaria",088,"Programas y Certificaciones interdisciplinarios relativos a Agropecuario, Silvicultura, Pesca y Veterinaria",0888,"Programas y Certificaciones interdisciplinarios relativos a Agropecuario, Silvicultura, Pesca y Veterinaria"
+09,Salud y Bienestar,091,Salud,0911,Odontología y estudios dentales
+09,Salud y Bienestar,091,Salud,0912,Medicina
+09,Salud y Bienestar,091,Salud,0913,Enfermería y Partería
+09,Salud y Bienestar,091,Salud,0914,Tecnología de Diagnóstico y Tratamiento Médico
+09,Salud y Bienestar,091,Salud,0915,"Fisioterapia, Fonoaudiología, terapia Ocupacional, Nutrición y afines"
+09,Salud y Bienestar,091,Salud,0916,Farmacia
+09,Salud y Bienestar,091,Salud,0917,Medicina y Terapia tradicional y complementaria
+09,Salud y Bienestar,091,Salud,0918,]Instrumentación quirúrgica
+09,Salud y Bienestar,091,Salud,0919,Salud no clasificada en otra parte
+09,Salud y Bienestar,092,Bienestar,0921,"Atención a adultos, adultos mayores con o sin discapacidad"
+09,Salud y Bienestar,092,Bienestar,0922,"Atención, protección y servicios a la infancia, adolescencia y juventud"
+09,Salud y Bienestar,092,Bienestar,0929,Bienestar no clasificado en otra parte
+09,Salud y Bienestar,098,Programas y Certificaciones interdisciplinarias relativos a Salud y Bienestar,0988,Programas y Certificaciones interdisciplinarias relativos a Salud y Bienestar
+10,Servicios,101,Servicios personales,1011,Servicios domésticos
+10,Servicios,101,Servicios personales,1012,Peluquería y Tratamientos de belleza
+10,Servicios,101,Servicios personales,1013,"Hotelería, Restaurantes y Servicios de banquetes"
+10,Servicios,101,Servicios personales,1014,Deportes
+10,Servicios,101,Servicios personales,1015,"Viajes, Turismo y Actividades recreativas"
+10,Servicios,101,Servicios personales,1016,Servicios Funerarios
+10,Servicios,101,Servicios personales,1019,Servicios personales no clasificados en otra parte
+10,Servicios,102,Servicios de Higiene y Salud Ocupacional,1021,Saneamiento de la comunidad
+10,Servicios,102,Servicios de Higiene y Salud Ocupacional,1022,Salud y Protección laboral
+10,Servicios,102,Servicios de Higiene y Salud Ocupacional,1029,Servicios de Higiene y Salud Ocupacional no clasificados en otra parte
+10,Servicios,103,Servicios de seguridad,1031,Educación Militar y de Defensa
+10,Servicios,103,Servicios de seguridad,1032,Protección de las personas y de la propiedad
+10,Servicios,103,Servicios de seguridad,1039,Servicios de Seguridad no clasificados en otra parte
+10,Servicios,104,Servicios de transporte,1041,Servicios de transporte
+10,Servicios,108,Programas y certificaciones interdisciplinarios relativos a Servicios,1088,Programas y certificaciones interdisciplinarios relativos a Servicios

@@ -2,23 +2,18 @@ module Api
   module V1
     class UsersController < ApplicationController
       before_action :set_user, only: [:show, :update]
-      #User.joins(:user_roles).where("user_roles.id = 4").first.researcher.mail
 
       rescue_from Exception do |e|
         render json: {error: e.message}, status: :internal_error
       end
-      #Manejo de excepciones
-      rescue_from ActiveRecord::RecordNotFound do |e|
-        render json: {error: e.message}, status: :not_found
-      end
-      rescue_from ActiveRecord::RecordInvalid do |e|
-        render json: {error: e.message}, status: :unprocessable_entity
-      end
 
       # GET /users
       def index
-        @users = User.all.order(:created_at)
-
+        if (user_id = params[:identification_number])
+          @users = User.where("users.identification_number = '#{user_id}'")
+        else
+          @users = DxService.load(User, params)
+        end
         render json: @users
       end
 
@@ -30,6 +25,7 @@ module Api
       # POST /users
       def create
         @user = User.new(user_params)
+        @user.active = true
 
         if @user.save
           render json: @user, status: :created
@@ -40,10 +36,19 @@ module Api
 
       # PATCH/PUT /users/1
       def update
-        if @user.update(user_params)
-          render json: @user
+        if @user.created_by.nil?
+          # Update user of created_by only this is nil
+          if @user.update(user_params)
+            render json: @user
+          else
+            render json: @user.errors, status: :unprocessable_entity
+          end
         else
-          render json: @user.errors, status: :unprocessable_entity
+          if @user.update(user_params.except(:created_by))
+            render json: @user
+          else
+            render json: @user.errors, status: :unprocessable_entity
+          end
         end
       end
 
@@ -57,7 +62,9 @@ module Api
 
       # Only allow a trusted parameter "white list" through.
       def user_params
-        params.require(:user).permit(:username, :researcher_id, user_role_ids: [])
+        params.require(:user).permit(:identification_number, :oas_user_id,
+                                     :user_role_id, :active,
+                                     :created_by, :updated_by)
       end
     end
   end
