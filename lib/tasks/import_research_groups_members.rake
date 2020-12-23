@@ -5,7 +5,7 @@ namespace :import_research_groups_members do
 		puts 'Cleaning up Model'
 		GroupMember.destroy_all
 		ActiveRecord::Base.connection.reset_pk_sequence!('group_members')
-		CSV.foreach('lib/data/group_members_valid071120.csv', {:headers => [
+		CSV.foreach('lib/data/group_members_valid231220.csv', {:headers => [
         :documento,
         :idpapel,
         :papel,
@@ -41,22 +41,28 @@ namespace :import_research_groups_members do
             else
             row[:idpapel]
             end
+
+
 	member = GroupMember.create(
 		role_id: role_id,
 		researcher_id: Researcher.find_by(identification_number: row[:documento]).id,
 		research_group_id: ResearchGroup.find_by(legacy_siciud_id: row[:idGrupoSemillero]).id,
 		gm_state_id: gm_state_id,
 		created_by: User.find_by(identification_number: '1234567890').id,
-        updated_by: User.find_by(identification_number: '1234567890').id,
+        updated_by: User.find_by(identification_number: '1234567890').id
 	)
-	puts "Importing member '#{researcher.id}' into group '#{member.research_group_id}"
-#     gm_history = gm_history?.create(
-#         initial_date: row[:fechaVinculacion]
-#         final_date: row[:fechaSalida]
-#         role_id: row[:idpapel]
-#         group_member_id: member.id,
-# #     )
-# Model is GmPeriod
+
+    gm_history = GmPeriod.create(
+         initial_date: row[:fechaVinculacion],
+         final_date: row[:fechaSalida],
+         role_id: row[:idpapel],
+         group_member_id: member.id,
+         created_by: User.find_by(identification_number: '1234567890').id,
+         updated_by: User.find_by(identification_number: '1234567890').id
+    )
+	puts "Importing member '#{member.id}' into group '#{member.research_group_id}"
+
+
 end
 puts "Member data successfully imported!"
 end

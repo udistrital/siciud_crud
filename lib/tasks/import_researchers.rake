@@ -5,7 +5,7 @@ namespace :import_researchers do
 	    puts 'Cleaning up Model'
 		Researcher.destroy_all
 		ActiveRecord::Base.connection.reset_pk_sequence!('researchers')
-		CSV.foreach('lib/data/group_members_valid211220.csv', {:headers => [
+		CSV.foreach('lib/data/group_members_valid231220.csv', {:headers => [
         :documento,
         :idpapel,
         :papel,

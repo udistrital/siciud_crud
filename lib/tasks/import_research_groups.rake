@@ -109,7 +109,7 @@ namespace :import_research_groups do
     ActiveRecord::Base.connection.reset_pk_sequence!('faculty_ids_research_groups')
     ActiveRecord::Base.connection.reset_pk_sequence!('curricular_prj_ids_research_groups')
     ActiveRecord::Base.connection.reset_pk_sequence!('research_groups')
-    CSV.foreach('lib/data/cidc_grup_semill-21-12-2020.csv', {:headers => [
+    CSV.foreach('lib/data/cidc_grup_semill-23122020.csv', {:headers => [
         :cgsid,
         :cgscodigo,
         :cgsnombre,
