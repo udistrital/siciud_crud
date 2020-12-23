@@ -1,30 +1,30 @@
-# SQLite version 3.x
-#   gem install sqlite3
+# PostgreSQL version 12.x
+#   gem install pg
 #
-#   Ensure the SQLite 3 gem is defined in your Gemfile
-#   gem 'sqlite3'
+#   Ensure the PostgreSQL gem is defined in your Gemfile
+#   gem 'pg'
 #
 default: &default
   adapter: postgresql
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   timeout: 5000
-  #  host: db
   encoding: unicode
-  username: postgres
-  password: DB2020
-#  port: 3505
+  host: <%= ENV['SICIUD_CRUD__PGHOST'] %>
+  port: <%= ENV['SICIUD_CRUD__PGPORT'] %>
+  username: <%= ENV['SICIUD_CRUD__PGUSER'] %>
+  password: <%= ENV['SICIUD_CRUD__PGPASS'] %>
 
 development:
   <<: *default
-  database: siciud_backend_development
+  database: <%= ENV['SICIUD_CRUD__PGDB_DEV'] %>
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: siciud_backend_test
+  database: <%= ENV['SICIUD_CRUD__PGDB_TEST'] %>
 
 production:
   <<: *default
-  database: siciud_backend_production
+  database: <%= ENV['SICIUD_CRUD__PGDB_PROD'] %>

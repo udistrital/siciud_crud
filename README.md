@@ -1,3 +1,4 @@
+
 # SICIUD CRUD
 
 ## Descripción
@@ -52,11 +53,18 @@ rails s
 
 ## Variables de Entorno
 ~~~
-SICIUD_CRUD__PGDB=[nombre de la base de datos]
-SICIUD_CRUD__PGPASS=[password del usuario]
-SICIUD_CRUD__PGURLS=[direccion de la base de datos]
+# Variables de entorno de las Bases de Datos de Producción, Desarrollo y Pruebas.
+SICIUD_CRUD__PGDB_PROD=[nombre de la base de datos de producción]
+SICIUD_CRUD__PGDB_DEV=[nombre de la base de datos de desarrollo]
+SICIUD_CRUD__PGDB_TEST=[nombre de la base de datos de prueba]
+
+# Variables generales Base de Datos
+SICIUD_CRUD__PGHOST=[host de la base de datos]
+SICIUD_CRUD__PGPORT=[puerto de la base de datos]
 SICIUD_CRUD__PGUSER=[usuario con acceso a la base de datos]
-SICIUD_CRUD__PGSCHEMA=[esquema donde se ubican las tablas]
+SICIUD_CRUD__PGPASS=[password del usuario]
+
+# Variables del API
 SICIUD_CRUD_API_PORT=[puerto de ejecucion]
 ~~~
 
