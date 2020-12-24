@@ -31,7 +31,7 @@ PostgreSQL.
     * Opción 1, [Instalar Ruby](https://www.ruby-lang.org/es/documentation/installation/)
     * Opción 2, [Ruby Version Manager - rvm](https://rvm.io/rvm/install) (Recomendada)
 * Instalación
-~~~
+```sh
 # Clonar el proyecto
 # Rama master - main
 git clone https://github.com/edissonca/siciud-backend.git
@@ -49,10 +49,10 @@ bundle install
 # Configure las variables de entorno
 # Ejecute el servidor
 rails s
-~~~
+```
 
 ## Variables de Entorno
-~~~
+```sh
 # Variables de entorno de las Bases de Datos de Producción, Desarrollo y Pruebas.
 SICIUD_CRUD_PGDB_PROD=[nombre de la base de datos de producción]
 SICIUD_CRUD_PGDB_DEV=[nombre de la base de datos de desarrollo]
@@ -66,14 +66,32 @@ SICIUD_CRUD_PGPASS=[password del usuario]
 
 # Variables del API
 SICIUD_CRUD_API_PORT=[puerto de ejecucion]
-~~~
+```
 
 ## Ejecución del Proyecto
 
 ### Ejecución Docker
 
 ### Ejecución docker-compose
+Para desarrollo puede utilizar esta opción.
+```sh
+# 1. Clonar el repositorio
+git clone -b development https://github.com/edissonca/siciud-backend.git
 
+# 2. Moverse a la carpeta del repositorio
+cd siciud-backend
+
+# 3. Establecer las variables de entorno descritas en "Variables de Entorno"
+
+# 4. Ejecutar el compose del contenedor
+docker-compose up
+
+# Puede utilizar -d, para correr los contenedores en segundo plano (Detached mode)
+docker-compose up -d
+
+# 6. Comprobar que los contenedores estén en ejecución
+docker ps
+```
 
 # Modelo de Datos
 ![entrada](https://github.com/edissonca/siciud-backend/blob/GROUP-003/docs/research-unit-ER.png)
