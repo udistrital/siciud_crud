@@ -4,16 +4,32 @@ Rails.application.routes.draw do
       get 'arp_assignment_reports/index'
     end
   end
-  get "/api" => redirect("/swagger/dist/index.html?url=/api/v1/apidocs/")
+  get "/api" => redirect("/api/v1/apidocs/")
   namespace :api do
     namespace :v1 do
       get "country", to: "country#index"
       get "country/:name", to: "country#show"
       resources :apidocs, only: [:index]
 
+      # General endpoints
+      # Geo endpoints
+      resources :geo_countries, only: [:index, :show] do
+        resources :geo_states, only: [:index, :show]
+        resources :geo_cities_by_countries, only: [:index]
+      end
+
+      resources :geo_states, only: [:index, :show] do
+        resources :geo_cities, only: [:index, :show]
+      end
+
+
+      # Endpoint para listar las unidades de investigacion
+      resources :research_unit, only: [:index, :show]
+
       #Endpoint para listar los estados de los grupos de investigacion
-      resources :state_group, only: [:index, :show]
+      resources :group_states, only: [:index, :show]
       resources :state_seedbed, only: [:index, :show]
+      resources :group_types, only: [:index, :create, :update]
 
       #Enpoint para listar las lineas de investigacion
       resources :research_focus, only: [:index, :show]
@@ -30,7 +46,7 @@ Rails.application.routes.draw do
       # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
       get "/health", to: "health#health"
 
-      resources :state_researcher, only: [:index, :show]
+      resources :gm_states, only: [:index, :show]
       resources :role, only: [:index, :show]
       resources :researcher, only: [:index, :show, :update, :create]
 
@@ -52,7 +68,6 @@ Rails.application.routes.draw do
       end
 
       resources :arp_role, only: [:index, :show, :create]
-      resources :product_typologies, only: [:index, :show, :create, :update]
 
       resources :user_roles, only: [:index, :show, :create, :update]
 
@@ -138,6 +153,56 @@ Rails.application.routes.draw do
         end
 
         resources :historical_colciencias_ranks, only: [:index, :show, :create, :update]
+
+
+        # PRODUCTS ENDPOINTS BY TYPOLOGY
+        # New generation products endpoints
+        # Book
+        resources :books, only: [:index, :show, :create, :update]
+
+        # Book chapter
+        resources :book_chapters, only: [:index, :show, :create, :update]
+        put "book_chapters/:id/attach/", to: "book_chapters#attach"
+
+        resources :ip_livestock_breeds, only: [:index, :show, :create, :update]
+        put "ip_livestock_breeds/:id/attach/", to: "ip_livestock_breeds#attach"
+
+        resources :new_animal_breeds, only: [:index, :show, :create, :update]
+        put "new_animal_breeds/:id/attach/", to: "new_animal_breeds#attach"
+
+        resources :papers, only: [:index, :show, :create, :update]
+        resources :patents, only: [:index, :show, :create, :update]
+        resources :research_creation_works, only: [:index, :show, :create, :update]
+        resources :scientific_notes, only: [:index, :show, :create, :update]
+        resources :vegetable_varieties, only: [:index, :show, :create, :update]
+      end
+
+      # RESEARCH UNIT PRODUCT ENDPOINTS
+      ## Participants in product creation
+      resources :books, :book_chapters, :ip_livestock_breeds, :new_animal_breeds,
+                :papers, :patents, :research_creation_works, :scientific_notes,
+                :vegetable_varieties, only: [] do
+        resources :ext_participants, only: [:index, :show, :create, :update]
+        resources :int_participants, only: [:index, :show, :create, :update]
+      end
+
+      ## General
+      resources :product_typologies, only: [:index, :show, :create, :update]
+      resources :product_types, only: [:index, :show, :create, :update]
+      resources :categories, only: [:index, :show, :create, :update]
+      resources :cycle_types, only: [:index, :show, :create, :update]
+      resources :editorials, only: [:index, :show, :create, :update]
+      resources :journals, only: [:index, :show, :create, :update]
+      resources :knwl_spec_areas, only: [:index, :show, :create, :update]
+      resources :paper_types, only: [:index, :show, :create, :update]
+      resources :participant_types, only: [:index, :show, :create, :update]
+      resources :patent_states, only: [:index, :show, :create, :update]
+      resources :petition_statuses, only: [:index, :show, :create, :update]
+      resources :work_types, only: [:index, :show, :create, :update]
+
+      ## Endpoints research_creation_works
+      resources :research_creation_works, only: [] do
+        resources :awards, only: [:index, :show, :create, :update]
       end
 
       resources :colciencias_calls, only: [:index, :create, :update]
@@ -206,7 +271,6 @@ Rails.application.routes.draw do
       resources :call_types, only: [:index]
       resources :call_user_roles, only: [:index]
       resources :duration_types, only: [:index]
-      resources :product_types, only: [:index]
       resources :required_types, only: [:index]
       resources :item_calls, only: [:index]
       resources :required_documents, only: [:index]
@@ -216,6 +280,7 @@ Rails.application.routes.draw do
       resources :oecd_knowledge_areas, only: [:index, :create, :update]
       resources :oecd_knowledge_subareas, only: [:index, :create, :update]
       resources :oecd_disciplines, only: [:index, :create, :update]
+
 
       # Endpoints CINE
       resources :cine_broad_areas, only: [:index, :create, :update]

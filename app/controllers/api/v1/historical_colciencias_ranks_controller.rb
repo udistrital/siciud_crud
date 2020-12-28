@@ -42,8 +42,8 @@ module Api
       def historical_colc_params
         params.require(:historical_colciencias_rank).permit(:colciencias_call_id,
                                                             :colciencias_category_id,
-                                                            :knowledge_area,
-                                                            :knowledge_subarea)
+                                                            :oecd_knowledge_area_id,
+                                                            :oecd_knowledge_subarea_id)
       end
 
       def set_research_group

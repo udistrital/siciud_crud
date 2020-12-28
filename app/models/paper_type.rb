@@ -1,0 +1,2 @@
+class PaperType < ApplicationRecord
+end

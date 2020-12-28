@@ -1,12 +1,20 @@
 version: '3'
 services:
   db:
-    image: postgres
+    image: postgres:12
+    environment:
+      - POSTGRES_USER=${SICIUD_CRUD_PGUSER}
+      - POSTGRES_PASSWORD=${SICIUD_CRUD_PGPASS}
     volumes:
       - ./tmp/db:/var/lib/postgresql/data
   web:
     build: .
     command: bash -c "rm -f tmp/pids/server.pid && bundle install && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    environment:
+      - SICIUD_CRUD_PGHOST=${SICIUD_CRUD_PGHOST}
+      - SICIUD_CRUD_PGPORT=${SICIUD_CRUD_PGPORT}
+      - SICIUD_CRUD_PGUSER=${SICIUD_CRUD_PGUSER}
+      - SICIUD_CRUD_PGPASS=${SICIUD_CRUD_PGPASS}
     volumes:
       - .:/myapp
     ports:
