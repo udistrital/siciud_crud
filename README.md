@@ -94,6 +94,10 @@ docker ps
 ```
 
 # Modelo de Datos
+En el siguiente diagrama para facilitar la visualización de las relaciones entre 
+las tablas se omite la relación de cada una de las tablas presentes con la tabla users,
+cada tabla cuenta con los campos *created_by* y *updated_by* los cuales almacenan el id del Usuario
+que realiza la creación o la actualización de un registro correspondientemente.
 ![entrada](https://github.com/edissonca/siciud-backend/blob/GROUP-003/docs/research-unit-ER.png)
 
 [Modelo de Datos API SICIUD](https://github.com/edissonca/siciud-backend/blob/GROUP-003/docs/research-unit-ER.png)
