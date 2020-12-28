@@ -1,4 +1,3 @@
-
 # SICIUD CRUD
 
 ## Descripción
@@ -103,5 +102,4 @@ que realiza la creación o la actualización de un registro correspondientemente
 [Modelo de Datos API SICIUD](https://github.com/edissonca/siciud-backend/blob/GROUP-003/docs/research-unit-ER.png)
 
 # Licencia
-
 
