@@ -13,13 +13,13 @@ una Nuxeo (para la gestión y almacenamiento de los documentos requeridos en los
 por ejemplo: Actas de creación de las Unidades de Investigación) labor apoyada por la Oficina Asesora de Sistemas 
 (OAS).
 
-# Especificaciones Técnicas
-
 # Modelo de Datos
 
 ![entrada](https://github.com/edissonca/siciud-backend/blob/GROUP-003/docs/research-unit-ER.png)
 
 [Modelo de Datos API SICIUD](https://github.com/edissonca/siciud-backend/blob/GROUP-003/docs/research-unit-ER.png)
+
+# Especificaciones Técnicas
 
 ## Tecnologías Implementadas y Versiones
 
