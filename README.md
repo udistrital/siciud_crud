@@ -80,8 +80,25 @@ SICIUD_CRUD_API_PORT=[puerto de ejecucion]
 
 ### Ejecución docker-compose
 
-```bash
-# Does not apply
+Para desarrollo puede utilizar esta opción:
+
+```sh
+# 1. Clonar el repositorio
+git clone -b development https://github.com/edissonca/siciud-backend.git
+
+# 2. Moverse a la carpeta del repositorio
+cd siciud-backend
+
+# 3. Establecer las variables de entorno descritas en "Variables de Entorno"
+
+# 4. Ejecutar el compose del contenedor
+docker-compose up
+
+# Puede utilizar -d, para correr los contenedores en segundo plano (Detached mode)
+docker-compose up -d
+
+# 6. Comprobar que los contenedores estén en ejecución
+docker ps
 ```
 
 ### Ejecución Pruebas
