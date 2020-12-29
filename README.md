@@ -36,36 +36,39 @@ PostgreSQL.
 * Paso previo: Instalar Ruby
     * Opción 1, [Instalar Ruby](https://www.ruby-lang.org/es/documentation/installation/)
     * Opción 2, [Ruby Version Manager - rvm](https://rvm.io/rvm/install) (Recomendada)
+
 * Instalación
-~~~
-# Clonar el proyecto
-# Rama master - main
+
+```bash
+# Clonar el proyecto,  rama master - main
 git clone https://github.com/edissonca/siciud-backend.git
+
 # Rama development
 git clone -b development https://github.com/edissonca/siciud-backend.git
 
 # Moverse a la carpeta del repositorio
 cd siciud_crud
 
-# Instale las gemas
-# Instale la gema bundler
+# Instale las gemas, instale la gema bundler
 gem install bundler
+
 # Instala las gemas requeridas
 bundle install
-# Configure las variables de entorno
-# Ejecute el servidor
+
+# Configure las variables de entorno y ejecute el servidor
 rails s
-~~~
+```
 
 ## Variables de Entorno
-~~~
+
+```bash
 SICIUD_CRUD__PGDB=[nombre de la base de datos]
 SICIUD_CRUD__PGPASS=[password del usuario]
 SICIUD_CRUD__PGURLS=[direccion de la base de datos]
 SICIUD_CRUD__PGUSER=[usuario con acceso a la base de datos]
 SICIUD_CRUD__PGSCHEMA=[esquema donde se ubican las tablas]
 SICIUD_CRUD_API_PORT=[puerto de ejecucion]
-~~~
+```
 
 ## Ejecución del Proyecto
 
