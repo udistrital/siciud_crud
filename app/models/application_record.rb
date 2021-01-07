@@ -1,4 +1,6 @@
 class ApplicationRecord < ActiveRecord::Base
+  include Swagger::ErrorSchema
+
   self.abstract_class = true
 
   # Tracking

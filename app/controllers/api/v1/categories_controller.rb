@@ -1,6 +1,8 @@
 module Api
   module V1
     class CategoriesController < ApplicationController
+      include Swagger::CategoryApi
+
       before_action :set_category, only: [:show, :update]
 
       # GET /categories

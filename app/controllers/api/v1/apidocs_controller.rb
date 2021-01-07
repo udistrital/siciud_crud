@@ -21,23 +21,32 @@ module Api
 
       # A list of all classes that have swagger_* declarations.
       SWAGGERED_CLASSES = [
-        Agreement,
-        GroupMember,
-        SeedbedMember,
-        FeContact,
-        ArpGeneralGoal,
-        ArpSpecificGoal,
-        ArpActivity,
-        AgreementController,
-        CountryController,
-        GroupMemberController,
-        SeedbedMemberController,
-        FeContactController,
-        ArpGeneralGoalController,
-        ArpSpecificGoalController,
-        ArpActivityController,
-        self,
+          CategoriesController,
+          CineBroadAreasController,
+          Category,
+          CineBroadArea,
+          ApplicationRecord,
+          self,
       ].freeze
+
+      # SWAGGERED_CLASSES = [
+      #   Agreement,
+      #   GroupMember,
+      #   SeedbedMember,
+      #   FeContact,
+      #   ArpGeneralGoal,
+      #   ArpSpecificGoal,
+      #   ArpActivity,
+      #   AgreementController,
+      #   CountryController,
+      #   GroupMemberController,
+      #   SeedbedMemberController,
+      #   FeContactController,
+      #   ArpGeneralGoalController,
+      #   ArpSpecificGoalController,
+      #   ArpActivityController,
+      #   self,
+      # ].freeze
 
       def index
         render json: Swagger::Blocks.build_root_json(SWAGGERED_CLASSES)
