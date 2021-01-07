@@ -23,8 +23,12 @@ module Api
       SWAGGERED_CLASSES = [
           CategoriesController,
           CineBroadAreasController,
+          CineSpecificAreasController,
+          CineDetailedAreasController,
           Category,
           CineBroadArea,
+          CineSpecificArea,
+          CineDetailedArea,
           ApplicationRecord,
           self,
       ].freeze
