@@ -68,7 +68,7 @@ module Swagger::CineDetailedAreaApi
       end
 
       operation :post do
-        key :summary, 'Create a new Detailed Area of ISCED by ID'
+        key :summary, 'Create a new Detailed Area of ISCED'
         key :description, 'Returns the created detailed area'
         key :operationId, :create_cine_detailed_area
         key :produces, ['application/json',]

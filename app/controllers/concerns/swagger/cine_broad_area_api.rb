@@ -68,7 +68,7 @@ module Swagger::CineBroadAreaApi
       end
 
       operation :post do
-        key :summary, 'Create a new Broad Area of ISCED by ID'
+        key :summary, 'Create a new Broad Area of ISCED'
         key :description, 'Returns the created broad area'
         key :operationId, :create_cine_broad_area
         key :produces, ['application/json',]

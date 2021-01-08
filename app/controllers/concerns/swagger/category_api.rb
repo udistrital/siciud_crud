@@ -108,7 +108,7 @@ module Swagger::CategoryApi
       end
 
       operation :post do
-        key :summary, 'Create a new Category by ID'
+        key :summary, 'Create a new Category'
         key :description, 'Returns the created category'
         key :operationId, :create_category
         key :produces, ['application/json',]
