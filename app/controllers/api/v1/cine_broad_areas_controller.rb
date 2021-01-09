@@ -1,6 +1,8 @@
 module Api
   module V1
     class CineBroadAreasController < ApplicationController
+      include Swagger::CineBroadAreaApi
+
       before_action :set_broad_area, only: [:update]
 
       rescue_from ActiveRecord::RecordNotFound do |e|

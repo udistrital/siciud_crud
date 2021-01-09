@@ -1,6 +1,8 @@
 module Api
   module V1
     class AwardsController < ApplicationController
+      include Swagger::AwardApi
+
       before_action :set_research_creation_work
       before_action :set_award, only: [:show, :update]
 

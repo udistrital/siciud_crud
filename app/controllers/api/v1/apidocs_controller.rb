@@ -20,24 +20,43 @@ module Api
       end
 
       # A list of all classes that have swagger_* declarations.
+      # This list is ordered by the areas and groups that make up.
+      # For example, areas of knowledge or type of production.
       SWAGGERED_CLASSES = [
-        Agreement,
-        GroupMember,
-        SeedbedMember,
-        FeContact,
-        ArpGeneralGoal,
-        ArpSpecificGoal,
-        ArpActivity,
-        AgreementController,
-        CountryController,
-        GroupMemberController,
-        SeedbedMemberController,
-        FeContactController,
-        ArpGeneralGoalController,
-        ArpSpecificGoalController,
-        ArpActivityController,
-        self,
+          CategoriesController,
+          CineBroadAreasController,
+          CineSpecificAreasController,
+          CineDetailedAreasController,
+          AwardsController,
+
+          Category,
+          CineBroadArea,
+          CineSpecificArea,
+          CineDetailedArea,
+          Award,
+
+          ApplicationRecord,
+          self,
       ].freeze
+
+      # SWAGGERED_CLASSES = [
+      #   Agreement,
+      #   GroupMember,
+      #   SeedbedMember,
+      #   FeContact,
+      #   ArpGeneralGoal,
+      #   ArpSpecificGoal,
+      #   ArpActivity,
+      #   AgreementController,
+      #   CountryController,
+      #   GroupMemberController,
+      #   SeedbedMemberController,
+      #   FeContactController,
+      #   ArpGeneralGoalController,
+      #   ArpSpecificGoalController,
+      #   ArpActivityController,
+      #   self,
+      # ].freeze
 
       def index
         render json: Swagger::Blocks.build_root_json(SWAGGERED_CLASSES)
