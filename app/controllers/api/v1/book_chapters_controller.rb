@@ -1,6 +1,8 @@
 module Api
   module V1
     class BookChaptersController < AbstractProductResearchUnitController
+      include Swagger::BookChapterApi
+
       before_action :set_research_group, only: [:index, :show, :create, :update]
       before_action :set_book_chapter, only: [:show, :update]
 

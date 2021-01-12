@@ -1,9 +1,9 @@
-module Swagger::CategorySchema
+module Swagger::ColcienciasCallSchema
   extend ActiveSupport::Concern
   include Swagger::Blocks
 
   included do
-    swagger_schema :Category do
+    swagger_schema :ColcienciasCall do
       key :required, [:id]
       property :id do
         key :type, :integer
@@ -12,7 +12,7 @@ module Swagger::CategorySchema
       property :name do
         key :type, :string
       end
-      property :product_type_id do
+      property :year do
         key :type, :integer
         key :format, :int64
       end
@@ -38,13 +38,12 @@ module Swagger::CategorySchema
       end
     end
 
-    swagger_schema :CategoryInput do
-      property :category do
-        key :required, [:name, :product_type_id]
+    swagger_schema :ColcienciasCallInput do
+      property :colciencias_call do
         property :name do
           key :type, :string
         end
-        property :product_type_id do
+        property :year do
           key :type, :integer
           key :format, :int64
         end
@@ -63,22 +62,10 @@ module Swagger::CategorySchema
       end
     end
 
-    swagger_schema :CategoryOutput do
+    swagger_schema :ColcienciasCallOutput do
       allOf do
         schema do
-          key :'$ref', :Category
-        end
-        schema do
-          property :product_type_name do
-            key :type, :string
-          end
-          property :product_typology_id do
-            key :type, :integer
-            key :format, :int64
-          end
-          property :product_typology_name do
-            key :type, :string
-          end
+          key :'$ref', :ColcienciasCall
         end
       end
     end

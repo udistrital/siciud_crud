@@ -1,19 +1,19 @@
-module Swagger::AwardApi
+module Swagger::BookChapterApi
   extend ActiveSupport::Concern
   include Swagger::Blocks
 
   included do
-    swagger_path '/api/v1/research_creation_works/{research_creation_work_id}/awards/{id}' do
+    swagger_path '/api/v1/research_group/{research_group_id}/book_chapters/{id}' do
       operation :get do
-        key :summary, 'Get an Award from a Research Creation Work by ID'
-        key :description, 'Returns a single award'
-        key :operationId, :get_award_by_id
+        key :summary, 'Get a Book Chapter from a Research Unit by ID'
+        key :description, 'Returns a single book chapter'
+        key :operationId, :get_book_chapter_by_id
         key :produces, ['application/json',]
-        key :tags, ['Products::GNK::RCW::Awards']
+        key :tags, ['Products::GNK::Book Chapters']
 
-        parameter name: :research_creation_work_id do
+        parameter name: :research_group_id do
           key :in, :path
-          key :description, 'ID of research creation work to fetch'
+          key :description, 'ID of research unit to fetch'
           key :required, true
           key :type, :integer
           key :format, :int64
@@ -21,16 +21,16 @@ module Swagger::AwardApi
 
         parameter name: :id do
           key :in, :path
-          key :description, 'ID of award from a research creation work to fetch'
+          key :description, 'ID of book chapter from a research unit to fetch'
           key :required, true
           key :type, :integer
           key :format, :int64
         end
 
         response 200 do
-          key :description, 'award response'
+          key :description, 'book chapter response'
           schema do
-            key :'$ref', :AwardOutput
+            key :'$ref', :BookChapterOutput
           end
         end
         response 404 do
@@ -45,15 +45,15 @@ module Swagger::AwardApi
       end
 
       operation :put do
-        key :summary, 'Update Award from a Research Creation Work by ID'
-        key :description, 'Returns the updated award'
-        key :operationId, :update_award
+        key :summary, 'Update Book Chapter by ID'
+        key :description, 'Returns the updated book chapter'
+        key :operationId, :update_book_chapter
         key :produces, ['application/json',]
-        key :tags, ['Products::GNK::RCW::Awards']
+        key :tags, ['Products::GNK::Book Chapters']
 
-        parameter name: :research_creation_work_id do
+        parameter name: :research_group_id do
           key :in, :path
-          key :description, 'ID of research creation work to fetch'
+          key :description, 'ID of research unit to fetch'
           key :required, true
           key :type, :integer
           key :format, :int64
@@ -61,25 +61,25 @@ module Swagger::AwardApi
 
         parameter name: :id do
           key :in, :path
-          key :description, 'ID of award from a research creation work to fetch'
+          key :description, 'ID of book chapter from a research unit to fetch'
           key :required, true
           key :type, :integer
           key :format, :int64
         end
 
-        parameter name: :award do
+        parameter name: :book_chapter do
           key :in, :body
-          key :description, 'Award to update'
+          key :description, 'Book Chapter to update'
           key :required, true
           schema do
-            key :'$ref', :AwardInput
+            key :'$ref', :BookChapterInput
           end
         end
 
         response 200 do
-          key :description, 'award response'
+          key :description, 'book chapter response'
           schema do
-            key :'$ref', :AwardOutput
+            key :'$ref', :BookChapterOutput
           end
         end
         response 422 do
@@ -94,28 +94,28 @@ module Swagger::AwardApi
       end
     end
 
-    swagger_path '/api/v1/research_creation_works/{research_creation_work_id}/awards/' do
+    swagger_path '/api/v1/research_group/{research_group_id}/book_chapters/' do
       operation :get do
-        key :summary, 'Get all Awards from a Research Creation Work'
-        key :description, 'Returns all awards from a Research Creation Work'
-        key :operationId, :get_awards
+        key :summary, 'Get all Book Chapters'
+        key :description, 'Returns all book chapters'
+        key :operationId, :get_book_chapters
         key :produces, ['application/json',]
-        key :tags, ['Products::GNK::RCW::Awards']
+        key :tags, ['Products::GNK::Book Chapters']
 
-        parameter name: :research_creation_work_id do
+        parameter name: :research_group_id do
           key :in, :path
-          key :description, 'ID of research creation work to fetch'
+          key :description, 'ID of research unit to fetch'
           key :required, true
           key :type, :integer
           key :format, :int64
         end
 
         response 200 do
-          key :description, 'award response'
+          key :description, 'book chapter response'
           schema do
             key :type, :array
             items do
-              key :'$ref', :AwardOutput
+              key :'$ref', :BookChapterOutput
             end
           end
         end
@@ -125,33 +125,33 @@ module Swagger::AwardApi
       end
 
       operation :post do
-        key :summary, 'Create a new Award for a Research Creation Work'
-        key :description, 'Returns the created award'
-        key :operationId, :create_award
+        key :summary, 'Create a new Book Chapter'
+        key :description, 'Returns the created book chapter'
+        key :operationId, :create_book_chapter
         key :produces, ['application/json',]
-        key :tags, ['Products::GNK::RCW::Awards']
+        key :tags, ['Products::GNK::Book Chapters']
 
-        parameter name: :research_creation_work_id do
+        parameter name: :research_group_id do
           key :in, :path
-          key :description, 'ID of research creation work to fetch'
+          key :description, 'ID of research unit to fetch'
           key :required, true
           key :type, :integer
           key :format, :int64
         end
 
-        parameter name: :award do
+        parameter name: :book_chapter do
           key :in, :body
-          key :description, 'Award to register'
+          key :description, 'Book Chapter to register'
           key :required, true
           schema do
-            key :'$ref', :AwardInput
+            key :'$ref', :BookChapterInput
           end
         end
 
         response 201 do
-          key :description, 'award response'
+          key :description, 'book chapter response'
           schema do
-            key :'$ref', :AwardOutput
+            key :'$ref', :BookChapterOutput
           end
         end
         response 422 do

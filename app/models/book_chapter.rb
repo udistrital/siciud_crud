@@ -1,4 +1,6 @@
 class BookChapter < ApplicationRecord
+  include Swagger::BookChapterSchema
+
   belongs_to :category
   belongs_to :editorial
   belongs_to :research_group

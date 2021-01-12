@@ -1,28 +1,28 @@
-module Swagger::CategoryApi
+module Swagger::ColcienciasCallApi
   extend ActiveSupport::Concern
   include Swagger::Blocks
 
   included do
-    swagger_path '/api/v1/categories/{id}' do
+    swagger_path '/api/v1/colciencias_calls/{id}' do
       operation :get do
-        key :summary, 'Get Category by ID'
-        key :description, 'Returns a single category'
-        key :operationId, :get_category_by_id
+        key :summary, 'Get a Colciencias Call by ID'
+        key :description, 'Returns a single colciencias call'
+        key :operationId, :get_colciencias_call_by_id
         key :produces, ['application/json',]
-        key :tags, ['Products::Categories']
+        key :tags, ['Colciencias Calls']
 
         parameter name: :id do
           key :in, :path
-          key :description, 'ID of category to fetch'
+          key :description, 'ID of colciencias call to fetch'
           key :required, true
           key :type, :integer
           key :format, :int64
         end
 
         response 200 do
-          key :description, 'category response'
+          key :description, 'colciencias call response'
           schema do
-            key :'$ref', :CategoryOutput
+            key :'$ref', :ColcienciasCallOutput
           end
         end
         response 404 do
@@ -37,32 +37,33 @@ module Swagger::CategoryApi
       end
 
       operation :put do
-        key :summary, 'Update Category by ID'
-        key :description, 'Returns the updated category'
-        key :operationId, :update_category
+        key :summary, 'Update Colciencias Call by ID'
+        key :description, 'Returns the updated colciencias call'
+        key :operationId, :update_colciencias_call
         key :produces, ['application/json',]
-        key :tags, ['Products::Categories']
+        key :tags, ['Colciencias Calls']
 
         parameter name: :id do
           key :in, :path
-          key :description, 'ID of category to fetch'
+          key :description, 'ID of colciencias call to fetch'
           key :required, true
           key :type, :integer
           key :format, :int64
         end
-        parameter name: :category do
+
+        parameter name: :colciencias_call do
           key :in, :body
-          key :description, 'Category to update'
+          key :description, 'Colciencias Call to update'
           key :required, true
           schema do
-            key :'$ref', :CategoryInput
+            key :'$ref', :ColcienciasCallInput
           end
         end
 
         response 200 do
-          key :description, 'category response'
+          key :description, 'colciencias call response'
           schema do
-            key :'$ref', :CategoryOutput
+            key :'$ref', :ColcienciasCallOutput
           end
         end
         response 422 do
@@ -77,28 +78,20 @@ module Swagger::CategoryApi
       end
     end
 
-    swagger_path '/api/v1/categories/' do
+    swagger_path '/api/v1/colciencias_calls/' do
       operation :get do
-        key :summary, 'Get all Categories'
-        key :description, 'Returns all categories'
-        key :operationId, :get_categories
+        key :summary, 'Get all Colciencias Calls'
+        key :description, 'Returns all colciencias calls'
+        key :operationId, :get_colciencias_calls
         key :produces, ['application/json',]
-        key :tags, ['Products::Categories']
-
-        parameter name: :product_type_id do
-          key :in, :query
-          key :description, 'filter by product type'
-          key :required, false
-          key :type, :integer
-          key :format, :int64
-        end
+        key :tags, ['Colciencias Calls']
 
         response 200 do
-          key :description, 'category response'
+          key :description, 'colciencias call response'
           schema do
             key :type, :array
             items do
-              key :'$ref', :CategoryOutput
+              key :'$ref', :ColcienciasCallOutput
             end
           end
         end
@@ -108,25 +101,25 @@ module Swagger::CategoryApi
       end
 
       operation :post do
-        key :summary, 'Create a new Category'
-        key :description, 'Returns the created category'
-        key :operationId, :create_category
+        key :summary, 'Create a new Colciencias Call'
+        key :description, 'Returns the created colciencias call'
+        key :operationId, :create_colciencias_call
         key :produces, ['application/json',]
-        key :tags, ['Products::Categories']
+        key :tags, ['Colciencias Calls']
 
-        parameter name: :category do
+        parameter name: :colciencias_call do
           key :in, :body
-          key :description, 'Category to register'
+          key :description, 'Colciencias Call to register'
           key :required, true
           schema do
-            key :'$ref', :CategoryInput
+            key :'$ref', :ColcienciasCallInput
           end
         end
 
         response 201 do
-          key :description, 'category response'
+          key :description, 'colciencias call response'
           schema do
-            key :'$ref', :CategoryOutput
+            key :'$ref', :ColcienciasCallOutput
           end
         end
         response 422 do

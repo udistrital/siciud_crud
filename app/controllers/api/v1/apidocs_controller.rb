@@ -23,16 +23,22 @@ module Api
       # This list is ordered by the areas and groups that make up.
       # For example, areas of knowledge or type of production.
       SWAGGERED_CLASSES = [
-          CategoriesController,
           CineBroadAreasController,
           CineSpecificAreasController,
           CineDetailedAreasController,
+          ColcienciasCallsController,
+          CategoriesController,
+          BookChaptersController,
+          BooksController,
           AwardsController,
 
-          Category,
           CineBroadArea,
           CineSpecificArea,
           CineDetailedArea,
+          ColcienciasCall,
+          Category,
+          BookChapter,
+          Book,
           Award,
 
           ApplicationRecord,
