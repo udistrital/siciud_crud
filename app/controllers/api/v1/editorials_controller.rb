@@ -1,6 +1,8 @@
 module Api
   module V1
     class EditorialsController < ApplicationController
+      include Swagger::EditorialApi
+
       before_action :set_editorial, only: [:show, :update]
 
       # Handling of database exceptions

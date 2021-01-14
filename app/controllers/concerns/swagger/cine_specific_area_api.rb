@@ -9,7 +9,7 @@ module Swagger::CineSpecificAreaApi
         key :description, 'Returns the updated Specific Area of ISCED'
         key :operationId, :update_cine_specific_area
         key :produces, ['application/json',]
-        key :tags, ['Specific Areas of International Standard Classification of Education - ISCED']
+        key :tags, ['ISCED - Specific Areas of International Standard Classification of Education']
 
         parameter name: :id do
           key :in, :path
@@ -51,7 +51,7 @@ module Swagger::CineSpecificAreaApi
         key :description, 'Returns all specific areas of ISCED'
         key :operationId, :get_cine_specific_areas
         key :produces, ['application/json',]
-        key :tags, ['Specific Areas of International Standard Classification of Education - ISCED']
+        key :tags, ['ISCED - Specific Areas of International Standard Classification of Education']
 
         response 200 do
           key :description, 'Specific Area of ISCED response'
@@ -72,7 +72,7 @@ module Swagger::CineSpecificAreaApi
         key :description, 'Returns the created specific area'
         key :operationId, :create_cine_specific_area
         key :produces, ['application/json',]
-        key :tags, ['Specific Areas of International Standard Classification of Education - ISCED']
+        key :tags, ['ISCED - Specific Areas of International Standard Classification of Education']
 
         parameter name: :cine_specific_area do
           key :in, :body
