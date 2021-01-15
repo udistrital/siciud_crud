@@ -3,7 +3,7 @@ module Swagger::BookApi
   include Swagger::Blocks
 
   included do
-    swagger_path '/api/v1/research_group/{research_group_id}/books/{id}' do
+    swagger_path '/research_group/{research_group_id}/books/{id}' do
       operation :get do
         key :summary, 'Get a Book of a Research Unit by ID'
         key :description, 'Returns a single book'
@@ -94,7 +94,7 @@ module Swagger::BookApi
       end
     end
 
-    swagger_path '/api/v1/research_group/{research_group_id}/books/' do
+    swagger_path '/research_group/{research_group_id}/books/' do
       operation :get do
         key :summary, 'Get all Books'
         key :description, 'Returns all books'

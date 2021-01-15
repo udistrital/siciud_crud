@@ -3,7 +3,7 @@ module Swagger::AwardApi
   include Swagger::Blocks
 
   included do
-    swagger_path '/api/v1/research_creation_works/{research_creation_work_id}/awards/{id}' do
+    swagger_path '/research_creation_works/{research_creation_work_id}/awards/{id}' do
       operation :get do
         key :summary, 'Get an Award from a Research Creation Work by ID'
         key :description, 'Returns a single award'
@@ -94,7 +94,7 @@ module Swagger::AwardApi
       end
     end
 
-    swagger_path '/api/v1/research_creation_works/{research_creation_work_id}/awards/' do
+    swagger_path '/research_creation_works/{research_creation_work_id}/awards/' do
       operation :get do
         key :summary, 'Get all Awards from a Research Creation Work'
         key :description, 'Returns all awards from a Research Creation Work'

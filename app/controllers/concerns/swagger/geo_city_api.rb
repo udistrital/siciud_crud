@@ -3,7 +3,7 @@ module Swagger::GeoCityApi
   include Swagger::Blocks
 
   included do
-    swagger_path '/api/v1/geo_states/{geo_state_id}/geo_cities/{id}' do
+    swagger_path '/geo_states/{geo_state_id}/geo_cities/{id}' do
       operation :get do
         key :summary, 'Get a City of a State by ID'
         key :description, 'Returns a single geo city'
@@ -92,7 +92,7 @@ module Swagger::GeoCityApi
       # end
     end
 
-    swagger_path '/api/v1/geo_states/{geo_state_id}/geo_cities/' do
+    swagger_path '/geo_states/{geo_state_id}/geo_cities/' do
       operation :get do
         key :summary, 'Get all Cities'
         key :description, 'Returns all cities'

@@ -3,7 +3,7 @@ module Swagger::ColcienciasCallApi
   include Swagger::Blocks
 
   included do
-    swagger_path '/api/v1/colciencias_calls/{id}' do
+    swagger_path '/colciencias_calls/{id}' do
       operation :get do
         key :summary, 'Get a Colciencias Call by ID'
         key :description, 'Returns a single colciencias call'
@@ -78,7 +78,7 @@ module Swagger::ColcienciasCallApi
       end
     end
 
-    swagger_path '/api/v1/colciencias_calls/' do
+    swagger_path '/colciencias_calls/' do
       operation :get do
         key :summary, 'Get all Colciencias Calls'
         key :description, 'Returns all colciencias calls'

@@ -3,7 +3,7 @@ module Swagger::GroupMemberApi
   include Swagger::Blocks
 
   included do
-    swagger_path '/api/v1/research_group/{research_group_id}/group_member/{id}' do
+    swagger_path '/research_group/{research_group_id}/group_member/{id}' do
       operation :get do
         key :summary, 'Get a Group Member of a Research Unit by ID'
         key :description, 'Returns a single group member'
@@ -94,7 +94,7 @@ module Swagger::GroupMemberApi
       end
     end
 
-    swagger_path '/api/v1/research_group/{research_group_id}/group_member/' do
+    swagger_path '/research_group/{research_group_id}/group_member/' do
       operation :get do
         key :summary, 'Get all Group Members'
         key :description, 'Returns all group members'

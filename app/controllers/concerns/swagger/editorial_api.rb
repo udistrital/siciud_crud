@@ -3,7 +3,7 @@ module Swagger::EditorialApi
   include Swagger::Blocks
 
   included do
-    swagger_path '/api/v1/editorials/{id}' do
+    swagger_path '/editorials/{id}' do
       operation :get do
         key :summary, 'Get a Editorial by ID'
         key :description, 'Returns a single editorial'
@@ -78,7 +78,7 @@ module Swagger::EditorialApi
       end
     end
 
-    swagger_path '/api/v1/editorials/' do
+    swagger_path '/editorials/' do
       operation :get do
         key :summary, 'Get all Editorials'
         key :description, 'Returns all editorials'

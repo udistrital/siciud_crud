@@ -3,7 +3,7 @@ module Swagger::CineBroadAreaApi
   include Swagger::Blocks
 
   included do
-    swagger_path '/api/v1/cine_broad_areas/{id}' do
+    swagger_path '/cine_broad_areas/{id}' do
       operation :put do
         key :summary, 'Update Broad Area of ISCED by ID'
         key :description, 'Returns the updated Broad Area of ISCED'
@@ -45,7 +45,7 @@ module Swagger::CineBroadAreaApi
       end
     end
 
-    swagger_path '/api/v1/cine_broad_areas/' do
+    swagger_path '/cine_broad_areas/' do
       operation :get do
         key :summary, 'Get all Broad Areas of ISCED'
         key :description, 'Returns all broad areas of ISCED'

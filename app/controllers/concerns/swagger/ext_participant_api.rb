@@ -3,7 +3,7 @@ module Swagger::ExtParticipantApi
   include Swagger::Blocks
 
   included do
-    swagger_path '/api/v1/{product_name}/{product_id}/ext_participants/{id}' do
+    swagger_path '/{product_name}/{product_id}/ext_participants/{id}' do
       operation :get do
         key :summary, 'Get an External Participant from a Product by ID'
         key :description, 'Returns a single external participant'
@@ -108,7 +108,7 @@ module Swagger::ExtParticipantApi
       end
     end
 
-    swagger_path '/api/v1/{product_name}/{product_id}/ext_participants/' do
+    swagger_path '/{product_name}/{product_id}/ext_participants/' do
       operation :get do
         key :summary, 'Get all External Participants'
         key :description, 'Returns all external participants'

@@ -3,7 +3,7 @@ module Swagger::GeoStateApi
   include Swagger::Blocks
 
   included do
-    swagger_path '/api/v1/geo_countries/{geo_country_id}/geo_states/{id}' do
+    swagger_path '/geo_countries/{geo_country_id}/geo_states/{id}' do
       operation :get do
         key :summary, 'Get a State of a Country by ID'
         key :description, 'Returns a single state'
@@ -92,7 +92,7 @@ module Swagger::GeoStateApi
       # end
     end
 
-    swagger_path '/api/v1/geo_countries/{geo_country_id}/geo_states/' do
+    swagger_path '/geo_countries/{geo_country_id}/geo_states/' do
       operation :get do
         key :summary, 'Get all States'
         key :description, 'Returns all states'

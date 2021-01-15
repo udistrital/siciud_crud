@@ -3,7 +3,7 @@ module Swagger::GeoCountryApi
   include Swagger::Blocks
 
   included do
-    swagger_path '/api/v1/geo_countries/{id}' do
+    swagger_path '/geo_countries/{id}' do
       operation :get do
         key :summary, 'Get a Country by ID'
         key :description, 'Returns a single country'
@@ -78,7 +78,7 @@ module Swagger::GeoCountryApi
       # end
     end
 
-    swagger_path '/api/v1/geo_countries/' do
+    swagger_path '/geo_countries/' do
       operation :get do
         key :summary, 'Get all Countries'
         key :description, 'Returns all countries'

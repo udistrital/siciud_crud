@@ -3,7 +3,7 @@ module Swagger::ColcienciasCategoryApi
   include Swagger::Blocks
 
   included do
-    swagger_path '/api/v1/colciencias_categories/{id}' do
+    swagger_path '/colciencias_categories/{id}' do
       operation :get do
         key :summary, 'Get a Colciencias Category by ID'
         key :description, 'Returns a single colciencias category'
@@ -78,7 +78,7 @@ module Swagger::ColcienciasCategoryApi
       end
     end
 
-    swagger_path '/api/v1/colciencias_categories/' do
+    swagger_path '/colciencias_categories/' do
       operation :get do
         key :summary, 'Get all Colciencias Categories'
         key :description, 'Returns all colciencias categories'

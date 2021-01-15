@@ -3,7 +3,7 @@ module Swagger::GmStateApi
   include Swagger::Blocks
 
   included do
-    swagger_path '/api/v1/gm_states/{id}' do
+    swagger_path '/gm_states/{id}' do
       operation :get do
         key :summary, 'Get a State of Group Members by ID'
         key :description, 'Returns a single state of group member'
@@ -78,7 +78,7 @@ module Swagger::GmStateApi
       # end
     end
 
-    swagger_path '/api/v1/gm_states/' do
+    swagger_path 'gm_states/' do
       operation :get do
         key :summary, 'Get all States of Group Members'
         key :description, 'Returns all states of group members'

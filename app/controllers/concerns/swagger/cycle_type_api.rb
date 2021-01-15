@@ -3,7 +3,7 @@ module Swagger::CycleTypeApi
   include Swagger::Blocks
 
   included do
-    swagger_path '/api/v1/cycle_types/{id}' do
+    swagger_path '/cycle_types/{id}' do
       operation :get do
         key :summary, 'Get a Cycle Type by ID'
         key :description, 'Returns a single cycle type'
@@ -78,7 +78,7 @@ module Swagger::CycleTypeApi
       end
     end
 
-    swagger_path '/api/v1/cycle_types/' do
+    swagger_path '/cycle_types/' do
       operation :get do
         key :summary, 'Get all Cycle Types'
         key :description, 'Returns all cycle types'

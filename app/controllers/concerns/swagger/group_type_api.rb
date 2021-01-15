@@ -3,7 +3,7 @@ module Swagger::GroupTypeApi
   include Swagger::Blocks
 
   included do
-    swagger_path '/api/v1/group_types/{id}' do
+    swagger_path '/group_types/{id}' do
       # operation :get do
       #   key :summary, 'Get a Group Type by ID'
       #   key :description, 'Returns a single group type'
@@ -78,7 +78,7 @@ module Swagger::GroupTypeApi
       end
     end
 
-    swagger_path '/api/v1/group_types/' do
+    swagger_path '/group_types/' do
       operation :get do
         key :summary, 'Get all Group Types'
         key :description, 'Returns all Group Types'

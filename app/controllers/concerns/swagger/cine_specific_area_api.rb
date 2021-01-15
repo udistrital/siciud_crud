@@ -3,7 +3,7 @@ module Swagger::CineSpecificAreaApi
   include Swagger::Blocks
 
   included do
-    swagger_path '/api/v1/cine_specific_areas/{id}' do
+    swagger_path '/cine_specific_areas/{id}' do
       operation :put do
         key :summary, 'Update Specific Area of ISCED by ID'
         key :description, 'Returns the updated Specific Area of ISCED'
@@ -45,7 +45,7 @@ module Swagger::CineSpecificAreaApi
       end
     end
 
-    swagger_path '/api/v1/cine_specific_areas/' do
+    swagger_path '/cine_specific_areas/' do
       operation :get do
         key :summary, 'Get all Specific Areas of ISCED'
         key :description, 'Returns all specific areas of ISCED'

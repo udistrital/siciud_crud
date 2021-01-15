@@ -3,7 +3,7 @@ module Swagger::CategoryApi
   include Swagger::Blocks
 
   included do
-    swagger_path '/api/v1/categories/{id}' do
+    swagger_path '/categories/{id}' do
       operation :get do
         key :summary, 'Get Category by ID'
         key :description, 'Returns a single category'
@@ -77,7 +77,7 @@ module Swagger::CategoryApi
       end
     end
 
-    swagger_path '/api/v1/categories/' do
+    swagger_path '/categories/' do
       operation :get do
         key :summary, 'Get all Categories'
         key :description, 'Returns all categories'

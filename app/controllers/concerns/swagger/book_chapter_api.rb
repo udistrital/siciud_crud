@@ -3,7 +3,7 @@ module Swagger::BookChapterApi
   include Swagger::Blocks
 
   included do
-    swagger_path '/api/v1/research_group/{research_group_id}/book_chapters/{id}' do
+    swagger_path '/research_group/{research_group_id}/book_chapters/{id}' do
       operation :get do
         key :summary, 'Get a Book Chapter from a Research Unit by ID'
         key :description, 'Returns a single book chapter'
@@ -94,7 +94,7 @@ module Swagger::BookChapterApi
       end
     end
 
-    swagger_path '/api/v1/research_group/{research_group_id}/book_chapters/' do
+    swagger_path '/research_group/{research_group_id}/book_chapters/' do
       operation :get do
         key :summary, 'Get all Book Chapters'
         key :description, 'Returns all book chapters'
