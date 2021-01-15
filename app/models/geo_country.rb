@@ -1,4 +1,5 @@
 class GeoCountry < ApplicationRecord
+  include Swagger::GeoCountrySchema
   has_many :geo_states
 
   # Products

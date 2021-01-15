@@ -5,7 +5,7 @@ module Swagger::BookApi
   included do
     swagger_path '/api/v1/research_group/{research_group_id}/books/{id}' do
       operation :get do
-        key :summary, 'Get a Book from a Research Unit by ID'
+        key :summary, 'Get a Book of a Research Unit by ID'
         key :description, 'Returns a single book'
         key :operationId, :get_book_by_id
         key :produces, ['application/json',]
@@ -21,7 +21,7 @@ module Swagger::BookApi
 
         parameter name: :id do
           key :in, :path
-          key :description, 'ID of book from a research unit to fetch'
+          key :description, 'ID of book of a research unit to fetch'
           key :required, true
           key :type, :integer
           key :format, :int64
@@ -61,7 +61,7 @@ module Swagger::BookApi
 
         parameter name: :id do
           key :in, :path
-          key :description, 'ID of book from a research unit to fetch'
+          key :description, 'ID of book of a research unit to fetch'
           key :required, true
           key :type, :integer
           key :format, :int64

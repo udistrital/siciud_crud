@@ -1,29 +1,16 @@
-module Swagger::GroupMemberSchema
+module Swagger::GroupStateSchema
   extend ActiveSupport::Concern
   include Swagger::Blocks
 
   included do
-    swagger_schema :GroupMember do
+    swagger_schema :GroupState do
       key :required, [:id]
       property :id do
         key :type, :integer
         key :format, :int64
       end
-      property :role_id do
-        key :type, :integer
-        key :format, :int64
-      end
-      property :researcher_id do
-        key :type, :integer
-        key :format, :int64
-      end
-      property :research_group_id do
-        key :type, :integer
-        key :format, :int64
-      end
-      property :gm_state_id do
-        key :type, :integer
-        key :format, :int64
+      property :name do
+        key :type, :string
       end
       property :active do
         key :type, :boolean
@@ -47,15 +34,10 @@ module Swagger::GroupMemberSchema
       end
     end
 
-    swagger_schema :GroupMemberInput do
-      property :group_member do
-        property :role_id do
-          key :type, :integer
-          key :format, :int64
-        end
-        property :researcher_id do
-          key :type, :integer
-          key :format, :int64
+    swagger_schema :GroupStateInput do
+      property :gm_state do
+        property :name do
+          key :type, :string
         end
         property :active do
           key :type, :boolean
@@ -72,10 +54,10 @@ module Swagger::GroupMemberSchema
       end
     end
 
-    swagger_schema :GroupMemberOutput do
+    swagger_schema :GroupStateOutput do
       allOf do
         schema do
-          key :'$ref', :GroupMember
+          key :'$ref', :GroupState
         end
       end
     end

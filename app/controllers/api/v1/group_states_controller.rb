@@ -1,6 +1,8 @@
 module Api
   module V1
     class GroupStatesController < ApplicationController
+      include Swagger::GroupStateApi
+
       before_action :set_group_state, only: [:show]
 
       rescue_from ActiveRecord::RecordNotFound do |e|

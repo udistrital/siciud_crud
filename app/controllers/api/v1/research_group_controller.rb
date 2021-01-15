@@ -1,6 +1,8 @@
 module Api
   module V1
     class ResearchGroupController < ApplicationController
+      include Swagger::ResearchUnitApi
+
       before_action :set_research_group, only: [:show, :update]
 
       # Handling of database exceptions
