@@ -1,6 +1,8 @@
 module Api
   module V1
     class IntParticipantsController < ApplicationController
+      include Swagger::IntParticipantApi
+
       before_action :set_context
       before_action :set_int_participant, only: [:show, :update]
 

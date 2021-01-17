@@ -7,14 +7,14 @@ module Api
         key :swagger, "2.0"
         info do
           key :version, "1.0.0"
-          key :title, "API Sistema de informacion de investigadores 2.0"
+          key :title, "API SICIUD 2.0"
           key :description, "A sample users CRUD API"
           contact do
-            key :name, "https://github.com/siciud-cidc"
+            key :name, "https://github.com/udistrital/siciud_crud.git"
           end
         end
         key :host, ENV["HOST"]
-        key :basePath, "/"
+        key :basePath, "/api/v1"
         key :consumes, ["application/json"]
         key :produces, ["application/json"]
       end
@@ -31,13 +31,18 @@ module Api
         CineDetailedAreasController,
         ColcienciasCallsController,
         ColcienciasCategoriesController,
+        HistoricalColcienciasRanksController,
+        KnwlSpecAreasController,
         CategoriesController,
         CycleTypesController,
         EditorialsController,
         ExtParticipantsController,
         BookChaptersController,
         BooksController,
+        IpLivestockBreedsController,
+        JournalsController,
         AwardsController,
+        IntParticipantsController,
         ResearchGroupController,
         GroupMemberController,
         GroupStatesController,
@@ -52,14 +57,19 @@ module Api
         CineDetailedArea,
         ColcienciasCall,
         ColcienciasCategory,
+        HistoricalColcienciasRank,
+        KnwlSpecArea,
         Category,
         CycleType,
         Editorial,
         ExtParticipant,
         BookChapter,
         Book,
+        IpLivestockBreed,
+        Journal,
         ResearchGroup,
         Award,
+        IntParticipant,
         GroupMember,
         GroupState,
         GroupType,

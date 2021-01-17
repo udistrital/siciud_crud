@@ -78,7 +78,7 @@ module Swagger::GmStateApi
       # end
     end
 
-    swagger_path 'gm_states/' do
+    swagger_path '/gm_states/' do
       operation :get do
         key :summary, 'Get all States of Group Members'
         key :description, 'Returns all states of group members'

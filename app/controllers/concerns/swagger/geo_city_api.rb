@@ -100,6 +100,14 @@ module Swagger::GeoCityApi
         key :produces, ['application/json',]
         key :tags, ['Geo Cities']
 
+        parameter name: :geo_state_id do
+          key :in, :path
+          key :description, 'State ID to fetch'
+          key :required, true
+          key :type, :integer
+          key :format, :int64
+        end
+
         response 200 do
           key :description, 'geo city response'
           schema do

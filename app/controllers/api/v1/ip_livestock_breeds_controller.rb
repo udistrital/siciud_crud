@@ -1,6 +1,8 @@
 module Api
   module V1
     class IpLivestockBreedsController < AbstractProductResearchUnitController
+      include Swagger::IpLivestockBreedApi
+
       before_action :set_research_group, only: [:index, :show, :create, :update]
       before_action :set_ip_livestock_breed, only: [:show, :update]
 

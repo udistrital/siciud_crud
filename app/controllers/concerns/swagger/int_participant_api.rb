@@ -1,15 +1,15 @@
-module Swagger::ExtParticipantApi
+module Swagger::IntParticipantApi
   extend ActiveSupport::Concern
   include Swagger::Blocks
 
   included do
-    swagger_path '/{product_name}/{producible_id}/ext_participants/{id}' do
+    swagger_path '/{product_name}/{producible_id}/int_participants/{id}' do
       operation :get do
-        key :summary, 'Get an External Participant of a Product by ID'
-        key :description, 'Returns a single external participant'
-        key :operationId, :get_external_participant_by_id
+        key :summary, 'Get an Internal Participant of a Product by ID'
+        key :description, 'Returns a single internal participant'
+        key :operationId, :get_int_participant_by_id
         key :produces, ['application/json',]
-        key :tags, ['Products::External Participants']
+        key :tags, ['Products::Internal Participants']
 
         parameter name: :product_name do
           key :in, :path
@@ -27,16 +27,16 @@ module Swagger::ExtParticipantApi
         end
         parameter name: :id do
           key :in, :path
-          key :description, 'ID of external participant to fetch'
+          key :description, 'ID of internal participant to fetch'
           key :required, true
           key :type, :integer
           key :format, :int64
         end
 
         response 200 do
-          key :description, 'external participant response'
+          key :description, 'internal participant response'
           schema do
-            key :'$ref', :ExtParticipantOutput
+            key :'$ref', :IntParticipantOutput
           end
         end
         response 404 do
@@ -51,11 +51,11 @@ module Swagger::ExtParticipantApi
       end
 
       operation :put do
-        key :summary, 'Update External Participant of a Product by ID'
-        key :description, 'Returns the updated external participant'
-        key :operationId, :update_external_participant
+        key :summary, 'Update Internal Participant of a Product by ID'
+        key :description, 'Returns the updated internal participant'
+        key :operationId, :update_int_participant
         key :produces, ['application/json',]
-        key :tags, ['Products::External Participants']
+        key :tags, ['Products::Internal Participants']
 
         parameter name: :product_name do
           key :in, :path
@@ -73,25 +73,25 @@ module Swagger::ExtParticipantApi
         end
         parameter name: :id do
           key :in, :path
-          key :description, 'ID of external participant to fetch'
+          key :description, 'ID of internal participant to fetch'
           key :required, true
           key :type, :integer
           key :format, :int64
         end
 
-        parameter name: :ext_participant do
+        parameter name: :int_participant do
           key :in, :body
-          key :description, 'External Participant to update'
+          key :description, 'Internal Participant to update'
           key :required, true
           schema do
-            key :'$ref', :ExtParticipantInput
+            key :'$ref', :IntParticipantInput
           end
         end
 
         response 200 do
-          key :description, 'external participant response'
+          key :description, 'internal participant response'
           schema do
-            key :'$ref', :ExtParticipantOutput
+            key :'$ref', :IntParticipantOutput
           end
         end
         response 422 do
@@ -106,13 +106,13 @@ module Swagger::ExtParticipantApi
       end
     end
 
-    swagger_path '/{product_name}/{producible_id}/ext_participants/' do
+    swagger_path '/{product_name}/{producible_id}/int_participants/' do
       operation :get do
-        key :summary, 'Get all External Participants of a Product by ID'
-        key :description, 'Returns all external participants'
-        key :operationId, :get_ext_participants
+        key :summary, 'Get all Internal Participants of a Product by ID'
+        key :description, 'Returns all internal participants'
+        key :operationId, :get_int_participants
         key :produces, ['application/json',]
-        key :tags, ['Products::External Participants']
+        key :tags, ['Products::Internal Participants']
 
         parameter name: :product_name do
           key :in, :path
@@ -130,11 +130,11 @@ module Swagger::ExtParticipantApi
         end
 
         response 200 do
-          key :description, 'external participant response'
+          key :description, 'internal participant response'
           schema do
             key :type, :array
             items do
-              key :'$ref', :ExtParticipantOutput
+              key :'$ref', :IntParticipantOutput
             end
           end
         end
@@ -144,11 +144,11 @@ module Swagger::ExtParticipantApi
       end
 
       operation :post do
-        key :summary, 'Create a new External Participant'
-        key :description, 'Returns the created external participant'
-        key :operationId, :create_ext_participant
+        key :summary, 'Create a new Internal Participant'
+        key :description, 'Returns the created internal participant'
+        key :operationId, :create_int_participant
         key :produces, ['application/json',]
-        key :tags, ['Products::External Participants']
+        key :tags, ['Products::Internal Participants']
 
         parameter name: :product_name do
           key :in, :path
@@ -165,19 +165,19 @@ module Swagger::ExtParticipantApi
           key :format, :int64
         end
 
-        parameter name: :ext_participant do
+        parameter name: :int_participant do
           key :in, :body
-          key :description, 'External Participant to register'
+          key :description, 'Internal Participant to register'
           key :required, true
           schema do
-            key :'$ref', :ExtParticipantInput
+            key :'$ref', :IntParticipantInput
           end
         end
 
         response 201 do
-          key :description, 'external participant response'
+          key :description, 'internal participant response'
           schema do
-            key :'$ref', :ExtParticipantOutput
+            key :'$ref', :IntParticipantOutput
           end
         end
         response 422 do

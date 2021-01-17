@@ -1,6 +1,8 @@
 module Api
   module V1
     class HistoricalColcienciasRanksController < ApplicationController
+      include Swagger::HistoricalColcienciasRankApi
+
       before_action :set_research_group
       before_action :set_historical_colc_rank, only: [:show, :update]
 

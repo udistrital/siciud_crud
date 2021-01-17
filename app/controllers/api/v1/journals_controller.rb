@@ -1,6 +1,8 @@
 module Api
   module V1
     class JournalsController < ApplicationController
+      include Swagger::JournalApi
+
       before_action :set_journal, only: [:show, :update]
 
       # Handling of database exceptions

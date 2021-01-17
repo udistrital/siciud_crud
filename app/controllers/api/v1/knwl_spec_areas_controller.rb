@@ -1,6 +1,8 @@
 module Api
   module V1
     class KnwlSpecAreasController < ApplicationController
+      include Swagger::KnwlSpecAreaApi
+
       before_action :set_knwl_spec_area, only: [:show, :update]
 
       # Handling of database exceptions

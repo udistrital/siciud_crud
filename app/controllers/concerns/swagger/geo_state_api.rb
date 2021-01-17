@@ -100,6 +100,14 @@ module Swagger::GeoStateApi
         key :produces, ['application/json',]
         key :tags, ['Geo States']
 
+        parameter name: :geo_country_id do
+          key :in, :path
+          key :description, 'Country ID to fetch'
+          key :required, true
+          key :type, :integer
+          key :format, :int64
+        end
+
         response 200 do
           key :description, 'geo state response'
           schema do
