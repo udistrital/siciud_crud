@@ -115,7 +115,7 @@ module Swagger::BookApi
           schema do
             key :type, :array
             items do
-              key :'$ref', :BookOutput
+              key :'$ref', :BookDxOutput
             end
           end
         end

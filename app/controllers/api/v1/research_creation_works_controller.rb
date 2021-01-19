@@ -1,6 +1,8 @@
 module Api
   module V1
     class ResearchCreationWorksController < AbstractProductResearchUnitController
+      include Swagger::ResearchCreationWorkApi
+
       before_action :set_research_group
       before_action :set_research_creation_work, only: [:show, :update]
 

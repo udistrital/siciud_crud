@@ -1,3 +1,5 @@
+
+
 module Swagger::BookChapterApi
   extend ActiveSupport::Concern
   include Swagger::Blocks
@@ -115,7 +117,7 @@ module Swagger::BookChapterApi
           schema do
             key :type, :array
             items do
-              key :'$ref', :BookChapterOutput
+              key :'$ref', :BookChapterDxOutput
             end
           end
         end

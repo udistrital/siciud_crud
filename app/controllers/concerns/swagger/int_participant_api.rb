@@ -15,6 +15,9 @@ module Swagger::IntParticipantApi
           key :in, :path
           key :description, 'Product name or production name to fetch, e. g.,
             books, papers and patents, among others (see all the names of the production "url names").'
+          key :enum, [:books, :book_chapters, :ip_livestock_breeds, :new_animal_breeds,
+                      :papers, :patents, :research_creation_works, :scientific_notes,
+                      :vegetable_varieties]
           key :required, true
           key :type, :string
         end
@@ -61,6 +64,9 @@ module Swagger::IntParticipantApi
           key :in, :path
           key :description, 'Product name or production name to fetch, e. g.,
             books, papers and patents, among others (see all the names of the production "url names").'
+          key :enum, [:books, :book_chapters, :ip_livestock_breeds, :new_animal_breeds,
+                      :papers, :patents, :research_creation_works, :scientific_notes,
+                      :vegetable_varieties]
           key :required, true
           key :type, :string
         end
@@ -118,6 +124,9 @@ module Swagger::IntParticipantApi
           key :in, :path
           key :description, 'Product name or production name to fetch, e. g.,
             books, papers and patents, among others (see all the names of the production "url names").'
+          key :enum, [:books, :book_chapters, :ip_livestock_breeds, :new_animal_breeds,
+                      :papers, :patents, :research_creation_works, :scientific_notes,
+                      :vegetable_varieties]
           key :required, true
           key :type, :string
         end
@@ -154,6 +163,9 @@ module Swagger::IntParticipantApi
           key :in, :path
           key :description, 'Product name or production name to fetch, e. g.,
             books, papers and patents, among others (see all the names of the production "url names").'
+          key :enum, [:books, :book_chapters, :ip_livestock_breeds, :new_animal_breeds,
+                      :papers, :patents, :research_creation_works, :scientific_notes,
+                      :vegetable_varieties]
           key :required, true
           key :type, :string
         end

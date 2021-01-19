@@ -1,6 +1,8 @@
 module Api
   module V1
     class ResearcherController < ApplicationController
+      include Swagger::ResearcherApi
+
       before_action :set_researcher, only: [:show, :update]
 
       rescue_from ActiveRecord::RecordNotFound do |e|

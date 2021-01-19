@@ -1,6 +1,8 @@
 module Api
   module V1
     class ScientificNotesController < AbstractProductResearchUnitController
+      include Swagger::ScientificNoteApi
+
       before_action :set_research_group
       before_action :set_scientific_note, only: [:show, :update]
 

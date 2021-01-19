@@ -1,4 +1,6 @@
 class Paper < ApplicationRecord
+  include Swagger::PaperSchema
+
   belongs_to :category
   belongs_to :journal
   belongs_to :paper_type

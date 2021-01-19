@@ -266,44 +266,7 @@ module Swagger::ResearchUnitSchema
           property :data do
             key :type, :array
             items do
-              key :'$ref', :ResearchUnit
-            end
-          end
-        end
-        schema do
-          property :data do
-            key :type, :array
-            items do
-              property :cine_detailed_area_ids do
-                key :type, :array
-                items do
-                  key :type, :integer
-                end
-              end
-              property :curricular_project_ids do
-                key :type, :array
-                items do
-                  key :type, :integer
-                end
-              end
-              property :faculty_ids do
-                key :type, :array
-                items do
-                  key :type, :integer
-                end
-              end
-              property :oecd_discipline_ids do
-                key :type, :array
-                items do
-                  key :type, :integer
-                end
-              end
-              property :research_focus_ids do
-                key :type, :array
-                items do
-                  key :type, :integer
-                end
-              end
+              key :'$ref', :ResearchUnitOutput
             end
           end
         end

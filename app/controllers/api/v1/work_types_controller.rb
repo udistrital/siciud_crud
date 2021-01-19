@@ -1,6 +1,8 @@
 module Api
   module V1
     class WorkTypesController < ApplicationController
+      include Swagger::WorkTypeApi
+
       before_action :set_work_type, only: [:show, :update]
 
       # Handling of database exceptions

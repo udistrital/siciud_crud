@@ -1,6 +1,8 @@
 module Api
   module V1
     class ParticipantTypesController < ApplicationController
+      include Swagger::ParticipantTypeApi
+
       before_action :set_participant_type, only: [:show, :update]
 
       # Handling of database exceptions

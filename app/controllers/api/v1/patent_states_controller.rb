@@ -1,6 +1,8 @@
 module Api
   module V1
     class PatentStatesController < ApplicationController
+      include Swagger::PatentStateApi
+
       before_action :set_patent_state, only: [:show, :update]
 
       # Handling of database exceptions

@@ -1,4 +1,6 @@
 class ResearchCreationWork < ApplicationRecord
+  include Swagger::ResearchCreationWorkSchema
+
   belongs_to :knwl_spec_area
   belongs_to :category
   belongs_to :research_group

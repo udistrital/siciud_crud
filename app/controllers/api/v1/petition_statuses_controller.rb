@@ -1,6 +1,8 @@
 module Api
   module V1
     class PetitionStatusesController < ApplicationController
+      include Swagger::PetitionStatusApi
+
       before_action :set_petition_status, only: [:show, :update]
 
       # Handling of database exceptions

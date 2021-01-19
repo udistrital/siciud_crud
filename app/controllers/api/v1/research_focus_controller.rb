@@ -1,6 +1,8 @@
 module Api
   module V1
     class ResearchFocusController < ApplicationController
+      include Swagger::ResearchFocusApi
+
       before_action :set_research_focus, only: [:show]
 
       rescue_from ActiveRecord::RecordNotFound do |e|

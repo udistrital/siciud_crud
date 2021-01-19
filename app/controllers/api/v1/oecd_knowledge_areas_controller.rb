@@ -1,6 +1,8 @@
 module Api
   module V1
     class OecdKnowledgeAreasController < ApplicationController
+      include Swagger::OecdKnowledgeAreaApi
+
       before_action :set_knowledge_area, only: [:update]
 
       rescue_from ActiveRecord::RecordNotFound do |e|

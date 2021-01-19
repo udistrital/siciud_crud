@@ -1,6 +1,8 @@
 module Api
   module V1
     class NewAnimalBreedsController < AbstractProductResearchUnitController
+      include Swagger::NewAnimalBreedApi
+
       before_action :set_research_group, only: [:index, :show, :create, :update]
       before_action :set_new_animal_breed, only: [:show, :update]
 

@@ -1,4 +1,6 @@
 class Researcher < ApplicationRecord
+  include Swagger::ResearcherSchema
+
   #Relaciones con los diferentes modelos
   has_one :user
 

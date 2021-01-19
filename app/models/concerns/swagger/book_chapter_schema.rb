@@ -151,5 +151,18 @@ module Swagger::BookChapterSchema
         end
       end
     end
+
+    swagger_schema :BookChapterDxOutput do
+      allOf do
+        schema do
+          property :data do
+            key :type, :array
+            items do
+              key :'$ref', :BookChapterOutput
+            end
+          end
+        end
+      end
+    end
   end
 end
