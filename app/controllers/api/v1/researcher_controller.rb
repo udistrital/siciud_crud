@@ -5,20 +5,13 @@ module Api
 
       before_action :set_researcher, only: [:show, :update]
 
-      rescue_from ActiveRecord::RecordNotFound do |e|
-        render json: {error: e.message}, status: :not_found
-      end
-      rescue_from ActiveRecord::RecordInvalid do |e|
-        render json: {error: e.message}, status: :unprocessable_entity
-      end
-
       def index
         @researchers = Researcher.all.order(:created_at)
         if (id_number = params[:identification_number])
           @researchers = ResearcherSearchService.search_researcher(@researchers,
                                                                    id_number)
           if @researchers.empty?
-            render json: {'message': 'Usuario no existe'}, status: :not_found
+            render json: { 'message': 'Usuario no existe' }, status: :not_found
           else
             render json: @researchers
           end
@@ -46,6 +39,14 @@ module Api
         else
           render json: @researcher.errors, status: :unprocessable_entity
         end
+      end
+
+      def researcher_research_units
+        research_units = ResearchUnitsByResearcher.where(
+          identification_number: params[:identification_number]
+        )
+
+        render json: research_units
       end
 
       private

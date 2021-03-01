@@ -49,6 +49,7 @@ Rails.application.routes.draw do
       resources :gm_states, only: [:index, :show]
       resources :role, only: [:index, :show]
       resources :researcher, only: [:index, :show, :update, :create]
+      get "researcher_research_units", to: "researcher#researcher_research_units"
 
       resources :funding_entity, only: [:index, :show, :create, :update] do
         resources :fe_contact, only: [:index, :show, :update, :create]
