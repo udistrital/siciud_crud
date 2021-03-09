@@ -22,6 +22,12 @@ Rails.application.routes.draw do
         resources :geo_cities, only: [:index, :show]
       end
 
+      # Types and Subtypes endpoints
+      resources :types, only: [:index, :show, :create, :update] do
+        resources :subtypes, only: [:index, :show, :create, :update]
+        put "/subtypes/:id/deactivate", to: "subtypes#deactivate"
+      end
+      put "/types/:id/deactivate", to: "types#deactivate"
 
       # Endpoint para listar las unidades de investigacion
       resources :research_unit, only: [:index, :show]
@@ -155,7 +161,6 @@ Rails.application.routes.draw do
 
         resources :historical_colciencias_ranks, only: [:index, :show, :create, :update]
 
-
         # PRODUCTS ENDPOINTS BY TYPOLOGY
         # New generation products endpoints
         # Book
@@ -208,7 +213,6 @@ Rails.application.routes.draw do
 
       resources :colciencias_calls, only: [:index, :create, :update]
       resources :colciencias_categories, only: [:index, :create, :update]
-
 
       resources :research_seedbed, only: [:index, :show, :create, :update] do
         #member do
@@ -276,12 +280,10 @@ Rails.application.routes.draw do
       resources :item_calls, only: [:index]
       resources :required_documents, only: [:index]
 
-
       # Endpoints OECD
       resources :oecd_knowledge_areas, only: [:index, :create, :update]
       resources :oecd_knowledge_subareas, only: [:index, :create, :update]
       resources :oecd_disciplines, only: [:index, :create, :update]
-
 
       # Endpoints CINE
       resources :cine_broad_areas, only: [:index, :create, :update]
