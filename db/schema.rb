@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_01_204144) do
+ActiveRecord::Schema.define(version: 2021_03_10_172228) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -494,6 +494,24 @@ ActiveRecord::Schema.define(version: 2021_03_01_204144) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "documents", force: :cascade do |t|
+    t.string "documentable_type"
+    t.bigint "documentable_id"
+    t.string "doc_name", null: false
+    t.string "doc_path", null: false
+    t.bigint "doc_size", comment: "file size in bytes"
+    t.bigint "document_type_id"
+    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.index ["created_by"], name: "index_documents_on_created_by"
+    t.index ["document_type_id"], name: "index_documents_on_document_type_id"
+    t.index ["documentable_type", "documentable_id"], name: "index_documents_on_documentable_type_and_documentable_id"
+    t.index ["updated_by"], name: "index_documents_on_updated_by"
   end
 
   create_table "duration_types", force: :cascade do |t|
@@ -1256,6 +1274,34 @@ ActiveRecord::Schema.define(version: 2021_03_01_204144) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "subtypes", force: :cascade do |t|
+    t.string "st_name"
+    t.text "st_description"
+    t.bigint "parent_id"
+    t.bigint "type_id"
+    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.index ["created_by"], name: "index_subtypes_on_created_by"
+    t.index ["parent_id"], name: "index_subtypes_on_parent_id"
+    t.index ["type_id"], name: "index_subtypes_on_type_id"
+    t.index ["updated_by"], name: "index_subtypes_on_updated_by"
+  end
+
+  create_table "types", force: :cascade do |t|
+    t.string "t_name", null: false
+    t.text "t_description"
+    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.index ["created_by"], name: "index_types_on_created_by"
+    t.index ["updated_by"], name: "index_types_on_updated_by"
+  end
+
   create_table "user_roles", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
@@ -1364,6 +1410,9 @@ ActiveRecord::Schema.define(version: 2021_03_01_204144) do
   add_foreign_key "curricular_prj_ids_research_groups", "users", column: "updated_by"
   add_foreign_key "cycle_types", "users", column: "created_by"
   add_foreign_key "cycle_types", "users", column: "updated_by"
+  add_foreign_key "documents", "subtypes", column: "document_type_id"
+  add_foreign_key "documents", "users", column: "created_by"
+  add_foreign_key "documents", "users", column: "updated_by"
   add_foreign_key "editorials", "users", column: "created_by"
   add_foreign_key "editorials", "users", column: "updated_by"
   add_foreign_key "ext_participants", "participant_types"
@@ -1474,6 +1523,12 @@ ActiveRecord::Schema.define(version: 2021_03_01_204144) do
   add_foreign_key "scientific_notes", "research_groups"
   add_foreign_key "scientific_notes", "users", column: "created_by"
   add_foreign_key "scientific_notes", "users", column: "updated_by"
+  add_foreign_key "subtypes", "subtypes", column: "parent_id"
+  add_foreign_key "subtypes", "types"
+  add_foreign_key "subtypes", "users", column: "created_by"
+  add_foreign_key "subtypes", "users", column: "updated_by"
+  add_foreign_key "types", "users", column: "created_by"
+  add_foreign_key "types", "users", column: "updated_by"
   add_foreign_key "user_roles", "users", column: "created_by"
   add_foreign_key "user_roles", "users", column: "updated_by"
   add_foreign_key "users", "user_roles"
@@ -1849,6 +1904,20 @@ ActiveRecord::Schema.define(version: 2021_03_01_204144) do
        LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
        LEFT JOIN journals j ON ((sn.journal_id = j.id)));
   SQL
+  create_view "complete_users", sql_definition: <<-SQL
+      SELECT u.id,
+      u.identification_number,
+      u.oas_user_id,
+      u.user_role_id,
+      ur.name AS user_role_name,
+      u.active,
+      u.created_by,
+      u.updated_by,
+      u.created_at,
+      u.updated_at
+     FROM (users u
+       LEFT JOIN user_roles ur ON ((u.user_role_id = ur.id)));
+  SQL
   create_view "research_units_by_researchers", sql_definition: <<-SQL
       SELECT rs.id,
       rs.identification_number,
@@ -1860,7 +1929,7 @@ ActiveRecord::Schema.define(version: 2021_03_01_204144) do
       gm.gm_state_id,
       gm.active AS group_member_is_active,
       gm.research_group_id,
-      rg.name AS research_unit_name,
+      rg.name AS research_group_name,
       rg.acronym,
       rg.group_type_id,
       rg.group_state_id,

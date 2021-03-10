@@ -12,9 +12,9 @@ module Api
       # GET /users
       def index
         if (user_id = params[:identification_number])
-          @users = User.where("users.identification_number = '#{user_id}'")
+          @users = CompleteUser.where("identification_number = '#{user_id}'")
         else
-          @users = DxService.load(User, params)
+          @users = DxService.load(CompleteUser, params)
         end
         render json: @users
       end
