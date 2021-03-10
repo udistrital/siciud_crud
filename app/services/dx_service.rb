@@ -14,24 +14,27 @@ class DxService < ApplicationService
     filter = GetParam(:filter)
     unless filter.nil?
       sql = ""
-      # sql = []
-      JSON.parse(filter).map { |element|
-        if element.is_a?(Array) then
-          if element[0].is_a?(Array) then
-            element.map { |subElement|
-              sql += GetSql(subElement) + " "
-            }
+      # 202103090121: Filtros multiples y unicos
+      if filter.include? "[["
+        # Filtro multiple
+        JSON.parse(filter).map { |element|
+          if element.is_a?(Array) then
+            if element[0].is_a?(Array) then
+              element.map { |subElement|
+                sql += GetSql(subElement) + " "
+              }
+            else
+              sql += " "+GetSql(element)+" "
+            end
           else
-            sql += " "+GetSql(element)+" "
-          end
-        else
-          if group.nil?
-            sql += element + " "
-          else
             sql += element + " "
           end
-        end
-      }
+        }
+      else
+        # Filtro unico
+        sql += " " + GetSql(JSON.parse(filter)) + " "
+      end
+
       sql = sql.squish
       if sql.include?(" = ") && !sql.include?("'")
         arr = sql.split(" = ")
@@ -149,7 +152,7 @@ class DxService < ApplicationService
       term = "'"+(element[1] == "contains" ? "%" + element[2].downcase + "%" : element[2])+"'"
       col.downcase + " " + op.upcase + " " + term
     else
-      element+" "
+      element+" KIKI3 "
     end
   end
 
