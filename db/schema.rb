@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_10_041317) do
+ActiveRecord::Schema.define(version: 2021_03_10_172228) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1904,6 +1904,21 @@ ActiveRecord::Schema.define(version: 2021_03_10_041317) do
        LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
        LEFT JOIN journals j ON ((sn.journal_id = j.id)));
   SQL
+
+  create_view "complete_users", sql_definition: <<-SQL
+      SELECT u.id,
+      u.identification_number,
+      u.oas_user_id,
+      u.user_role_id,
+      ur.name AS user_role_name,
+      u.active,
+      u.created_by,
+      u.updated_by,
+      u.created_at,
+      u.updated_at
+     FROM (users u
+       LEFT JOIN user_roles ur ON ((u.user_role_id = ur.id)));
+  SQL
   create_view "research_units_by_researchers", sql_definition: <<-SQL
       SELECT rs.id,
       rs.identification_number,
@@ -1915,7 +1930,7 @@ ActiveRecord::Schema.define(version: 2021_03_10_041317) do
       gm.gm_state_id,
       gm.active AS group_member_is_active,
       gm.research_group_id,
-      rg.name AS research_unit_name,
+      rg.name AS research_group_name,
       rg.acronym,
       rg.group_type_id,
       rg.group_state_id,
