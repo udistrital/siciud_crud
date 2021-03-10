@@ -9,11 +9,11 @@ default: &default
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   timeout: 5000
   encoding: unicode
-  database: <%= ENV['SICIUD_CRUD_PGDB'] || 'siciud_v2' %>
-  host: <%= ENV['SICIUD_CRUD_PGHOST'] || '192.168.0.4' %>
-  port: <%= ENV['SICIUD_CRUD_PGPORT'] || '3505' %>
-  username: <%= ENV['SICIUD_CRUD_PGUSER'] || 'postgres' %>
-  password: <%= ENV['SICIUD_CRUD_PGPASS'] || '********' %>
+  database: <%= ENV['SICIUD_CRUD_PGDB'] %>
+  host: <%= ENV['SICIUD_CRUD_PGHOST'] %>
+  port: <%= ENV['SICIUD_CRUD_PGPORT'] %>
+  username: <%= ENV['SICIUD_CRUD_PGUSER'] %>
+  password: <%= ENV['SICIUD_CRUD_PGPASS'] %>
   schema_search_path: <%= ENV['SICIUD_CRUD_PGSCHEMA'] %>
 
 development:
