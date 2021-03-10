@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_09_043322) do
+ActiveRecord::Schema.define(version: 2021_03_10_041317) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -499,18 +499,18 @@ ActiveRecord::Schema.define(version: 2021_03_09_043322) do
   create_table "documents", force: :cascade do |t|
     t.string "documentable_type"
     t.bigint "documentable_id"
-    t.string "name"
-    t.string "path"
-    t.string "size"
+    t.string "doc_name", null: false
+    t.string "doc_path", null: false
+    t.bigint "doc_size", comment: "file size in bytes"
+    t.bigint "document_type_id"
     t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
-    t.bigint "type_id"
     t.index ["created_by"], name: "index_documents_on_created_by"
+    t.index ["document_type_id"], name: "index_documents_on_document_type_id"
     t.index ["documentable_type", "documentable_id"], name: "index_documents_on_documentable_type_and_documentable_id"
-    t.index ["type_id"], name: "index_documents_on_type_id"
     t.index ["updated_by"], name: "index_documents_on_updated_by"
   end
 
@@ -1410,7 +1410,7 @@ ActiveRecord::Schema.define(version: 2021_03_09_043322) do
   add_foreign_key "curricular_prj_ids_research_groups", "users", column: "updated_by"
   add_foreign_key "cycle_types", "users", column: "created_by"
   add_foreign_key "cycle_types", "users", column: "updated_by"
-  add_foreign_key "documents", "subtypes", column: "type_id"
+  add_foreign_key "documents", "subtypes", column: "document_type_id"
   add_foreign_key "documents", "users", column: "created_by"
   add_foreign_key "documents", "users", column: "updated_by"
   add_foreign_key "editorials", "users", column: "created_by"
@@ -1544,297 +1544,6 @@ ActiveRecord::Schema.define(version: 2021_03_09_043322) do
   add_foreign_key "work_types", "users", column: "created_by"
   add_foreign_key "work_types", "users", column: "updated_by"
 
-  create_view "complete_book_chapters", sql_definition: <<-SQL
-      SELECT bc.id,
-      bc.book_title,
-      bc.title,
-      bc.book_chapter_document,
-      bc.category_id,
-      c.name AS category_name,
-      bc.doi,
-      bc.editorial_id,
-      e.name AS editorial_name,
-      bc.geo_city_id,
-      gcity.name AS geo_city_name,
-      gs.geo_country_id,
-      gctry.name AS geo_country_name,
-      gcity.geo_state_id,
-      gs.name AS geo_state_name,
-      bc.isbn,
-      bc.observation,
-      bc.publication_date,
-      bc.research_group_id,
-      bc.url,
-      bc.active,
-      bc.created_by,
-      bc.updated_by,
-      bc.created_at,
-      bc.updated_at
-     FROM (((((book_chapters bc
-       LEFT JOIN categories c ON ((bc.category_id = c.id)))
-       LEFT JOIN editorials e ON ((bc.editorial_id = e.id)))
-       LEFT JOIN geo_cities gcity ON ((bc.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
-  SQL
-  create_view "complete_books", sql_definition: <<-SQL
-      SELECT b.id,
-      b.title,
-      b.book_document,
-      b.category_id,
-      c.name AS category_name,
-      b.editorial_id,
-      e.name AS editorial_name,
-      b.geo_city_id,
-      gcity.name AS geo_city_name,
-      gs.geo_country_id,
-      gctry.name AS geo_country_name,
-      gcity.geo_state_id,
-      gs.name AS geo_state_name,
-      b.isbn,
-      b.observation,
-      b.publication_date,
-      b.research_group_id,
-      b.url,
-      b.active,
-      b.created_by,
-      b.updated_by,
-      b.created_at,
-      b.updated_at
-     FROM (((((books b
-       LEFT JOIN categories c ON ((b.category_id = c.id)))
-       LEFT JOIN editorials e ON ((b.editorial_id = e.id)))
-       LEFT JOIN geo_cities gcity ON ((b.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
-  SQL
-  create_view "complete_ipl_breeds", sql_definition: <<-SQL
-      SELECT iplb.id,
-      iplb.name,
-      iplb.category_id,
-      c.name AS category_name,
-      iplb.certificate_ma_document,
-      iplb.consecutive_number_ma,
-      iplb.geo_city_id,
-      gcity.name AS geo_city_name,
-      gs.geo_country_id,
-      gctry.name AS geo_country_name,
-      gcity.geo_state_id,
-      gs.name AS geo_state_name,
-      iplb.ip_livestock_breed_document,
-      iplb.observation,
-      iplb.publication_date,
-      iplb.research_group_id,
-      iplb.active,
-      iplb.created_by,
-      iplb.updated_by,
-      iplb.created_at,
-      iplb.updated_at
-     FROM ((((ip_livestock_breeds iplb
-       LEFT JOIN categories c ON ((iplb.category_id = c.id)))
-       LEFT JOIN geo_cities gcity ON ((iplb.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
-  SQL
-  create_view "complete_new_animal_bs", sql_definition: <<-SQL
-      SELECT nab.id,
-      nab.name,
-      nab.category_id,
-      c.name AS category_name,
-      nab.ccb_ica_document,
-      nab.cycle_type_id,
-      ct.name AS cycle_type_name,
-      nab.date,
-      nab.geo_city_id,
-      gcity.name AS geo_city_name,
-      gs.geo_country_id,
-      gctry.name AS geo_country_name,
-      gcity.geo_state_id,
-      gs.name AS geo_state_name,
-      nab.new_animal_breed_document,
-      nab.observation,
-      nab.petition_status_id,
-      ps.name AS petition_status_name,
-      nab.research_group_id,
-      nab.active,
-      nab.created_by,
-      nab.updated_by,
-      nab.created_at,
-      nab.updated_at
-     FROM ((((((new_animal_breeds nab
-       LEFT JOIN categories c ON ((nab.category_id = c.id)))
-       LEFT JOIN cycle_types ct ON ((nab.cycle_type_id = ct.id)))
-       LEFT JOIN geo_cities gcity ON ((nab.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
-       LEFT JOIN petition_statuses ps ON ((nab.petition_status_id = ps.id)));
-  SQL
-  create_view "complete_papers", sql_definition: <<-SQL
-      SELECT p.id,
-      p.title,
-      p.approval_date,
-      p.category_id,
-      c.name AS category_name,
-      p.doi,
-      p.final_page,
-      p.geo_city_id,
-      gcity.name AS geo_city_name,
-      gs.geo_country_id,
-      gctry.name AS geo_country_name,
-      gcity.geo_state_id,
-      gs.name AS geo_state_name,
-      p.initial_page,
-      p.issn,
-      p.journal_id,
-      j.name AS journal_name,
-      p.number_of_pages,
-      p.observation,
-      p.paper_type_id,
-      pt.name AS paper_type_name,
-      p.publication_date,
-      p.research_group_id,
-      p.url,
-      p.volume,
-      p.active,
-      p.created_by,
-      p.updated_by,
-      p.created_at,
-      p.updated_at
-     FROM ((((((papers p
-       LEFT JOIN categories c ON ((p.category_id = c.id)))
-       LEFT JOIN geo_cities gcity ON ((p.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
-       LEFT JOIN journals j ON ((p.journal_id = j.id)))
-       LEFT JOIN paper_types pt ON ((p.paper_type_id = pt.id)));
-  SQL
-  create_view "complete_patents", sql_definition: <<-SQL
-      SELECT p.id,
-      p.title,
-      p.category_id,
-      c.name AS category_name,
-      p.date_of_obtaining,
-      ARRAY( SELECT gcp.geo_country_id
-             FROM geo_countries_patents gcp
-            WHERE (p.id = gcp.patent_id)) AS geo_country_ids,
-      p.industrial_publication_gazette,
-      p.observation,
-      p.patent_certificate_document,
-      p.patent_number,
-      p.patent_state_id,
-      ps.name AS patent_state_name,
-      p.research_group_id,
-      p.active,
-      p.created_by,
-      p.updated_by,
-      p.created_at,
-      p.updated_at
-     FROM ((patents p
-       LEFT JOIN categories c ON ((p.category_id = c.id)))
-       LEFT JOIN patent_states ps ON ((p.patent_state_id = ps.id)));
-  SQL
-  create_view "complete_research_cws", sql_definition: <<-SQL
-      SELECT rcw.id,
-      rcw.title,
-      rcw.category_id,
-      c.name AS category_name,
-      rcw.creation_and_selection_date,
-      rcw.geo_city_id,
-      gcity.name AS geo_city_name,
-      gs.geo_country_id,
-      gctry.name AS geo_country_name,
-      gcity.geo_state_id,
-      gs.name AS geo_state_name,
-      rcw.knwl_spec_area_id,
-      ksa.name AS knwl_spec_area_name,
-      rcw.nature_of_work,
-      rcw.observation,
-      rcw.registered_project_title,
-      rcw.url,
-      ARRAY( SELECT rcwwt.work_type_id
-             FROM research_creation_works_work_types rcwwt
-            WHERE (rcw.id = rcwwt.research_creation_work_id)) AS work_type_ids,
-      rcw.research_group_id,
-      rcw.active,
-      rcw.created_by,
-      rcw.updated_by,
-      rcw.created_at,
-      rcw.updated_at
-     FROM (((((research_creation_works rcw
-       LEFT JOIN categories c ON ((rcw.category_id = c.id)))
-       LEFT JOIN geo_cities gcity ON ((rcw.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
-       LEFT JOIN knwl_spec_areas ksa ON ((rcw.knwl_spec_area_id = ksa.id)));
-  SQL
-  create_view "complete_scientific_notes", sql_definition: <<-SQL
-      SELECT sn.id,
-      sn.title,
-      sn.approval_date,
-      sn.category_id,
-      c.name AS category_name,
-      sn.doi,
-      sn.final_page,
-      sn.geo_city_id,
-      gcity.name AS geo_city_name,
-      gs.geo_country_id,
-      gctry.name AS geo_country_name,
-      gcity.geo_state_id,
-      gs.name AS geo_state_name,
-      sn.initial_page,
-      sn.issn,
-      sn.journal_id,
-      j.name AS journal_name,
-      sn.number_of_pages,
-      sn.observation,
-      sn.publication_date,
-      sn.research_group_id,
-      sn.url,
-      sn.volume,
-      sn.active,
-      sn.created_by,
-      sn.updated_by,
-      sn.created_at,
-      sn.updated_at
-     FROM (((((scientific_notes sn
-       LEFT JOIN categories c ON ((sn.category_id = c.id)))
-       LEFT JOIN geo_cities gcity ON ((sn.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
-       LEFT JOIN journals j ON ((sn.journal_id = j.id)));
-  SQL
-  create_view "complete_vegetable_varieties", sql_definition: <<-SQL
-      SELECT vv.id,
-      vv.name,
-      vv.category_id,
-      c.name AS category_name,
-      vv.cycle_type_id,
-      ct.name AS cycle_type_name,
-      vv.date,
-      vv.geo_city_id,
-      gcity.name AS geo_city_name,
-      gs.geo_country_id,
-      gctry.name AS geo_country_name,
-      gcity.geo_state_id,
-      gs.name AS geo_state_name,
-      vv.observation,
-      vv.petition_status_id,
-      ps.name AS petition_status_name,
-      vv.research_group_id,
-      vv.vegetable_variety_document,
-      vv.active,
-      vv.created_by,
-      vv.updated_by,
-      vv.created_at,
-      vv.updated_at
-     FROM ((((((vegetable_varieties vv
-       LEFT JOIN categories c ON ((vv.category_id = c.id)))
-       LEFT JOIN cycle_types ct ON ((vv.cycle_type_id = ct.id)))
-       LEFT JOIN geo_cities gcity ON ((vv.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
-       LEFT JOIN petition_statuses ps ON ((vv.petition_status_id = ps.id)));
-  SQL
   create_view "research_units", sql_definition: <<-SQL
       SELECT rg.id,
       rg.legacy_siciud_id,
@@ -1903,6 +1612,297 @@ ActiveRecord::Schema.define(version: 2021_03_09_043322) do
       rg.created_by,
       rg.updated_by
      FROM research_groups rg;
+  SQL
+  create_view "complete_papers", sql_definition: <<-SQL
+      SELECT p.id,
+      p.title,
+      p.approval_date,
+      p.category_id,
+      c.name AS category_name,
+      p.doi,
+      p.final_page,
+      p.geo_city_id,
+      gcity.name AS geo_city_name,
+      gs.geo_country_id,
+      gctry.name AS geo_country_name,
+      gcity.geo_state_id,
+      gs.name AS geo_state_name,
+      p.initial_page,
+      p.issn,
+      p.journal_id,
+      j.name AS journal_name,
+      p.number_of_pages,
+      p.observation,
+      p.paper_type_id,
+      pt.name AS paper_type_name,
+      p.publication_date,
+      p.research_group_id,
+      p.url,
+      p.volume,
+      p.active,
+      p.created_by,
+      p.updated_by,
+      p.created_at,
+      p.updated_at
+     FROM ((((((papers p
+       LEFT JOIN categories c ON ((p.category_id = c.id)))
+       LEFT JOIN geo_cities gcity ON ((p.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
+       LEFT JOIN journals j ON ((p.journal_id = j.id)))
+       LEFT JOIN paper_types pt ON ((p.paper_type_id = pt.id)));
+  SQL
+  create_view "complete_books", sql_definition: <<-SQL
+      SELECT b.id,
+      b.title,
+      b.book_document,
+      b.category_id,
+      c.name AS category_name,
+      b.editorial_id,
+      e.name AS editorial_name,
+      b.geo_city_id,
+      gcity.name AS geo_city_name,
+      gs.geo_country_id,
+      gctry.name AS geo_country_name,
+      gcity.geo_state_id,
+      gs.name AS geo_state_name,
+      b.isbn,
+      b.observation,
+      b.publication_date,
+      b.research_group_id,
+      b.url,
+      b.active,
+      b.created_by,
+      b.updated_by,
+      b.created_at,
+      b.updated_at
+     FROM (((((books b
+       LEFT JOIN categories c ON ((b.category_id = c.id)))
+       LEFT JOIN editorials e ON ((b.editorial_id = e.id)))
+       LEFT JOIN geo_cities gcity ON ((b.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_book_chapters", sql_definition: <<-SQL
+      SELECT bc.id,
+      bc.book_title,
+      bc.title,
+      bc.book_chapter_document,
+      bc.category_id,
+      c.name AS category_name,
+      bc.doi,
+      bc.editorial_id,
+      e.name AS editorial_name,
+      bc.geo_city_id,
+      gcity.name AS geo_city_name,
+      gs.geo_country_id,
+      gctry.name AS geo_country_name,
+      gcity.geo_state_id,
+      gs.name AS geo_state_name,
+      bc.isbn,
+      bc.observation,
+      bc.publication_date,
+      bc.research_group_id,
+      bc.url,
+      bc.active,
+      bc.created_by,
+      bc.updated_by,
+      bc.created_at,
+      bc.updated_at
+     FROM (((((book_chapters bc
+       LEFT JOIN categories c ON ((bc.category_id = c.id)))
+       LEFT JOIN editorials e ON ((bc.editorial_id = e.id)))
+       LEFT JOIN geo_cities gcity ON ((bc.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_ipl_breeds", sql_definition: <<-SQL
+      SELECT iplb.id,
+      iplb.name,
+      iplb.category_id,
+      c.name AS category_name,
+      iplb.certificate_ma_document,
+      iplb.consecutive_number_ma,
+      iplb.geo_city_id,
+      gcity.name AS geo_city_name,
+      gs.geo_country_id,
+      gctry.name AS geo_country_name,
+      gcity.geo_state_id,
+      gs.name AS geo_state_name,
+      iplb.ip_livestock_breed_document,
+      iplb.observation,
+      iplb.publication_date,
+      iplb.research_group_id,
+      iplb.active,
+      iplb.created_by,
+      iplb.updated_by,
+      iplb.created_at,
+      iplb.updated_at
+     FROM ((((ip_livestock_breeds iplb
+       LEFT JOIN categories c ON ((iplb.category_id = c.id)))
+       LEFT JOIN geo_cities gcity ON ((iplb.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_new_animal_bs", sql_definition: <<-SQL
+      SELECT nab.id,
+      nab.name,
+      nab.category_id,
+      c.name AS category_name,
+      nab.ccb_ica_document,
+      nab.cycle_type_id,
+      ct.name AS cycle_type_name,
+      nab.date,
+      nab.geo_city_id,
+      gcity.name AS geo_city_name,
+      gs.geo_country_id,
+      gctry.name AS geo_country_name,
+      gcity.geo_state_id,
+      gs.name AS geo_state_name,
+      nab.new_animal_breed_document,
+      nab.observation,
+      nab.petition_status_id,
+      ps.name AS petition_status_name,
+      nab.research_group_id,
+      nab.active,
+      nab.created_by,
+      nab.updated_by,
+      nab.created_at,
+      nab.updated_at
+     FROM ((((((new_animal_breeds nab
+       LEFT JOIN categories c ON ((nab.category_id = c.id)))
+       LEFT JOIN cycle_types ct ON ((nab.cycle_type_id = ct.id)))
+       LEFT JOIN geo_cities gcity ON ((nab.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
+       LEFT JOIN petition_statuses ps ON ((nab.petition_status_id = ps.id)));
+  SQL
+  create_view "complete_patents", sql_definition: <<-SQL
+      SELECT p.id,
+      p.title,
+      p.category_id,
+      c.name AS category_name,
+      p.date_of_obtaining,
+      ARRAY( SELECT gcp.geo_country_id
+             FROM geo_countries_patents gcp
+            WHERE (p.id = gcp.patent_id)) AS geo_country_ids,
+      p.industrial_publication_gazette,
+      p.observation,
+      p.patent_certificate_document,
+      p.patent_number,
+      p.patent_state_id,
+      ps.name AS patent_state_name,
+      p.research_group_id,
+      p.active,
+      p.created_by,
+      p.updated_by,
+      p.created_at,
+      p.updated_at
+     FROM ((patents p
+       LEFT JOIN categories c ON ((p.category_id = c.id)))
+       LEFT JOIN patent_states ps ON ((p.patent_state_id = ps.id)));
+  SQL
+  create_view "complete_research_cws", sql_definition: <<-SQL
+      SELECT rcw.id,
+      rcw.title,
+      rcw.category_id,
+      c.name AS category_name,
+      rcw.creation_and_selection_date,
+      rcw.geo_city_id,
+      gcity.name AS geo_city_name,
+      gs.geo_country_id,
+      gctry.name AS geo_country_name,
+      gcity.geo_state_id,
+      gs.name AS geo_state_name,
+      rcw.knwl_spec_area_id,
+      ksa.name AS knwl_spec_area_name,
+      rcw.nature_of_work,
+      rcw.observation,
+      rcw.registered_project_title,
+      rcw.url,
+      ARRAY( SELECT rcwwt.work_type_id
+             FROM research_creation_works_work_types rcwwt
+            WHERE (rcw.id = rcwwt.research_creation_work_id)) AS work_type_ids,
+      rcw.research_group_id,
+      rcw.active,
+      rcw.created_by,
+      rcw.updated_by,
+      rcw.created_at,
+      rcw.updated_at
+     FROM (((((research_creation_works rcw
+       LEFT JOIN categories c ON ((rcw.category_id = c.id)))
+       LEFT JOIN geo_cities gcity ON ((rcw.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
+       LEFT JOIN knwl_spec_areas ksa ON ((rcw.knwl_spec_area_id = ksa.id)));
+  SQL
+  create_view "complete_vegetable_varieties", sql_definition: <<-SQL
+      SELECT vv.id,
+      vv.name,
+      vv.category_id,
+      c.name AS category_name,
+      vv.cycle_type_id,
+      ct.name AS cycle_type_name,
+      vv.date,
+      vv.geo_city_id,
+      gcity.name AS geo_city_name,
+      gs.geo_country_id,
+      gctry.name AS geo_country_name,
+      gcity.geo_state_id,
+      gs.name AS geo_state_name,
+      vv.observation,
+      vv.petition_status_id,
+      ps.name AS petition_status_name,
+      vv.research_group_id,
+      vv.vegetable_variety_document,
+      vv.active,
+      vv.created_by,
+      vv.updated_by,
+      vv.created_at,
+      vv.updated_at
+     FROM ((((((vegetable_varieties vv
+       LEFT JOIN categories c ON ((vv.category_id = c.id)))
+       LEFT JOIN cycle_types ct ON ((vv.cycle_type_id = ct.id)))
+       LEFT JOIN geo_cities gcity ON ((vv.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
+       LEFT JOIN petition_statuses ps ON ((vv.petition_status_id = ps.id)));
+  SQL
+  create_view "complete_scientific_notes", sql_definition: <<-SQL
+      SELECT sn.id,
+      sn.title,
+      sn.approval_date,
+      sn.category_id,
+      c.name AS category_name,
+      sn.doi,
+      sn.final_page,
+      sn.geo_city_id,
+      gcity.name AS geo_city_name,
+      gs.geo_country_id,
+      gctry.name AS geo_country_name,
+      gcity.geo_state_id,
+      gs.name AS geo_state_name,
+      sn.initial_page,
+      sn.issn,
+      sn.journal_id,
+      j.name AS journal_name,
+      sn.number_of_pages,
+      sn.observation,
+      sn.publication_date,
+      sn.research_group_id,
+      sn.url,
+      sn.volume,
+      sn.active,
+      sn.created_by,
+      sn.updated_by,
+      sn.created_at,
+      sn.updated_at
+     FROM (((((scientific_notes sn
+       LEFT JOIN categories c ON ((sn.category_id = c.id)))
+       LEFT JOIN geo_cities gcity ON ((sn.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
+       LEFT JOIN journals j ON ((sn.journal_id = j.id)));
   SQL
   create_view "research_units_by_researchers", sql_definition: <<-SQL
       SELECT rs.id,

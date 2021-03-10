@@ -190,6 +190,7 @@ Rails.application.routes.draw do
                 :vegetable_varieties, only: [] do
         resources :ext_participants, only: [:index, :show, :create, :update]
         resources :int_participants, only: [:index, :show, :create, :update]
+        resources :documents, only: [:index, :show, :create, :update]
       end
 
       ## General
