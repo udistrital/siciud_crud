@@ -3,8 +3,8 @@ module Api
     class BooksController < AbstractProductResearchUnitController
       include Swagger::BookApi
 
-      before_action :set_research_group, only: [:index, :show, :create, :update, :deactivate]
-      before_action :set_book, only: [:show, :update, :deactivate]
+      before_action :set_research_group, only: [:index, :show, :create, :update, :change_active]
+      before_action :set_book, only: [:show, :update, :change_active]
 
       # GET /research_group/:id/books
       def index
@@ -55,9 +55,8 @@ module Api
         end
       end
 
-      # PUT /research_group/:id/books/1/deactivate
-      def deactivate
-        @book.active = false
+      # PUT /research_group/:id/books/1/activate
+      def change_active
         if @book.update(book_params_to_deactivate)
           render json: @book
         else
@@ -86,7 +85,7 @@ module Api
       end
 
       def book_params_to_deactivate
-        params.require(:book).permit(:updated_by)
+        params.require(:book).permit(:active, :updated_by)
       end
     end
   end

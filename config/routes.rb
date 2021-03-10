@@ -165,7 +165,7 @@ Rails.application.routes.draw do
         # New generation products endpoints
         # Book
         resources :books, only: [:index, :show, :create, :update]
-        put "/books/:id/deactivate", to: "books#deactivate"
+        put "/books/:id/active", to: "books#change_active"
 
 
         # Book chapter
