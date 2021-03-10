@@ -6,15 +6,6 @@ module Api
       before_action :set_context
       before_action :set_int_participant, only: [:show, :update]
 
-      # Handling of database exceptions
-      rescue_from ActiveRecord::RecordNotFound do |e|
-        render json: {error: e.message}, status: :not_found
-      end
-
-      rescue_from ActiveRecord::RecordInvalid do |e|
-        render json: {error: e.message}, status: :unprocessable_entity
-      end
-
       # GET context/:id/int_participants
       def index
         @int_participants = @context.int_participants.all.order(:id)

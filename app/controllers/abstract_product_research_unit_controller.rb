@@ -2,7 +2,7 @@ class AbstractProductResearchUnitController < ApplicationController
 
   private
 
-  def set_editorial(editorial_name, created_by_user, updated_by_user)
+  def set_editorial(editorial_name, created_by_user)
     editorial = nil
     if editorial_name.is_a? String
       editorial_name = editorial_name.strip
@@ -10,8 +10,7 @@ class AbstractProductResearchUnitController < ApplicationController
       editorial = Editorial.where('lower(name) = ?', editorial_name).first
       if editorial.nil?
         editorial = Editorial.new(name: editorial_name.titleize,
-                                  created_by: created_by_user,
-                                  updated_by: updated_by_user)
+                                  created_by: created_by_user)
         unless editorial.save
           render json: {error: editorial.errors, method: 'set_editorial'},
                  status: :unprocessable_entity and return

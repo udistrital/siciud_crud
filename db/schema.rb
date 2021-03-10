@@ -1904,6 +1904,7 @@ ActiveRecord::Schema.define(version: 2021_03_10_172228) do
        LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
        LEFT JOIN journals j ON ((sn.journal_id = j.id)));
   SQL
+
   create_view "complete_users", sql_definition: <<-SQL
       SELECT u.id,
       u.identification_number,
