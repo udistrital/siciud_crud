@@ -14,6 +14,7 @@ class DxService < ApplicationService
     filter = GetParam(:filter)
     unless filter.nil?
       sql = ""
+
       # 202103090121: Filtros multiples y unicos
       if filter.include? "[["
         # Filtro multiple
@@ -21,18 +22,30 @@ class DxService < ApplicationService
           if element.is_a?(Array) then
             if element[0].is_a?(Array) then
               element.map { |subElement|
-                sql += GetSql(subElement) + " "
+                tSql = GetSql(element)
+                if tSql.length > 0
+                  sql += tSql +" "
+                end
               }
             else
-              sql += " "+GetSql(element)+" "
+              tSql = GetSql(element)
+              if tSql.length > 0
+                sql += " " + tSql +" "
+              end
             end
           else
-            sql += element + " "
+            if element != "" && element != "or"
+              sql += element + " "
+            end
           end
         }
       else
         # Filtro unico
-        sql += " " + GetSql(JSON.parse(filter)) + " "
+        tSql = GetSql(JSON.parse(filter))
+        if tSql.length > 0
+          sql += " " + tSql +" "
+        end
+        
       end
 
       sql = sql.squish
@@ -40,8 +53,10 @@ class DxService < ApplicationService
         arr = sql.split(" = ")
         sql = arr[0]+ "='" + arr[1] + "'"
       end
+
       result.root[:filter] = sql
       @dbSet = @dbSet.where(sql)
+
     end
 
     # Argumentos
@@ -148,11 +163,15 @@ class DxService < ApplicationService
   def self.GetSql(element)
     if element.is_a?(Array) then
       col = element[1] == "contains" ? "LOWER("+element[0]+")" : element[0]
-      op = element[1] == "contains" ? "LIKE" : element[1]
-      term = "'"+(element[1] == "contains" ? "%" + element[2].downcase + "%" : element[2])+"'"
-      col.downcase + " " + op.upcase + " " + term
+      if col != "id" then
+        op = element[1] == "contains" ? "LIKE" : element[1]
+        term = "'"+(element[1] == "contains" ? "%" + element[2].downcase + "%" : element[2])+"'"
+        return col.downcase + " " + op.upcase + " " + term
+      else
+        return ""
+      end
     else
-      element+" KIKI3 "
+      return element+" "
     end
   end
 
