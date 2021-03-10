@@ -36,7 +36,7 @@ module Api
         end
       end
 
-      # PUT /types/1
+      # PUT /types/1/deactivate
       def deactivate
         @type.active = false
         if @type.update(type_params_to_deactivate)
