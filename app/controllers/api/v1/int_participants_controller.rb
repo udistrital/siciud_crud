@@ -20,7 +20,7 @@ module Api
 
       # POST context/:id/int_participants
       def create
-        @int_participant = @context.int_participants.new(int_participant_params)
+        @int_participant = @context.int_participants.new(int_p_params_to_create)
 
         if @int_participant.save
           render json: @int_participant, status: :created
@@ -31,7 +31,7 @@ module Api
 
       # PATCH/PUT context/:id/int_participants/1
       def update
-        if @int_participant.update(int_participant_params)
+        if @int_participant.update(int_p_params_to_update)
           render json: @int_participant
         else
           render json: @int_participant.errors, status: :unprocessable_entity
@@ -46,9 +46,20 @@ module Api
       end
 
       # Only allow a trusted parameter "white list" through.
-      def int_participant_params
+      def int_p_params_to_create
         params.require(:int_participant).permit(:researcher_id,
-                                                :participant_type_id)
+                                                :participant_type_id,
+                                                :created_by)
+      end
+
+      def int_p_params_to_update
+        params.require(:int_participant).permit(:researcher_id,
+                                                :participant_type_id,
+                                                :updated_by)
+      end
+
+      def int_p_params_to_deactivate
+        params.require(:int_participant).permit(:active, :updated_by)
       end
 
       def set_context
