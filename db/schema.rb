@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_10_172228) do
+ActiveRecord::Schema.define(version: 2021_03_11_220925) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -269,7 +269,6 @@ ActiveRecord::Schema.define(version: 2021_03_10_172228) do
     t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
-    t.string "book_document"
     t.index ["category_id"], name: "index_books_on_category_id"
     t.index ["created_by"], name: "index_books_on_created_by"
     t.index ["editorial_id"], name: "index_books_on_editorial_id"
@@ -1652,37 +1651,6 @@ ActiveRecord::Schema.define(version: 2021_03_10_172228) do
        LEFT JOIN journals j ON ((p.journal_id = j.id)))
        LEFT JOIN paper_types pt ON ((p.paper_type_id = pt.id)));
   SQL
-  create_view "complete_books", sql_definition: <<-SQL
-      SELECT b.id,
-      b.title,
-      b.book_document,
-      b.category_id,
-      c.name AS category_name,
-      b.editorial_id,
-      e.name AS editorial_name,
-      b.geo_city_id,
-      gcity.name AS geo_city_name,
-      gs.geo_country_id,
-      gctry.name AS geo_country_name,
-      gcity.geo_state_id,
-      gs.name AS geo_state_name,
-      b.isbn,
-      b.observation,
-      b.publication_date,
-      b.research_group_id,
-      b.url,
-      b.active,
-      b.created_by,
-      b.updated_by,
-      b.created_at,
-      b.updated_at
-     FROM (((((books b
-       LEFT JOIN categories c ON ((b.category_id = c.id)))
-       LEFT JOIN editorials e ON ((b.editorial_id = e.id)))
-       LEFT JOIN geo_cities gcity ON ((b.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
-  SQL
   create_view "complete_book_chapters", sql_definition: <<-SQL
       SELECT bc.id,
       bc.book_title,
@@ -1938,5 +1906,35 @@ ActiveRecord::Schema.define(version: 2021_03_10_172228) do
        JOIN group_members gm ON ((gm.researcher_id = rs.id)))
        JOIN roles rl ON ((rl.id = gm.role_id)))
        JOIN research_groups rg ON ((gm.research_group_id = rg.id)));
+  SQL
+  create_view "complete_books", sql_definition: <<-SQL
+      SELECT b.id,
+      b.title,
+      b.category_id,
+      c.name AS category_name,
+      b.editorial_id,
+      e.name AS editorial_name,
+      b.geo_city_id,
+      gcity.name AS geo_city_name,
+      gs.geo_country_id,
+      gctry.name AS geo_country_name,
+      gcity.geo_state_id,
+      gs.name AS geo_state_name,
+      b.isbn,
+      b.observation,
+      b.publication_date,
+      b.research_group_id,
+      b.url,
+      b.active,
+      b.created_by,
+      b.updated_by,
+      b.created_at,
+      b.updated_at
+     FROM (((((books b
+       LEFT JOIN categories c ON ((b.category_id = c.id)))
+       LEFT JOIN editorials e ON ((b.editorial_id = e.id)))
+       LEFT JOIN geo_cities gcity ON ((b.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
   SQL
 end
