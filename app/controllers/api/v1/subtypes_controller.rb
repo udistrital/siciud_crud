@@ -2,7 +2,10 @@ module Api
   module V1
     class SubtypesController < ApplicationController
       before_action :set_type
-      before_action :set_subtype, only: [:show, :update, :deactivate]
+      before_action :set_subtype, only: [:show, :update, :change_active]
+      before_action only: [:change_active] do
+        active_in_body_params? subtype_params_to_deactivate
+      end
 
       # GET /subtypes
       def index
@@ -36,9 +39,8 @@ module Api
         end
       end
 
-      # PUT /subtypes/1
-      def deactivate
-        @subtype.active = false
+      # PUT /subtypes/1/active
+      def change_active
         if @subtype.update(subtype_params_to_deactivate)
           render json: @subtype
         else
@@ -69,7 +71,7 @@ module Api
       end
 
       def subtype_params_to_deactivate
-        params.require(:subtype).permit(:updated_by)
+        params.require(:subtype).permit(:active, :updated_by)
       end
     end
   end

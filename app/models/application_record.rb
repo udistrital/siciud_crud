@@ -11,6 +11,7 @@ class ApplicationRecord < ActiveRecord::Base
   # https://stackoverflow.com/questions/57532366/how-to-add-foreign-key-in-migration-where-reference-table-has-no-id-column
   belongs_to :user, foreign_key: 'created_by', optional: true
   belongs_to :user, foreign_key: 'updated_by', optional: true
+
   # belongs_to :created_by, class_name: "User", foreign_key: 'created_by', optional: true
   # belongs_to :updated_by, class_name: "User", foreign_key: 'updated_by', optional: true
 

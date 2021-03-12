@@ -3,13 +3,16 @@ module Api
     class PapersController < AbstractProductResearchUnitController
       include Swagger::PaperApi
 
-      before_action :set_research_group, only: [:index, :show, :create, :update]
-      before_action :set_paper, only: [:show, :update]
+      before_action :set_research_group
+      before_action :set_paper, only: [:show, :update, :change_active]
+      before_action only: [:change_active] do
+        active_in_body_params? paper_params_to_deactivate
+      end
 
       # GET /research_group/:id/papers
       def index
         list_papers = CompletePaper.where(
-            research_group_id: params[:research_group_id])
+          research_group_id: params[:research_group_id])
         @papers = DxService.load(list_papers, params)
         render json: @papers
       end
@@ -21,9 +24,9 @@ module Api
 
       # POST /research_group/:id/papers
       def create
-        @paper = @research_group.papers.new(paper_params.except(:journal_name))
-        journal = set_journal(params[:paper][:journal_name], @paper.created_by,
-                              @paper.updated_by)
+        @paper = @research_group.papers.new(
+          paper_params_to_create.except(:journal_name))
+        journal = set_journal(params[:paper][:journal_name], @paper.created_by)
         if journal
           @paper.journal = journal
         else
@@ -39,8 +42,7 @@ module Api
 
       # PATCH/PUT /research_group/:id/papers/1
       def update
-        journal = set_journal(params[:paper][:journal_name], @paper.created_by,
-                              @paper.updated_by)
+        journal = set_journal(params[:paper][:journal_name], @paper.created_by)
         if journal
           @paper.journal = journal
         else
@@ -49,17 +51,26 @@ module Api
 
         if @paper.created_by.nil?
           # Update user of created_by only this is nil
-          if @paper.update(paper_params.except(:journal_name))
+          if @paper.update(paper_params_to_update.except(:journal_name))
             render json: @paper
           else
             render json: @paper.errors, status: :unprocessable_entity
           end
         else
-          if @paper.update(paper_params.except(:journal_name, :created_by))
+          if @paper.update(paper_params_to_update.except(:journal_name))
             render json: @paper
           else
             render json: @paper.errors, status: :unprocessable_entity
           end
+        end
+      end
+
+      # PUT /research_group/:id/papers/1/active
+      def change_active
+        if @paper.update(paper_params_to_deactivate)
+          render json: @paper
+        else
+          render json: @paper.errors, status: :unprocessable_entity
         end
       end
 
@@ -71,13 +82,28 @@ module Api
       end
 
       # Only allow a trusted parameter "white list" through.
-      def paper_params
-        params.require(:paper).permit(:title, :publication_date, :approval_date,
-                                      :volume, :number_of_pages, :initial_page,
+      def paper_params_to_create
+        params.require(:paper).permit(:title, :publication_date,
+                                      :approval_date, :volume,
+                                      :number_of_pages, :initial_page,
+                                      :final_page, :issn, :url, :doi,
+                                      :observation, :category_id,
+                                      :paper_type_id,
+                                      :geo_city_id, :journal_name,
+                                      :created_by)
+      end
+
+      def paper_params_to_update
+        params.require(:paper).permit(:title, :publication_date,
+                                      :approval_date, :volume,
+                                      :number_of_pages, :initial_page,
                                       :final_page, :issn, :url, :doi,
                                       :observation, :category_id, :paper_type_id,
-                                      :geo_city_id, :journal_name, :active,
-                                      :created_by, :updated_by)
+                                      :geo_city_id, :journal_name, :updated_by)
+      end
+
+      def paper_params_to_deactivate
+        params.require(:paper).permit(:active, :updated_by)
       end
     end
   end

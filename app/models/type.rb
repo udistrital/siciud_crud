@@ -1,4 +1,8 @@
 class Type < ApplicationRecord
+
+  belongs_to :t_parent, class_name: 'Type', optional: true
+
+  has_many :types
   has_many :subtypes
 
   # Tracking inherited from ApplicationRecord, fields:
