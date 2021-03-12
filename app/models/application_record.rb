@@ -12,9 +12,6 @@ class ApplicationRecord < ActiveRecord::Base
   belongs_to :user, foreign_key: 'created_by', optional: true
   belongs_to :user, foreign_key: 'updated_by', optional: true
 
-  validates :created_by, presence: true, allow_nil: false, on: :create
-  validates :updated_by, presence: true, allow_nil: false, on: :update
-  validate :validate_created_by, :validate_updated_by
   # belongs_to :created_by, class_name: "User", foreign_key: 'created_by', optional: true
   # belongs_to :updated_by, class_name: "User", foreign_key: 'updated_by', optional: true
 

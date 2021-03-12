@@ -20,7 +20,7 @@ class AbstractProductResearchUnitController < ApplicationController
     editorial
   end
 
-  def set_journal(journal_name, created_by_user, updated_by_user)
+  def set_journal(journal_name, created_by_user)
     journal = nil
     if journal_name.is_a? String
       journal_name = journal_name.strip
@@ -28,8 +28,7 @@ class AbstractProductResearchUnitController < ApplicationController
       journal = Journal.where('lower(name) = ?', journal_name).first
       if journal.nil?
         journal = Journal.new(name: journal_name.titleize,
-                              created_by: created_by_user,
-                              updated_by: updated_by_user)
+                              created_by: created_by_user)
         unless journal.save
           render json: {error: journal.errors, method: 'set_journal'},
                  status: :unprocessable_entity and return

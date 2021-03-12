@@ -179,6 +179,8 @@ Rails.application.routes.draw do
         put "new_animal_breeds/:id/attach/", to: "new_animal_breeds#attach"
 
         resources :papers, only: [:index, :show, :create, :update]
+        put "/papers/:id/active", to: "papers#change_active"
+
         resources :patents, only: [:index, :show, :create, :update]
         resources :research_creation_works, only: [:index, :show, :create, :update]
         resources :scientific_notes, only: [:index, :show, :create, :update]

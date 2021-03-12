@@ -11,12 +11,12 @@ rake import_research_groups:data
 rake add_group_roles:data
 rake import_researchers:data
 rake import_research_groups_members:data
-rake import_geos:load_data
 
 # NOTE: 202011092136: 'postgresql-client' se requiere en la máquina:
 # RUN apt-get update -qq && apt-get install -y nodejs postgresql-client
 #
 # Does not work with environment variables, use rake task
-# rails db -p <db/data/01-data-country.sql
-# rails db -p <db/data/02-data-state.sql
-# rails db -p <db/data/03-data-city.sql
+# rake import_geos:load_data
+ rails db -p <db/data/01-data-country.sql
+ rails db -p <db/data/02-data-state.sql
+ rails db -p <db/data/03-data-city.sql
