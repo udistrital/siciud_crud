@@ -4,16 +4,7 @@ module Api
       include Swagger::ExtParticipantApi
 
       before_action :set_context
-      before_action :set_ext_participant, only: [:show, :update, :destroy]
-
-      # Handling of database exceptions
-      rescue_from ActiveRecord::RecordNotFound do |e|
-        render json: {error: e.message}, status: :not_found
-      end
-
-      rescue_from ActiveRecord::RecordInvalid do |e|
-        render json: {error: e.message}, status: :unprocessable_entity
-      end
+      before_action :set_ext_participant, only: [:show, :update]
 
       # GET context/:id/ext_participants
       def index
@@ -55,9 +46,22 @@ module Api
       end
 
       # Only allow a trusted parameter "white list" through.
-      def ext_participant_params
+      def ext_p_params_to_create
         params.require(:ext_participant).permit(:first_name,
                                                 :last_name,
+                                                :participant_type_id,
+                                                :created_by)
+      end
+
+      def ext_p_params_to_update
+        params.require(:ext_participant).permit(:first_name,
+                                                :last_name,
+                                                :participant_type_id,
+                                                :updated_by)
+      end
+
+      def ext_p_params_to_deactivate
+        params.require(:ext_participant).permit(:active,
                                                 :participant_type_id)
       end
 
