@@ -25,9 +25,9 @@ Rails.application.routes.draw do
       # Types and Subtypes endpoints
       resources :types, only: [:index, :show, :create, :update] do
         resources :subtypes, only: [:index, :show, :create, :update]
-        put "/subtypes/:id/deactivate", to: "subtypes#deactivate"
+        put "/subtypes/:id/active", to: "subtypes#change_active"
       end
-      put "/types/:id/deactivate", to: "types#deactivate"
+      put "/types/:id/active", to: "types#change_active"
 
       # Endpoint para listar las unidades de investigacion
       resources :research_unit, only: [:index, :show]

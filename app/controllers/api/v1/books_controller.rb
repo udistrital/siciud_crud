@@ -5,6 +5,9 @@ module Api
 
       before_action :set_research_group
       before_action :set_book, only: [:show, :update, :change_active]
+      before_action only: [:change_active] do
+        active_in_body_params? book_params_to_deactivate
+      end
 
       # GET /research_group/:id/books
       def index
@@ -55,7 +58,7 @@ module Api
         end
       end
 
-      # PUT /research_group/:id/books/1/activate
+      # PUT /research_group/:id/books/1/active
       def change_active
         if @book.update(book_params_to_deactivate)
           render json: @book
