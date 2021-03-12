@@ -9,6 +9,12 @@ class DxService < ApplicationService
     # Resultado
     result = OpenStruct.new(root:{})
 
+    # 202103120948: Filtro por IDs (ids=507,211,395)
+    ids = GetParam(:ids)
+    unless ids.nil?
+      @dbSet = @dbSet.where("id in ("+ ids +")")
+    end
+
     # Filtro y grupo
     group = GetParam(:group)
     filter = GetParam(:filter)

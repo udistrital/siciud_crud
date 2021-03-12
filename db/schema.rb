@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_12_040840) do
+ActiveRecord::Schema.define(version: 2021_03_12_172901) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1320,7 +1320,7 @@ ActiveRecord::Schema.define(version: 2021_03_12_040840) do
     t.string "identification_number"
     t.string "oas_user_id"
     t.bigint "user_role_id"
-    t.boolean "active"
+    t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
     t.index ["created_by"], name: "index_users_on_created_by"
