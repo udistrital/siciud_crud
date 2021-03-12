@@ -57,11 +57,13 @@ module Api
 
       # Only allow a trusted parameter "white list" through.
       def type_params_to_create
-        params.require(:type).permit(:t_name, :t_description, :created_by)
+        params.require(:type).permit(:t_name, :t_parent_id, :t_description,
+                                     :created_by)
       end
 
       def type_params_to_update
-        params.require(:type).permit(:t_name, :t_description, :updated_by)
+        params.require(:type).permit(:t_name, :t_parent_id, :t_description,
+                                     :updated_by)
       end
 
       def type_params_to_deactivate
