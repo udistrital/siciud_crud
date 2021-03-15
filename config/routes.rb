@@ -105,6 +105,7 @@ Rails.application.routes.draw do
         put "arp_payment/:id/attach/", to: "arp_payment#attach"
       end
       resources :users, only: [:index, :show, :create, :update]
+      put "/users/:id/active", to: "users#change_active"
 
       # Enpoint CRUD de los grupos de investigacion
       resources :research_group, only: [:index, :show, :create, :update] do

@@ -3,10 +3,13 @@ module Api
     class UsersController < ApplicationController
       include Swagger::UserApi
 
-      before_action :set_user, only: [:show, :update]
+      before_action :set_user, only: [:show, :update, :change_active]
+      before_action only: [:change_active] do
+        active_in_body_params? user_params_to_deactivate
+      end
 
       rescue_from Exception do |e|
-        render json: {error: e.message}, status: :internal_error
+        render json: { error: e.message }, status: :internal_error
       end
 
       # GET /users
@@ -26,7 +29,7 @@ module Api
 
       # POST /users
       def create
-        @user = User.new(user_params)
+        @user = User.new(user_params_to_create)
         @user.active = true
 
         if @user.save
@@ -40,7 +43,7 @@ module Api
       def update
         if @user.created_by.nil?
           # Update user of created_by only this is nil
-          if @user.update(user_params)
+          if @user.update(user_params_to_update)
             render json: @user
           else
             render json: @user.errors, status: :unprocessable_entity
@@ -54,6 +57,14 @@ module Api
         end
       end
 
+      # PUT /users/1/active
+      def change_active
+        if @user.update(user_params_to_deactivate)
+          render json: @user
+        else
+          render json: @user.errors, status: :unprocessable_entity
+        end
+      end
 
       private
 
@@ -63,10 +74,20 @@ module Api
       end
 
       # Only allow a trusted parameter "white list" through.
-      def user_params
+      def user_params_to_create
         params.require(:user).permit(:identification_number, :oas_user_id,
                                      :user_role_id, :active,
-                                     :created_by, :updated_by)
+                                     :created_by)
+      end
+
+      def user_params_to_update
+        params.require(:user).permit(:identification_number, :oas_user_id,
+                                     :user_role_id, :active,
+                                     :updated_by)
+      end
+
+      def user_params_to_deactivate
+        params.require(:user).permit(:active, :updated_by)
       end
     end
   end
