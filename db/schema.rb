@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_15_153449) do
+ActiveRecord::Schema.define(version: 2021_03_15_171015) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -269,7 +269,9 @@ ActiveRecord::Schema.define(version: 2021_03_15_153449) do
     t.bigint "created_by"
     t.bigint "updated_by"
     t.bigint "category_id"
+    t.bigint "colciencias_call_id"
     t.index ["category_id"], name: "index_books_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_books_on_colciencias_call_id"
     t.index ["created_by"], name: "index_books_on_created_by"
     t.index ["editorial_id"], name: "index_books_on_editorial_id"
     t.index ["geo_city_id"], name: "index_books_on_geo_city_id"
@@ -1375,6 +1377,7 @@ ActiveRecord::Schema.define(version: 2021_03_15_153449) do
   add_foreign_key "book_chapters", "research_groups"
   add_foreign_key "book_chapters", "users", column: "created_by"
   add_foreign_key "book_chapters", "users", column: "updated_by"
+  add_foreign_key "books", "colciencias_calls"
   add_foreign_key "books", "editorials"
   add_foreign_key "books", "geo_cities"
   add_foreign_key "books", "research_groups"
@@ -1914,7 +1917,10 @@ ActiveRecord::Schema.define(version: 2021_03_15_153449) do
       SELECT b.id,
       b.title,
       b.category_id,
-      st.st_name,
+      st.st_name AS category_name,
+      b.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
       b.editorial_id,
       e.name AS editorial_name,
       b.geo_city_id,
@@ -1933,8 +1939,9 @@ ActiveRecord::Schema.define(version: 2021_03_15_153449) do
       b.updated_by,
       b.created_at,
       b.updated_at
-     FROM (((((books b
+     FROM ((((((books b
        LEFT JOIN subtypes st ON ((b.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((b.colciencias_call_id = cc.id)))
        LEFT JOIN editorials e ON ((b.editorial_id = e.id)))
        LEFT JOIN geo_cities gcity ON ((b.geo_city_id = gcity.id)))
        LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))

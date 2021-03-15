@@ -3,7 +3,21 @@ class AbstractProductNewKnwGenSerializer < AbstractGeneralSerializer
   def category_name
     category = self.object.category
     if category
-      category.name
+      category.st_name
+    end
+  end
+
+  def colciencias_call_name
+    colciencias_call = self.object.colciencias_call
+    if colciencias_call
+      colciencias_call.name
+    end
+  end
+
+  def colciencias_call_year
+    colciencias_call = self.object.colciencias_call
+    if colciencias_call
+      colciencias_call.year
     end
   end
 
