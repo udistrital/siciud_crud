@@ -3,13 +3,16 @@ module Api
     class BookChaptersController < AbstractProductResearchUnitController
       include Swagger::BookChapterApi
 
-      before_action :set_research_group, only: [:index, :show, :create, :update]
-      before_action :set_book_chapter, only: [:show, :update]
+      before_action :set_research_group
+      before_action :set_book_chapter, only: [:show, :update, :change_active]
+      before_action only: [:change_active] do
+        active_in_body_params? book_chap_params_to_deactivate
+      end
 
       # GET /research_group/:id/book_chapters
       def index
         book_chapters_by_ru = CompleteBookChapter.where(
-            research_group_id: params[:research_group_id])
+          research_group_id: params[:research_group_id])
         @book_chapters = DxService.load(book_chapters_by_ru, params)
         render json: @book_chapters
       end
@@ -22,12 +25,11 @@ module Api
       # POST /research_group/:id/book_chapters
       def create
         @book_chapter = @research_group.book_chapters.new(
-            book_chapter_params.except(:editorial_name)
+          book_chapter_params_to_create.except(:editorial_name)
         )
 
         editorial = set_editorial(params[:book_chapter][:editorial_name],
-                                  @book_chapter.created_by,
-                                  @book_chapter.updated_by)
+                                  @book_chapter.created_by)
         if editorial
           @book_chapter.editorial = editorial
         else
@@ -44,28 +46,26 @@ module Api
       # PATCH/PUT /research_group/:id/book_chapters/1
       def update
         editorial = set_editorial(params[:book_chapter][:editorial_name],
-                                  @book_chapter.created_by,
-                                  @book_chapter.updated_by)
+                                  @book_chapter.created_by)
         if editorial
           @book_chapter.editorial = editorial
         else
           return
         end
 
-        if @book_chapter.created_by.nil?
-          # Update user of created_by only this is nil
-          if @book_chapter.update(book_chapter_params.except(:editorial_name))
-            render json: @book_chapter
-          else
-            render json: @book_chapter.errors, status: :unprocessable_entity
-          end
+        if @book_chapter.update(book_chapter_params_to_update.except(:editorial_name))
+          render json: @book_chapter
         else
-          if @book_chapter.update(book_chapter_params.except(:editorial_name,
-                                                             :created_by))
-            render json: @book_chapter
-          else
-            render json: @book_chapter.errors, status: :unprocessable_entity
-          end
+          render json: @book_chapter.errors, status: :unprocessable_entity
+        end
+      end
+
+      # PUT /research_group/:id/book_chapters/1/active
+      def change_active
+        if @book_chapter.update(book_chap_params_to_deactivate)
+          render json: @book_chapter
+        else
+          render json: @book_chapter.errors, status: :unprocessable_entity
         end
       end
 
@@ -77,13 +77,36 @@ module Api
       end
 
       # Only allow a trusted parameter "white list" through.
-      def book_chapter_params
+      def book_chapter_params_to_create
         params.require(:book_chapter).permit(:book_title, :title,
                                              :publication_date, :isbn,
                                              :doi, :url, :observation,
-                                             :category_id, :geo_city_id,
+                                             :category_id, :colciencias_call_id,
+                                             :geo_city_id,
                                              :editorial_name,
-                                             :book_chapter_document, :active,
+                                             :active,
+                                             :created_by, :updated_by)
+      end
+
+      def book_chapter_params_to_update
+        params.require(:book_chapter).permit(:book_title, :title,
+                                             :publication_date, :isbn,
+                                             :doi, :url, :observation,
+                                             :category_id, :colciencias_call_id,
+                                             :geo_city_id,
+                                             :editorial_name,
+                                             :active,
+                                             :created_by, :updated_by)
+      end
+
+      def book_chap_params_to_deactivate
+        params.require(:book_chapter).permit(:book_title, :title,
+                                             :publication_date, :isbn,
+                                             :doi, :url, :observation,
+                                             :category_id, :colciencias_call_id,
+                                             :geo_city_id,
+                                             :editorial_name,
+                                             :active,
                                              :created_by, :updated_by)
       end
     end

@@ -170,7 +170,7 @@ Rails.application.routes.draw do
 
         # Book chapter
         resources :book_chapters, only: [:index, :show, :create, :update]
-        put "book_chapters/:id/attach/", to: "book_chapters#attach"
+        put "book_chapters/:id/active/", to: "book_chapters#change_active"
 
         resources :ip_livestock_breeds, only: [:index, :show, :create, :update]
         put "ip_livestock_breeds/:id/attach/", to: "ip_livestock_breeds#attach"

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_15_171015) do
+ActiveRecord::Schema.define(version: 2021_03_15_174203) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -236,7 +236,6 @@ ActiveRecord::Schema.define(version: 2021_03_15_171015) do
     t.string "doi"
     t.string "url"
     t.text "observation"
-    t.bigint "category_id"
     t.bigint "editorial_id"
     t.bigint "research_group_id"
     t.datetime "created_at", null: false
@@ -246,7 +245,10 @@ ActiveRecord::Schema.define(version: 2021_03_15_171015) do
     t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
+    t.bigint "category_id"
+    t.bigint "colciencias_call_id"
     t.index ["category_id"], name: "index_book_chapters_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_book_chapters_on_colciencias_call_id"
     t.index ["created_by"], name: "index_book_chapters_on_created_by"
     t.index ["editorial_id"], name: "index_book_chapters_on_editorial_id"
     t.index ["geo_city_id"], name: "index_book_chapters_on_geo_city_id"
@@ -1371,10 +1373,11 @@ ActiveRecord::Schema.define(version: 2021_03_15_171015) do
   add_foreign_key "awards", "research_creation_works"
   add_foreign_key "awards", "users", column: "created_by"
   add_foreign_key "awards", "users", column: "updated_by"
-  add_foreign_key "book_chapters", "categories"
+  add_foreign_key "book_chapters", "colciencias_calls"
   add_foreign_key "book_chapters", "editorials"
   add_foreign_key "book_chapters", "geo_cities"
   add_foreign_key "book_chapters", "research_groups"
+  add_foreign_key "book_chapters", "subtypes", column: "category_id"
   add_foreign_key "book_chapters", "users", column: "created_by"
   add_foreign_key "book_chapters", "users", column: "updated_by"
   add_foreign_key "books", "colciencias_calls"
@@ -1657,39 +1660,6 @@ ActiveRecord::Schema.define(version: 2021_03_15_171015) do
        LEFT JOIN journals j ON ((p.journal_id = j.id)))
        LEFT JOIN paper_types pt ON ((p.paper_type_id = pt.id)));
   SQL
-  create_view "complete_book_chapters", sql_definition: <<-SQL
-      SELECT bc.id,
-      bc.book_title,
-      bc.title,
-      bc.book_chapter_document,
-      bc.category_id,
-      c.name AS category_name,
-      bc.doi,
-      bc.editorial_id,
-      e.name AS editorial_name,
-      bc.geo_city_id,
-      gcity.name AS geo_city_name,
-      gs.geo_country_id,
-      gctry.name AS geo_country_name,
-      gcity.geo_state_id,
-      gs.name AS geo_state_name,
-      bc.isbn,
-      bc.observation,
-      bc.publication_date,
-      bc.research_group_id,
-      bc.url,
-      bc.active,
-      bc.created_by,
-      bc.updated_by,
-      bc.created_at,
-      bc.updated_at
-     FROM (((((book_chapters bc
-       LEFT JOIN categories c ON ((bc.category_id = c.id)))
-       LEFT JOIN editorials e ON ((bc.editorial_id = e.id)))
-       LEFT JOIN geo_cities gcity ON ((bc.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
-  SQL
   create_view "complete_ipl_breeds", sql_definition: <<-SQL
       SELECT iplb.id,
       iplb.name,
@@ -1944,6 +1914,42 @@ ActiveRecord::Schema.define(version: 2021_03_15_171015) do
        LEFT JOIN colciencias_calls cc ON ((b.colciencias_call_id = cc.id)))
        LEFT JOIN editorials e ON ((b.editorial_id = e.id)))
        LEFT JOIN geo_cities gcity ON ((b.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_book_chapters", sql_definition: <<-SQL
+      SELECT bc.id,
+      bc.book_title,
+      bc.title,
+      bc.category_id,
+      st.st_name AS category_name,
+      bc.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      bc.doi,
+      bc.editorial_id,
+      e.name AS editorial_name,
+      bc.geo_city_id,
+      gcity.name AS geo_city_name,
+      gs.geo_country_id,
+      gctry.name AS geo_country_name,
+      gcity.geo_state_id,
+      gs.name AS geo_state_name,
+      bc.isbn,
+      bc.observation,
+      bc.publication_date,
+      bc.research_group_id,
+      bc.url,
+      bc.active,
+      bc.created_by,
+      bc.updated_by,
+      bc.created_at,
+      bc.updated_at
+     FROM ((((((book_chapters bc
+       LEFT JOIN subtypes st ON ((bc.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((bc.colciencias_call_id = cc.id)))
+       LEFT JOIN editorials e ON ((bc.editorial_id = e.id)))
+       LEFT JOIN geo_cities gcity ON ((bc.geo_city_id = gcity.id)))
        LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
        LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
   SQL
