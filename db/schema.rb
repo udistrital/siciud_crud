@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_15_174203) do
+ActiveRecord::Schema.define(version: 2021_03_15_230722) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -241,7 +241,6 @@ ActiveRecord::Schema.define(version: 2021_03_15_174203) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "geo_city_id"
-    t.string "book_chapter_document"
     t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
@@ -900,18 +899,19 @@ ActiveRecord::Schema.define(version: 2021_03_15_174203) do
     t.string "url"
     t.string "doi"
     t.text "observation"
-    t.bigint "category_id"
     t.bigint "journal_id"
-    t.bigint "paper_type_id"
     t.bigint "research_group_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "geo_city_id"
-    t.string "paper_document"
     t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
+    t.bigint "category_id"
+    t.bigint "paper_type_id"
+    t.bigint "colciencias_call_id"
     t.index ["category_id"], name: "index_papers_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_papers_on_colciencias_call_id"
     t.index ["created_by"], name: "index_papers_on_created_by"
     t.index ["geo_city_id"], name: "index_papers_on_geo_city_id"
     t.index ["journal_id"], name: "index_papers_on_journal_id"
@@ -1481,11 +1481,12 @@ ActiveRecord::Schema.define(version: 2021_03_15_174203) do
   add_foreign_key "oecd_knowledge_subareas", "users", column: "updated_by"
   add_foreign_key "paper_types", "users", column: "created_by"
   add_foreign_key "paper_types", "users", column: "updated_by"
-  add_foreign_key "papers", "categories"
+  add_foreign_key "papers", "colciencias_calls"
   add_foreign_key "papers", "geo_cities"
   add_foreign_key "papers", "journals"
-  add_foreign_key "papers", "paper_types"
   add_foreign_key "papers", "research_groups"
+  add_foreign_key "papers", "subtypes", column: "category_id"
+  add_foreign_key "papers", "subtypes", column: "paper_type_id"
   add_foreign_key "papers", "users", column: "created_by"
   add_foreign_key "papers", "users", column: "updated_by"
   add_foreign_key "participant_types", "users", column: "created_by"
@@ -1620,45 +1621,6 @@ ActiveRecord::Schema.define(version: 2021_03_15_174203) do
       rg.created_by,
       rg.updated_by
      FROM research_groups rg;
-  SQL
-  create_view "complete_papers", sql_definition: <<-SQL
-      SELECT p.id,
-      p.title,
-      p.approval_date,
-      p.category_id,
-      c.name AS category_name,
-      p.doi,
-      p.final_page,
-      p.geo_city_id,
-      gcity.name AS geo_city_name,
-      gs.geo_country_id,
-      gctry.name AS geo_country_name,
-      gcity.geo_state_id,
-      gs.name AS geo_state_name,
-      p.initial_page,
-      p.issn,
-      p.journal_id,
-      j.name AS journal_name,
-      p.number_of_pages,
-      p.observation,
-      p.paper_type_id,
-      pt.name AS paper_type_name,
-      p.publication_date,
-      p.research_group_id,
-      p.url,
-      p.volume,
-      p.active,
-      p.created_by,
-      p.updated_by,
-      p.created_at,
-      p.updated_at
-     FROM ((((((papers p
-       LEFT JOIN categories c ON ((p.category_id = c.id)))
-       LEFT JOIN geo_cities gcity ON ((p.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
-       LEFT JOIN journals j ON ((p.journal_id = j.id)))
-       LEFT JOIN paper_types pt ON ((p.paper_type_id = pt.id)));
   SQL
   create_view "complete_ipl_breeds", sql_definition: <<-SQL
       SELECT iplb.id,
@@ -1952,5 +1914,48 @@ ActiveRecord::Schema.define(version: 2021_03_15_174203) do
        LEFT JOIN geo_cities gcity ON ((bc.geo_city_id = gcity.id)))
        LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
        LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_papers", sql_definition: <<-SQL
+      SELECT p.id,
+      p.title,
+      p.approval_date,
+      p.category_id,
+      stc.st_name AS category_name,
+      p.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      p.doi,
+      p.final_page,
+      p.geo_city_id,
+      gcity.name AS geo_city_name,
+      gs.geo_country_id,
+      gctry.name AS geo_country_name,
+      gcity.geo_state_id,
+      gs.name AS geo_state_name,
+      p.initial_page,
+      p.issn,
+      p.journal_id,
+      j.name AS journal_name,
+      p.number_of_pages,
+      p.observation,
+      p.paper_type_id,
+      stpt.st_name AS paper_type_name,
+      p.publication_date,
+      p.research_group_id,
+      p.url,
+      p.volume,
+      p.active,
+      p.created_by,
+      p.updated_by,
+      p.created_at,
+      p.updated_at
+     FROM (((((((papers p
+       LEFT JOIN subtypes stc ON ((p.category_id = stc.id)))
+       LEFT JOIN colciencias_calls cc ON ((p.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((p.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
+       LEFT JOIN journals j ON ((p.journal_id = j.id)))
+       LEFT JOIN subtypes stpt ON ((p.paper_type_id = stpt.id)));
   SQL
 end
