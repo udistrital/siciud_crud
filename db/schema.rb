@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_12_172901) do
+ActiveRecord::Schema.define(version: 2021_03_15_153449) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -260,7 +260,6 @@ ActiveRecord::Schema.define(version: 2021_03_12_172901) do
     t.string "isbn"
     t.string "url"
     t.text "observation"
-    t.bigint "category_id"
     t.bigint "editorial_id"
     t.bigint "research_group_id"
     t.datetime "created_at", null: false
@@ -269,6 +268,7 @@ ActiveRecord::Schema.define(version: 2021_03_12_172901) do
     t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
+    t.bigint "category_id"
     t.index ["category_id"], name: "index_books_on_category_id"
     t.index ["created_by"], name: "index_books_on_created_by"
     t.index ["editorial_id"], name: "index_books_on_editorial_id"
@@ -1375,10 +1375,10 @@ ActiveRecord::Schema.define(version: 2021_03_12_172901) do
   add_foreign_key "book_chapters", "research_groups"
   add_foreign_key "book_chapters", "users", column: "created_by"
   add_foreign_key "book_chapters", "users", column: "updated_by"
-  add_foreign_key "books", "categories"
   add_foreign_key "books", "editorials"
   add_foreign_key "books", "geo_cities"
   add_foreign_key "books", "research_groups"
+  add_foreign_key "books", "subtypes", column: "category_id"
   add_foreign_key "books", "users", column: "created_by"
   add_foreign_key "books", "users", column: "updated_by"
   add_foreign_key "call_item_categories", "calls"
@@ -1914,7 +1914,7 @@ ActiveRecord::Schema.define(version: 2021_03_12_172901) do
       SELECT b.id,
       b.title,
       b.category_id,
-      c.name AS category_name,
+      st.st_name,
       b.editorial_id,
       e.name AS editorial_name,
       b.geo_city_id,
@@ -1934,7 +1934,7 @@ ActiveRecord::Schema.define(version: 2021_03_12_172901) do
       b.created_at,
       b.updated_at
      FROM (((((books b
-       LEFT JOIN categories c ON ((b.category_id = c.id)))
+       LEFT JOIN subtypes st ON ((b.category_id = st.id)))
        LEFT JOIN editorials e ON ((b.editorial_id = e.id)))
        LEFT JOIN geo_cities gcity ON ((b.geo_city_id = gcity.id)))
        LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
