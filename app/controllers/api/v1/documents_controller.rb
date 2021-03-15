@@ -50,7 +50,7 @@ module Api
 
       # Use callbacks to share common setup or constraints between actions.
       def set_document
-        @document = Document.find(params[:id])
+        @document = @context.documents.find(params[:id])
       end
 
       # Only allow a trusted parameter "white list" through.
@@ -61,11 +61,11 @@ module Api
 
       def document_params_to_update
         params.require(:document).permit(:doc_name, :doc_path, :doc_size,
-                                         :document_type_id, :updated_by_id)
+                                         :document_type_id, :updated_by)
       end
 
       def document_params_to_deactivate
-        params.require(:document).permit(:updated_by_id)
+        params.require(:document).permit(:updated_by)
       end
 
       def set_context_product
