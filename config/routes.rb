@@ -183,7 +183,10 @@ Rails.application.routes.draw do
 
         resources :patents, only: [:index, :show, :create, :update]
         resources :research_creation_works, only: [:index, :show, :create, :update]
+
         resources :scientific_notes, only: [:index, :show, :create, :update]
+        put "/scientific_notes/:id/active", to: "scientific_notes#change_active"
+
         resources :vegetable_varieties, only: [:index, :show, :create, :update]
       end
 

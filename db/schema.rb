@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_15_230722) do
+ActiveRecord::Schema.define(version: 2021_03_16_001519) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1211,18 +1211,19 @@ ActiveRecord::Schema.define(version: 2021_03_15_230722) do
     t.string "url"
     t.string "doi"
     t.text "observation"
-    t.bigint "category_id"
     t.bigint "journal_id"
     t.bigint "research_group_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "geo_city_id"
     t.date "approval_date"
-    t.string "scientific_note_document"
     t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
+    t.bigint "category_id"
+    t.bigint "colciencias_call_id"
     t.index ["category_id"], name: "index_scientific_notes_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_scientific_notes_on_colciencias_call_id"
     t.index ["created_by"], name: "index_scientific_notes_on_created_by"
     t.index ["geo_city_id"], name: "index_scientific_notes_on_geo_city_id"
     t.index ["journal_id"], name: "index_scientific_notes_on_journal_id"
@@ -1525,10 +1526,11 @@ ActiveRecord::Schema.define(version: 2021_03_15_230722) do
   add_foreign_key "researchers", "users", column: "updated_by"
   add_foreign_key "roles", "users", column: "created_by"
   add_foreign_key "roles", "users", column: "updated_by"
-  add_foreign_key "scientific_notes", "categories"
+  add_foreign_key "scientific_notes", "colciencias_calls"
   add_foreign_key "scientific_notes", "geo_cities"
   add_foreign_key "scientific_notes", "journals"
   add_foreign_key "scientific_notes", "research_groups"
+  add_foreign_key "scientific_notes", "subtypes", column: "category_id"
   add_foreign_key "scientific_notes", "users", column: "created_by"
   add_foreign_key "scientific_notes", "users", column: "updated_by"
   add_foreign_key "subtypes", "subtypes", column: "parent_id"
@@ -1774,42 +1776,6 @@ ActiveRecord::Schema.define(version: 2021_03_15_230722) do
        LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
        LEFT JOIN petition_statuses ps ON ((vv.petition_status_id = ps.id)));
   SQL
-  create_view "complete_scientific_notes", sql_definition: <<-SQL
-      SELECT sn.id,
-      sn.title,
-      sn.approval_date,
-      sn.category_id,
-      c.name AS category_name,
-      sn.doi,
-      sn.final_page,
-      sn.geo_city_id,
-      gcity.name AS geo_city_name,
-      gs.geo_country_id,
-      gctry.name AS geo_country_name,
-      gcity.geo_state_id,
-      gs.name AS geo_state_name,
-      sn.initial_page,
-      sn.issn,
-      sn.journal_id,
-      j.name AS journal_name,
-      sn.number_of_pages,
-      sn.observation,
-      sn.publication_date,
-      sn.research_group_id,
-      sn.url,
-      sn.volume,
-      sn.active,
-      sn.created_by,
-      sn.updated_by,
-      sn.created_at,
-      sn.updated_at
-     FROM (((((scientific_notes sn
-       LEFT JOIN categories c ON ((sn.category_id = c.id)))
-       LEFT JOIN geo_cities gcity ON ((sn.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
-       LEFT JOIN journals j ON ((sn.journal_id = j.id)));
-  SQL
   create_view "complete_users", sql_definition: <<-SQL
       SELECT u.id,
       u.identification_number,
@@ -1957,5 +1923,45 @@ ActiveRecord::Schema.define(version: 2021_03_15_230722) do
        LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
        LEFT JOIN journals j ON ((p.journal_id = j.id)))
        LEFT JOIN subtypes stpt ON ((p.paper_type_id = stpt.id)));
+  SQL
+  create_view "complete_scientific_notes", sql_definition: <<-SQL
+      SELECT sn.id,
+      sn.title,
+      sn.approval_date,
+      sn.category_id,
+      st.st_name AS category_name,
+      sn.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      sn.doi,
+      sn.final_page,
+      sn.geo_city_id,
+      gcity.name AS geo_city_name,
+      gs.geo_country_id,
+      gctry.name AS geo_country_name,
+      gcity.geo_state_id,
+      gs.name AS geo_state_name,
+      sn.initial_page,
+      sn.issn,
+      sn.journal_id,
+      j.name AS journal_name,
+      sn.number_of_pages,
+      sn.observation,
+      sn.publication_date,
+      sn.research_group_id,
+      sn.url,
+      sn.volume,
+      sn.active,
+      sn.created_by,
+      sn.updated_by,
+      sn.created_at,
+      sn.updated_at
+     FROM ((((((scientific_notes sn
+       LEFT JOIN subtypes st ON ((sn.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((sn.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((sn.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
+       LEFT JOIN journals j ON ((sn.journal_id = j.id)));
   SQL
 end
