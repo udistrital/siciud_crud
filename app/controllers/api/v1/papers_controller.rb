@@ -88,6 +88,7 @@ module Api
                                       :number_of_pages, :initial_page,
                                       :final_page, :issn, :url, :doi,
                                       :observation, :category_id,
+                                      :colciencias_call_id,
                                       :paper_type_id,
                                       :geo_city_id, :journal_name,
                                       :created_by)
@@ -99,6 +100,7 @@ module Api
                                       :number_of_pages, :initial_page,
                                       :final_page, :issn, :url, :doi,
                                       :observation, :category_id, :paper_type_id,
+                                      :colciencias_call_id,
                                       :geo_city_id, :journal_name, :updated_by)
       end
 

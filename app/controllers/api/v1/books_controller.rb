@@ -78,13 +78,15 @@ module Api
       def book_params_to_create
         params.require(:book).permit(:title, :publication_date, :isbn,
                                      :url, :observation, :category_id,
-                                     :geo_city_id, :created_by)
+                                     :colciencias_call_id, :geo_city_id,
+                                     :created_by)
       end
 
       def book_params_to_update
         params.require(:book).permit(:title, :publication_date, :isbn,
                                      :url, :observation, :category_id,
-                                     :geo_city_id, :updated_by)
+                                     :colciencias_call_id, :geo_city_id,
+                                     :updated_by)
       end
 
       def book_params_to_deactivate

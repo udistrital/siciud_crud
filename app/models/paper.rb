@@ -1,9 +1,10 @@
 class Paper < ApplicationRecord
   include Swagger::PaperSchema
 
-  belongs_to :category
+  belongs_to :category, class_name: 'Subtype', foreign_key: 'category_id', optional: true
+  belongs_to :colciencias_call
   belongs_to :journal
-  belongs_to :paper_type
+  belongs_to :paper_type, class_name: 'Subtype', foreign_key: 'paper_type_id', optional: true
   belongs_to :research_group
 
   # Publication place

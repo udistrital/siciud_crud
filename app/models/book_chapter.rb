@@ -1,7 +1,8 @@
 class BookChapter < ApplicationRecord
   include Swagger::BookChapterSchema
 
-  belongs_to :category
+  belongs_to :category, class_name: 'Subtype', foreign_key: 'category_id', optional: true
+  belongs_to :colciencias_call
   belongs_to :editorial
   belongs_to :research_group
 
@@ -13,6 +14,8 @@ class BookChapter < ApplicationRecord
   # Participants
   has_many :int_participants, as: :producible
   has_many :ext_participants, as: :producible
+
+  has_many :documents, as: :documentable
 
   # Tracking inherited from ApplicationRecord, fields:
   # created_by and updated_by, see application_record.rb

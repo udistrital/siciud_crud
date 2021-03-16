@@ -1,7 +1,8 @@
 class ScientificNote < ApplicationRecord
   include Swagger::ScientificNoteSchema
 
-  belongs_to :category
+  belongs_to :category, class_name: 'Subtype', foreign_key: 'category_id', optional: true
+  belongs_to :colciencias_call
   belongs_to :journal
   belongs_to :research_group
 
@@ -13,6 +14,8 @@ class ScientificNote < ApplicationRecord
   # Participants
   has_many :int_participants, as: :producible
   has_many :ext_participants, as: :producible
+
+  has_many :documents, as: :documentable
 
   # Tracking inherited from ApplicationRecord, fields:
   # created_by and updated_by, see application_record.rb
