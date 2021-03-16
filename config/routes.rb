@@ -183,6 +183,8 @@ Rails.application.routes.draw do
         put "/papers/:id/active", to: "papers#change_active"
 
         resources :patents, only: [:index, :show, :create, :update]
+        put "/patents/:id/active", to: "patents#change_active"
+
         resources :research_creation_works, only: [:index, :show, :create, :update]
 
         resources :scientific_notes, only: [:index, :show, :create, :update]

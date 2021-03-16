@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_16_001519) do
+ActiveRecord::Schema.define(version: 2021_03_16_201013) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -948,16 +948,17 @@ ActiveRecord::Schema.define(version: 2021_03_16_001519) do
     t.date "date_of_obtaining"
     t.string "industrial_publication_gazette"
     t.text "observation"
-    t.bigint "category_id"
-    t.bigint "patent_state_id"
     t.bigint "research_group_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "patent_certificate_document"
     t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
+    t.bigint "category_id"
+    t.bigint "colciencias_call_id"
+    t.bigint "patent_state_id"
     t.index ["category_id"], name: "index_patents_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_patents_on_colciencias_call_id"
     t.index ["created_by"], name: "index_patents_on_created_by"
     t.index ["patent_state_id"], name: "index_patents_on_patent_state_id"
     t.index ["research_group_id"], name: "index_patents_on_research_group_id"
@@ -1494,9 +1495,10 @@ ActiveRecord::Schema.define(version: 2021_03_16_001519) do
   add_foreign_key "participant_types", "users", column: "updated_by"
   add_foreign_key "patent_states", "users", column: "created_by"
   add_foreign_key "patent_states", "users", column: "updated_by"
-  add_foreign_key "patents", "categories"
-  add_foreign_key "patents", "patent_states"
+  add_foreign_key "patents", "colciencias_calls"
   add_foreign_key "patents", "research_groups"
+  add_foreign_key "patents", "subtypes", column: "category_id"
+  add_foreign_key "patents", "subtypes", column: "patent_state_id"
   add_foreign_key "patents", "users", column: "created_by"
   add_foreign_key "patents", "users", column: "updated_by"
   add_foreign_key "petition_statuses", "users", column: "created_by"
@@ -1684,31 +1686,6 @@ ActiveRecord::Schema.define(version: 2021_03_16_001519) do
        LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
        LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
        LEFT JOIN petition_statuses ps ON ((nab.petition_status_id = ps.id)));
-  SQL
-  create_view "complete_patents", sql_definition: <<-SQL
-      SELECT p.id,
-      p.title,
-      p.category_id,
-      c.name AS category_name,
-      p.date_of_obtaining,
-      ARRAY( SELECT gcp.geo_country_id
-             FROM geo_countries_patents gcp
-            WHERE (p.id = gcp.patent_id)) AS geo_country_ids,
-      p.industrial_publication_gazette,
-      p.observation,
-      p.patent_certificate_document,
-      p.patent_number,
-      p.patent_state_id,
-      ps.name AS patent_state_name,
-      p.research_group_id,
-      p.active,
-      p.created_by,
-      p.updated_by,
-      p.created_at,
-      p.updated_at
-     FROM ((patents p
-       LEFT JOIN categories c ON ((p.category_id = c.id)))
-       LEFT JOIN patent_states ps ON ((p.patent_state_id = ps.id)));
   SQL
   create_view "complete_research_cws", sql_definition: <<-SQL
       SELECT rcw.id,
@@ -1963,5 +1940,33 @@ ActiveRecord::Schema.define(version: 2021_03_16_001519) do
        LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
        LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
        LEFT JOIN journals j ON ((sn.journal_id = j.id)));
+  SQL
+  create_view "complete_patents", sql_definition: <<-SQL
+      SELECT p.id,
+      p.title,
+      p.category_id,
+      stc.st_name AS category_name,
+      p.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      p.date_of_obtaining,
+      ARRAY( SELECT gcp.geo_country_id
+             FROM geo_countries_patents gcp
+            WHERE (p.id = gcp.patent_id)) AS geo_country_ids,
+      p.industrial_publication_gazette,
+      p.observation,
+      p.patent_state_id,
+      stps.st_name AS patent_state_name,
+      p.patent_number,
+      p.research_group_id,
+      p.active,
+      p.created_by,
+      p.updated_by,
+      p.created_at,
+      p.updated_at
+     FROM (((patents p
+       LEFT JOIN subtypes stc ON ((p.category_id = stc.id)))
+       LEFT JOIN colciencias_calls cc ON ((p.colciencias_call_id = cc.id)))
+       LEFT JOIN subtypes stps ON ((p.patent_state_id = stps.id)));
   SQL
 end
