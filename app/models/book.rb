@@ -2,7 +2,7 @@ class Book < ApplicationRecord
   include Swagger::BookSchema
 
   belongs_to :category, class_name: 'Subtype', foreign_key: 'category_id', optional: true
-  belongs_to :colciencias_call
+  belongs_to :colciencias_call, optional: true
   belongs_to :editorial
   belongs_to :research_group
 

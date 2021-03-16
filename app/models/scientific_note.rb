@@ -2,7 +2,7 @@ class ScientificNote < ApplicationRecord
   include Swagger::ScientificNoteSchema
 
   belongs_to :category, class_name: 'Subtype', foreign_key: 'category_id', optional: true
-  belongs_to :colciencias_call
+  belongs_to :colciencias_call, optional: true
   belongs_to :journal
   belongs_to :research_group
 
