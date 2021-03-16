@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_16_222159) do
+ActiveRecord::Schema.define(version: 2021_03_16_230159) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -761,17 +761,17 @@ ActiveRecord::Schema.define(version: 2021_03_16_222159) do
     t.date "publication_date"
     t.string "consecutive_number_ma"
     t.text "observation"
-    t.bigint "category_id"
     t.bigint "research_group_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "geo_city_id"
-    t.string "certificate_ma_document"
-    t.string "ip_livestock_breed_document"
     t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
+    t.bigint "category_id"
+    t.bigint "colciencias_call_id"
     t.index ["category_id"], name: "index_ip_livestock_breeds_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_ip_livestock_breeds_on_colciencias_call_id"
     t.index ["created_by"], name: "index_ip_livestock_breeds_on_created_by"
     t.index ["geo_city_id"], name: "index_ip_livestock_breeds_on_geo_city_id"
     t.index ["research_group_id"], name: "index_ip_livestock_breeds_on_research_group_id"
@@ -1458,9 +1458,10 @@ ActiveRecord::Schema.define(version: 2021_03_16_222159) do
   add_foreign_key "int_participants", "researchers"
   add_foreign_key "int_participants", "users", column: "created_by"
   add_foreign_key "int_participants", "users", column: "updated_by"
-  add_foreign_key "ip_livestock_breeds", "categories"
+  add_foreign_key "ip_livestock_breeds", "colciencias_calls"
   add_foreign_key "ip_livestock_breeds", "geo_cities"
   add_foreign_key "ip_livestock_breeds", "research_groups"
+  add_foreign_key "ip_livestock_breeds", "subtypes", column: "category_id"
   add_foreign_key "ip_livestock_breeds", "users", column: "created_by"
   add_foreign_key "ip_livestock_breeds", "users", column: "updated_by"
   add_foreign_key "journals", "users", column: "created_by"
@@ -1628,34 +1629,6 @@ ActiveRecord::Schema.define(version: 2021_03_16_222159) do
       rg.created_by,
       rg.updated_by
      FROM research_groups rg;
-  SQL
-  create_view "complete_ipl_breeds", sql_definition: <<-SQL
-      SELECT iplb.id,
-      iplb.name,
-      iplb.category_id,
-      c.name AS category_name,
-      iplb.certificate_ma_document,
-      iplb.consecutive_number_ma,
-      iplb.geo_city_id,
-      gcity.name AS geo_city_name,
-      gs.geo_country_id,
-      gctry.name AS geo_country_name,
-      gcity.geo_state_id,
-      gs.name AS geo_state_name,
-      iplb.ip_livestock_breed_document,
-      iplb.observation,
-      iplb.publication_date,
-      iplb.research_group_id,
-      iplb.active,
-      iplb.created_by,
-      iplb.updated_by,
-      iplb.created_at,
-      iplb.updated_at
-     FROM ((((ip_livestock_breeds iplb
-       LEFT JOIN categories c ON ((iplb.category_id = c.id)))
-       LEFT JOIN geo_cities gcity ON ((iplb.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
   SQL
   create_view "complete_research_cws", sql_definition: <<-SQL
       SELECT rcw.id,
@@ -1976,5 +1949,35 @@ ActiveRecord::Schema.define(version: 2021_03_16_222159) do
        LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
        LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
        LEFT JOIN subtypes stpt ON ((nab.petition_status_id = stpt.id)));
+  SQL
+  create_view "complete_ipl_breeds", sql_definition: <<-SQL
+      SELECT iplb.id,
+      iplb.name,
+      iplb.category_id,
+      stc.st_name AS category_name,
+      iplb.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      iplb.consecutive_number_ma,
+      iplb.geo_city_id,
+      gcity.name AS geo_city_name,
+      gs.geo_country_id,
+      gctry.name AS geo_country_name,
+      gcity.geo_state_id,
+      gs.name AS geo_state_name,
+      iplb.observation,
+      iplb.publication_date,
+      iplb.research_group_id,
+      iplb.active,
+      iplb.created_by,
+      iplb.updated_by,
+      iplb.created_at,
+      iplb.updated_at
+     FROM (((((ip_livestock_breeds iplb
+       LEFT JOIN subtypes stc ON ((iplb.category_id = stc.id)))
+       LEFT JOIN colciencias_calls cc ON ((iplb.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((iplb.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
   SQL
 end
