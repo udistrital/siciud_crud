@@ -174,21 +174,24 @@ Rails.application.routes.draw do
         put "book_chapters/:id/active/", to: "book_chapters#change_active"
 
         resources :ip_livestock_breeds, only: [:index, :show, :create, :update]
-        put "ip_livestock_breeds/:id/attach/", to: "ip_livestock_breeds#attach"
+        put "/ip_livestock_breeds/:id/active", to: "ip_livestock_breeds#change_active"
 
         resources :new_animal_breeds, only: [:index, :show, :create, :update]
-        put "new_animal_breeds/:id/attach/", to: "new_animal_breeds#attach"
+        put "/new_animal_breeds/:id/active", to: "new_animal_breeds#change_active"
 
         resources :papers, only: [:index, :show, :create, :update]
         put "/papers/:id/active", to: "papers#change_active"
 
         resources :patents, only: [:index, :show, :create, :update]
+        put "/patents/:id/active", to: "patents#change_active"
+
         resources :research_creation_works, only: [:index, :show, :create, :update]
 
         resources :scientific_notes, only: [:index, :show, :create, :update]
         put "/scientific_notes/:id/active", to: "scientific_notes#change_active"
 
         resources :vegetable_varieties, only: [:index, :show, :create, :update]
+        put "/vegetable_varieties/:id/active", to: "vegetable_varieties#change_active"
       end
 
       # RESEARCH UNIT PRODUCT ENDPOINTS
