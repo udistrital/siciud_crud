@@ -177,7 +177,7 @@ Rails.application.routes.draw do
         put "ip_livestock_breeds/:id/attach/", to: "ip_livestock_breeds#attach"
 
         resources :new_animal_breeds, only: [:index, :show, :create, :update]
-        put "new_animal_breeds/:id/attach/", to: "new_animal_breeds#attach"
+        put "/new_animal_breeds/:id/active", to: "new_animal_breeds#change_active"
 
         resources :papers, only: [:index, :show, :create, :update]
         put "/papers/:id/active", to: "papers#change_active"
