@@ -191,6 +191,7 @@ Rails.application.routes.draw do
         put "/scientific_notes/:id/active", to: "scientific_notes#change_active"
 
         resources :vegetable_varieties, only: [:index, :show, :create, :update]
+        put "/vegetable_varieties/:id/active", to: "vegetable_varieties#change_active"
       end
 
       # RESEARCH UNIT PRODUCT ENDPOINTS

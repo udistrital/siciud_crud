@@ -1,9 +1,11 @@
 class VegetableVariety < ApplicationRecord
   include Swagger::VegetableVarietySchema
 
-  belongs_to :cycle_type
-  belongs_to :petition_status
-  belongs_to :category
+
+  belongs_to :category, class_name: 'Subtype', foreign_key: 'category_id', optional: true
+  belongs_to :colciencias_call, optional: true
+  belongs_to :cycle_type, class_name: 'Subtype', foreign_key: 'cycle_type_id', optional: true
+  belongs_to :petition_status, class_name: 'Subtype', foreign_key: 'petition_status_id', optional: true
   belongs_to :research_group
 
   # Publication place
@@ -14,6 +16,8 @@ class VegetableVariety < ApplicationRecord
   # Participants
   has_many :int_participants, as: :producible
   has_many :ext_participants, as: :producible
+
+  has_many :documents, as: :documentable
 
   # Tracking inherited from ApplicationRecord, fields:
   # created_by and updated_by, see application_record.rb

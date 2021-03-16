@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_16_201013) do
+ActiveRecord::Schema.define(version: 2021_03_16_213132) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1338,18 +1338,19 @@ ActiveRecord::Schema.define(version: 2021_03_16_201013) do
     t.string "name"
     t.date "date"
     t.text "observation"
-    t.bigint "cycle_type_id"
-    t.bigint "petition_status_id"
-    t.bigint "category_id"
     t.bigint "research_group_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "geo_city_id"
-    t.string "vegetable_variety_document"
     t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
+    t.bigint "category_id"
+    t.bigint "colciencias_call_id"
+    t.bigint "cycle_type_id"
+    t.bigint "petition_status_id"
     t.index ["category_id"], name: "index_vegetable_varieties_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_vegetable_varieties_on_colciencias_call_id"
     t.index ["created_by"], name: "index_vegetable_varieties_on_created_by"
     t.index ["cycle_type_id"], name: "index_vegetable_varieties_on_cycle_type_id"
     t.index ["geo_city_id"], name: "index_vegetable_varieties_on_geo_city_id"
@@ -1547,11 +1548,12 @@ ActiveRecord::Schema.define(version: 2021_03_16_201013) do
   add_foreign_key "users", "user_roles"
   add_foreign_key "users", "users", column: "created_by"
   add_foreign_key "users", "users", column: "updated_by"
-  add_foreign_key "vegetable_varieties", "categories"
-  add_foreign_key "vegetable_varieties", "cycle_types"
+  add_foreign_key "vegetable_varieties", "colciencias_calls"
   add_foreign_key "vegetable_varieties", "geo_cities"
-  add_foreign_key "vegetable_varieties", "petition_statuses"
   add_foreign_key "vegetable_varieties", "research_groups"
+  add_foreign_key "vegetable_varieties", "subtypes", column: "category_id"
+  add_foreign_key "vegetable_varieties", "subtypes", column: "cycle_type_id"
+  add_foreign_key "vegetable_varieties", "subtypes", column: "petition_status_id"
   add_foreign_key "vegetable_varieties", "users", column: "created_by"
   add_foreign_key "vegetable_varieties", "users", column: "updated_by"
   add_foreign_key "work_types", "users", column: "created_by"
@@ -1720,38 +1722,6 @@ ActiveRecord::Schema.define(version: 2021_03_16_201013) do
        LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
        LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
        LEFT JOIN knwl_spec_areas ksa ON ((rcw.knwl_spec_area_id = ksa.id)));
-  SQL
-  create_view "complete_vegetable_varieties", sql_definition: <<-SQL
-      SELECT vv.id,
-      vv.name,
-      vv.category_id,
-      c.name AS category_name,
-      vv.cycle_type_id,
-      ct.name AS cycle_type_name,
-      vv.date,
-      vv.geo_city_id,
-      gcity.name AS geo_city_name,
-      gs.geo_country_id,
-      gctry.name AS geo_country_name,
-      gcity.geo_state_id,
-      gs.name AS geo_state_name,
-      vv.observation,
-      vv.petition_status_id,
-      ps.name AS petition_status_name,
-      vv.research_group_id,
-      vv.vegetable_variety_document,
-      vv.active,
-      vv.created_by,
-      vv.updated_by,
-      vv.created_at,
-      vv.updated_at
-     FROM ((((((vegetable_varieties vv
-       LEFT JOIN categories c ON ((vv.category_id = c.id)))
-       LEFT JOIN cycle_types ct ON ((vv.cycle_type_id = ct.id)))
-       LEFT JOIN geo_cities gcity ON ((vv.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
-       LEFT JOIN petition_statuses ps ON ((vv.petition_status_id = ps.id)));
   SQL
   create_view "complete_users", sql_definition: <<-SQL
       SELECT u.id,
@@ -1968,5 +1938,40 @@ ActiveRecord::Schema.define(version: 2021_03_16_201013) do
        LEFT JOIN subtypes stc ON ((p.category_id = stc.id)))
        LEFT JOIN colciencias_calls cc ON ((p.colciencias_call_id = cc.id)))
        LEFT JOIN subtypes stps ON ((p.patent_state_id = stps.id)));
+  SQL
+  create_view "complete_vegetable_varieties", sql_definition: <<-SQL
+      SELECT vv.id,
+      vv.name,
+      vv.category_id,
+      stc.st_name AS category_name,
+      vv.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      vv.cycle_type_id,
+      stcc.st_name AS cycle_type_name,
+      vv.date,
+      vv.geo_city_id,
+      gcity.name AS geo_city_name,
+      gs.geo_country_id,
+      gctry.name AS geo_country_name,
+      gcity.geo_state_id,
+      gs.name AS geo_state_name,
+      vv.petition_status_id,
+      stpt.st_name AS petition_status_name,
+      vv.observation,
+      vv.research_group_id,
+      vv.active,
+      vv.created_by,
+      vv.updated_by,
+      vv.created_at,
+      vv.updated_at
+     FROM (((((((vegetable_varieties vv
+       LEFT JOIN subtypes stc ON ((vv.category_id = stc.id)))
+       LEFT JOIN colciencias_calls cc ON ((vv.colciencias_call_id = cc.id)))
+       LEFT JOIN subtypes stcc ON ((vv.cycle_type_id = stcc.id)))
+       LEFT JOIN geo_cities gcity ON ((vv.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
+       LEFT JOIN subtypes stpt ON ((vv.petition_status_id = stpt.id)));
   SQL
 end
