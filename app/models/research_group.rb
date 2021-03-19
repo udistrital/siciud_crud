@@ -1,8 +1,8 @@
 class ResearchGroup < ApplicationRecord
   include Swagger::ResearchUnitSchema
 
-  belongs_to :group_state
-  belongs_to :group_type
+  belongs_to :group_state, class_name: 'Subtype', foreign_key: 'group_state_id', optional: true
+  belongs_to :group_type, class_name: 'Subtype', foreign_key: 'group_type_id', optional: true
   belongs_to :cine_broad_area, optional: true
   belongs_to :cine_specific_area, optional: true
   belongs_to :oecd_knowledge_area, optional: true
@@ -30,6 +30,8 @@ class ResearchGroup < ApplicationRecord
   has_many :scientific_notes, dependent: :destroy
   has_many :vegetable_varieties, dependent: :destroy
 
+  has_many :documents, as: :documentable
+
   #Validaciones de los campos obligatorios
   validates :name, :acronym, :cidc_registration_date,
             :cidc_act_number, :faculty_act_number, :faculty_registration_date,
@@ -38,7 +40,7 @@ class ResearchGroup < ApplicationRecord
   # Tracking inherited from ApplicationRecord, fields:
   # created_by and updated_by, see application_record.rb
   # Too validate_created_by, validate_updated_by methods
-  validates :created_by, presence: true, allow_nil: false
+  validates :created_by, presence: true, allow_nil: false, on: :create
   validates :updated_by, presence: true, allow_nil: false, on: :update
   validate :validate_created_by, :validate_updated_by
 end

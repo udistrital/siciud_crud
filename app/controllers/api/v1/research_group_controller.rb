@@ -7,32 +7,32 @@ module Api
 
       # Handling of database exceptions
       rescue_from ActiveRecord::StatementInvalid do |e|
-        render json: {error: e.message}, status: :unprocessable_entity
+        render json: { error: e.message }, status: :unprocessable_entity
       end
 
       def index
         @research_groups = ResearchGroup.joins(:group_type, :group_state)
         if (gt_id = params[:group_type_id])
           @research_groups = ResearchGroupsSearchService.filter_by_type(
-              @research_groups, gt_id)
+            @research_groups, gt_id)
         end
         if (filter = params[:filter])
           filter = ResearchGroupsSearchService.str2array_and_remove_str(
-              filter, ['"or",'])
+            filter, ['"or",'])
           @research_groups = ResearchGroupsSearchService.search_with_query(
-              @research_groups, filter)
+            @research_groups, filter)
         end
 
         if (group = params[:group])
           group = ResearchGroupsSearchService.str2array_direct(group)
           response = ResearchGroupsSearchService.group_with_query(@research_groups, group, [])
-          render json: {'totalCount': @research_groups.count,
-                        'data': response}
+          render json: { 'totalCount': @research_groups.count,
+                         'data': response }
         else
           if (sort = params[:sort])
             order_list = ResearchGroupsSearchService.str2array_direct(sort)
             @research_groups = ResearchGroupsSearchService.sort_with_query(
-                @research_groups, order_list)
+              @research_groups, order_list)
           end
 
           if params[:skip] and params[:take] != 0
@@ -42,8 +42,8 @@ module Api
           else
             aux = @research_groups
           end
-          render json: {'totalCount': @research_groups.count,
-                        'data': ActiveModelSerializers::SerializableResource.new(aux)}
+          render json: { 'totalCount': @research_groups.count,
+                         'data': ActiveModelSerializers::SerializableResource.new(aux) }
         end
       end
 
@@ -103,13 +103,13 @@ module Api
       def save_data_by_key(research_gr)
         if params[:research_group].has_key?(:faculty_ids)
           research_gr = setFaculties(
-              (params[:research_group][:faculty_ids]).uniq,
-              research_gr)
+            (params[:research_group][:faculty_ids]).uniq,
+            research_gr)
         end
         if params[:research_group].has_key?(:curricular_project_ids)
           research_gr = setCurricularPrj(
-              (params[:research_group][:curricular_project_ids]).uniq,
-              research_gr)
+            (params[:research_group][:curricular_project_ids]).uniq,
+            research_gr)
         end
         if params[:research_group].has_key?(:oecd_discipline_ids)
           research_gr.oecd_discipline_ids = (params[:research_group][:oecd_discipline_ids]).map(&:to_i).uniq
@@ -160,8 +160,6 @@ module Api
                                                :oecd_knowledge_area_id,
                                                :legacy_siciud_id,
                                                :created_by, :updated_by,
-                                               :cidc_act_document, :establishment_document,
-                                               :faculty_act_document,
                                                research_focus_ids: [],
                                                oecd_discipline_ids: [])
       end

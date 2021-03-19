@@ -1,17 +1,18 @@
 class ResearchGroupSerializer < AbstractGeneralSerializer
-  attributes :id, :name, :acronym, :cidc_act_document, :cidc_act_number,
+  attributes :id, :name, :acronym, :cidc_act_number,
              :cidc_registration_date,
              :cine_detailed_area_ids,
              :cine_broad_area_id, :cine_specific_area_id,
              :colciencias_code, :curricular_project_ids, :description,
-             :establishment_document, :email, :faculty_act_document,
+             :email,
              :faculty_act_number, :faculty_ids, :faculty_registration_date,
+             :group_state_id, :group_state_name,
              :group_type_id, :group_type_name, :gruplac, :historical_colciencias,
              :interinstitutional, :legacy_siciud_id,
              :mission, :oecd_knowledge_subarea_id,
              :oecd_knowledge_area_id,
              :oecd_discipline_ids, :research_focus_ids,
-             :snies_id, :state_id, :state_name, :vision, :webpage,
+             :snies_id, :vision, :webpage,
              :created_by, :updated_by, :created_at, :updated_at
 
   def curricular_project_ids
@@ -49,7 +50,7 @@ class ResearchGroupSerializer < AbstractGeneralSerializer
   def group_type_name
     type = self.object.group_type
     if type
-      type.name
+      type.st_name
     end
   end
 
@@ -57,24 +58,17 @@ class ResearchGroupSerializer < AbstractGeneralSerializer
     if self.object.historical_colciencias_ranks
       self.object.historical_colciencias_ranks.map do |rank|
         {
-            call: rank.colciencias_call,
-            rank: rank.colciencias_category,
+          call: rank.colciencias_call,
+          rank: rank.colciencias_category,
         }
       end
     end
   end
 
-  def state_id
+  def group_state_name
     state = self.object.group_state
     if state
-      state.id
-    end
-  end
-
-  def state_name
-    state = self.object.group_state
-    if state
-      state.name
+      state.st_name
     end
   end
 end
