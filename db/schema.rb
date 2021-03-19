@@ -1029,17 +1029,18 @@ ActiveRecord::Schema.define(version: 2021_03_17_055653) do
     t.string "registered_project_title"
     t.string "url"
     t.text "observation"
-    t.bigint "knwl_spec_area_id"
-    t.bigint "category_id"
     t.bigint "research_group_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "geo_city_id"
-    t.string "certificate_work_document"
     t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
+    t.bigint "category_id"
+    t.bigint "colciencias_call_id"
+    t.bigint "knwl_spec_area_id"
     t.index ["category_id"], name: "index_research_creation_works_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_research_creation_works_on_colciencias_call_id"
     t.index ["created_by"], name: "index_research_creation_works_on_created_by"
     t.index ["geo_city_id"], name: "index_research_creation_works_on_geo_city_id"
     t.index ["knwl_spec_area_id"], name: "index_research_creation_works_on_knwl_spec_area_id"
@@ -1048,8 +1049,8 @@ ActiveRecord::Schema.define(version: 2021_03_17_055653) do
   end
 
   create_table "research_creation_works_work_types", id: false, force: :cascade do |t|
-    t.bigint "work_type_id", null: false
     t.bigint "research_creation_work_id", null: false
+    t.bigint "subtype_id", null: false
   end
 
   create_table "research_focuses", force: :cascade do |t|
@@ -1511,10 +1512,11 @@ ActiveRecord::Schema.define(version: 2021_03_17_055653) do
   add_foreign_key "product_types", "users", column: "updated_by"
   add_foreign_key "product_typologies", "users", column: "created_by"
   add_foreign_key "product_typologies", "users", column: "updated_by"
-  add_foreign_key "research_creation_works", "categories"
+  add_foreign_key "research_creation_works", "colciencias_calls"
   add_foreign_key "research_creation_works", "geo_cities"
-  add_foreign_key "research_creation_works", "knwl_spec_areas"
   add_foreign_key "research_creation_works", "research_groups"
+  add_foreign_key "research_creation_works", "subtypes", column: "category_id"
+  add_foreign_key "research_creation_works", "subtypes", column: "knwl_spec_area_id"
   add_foreign_key "research_creation_works", "users", column: "created_by"
   add_foreign_key "research_creation_works", "users", column: "updated_by"
   add_foreign_key "research_focuses", "users", column: "created_by"
@@ -1560,7 +1562,8 @@ ActiveRecord::Schema.define(version: 2021_03_17_055653) do
   add_foreign_key "vegetable_varieties", "users", column: "updated_by"
   add_foreign_key "work_types", "users", column: "created_by"
   add_foreign_key "work_types", "users", column: "updated_by"
-
+  
+  SQL
   create_view "complete_research_cws", sql_definition: <<-SQL
       SELECT rcw.id,
       rcw.title,
@@ -1594,6 +1597,7 @@ ActiveRecord::Schema.define(version: 2021_03_17_055653) do
        LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
        LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
        LEFT JOIN knwl_spec_areas ksa ON ((rcw.knwl_spec_area_id = ksa.id)));
+
   SQL
   create_view "complete_users", sql_definition: <<-SQL
       SELECT u.id,

@@ -4,6 +4,11 @@ class Subtype < ApplicationRecord
   belongs_to :parent, class_name: 'Subtype', optional: true
 
   has_many :subtypes, class_name: 'Subtype', foreign_key: 'parent_id'
+  has_and_belongs_to_many :research_creation_works,
+                          join_table: 'research_creation_works_work_types',
+                          class_name: 'ResearchCreationWork',
+                          inverse_of: :work_types
+
 
   # Tracking inherited from ApplicationRecord, fields:
   # created_by and updated_by, see application_record.rb
