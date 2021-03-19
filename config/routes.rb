@@ -186,6 +186,7 @@ Rails.application.routes.draw do
         put "/patents/:id/active", to: "patents#change_active"
 
         resources :research_creation_works, only: [:index, :show, :create, :update]
+        put "/research_creation_works/:id/active", to: "research_creation_works#change_active"
 
         resources :scientific_notes, only: [:index, :show, :create, :update]
         put "/scientific_notes/:id/active", to: "scientific_notes#change_active"
