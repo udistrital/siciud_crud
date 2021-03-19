@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_19_192045) do
+ActiveRecord::Schema.define(version: 2021_03_17_055653) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1562,75 +1562,42 @@ ActiveRecord::Schema.define(version: 2021_03_19_192045) do
   add_foreign_key "vegetable_varieties", "users", column: "updated_by"
   add_foreign_key "work_types", "users", column: "created_by"
   add_foreign_key "work_types", "users", column: "updated_by"
+  
+  SQL
+  create_view "complete_research_cws", sql_definition: <<-SQL
+      SELECT rcw.id,
+      rcw.title,
+      rcw.category_id,
+      c.name AS category_name,
+      rcw.creation_and_selection_date,
+      rcw.geo_city_id,
+      gcity.name AS geo_city_name,
+      gs.geo_country_id,
+      gctry.name AS geo_country_name,
+      gcity.geo_state_id,
+      gs.name AS geo_state_name,
+      rcw.knwl_spec_area_id,
+      ksa.name AS knwl_spec_area_name,
+      rcw.nature_of_work,
+      rcw.observation,
+      rcw.registered_project_title,
+      rcw.url,
+      ARRAY( SELECT rcwwt.work_type_id
+             FROM research_creation_works_work_types rcwwt
+            WHERE (rcw.id = rcwwt.research_creation_work_id)) AS work_type_ids,
+      rcw.research_group_id,
+      rcw.active,
+      rcw.created_by,
+      rcw.updated_by,
+      rcw.created_at,
+      rcw.updated_at
+     FROM (((((research_creation_works rcw
+       LEFT JOIN categories c ON ((rcw.category_id = c.id)))
+       LEFT JOIN geo_cities gcity ON ((rcw.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
+       LEFT JOIN knwl_spec_areas ksa ON ((rcw.knwl_spec_area_id = ksa.id)));
 
-  create_view "research_units", sql_definition: <<-SQL
-      SELECT rg.id,
-      rg.legacy_siciud_id,
-      rg.name,
-      rg.acronym,
-      rg.description,
-      rg.cidc_registration_date,
-      rg.cidc_act_number,
-      rg.faculty_act_number,
-      rg.faculty_registration_date,
-      rg.email,
-      rg.gruplac,
-      rg.webpage,
-      rg.mission,
-      rg.vision,
-      rg.colciencias_code,
-      rg.snies_id,
-      rg.group_type_id,
-      ( SELECT group_types.name
-             FROM group_types
-            WHERE (group_types.id = rg.group_type_id)) AS group_type_name,
-      rg.group_state_id,
-      ( SELECT group_states.name
-             FROM group_states
-            WHERE (group_states.id = rg.group_state_id)) AS group_state_name,
-      rg.interinstitutional,
-      ARRAY( SELECT group_members.researcher_id
-             FROM group_members
-            WHERE (group_members.research_group_id = rg.id)) AS member_ids,
-      ARRAY( SELECT faculty_ids_research_groups.faculty_id
-             FROM faculty_ids_research_groups
-            WHERE (faculty_ids_research_groups.research_group_id = rg.id)) AS faculty_ids,
-      rg.cine_broad_area_id,
-      ( SELECT cine_broad_areas.name
-             FROM cine_broad_areas
-            WHERE (cine_broad_areas.id = rg.cine_broad_area_id)) AS cine_broad_area_name,
-      rg.cine_specific_area_id,
-      ( SELECT cine_specific_areas.name
-             FROM cine_specific_areas
-            WHERE (cine_specific_areas.id = rg.cine_specific_area_id)) AS cine_specific_area_name,
-      ARRAY( SELECT cine_detailed_areas_research_groups.cine_detailed_area_id
-             FROM cine_detailed_areas_research_groups
-            WHERE (cine_detailed_areas_research_groups.research_group_id = rg.id)) AS cine_detailed_area_ids,
-      ARRAY( SELECT curricular_prj_ids_research_groups.curricular_project_id
-             FROM curricular_prj_ids_research_groups
-            WHERE (curricular_prj_ids_research_groups.research_group_id = rg.id)) AS curricular_project_ids,
-      rg.oecd_knowledge_area_id,
-      ( SELECT oecd_knowledge_areas.name
-             FROM oecd_knowledge_areas
-            WHERE (oecd_knowledge_areas.id = rg.oecd_knowledge_area_id)) AS oecd_knowledge_area_name,
-      rg.oecd_knowledge_subarea_id,
-      ( SELECT oecd_knowledge_subareas.name
-             FROM oecd_knowledge_subareas
-            WHERE (oecd_knowledge_subareas.id = rg.oecd_knowledge_subarea_id)) AS oecd_knowledge_subarea_name,
-      ARRAY( SELECT oecd_disciplines_research_groups.oecd_discipline_id
-             FROM oecd_disciplines_research_groups
-            WHERE (oecd_disciplines_research_groups.research_group_id = rg.id)) AS oecd_discipline_ids,
-      ARRAY( SELECT research_focuses_groups.research_focus_id
-             FROM research_focuses_groups
-            WHERE (research_focuses_groups.research_group_id = rg.id)) AS research_focus_ids,
-      rg.cidc_act_document,
-      rg.establishment_document,
-      rg.faculty_act_document,
-      rg.created_at,
-      rg.updated_at,
-      rg.created_by,
-      rg.updated_by
-     FROM research_groups rg;
   SQL
   create_view "complete_users", sql_definition: <<-SQL
       SELECT u.id,
@@ -1948,42 +1915,76 @@ ActiveRecord::Schema.define(version: 2021_03_19_192045) do
        LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
        LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
   SQL
-  create_view "complete_research_cws", sql_definition: <<-SQL
-      SELECT rcw.id,
-      rcw.title,
-      rcw.category_id,
-      stc.st_name AS category_name,
-      rcw.colciencias_call_id,
-      cc.name AS colciencias_call_name,
-      cc.year AS colciencias_call_year,
-      rcw.creation_and_selection_date,
-      rcw.geo_city_id,
-      gcity.name AS geo_city_name,
-      gs.geo_country_id,
-      gctry.name AS geo_country_name,
-      gcity.geo_state_id,
-      gs.name AS geo_state_name,
-      rcw.knwl_spec_area_id,
-      stksa.st_name AS knwl_spec_area_name,
-      rcw.nature_of_work,
-      rcw.observation,
-      rcw.registered_project_title,
-      rcw.url,
-      ARRAY( SELECT rcwwt.subtype_id
-             FROM research_creation_works_work_types rcwwt
-            WHERE (rcw.id = rcwwt.research_creation_work_id)) AS work_type_ids,
-      rcw.research_group_id,
-      rcw.active,
-      rcw.created_by,
-      rcw.updated_by,
-      rcw.created_at,
-      rcw.updated_at
-     FROM ((((((research_creation_works rcw
-       LEFT JOIN subtypes stc ON ((rcw.category_id = stc.id)))
-       LEFT JOIN colciencias_calls cc ON ((rcw.colciencias_call_id = cc.id)))
-       LEFT JOIN geo_cities gcity ON ((rcw.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
-       LEFT JOIN subtypes stksa ON ((rcw.knwl_spec_area_id = stksa.id)));
+  create_view "research_units", sql_definition: <<-SQL
+      SELECT rg.id,
+      rg.legacy_siciud_id,
+      rg.name,
+      rg.acronym,
+      rg.description,
+      rg.cidc_registration_date,
+      rg.cidc_act_number,
+      rg.faculty_act_number,
+      rg.faculty_registration_date,
+      rg.email,
+      rg.gruplac,
+      rg.webpage,
+      rg.mission,
+      rg.vision,
+      rg.colciencias_code,
+      rg.snies_id,
+      rg.group_type_id,
+      ( SELECT group_types.name
+             FROM group_types
+            WHERE (group_types.id = rg.group_type_id)) AS group_type_name,
+      rg.group_state_id,
+      ( SELECT group_states.name
+             FROM group_states
+            WHERE (group_states.id = rg.group_state_id)) AS group_state_name,
+      rg.interinstitutional,
+      ARRAY( SELECT group_members.researcher_id
+             FROM group_members
+            WHERE (group_members.research_group_id = rg.id)) AS member_ids,
+      ( SELECT count(*) AS count
+             FROM group_members
+            WHERE (group_members.research_group_id = rg.id)) AS member_count,
+      ARRAY( SELECT faculty_ids_research_groups.faculty_id
+             FROM faculty_ids_research_groups
+            WHERE (faculty_ids_research_groups.research_group_id = rg.id)) AS faculty_ids,
+      rg.cine_broad_area_id,
+      ( SELECT cine_broad_areas.name
+             FROM cine_broad_areas
+            WHERE (cine_broad_areas.id = rg.cine_broad_area_id)) AS cine_broad_area_name,
+      rg.cine_specific_area_id,
+      ( SELECT cine_specific_areas.name
+             FROM cine_specific_areas
+            WHERE (cine_specific_areas.id = rg.cine_specific_area_id)) AS cine_specific_area_name,
+      ARRAY( SELECT cine_detailed_areas_research_groups.cine_detailed_area_id
+             FROM cine_detailed_areas_research_groups
+            WHERE (cine_detailed_areas_research_groups.research_group_id = rg.id)) AS cine_detailed_area_ids,
+      ARRAY( SELECT curricular_prj_ids_research_groups.curricular_project_id
+             FROM curricular_prj_ids_research_groups
+            WHERE (curricular_prj_ids_research_groups.research_group_id = rg.id)) AS curricular_project_ids,
+      rg.oecd_knowledge_area_id,
+      ( SELECT oecd_knowledge_areas.name
+             FROM oecd_knowledge_areas
+            WHERE (oecd_knowledge_areas.id = rg.oecd_knowledge_area_id)) AS oecd_knowledge_area_name,
+      rg.oecd_knowledge_subarea_id,
+      ( SELECT oecd_knowledge_subareas.name
+             FROM oecd_knowledge_subareas
+            WHERE (oecd_knowledge_subareas.id = rg.oecd_knowledge_subarea_id)) AS oecd_knowledge_subarea_name,
+      ARRAY( SELECT oecd_disciplines_research_groups.oecd_discipline_id
+             FROM oecd_disciplines_research_groups
+            WHERE (oecd_disciplines_research_groups.research_group_id = rg.id)) AS oecd_discipline_ids,
+      ARRAY( SELECT research_focuses_groups.research_focus_id
+             FROM research_focuses_groups
+            WHERE (research_focuses_groups.research_group_id = rg.id)) AS research_focus_ids,
+      rg.cidc_act_document,
+      rg.establishment_document,
+      rg.faculty_act_document,
+      rg.created_at,
+      rg.updated_at,
+      rg.created_by,
+      rg.updated_by
+     FROM research_groups rg;
   SQL
 end
