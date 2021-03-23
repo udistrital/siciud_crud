@@ -69,7 +69,10 @@ module Api
       end
 
       def set_context_product
-        if params[:book_id]
+        if params[:research_group_id]
+          id = params[:research_group_id]
+          @context = ResearchGroup.find(id)
+        elsif params[:book_id]
           id = params[:book_id]
           @context = Book.find(id)
         elsif params[:book_chapter_id]

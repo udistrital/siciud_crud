@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_17_055653) do
+ActiveRecord::Schema.define(version: 2021_03_19_220953) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1091,8 +1091,6 @@ ActiveRecord::Schema.define(version: 2021_03_17_055653) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "snies_id"
-    t.bigint "group_type_id"
-    t.bigint "group_state_id"
     t.boolean "interinstitutional"
     t.bigint "cine_broad_area_id"
     t.bigint "cine_specific_area_id"
@@ -1101,9 +1099,8 @@ ActiveRecord::Schema.define(version: 2021_03_17_055653) do
     t.integer "legacy_siciud_id"
     t.bigint "created_by"
     t.bigint "updated_by"
-    t.string "cidc_act_document"
-    t.string "establishment_document"
-    t.string "faculty_act_document"
+    t.bigint "group_state_id"
+    t.bigint "group_type_id"
     t.index ["cine_broad_area_id"], name: "index_research_groups_on_cine_broad_area_id"
     t.index ["cine_specific_area_id"], name: "index_research_groups_on_cine_specific_area_id"
     t.index ["created_by"], name: "index_research_groups_on_created_by"
@@ -1523,10 +1520,10 @@ ActiveRecord::Schema.define(version: 2021_03_17_055653) do
   add_foreign_key "research_focuses", "users", column: "updated_by"
   add_foreign_key "research_groups", "cine_broad_areas"
   add_foreign_key "research_groups", "cine_specific_areas"
-  add_foreign_key "research_groups", "group_states"
-  add_foreign_key "research_groups", "group_types"
   add_foreign_key "research_groups", "oecd_knowledge_areas"
   add_foreign_key "research_groups", "oecd_knowledge_subareas"
+  add_foreign_key "research_groups", "subtypes", column: "group_state_id"
+  add_foreign_key "research_groups", "subtypes", column: "group_type_id"
   add_foreign_key "research_groups", "users", column: "created_by"
   add_foreign_key "research_groups", "users", column: "updated_by"
   add_foreign_key "researchers", "users", column: "created_by"
@@ -1562,43 +1559,7 @@ ActiveRecord::Schema.define(version: 2021_03_17_055653) do
   add_foreign_key "vegetable_varieties", "users", column: "updated_by"
   add_foreign_key "work_types", "users", column: "created_by"
   add_foreign_key "work_types", "users", column: "updated_by"
-  
-  SQL
-  create_view "complete_research_cws", sql_definition: <<-SQL
-      SELECT rcw.id,
-      rcw.title,
-      rcw.category_id,
-      c.name AS category_name,
-      rcw.creation_and_selection_date,
-      rcw.geo_city_id,
-      gcity.name AS geo_city_name,
-      gs.geo_country_id,
-      gctry.name AS geo_country_name,
-      gcity.geo_state_id,
-      gs.name AS geo_state_name,
-      rcw.knwl_spec_area_id,
-      ksa.name AS knwl_spec_area_name,
-      rcw.nature_of_work,
-      rcw.observation,
-      rcw.registered_project_title,
-      rcw.url,
-      ARRAY( SELECT rcwwt.work_type_id
-             FROM research_creation_works_work_types rcwwt
-            WHERE (rcw.id = rcwwt.research_creation_work_id)) AS work_type_ids,
-      rcw.research_group_id,
-      rcw.active,
-      rcw.created_by,
-      rcw.updated_by,
-      rcw.created_at,
-      rcw.updated_at
-     FROM (((((research_creation_works rcw
-       LEFT JOIN categories c ON ((rcw.category_id = c.id)))
-       LEFT JOIN geo_cities gcity ON ((rcw.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
-       LEFT JOIN knwl_spec_areas ksa ON ((rcw.knwl_spec_area_id = ksa.id)));
 
-  SQL
   create_view "complete_users", sql_definition: <<-SQL
       SELECT u.id,
       u.identification_number,
@@ -1612,27 +1573,6 @@ ActiveRecord::Schema.define(version: 2021_03_17_055653) do
       u.updated_at
      FROM (users u
        LEFT JOIN user_roles ur ON ((u.user_role_id = ur.id)));
-  SQL
-  create_view "research_units_by_researchers", sql_definition: <<-SQL
-      SELECT rs.id,
-      rs.identification_number,
-      rs.oas_researcher_id,
-      rs.active AS researcher_is_active,
-      gm.id AS group_member_id,
-      gm.role_id,
-      rl.name AS role_name,
-      gm.gm_state_id,
-      gm.active AS group_member_is_active,
-      gm.research_group_id,
-      rg.name AS research_group_name,
-      rg.acronym,
-      rg.group_type_id,
-      rg.group_state_id,
-      rg.legacy_siciud_id
-     FROM (((researchers rs
-       JOIN group_members gm ON ((gm.researcher_id = rs.id)))
-       JOIN roles rl ON ((rl.id = gm.role_id)))
-       JOIN research_groups rg ON ((gm.research_group_id = rg.id)));
   SQL
   create_view "complete_books", sql_definition: <<-SQL
       SELECT b.id,
@@ -1915,6 +1855,65 @@ ActiveRecord::Schema.define(version: 2021_03_17_055653) do
        LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
        LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
   SQL
+  create_view "complete_research_cws", sql_definition: <<-SQL
+      SELECT rcw.id,
+      rcw.title,
+      rcw.category_id,
+      stc.st_name AS category_name,
+      rcw.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      rcw.creation_and_selection_date,
+      rcw.geo_city_id,
+      gcity.name AS geo_city_name,
+      gs.geo_country_id,
+      gctry.name AS geo_country_name,
+      gcity.geo_state_id,
+      gs.name AS geo_state_name,
+      rcw.knwl_spec_area_id,
+      stksa.st_name AS knwl_spec_area_name,
+      rcw.nature_of_work,
+      rcw.observation,
+      rcw.registered_project_title,
+      rcw.url,
+      ARRAY( SELECT rcwwt.subtype_id
+             FROM research_creation_works_work_types rcwwt
+            WHERE (rcw.id = rcwwt.research_creation_work_id)) AS work_type_ids,
+      rcw.research_group_id,
+      rcw.active,
+      rcw.created_by,
+      rcw.updated_by,
+      rcw.created_at,
+      rcw.updated_at
+     FROM ((((((research_creation_works rcw
+       LEFT JOIN subtypes stc ON ((rcw.category_id = stc.id)))
+       LEFT JOIN colciencias_calls cc ON ((rcw.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((rcw.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
+       LEFT JOIN subtypes stksa ON ((rcw.knwl_spec_area_id = stksa.id)));
+  SQL
+  create_view "research_units_by_researchers", sql_definition: <<-SQL
+      SELECT rs.id,
+      rs.identification_number,
+      rs.oas_researcher_id,
+      rs.active AS researcher_is_active,
+      gm.id AS group_member_id,
+      gm.role_id,
+      rl.name AS role_name,
+      gm.gm_state_id,
+      gm.active AS group_member_is_active,
+      gm.research_group_id,
+      rg.name AS research_group_name,
+      rg.acronym,
+      rg.group_type_id,
+      rg.group_state_id,
+      rg.legacy_siciud_id
+     FROM (((researchers rs
+       JOIN group_members gm ON ((gm.researcher_id = rs.id)))
+       JOIN roles rl ON ((rl.id = gm.role_id)))
+       JOIN research_groups rg ON ((gm.research_group_id = rg.id)));
+  SQL
   create_view "research_units", sql_definition: <<-SQL
       SELECT rg.id,
       rg.legacy_siciud_id,
@@ -1933,13 +1932,9 @@ ActiveRecord::Schema.define(version: 2021_03_17_055653) do
       rg.colciencias_code,
       rg.snies_id,
       rg.group_type_id,
-      ( SELECT group_types.name
-             FROM group_types
-            WHERE (group_types.id = rg.group_type_id)) AS group_type_name,
+      stgt.st_name AS group_type_name,
       rg.group_state_id,
-      ( SELECT group_states.name
-             FROM group_states
-            WHERE (group_states.id = rg.group_state_id)) AS group_state_name,
+      stgs.st_name AS group_state_name,
       rg.interinstitutional,
       ARRAY( SELECT group_members.researcher_id
              FROM group_members
@@ -1978,13 +1973,12 @@ ActiveRecord::Schema.define(version: 2021_03_17_055653) do
       ARRAY( SELECT research_focuses_groups.research_focus_id
              FROM research_focuses_groups
             WHERE (research_focuses_groups.research_group_id = rg.id)) AS research_focus_ids,
-      rg.cidc_act_document,
-      rg.establishment_document,
-      rg.faculty_act_document,
       rg.created_at,
       rg.updated_at,
       rg.created_by,
       rg.updated_by
-     FROM research_groups rg;
+     FROM ((research_groups rg
+       LEFT JOIN subtypes stgt ON ((rg.group_type_id = stgt.id)))
+       LEFT JOIN subtypes stgs ON ((rg.group_state_id = stgs.id)));
   SQL
 end

@@ -1,6 +1,6 @@
 module Api
   module V1
-    class ResearcherController < ApplicationController
+    class ResearchersController < ApplicationController
       include Swagger::ResearcherApi
 
       before_action :set_researcher, only: [:show, :update]
@@ -25,7 +25,7 @@ module Api
       end
 
       def create
-        @researcher = Researcher.new(researcher_params)
+        @researcher = Researcher.new(researcher_params_create)
         if @researcher.save
           render json: @researcher, status: :created
         else
@@ -34,7 +34,7 @@ module Api
       end
 
       def update
-        if @researcher.update(researcher_params)
+        if @researcher.update(researcher_params_update)
           render json: @researcher
         else
           render json: @researcher.errors, status: :unprocessable_entity
@@ -55,11 +55,24 @@ module Api
         @researcher = Researcher.find(params[:id])
       end
 
-      def researcher_params
+      def researcher_params_create
         params.require(:researcher).permit(:identification_number,
                                            :orcid_id, :scientific_signature,
-                                           :oas_researcher_id, :mobile_number,
-                                           :address)
+                                           :oas_researcher_id, :mobile_number_one,
+                                           :mobile_number_two, :phone_number_one,
+                                           :phone_number_two,
+                                           :address,
+                                           :created_by)
+      end
+
+      def researcher_params_update
+        params.require(:researcher).permit(:identification_number,
+                                           :orcid_id, :scientific_signature,
+                                           :oas_researcher_id, :mobile_number_one,
+                                           :mobile_number_two, :phone_number_one,
+                                           :phone_number_two,
+                                           :address,
+                                           :updated_by)
       end
     end
   end
