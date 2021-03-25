@@ -157,7 +157,6 @@ Rails.application.routes.draw do
       ## General
       resources :editorials, only: [:index, :show, :create, :update]
       resources :journals, only: [:index, :show, :create, :update]
-      resources :participant_types, only: [:index, :show, :create, :update]
 
       ## Endpoints research_creation_works
       resources :research_creation_works, only: [] do

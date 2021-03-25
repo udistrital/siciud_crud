@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_19_220953) do
+ActiveRecord::Schema.define(version: 2021_03_25_031138) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -544,12 +544,12 @@ ActiveRecord::Schema.define(version: 2021_03_19_220953) do
     t.string "last_name"
     t.string "producible_type"
     t.bigint "producible_id"
-    t.bigint "participant_type_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
+    t.bigint "participant_type_id"
     t.index ["created_by"], name: "index_ext_participants_on_created_by"
     t.index ["participant_type_id"], name: "index_ext_participants_on_participant_type_id"
     t.index ["producible_type", "producible_id"], name: "index_ext_participants_on_producible_type_and_producible_id"
@@ -742,13 +742,13 @@ ActiveRecord::Schema.define(version: 2021_03_19_220953) do
   create_table "int_participants", force: :cascade do |t|
     t.string "producible_type"
     t.bigint "producible_id"
-    t.bigint "participant_type_id"
     t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.bigint "researcher_id"
     t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
+    t.bigint "participant_type_id"
     t.index ["created_by"], name: "index_int_participants_on_created_by"
     t.index ["participant_type_id"], name: "index_int_participants_on_participant_type_id"
     t.index ["producible_type", "producible_id"], name: "index_int_participants_on_producible_type_and_producible_id"
@@ -1423,7 +1423,7 @@ ActiveRecord::Schema.define(version: 2021_03_19_220953) do
   add_foreign_key "documents", "users", column: "updated_by"
   add_foreign_key "editorials", "users", column: "created_by"
   add_foreign_key "editorials", "users", column: "updated_by"
-  add_foreign_key "ext_participants", "participant_types"
+  add_foreign_key "ext_participants", "subtypes", column: "participant_type_id"
   add_foreign_key "ext_participants", "users", column: "created_by"
   add_foreign_key "ext_participants", "users", column: "updated_by"
   add_foreign_key "faculty_ids_research_groups", "research_groups"
@@ -1452,8 +1452,8 @@ ActiveRecord::Schema.define(version: 2021_03_19_220953) do
   add_foreign_key "historical_colciencias_ranks", "oecd_knowledge_subareas"
   add_foreign_key "historical_colciencias_ranks", "users", column: "created_by"
   add_foreign_key "historical_colciencias_ranks", "users", column: "updated_by"
-  add_foreign_key "int_participants", "participant_types"
   add_foreign_key "int_participants", "researchers"
+  add_foreign_key "int_participants", "subtypes", column: "participant_type_id"
   add_foreign_key "int_participants", "users", column: "created_by"
   add_foreign_key "int_participants", "users", column: "updated_by"
   add_foreign_key "ip_livestock_breeds", "colciencias_calls"
