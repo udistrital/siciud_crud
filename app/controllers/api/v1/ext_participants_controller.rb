@@ -20,7 +20,7 @@ module Api
 
       # POST context/:id/ext_participants
       def create
-        @ext_participant = @context.ext_participants.new(ext_participant_params)
+        @ext_participant = @context.ext_participants.new(ext_p_params_to_create)
 
         if @ext_participant.save
           render json: @ext_participant, status: :created
@@ -31,7 +31,7 @@ module Api
 
       # PATCH/PUT context/:id/ext_participants/1
       def update
-        if @ext_participant.update(ext_participant_params)
+        if @ext_participant.update(ext_p_params_to_update)
           render json: @ext_participant
         else
           render json: @ext_participant.errors, status: :unprocessable_entity
