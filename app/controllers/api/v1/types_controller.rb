@@ -6,11 +6,17 @@ module Api
         active_in_body_params? type_params_to_deactivate
       end
 
+      # GET /types/all
+      def all
+        @types = CompleteType.all
+        @types = DxService.load(@types, params)
+        render json: @types
+      end
+
       # GET /types
       def index
         @types = Type.all
         @types = DxService.load(@types, params)
-
         render json: @types
       end
 
