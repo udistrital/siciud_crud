@@ -23,11 +23,11 @@ Rails.application.routes.draw do
       end
 
       # Types and Subtypes endpoints
-      resources :types, only: [:index, :all, :show, :create, :update] do
+      resources :types, only: [:index, :show, :create, :update] do
         resources :subtypes, only: [:index, :show, :create, :update]
         put "/subtypes/:id/active", to: "subtypes#change_active"
       end
-      get "/types_all", to: "types#all"
+      get "/types_all", to: "types#all_types_and_subtypes"
       put "/types/:id/active", to: "types#change_active"
 
       #Enpoint para listar las lineas de investigacion
