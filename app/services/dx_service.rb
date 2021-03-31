@@ -36,7 +36,7 @@ class DxService < ApplicationService
             else
               tSql = GetSql(element)
               if tSql.length > 0
-                sql += " " + tSql +" "
+                sql += " " + tSql +" OR "
               end
             end
           else
@@ -49,7 +49,7 @@ class DxService < ApplicationService
         # Filtro unico
         tSql = GetSql(JSON.parse(filter))
         if tSql.length > 0
-          sql += " " + tSql +" "
+          sql += " " + tSql + " "
         end
         
       end
@@ -58,6 +58,9 @@ class DxService < ApplicationService
       if sql.include?(" = ") && !sql.include?("'")
         arr = sql.split(" = ")
         sql = arr[0]+ "='" + arr[1] + "'"
+      elsif sql.include?("OR")
+        # 202103310003: https://stackoverflow.com/a/4209406
+        sql = sql[0...-3]
       end
 
       result.root[:filter] = sql
