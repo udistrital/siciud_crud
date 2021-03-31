@@ -2,29 +2,23 @@ module Api
   module V1
     class SubtypesController < ApplicationController
       before_action :set_type, only: [:index, :show, :update, :change_active]
-      before_action :set_subtype, only: [:index, :show, :update, :change_active]
+      before_action :set_subtype, only: [:show, :update, :change_active]
       before_action only: [:change_active] do
         active_in_body_params? subtype_params_to_deactivate
       end
 
-      # GET /subtypes_all
-      def subtypes_all
-        @items = Subtype.all.order(:id)
-        render json: @items
-      end
-
-      # GET /subtypes
+      # GET types/:type_id/subtypes
       def index
         @subtypes = @type.subtypes
         render json: @subtypes
       end
 
-      # GET /subtypes/1
+      # GET types/:type_id/subtypes/1
       def show
         render json: @subtype
       end
 
-      # POST /subtypes
+      # POST types/:type_id/subtypes
       def create
         @subtype = @type.subtypes.new(subtype_params_to_create)
 
@@ -35,7 +29,7 @@ module Api
         end
       end
 
-      # PATCH/PUT /subtypes/1
+      # PATCH/PUT types/:type_id/subtypes/1
       def update
         if @subtype.update(subtype_params_to_update)
           render json: @subtype
@@ -44,13 +38,19 @@ module Api
         end
       end
 
-      # PUT /subtypes/1/active
+      # PUT types/:type_id/subtypes/1/active
       def change_active
         if @subtype.update(subtype_params_to_deactivate)
           render json: @subtype
         else
           render json: @subtype.errors, status: :unprocessable_entity
         end
+      end
+
+      # GET /subtypes_all
+      def subtypes_all
+        @subtypes = Subtype.all.order(:id)
+        render json: @subtypes
       end
 
       private
