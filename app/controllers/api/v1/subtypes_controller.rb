@@ -1,16 +1,21 @@
 module Api
   module V1
     class SubtypesController < ApplicationController
-      before_action :set_type
-      before_action :set_subtype, only: [:show, :update, :change_active]
+      before_action :set_type, only: [:index, :show, :update, :change_active]
+      before_action :set_subtype, only: [:index, :show, :update, :change_active]
       before_action only: [:change_active] do
         active_in_body_params? subtype_params_to_deactivate
+      end
+
+      # GET /subtypes_all
+      def subtypes_all
+        @items = Subtype.all.order(:id)
+        render json: @items
       end
 
       # GET /subtypes
       def index
         @subtypes = @type.subtypes
-
         render json: @subtypes
       end
 
