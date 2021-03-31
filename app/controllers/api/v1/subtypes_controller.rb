@@ -1,7 +1,7 @@
 module Api
   module V1
     class SubtypesController < ApplicationController
-      before_action :set_type, only: [:index, :show, :update, :change_active]
+      before_action :set_type, only: [:index, :show, :create, :update, :change_active]
       before_action :set_subtype, only: [:show, :update, :change_active]
       before_action only: [:change_active] do
         active_in_body_params? subtype_params_to_deactivate
