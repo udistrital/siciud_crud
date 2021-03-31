@@ -15,8 +15,7 @@ class DxService < ApplicationService
       @dbSet = @dbSet.where("id in ("+ ids +")")
     end
 
-    # Filtro y grupo
-    group = GetParam(:group)
+    # Filtro
     filter = GetParam(:filter)
     unless filter.nil?
       # 202103310321: Nueva con funciones
@@ -25,17 +24,15 @@ class DxService < ApplicationService
       @dbSet = @dbSet.where(sql)
     end
 
-    # Argumentos
-    take = GetParam(:take, 10);
-    skip = GetParam(:skip, 0);
-    requireTotal = GetParam(:requireTotalCount);
-
     # Conteo total
+    requireTotal = GetParam(:requireTotalCount);
     unless requireTotal.nil?
       result.root[:totalCount] = @dbSet.count
     end
 
     # Paginado
+    take = GetParam(:take, 10);
+    skip = GetParam(:skip, 0);
     @dbSet = @dbSet.limit(take.to_i).offset(skip.to_i)
 
     # Grupo
@@ -70,48 +67,6 @@ class DxService < ApplicationService
         @dbSet = @dbSet.order(sort)
       end
 
-      # Documentos
-      files.each do |file|
-        @dbSet.each do |item|
-          att = ActiveStorage::Attachment.where(name: file, record_id: item.id)
-          if att.any?
-            blob = ActiveStorage::Blob.where(id: att[0].blob_id)
-            blob = att[0].blob
-            unless blob.nil?
-            # if blob.any?
-              # cidc_act_document
-              # https://stackoverflow.com/a/57822787
-              # path = rails_blob_path(self.object.facultyActDocument, only_path: true) if self.object.facultyActDocument.attached?
-              # item.includes(:images_attachment)
-              ActiveStorage::Current.host = "siciud-v2-api.nemedi.com/api/v1"
-              # blob = ActiveStorage::Attachment.find_by(record_type: "YourModel", record_id: record.id).blob
-              # https://stackoverflow.com/a/51768570
-              url = ActiveStorage::Blob.service.url(
-                  blob.key,
-                  expires_in: 20000,
-                  disposition: "inline", #"attachment", # "inline"
-                  filename: blob.filename,
-                  content_type: blob.content_type
-              )
-              # if Rails.env.development?
-                url =  Rails.application.routes.url_helpers.rails_blob_path(blob,
-                  disposition: "attachment", only_path:false, host: "https://siciud-v2-api.nemedi.com/api/v1")
-                url = url.split("?")[0]
-              # else
-              #   url = self.logo&.service_url&.split("?")&.first
-              # end
-              # url = Rails.application.routes.url_helpers
-              #   .rails_blob_url(blob, host: "https://siciud-v2-api.nemedi.com/api/v1")
-              item.send(:"#{file}=", url)
-              # item[file] = "Diego"
-              # attachment = ActiveStorage::Attachment.find(90)
-              # attachment.blob.service_url # returns large URI
-              # attachment.blob.service_url.sub(/\?.*/, '') # remove query params
-            end
-          end
-        end
-      end
-
       # Final
       result.root[:data] = @dbSet
       # result.root[:data] = @dbSet.includes(users: :avatar_attachment)
@@ -128,11 +83,14 @@ class DxService < ApplicationService
 
   def self.GetSql(element)
     if element.instance_of?(Array) && element.length() == 3 then
-      col = element[1] == "contains" ? "LOWER("+element[0]+")" : element[0]
-      if col != "id" then
-        op = element[1] == "contains" ? "LIKE" : element[1]
-        term = "'"+(element[1] == "contains" ? "%" + element[2].downcase + "%" : element[2])+"'"
-        return col.downcase + " " + op.upcase + " " + term
+      valor = element[2].to_s
+      operador = element[1].to_s
+      columna = operador == "contains" ? "LOWER("+element[0]+")" : element[0]
+      if columna != "id" then
+        separador = columna.include?("_id") ? "" : "'"
+        operador = operador == "contains" ? "LIKE" : operador
+        valor = separador + (operador == "LIKE" ? "%" + valor.downcase + "%" : valor) + separador
+        return columna.downcase + " " + operador.upcase + " " + valor
       else
         return ""
       end
