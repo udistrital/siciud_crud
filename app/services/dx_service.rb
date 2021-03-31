@@ -19,53 +19,10 @@ class DxService < ApplicationService
     group = GetParam(:group)
     filter = GetParam(:filter)
     unless filter.nil?
-      sql = ""
-
-      # 202103090121: Filtros multiples y unicos
-      if filter.include? "[["
-        # Filtro multiple
-        JSON.parse(filter).map { |element|
-          if element.is_a?(Array) then
-            if element[0].is_a?(Array) then
-              element.map { |subElement|
-                tSql = GetSql(element)
-                if tSql.length > 0
-                  sql += tSql +" "
-                end
-              }
-            else
-              tSql = GetSql(element)
-              if tSql.length > 0
-                sql += " " + tSql +" OR "
-              end
-            end
-          else
-            if element != "" && element != "or"
-              sql += element + " "
-            end
-          end
-        }
-      else
-        # Filtro unico
-        tSql = GetSql(JSON.parse(filter))
-        if tSql.length > 0
-          sql += " " + tSql + " "
-        end
-        
-      end
-
-      sql = sql.squish
-      if sql.include?(" = ") && !sql.include?("'")
-        arr = sql.split(" = ")
-        sql = arr[0]+ "='" + arr[1] + "'"
-      elsif sql.include?("OR")
-        # 202103310003: https://stackoverflow.com/a/4209406
-        sql = sql[0...-3]
-      end
-
+      # 202103310321: Nueva con funciones
+      sql = GetSqlMapped(JSON.parse(filter))
       result.root[:filter] = sql
       @dbSet = @dbSet.where(sql)
-
     end
 
     # Argumentos
@@ -170,7 +127,7 @@ class DxService < ApplicationService
   end
 
   def self.GetSql(element)
-    if element.is_a?(Array) then
+    if element.instance_of?(Array) && element.length() == 3 then
       col = element[1] == "contains" ? "LOWER("+element[0]+")" : element[0]
       if col != "id" then
         op = element[1] == "contains" ? "LIKE" : element[1]
@@ -179,9 +136,23 @@ class DxService < ApplicationService
       else
         return ""
       end
-    else
-      return element+" "
     end
+  end
+
+  def self.GetSqlMapped(expression)
+    res = ""
+    if expression.instance_of?(Array) then
+      if expression.length() > 3 || expression[0].instance_of?(Array)
+        expression.map { |element|
+          res = res + GetSqlMapped(element)
+        }
+      else
+        res = res + GetSql(expression)
+      end
+    else
+      res = res + " " + expression.upcase + " "
+    end
+    return res
   end
 
 end
