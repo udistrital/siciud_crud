@@ -85,11 +85,24 @@ class DxService < ApplicationService
     if element.instance_of?(Array) && element.length() == 3 then
       valor = element[2].to_s
       operador = element[1].to_s
-      columna = operador == "contains" ? "LOWER("+element[0]+")" : element[0]
+      columna = element[0]
       if columna != "id" then
+        comodin_inicio = ""
+        comodin_final = ""
         separador = columna.include?("_id") ? "" : "'"
-        operador = operador == "contains" ? "LIKE" : operador
-        valor = separador + (operador == "LIKE" ? "%" + valor.downcase + "%" : valor) + separador
+        if operador == "contains" || operador == "notcontains" || operador == "startswith" || operador == "endswith"
+          comodin_inicio = operador == "startswith" ? "": "%"
+          comodin_final = operador == "endswith" ? "": "%"
+          operador = operador == "notcontains" ? "NOT LIKE" : "LIKE"
+          columna = "LOWER("+ columna +")"
+          valor = valor.downcase
+        # elsif 
+        #   operador = "NOT LIKE"
+        #   comodin_inicio = "%"
+        #   comodin_final = "%"
+        end
+        # operador = operador == "contains" ? "LIKE" : operador
+        valor = separador + comodin_inicio + valor + comodin_final + separador
         return columna.downcase + " " + operador.upcase + " " + valor
       else
         return ""
