@@ -9,7 +9,7 @@ module Api
       # GET /types
       def index
         @types = Type.all
-        @types = DxService.load(@types, params)
+        # @types = DxService.load(@types, params)
         render json: @types
       end
 
