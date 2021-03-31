@@ -47,8 +47,8 @@ module Api
         end
       end
 
-      # GET /subtypes_all
-      def subtypes_all
+      # GET /subtypes
+      def all_subtypes
         @subtypes = Subtype.all.order(:id)
         render json: @subtypes
       end

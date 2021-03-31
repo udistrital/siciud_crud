@@ -27,7 +27,7 @@ Rails.application.routes.draw do
         resources :subtypes, only: [:index, :show, :create, :update]
         put "/subtypes/:id/active", to: "subtypes#change_active"
       end
-      get "/subtypes_all", to: "subtypes#subtypes_all"
+      get "/subtypes", to: "subtypes#all_subtypes"
       get "/types_all", to: "types#all_types_and_subtypes"
       put "/types/:id/active", to: "types#change_active"
 
