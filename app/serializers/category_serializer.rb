@@ -1,4 +1,4 @@
-class CategorySerializer < AbstractProductNewKnwGenSerializer
+class CategorySerializer < AbstractProductSerializer
   attributes :id, :name, :product_type_id, :product_type_name,
              :product_typology_id, :product_typology_name
 

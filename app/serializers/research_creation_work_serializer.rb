@@ -1,4 +1,4 @@
-class ResearchCreationWorkSerializer < AbstractProductNewKnwGenSerializer
+class ResearchCreationWorkSerializer < AbstractProductSerializer
   attributes :id, :title, :category_id, :category_name,
              :colciencias_call_id, :colciencias_call_name,
              :colciencias_call_year, :creation_and_selection_date,

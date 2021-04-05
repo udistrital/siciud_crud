@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_29_143756) do
+ActiveRecord::Schema.define(version: 2021_04_05_232930) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -739,6 +739,29 @@ ActiveRecord::Schema.define(version: 2021_03_29_143756) do
     t.index ["updated_by"], name: "index_historical_colciencias_ranks_on_updated_by"
   end
 
+  create_table "industrial_designs", force: :cascade do |t|
+    t.string "ind_dsg_registration_number"
+    t.string "ind_dsg_registration_title"
+    t.date "ind_dsg_date_of_obtaining"
+    t.bigint "geo_country_id"
+    t.string "ind_dsg_industrial_publication_gazette"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "observation"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_industrial_designs_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_industrial_designs_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_industrial_designs_on_created_by"
+    t.index ["geo_country_id"], name: "index_industrial_designs_on_geo_country_id"
+    t.index ["research_group_id"], name: "index_industrial_designs_on_research_group_id"
+    t.index ["updated_by"], name: "index_industrial_designs_on_updated_by"
+  end
+
   create_table "int_participants", force: :cascade do |t|
     t.string "producible_type"
     t.bigint "producible_id"
@@ -1452,6 +1475,12 @@ ActiveRecord::Schema.define(version: 2021_03_29_143756) do
   add_foreign_key "historical_colciencias_ranks", "oecd_knowledge_subareas"
   add_foreign_key "historical_colciencias_ranks", "users", column: "created_by"
   add_foreign_key "historical_colciencias_ranks", "users", column: "updated_by"
+  add_foreign_key "industrial_designs", "colciencias_calls"
+  add_foreign_key "industrial_designs", "geo_countries"
+  add_foreign_key "industrial_designs", "research_groups"
+  add_foreign_key "industrial_designs", "subtypes", column: "category_id"
+  add_foreign_key "industrial_designs", "users", column: "created_by"
+  add_foreign_key "industrial_designs", "users", column: "updated_by"
   add_foreign_key "int_participants", "researchers"
   add_foreign_key "int_participants", "subtypes", column: "participant_type_id"
   add_foreign_key "int_participants", "users", column: "created_by"
@@ -2000,5 +2029,30 @@ ActiveRecord::Schema.define(version: 2021_03_29_143756) do
        RIGHT JOIN subtypes st ON ((t.id = st.type_id)))
        LEFT JOIN subtypes p ON ((st.parent_id = p.id)))
        LEFT JOIN types pt ON ((p.type_id = pt.id)));
+  SQL
+  create_view "complete_industrial_designs", sql_definition: <<-SQL
+      SELECT ind.id,
+      ind.category_id,
+      st.st_name AS category_name,
+      ind.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      ind.geo_country_id,
+      gctry.name AS geo_country_name,
+      ind.ind_dsg_date_of_obtaining,
+      ind.ind_dsg_industrial_publication_gazette,
+      ind.ind_dsg_registration_number,
+      ind.ind_dsg_registration_title,
+      ind.observation,
+      ind.research_group_id,
+      ind.active,
+      ind.created_by,
+      ind.updated_by,
+      ind.created_at,
+      ind.updated_at
+     FROM (((industrial_designs ind
+       LEFT JOIN subtypes st ON ((ind.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((ind.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_countries gctry ON ((ind.geo_country_id = gctry.id)));
   SQL
 end

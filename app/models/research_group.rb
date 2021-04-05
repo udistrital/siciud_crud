@@ -30,6 +30,9 @@ class ResearchGroup < ApplicationRecord
   has_many :scientific_notes, dependent: :destroy
   has_many :vegetable_varieties, dependent: :destroy
 
+  has_many :industrial_designs, dependent: :destroy
+
+
   has_many :documents, as: :documentable
 
   #Validaciones de los campos obligatorios

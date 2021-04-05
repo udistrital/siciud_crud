@@ -1,4 +1,4 @@
-class PatentSerializer < AbstractProductNewKnwGenSerializer
+class PatentSerializer < AbstractProductSerializer
   attributes :id, :title, :category_id, :category_name, :date_of_obtaining,
              :geo_country_ids, :industrial_publication_gazette, :observation,
              :patent_number, :patent_state_id,

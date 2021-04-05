@@ -9,7 +9,7 @@ module Api
         active_in_body_params? book_params_to_deactivate
       end
 
-      # GET /research_group/:id/books
+      # GET /research_units/:id/books
       def index
         books_by_ru = CompleteBook.where(
           research_group_id: params[:research_group_id])

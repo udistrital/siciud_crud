@@ -1,4 +1,4 @@
-class IpLivestockBreedSerializer < AbstractProductNewKnwGenSerializer
+class IpLivestockBreedSerializer < AbstractProductSerializer
   attributes :id, :name, :category_id, :category_name, :colciencias_call_id,
              :colciencias_call_name, :colciencias_call_year,
              :consecutive_number_ma, :geo_city_id, :geo_city_name, :geo_state_id,

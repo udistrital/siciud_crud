@@ -114,12 +114,9 @@ Rails.application.routes.draw do
 
         # PRODUCTS ENDPOINTS BY TYPOLOGY
         # New generation products endpoints
-        # Book
         resources :books, only: [:index, :show, :create, :update]
         put "/books/:id/active", to: "books#change_active"
 
-
-        # Book chapter
         resources :book_chapters, only: [:index, :show, :create, :update]
         put "book_chapters/:id/active/", to: "book_chapters#change_active"
 
@@ -143,13 +140,17 @@ Rails.application.routes.draw do
 
         resources :vegetable_varieties, only: [:index, :show, :create, :update]
         put "/vegetable_varieties/:id/active", to: "vegetable_varieties#change_active"
+
+        # Technological development and innovation
+        resources :industrial_designs, only: [:index, :show, :create, :update]
+        put "/industrial_designs/:id/active", to: "industrial_designs#change_active"
       end
 
       # RESEARCH UNIT PRODUCT ENDPOINTS
-      ## Participants in product creation
+      ## Participants in product creation and documents
       resources :books, :book_chapters, :ip_livestock_breeds, :new_animal_breeds,
                 :papers, :patents, :research_creation_works, :scientific_notes,
-                :vegetable_varieties, only: [] do
+                :vegetable_varieties, :industrial_designs, only: [] do
         resources :ext_participants, only: [:index, :show, :create, :update]
         resources :int_participants, only: [:index, :show, :create, :update]
         resources :documents, only: [:index, :show, :create, :update]

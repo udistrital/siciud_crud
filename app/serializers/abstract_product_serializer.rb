@@ -1,4 +1,4 @@
-class AbstractProductNewKnwGenSerializer < AbstractGeneralSerializer
+class AbstractProductSerializer < AbstractGeneralSerializer
 
   def category_name
     category = self.object.category
