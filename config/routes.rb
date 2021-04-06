@@ -144,13 +144,17 @@ Rails.application.routes.draw do
         # Technological development and innovation
         resources :industrial_designs, only: [:index, :show, :create, :update]
         put "/industrial_designs/:id/active", to: "industrial_designs#change_active"
+
+        resources :integrated_circuit_diagrams
+        put "/integrated_circuit_diagrams/:id/active", to: "integrated_circuit_diagrams#change_active"
       end
 
       # RESEARCH UNIT PRODUCT ENDPOINTS
       ## Participants in product creation and documents
       resources :books, :book_chapters, :ip_livestock_breeds, :new_animal_breeds,
                 :papers, :patents, :research_creation_works, :scientific_notes,
-                :vegetable_varieties, :industrial_designs, only: [] do
+                :vegetable_varieties, :industrial_designs,
+                :integrated_circuit_diagrams, only: [] do
         resources :ext_participants, only: [:index, :show, :create, :update]
         resources :int_participants, only: [:index, :show, :create, :update]
         resources :documents, only: [:index, :show, :create, :update]

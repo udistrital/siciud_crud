@@ -65,7 +65,7 @@ module Api
           :ind_dsg_registration_number, :ind_dsg_registration_title,
           :ind_dsg_date_of_obtaining, :geo_country_id, :observation,
           :ind_dsg_industrial_publication_gazette, :category_id,
-          :research_group_id, :colciencias_call_id, :created_by)
+          :colciencias_call_id, :created_by)
       end
 
       def ind_design_params_to_update
@@ -73,7 +73,7 @@ module Api
           :ind_dsg_registration_number, :ind_dsg_registration_title,
           :ind_dsg_date_of_obtaining, :geo_country_id, :observation,
           :ind_dsg_industrial_publication_gazette, :category_id,
-          :research_group_id, :colciencias_call_id, :updated_by)
+          :colciencias_call_id, :updated_by)
       end
 
       def ind_design_params_to_deactivate

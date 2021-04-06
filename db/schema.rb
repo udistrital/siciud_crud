@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_05_232930) do
+ActiveRecord::Schema.define(version: 2021_04_06_150221) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -779,6 +779,28 @@ ActiveRecord::Schema.define(version: 2021_04_05_232930) do
     t.index ["updated_by"], name: "index_int_participants_on_updated_by"
   end
 
+  create_table "integrated_circuit_diagrams", force: :cascade do |t|
+    t.string "icd_registration_number"
+    t.string "icd_registration_title"
+    t.date "icd_date_of_obtaining"
+    t.bigint "geo_country_id"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "observation"
+    t.boolean "active"
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_integrated_circuit_diagrams_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_integrated_circuit_diagrams_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_integrated_circuit_diagrams_on_created_by"
+    t.index ["geo_country_id"], name: "index_integrated_circuit_diagrams_on_geo_country_id"
+    t.index ["research_group_id"], name: "index_integrated_circuit_diagrams_on_research_group_id"
+    t.index ["updated_by"], name: "index_integrated_circuit_diagrams_on_updated_by"
+  end
+
   create_table "ip_livestock_breeds", force: :cascade do |t|
     t.string "name"
     t.date "publication_date"
@@ -1485,6 +1507,12 @@ ActiveRecord::Schema.define(version: 2021_04_05_232930) do
   add_foreign_key "int_participants", "subtypes", column: "participant_type_id"
   add_foreign_key "int_participants", "users", column: "created_by"
   add_foreign_key "int_participants", "users", column: "updated_by"
+  add_foreign_key "integrated_circuit_diagrams", "colciencias_calls"
+  add_foreign_key "integrated_circuit_diagrams", "geo_countries"
+  add_foreign_key "integrated_circuit_diagrams", "research_groups"
+  add_foreign_key "integrated_circuit_diagrams", "subtypes", column: "category_id"
+  add_foreign_key "integrated_circuit_diagrams", "users", column: "created_by"
+  add_foreign_key "integrated_circuit_diagrams", "users", column: "updated_by"
   add_foreign_key "ip_livestock_breeds", "colciencias_calls"
   add_foreign_key "ip_livestock_breeds", "geo_cities"
   add_foreign_key "ip_livestock_breeds", "research_groups"

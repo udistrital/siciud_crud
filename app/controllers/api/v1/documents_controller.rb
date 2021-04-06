@@ -65,7 +65,7 @@ module Api
       end
 
       def document_params_to_deactivate
-        params.require(:document).permit(:updated_by)
+        params.require(:document).permit(:active, :updated_by)
       end
     end
   end

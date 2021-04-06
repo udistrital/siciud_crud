@@ -1,7 +1,5 @@
 class AbstractProductResearchUnitController < ApplicationController
 
-  private
-
   def set_editorial(editorial_name, created_by_user)
     editorial = nil
     if editorial_name.is_a? String
@@ -12,7 +10,7 @@ class AbstractProductResearchUnitController < ApplicationController
         editorial = Editorial.new(name: editorial_name.titleize,
                                   created_by: created_by_user)
         unless editorial.save
-          render json: {error: editorial.errors, method: 'set_editorial'},
+          render json: { error: editorial.errors, method: 'set_editorial' },
                  status: :unprocessable_entity and return
         end
       end
@@ -30,7 +28,7 @@ class AbstractProductResearchUnitController < ApplicationController
         journal = Journal.new(name: journal_name.titleize,
                               created_by: created_by_user)
         unless journal.save
-          render json: {error: journal.errors, method: 'set_journal'},
+          render json: { error: journal.errors, method: 'set_journal' },
                  status: :unprocessable_entity and return
         end
       end
