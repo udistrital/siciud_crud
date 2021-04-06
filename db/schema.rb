@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_06_171531) do
+ActiveRecord::Schema.define(version: 2021_04_06_195252) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -594,6 +594,11 @@ ActiveRecord::Schema.define(version: 2021_04_06_171531) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["entity_type_id"], name: "index_funding_entities_on_entity_type_id"
+  end
+
+  create_table "funding_entities_plant_ind_prototypes", id: false, force: :cascade do |t|
+    t.bigint "plant_ind_prototype_id", null: false
+    t.bigint "funding_entity_id", null: false
   end
 
   create_table "genres", force: :cascade do |t|
@@ -2199,6 +2204,9 @@ ActiveRecord::Schema.define(version: 2021_04_06_171531) do
       pltind.colciencias_call_id,
       cc.name AS colciencias_call_name,
       cc.year AS colciencias_call_year,
+      ARRAY( SELECT funding_entities_plant_ind_prototypes.funding_entity_id
+             FROM funding_entities_plant_ind_prototypes
+            WHERE (funding_entities_plant_ind_prototypes.plant_ind_prototype_id = pltind.id)) AS funding_entity_ids,
       pltind.geo_country_id,
       gctry.name AS geo_country_name,
       pltind.plt_name,

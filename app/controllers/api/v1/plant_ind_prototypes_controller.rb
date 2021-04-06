@@ -64,14 +64,16 @@ module Api
         params.require(:plant_ind_prototype).permit(
           :plt_name, :plt_registration_number, :plt_date_of_elaboration,
           :geo_country_id, :category_id, :colciencias_call_id,
-          :observation, :plt_type_id, :created_by)
+          :observation, :plt_type_id, :created_by,
+          funding_entity_ids: [])
       end
 
       def pip_params_to_update
         params.require(:plant_ind_prototype).permit(
           :plt_name, :plt_registration_number, :plt_date_of_elaboration,
           :geo_country_id, :category_id, :colciencias_call_id,
-          :observation, :plt_type_id, :updated_by)
+          :observation, :plt_type_id, :updated_by,
+          funding_entity_ids: [])
       end
 
       def pip_params_to_deactivate

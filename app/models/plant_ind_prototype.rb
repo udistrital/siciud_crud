@@ -12,6 +12,8 @@ class PlantIndPrototype < ApplicationRecord
 
   has_many :documents, as: :documentable
 
+  has_and_belongs_to_many :funding_entities
+
   # Tracking inherited from ApplicationRecord, fields:
   # created_by and updated_by, see application_record.rb
   validates :created_by, presence: true, allow_nil: false, on: :create
