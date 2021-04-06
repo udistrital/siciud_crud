@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_06_165250) do
+ActiveRecord::Schema.define(version: 2021_04_06_171531) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -2205,6 +2205,7 @@ ActiveRecord::Schema.define(version: 2021_04_06_165250) do
       pltind.plt_date_of_elaboration,
       pltind.plt_registration_number,
       pltind.plt_type_id,
+      stplt.st_name AS plt_type_name,
       pltind.observation,
       pltind.research_group_id,
       pltind.active,
@@ -2212,8 +2213,9 @@ ActiveRecord::Schema.define(version: 2021_04_06_165250) do
       pltind.updated_by,
       pltind.created_at,
       pltind.updated_at
-     FROM (((plant_ind_prototypes pltind
+     FROM ((((plant_ind_prototypes pltind
        LEFT JOIN subtypes st ON ((pltind.category_id = st.id)))
+       LEFT JOIN subtypes stplt ON ((pltind.plt_type_id = stplt.id)))
        LEFT JOIN colciencias_calls cc ON ((pltind.colciencias_call_id = cc.id)))
        LEFT JOIN geo_countries gctry ON ((pltind.geo_country_id = gctry.id)));
   SQL
