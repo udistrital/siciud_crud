@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_06_162321) do
+ActiveRecord::Schema.define(version: 2021_04_06_165250) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1030,6 +1030,30 @@ ActiveRecord::Schema.define(version: 2021_04_06_162321) do
     t.index ["planable_id"], name: "index_plan_periods_on_planable_id"
   end
 
+  create_table "plant_ind_prototypes", force: :cascade do |t|
+    t.string "plt_name"
+    t.string "plt_registration_number"
+    t.date "plt_date_of_elaboration"
+    t.bigint "geo_country_id"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "observation"
+    t.bigint "plt_type_id"
+    t.boolean "active"
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_plant_ind_prototypes_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_plant_ind_prototypes_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_plant_ind_prototypes_on_created_by"
+    t.index ["geo_country_id"], name: "index_plant_ind_prototypes_on_geo_country_id"
+    t.index ["plt_type_id"], name: "index_plant_ind_prototypes_on_plt_type_id"
+    t.index ["research_group_id"], name: "index_plant_ind_prototypes_on_research_group_id"
+    t.index ["updated_by"], name: "index_plant_ind_prototypes_on_updated_by"
+  end
+
   create_table "product_types", force: :cascade do |t|
     t.string "name"
     t.text "indicator"
@@ -1584,6 +1608,13 @@ ActiveRecord::Schema.define(version: 2021_04_06_162321) do
   add_foreign_key "patents", "users", column: "updated_by"
   add_foreign_key "petition_statuses", "users", column: "created_by"
   add_foreign_key "petition_statuses", "users", column: "updated_by"
+  add_foreign_key "plant_ind_prototypes", "colciencias_calls"
+  add_foreign_key "plant_ind_prototypes", "geo_countries"
+  add_foreign_key "plant_ind_prototypes", "research_groups"
+  add_foreign_key "plant_ind_prototypes", "subtypes", column: "category_id"
+  add_foreign_key "plant_ind_prototypes", "subtypes", column: "plt_type_id"
+  add_foreign_key "plant_ind_prototypes", "users", column: "created_by"
+  add_foreign_key "plant_ind_prototypes", "users", column: "updated_by"
   add_foreign_key "product_types", "product_typologies"
   add_foreign_key "product_types", "users", column: "created_by"
   add_foreign_key "product_types", "users", column: "updated_by"
@@ -2160,5 +2191,30 @@ ActiveRecord::Schema.define(version: 2021_04_06_162321) do
        LEFT JOIN subtypes st ON ((soft.category_id = st.id)))
        LEFT JOIN colciencias_calls cc ON ((soft.colciencias_call_id = cc.id)))
        LEFT JOIN geo_countries gctry ON ((soft.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_plt_ind_prots", sql_definition: <<-SQL
+      SELECT pltind.id,
+      pltind.category_id,
+      st.st_name AS category_name,
+      pltind.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      pltind.geo_country_id,
+      gctry.name AS geo_country_name,
+      pltind.plt_name,
+      pltind.plt_date_of_elaboration,
+      pltind.plt_registration_number,
+      pltind.plt_type_id,
+      pltind.observation,
+      pltind.research_group_id,
+      pltind.active,
+      pltind.created_by,
+      pltind.updated_by,
+      pltind.created_at,
+      pltind.updated_at
+     FROM (((plant_ind_prototypes pltind
+       LEFT JOIN subtypes st ON ((pltind.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((pltind.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_countries gctry ON ((pltind.geo_country_id = gctry.id)));
   SQL
 end

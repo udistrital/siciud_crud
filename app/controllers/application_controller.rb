@@ -63,6 +63,12 @@ class ApplicationController < ActionController::API
     elsif params[:integrated_circuit_diagram_id]
       id = params[:integrated_circuit_diagram_id]
       @context = IntegratedCircuitDiagram.find(id)
+    elsif params[:software_id]
+      id = params[:software_id]
+      @context = Software.find(id)
+    elsif params[:plant_ind_prototype_id]
+      id = params[:plant_ind_prototype_id]
+      @context = PlantIndPrototype.find(id)
     end
   end
 end

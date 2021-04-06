@@ -1,6 +1,7 @@
 class SoftwareSerializer < ActiveModel::Serializer
-  attributes :id, :sof_registration_number, :sof_product_title, :sof_date_of_obtaining, :sof_description, :category_id, :observation, :active, :created_by, :updated_by
-  has_one :geo_country
-  has_one :research_group
-  has_one :colciencias_call
+  attributes :id, :sof_registration_number, :sof_product_title,
+             :sof_date_of_obtaining, :sof_description, :category_id,
+             :category_name, :colciencias_call_id, :colciencias_call_name,
+             :colciencias_call_year, :geo_country_id, :geo_country_name,
+             :observation, :research_group_id, :active, :created_by, :updated_by
 end
