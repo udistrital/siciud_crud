@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_06_150221) do
+ActiveRecord::Schema.define(version: 2021_04_06_162321) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1316,6 +1316,29 @@ ActiveRecord::Schema.define(version: 2021_04_06_150221) do
     t.index ["plan_period_id"], name: "index_social_appropriation_plans_on_plan_period_id"
   end
 
+  create_table "software", force: :cascade do |t|
+    t.string "sof_registration_number"
+    t.string "sof_product_title"
+    t.date "sof_date_of_obtaining"
+    t.bigint "geo_country_id"
+    t.text "sof_description"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "observation"
+    t.boolean "active"
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_software_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_software_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_software_on_created_by"
+    t.index ["geo_country_id"], name: "index_software_on_geo_country_id"
+    t.index ["research_group_id"], name: "index_software_on_research_group_id"
+    t.index ["updated_by"], name: "index_software_on_updated_by"
+  end
+
   create_table "state_seedbeds", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -1594,6 +1617,12 @@ ActiveRecord::Schema.define(version: 2021_04_06_150221) do
   add_foreign_key "scientific_notes", "subtypes", column: "category_id"
   add_foreign_key "scientific_notes", "users", column: "created_by"
   add_foreign_key "scientific_notes", "users", column: "updated_by"
+  add_foreign_key "software", "colciencias_calls"
+  add_foreign_key "software", "geo_countries"
+  add_foreign_key "software", "research_groups"
+  add_foreign_key "software", "subtypes", column: "category_id"
+  add_foreign_key "software", "users", column: "created_by"
+  add_foreign_key "software", "users", column: "updated_by"
   add_foreign_key "subtypes", "subtypes", column: "parent_id"
   add_foreign_key "subtypes", "types"
   add_foreign_key "subtypes", "users", column: "created_by"
@@ -2082,5 +2111,54 @@ ActiveRecord::Schema.define(version: 2021_04_06_150221) do
        LEFT JOIN subtypes st ON ((ind.category_id = st.id)))
        LEFT JOIN colciencias_calls cc ON ((ind.colciencias_call_id = cc.id)))
        LEFT JOIN geo_countries gctry ON ((ind.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_icds", sql_definition: <<-SQL
+      SELECT icd.id,
+      icd.category_id,
+      st.st_name AS category_name,
+      icd.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      icd.geo_country_id,
+      gctry.name AS geo_country_name,
+      icd.icd_date_of_obtaining,
+      icd.icd_registration_number,
+      icd.icd_registration_title,
+      icd.observation,
+      icd.research_group_id,
+      icd.active,
+      icd.created_by,
+      icd.updated_by,
+      icd.created_at,
+      icd.updated_at
+     FROM (((integrated_circuit_diagrams icd
+       LEFT JOIN subtypes st ON ((icd.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((icd.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_countries gctry ON ((icd.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_software", sql_definition: <<-SQL
+      SELECT soft.id,
+      soft.category_id,
+      st.st_name AS category_name,
+      soft.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      soft.geo_country_id,
+      gctry.name AS geo_country_name,
+      soft.sof_date_of_obtaining,
+      soft.sof_description,
+      soft.sof_product_title,
+      soft.sof_registration_number,
+      soft.observation,
+      soft.research_group_id,
+      soft.active,
+      soft.created_by,
+      soft.updated_by,
+      soft.created_at,
+      soft.updated_at
+     FROM (((software soft
+       LEFT JOIN subtypes st ON ((soft.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((soft.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_countries gctry ON ((soft.geo_country_id = gctry.id)));
   SQL
 end

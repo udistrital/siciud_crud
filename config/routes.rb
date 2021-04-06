@@ -147,6 +147,9 @@ Rails.application.routes.draw do
 
         resources :integrated_circuit_diagrams
         put "/integrated_circuit_diagrams/:id/active", to: "integrated_circuit_diagrams#change_active"
+
+        resources :software
+        put "/software/:id/active", to: "software#change_active"
       end
 
       # RESEARCH UNIT PRODUCT ENDPOINTS
@@ -154,7 +157,7 @@ Rails.application.routes.draw do
       resources :books, :book_chapters, :ip_livestock_breeds, :new_animal_breeds,
                 :papers, :patents, :research_creation_works, :scientific_notes,
                 :vegetable_varieties, :industrial_designs,
-                :integrated_circuit_diagrams, only: [] do
+                :integrated_circuit_diagrams, :software, only: [] do
         resources :ext_participants, only: [:index, :show, :create, :update]
         resources :int_participants, only: [:index, :show, :create, :update]
         resources :documents, only: [:index, :show, :create, :update]

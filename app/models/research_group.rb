@@ -32,6 +32,7 @@ class ResearchGroup < ApplicationRecord
 
   has_many :industrial_designs, dependent: :destroy
   has_many :integrated_circuit_diagrams, dependent: :destroy
+  has_many :software, dependent: :destroy
 
 
   has_many :documents, as: :documentable

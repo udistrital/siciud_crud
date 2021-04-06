@@ -9,7 +9,10 @@ module Api
 
       # GET /research_units/:id/integrated_circuit_diagrams
       def index
-        @integrated_circuit_diagrams = IntegratedCircuitDiagram.all
+        @integrated_circuit_diagrams = CompleteIcd.where(
+          research_group_id: params[:research_group_id]
+        )
+        @integrated_circuit_diagrams = DxService.load(@integrated_circuit_diagrams, params)
 
         render json: @integrated_circuit_diagrams
       end

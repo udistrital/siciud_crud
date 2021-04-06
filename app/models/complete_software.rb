@@ -1,0 +1,2 @@
+class CompleteSoftware < ApplicationRecord
+end
