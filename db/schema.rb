@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_07_205516) do
+ActiveRecord::Schema.define(version: 2021_04_07_233944) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -2236,5 +2236,55 @@ ActiveRecord::Schema.define(version: 2021_04_07_205516) do
        LEFT JOIN subtypes stplt ON ((pltind.plt_type_id = stplt.id)))
        LEFT JOIN colciencias_calls cc ON ((pltind.colciencias_call_id = cc.id)))
        LEFT JOIN geo_countries gctry ON ((pltind.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_int_participants", sql_definition: <<-SQL
+      SELECT intp.id,
+      intp.producible_type AS product_type,
+      intp.producible_id AS product_type_id,
+      intp.researcher_id,
+      r.oas_researcher_id,
+      intp.participant_type_id,
+      pt.st_name AS participant_type_name,
+      intp.active,
+      intp.created_by,
+      intp.updated_by,
+      intp.created_at,
+      intp.updated_at
+     FROM ((int_participants intp
+       LEFT JOIN researchers r ON ((r.id = intp.researcher_id)))
+       LEFT JOIN subtypes pt ON ((pt.id = intp.participant_type_id)));
+  SQL
+  create_view "complete_ext_participants", sql_definition: <<-SQL
+      SELECT extp.id,
+      extp.producible_type AS product_type,
+      extp.producible_id AS product_type_id,
+      extp.first_name,
+      extp.last_name,
+      extp.participant_type_id,
+      pt.st_name AS participant_type_name,
+      extp.active,
+      extp.created_by,
+      extp.updated_by,
+      extp.created_at,
+      extp.updated_at
+     FROM (ext_participants extp
+       LEFT JOIN subtypes pt ON ((pt.id = extp.participant_type_id)));
+  SQL
+  create_view "complete_documents", sql_definition: <<-SQL
+      SELECT doc.id,
+      doc.documentable_type AS product_type,
+      doc.documentable_id AS product_type_id,
+      doc.doc_name,
+      doc.doc_path,
+      doc.doc_size,
+      doc.document_type_id,
+      dt.st_name AS document_type_name,
+      doc.active,
+      doc.created_by,
+      doc.updated_by,
+      doc.created_at,
+      doc.updated_at
+     FROM (documents doc
+       LEFT JOIN subtypes dt ON ((dt.id = doc.document_type_id)));
   SQL
 end

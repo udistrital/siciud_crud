@@ -8,7 +8,11 @@ module Api
 
       # GET context/:id/ext_participants
       def index
-        @ext_participants = @context.ext_participants.all.order(:id)
+        context_name = @context.class.name
+        @ext_participants = CompleteExtParticipant.where(
+          product_type: context_name, product_type_id: @context.id
+        )
+        @ext_participants = DxService.load(@ext_participants, params)
 
         render json: @ext_participants
       end

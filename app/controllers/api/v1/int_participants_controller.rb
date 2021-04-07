@@ -8,8 +8,11 @@ module Api
 
       # GET context/:id/int_participants
       def index
-        @int_participants = @context.int_participants.all.order(:id)
-
+        context_name = @context.class.name
+        @int_participants = CompleteIntParticipant.where(
+          product_type: context_name, product_type_id: @context.id
+        )
+        @int_participants = DxService.load(@int_participants, params)
         render json: @int_participants
       end
 

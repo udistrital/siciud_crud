@@ -6,7 +6,11 @@ module Api
 
       # GET context/:id/documents
       def index
-        @documents = @context.documents.all.order(:id)
+        context_name = @context.class.name
+        @documents = CompleteDocument.where(
+          product_type: context_name, product_type_id: @context.id
+        )
+        @documents = DxService.load(@documents, params)
 
         render json: @documents
       end
