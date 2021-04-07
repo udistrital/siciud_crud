@@ -44,7 +44,7 @@ module Api
 
       # PUT /research_units/:id/industrial_designs/1/active
       def change_active
-        if @software.update(software_params_to_update)
+        if @software.update(software_params_to_deactivate)
           render json: @software
         else
           render json: @software.errors, status: :unprocessable_entity
