@@ -1,32 +1,42 @@
-1,,Estados de Unidades de Investigación
-2,,Tipos de Unidades de Investigación
-3,,Tipologías de Productos 
-4,,Tipos de Productos
-5,,Tipos de Artículos
-6,,Estados de las Patentes
-7,,Tipos de Ciclos
-8,,Estados de Petición
-9,,Tipos de Obras
+1,,Unidades de Investigación – Estados
+2,,Unidades de Investigación – Tipos
+3,,Producto – Tipologías
+4,,Producto – Tipos
+5,,Artículo – Tipos
+6,,Patente – Estados
+7,,Ciclo – Tipos
+8,,Petición – Estados
+9,,Obra -Tipos
 10,,Áreas y esp. de conocimiento
-11,,Categorías de Productos
-12,11,Categorías de Artículo
-13,11,Categorías de Libro
-14,11,Categorías de Capítulo de Libro
-15,11,Categorías de Patente
-16,11,Categorías de Variedad Vegetal
-17,11,Categorías de Nueva Raza Animal
-18,11,Categorías de Poblaciones mejoradas de razas pecuarias
-19,11,Categorías de Obras o productos de investigación-creación en Artes Arquitectura y Diseño
-20,11,Categorías de Nota Científica
-21,,Tipos de Documentos
-22,20,Documentos de Unidades de Investigación
-23,20,Documentos de Artículo
-24,20,Documentos de Libro
-25,20,Documentos de Capítulo de Libro
-26,20,Documentos de Patente
-27,20,Documentos de Variedad Vegetal
-28,20,Documentos de Nueva Raza Animal
-29,20,Documentos de Poblaciones mejoradas de razas pecuarias
-30,20,Documentos de Obras o productos de investigación-creación en Artes Arquitectura y Diseño
-31,20,Documentos de Nota Cienifica
-32,,Tipos de Participante
+11,,Producto – Categorías
+12,11,Artículo – Categorías
+13,11,Libro – Categorías
+14,11,Capítulo de Libro – Categorías
+15,11,Patente – Categorías
+16,11,Variedad Vegetal – Categorías
+17,11,Nueva Raza Animal – Categorías
+18,11,Poblaciones mejoradas de razas pecuarias – Categorías
+19,11,Obras o productos de investigación-creación en Artes Arquitectura y Diseño – Categorías
+20,11,Nota Científica – Categorías
+21,,Documentos – Tipos
+22,20,Unidades de Investigación- Documentos
+23,20,Artículo – Documentos
+24,20,Libro – Documentos
+25,20,Capítulo de Libro – Documentos
+26,20,Patente – Documentos
+27,20,Variedad Vegetal – Documentos
+28,20,Nueva Raza Animal – Documentos
+29,20,Poblaciones mejoradas de razas pecuarias – Documentos
+30,20,Obras o productos de investigación-creación en Artes Arquitectura y Diseño – Documentos
+31,20,Nota Cienifica – Documentos
+32,,Participante – Tipos
+33,11,Diseño Industrial – Categorías
+34,11,Esquema de circuito integrado – Categorías
+35,11,Software – Categorías
+36,11,Planta piloto – Categorías
+37,11,Prototipo industrial – Categorías
+38,11,Signos distintivos – Categorías
+39,11,Productos nutraceúticos – Categorías
+40,11,Colección científica – Categorías
+41,11,Nuevo registro científico – Categorías
+42,,Planta piloto y Prototipo industrial – Tipos
