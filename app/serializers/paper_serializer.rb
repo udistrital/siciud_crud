@@ -1,4 +1,4 @@
-class PaperSerializer < AbstractProductNewKnwGenSerializer
+class PaperSerializer < AbstractProductSerializer
   attributes :id, :title, :approval_date, :category_id, :category_name,
              :colciencias_call_id, :colciencias_call_name,
              :colciencias_call_year, :doi, :final_page, :geo_city_id,

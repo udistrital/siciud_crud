@@ -115,12 +115,9 @@ Rails.application.routes.draw do
 
         # PRODUCTS ENDPOINTS BY TYPOLOGY
         # New generation products endpoints
-        # Book
         resources :books, only: [:index, :show, :create, :update]
         put "/books/:id/active", to: "books#change_active"
 
-
-        # Book chapter
         resources :book_chapters, only: [:index, :show, :create, :update]
         put "book_chapters/:id/active/", to: "book_chapters#change_active"
 
@@ -144,13 +141,29 @@ Rails.application.routes.draw do
 
         resources :vegetable_varieties, only: [:index, :show, :create, :update]
         put "/vegetable_varieties/:id/active", to: "vegetable_varieties#change_active"
+
+        # Technological development and innovation
+        resources :industrial_designs, only: [:index, :show, :create, :update]
+        put "/industrial_designs/:id/active", to: "industrial_designs#change_active"
+
+        resources :integrated_circuit_diagrams
+        put "/integrated_circuit_diagrams/:id/active", to: "integrated_circuit_diagrams#change_active"
+
+        resources :software
+        put "/software/:id/active", to: "software#change_active"
+
+        resources :plant_ind_prototypes
+        put "/plant_ind_prototypes/:id/active", to: "plant_ind_prototypes#change_active"
+
       end
 
       # RESEARCH UNIT PRODUCT ENDPOINTS
-      ## Participants in product creation
+      ## Participants in product creation and documents
       resources :books, :book_chapters, :ip_livestock_breeds, :new_animal_breeds,
                 :papers, :patents, :research_creation_works, :scientific_notes,
-                :vegetable_varieties, only: [] do
+                :vegetable_varieties, :industrial_designs,
+                :integrated_circuit_diagrams, :software,
+                :plant_ind_prototypes, only: [] do
         resources :ext_participants, only: [:index, :show, :create, :update]
         resources :int_participants, only: [:index, :show, :create, :update]
         resources :documents, only: [:index, :show, :create, :update]
@@ -159,6 +172,8 @@ Rails.application.routes.draw do
       ## General
       resources :editorials, only: [:index, :show, :create, :update]
       resources :journals, only: [:index, :show, :create, :update]
+      resources :institutions, only: [:index, :show, :create, :update]
+      put "/institutions/:id/active", to: "institutions#change_active"
 
       ## Endpoints research_creation_works
       resources :research_creation_works, only: [] do

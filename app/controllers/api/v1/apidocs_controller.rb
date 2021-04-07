@@ -60,7 +60,7 @@ module Api
         ParticipantTypesController,
         PetitionStatusesController,
         ResearchFocusController,
-        ResearcherController,
+        ResearchersController,
         ResearchGroupController,
         GroupMemberController,
         GroupStatesController,

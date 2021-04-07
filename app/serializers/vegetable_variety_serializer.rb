@@ -1,4 +1,4 @@
-class VegetableVarietySerializer < AbstractProductNewKnwGenSerializer
+class VegetableVarietySerializer < AbstractProductSerializer
   attributes :id, :name, :category_id, :category_name,
              :colciencias_call_id, :colciencias_call_name,
              :colciencias_call_year, :cycle_type_id,

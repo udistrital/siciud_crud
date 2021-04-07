@@ -1,4 +1,4 @@
-class BookSerializer < AbstractProductNewKnwGenSerializer
+class BookSerializer < AbstractProductSerializer
   attributes :id, :title, :category_id, :category_name, :colciencias_call_id,
              :colciencias_call_name, :colciencias_call_year, :editorial_id,
              :editorial_name, :geo_city_id, :geo_city_name, :geo_country_id,
