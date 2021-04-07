@@ -1,7 +1,5 @@
 class FundingEntity < ApplicationRecord
 
-    has_and_belongs_to_many :plant_ind_prototypes
-
     # validates :name, presence: true
     # validates :country, presence: true
     # validates :city, presence: true

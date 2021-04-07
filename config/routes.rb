@@ -171,6 +171,8 @@ Rails.application.routes.draw do
       ## General
       resources :editorials, only: [:index, :show, :create, :update]
       resources :journals, only: [:index, :show, :create, :update]
+      resources :institutions, only: [:index, :show, :create, :update]
+      put "/institutions/:id/active", to: "institutions#change_active"
 
       ## Endpoints research_creation_works
       resources :research_creation_works, only: [] do

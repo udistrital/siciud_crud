@@ -25,7 +25,18 @@ module Api
       # POST /research_units/:id/plant_ind_prototypes
       def create
         @plant_ind_prototype = @research_group.plant_ind_prototypes.new(
-          pip_params_to_create)
+          pip_params_to_create.except(:institution_name))
+        institution = set_institution(
+          params[:plant_ind_prototype][:institution_name],
+          @plant_ind_prototype.created_by)
+
+        if institution
+          @plant_ind_prototype.institution = institution
+          puts "ok"
+        else
+          puts "failed"
+          return
+        end
 
         if @plant_ind_prototype.save
           render json: @plant_ind_prototype, status: :created
@@ -36,7 +47,18 @@ module Api
 
       # PATCH/PUT /research_units/:id/plant_ind_prototypes/1
       def update
-        if @plant_ind_prototype.update(pip_params_to_update)
+        institution = set_institution(
+          params[:plant_ind_prototype][:institution_name],
+          @plant_ind_prototype.created_by)
+
+        if institution
+          @plant_ind_prototype.institution = institution
+        else
+          return
+        end
+
+        if @plant_ind_prototype.update(
+          pip_params_to_update.except(:institution_name))
           render json: @plant_ind_prototype
         else
           render json: @plant_ind_prototype.errors, status: :unprocessable_entity
@@ -63,17 +85,15 @@ module Api
       def pip_params_to_create
         params.require(:plant_ind_prototype).permit(
           :plt_name, :plt_registration_number, :plt_date_of_elaboration,
-          :geo_country_id, :category_id, :colciencias_call_id,
-          :observation, :plt_type_id, :created_by,
-          funding_entity_ids: [])
+          :geo_country_id, :category_id, :colciencias_call_id, :institution_name,
+          :observation, :plt_type_id, :created_by)
       end
 
       def pip_params_to_update
         params.require(:plant_ind_prototype).permit(
           :plt_name, :plt_registration_number, :plt_date_of_elaboration,
-          :geo_country_id, :category_id, :colciencias_call_id,
-          :observation, :plt_type_id, :updated_by,
-          funding_entity_ids: [])
+          :geo_country_id, :category_id, :colciencias_call_id, :institution_name,
+          :observation, :plt_type_id, :updated_by)
       end
 
       def pip_params_to_deactivate

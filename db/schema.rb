@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_06_195252) do
+ActiveRecord::Schema.define(version: 2021_04_07_205516) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -596,11 +596,6 @@ ActiveRecord::Schema.define(version: 2021_04_06_195252) do
     t.index ["entity_type_id"], name: "index_funding_entities_on_entity_type_id"
   end
 
-  create_table "funding_entities_plant_ind_prototypes", id: false, force: :cascade do |t|
-    t.bigint "plant_ind_prototype_id", null: false
-    t.bigint "funding_entity_id", null: false
-  end
-
   create_table "genres", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -765,6 +760,17 @@ ActiveRecord::Schema.define(version: 2021_04_06_195252) do
     t.index ["geo_country_id"], name: "index_industrial_designs_on_geo_country_id"
     t.index ["research_group_id"], name: "index_industrial_designs_on_research_group_id"
     t.index ["updated_by"], name: "index_industrial_designs_on_updated_by"
+  end
+
+  create_table "institutions", force: :cascade do |t|
+    t.string "inst_name"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_institutions_on_created_by"
+    t.index ["updated_by"], name: "index_institutions_on_updated_by"
   end
 
   create_table "int_participants", force: :cascade do |t|
@@ -1050,10 +1056,12 @@ ActiveRecord::Schema.define(version: 2021_04_06_195252) do
     t.bigint "updated_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "institution_id"
     t.index ["category_id"], name: "index_plant_ind_prototypes_on_category_id"
     t.index ["colciencias_call_id"], name: "index_plant_ind_prototypes_on_colciencias_call_id"
     t.index ["created_by"], name: "index_plant_ind_prototypes_on_created_by"
     t.index ["geo_country_id"], name: "index_plant_ind_prototypes_on_geo_country_id"
+    t.index ["institution_id"], name: "index_plant_ind_prototypes_on_institution_id"
     t.index ["plt_type_id"], name: "index_plant_ind_prototypes_on_plt_type_id"
     t.index ["research_group_id"], name: "index_plant_ind_prototypes_on_research_group_id"
     t.index ["updated_by"], name: "index_plant_ind_prototypes_on_updated_by"
@@ -1555,6 +1563,8 @@ ActiveRecord::Schema.define(version: 2021_04_06_195252) do
   add_foreign_key "industrial_designs", "subtypes", column: "category_id"
   add_foreign_key "industrial_designs", "users", column: "created_by"
   add_foreign_key "industrial_designs", "users", column: "updated_by"
+  add_foreign_key "institutions", "users", column: "created_by"
+  add_foreign_key "institutions", "users", column: "updated_by"
   add_foreign_key "int_participants", "researchers"
   add_foreign_key "int_participants", "subtypes", column: "participant_type_id"
   add_foreign_key "int_participants", "users", column: "created_by"
@@ -1615,6 +1625,7 @@ ActiveRecord::Schema.define(version: 2021_04_06_195252) do
   add_foreign_key "petition_statuses", "users", column: "updated_by"
   add_foreign_key "plant_ind_prototypes", "colciencias_calls"
   add_foreign_key "plant_ind_prototypes", "geo_countries"
+  add_foreign_key "plant_ind_prototypes", "institutions"
   add_foreign_key "plant_ind_prototypes", "research_groups"
   add_foreign_key "plant_ind_prototypes", "subtypes", column: "category_id"
   add_foreign_key "plant_ind_prototypes", "subtypes", column: "plt_type_id"
@@ -2204,11 +2215,9 @@ ActiveRecord::Schema.define(version: 2021_04_06_195252) do
       pltind.colciencias_call_id,
       cc.name AS colciencias_call_name,
       cc.year AS colciencias_call_year,
-      ARRAY( SELECT funding_entities_plant_ind_prototypes.funding_entity_id
-             FROM funding_entities_plant_ind_prototypes
-            WHERE (funding_entities_plant_ind_prototypes.plant_ind_prototype_id = pltind.id)) AS funding_entity_ids,
       pltind.geo_country_id,
       gctry.name AS geo_country_name,
+      inst.inst_name AS institution_name,
       pltind.plt_name,
       pltind.plt_date_of_elaboration,
       pltind.plt_registration_number,
@@ -2221,7 +2230,8 @@ ActiveRecord::Schema.define(version: 2021_04_06_195252) do
       pltind.updated_by,
       pltind.created_at,
       pltind.updated_at
-     FROM ((((plant_ind_prototypes pltind
+     FROM (((((plant_ind_prototypes pltind
+       LEFT JOIN institutions inst ON ((pltind.institution_id = inst.id)))
        LEFT JOIN subtypes st ON ((pltind.category_id = st.id)))
        LEFT JOIN subtypes stplt ON ((pltind.plt_type_id = stplt.id)))
        LEFT JOIN colciencias_calls cc ON ((pltind.colciencias_call_id = cc.id)))

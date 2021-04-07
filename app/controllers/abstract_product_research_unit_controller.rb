@@ -18,6 +18,24 @@ class AbstractProductResearchUnitController < ApplicationController
     editorial
   end
 
+  def set_institution(institution_name, created_by_user)
+    institution = nil
+    if institution_name.is_a? String
+      institution_name = institution_name.strip
+      institution = Institution.where('lower(inst_name) = ?',
+                                      institution_name.downcase).first
+      if institution.nil?
+        institution = Institution.new(inst_name: institution_name,
+                                      created_by: created_by_user)
+        unless institution.save
+          render json: { error: institution.errors, method: 'set_institution' },
+                 status: :unprocessable_entity and return
+        end
+      end
+    end
+    institution
+  end
+
   def set_journal(journal_name, created_by_user)
     journal = nil
     if journal_name.is_a? String
