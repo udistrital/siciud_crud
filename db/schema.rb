@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_07_233944) do
+ActiveRecord::Schema.define(version: 2021_04_08_000013) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -510,6 +510,7 @@ ActiveRecord::Schema.define(version: 2021_04_07_233944) do
     t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
+    t.string "nuxeo_id"
     t.index ["created_by"], name: "index_documents_on_created_by"
     t.index ["document_type_id"], name: "index_documents_on_document_type_id"
     t.index ["documentable_type", "documentable_id"], name: "index_documents_on_documentable_type_and_documentable_id"
@@ -2272,6 +2273,7 @@ ActiveRecord::Schema.define(version: 2021_04_07_233944) do
   SQL
   create_view "complete_documents", sql_definition: <<-SQL
       SELECT doc.id,
+      doc.nuxeo_id,
       doc.documentable_type AS product_type,
       doc.documentable_id AS product_type_id,
       doc.doc_name,

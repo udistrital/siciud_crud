@@ -60,12 +60,12 @@ module Api
       # Only allow a trusted parameter "white list" through.
       def document_params_to_create
         params.require(:document).permit(:doc_name, :doc_path, :doc_size,
-                                         :document_type_id, :created_by)
+                                         :document_type_id, :nuxeo_id, :created_by)
       end
 
       def document_params_to_update
         params.require(:document).permit(:doc_name, :doc_path, :doc_size,
-                                         :document_type_id, :updated_by)
+                                         :document_type_id, :nuxeo_id, :updated_by)
       end
 
       def document_params_to_deactivate
