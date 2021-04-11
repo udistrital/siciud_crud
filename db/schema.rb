@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_11_225554) do
+ActiveRecord::Schema.define(version: 2021_04_11_230438) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1389,7 +1389,7 @@ ActiveRecord::Schema.define(version: 2021_04_11_225554) do
     t.bigint "research_group_id"
     t.bigint "colciencias_call_id"
     t.text "observation"
-    t.boolean "active"
+    t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
     t.datetime "created_at", null: false
