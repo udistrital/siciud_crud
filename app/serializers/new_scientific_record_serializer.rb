@@ -1,4 +1,4 @@
-class NewScientificRecordSerializer < ActiveModel::Serializer
+class NewScientificRecordSerializer < AbstractProductSerializer
   attributes :id, :nsr_name, :nsr_date_of_obtaining, :nsr_database_name,
              :nsr_database_url, :category_id, :category_name,
              :colciencias_call_id, :colciencias_call_name,

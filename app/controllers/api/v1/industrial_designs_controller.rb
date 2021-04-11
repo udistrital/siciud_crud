@@ -45,7 +45,7 @@ module Api
 
       # PUT /research_units/:id/industrial_designs/1/active
       def change_active
-        if @industrial_design.update(book_params_to_deactivate)
+        if @industrial_design.update(ind_design_params_to_deactivate)
           render json: @industrial_design
         else
           render json: @industrial_design.errors, status: :unprocessable_entity
