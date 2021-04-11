@@ -155,6 +155,8 @@ Rails.application.routes.draw do
         resources :plant_ind_prototypes
         put "/plant_ind_prototypes/:id/active", to: "plant_ind_prototypes#change_active"
 
+        resources :new_scientific_records
+        put "/new_scientific_records/:id/active", to: "new_scientific_records#change_active"
       end
 
       # RESEARCH UNIT PRODUCT ENDPOINTS
@@ -163,7 +165,7 @@ Rails.application.routes.draw do
                 :papers, :patents, :research_creation_works, :scientific_notes,
                 :vegetable_varieties, :industrial_designs,
                 :integrated_circuit_diagrams, :software,
-                :plant_ind_prototypes, only: [] do
+                :plant_ind_prototypes, :new_scientific_records, only: [] do
         resources :ext_participants, only: [:index, :show, :create, :update]
         resources :int_participants, only: [:index, :show, :create, :update]
         resources :documents, only: [:index, :show, :create, :update]

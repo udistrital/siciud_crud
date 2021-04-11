@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_08_000013) do
+ActiveRecord::Schema.define(version: 2021_04_11_225554) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -888,6 +888,31 @@ ActiveRecord::Schema.define(version: 2021_04_08_000013) do
     t.index ["updated_by"], name: "index_new_animal_breeds_on_updated_by"
   end
 
+  create_table "new_scientific_records", force: :cascade do |t|
+    t.string "nsr_name"
+    t.date "nsr_date_of_obtaining"
+    t.string "nsr_database_name"
+    t.string "nsr_database_url"
+    t.string "nsr_certifying_institution"
+    t.string "nsr_issuing_institution"
+    t.bigint "geo_country_id"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "observation"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_new_scientific_records_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_new_scientific_records_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_new_scientific_records_on_created_by"
+    t.index ["geo_country_id"], name: "index_new_scientific_records_on_geo_country_id"
+    t.index ["research_group_id"], name: "index_new_scientific_records_on_research_group_id"
+    t.index ["updated_by"], name: "index_new_scientific_records_on_updated_by"
+  end
+
   create_table "oecd_disciplines", force: :cascade do |t|
     t.string "name"
     t.string "code"
@@ -1594,6 +1619,12 @@ ActiveRecord::Schema.define(version: 2021_04_08_000013) do
   add_foreign_key "new_animal_breeds", "subtypes", column: "petition_status_id"
   add_foreign_key "new_animal_breeds", "users", column: "created_by"
   add_foreign_key "new_animal_breeds", "users", column: "updated_by"
+  add_foreign_key "new_scientific_records", "colciencias_calls"
+  add_foreign_key "new_scientific_records", "geo_countries"
+  add_foreign_key "new_scientific_records", "research_groups"
+  add_foreign_key "new_scientific_records", "subtypes", column: "category_id"
+  add_foreign_key "new_scientific_records", "users", column: "created_by"
+  add_foreign_key "new_scientific_records", "users", column: "updated_by"
   add_foreign_key "oecd_disciplines", "oecd_knowledge_subareas"
   add_foreign_key "oecd_disciplines", "users", column: "created_by"
   add_foreign_key "oecd_disciplines", "users", column: "updated_by"
@@ -2288,5 +2319,32 @@ ActiveRecord::Schema.define(version: 2021_04_08_000013) do
       doc.updated_at
      FROM (documents doc
        LEFT JOIN subtypes dt ON ((dt.id = doc.document_type_id)));
+  SQL
+  create_view "complete_new_scientific_records", sql_definition: <<-SQL
+      SELECT nsr.id,
+      nsr.category_id,
+      st.st_name AS category_name,
+      nsr.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      nsr.geo_country_id,
+      gctry.name AS geo_country_name,
+      nsr.nsr_name,
+      nsr.nsr_date_of_obtaining,
+      nsr.nsr_database_name,
+      nsr.nsr_database_url,
+      nsr.nsr_certifying_institution,
+      nsr.nsr_issuing_institution,
+      nsr.observation,
+      nsr.research_group_id,
+      nsr.active,
+      nsr.created_by,
+      nsr.updated_by,
+      nsr.created_at,
+      nsr.updated_at
+     FROM (((new_scientific_records nsr
+       LEFT JOIN subtypes st ON ((nsr.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((nsr.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_countries gctry ON ((nsr.geo_country_id = gctry.id)));
   SQL
 end

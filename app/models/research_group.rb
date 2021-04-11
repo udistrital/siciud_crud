@@ -34,6 +34,7 @@ class ResearchGroup < ApplicationRecord
   has_many :integrated_circuit_diagrams, dependent: :destroy
   has_many :software, dependent: :destroy
   has_many :plant_ind_prototypes, dependent: :destroy
+  has_many :new_scientific_records, dependent: :destroy
 
 
   has_many :documents, as: :documentable

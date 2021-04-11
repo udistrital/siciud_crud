@@ -69,6 +69,9 @@ class ApplicationController < ActionController::API
     elsif params[:plant_ind_prototype_id]
       id = params[:plant_ind_prototype_id]
       @context = PlantIndPrototype.find(id)
+    elsif params[:new_scientific_record_id]
+      id = params[:new_scientific_record_id]
+      @context = NewScientificRecord.find(id)
     end
   end
 end
