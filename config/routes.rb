@@ -146,15 +146,25 @@ Rails.application.routes.draw do
         resources :industrial_designs, only: [:index, :show, :create, :update]
         put "/industrial_designs/:id/active", to: "industrial_designs#change_active"
 
-        resources :integrated_circuit_diagrams
+        resources :integrated_circuit_diagrams, only: [:index, :show, :create, :update]
         put "/integrated_circuit_diagrams/:id/active", to: "integrated_circuit_diagrams#change_active"
 
-        resources :software
+        resources :software, only: [:index, :show, :create, :update]
         put "/software/:id/active", to: "software#change_active"
 
-        resources :plant_ind_prototypes
+        resources :plant_ind_prototypes, only: [:index, :show, :create, :update]
         put "/plant_ind_prototypes/:id/active", to: "plant_ind_prototypes#change_active"
 
+        resources :new_scientific_records, only: [:index, :show, :create, :update]
+        put "/new_scientific_records/:id/active", to: "new_scientific_records#change_active"
+
+        # Social appropriation of knowledge
+        resources :events, only: [:index, :show, :create, :update]
+        put "/events/:id/active", to: "events#change_active"
+
+        # Human Resource Training for CTel
+        resources :degree_works, only: [:index, :show, :create, :update]
+        put "/degree_works/:id/active", to: "degree_works#change_active"
       end
 
       # RESEARCH UNIT PRODUCT ENDPOINTS
@@ -163,7 +173,9 @@ Rails.application.routes.draw do
                 :papers, :patents, :research_creation_works, :scientific_notes,
                 :vegetable_varieties, :industrial_designs,
                 :integrated_circuit_diagrams, :software,
-                :plant_ind_prototypes, only: [] do
+                :plant_ind_prototypes, :new_scientific_records,
+                :events, :degree_works,
+                only: [] do
         resources :ext_participants, only: [:index, :show, :create, :update]
         resources :int_participants, only: [:index, :show, :create, :update]
         resources :documents, only: [:index, :show, :create, :update]

@@ -1,8 +1,8 @@
-class Software < ApplicationRecord
+class Event < ApplicationRecord
 
   belongs_to :category, class_name: 'Subtype', foreign_key: 'category_id', optional: true
   belongs_to :colciencias_call, optional: true
-  belongs_to :geo_country
+  belongs_to :eve_type, class_name: 'Subtype', foreign_key: 'eve_type_id', optional: true
   belongs_to :research_group
 
   # Participants

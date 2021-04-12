@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_08_000013) do
+ActiveRecord::Schema.define(version: 2021_04_12_030624) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -492,6 +492,29 @@ ActiveRecord::Schema.define(version: 2021_04_08_000013) do
     t.index ["updated_by"], name: "index_cycle_types_on_updated_by"
   end
 
+  create_table "degree_works", force: :cascade do |t|
+    t.string "dw_title"
+    t.date "dw_date"
+    t.string "dw_institution_name"
+    t.string "dw_recognition"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "dw_observation"
+    t.bigint "dw_type_id"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_degree_works_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_degree_works_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_degree_works_on_created_by"
+    t.index ["dw_type_id"], name: "index_degree_works_on_dw_type_id"
+    t.index ["research_group_id"], name: "index_degree_works_on_research_group_id"
+    t.index ["updated_by"], name: "index_degree_works_on_updated_by"
+  end
+
   create_table "document_types", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -538,6 +561,30 @@ ActiveRecord::Schema.define(version: 2021_04_08_000013) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "events", force: :cascade do |t|
+    t.string "eve_name"
+    t.date "eve_start_date"
+    t.date "eve_finish_date"
+    t.string "eve_organizers"
+    t.string "eve_entities"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "eve_observation"
+    t.bigint "eve_type_id"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_events_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_events_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_events_on_created_by"
+    t.index ["eve_type_id"], name: "index_events_on_eve_type_id"
+    t.index ["research_group_id"], name: "index_events_on_research_group_id"
+    t.index ["updated_by"], name: "index_events_on_updated_by"
   end
 
   create_table "ext_participants", force: :cascade do |t|
@@ -886,6 +933,31 @@ ActiveRecord::Schema.define(version: 2021_04_08_000013) do
     t.index ["petition_status_id"], name: "index_new_animal_breeds_on_petition_status_id"
     t.index ["research_group_id"], name: "index_new_animal_breeds_on_research_group_id"
     t.index ["updated_by"], name: "index_new_animal_breeds_on_updated_by"
+  end
+
+  create_table "new_scientific_records", force: :cascade do |t|
+    t.string "nsr_name"
+    t.date "nsr_date_of_obtaining"
+    t.string "nsr_database_name"
+    t.string "nsr_database_url"
+    t.string "nsr_certifying_institution"
+    t.string "nsr_issuing_institution"
+    t.bigint "geo_country_id"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "observation"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_new_scientific_records_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_new_scientific_records_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_new_scientific_records_on_created_by"
+    t.index ["geo_country_id"], name: "index_new_scientific_records_on_geo_country_id"
+    t.index ["research_group_id"], name: "index_new_scientific_records_on_research_group_id"
+    t.index ["updated_by"], name: "index_new_scientific_records_on_updated_by"
   end
 
   create_table "oecd_disciplines", force: :cascade do |t|
@@ -1364,7 +1436,7 @@ ActiveRecord::Schema.define(version: 2021_04_08_000013) do
     t.bigint "research_group_id"
     t.bigint "colciencias_call_id"
     t.text "observation"
-    t.boolean "active"
+    t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
     t.datetime "created_at", null: false
@@ -1524,11 +1596,23 @@ ActiveRecord::Schema.define(version: 2021_04_08_000013) do
   add_foreign_key "curricular_prj_ids_research_groups", "users", column: "updated_by"
   add_foreign_key "cycle_types", "users", column: "created_by"
   add_foreign_key "cycle_types", "users", column: "updated_by"
+  add_foreign_key "degree_works", "colciencias_calls"
+  add_foreign_key "degree_works", "research_groups"
+  add_foreign_key "degree_works", "subtypes", column: "category_id"
+  add_foreign_key "degree_works", "subtypes", column: "dw_type_id"
+  add_foreign_key "degree_works", "users", column: "created_by"
+  add_foreign_key "degree_works", "users", column: "updated_by"
   add_foreign_key "documents", "subtypes", column: "document_type_id"
   add_foreign_key "documents", "users", column: "created_by"
   add_foreign_key "documents", "users", column: "updated_by"
   add_foreign_key "editorials", "users", column: "created_by"
   add_foreign_key "editorials", "users", column: "updated_by"
+  add_foreign_key "events", "colciencias_calls"
+  add_foreign_key "events", "research_groups"
+  add_foreign_key "events", "subtypes", column: "category_id"
+  add_foreign_key "events", "subtypes", column: "eve_type_id"
+  add_foreign_key "events", "users", column: "created_by"
+  add_foreign_key "events", "users", column: "updated_by"
   add_foreign_key "ext_participants", "subtypes", column: "participant_type_id"
   add_foreign_key "ext_participants", "users", column: "created_by"
   add_foreign_key "ext_participants", "users", column: "updated_by"
@@ -1594,6 +1678,12 @@ ActiveRecord::Schema.define(version: 2021_04_08_000013) do
   add_foreign_key "new_animal_breeds", "subtypes", column: "petition_status_id"
   add_foreign_key "new_animal_breeds", "users", column: "created_by"
   add_foreign_key "new_animal_breeds", "users", column: "updated_by"
+  add_foreign_key "new_scientific_records", "colciencias_calls"
+  add_foreign_key "new_scientific_records", "geo_countries"
+  add_foreign_key "new_scientific_records", "research_groups"
+  add_foreign_key "new_scientific_records", "subtypes", column: "category_id"
+  add_foreign_key "new_scientific_records", "users", column: "created_by"
+  add_foreign_key "new_scientific_records", "users", column: "updated_by"
   add_foreign_key "oecd_disciplines", "oecd_knowledge_subareas"
   add_foreign_key "oecd_disciplines", "users", column: "created_by"
   add_foreign_key "oecd_disciplines", "users", column: "updated_by"
@@ -2288,5 +2378,83 @@ ActiveRecord::Schema.define(version: 2021_04_08_000013) do
       doc.updated_at
      FROM (documents doc
        LEFT JOIN subtypes dt ON ((dt.id = doc.document_type_id)));
+  SQL
+  create_view "complete_new_scientific_records", sql_definition: <<-SQL
+      SELECT nsr.id,
+      nsr.category_id,
+      st.st_name AS category_name,
+      nsr.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      nsr.geo_country_id,
+      gctry.name AS geo_country_name,
+      nsr.nsr_name,
+      nsr.nsr_date_of_obtaining,
+      nsr.nsr_database_name,
+      nsr.nsr_database_url,
+      nsr.nsr_certifying_institution,
+      nsr.nsr_issuing_institution,
+      nsr.observation,
+      nsr.research_group_id,
+      nsr.active,
+      nsr.created_by,
+      nsr.updated_by,
+      nsr.created_at,
+      nsr.updated_at
+     FROM (((new_scientific_records nsr
+       LEFT JOIN subtypes st ON ((nsr.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((nsr.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_countries gctry ON ((nsr.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_events", sql_definition: <<-SQL
+      SELECT eve.id,
+      eve.category_id,
+      st.st_name AS category_name,
+      eve.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      eve.eve_name,
+      eve.eve_start_date,
+      eve.eve_finish_date,
+      eve.eve_organizers,
+      eve.eve_entities,
+      eve.eve_observation,
+      eve.eve_type_id,
+      evt.st_name AS eve_type_name,
+      eve.research_group_id,
+      eve.active,
+      eve.created_by,
+      eve.updated_by,
+      eve.created_at,
+      eve.updated_at
+     FROM (((events eve
+       LEFT JOIN subtypes st ON ((eve.category_id = st.id)))
+       LEFT JOIN subtypes evt ON ((eve.eve_type_id = evt.id)))
+       LEFT JOIN colciencias_calls cc ON ((eve.colciencias_call_id = cc.id)));
+  SQL
+  create_view "complete_degree_works", sql_definition: <<-SQL
+      SELECT dw.id,
+      dw.category_id,
+      st.st_name AS category_name,
+      dw.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      dw.dw_title,
+      dw.dw_date,
+      dw.dw_institution_name,
+      dw.dw_recognition,
+      dw.dw_type_id,
+      dwt.st_name AS dw_type_name,
+      dw.dw_observation,
+      dw.research_group_id,
+      dw.active,
+      dw.created_by,
+      dw.updated_by,
+      dw.created_at,
+      dw.updated_at
+     FROM (((degree_works dw
+       LEFT JOIN subtypes st ON ((dw.category_id = st.id)))
+       LEFT JOIN subtypes dwt ON ((dw.category_id = dwt.id)))
+       LEFT JOIN colciencias_calls cc ON ((dw.colciencias_call_id = cc.id)));
   SQL
 end

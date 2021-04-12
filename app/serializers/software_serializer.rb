@@ -1,4 +1,4 @@
-class SoftwareSerializer < AbstractGeneralSerializer
+class SoftwareSerializer < AbstractProductSerializer
   attributes :id, :sof_registration_number, :sof_product_title,
              :sof_date_of_obtaining, :sof_description, :category_id,
              :category_name, :colciencias_call_id, :colciencias_call_name,

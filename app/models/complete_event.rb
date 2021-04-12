@@ -1,4 +1,4 @@
-class CompleteSoftware < ApplicationRecord
+class CompleteEvent < ApplicationRecord
   self.primary_key = :id
 
   def readonly?
