@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_12_182502) do
+ActiveRecord::Schema.define(version: 2021_04_12_214804) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -791,7 +791,6 @@ ActiveRecord::Schema.define(version: 2021_04_12_182502) do
     t.string "ind_dsg_registration_number"
     t.string "ind_dsg_registration_title"
     t.date "ind_dsg_date_of_obtaining"
-    t.bigint "geo_country_id"
     t.string "ind_dsg_industrial_publication_gazette"
     t.bigint "category_id"
     t.bigint "research_group_id"
@@ -802,10 +801,11 @@ ActiveRecord::Schema.define(version: 2021_04_12_182502) do
     t.bigint "updated_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "geo_city_id"
     t.index ["category_id"], name: "index_industrial_designs_on_category_id"
     t.index ["colciencias_call_id"], name: "index_industrial_designs_on_colciencias_call_id"
     t.index ["created_by"], name: "index_industrial_designs_on_created_by"
-    t.index ["geo_country_id"], name: "index_industrial_designs_on_geo_country_id"
+    t.index ["geo_city_id"], name: "index_industrial_designs_on_geo_city_id"
     t.index ["research_group_id"], name: "index_industrial_designs_on_research_group_id"
     t.index ["updated_by"], name: "index_industrial_designs_on_updated_by"
   end
@@ -842,7 +842,6 @@ ActiveRecord::Schema.define(version: 2021_04_12_182502) do
     t.string "icd_registration_number"
     t.string "icd_registration_title"
     t.date "icd_date_of_obtaining"
-    t.bigint "geo_country_id"
     t.bigint "category_id"
     t.bigint "research_group_id"
     t.bigint "colciencias_call_id"
@@ -852,10 +851,11 @@ ActiveRecord::Schema.define(version: 2021_04_12_182502) do
     t.bigint "updated_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "geo_city_id"
     t.index ["category_id"], name: "index_integrated_circuit_diagrams_on_category_id"
     t.index ["colciencias_call_id"], name: "index_integrated_circuit_diagrams_on_colciencias_call_id"
     t.index ["created_by"], name: "index_integrated_circuit_diagrams_on_created_by"
-    t.index ["geo_country_id"], name: "index_integrated_circuit_diagrams_on_geo_country_id"
+    t.index ["geo_city_id"], name: "index_integrated_circuit_diagrams_on_geo_city_id"
     t.index ["research_group_id"], name: "index_integrated_circuit_diagrams_on_research_group_id"
     t.index ["updated_by"], name: "index_integrated_circuit_diagrams_on_updated_by"
   end
@@ -1430,7 +1430,6 @@ ActiveRecord::Schema.define(version: 2021_04_12_182502) do
     t.string "sof_registration_number"
     t.string "sof_product_title"
     t.date "sof_date_of_obtaining"
-    t.bigint "geo_country_id"
     t.text "sof_description"
     t.bigint "category_id"
     t.bigint "research_group_id"
@@ -1441,10 +1440,11 @@ ActiveRecord::Schema.define(version: 2021_04_12_182502) do
     t.bigint "updated_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "geo_city_id"
     t.index ["category_id"], name: "index_software_on_category_id"
     t.index ["colciencias_call_id"], name: "index_software_on_colciencias_call_id"
     t.index ["created_by"], name: "index_software_on_created_by"
-    t.index ["geo_country_id"], name: "index_software_on_geo_country_id"
+    t.index ["geo_city_id"], name: "index_software_on_geo_city_id"
     t.index ["research_group_id"], name: "index_software_on_research_group_id"
     t.index ["updated_by"], name: "index_software_on_updated_by"
   end
@@ -1643,7 +1643,7 @@ ActiveRecord::Schema.define(version: 2021_04_12_182502) do
   add_foreign_key "historical_colciencias_ranks", "users", column: "created_by"
   add_foreign_key "historical_colciencias_ranks", "users", column: "updated_by"
   add_foreign_key "industrial_designs", "colciencias_calls"
-  add_foreign_key "industrial_designs", "geo_countries"
+  add_foreign_key "industrial_designs", "geo_cities"
   add_foreign_key "industrial_designs", "research_groups"
   add_foreign_key "industrial_designs", "subtypes", column: "category_id"
   add_foreign_key "industrial_designs", "users", column: "created_by"
@@ -1655,7 +1655,7 @@ ActiveRecord::Schema.define(version: 2021_04_12_182502) do
   add_foreign_key "int_participants", "users", column: "created_by"
   add_foreign_key "int_participants", "users", column: "updated_by"
   add_foreign_key "integrated_circuit_diagrams", "colciencias_calls"
-  add_foreign_key "integrated_circuit_diagrams", "geo_countries"
+  add_foreign_key "integrated_circuit_diagrams", "geo_cities"
   add_foreign_key "integrated_circuit_diagrams", "research_groups"
   add_foreign_key "integrated_circuit_diagrams", "subtypes", column: "category_id"
   add_foreign_key "integrated_circuit_diagrams", "users", column: "created_by"
@@ -1756,7 +1756,7 @@ ActiveRecord::Schema.define(version: 2021_04_12_182502) do
   add_foreign_key "scientific_notes", "users", column: "created_by"
   add_foreign_key "scientific_notes", "users", column: "updated_by"
   add_foreign_key "software", "colciencias_calls"
-  add_foreign_key "software", "geo_countries"
+  add_foreign_key "software", "geo_cities"
   add_foreign_key "software", "research_groups"
   add_foreign_key "software", "subtypes", column: "category_id"
   add_foreign_key "software", "users", column: "created_by"
@@ -2158,80 +2158,6 @@ ActiveRecord::Schema.define(version: 2021_04_12_182502) do
        LEFT JOIN subtypes p ON ((st.parent_id = p.id)))
        LEFT JOIN types pt ON ((p.type_id = pt.id)));
   SQL
-  create_view "complete_industrial_designs", sql_definition: <<-SQL
-      SELECT ind.id,
-      ind.category_id,
-      st.st_name AS category_name,
-      ind.colciencias_call_id,
-      cc.name AS colciencias_call_name,
-      cc.year AS colciencias_call_year,
-      ind.geo_country_id,
-      gctry.name AS geo_country_name,
-      ind.ind_dsg_date_of_obtaining,
-      ind.ind_dsg_industrial_publication_gazette,
-      ind.ind_dsg_registration_number,
-      ind.ind_dsg_registration_title,
-      ind.observation,
-      ind.research_group_id,
-      ind.active,
-      ind.created_by,
-      ind.updated_by,
-      ind.created_at,
-      ind.updated_at
-     FROM (((industrial_designs ind
-       LEFT JOIN subtypes st ON ((ind.category_id = st.id)))
-       LEFT JOIN colciencias_calls cc ON ((ind.colciencias_call_id = cc.id)))
-       LEFT JOIN geo_countries gctry ON ((ind.geo_country_id = gctry.id)));
-  SQL
-  create_view "complete_icds", sql_definition: <<-SQL
-      SELECT icd.id,
-      icd.category_id,
-      st.st_name AS category_name,
-      icd.colciencias_call_id,
-      cc.name AS colciencias_call_name,
-      cc.year AS colciencias_call_year,
-      icd.geo_country_id,
-      gctry.name AS geo_country_name,
-      icd.icd_date_of_obtaining,
-      icd.icd_registration_number,
-      icd.icd_registration_title,
-      icd.observation,
-      icd.research_group_id,
-      icd.active,
-      icd.created_by,
-      icd.updated_by,
-      icd.created_at,
-      icd.updated_at
-     FROM (((integrated_circuit_diagrams icd
-       LEFT JOIN subtypes st ON ((icd.category_id = st.id)))
-       LEFT JOIN colciencias_calls cc ON ((icd.colciencias_call_id = cc.id)))
-       LEFT JOIN geo_countries gctry ON ((icd.geo_country_id = gctry.id)));
-  SQL
-  create_view "complete_software", sql_definition: <<-SQL
-      SELECT soft.id,
-      soft.category_id,
-      st.st_name AS category_name,
-      soft.colciencias_call_id,
-      cc.name AS colciencias_call_name,
-      cc.year AS colciencias_call_year,
-      soft.geo_country_id,
-      gctry.name AS geo_country_name,
-      soft.sof_date_of_obtaining,
-      soft.sof_description,
-      soft.sof_product_title,
-      soft.sof_registration_number,
-      soft.observation,
-      soft.research_group_id,
-      soft.active,
-      soft.created_by,
-      soft.updated_by,
-      soft.created_at,
-      soft.updated_at
-     FROM (((software soft
-       LEFT JOIN subtypes st ON ((soft.category_id = st.id)))
-       LEFT JOIN colciencias_calls cc ON ((soft.colciencias_call_id = cc.id)))
-       LEFT JOIN geo_countries gctry ON ((soft.geo_country_id = gctry.id)));
-  SQL
   create_view "complete_plt_ind_prots", sql_definition: <<-SQL
       SELECT pltind.id,
       pltind.category_id,
@@ -2456,5 +2382,97 @@ ActiveRecord::Schema.define(version: 2021_04_12_182502) do
      FROM ((research_groups rg
        LEFT JOIN subtypes stgt ON ((rg.group_type_id = stgt.id)))
        LEFT JOIN subtypes stgs ON ((rg.group_state_id = stgs.id)));
+  SQL
+  create_view "complete_industrial_designs", sql_definition: <<-SQL
+      SELECT ind.id,
+      ind.category_id,
+      st.st_name AS category_name,
+      ind.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      ind.geo_city_id,
+      gcity.name AS geo_city_name,
+      gs.geo_country_id,
+      gctry.name AS geo_country_name,
+      gcity.geo_state_id,
+      gs.name AS geo_state_name,
+      ind.ind_dsg_date_of_obtaining,
+      ind.ind_dsg_industrial_publication_gazette,
+      ind.ind_dsg_registration_number,
+      ind.ind_dsg_registration_title,
+      ind.observation,
+      ind.research_group_id,
+      ind.active,
+      ind.created_by,
+      ind.updated_by,
+      ind.created_at,
+      ind.updated_at
+     FROM (((((industrial_designs ind
+       LEFT JOIN subtypes st ON ((ind.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((ind.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((ind.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_icds", sql_definition: <<-SQL
+      SELECT icd.id,
+      icd.category_id,
+      st.st_name AS category_name,
+      icd.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      icd.geo_city_id,
+      gcity.name AS geo_city_name,
+      gs.geo_country_id,
+      gctry.name AS geo_country_name,
+      gcity.geo_state_id,
+      gs.name AS geo_state_name,
+      icd.icd_date_of_obtaining,
+      icd.icd_registration_number,
+      icd.icd_registration_title,
+      icd.observation,
+      icd.research_group_id,
+      icd.active,
+      icd.created_by,
+      icd.updated_by,
+      icd.created_at,
+      icd.updated_at
+     FROM (((((integrated_circuit_diagrams icd
+       LEFT JOIN subtypes st ON ((icd.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((icd.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((icd.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_software", sql_definition: <<-SQL
+      SELECT soft.id,
+      soft.category_id,
+      st.st_name AS category_name,
+      soft.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      soft.geo_city_id,
+      gcity.name AS geo_city_name,
+      gs.geo_country_id,
+      gctry.name AS geo_country_name,
+      gcity.geo_state_id,
+      gs.name AS geo_state_name,
+      soft.sof_date_of_obtaining,
+      soft.sof_description,
+      soft.sof_product_title,
+      soft.sof_registration_number,
+      soft.observation,
+      soft.research_group_id,
+      soft.active,
+      soft.created_by,
+      soft.updated_by,
+      soft.created_at,
+      soft.updated_at
+     FROM (((((software soft
+       LEFT JOIN subtypes st ON ((soft.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((soft.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((soft.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
   SQL
 end

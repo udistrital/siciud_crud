@@ -63,7 +63,7 @@ module Api
       def ind_design_params_to_create
         params.require(:industrial_design).permit(
           :ind_dsg_registration_number, :ind_dsg_registration_title,
-          :ind_dsg_date_of_obtaining, :geo_country_id, :observation,
+          :ind_dsg_date_of_obtaining, :geo_city_id, :observation,
           :ind_dsg_industrial_publication_gazette, :category_id,
           :colciencias_call_id, :created_by)
       end
@@ -71,7 +71,7 @@ module Api
       def ind_design_params_to_update
         params.require(:industrial_design).permit(
           :ind_dsg_registration_number, :ind_dsg_registration_title,
-          :ind_dsg_date_of_obtaining, :geo_country_id, :observation,
+          :ind_dsg_date_of_obtaining, :geo_city_id, :observation,
           :ind_dsg_industrial_publication_gazette, :category_id,
           :colciencias_call_id, :updated_by)
       end
