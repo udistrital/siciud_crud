@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_11_230438) do
+ActiveRecord::Schema.define(version: 2021_04_11_235923) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -538,6 +538,30 @@ ActiveRecord::Schema.define(version: 2021_04_11_230438) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "events", force: :cascade do |t|
+    t.string "eve_name"
+    t.date "eve_start_date"
+    t.date "eve_finish_date"
+    t.string "eve_organizers"
+    t.string "eve_entities"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "eve_observation"
+    t.bigint "eve_type_id"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_events_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_events_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_events_on_created_by"
+    t.index ["eve_type_id"], name: "index_events_on_eve_type_id"
+    t.index ["research_group_id"], name: "index_events_on_research_group_id"
+    t.index ["updated_by"], name: "index_events_on_updated_by"
   end
 
   create_table "ext_participants", force: :cascade do |t|
@@ -1554,6 +1578,12 @@ ActiveRecord::Schema.define(version: 2021_04_11_230438) do
   add_foreign_key "documents", "users", column: "updated_by"
   add_foreign_key "editorials", "users", column: "created_by"
   add_foreign_key "editorials", "users", column: "updated_by"
+  add_foreign_key "events", "colciencias_calls"
+  add_foreign_key "events", "research_groups"
+  add_foreign_key "events", "subtypes", column: "category_id"
+  add_foreign_key "events", "subtypes", column: "eve_type_id"
+  add_foreign_key "events", "users", column: "created_by"
+  add_foreign_key "events", "users", column: "updated_by"
   add_foreign_key "ext_participants", "subtypes", column: "participant_type_id"
   add_foreign_key "ext_participants", "users", column: "created_by"
   add_foreign_key "ext_participants", "users", column: "updated_by"
@@ -2346,5 +2376,31 @@ ActiveRecord::Schema.define(version: 2021_04_11_230438) do
        LEFT JOIN subtypes st ON ((nsr.category_id = st.id)))
        LEFT JOIN colciencias_calls cc ON ((nsr.colciencias_call_id = cc.id)))
        LEFT JOIN geo_countries gctry ON ((nsr.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_events", sql_definition: <<-SQL
+      SELECT eve.id,
+      eve.category_id,
+      st.st_name AS category_name,
+      eve.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      eve.eve_name,
+      eve.eve_start_date,
+      eve.eve_finish_date,
+      eve.eve_organizers,
+      eve.eve_entities,
+      eve.eve_observation,
+      eve.eve_type_id,
+      evt.st_name AS eve_type_name,
+      eve.research_group_id,
+      eve.active,
+      eve.created_by,
+      eve.updated_by,
+      eve.created_at,
+      eve.updated_at
+     FROM (((events eve
+       LEFT JOIN subtypes st ON ((eve.category_id = st.id)))
+       LEFT JOIN subtypes evt ON ((eve.eve_type_id = evt.id)))
+       LEFT JOIN colciencias_calls cc ON ((eve.colciencias_call_id = cc.id)));
   SQL
 end

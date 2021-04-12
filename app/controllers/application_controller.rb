@@ -72,6 +72,9 @@ class ApplicationController < ActionController::API
     elsif params[:new_scientific_record_id]
       id = params[:new_scientific_record_id]
       @context = NewScientificRecord.find(id)
+    elsif params[:event_id]
+      id = params[:event_id]
+      @context = Event.find(id)
     end
   end
 end
