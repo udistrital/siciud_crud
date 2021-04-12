@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_11_235923) do
+ActiveRecord::Schema.define(version: 2021_04_12_030624) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -490,6 +490,29 @@ ActiveRecord::Schema.define(version: 2021_04_11_235923) do
     t.bigint "updated_by"
     t.index ["created_by"], name: "index_cycle_types_on_created_by"
     t.index ["updated_by"], name: "index_cycle_types_on_updated_by"
+  end
+
+  create_table "degree_works", force: :cascade do |t|
+    t.string "dw_title"
+    t.date "dw_date"
+    t.string "dw_institution_name"
+    t.string "dw_recognition"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "dw_observation"
+    t.bigint "dw_type_id"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_degree_works_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_degree_works_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_degree_works_on_created_by"
+    t.index ["dw_type_id"], name: "index_degree_works_on_dw_type_id"
+    t.index ["research_group_id"], name: "index_degree_works_on_research_group_id"
+    t.index ["updated_by"], name: "index_degree_works_on_updated_by"
   end
 
   create_table "document_types", force: :cascade do |t|
@@ -1573,6 +1596,12 @@ ActiveRecord::Schema.define(version: 2021_04_11_235923) do
   add_foreign_key "curricular_prj_ids_research_groups", "users", column: "updated_by"
   add_foreign_key "cycle_types", "users", column: "created_by"
   add_foreign_key "cycle_types", "users", column: "updated_by"
+  add_foreign_key "degree_works", "colciencias_calls"
+  add_foreign_key "degree_works", "research_groups"
+  add_foreign_key "degree_works", "subtypes", column: "category_id"
+  add_foreign_key "degree_works", "subtypes", column: "dw_type_id"
+  add_foreign_key "degree_works", "users", column: "created_by"
+  add_foreign_key "degree_works", "users", column: "updated_by"
   add_foreign_key "documents", "subtypes", column: "document_type_id"
   add_foreign_key "documents", "users", column: "created_by"
   add_foreign_key "documents", "users", column: "updated_by"
@@ -2402,5 +2431,30 @@ ActiveRecord::Schema.define(version: 2021_04_11_235923) do
        LEFT JOIN subtypes st ON ((eve.category_id = st.id)))
        LEFT JOIN subtypes evt ON ((eve.eve_type_id = evt.id)))
        LEFT JOIN colciencias_calls cc ON ((eve.colciencias_call_id = cc.id)));
+  SQL
+  create_view "complete_degree_works", sql_definition: <<-SQL
+      SELECT dw.id,
+      dw.category_id,
+      st.st_name AS category_name,
+      dw.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      dw.dw_title,
+      dw.dw_date,
+      dw.dw_institution_name,
+      dw.dw_recognition,
+      dw.dw_type_id,
+      dwt.st_name AS dw_type_name,
+      dw.dw_observation,
+      dw.research_group_id,
+      dw.active,
+      dw.created_by,
+      dw.updated_by,
+      dw.created_at,
+      dw.updated_at
+     FROM (((degree_works dw
+       LEFT JOIN subtypes st ON ((dw.category_id = st.id)))
+       LEFT JOIN subtypes dwt ON ((dw.category_id = dwt.id)))
+       LEFT JOIN colciencias_calls cc ON ((dw.colciencias_call_id = cc.id)));
   SQL
 end

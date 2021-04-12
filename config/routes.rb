@@ -161,6 +161,10 @@ Rails.application.routes.draw do
         # Social appropriation of knowledge
         resources :events, only: [:index, :show, :create, :update]
         put "/events/:id/active", to: "events#change_active"
+
+        # Human Resource Training for CTel
+        resources :degree_works, only: [:index, :show, :create, :update]
+        put "/degree_works/:id/active", to: "degree_works#change_active"
       end
 
       # RESEARCH UNIT PRODUCT ENDPOINTS
@@ -170,7 +174,7 @@ Rails.application.routes.draw do
                 :vegetable_varieties, :industrial_designs,
                 :integrated_circuit_diagrams, :software,
                 :plant_ind_prototypes, :new_scientific_records,
-                :events,
+                :events, :degree_works,
                 only: [] do
         resources :ext_participants, only: [:index, :show, :create, :update]
         resources :int_participants, only: [:index, :show, :create, :update]

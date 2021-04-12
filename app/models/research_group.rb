@@ -38,6 +38,8 @@ class ResearchGroup < ApplicationRecord
 
   has_many :events, dependent: :destroy
 
+  has_many :degree_works, dependent: :destroy
+
 
   has_many :documents, as: :documentable
 

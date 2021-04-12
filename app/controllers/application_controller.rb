@@ -75,6 +75,9 @@ class ApplicationController < ActionController::API
     elsif params[:event_id]
       id = params[:event_id]
       @context = Event.find(id)
+    elsif params[:degree_work_id]
+      id = params[:degree_work_id]
+      @context = DegreeWork.find(id)
     end
   end
 end
