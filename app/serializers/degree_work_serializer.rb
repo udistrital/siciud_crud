@@ -1,4 +1,4 @@
-class DegreeWorkSerializer < ActiveModel::Serializer
+class DegreeWorkSerializer < AbstractProductSerializer
   attributes :id, :dw_title, :dw_date, :dw_institution_name, :dw_recognition,
              :category_id, :category_name, :colciencias_call_id,
              :colciencias_call_name, :colciencias_call_year,

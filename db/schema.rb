@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_12_214804) do
+ActiveRecord::Schema.define(version: 2021_04_12_221342) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -942,7 +942,6 @@ ActiveRecord::Schema.define(version: 2021_04_12_214804) do
     t.string "nsr_database_url"
     t.string "nsr_certifying_institution"
     t.string "nsr_issuing_institution"
-    t.bigint "geo_country_id"
     t.bigint "category_id"
     t.bigint "research_group_id"
     t.bigint "colciencias_call_id"
@@ -952,10 +951,11 @@ ActiveRecord::Schema.define(version: 2021_04_12_214804) do
     t.bigint "updated_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "geo_city_id"
     t.index ["category_id"], name: "index_new_scientific_records_on_category_id"
     t.index ["colciencias_call_id"], name: "index_new_scientific_records_on_colciencias_call_id"
     t.index ["created_by"], name: "index_new_scientific_records_on_created_by"
-    t.index ["geo_country_id"], name: "index_new_scientific_records_on_geo_country_id"
+    t.index ["geo_city_id"], name: "index_new_scientific_records_on_geo_city_id"
     t.index ["research_group_id"], name: "index_new_scientific_records_on_research_group_id"
     t.index ["updated_by"], name: "index_new_scientific_records_on_updated_by"
   end
@@ -1118,7 +1118,6 @@ ActiveRecord::Schema.define(version: 2021_04_12_214804) do
     t.string "plt_name"
     t.string "plt_registration_number"
     t.date "plt_date_of_elaboration"
-    t.bigint "geo_country_id"
     t.bigint "category_id"
     t.bigint "research_group_id"
     t.bigint "colciencias_call_id"
@@ -1129,12 +1128,12 @@ ActiveRecord::Schema.define(version: 2021_04_12_214804) do
     t.bigint "updated_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "institution_id"
+    t.bigint "geo_city_id"
+    t.string "institution_name"
     t.index ["category_id"], name: "index_plant_ind_prototypes_on_category_id"
     t.index ["colciencias_call_id"], name: "index_plant_ind_prototypes_on_colciencias_call_id"
     t.index ["created_by"], name: "index_plant_ind_prototypes_on_created_by"
-    t.index ["geo_country_id"], name: "index_plant_ind_prototypes_on_geo_country_id"
-    t.index ["institution_id"], name: "index_plant_ind_prototypes_on_institution_id"
+    t.index ["geo_city_id"], name: "index_plant_ind_prototypes_on_geo_city_id"
     t.index ["plt_type_id"], name: "index_plant_ind_prototypes_on_plt_type_id"
     t.index ["research_group_id"], name: "index_plant_ind_prototypes_on_research_group_id"
     t.index ["updated_by"], name: "index_plant_ind_prototypes_on_updated_by"
@@ -1679,7 +1678,7 @@ ActiveRecord::Schema.define(version: 2021_04_12_214804) do
   add_foreign_key "new_animal_breeds", "users", column: "created_by"
   add_foreign_key "new_animal_breeds", "users", column: "updated_by"
   add_foreign_key "new_scientific_records", "colciencias_calls"
-  add_foreign_key "new_scientific_records", "geo_countries"
+  add_foreign_key "new_scientific_records", "geo_cities"
   add_foreign_key "new_scientific_records", "research_groups"
   add_foreign_key "new_scientific_records", "subtypes", column: "category_id"
   add_foreign_key "new_scientific_records", "users", column: "created_by"
@@ -1715,8 +1714,7 @@ ActiveRecord::Schema.define(version: 2021_04_12_214804) do
   add_foreign_key "petition_statuses", "users", column: "created_by"
   add_foreign_key "petition_statuses", "users", column: "updated_by"
   add_foreign_key "plant_ind_prototypes", "colciencias_calls"
-  add_foreign_key "plant_ind_prototypes", "geo_countries"
-  add_foreign_key "plant_ind_prototypes", "institutions"
+  add_foreign_key "plant_ind_prototypes", "geo_cities"
   add_foreign_key "plant_ind_prototypes", "research_groups"
   add_foreign_key "plant_ind_prototypes", "subtypes", column: "category_id"
   add_foreign_key "plant_ind_prototypes", "subtypes", column: "plt_type_id"
@@ -2158,35 +2156,6 @@ ActiveRecord::Schema.define(version: 2021_04_12_214804) do
        LEFT JOIN subtypes p ON ((st.parent_id = p.id)))
        LEFT JOIN types pt ON ((p.type_id = pt.id)));
   SQL
-  create_view "complete_plt_ind_prots", sql_definition: <<-SQL
-      SELECT pltind.id,
-      pltind.category_id,
-      st.st_name AS category_name,
-      pltind.colciencias_call_id,
-      cc.name AS colciencias_call_name,
-      cc.year AS colciencias_call_year,
-      pltind.geo_country_id,
-      gctry.name AS geo_country_name,
-      inst.inst_name AS institution_name,
-      pltind.plt_name,
-      pltind.plt_date_of_elaboration,
-      pltind.plt_registration_number,
-      pltind.plt_type_id,
-      stplt.st_name AS plt_type_name,
-      pltind.observation,
-      pltind.research_group_id,
-      pltind.active,
-      pltind.created_by,
-      pltind.updated_by,
-      pltind.created_at,
-      pltind.updated_at
-     FROM (((((plant_ind_prototypes pltind
-       LEFT JOIN institutions inst ON ((pltind.institution_id = inst.id)))
-       LEFT JOIN subtypes st ON ((pltind.category_id = st.id)))
-       LEFT JOIN subtypes stplt ON ((pltind.plt_type_id = stplt.id)))
-       LEFT JOIN colciencias_calls cc ON ((pltind.colciencias_call_id = cc.id)))
-       LEFT JOIN geo_countries gctry ON ((pltind.geo_country_id = gctry.id)));
-  SQL
   create_view "complete_int_participants", sql_definition: <<-SQL
       SELECT intp.id,
       intp.producible_type AS product_type,
@@ -2237,33 +2206,6 @@ ActiveRecord::Schema.define(version: 2021_04_12_214804) do
       doc.updated_at
      FROM (documents doc
        LEFT JOIN subtypes dt ON ((dt.id = doc.document_type_id)));
-  SQL
-  create_view "complete_new_scientific_records", sql_definition: <<-SQL
-      SELECT nsr.id,
-      nsr.category_id,
-      st.st_name AS category_name,
-      nsr.colciencias_call_id,
-      cc.name AS colciencias_call_name,
-      cc.year AS colciencias_call_year,
-      nsr.geo_country_id,
-      gctry.name AS geo_country_name,
-      nsr.nsr_name,
-      nsr.nsr_date_of_obtaining,
-      nsr.nsr_database_name,
-      nsr.nsr_database_url,
-      nsr.nsr_certifying_institution,
-      nsr.nsr_issuing_institution,
-      nsr.observation,
-      nsr.research_group_id,
-      nsr.active,
-      nsr.created_by,
-      nsr.updated_by,
-      nsr.created_at,
-      nsr.updated_at
-     FROM (((new_scientific_records nsr
-       LEFT JOIN subtypes st ON ((nsr.category_id = st.id)))
-       LEFT JOIN colciencias_calls cc ON ((nsr.colciencias_call_id = cc.id)))
-       LEFT JOIN geo_countries gctry ON ((nsr.geo_country_id = gctry.id)));
   SQL
   create_view "complete_events", sql_definition: <<-SQL
       SELECT eve.id,
@@ -2472,6 +2414,73 @@ ActiveRecord::Schema.define(version: 2021_04_12_214804) do
        LEFT JOIN subtypes st ON ((soft.category_id = st.id)))
        LEFT JOIN colciencias_calls cc ON ((soft.colciencias_call_id = cc.id)))
        LEFT JOIN geo_cities gcity ON ((soft.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_plt_ind_prots", sql_definition: <<-SQL
+      SELECT pltind.id,
+      pltind.category_id,
+      st.st_name AS category_name,
+      pltind.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      pltind.geo_city_id,
+      gcity.name AS geo_city_name,
+      gs.geo_country_id,
+      gctry.name AS geo_country_name,
+      gcity.geo_state_id,
+      gs.name AS geo_state_name,
+      pltind.institution_name,
+      pltind.plt_name,
+      pltind.plt_date_of_elaboration,
+      pltind.plt_registration_number,
+      pltind.plt_type_id,
+      stplt.st_name AS plt_type_name,
+      pltind.observation,
+      pltind.research_group_id,
+      pltind.active,
+      pltind.created_by,
+      pltind.updated_by,
+      pltind.created_at,
+      pltind.updated_at
+     FROM ((((((plant_ind_prototypes pltind
+       LEFT JOIN subtypes st ON ((pltind.category_id = st.id)))
+       LEFT JOIN subtypes stplt ON ((pltind.plt_type_id = stplt.id)))
+       LEFT JOIN colciencias_calls cc ON ((pltind.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((pltind.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_new_scientific_records", sql_definition: <<-SQL
+      SELECT nsr.id,
+      nsr.category_id,
+      st.st_name AS category_name,
+      nsr.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      nsr.geo_city_id,
+      gcity.name AS geo_city_name,
+      gs.geo_country_id,
+      gctry.name AS geo_country_name,
+      gcity.geo_state_id,
+      gs.name AS geo_state_name,
+      nsr.nsr_name,
+      nsr.nsr_date_of_obtaining,
+      nsr.nsr_database_name,
+      nsr.nsr_database_url,
+      nsr.nsr_certifying_institution,
+      nsr.nsr_issuing_institution,
+      nsr.observation,
+      nsr.research_group_id,
+      nsr.active,
+      nsr.created_by,
+      nsr.updated_by,
+      nsr.created_at,
+      nsr.updated_at
+     FROM (((((new_scientific_records nsr
+       LEFT JOIN subtypes st ON ((nsr.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((nsr.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((nsr.geo_city_id = gcity.id)))
        LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
        LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
   SQL
