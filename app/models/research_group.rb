@@ -8,7 +8,10 @@ class ResearchGroup < ApplicationRecord
   belongs_to :oecd_knowledge_area, optional: true
   belongs_to :oecd_knowledge_subarea, optional: true
 
-  has_and_belongs_to_many :research_focuses, dependent: :destroy
+  has_and_belongs_to_many :research_focuses,
+                          join_table: 'research_focuses_units',
+                          class_name: 'Subtype',
+                          dependent: :destroy
   has_and_belongs_to_many :agreements, dependent: :destroy
   has_and_belongs_to_many :oecd_disciplines, dependent: :destroy
   has_and_belongs_to_many :cine_detailed_areas, dependent: :destroy

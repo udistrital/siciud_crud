@@ -9,6 +9,11 @@ class Subtype < ApplicationRecord
                           class_name: 'ResearchCreationWork',
                           inverse_of: :work_types
 
+  has_and_belongs_to_many :research_units,
+                          join_table: 'research_focuses_units',
+                          class_name: 'ResearchGroup',
+                          inverse_of: :research_units
+
 
   has_many :document_types, class_name: 'Document', foreign_key: 'document_type_id', dependent: :destroy
 
