@@ -41,19 +41,10 @@ module Api
 
       # PATCH/PUT /users/1
       def update
-        if @user.created_by.nil?
-          # Update user of created_by only this is nil
-          if @user.update(user_params_to_update)
-            render json: @user
-          else
-            render json: @user.errors, status: :unprocessable_entity
-          end
+        if @user.update(user_params_to_update)
+          render json: @user
         else
-          if @user.update(user_params.except(:created_by))
-            render json: @user
-          else
-            render json: @user.errors, status: :unprocessable_entity
-          end
+          render json: @user.errors, status: :unprocessable_entity
         end
       end
 
