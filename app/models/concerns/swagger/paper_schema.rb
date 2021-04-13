@@ -19,6 +19,10 @@ module Swagger::PaperSchema
         key :type, :integer
         key :format, :int64
       end
+      property :colciencias_call_id do
+        key :type, :integer
+        key :format, :int64
+      end
       property :doi do
         key :type, :string
       end
@@ -56,7 +60,7 @@ module Swagger::PaperSchema
         key :type, :string
         key :format, :date
       end
-      property :research_group_id do
+      property :research_unit_id do
         key :type, :integer
         key :format, :int64
       end
@@ -86,7 +90,7 @@ module Swagger::PaperSchema
         key :type, :string
         key :format, 'date-time'
       end
-    end
+      end
 
     swagger_schema :PaperInput do
       property :paper do
@@ -138,7 +142,7 @@ module Swagger::PaperSchema
           key :type, :string
           key :format, :date
         end
-        property :research_group_id do
+        property :research_unit_id do
           key :type, :integer
           key :format, :int64
         end
@@ -172,6 +176,13 @@ module Swagger::PaperSchema
           property :category_name do
             key :type, :string
           end
+          property :colciencias_call_name do
+            key :type, :string
+          end
+          property :colciencias_call_year do
+            key :type, :integer
+            key :format, :int64
+          end
           property :geo_city_name do
             key :type, :string
           end
@@ -198,7 +209,6 @@ module Swagger::PaperSchema
         end
       end
     end
-
     swagger_schema :PaperDxOutput do
       allOf do
         schema do
