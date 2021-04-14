@@ -69,6 +69,7 @@ module Api
         RoleController,
         UserRolesController,
         UsersController,
+        SoftwareController,
 
         ColcienciasCall,
         ColcienciasCategory,
@@ -116,6 +117,7 @@ module Api
         Role,
         UserRole,
         User,
+        Software,
 
         ApplicationRecord,
         self,

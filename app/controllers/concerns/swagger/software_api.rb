@@ -1,15 +1,15 @@
-module Swagger::PaperApi
+module Swagger::SoftwareApi
   extend ActiveSupport::Concern
   include Swagger::Blocks
 
   included do
-    swagger_path '/research_units/{research_unit_id}/papers/{id}' do
+    swagger_path '/research_units/{research_unit_id}/software/{id}' do
       operation :get do
-        key :summary, 'Get a Paper of a Research Unit by ID'
-        key :description, 'Returns a single paper'
-        key :operationId, :get_paper_by_id
+        key :summary, 'Get a Software of a Research Unit by ID'
+        key :description, 'Returns a single software'
+        key :operationId, :get_software_by_id
         key :produces, ['application/json',]
-        key :tags, ['Products::GNK::Papers']
+        key :tags, ['Products::TDI::Software']
 
         parameter name: :research_unit_id do
           key :in, :path
@@ -21,16 +21,16 @@ module Swagger::PaperApi
 
         parameter name: :id do
           key :in, :path
-          key :description, 'ID of paper of a research unit to fetch'
+          key :description, 'ID of software of a research unit to fetch'
           key :required, true
           key :type, :integer
           key :format, :int64
         end
 
         response 200 do
-          key :description, 'paper response'
+          key :description, 'software response'
           schema do
-            key :'$ref', :PaperOutput
+            key :'$ref', :SoftwareOutput
           end
         end
         response 404 do
@@ -45,11 +45,11 @@ module Swagger::PaperApi
       end
 
       operation :put do
-        key :summary, 'Update Paper by ID'
-        key :description, 'Returns the updated paper'
-        key :operationId, :update_paper
+        key :summary, 'Update Software by ID'
+        key :description, 'Returns the updated software'
+        key :operationId, :update_software
         key :produces, ['application/json',]
-        key :tags, ['Products::GNK::Papers']
+        key :tags, ['Products::TDI::Software']
 
         parameter name: :research_unit_id do
           key :in, :path
@@ -61,25 +61,25 @@ module Swagger::PaperApi
 
         parameter name: :id do
           key :in, :path
-          key :description, 'ID of paper of a research unit to fetch'
+          key :description, 'ID of software of a research unit to fetch'
           key :required, true
           key :type, :integer
           key :format, :int64
         end
 
-        parameter name: :paper do
+        parameter name: :software do
           key :in, :body
-          key :description, 'Paper to update'
+          key :description, 'Software to update'
           key :required, true
           schema do
-            key :'$ref', :PaperInputPut
+            key :'$ref', :SoftwareInputPut
           end
         end
 
         response 200 do
-          key :description, 'paper response'
+          key :description, 'Software response'
           schema do
-            key :'$ref', :PaperOutput
+            key :'$ref', :SoftwareOutput
           end
         end
         response 422 do
@@ -94,13 +94,13 @@ module Swagger::PaperApi
       end
     end
 
-    swagger_path '/research_units/{research_unit_id}/papers/' do
+    swagger_path '/research_units/{research_unit_id}/software/' do
       operation :get do
-        key :summary, 'Get all Papers'
-        key :description, 'Returns all papers'
-        key :operationId, :get_papers
+        key :summary, 'Get all Software'
+        key :description, 'Returns all software'
+        key :operationId, :get_software
         key :produces, ['application/json',]
-        key :tags, ['Products::GNK::Papers']
+        key :tags, ['Products::TDI::Software']
 
         parameter name: :research_unit_id do
           key :in, :path
@@ -111,11 +111,11 @@ module Swagger::PaperApi
         end
 
         response 200 do
-          key :description, 'paper response'
+          key :description, 'software response'
           schema do
             key :type, :array
             items do
-              key :'$ref', :PaperDxOutput
+              key :'$ref', :SoftwareDxOutput
             end
           end
         end
@@ -125,11 +125,11 @@ module Swagger::PaperApi
       end
 
       operation :post do
-        key :summary, 'Create a new Paper'
-        key :description, 'Returns the created paper'
-        key :operationId, :create_paper
+        key :summary, 'Create a new Software'
+        key :description, 'Returns the created software'
+        key :operationId, :create_software
         key :produces, ['application/json',]
-        key :tags, ['Products::GNK::Papers']
+        key :tags, ['Products::TDI::Software']
 
         parameter name: :research_unit_id do
           key :in, :path
@@ -139,19 +139,19 @@ module Swagger::PaperApi
           key :format, :int64
         end
 
-        parameter name: :paper do
+        parameter name: :software do
           key :in, :body
-          key :description, 'Paper to register'
+          key :description, 'Software to register'
           key :required, true
           schema do
-            key :'$ref', :PaperInputPost
+            key :'$ref', :SoftwareInputPost
           end
         end
 
         response 201 do
-          key :description, 'paper response'
+          key :description, 'software response'
           schema do
-            key :'$ref', :PaperOutput
+            key :'$ref', :SoftwareOutput
           end
         end
         response 422 do
