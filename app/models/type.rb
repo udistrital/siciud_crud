@@ -1,8 +1,4 @@
 class Type < ApplicationRecord
-
-  belongs_to :t_parent, class_name: 'Type', optional: true, dependent: :destroy
-
-  has_many :types, class_name: 'Type', foreign_key: 't_parent_id', dependent: :destroy
   has_many :subtypes
 
   # Tracking inherited from ApplicationRecord, fields:

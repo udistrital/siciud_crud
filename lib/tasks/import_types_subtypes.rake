@@ -44,16 +44,14 @@ namespace :import_types_subtypes do
 
     print_message("Import/Create Types - ID user #{superadmin_id}",
                   task_logger)
-    CSV.foreach('lib/data/types_24032021.csv', { :headers => [
+    CSV.foreach('lib/data/types_14042021.csv', { :headers => [
       :id,
-      :t_parent_id,
       :t_name,
       :t_description]
     }
     ) do |row|
       begin
         type = Type.create!(id: row[:id],
-                            t_parent_id: row[:t_parent_id],
                             t_name: row[:t_name],
                             t_description: row[:t_description],
                             created_by: superadmin_id)
@@ -66,7 +64,7 @@ namespace :import_types_subtypes do
     ActiveRecord::Base.connection.reset_pk_sequence!('types')
     print_message('Type data successfully imported!', task_logger)
 
-    CSV.foreach('lib/data/subtypes_24032021.csv', { :headers => [
+    CSV.foreach('lib/data/subtypes_14042021.csv', { :headers => [
       :id,
       :parent_id,
       :type_id,
@@ -122,9 +120,8 @@ namespace :import_types_subtypes do
 
     print_message("Import/Create Types - ID user #{superadmin_id}",
                   task_logger)
-    CSV.foreach('lib/data/types_24032021.csv', { :headers => [
+    CSV.foreach('lib/data/types_14042021.csv', { :headers => [
       :id,
-      :t_parent_id,
       :t_name,
       :t_description]
     }
@@ -133,14 +130,12 @@ namespace :import_types_subtypes do
         type_exists = Type.find_by(id: row[:id])
         if type_exists.nil?
           type = Type.create!(id: row[:id],
-                              t_parent_id: row[:t_parent_id],
                               t_name: row[:t_name],
                               t_description: row[:t_description],
                               created_by: superadmin_id)
           print_message("\n\nCreated Type #{type.t_name} with ID #{type.id}", task_logger)
         else
-          type_upd = type_exists.update(t_parent_id: row[:t_parent_id],
-                                        t_name: row[:t_name],
+          type_upd = type_exists.update(t_name: row[:t_name],
                                         t_description: row[:t_description],
                                         updated_by: superadmin_id)
           if type_upd
@@ -160,7 +155,7 @@ namespace :import_types_subtypes do
     ActiveRecord::Base.connection.reset_pk_sequence!('types')
     print_message('Type data successfully imported/updated!', task_logger)
 
-    CSV.foreach('lib/data/subtypes_24032021.csv', { :headers => [
+    CSV.foreach('lib/data/subtypes_14042021.csv', { :headers => [
       :id,
       :parent_id,
       :type_id,

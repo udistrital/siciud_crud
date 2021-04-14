@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_12_221342) do
+ActiveRecord::Schema.define(version: 2021_04_13_213941) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1478,9 +1478,7 @@ ActiveRecord::Schema.define(version: 2021_04_12_221342) do
     t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
-    t.bigint "t_parent_id"
     t.index ["created_by"], name: "index_types_on_created_by"
-    t.index ["t_parent_id"], name: "index_types_on_t_parent_id"
     t.index ["updated_by"], name: "index_types_on_updated_by"
   end
 
@@ -1763,7 +1761,6 @@ ActiveRecord::Schema.define(version: 2021_04_12_221342) do
   add_foreign_key "subtypes", "types"
   add_foreign_key "subtypes", "users", column: "created_by"
   add_foreign_key "subtypes", "users", column: "updated_by"
-  add_foreign_key "types", "types", column: "t_parent_id"
   add_foreign_key "types", "users", column: "created_by"
   add_foreign_key "types", "users", column: "updated_by"
   add_foreign_key "user_roles", "users", column: "created_by"
