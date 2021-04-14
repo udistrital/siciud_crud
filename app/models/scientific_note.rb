@@ -1,4 +1,6 @@
 class ScientificNote < ApplicationRecord
+  include Swagger::ScientificNoteSchema
+
   belongs_to :category
   belongs_to :journal
   belongs_to :research_group

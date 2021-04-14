@@ -3,13 +3,13 @@ module Swagger::CineBroadAreaApi
   include Swagger::Blocks
 
   included do
-    swagger_path '/api/v1/cine_broad_areas/{id}' do
+    swagger_path '/cine_broad_areas/{id}' do
       operation :put do
         key :summary, 'Update Broad Area of ISCED by ID'
         key :description, 'Returns the updated Broad Area of ISCED'
         key :operationId, :update_cine_broad_area
         key :produces, ['application/json',]
-        key :tags, ['Broad Areas of International Standard Classification of Education - ISCED']
+        key :tags, ['ISCED - Broad Areas of International Standard Classification of Education']
 
         parameter name: :id do
           key :in, :path
@@ -45,13 +45,13 @@ module Swagger::CineBroadAreaApi
       end
     end
 
-    swagger_path '/api/v1/cine_broad_areas/' do
+    swagger_path '/cine_broad_areas/' do
       operation :get do
         key :summary, 'Get all Broad Areas of ISCED'
         key :description, 'Returns all broad areas of ISCED'
         key :operationId, :get_cine_broad_areas
         key :produces, ['application/json',]
-        key :tags, ['Broad Areas of International Standard Classification of Education - ISCED']
+        key :tags, ['ISCED - Broad Areas of International Standard Classification of Education']
 
         response 200 do
           key :description, 'Broad Area of ISCED response'
@@ -72,7 +72,7 @@ module Swagger::CineBroadAreaApi
         key :description, 'Returns the created broad area'
         key :operationId, :create_cine_broad_area
         key :produces, ['application/json',]
-        key :tags, ['Broad Areas of International Standard Classification of Education - ISCED']
+        key :tags, ['ISCED - Broad Areas of International Standard Classification of Education']
 
         parameter name: :cine_broad_area do
           key :in, :body

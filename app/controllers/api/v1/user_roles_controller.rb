@@ -1,4 +1,5 @@
 class Api::V1::UserRolesController < ApplicationController
+  include Swagger::UserRoleApi
 
   before_action :set_user_role, only: [:show, :update]
 

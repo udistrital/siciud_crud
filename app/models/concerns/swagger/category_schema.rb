@@ -30,11 +30,11 @@ module Swagger::CategorySchema
       end
       property :created_at do
         key :type, :string
-        key :format, :'date-time'
+        key :format, 'date-time'
       end
       property :updated_at do
         key :type, :string
-        key :format, :'date-time'
+        key :format, 'date-time'
       end
     end
 

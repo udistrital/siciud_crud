@@ -1,6 +1,8 @@
 module Api
   module V1
     class ExtParticipantsController < ApplicationController
+      include Swagger::ExtParticipantApi
+
       before_action :set_context
       before_action :set_ext_participant, only: [:show, :update, :destroy]
 

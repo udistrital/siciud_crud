@@ -1,6 +1,8 @@
 module Api
   module V1
     class GeoStatesController < ApplicationController
+      include Swagger::GeoStateApi
+
       before_action :set_geo_country
       before_action :set_geo_state, only: [:show]
 

@@ -1,4 +1,6 @@
 class ResearchGroup < ApplicationRecord
+  include Swagger::ResearchUnitSchema
+
   belongs_to :group_state
   belongs_to :group_type
   belongs_to :cine_broad_area, optional: true

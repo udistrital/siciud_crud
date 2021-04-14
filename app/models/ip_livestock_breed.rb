@@ -1,4 +1,6 @@
 class IpLivestockBreed < ApplicationRecord
+  include Swagger::IpLivestockBreedSchema
+
   # Improved populations of livestock breeds model.
   belongs_to :category
   belongs_to :research_group

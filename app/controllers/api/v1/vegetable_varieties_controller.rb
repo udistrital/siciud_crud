@@ -1,6 +1,8 @@
 module Api
   module V1
     class VegetableVarietiesController < AbstractProductResearchUnitController
+      include Swagger::VegetableVarietyApi
+
       before_action :set_research_group
       before_action :set_vegetable_variety, only: [:show, :update]
 

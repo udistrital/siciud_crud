@@ -1,4 +1,6 @@
 class VegetableVariety < ApplicationRecord
+  include Swagger::VegetableVarietySchema
+
   belongs_to :cycle_type
   belongs_to :petition_status
   belongs_to :category

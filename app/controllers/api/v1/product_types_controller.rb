@@ -1,6 +1,8 @@
 module Api
   module V1
     class ProductTypesController < ApplicationController
+      include Swagger::ProductTypeApi
+
       before_action :set_product_type, only: [:show, :update]
 
       rescue_from ActiveRecord::RecordNotFound do |e|

@@ -1,6 +1,8 @@
 module Api
   module V1
     class PapersController < AbstractProductResearchUnitController
+      include Swagger::PaperApi
+
       before_action :set_research_group, only: [:index, :show, :create, :update]
       before_action :set_paper, only: [:show, :update]
 

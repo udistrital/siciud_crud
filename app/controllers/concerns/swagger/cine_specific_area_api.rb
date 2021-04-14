@@ -3,13 +3,13 @@ module Swagger::CineSpecificAreaApi
   include Swagger::Blocks
 
   included do
-    swagger_path '/api/v1/cine_specific_areas/{id}' do
+    swagger_path '/cine_specific_areas/{id}' do
       operation :put do
         key :summary, 'Update Specific Area of ISCED by ID'
         key :description, 'Returns the updated Specific Area of ISCED'
         key :operationId, :update_cine_specific_area
         key :produces, ['application/json',]
-        key :tags, ['Specific Areas of International Standard Classification of Education - ISCED']
+        key :tags, ['ISCED - Specific Areas of International Standard Classification of Education']
 
         parameter name: :id do
           key :in, :path
@@ -45,13 +45,13 @@ module Swagger::CineSpecificAreaApi
       end
     end
 
-    swagger_path '/api/v1/cine_specific_areas/' do
+    swagger_path '/cine_specific_areas/' do
       operation :get do
         key :summary, 'Get all Specific Areas of ISCED'
         key :description, 'Returns all specific areas of ISCED'
         key :operationId, :get_cine_specific_areas
         key :produces, ['application/json',]
-        key :tags, ['Specific Areas of International Standard Classification of Education - ISCED']
+        key :tags, ['ISCED - Specific Areas of International Standard Classification of Education']
 
         response 200 do
           key :description, 'Specific Area of ISCED response'
@@ -72,7 +72,7 @@ module Swagger::CineSpecificAreaApi
         key :description, 'Returns the created specific area'
         key :operationId, :create_cine_specific_area
         key :produces, ['application/json',]
-        key :tags, ['Specific Areas of International Standard Classification of Education - ISCED']
+        key :tags, ['ISCED - Specific Areas of International Standard Classification of Education']
 
         parameter name: :cine_specific_area do
           key :in, :body

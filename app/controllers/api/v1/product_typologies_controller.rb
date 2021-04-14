@@ -1,4 +1,6 @@
 class Api::V1::ProductTypologiesController < ApplicationController
+  include Swagger::ProductTypologyApi
+
   before_action :set_product_typology, only: [:show, :update]
 
 

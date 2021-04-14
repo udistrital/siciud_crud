@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  include Swagger::UserSchema
+
   belongs_to :user_role
 
   validates :user_role, presence: true

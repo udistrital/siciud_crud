@@ -3,138 +3,165 @@ module Swagger::GroupMemberApi
   include Swagger::Blocks
 
   included do
-    swagger_path "/api/v1/research_group/{research_group_id}/group_member" do
+    swagger_path '/research_group/{research_group_id}/group_member/{id}' do
       operation :get do
-        key :description, "Traer todos los convenios paginados "
-        key :operationId, :get_members
-        key :produces, [
-              "application/json",
-            ]
-        key :tags, [
-              "Integrantes Grupos de investigacion",
-            #,
-            ]
-        parameter name: :research_group_id do
-          key :in, :path
-          key :description, "Research group id"
-          key :required, false
-          key :type, :int64
-        end
-        # definición del success response
-        response 200 do
-          key :description, "Lista de integrantes del grupo de investigacion"
+        key :summary, 'Get a Group Member of a Research Unit by ID'
+        key :description, 'Returns a single group member'
+        key :operationId, :get_group_member_by_id
+        key :produces, ['application/json',]
+        key :tags, ['Research Units::Group Members']
 
-          schema do
-            key :'$ref', :GroupMemberBase
-          end
-        end
-      end
-      operation :post do
-        key :description, "Agregar un integrante aun grupo de investigacion o agregar un nuevo periodo en caso de que ya exista,
-        la fecha de inicio es la del dia que se hace el registro"
-        key :operationId, :create_agreement
-        key :produces, ["application/json"]
-        key :tags, [
-              "Integrantes Grupos de investigacion",
-            #,
-            ]
         parameter name: :research_group_id do
           key :in, :path
-          key :description, "Research group id"
-          key :required, false
-          key :type, :int64
-        end
-        parameter do
-          key :name, :group_member
-          key :in, :body
-          key :description, "Investigador y rol del investigador"
+          key :description, 'ID of research unit to fetch'
           key :required, true
+          key :type, :integer
+          key :format, :int64
+        end
+
+        parameter name: :id do
+          key :in, :path
+          key :description, 'ID of group member of a research unit to fetch'
+          key :required, true
+          key :type, :integer
+          key :format, :int64
+        end
+
+        response 200 do
+          key :description, 'group member response'
           schema do
-            property :group_member do
-              property :role_id do
-                key :type, :integer
-                #key :format, :date
-              end
-              property :researcher_id do
-                key :type, :integer
-              end
-            end
+            key :'$ref', :GroupMemberOutput
           end
         end
-        response 200 do
-          key :description, "Respuesta"
+        response 404 do
+          key :description, 'Not Found'
           schema do
-            key :'$ref', :GroupMemberComplete
+            key :'$ref', :ErrorNotFound
           end
         end
         response :default do
-          key :description, "unexpected error"
+          key :description, 'Unexpected Error'
         end
       end
-    end
-    swagger_path "/api/v1/research_group/{research_group_id}/group_member/{id}" do
-      operation :get do
-        key :description, "Traer el detalle de un integrante del grupo de investigacion "
-        key :operationId, :get_members
-        key :produces, [
-          "application/json",
-        ]
-        key :tags, [
-          "Integrantes Grupos de investigacion",
-        #,
-        ]
-        parameter name: :research_group_id do
-          key :in, :path
-          key :description, "Research group id"
-          key :required, false
-          key :type, :int64
-        end
-        parameter name: :id do
-          key :in, :path
-          key :description, "Member id"
-          key :required, false
-          key :type, :int64
-        end
-        # definición del success response
-        response 200 do
-          key :description, "Informacion del integrante"
 
+      operation :put do
+        key :summary, 'Update Group Member by ID'
+        key :description, 'Returns the updated group member'
+        key :operationId, :update_group_member
+        key :produces, ['application/json',]
+        key :tags, ['Research Units::Group Members']
+
+        parameter name: :research_group_id do
+          key :in, :path
+          key :description, 'ID of research unit to fetch'
+          key :required, true
+          key :type, :integer
+          key :format, :int64
+        end
+
+        parameter name: :id do
+          key :in, :path
+          key :description, 'ID of group member of a research unit to fetch'
+          key :required, true
+          key :type, :integer
+          key :format, :int64
+        end
+
+        parameter name: :group_member do
+          key :in, :body
+          key :description, 'Group Member to update'
+          key :required, true
           schema do
-            key :'$ref', :GroupMemberComplete
+            key :'$ref', :GroupMemberInput
           end
+        end
+
+        response 200 do
+          key :description, 'group member response'
+          schema do
+            key :'$ref', :GroupMemberOutput
+          end
+        end
+        response 422 do
+          key :description, 'Unprocessable Entity'
+          schema do
+            key :'$ref', :ErrorUnprocessableEntity
+          end
+        end
+        response :default do
+          key :description, 'Unexpected Error'
         end
       end
     end
-    swagger_path "/api/v1/research_group/{research_group_id}/group_member/{id}/deactivate" do
-      operation :put do
-        key :description, "Desactivar un integrante"
-        key :operationId, :deactivate_members
-        key :produces, [
-              "application/json",
-            ]
-        key :tags, [
-              "Integrantes Grupos de investigacion",
-            #,
-            ]
+
+    swagger_path '/research_group/{research_group_id}/group_member/' do
+      operation :get do
+        key :summary, 'Get all Group Members'
+        key :description, 'Returns all group members'
+        key :operationId, :get_group_members
+        key :produces, ['application/json',]
+        key :tags, ['Research Units::Group Members']
+
         parameter name: :research_group_id do
           key :in, :path
-          key :description, "Research group id"
-          key :required, false
-          key :type, :int64
+          key :description, 'ID of research unit to fetch'
+          key :required, true
+          key :type, :integer
+          key :format, :int64
         end
-        parameter name: :id do
-          key :in, :path
-          key :description, "Member id"
-          key :required, false
-          key :type, :int64
-        end
-        # definición del success response
+
         response 200 do
-          key :description, "Informacion del integrante"
-  
+          key :description, 'group member response'
           schema do
-            key :'$ref', :GroupMemberComplete
+            key :type, :array
+            items do
+              key :'$ref', :GroupMemberOutput
+            end
           end
+        end
+        response :default do
+          key :description, 'Unexpected Error'
+        end
+      end
+
+      operation :post do
+        key :summary, 'Create a new Group Member'
+        key :description, 'Returns the created group member'
+        key :operationId, :create_group_member
+        key :produces, ['application/json',]
+        key :tags, ['Research Units::Group Members']
+
+        parameter name: :research_group_id do
+          key :in, :path
+          key :description, 'ID of research unit to fetch'
+          key :required, true
+          key :type, :integer
+          key :format, :int64
+        end
+
+        parameter name: :group_member do
+          key :in, :body
+          key :description, 'GroupMember to register'
+          key :required, true
+          schema do
+            key :'$ref', :GroupMemberInput
+          end
+        end
+
+        response 201 do
+          key :description, 'group member response'
+          schema do
+            key :'$ref', :GroupMemberOutput
+          end
+        end
+        response 422 do
+          key :description, 'Unprocessable Entity'
+          schema do
+            key :'$ref', :ErrorUnprocessableEntity
+          end
+        end
+        response :default do
+          key :description, 'Unexpected Error'
         end
       end
     end

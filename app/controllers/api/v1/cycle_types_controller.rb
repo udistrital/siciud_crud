@@ -1,6 +1,8 @@
 module Api
   module V1
     class CycleTypesController < ApplicationController
+      include Swagger::CycleTypeApi
+
       before_action :set_cycle_type, only: [:show, :update]
 
       # Handling of database exceptions

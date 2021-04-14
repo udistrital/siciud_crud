@@ -1,4 +1,6 @@
 class NewAnimalBreed < ApplicationRecord
+  include Swagger::NewAnimalBreedSchema
+
   belongs_to :cycle_type
   belongs_to :petition_status
   belongs_to :category

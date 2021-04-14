@@ -1,6 +1,8 @@
 module Api
   module V1
     class GroupTypesController < ApplicationController
+      include Swagger::GroupTypeApi
+
       before_action :set_group_type, only: [:show, :update]
 
       rescue_from ActiveRecord::RecordNotFound do |e|

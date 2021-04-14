@@ -1,6 +1,8 @@
 module Api
   module V1
     class GmStatesController < ApplicationController
+      include Swagger::GmStateApi
+
       before_action :set_gm_state, only: [:show]
 
       rescue_from ActiveRecord::RecordNotFound do |e|

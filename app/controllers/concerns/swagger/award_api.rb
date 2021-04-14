@@ -3,10 +3,10 @@ module Swagger::AwardApi
   include Swagger::Blocks
 
   included do
-    swagger_path '/api/v1/research_creation_works/{research_creation_work_id}/awards/{id}' do
+    swagger_path '/research_creation_works/{research_creation_work_id}/awards/{id}' do
       operation :get do
         key :summary, 'Get an Award from a Research Creation Work by ID'
-        key :description, 'Returns a single category'
+        key :description, 'Returns a single award'
         key :operationId, :get_award_by_id
         key :produces, ['application/json',]
         key :tags, ['Products::GNK::RCW::Awards']
@@ -94,7 +94,7 @@ module Swagger::AwardApi
       end
     end
 
-    swagger_path '/api/v1/research_creation_works/{research_creation_work_id}/awards/' do
+    swagger_path '/research_creation_works/{research_creation_work_id}/awards/' do
       operation :get do
         key :summary, 'Get all Awards from a Research Creation Work'
         key :description, 'Returns all awards from a Research Creation Work'
@@ -130,6 +130,14 @@ module Swagger::AwardApi
         key :operationId, :create_award
         key :produces, ['application/json',]
         key :tags, ['Products::GNK::RCW::Awards']
+
+        parameter name: :research_creation_work_id do
+          key :in, :path
+          key :description, 'ID of research creation work to fetch'
+          key :required, true
+          key :type, :integer
+          key :format, :int64
+        end
 
         parameter name: :award do
           key :in, :body

@@ -3,13 +3,13 @@ module Swagger::CineDetailedAreaApi
   include Swagger::Blocks
 
   included do
-    swagger_path '/api/v1/cine_detailed_areas/{id}' do
+    swagger_path '/cine_detailed_areas/{id}' do
       operation :put do
         key :summary, 'Update Detailed Area of ISCED by ID'
         key :description, 'Returns the updated Detailed Area of ISCED'
         key :operationId, :update_cine_detailed_area
         key :produces, ['application/json',]
-        key :tags, ['Detailed Areas of International Standard Classification of Education - ISCED']
+        key :tags, ['ISCED - Detailed Areas of International Standard Classification of Education']
 
         parameter name: :id do
           key :in, :path
@@ -45,13 +45,13 @@ module Swagger::CineDetailedAreaApi
       end
     end
 
-    swagger_path '/api/v1/cine_detailed_areas/' do
+    swagger_path '/cine_detailed_areas/' do
       operation :get do
         key :summary, 'Get all Detailed Areas of ISCED'
         key :description, 'Returns all detailed areas of ISCED'
         key :operationId, :get_cine_detailed_areas
         key :produces, ['application/json',]
-        key :tags, ['Detailed Areas of International Standard Classification of Education - ISCED']
+        key :tags, ['ISCED - Detailed Areas of International Standard Classification of Education']
 
         response 200 do
           key :description, 'Detailed Area of ISCED response'
@@ -72,7 +72,7 @@ module Swagger::CineDetailedAreaApi
         key :description, 'Returns the created detailed area'
         key :operationId, :create_cine_detailed_area
         key :produces, ['application/json',]
-        key :tags, ['Detailed Areas of International Standard Classification of Education - ISCED']
+        key :tags, ['ISCED - Detailed Areas of International Standard Classification of Education']
 
         parameter name: :cine_detailed_area do
           key :in, :body

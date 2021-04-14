@@ -1,6 +1,8 @@
 module Api
   module V1
     class UsersController < ApplicationController
+      include Swagger::UserApi
+
       before_action :set_user, only: [:show, :update]
 
       rescue_from Exception do |e|

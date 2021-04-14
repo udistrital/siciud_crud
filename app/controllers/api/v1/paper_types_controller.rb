@@ -1,6 +1,8 @@
 module Api
   module V1
     class PaperTypesController < ApplicationController
+      include Swagger::PaperTypeApi
+
       before_action :set_paper_type, only: [:show, :update]
 
       # Handling of database exceptions

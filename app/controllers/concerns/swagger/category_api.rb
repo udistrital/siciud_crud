@@ -3,13 +3,13 @@ module Swagger::CategoryApi
   include Swagger::Blocks
 
   included do
-    swagger_path '/api/v1/categories/{id}' do
+    swagger_path '/categories/{id}' do
       operation :get do
         key :summary, 'Get Category by ID'
         key :description, 'Returns a single category'
         key :operationId, :get_category_by_id
         key :produces, ['application/json',]
-        key :tags, [:Categories]
+        key :tags, ['Products::Categories']
 
         parameter name: :id do
           key :in, :path
@@ -41,7 +41,7 @@ module Swagger::CategoryApi
         key :description, 'Returns the updated category'
         key :operationId, :update_category
         key :produces, ['application/json',]
-        key :tags, [:Categories]
+        key :tags, ['Products::Categories']
 
         parameter name: :id do
           key :in, :path
@@ -77,13 +77,13 @@ module Swagger::CategoryApi
       end
     end
 
-    swagger_path '/api/v1/categories/' do
+    swagger_path '/categories/' do
       operation :get do
         key :summary, 'Get all Categories'
         key :description, 'Returns all categories'
         key :operationId, :get_categories
         key :produces, ['application/json',]
-        key :tags, [:Categories]
+        key :tags, ['Products::Categories']
 
         parameter name: :product_type_id do
           key :in, :query
@@ -112,7 +112,7 @@ module Swagger::CategoryApi
         key :description, 'Returns the created category'
         key :operationId, :create_category
         key :produces, ['application/json',]
-        key :tags, [:Categories]
+        key :tags, ['Products::Categories']
 
         parameter name: :category do
           key :in, :body
