@@ -9,9 +9,17 @@ module Api
 
       # GET /research_units/:id/plant_ind_prototypes
       def index
-        @plant_ind_prototypes = CompletePltIndProt.where(
-          research_group_id: params[:research_group_id]
-        )
+        if params[:plt_type_id]
+          puts "Si tiene la llave"
+          @plant_ind_prototypes = CompletePltIndProt.where(
+            "research_group_id = ? AND plt_type_id = ?",
+            params[:research_group_id], params[:plt_type_id]
+          )
+        else
+          @plant_ind_prototypes = CompletePltIndProt.where(
+            research_group_id: params[:research_group_id]
+          )
+        end
         @plant_ind_prototypes = DxService.load(@plant_ind_prototypes, params)
 
         render json: @plant_ind_prototypes

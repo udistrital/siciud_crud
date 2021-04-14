@@ -9,9 +9,16 @@ module Api
 
       # GET /research_units/:id/events
       def index
-        @events = CompleteEvent.where(
-          research_group_id: params[:research_group_id]
-        )
+        if params[:eve_type_id]
+          @events = CompleteEvent.where(
+            "research_group_id = ? AND eve_type_id = ?",
+            params[:research_group_id], params[:eve_type_id]
+          )
+        else
+          @events = CompleteEvent.where(
+            research_group_id: params[:research_group_id]
+          )
+        end
         @events = DxService.load(@events, params)
 
         render json: @events

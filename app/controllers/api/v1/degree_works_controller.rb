@@ -9,9 +9,16 @@ module Api
 
       # GET /research_units/:id/degree_works
       def index
-        @degree_works = CompleteDegreeWork.where(
-          research_group_id: params[:research_group_id]
-        )
+        if params[:dw_type_id]
+          @degree_works = CompleteDegreeWork.where(
+            "research_group_id = ? AND dw_type_id = ?",
+            params[:research_group_id], params[:dw_type_id]
+          )
+        else
+          @degree_works = CompleteDegreeWork.where(
+            research_group_id: params[:research_group_id]
+          )
+        end
         @degree_works = DxService.load(@degree_works, params)
 
         render json: @degree_works
