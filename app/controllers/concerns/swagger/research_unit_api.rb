@@ -3,7 +3,7 @@ module Swagger::ResearchUnitApi
   include Swagger::Blocks
 
   included do
-    swagger_path '/research_group/{id}' do
+    swagger_path '/research_units/{id}' do
       operation :get do
         key :summary, 'Get a Research Unit by ID'
         key :description, 'Returns a single research unit'
@@ -78,7 +78,7 @@ module Swagger::ResearchUnitApi
       end
     end
 
-    swagger_path '/research_unit/' do
+    swagger_path '/research_units/' do
       operation :get do
         key :summary, 'Get all Research Units'
         key :description, 'Returns all Research Units'
@@ -99,9 +99,7 @@ module Swagger::ResearchUnitApi
           key :description, 'Unexpected Error'
         end
       end
-    end
 
-    swagger_path '/research_group/' do
       operation :post do
         key :summary, 'Create a new Research Unit'
         key :description, 'Returns the created research unit'
@@ -114,7 +112,7 @@ module Swagger::ResearchUnitApi
           key :description, 'Research Unit to register'
           key :required, true
           schema do
-            key :'$ref', :ResearchUnitInput
+            key :'$ref', :ResearchUnitInputPost
           end
         end
 

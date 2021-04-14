@@ -88,7 +88,7 @@ module Swagger::PaperSchema
       end
     end
 
-    swagger_schema :PaperInput do
+    swagger_schema :PaperInputPost do
       property :paper do
         property :title do
           key :type, :string
