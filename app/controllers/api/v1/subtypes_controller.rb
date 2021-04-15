@@ -1,6 +1,8 @@
 module Api
   module V1
     class SubtypesController < ApplicationController
+      include Swagger::SubtypeApi
+
       before_action :set_type, only: [:index, :show, :create, :update, :change_active]
       before_action :set_subtype, only: [:show, :update, :change_active]
       before_action only: [:change_active] do

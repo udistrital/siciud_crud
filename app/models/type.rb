@@ -1,4 +1,6 @@
 class Type < ApplicationRecord
+  include Swagger::TypeSchema
+
   has_many :subtypes
 
   # Tracking inherited from ApplicationRecord, fields:

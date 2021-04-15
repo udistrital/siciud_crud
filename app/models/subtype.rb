@@ -1,4 +1,6 @@
 class Subtype < ApplicationRecord
+  include Swagger::SubtypeSchema
+
   belongs_to :type
 
   belongs_to :parent, class_name: 'Subtype', optional: true
@@ -13,7 +15,6 @@ class Subtype < ApplicationRecord
                           join_table: 'research_focuses_units',
                           class_name: 'ResearchGroup',
                           inverse_of: :research_units
-
 
   has_many :document_types, class_name: 'Document', foreign_key: 'document_type_id', dependent: :destroy
 
@@ -39,7 +40,6 @@ class Subtype < ApplicationRecord
 
   has_many :ext_participants, class_name: 'ExtParticipant', foreign_key: 'participant_type_id', dependent: :destroy
   has_many :int_participants, class_name: 'IntParticipant', foreign_key: 'participant_type_id', dependent: :destroy
-
 
   # Tracking inherited from ApplicationRecord, fields:
   # created_by and updated_by, see application_record.rb
