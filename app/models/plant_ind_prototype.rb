@@ -1,4 +1,5 @@
 class PlantIndPrototype < ApplicationRecord
+  include Swagger::PlantIndPrototypeSchema
 
   belongs_to :category, class_name: 'Subtype', foreign_key: 'category_id', optional: true
   belongs_to :colciencias_call, optional: true

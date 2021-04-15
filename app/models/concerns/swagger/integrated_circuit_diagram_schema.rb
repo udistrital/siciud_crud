@@ -1,16 +1,16 @@
-module Swagger::PlantIndPrototypeSchema
+module Swagger::IntegratedCircuitDiagramSchema
   extend ActiveSupport::Concern
   include Swagger::Blocks
 
   included do
-    swagger_schema :PlantIndPrototypeSchema do
-      property :plt_name do
+    swagger_schema :IntegratedCircuitDiagram do
+      property :icd_registration_number do
         key :type, :string
       end
-      property :plt_registration_number do
+      property :icd_registration_title do
         key :type, :string
       end
-      property :plt_date_of_elaboration do
+      property :icd_date_of_obtaining do
         key :type, :string
         key :format, :date
       end
@@ -29,48 +29,21 @@ module Swagger::PlantIndPrototypeSchema
       property :observation do
         key :type, :string
       end
-      property :institution_name do
-        key :type, :string
-      end
-      property :plt_type_id do
-        key :type, :integer
-        key :format, :int64
-      end
       property :geo_city_id do
         key :type, :integer
         key :format, :int64
       end
-      property :active do
-        key :type, :boolean
-        key :default, true
-      end
-      property :created_by do
-        key :type, :integer
-        key :format, :int64
-      end
-      property :updated_by do
-        key :type, :integer
-        key :format, :int64
-      end
-      property :created_at do
-        key :type, :string
-        key :format, 'date-time'
-      end
-      property :updated_at do
-        key :type, :string
-        key :format, 'date-time'
-      end
     end
 
-    swagger_schema :PlantIndPrototypeSchemaInputPost do
+    swagger_schema :IntegratedCircuitDiagramInputPost do
       allOf do
         schema do
-          property :plantIndPrototype do
-            key :'$ref', :PlantIndPrototype
+          property :integrated_circuit_diagram do
+            key :'$ref', :IntegratedCircuitDiagram
           end
         end
         schema do
-          property :software do
+          property :integrated_circuit_diagram do
             property :created_by do
               key :type, :integer
               key :format, :int64
@@ -80,15 +53,15 @@ module Swagger::PlantIndPrototypeSchema
       end
     end
 
-    swagger_schema :PlantIndPrototypeSchemaInputPut do
+    swagger_schema :IntegratedCircuitDiagramInputPut do
       allOf do
         schema do
-          property :plantIndPrototype do
-            key :'$ref', :PlantIndPrototype
+          property :integrated_circuit_diagram do
+            key :'$ref', :IntegratedCircuitDiagram
           end
         end
         schema do
-          property :software do
+          property :integrated_circuit_diagram do
             property :updated_by do
               key :type, :integer
               key :format, :int64
@@ -98,10 +71,10 @@ module Swagger::PlantIndPrototypeSchema
       end
     end
 
-    swagger_schema :PlantIndPrototypeSchemaOutput do
+    swagger_schema :IntegratedCircuitDiagramOutput do
       allOf do
         schema do
-          key :'$ref', :PlantIndPrototype
+          key :'$ref', :IntegratedCircuitDiagram
         end
         schema do
           property :category_name do
@@ -131,8 +104,9 @@ module Swagger::PlantIndPrototypeSchema
           property :geo_state_name do
             key :type, :string
           end
-          property :plt_type_name do
-            key :type, :string
+          property :active do
+            key :type, :boolean
+            key :default, true
           end
           property :created_by do
             key :type, :integer
@@ -142,17 +116,25 @@ module Swagger::PlantIndPrototypeSchema
             key :type, :integer
             key :format, :int64
           end
+          property :created_at do
+            key :type, :string
+            key :format, 'date-time'
+          end
+          property :updated_at do
+            key :type, :string
+            key :format, 'date-time'
+          end
         end
       end
     end
 
-    swagger_schema :PlantIndPrototypeSchemaDxOutput do
+    swagger_schema :IntegratedCircuitDiagramDxOutput do
       allOf do
         schema do
           property :data do
             key :type, :array
             items do
-              key :'$ref', :PlantIndPrototypeOutput
+              key :'$ref', :IntegratedCircuitDiagram
             end
           end
         end

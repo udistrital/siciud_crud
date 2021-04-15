@@ -1,6 +1,8 @@
 module Api
   module V1
     class IndustrialDesignsController < AbstractProductResearchUnitController
+      include Swagger::IndustrialDesignApi
+
       before_action :set_research_group
       before_action :set_industrial_design, only: [:show, :update, :change_active]
       before_action only: [:change_active] do

@@ -70,6 +70,11 @@ module Api
         UserRolesController,
         UsersController,
         SoftwareController,
+        PlantIndPrototypesController,
+        NewScientificRecordsController,
+        DegreeWorksController,
+        IndustrialDesignsController,
+        IntegratedCircuitDiagramsController,
 
         ColcienciasCall,
         ColcienciasCategory,
@@ -118,6 +123,11 @@ module Api
         UserRole,
         User,
         Software,
+        PlantIndPrototype,
+        NewScientificRecord,
+        DegreeWork,
+        IndustrialDesign,
+        IntegratedCircuitDiagram,
 
         ApplicationRecord,
         self,

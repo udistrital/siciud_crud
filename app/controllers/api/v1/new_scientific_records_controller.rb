@@ -1,6 +1,8 @@
 module Api
   module V1
     class NewScientificRecordsController < AbstractProductResearchUnitController
+      include Swagger::NewScientificRecordApi
+
       before_action :set_research_group
       before_action :set_new_scientific_record, only: [:show, :update, :change_active]
       before_action only: [:change_active] do
