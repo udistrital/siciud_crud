@@ -68,3 +68,6 @@ gem 'json'
 
 # gem scenic used to  database views
 gem 'scenic'
+
+# gem mime magic
+gem 'mimemagic', github: 'mimemagicrb/mimemagic', ref: '01f92d86d15d85cfd0f20dabd025dcbd36a8a60f'
