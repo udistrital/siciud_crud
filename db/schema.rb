@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_15_232144) do
+ActiveRecord::Schema.define(version: 2021_04_15_233226) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1154,22 +1154,6 @@ ActiveRecord::Schema.define(version: 2021_04_15_232144) do
     t.bigint "subtype_id", null: false
   end
 
-  create_table "research_focuses", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.boolean "active", default: true
-    t.bigint "created_by"
-    t.bigint "updated_by"
-    t.index ["created_by"], name: "index_research_focuses_on_created_by"
-    t.index ["updated_by"], name: "index_research_focuses_on_updated_by"
-  end
-
-  create_table "research_focuses_seedbeds", id: false, force: :cascade do |t|
-    t.integer "research_seedbed_id", null: false
-    t.integer "research_focus_id", null: false
-  end
-
   create_table "research_focuses_units", id: false, force: :cascade do |t|
     t.bigint "subtype_id", null: false
     t.bigint "research_group_id", null: false
@@ -1665,8 +1649,6 @@ ActiveRecord::Schema.define(version: 2021_04_15_232144) do
   add_foreign_key "research_creation_works", "subtypes", column: "knwl_spec_area_id"
   add_foreign_key "research_creation_works", "users", column: "created_by"
   add_foreign_key "research_creation_works", "users", column: "updated_by"
-  add_foreign_key "research_focuses", "users", column: "created_by"
-  add_foreign_key "research_focuses", "users", column: "updated_by"
   add_foreign_key "research_groups", "cine_broad_areas"
   add_foreign_key "research_groups", "cine_specific_areas"
   add_foreign_key "research_groups", "oecd_knowledge_areas"
