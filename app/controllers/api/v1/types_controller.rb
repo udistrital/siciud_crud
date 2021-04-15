@@ -1,6 +1,8 @@
 module Api
   module V1
     class TypesController < ApplicationController
+      include Swagger::TypeApi
+
       before_action :set_type, only: [:show, :update, :change_active]
       before_action only: [:change_active] do
         active_in_body_params? type_params_to_deactivate
