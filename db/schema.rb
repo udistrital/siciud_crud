@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_13_213941) do
+ActiveRecord::Schema.define(version: 2021_04_15_233226) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -133,13 +133,11 @@ ActiveRecord::Schema.define(version: 2021_04_13_213941) do
   end
 
   create_table "arp_assignments", force: :cascade do |t|
-    t.bigint "product_typology_id"
     t.bigint "agreement_research_project_id"
     t.integer "completedPercentage"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["agreement_research_project_id"], name: "index_arp_assignments_on_agreement_research_project_id"
-    t.index ["product_typology_id"], name: "index_arp_assignments_on_product_typology_id"
   end
 
   create_table "arp_expenses", force: :cascade do |t|
@@ -328,13 +326,11 @@ ActiveRecord::Schema.define(version: 2021_04_13_213941) do
   create_table "calls_product_types", force: :cascade do |t|
     t.integer "quantity"
     t.bigint "call_id"
-    t.bigint "product_type_id"
     t.text "alternate_indicator"
     t.bigint "required_type_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["call_id"], name: "index_calls_product_types_on_call_id"
-    t.index ["product_type_id"], name: "index_calls_product_types_on_product_type_id"
     t.index ["required_type_id"], name: "index_calls_product_types_on_required_type_id"
   end
 
@@ -350,14 +346,12 @@ ActiveRecord::Schema.define(version: 2021_04_13_213941) do
 
   create_table "categories", force: :cascade do |t|
     t.string "name"
-    t.bigint "product_type_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
     t.index ["created_by"], name: "index_categories_on_created_by"
-    t.index ["product_type_id"], name: "index_categories_on_product_type_id"
     t.index ["updated_by"], name: "index_categories_on_updated_by"
   end
 
@@ -745,28 +739,6 @@ ActiveRecord::Schema.define(version: 2021_04_13_213941) do
     t.index ["updated_by"], name: "index_group_members_on_updated_by"
   end
 
-  create_table "group_states", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.boolean "active", default: true
-    t.bigint "created_by"
-    t.bigint "updated_by"
-    t.index ["created_by"], name: "index_group_states_on_created_by"
-    t.index ["updated_by"], name: "index_group_states_on_updated_by"
-  end
-
-  create_table "group_types", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.boolean "active", default: true
-    t.bigint "created_by"
-    t.bigint "updated_by"
-    t.index ["created_by"], name: "index_group_types_on_created_by"
-    t.index ["updated_by"], name: "index_group_types_on_updated_by"
-  end
-
   create_table "historical_colciencias_ranks", force: :cascade do |t|
     t.integer "colciencias_call_id"
     t.integer "colciencias_category_id"
@@ -1139,31 +1111,6 @@ ActiveRecord::Schema.define(version: 2021_04_13_213941) do
     t.index ["updated_by"], name: "index_plant_ind_prototypes_on_updated_by"
   end
 
-  create_table "product_types", force: :cascade do |t|
-    t.string "name"
-    t.text "indicator"
-    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.bigint "product_typology_id"
-    t.boolean "active", default: true
-    t.bigint "created_by"
-    t.bigint "updated_by"
-    t.index ["created_by"], name: "index_product_types_on_created_by"
-    t.index ["product_typology_id"], name: "index_product_types_on_product_typology_id"
-    t.index ["updated_by"], name: "index_product_types_on_updated_by"
-  end
-
-  create_table "product_typologies", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.boolean "active", default: true
-    t.bigint "created_by"
-    t.bigint "updated_by"
-    t.index ["created_by"], name: "index_product_typologies_on_created_by"
-    t.index ["updated_by"], name: "index_product_typologies_on_updated_by"
-  end
-
   create_table "required_documents", force: :cascade do |t|
     t.string "document_name"
     t.datetime "created_at", null: false
@@ -1205,22 +1152,6 @@ ActiveRecord::Schema.define(version: 2021_04_13_213941) do
   create_table "research_creation_works_work_types", id: false, force: :cascade do |t|
     t.bigint "research_creation_work_id", null: false
     t.bigint "subtype_id", null: false
-  end
-
-  create_table "research_focuses", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.boolean "active", default: true
-    t.bigint "created_by"
-    t.bigint "updated_by"
-    t.index ["created_by"], name: "index_research_focuses_on_created_by"
-    t.index ["updated_by"], name: "index_research_focuses_on_updated_by"
-  end
-
-  create_table "research_focuses_seedbeds", id: false, force: :cascade do |t|
-    t.integer "research_seedbed_id", null: false
-    t.integer "research_focus_id", null: false
   end
 
   create_table "research_focuses_units", id: false, force: :cascade do |t|
@@ -1545,7 +1476,6 @@ ActiveRecord::Schema.define(version: 2021_04_13_213941) do
 
   add_foreign_key "arp_assignment_reports", "arp_assignments"
   add_foreign_key "arp_assignments", "agreement_research_projects"
-  add_foreign_key "arp_assignments", "product_typologies"
   add_foreign_key "awards", "research_creation_works"
   add_foreign_key "awards", "users", column: "created_by"
   add_foreign_key "awards", "users", column: "updated_by"
@@ -1569,11 +1499,9 @@ ActiveRecord::Schema.define(version: 2021_04_13_213941) do
   add_foreign_key "calls", "call_user_roles"
   add_foreign_key "calls", "duration_types"
   add_foreign_key "calls_product_types", "calls"
-  add_foreign_key "calls_product_types", "product_types"
   add_foreign_key "calls_product_types", "required_types"
   add_foreign_key "calls_required_documents", "calls"
   add_foreign_key "calls_required_documents", "required_documents"
-  add_foreign_key "categories", "product_types"
   add_foreign_key "categories", "users", column: "created_by"
   add_foreign_key "categories", "users", column: "updated_by"
   add_foreign_key "cine_broad_areas", "users", column: "created_by"
@@ -1631,10 +1559,6 @@ ActiveRecord::Schema.define(version: 2021_04_13_213941) do
   add_foreign_key "group_members", "gm_states"
   add_foreign_key "group_members", "users", column: "created_by"
   add_foreign_key "group_members", "users", column: "updated_by"
-  add_foreign_key "group_states", "users", column: "created_by"
-  add_foreign_key "group_states", "users", column: "updated_by"
-  add_foreign_key "group_types", "users", column: "created_by"
-  add_foreign_key "group_types", "users", column: "updated_by"
   add_foreign_key "historical_colciencias_ranks", "oecd_knowledge_areas"
   add_foreign_key "historical_colciencias_ranks", "oecd_knowledge_subareas"
   add_foreign_key "historical_colciencias_ranks", "users", column: "created_by"
@@ -1718,11 +1642,6 @@ ActiveRecord::Schema.define(version: 2021_04_13_213941) do
   add_foreign_key "plant_ind_prototypes", "subtypes", column: "plt_type_id"
   add_foreign_key "plant_ind_prototypes", "users", column: "created_by"
   add_foreign_key "plant_ind_prototypes", "users", column: "updated_by"
-  add_foreign_key "product_types", "product_typologies"
-  add_foreign_key "product_types", "users", column: "created_by"
-  add_foreign_key "product_types", "users", column: "updated_by"
-  add_foreign_key "product_typologies", "users", column: "created_by"
-  add_foreign_key "product_typologies", "users", column: "updated_by"
   add_foreign_key "research_creation_works", "colciencias_calls"
   add_foreign_key "research_creation_works", "geo_cities"
   add_foreign_key "research_creation_works", "research_groups"
@@ -1730,8 +1649,6 @@ ActiveRecord::Schema.define(version: 2021_04_13_213941) do
   add_foreign_key "research_creation_works", "subtypes", column: "knwl_spec_area_id"
   add_foreign_key "research_creation_works", "users", column: "created_by"
   add_foreign_key "research_creation_works", "users", column: "updated_by"
-  add_foreign_key "research_focuses", "users", column: "created_by"
-  add_foreign_key "research_focuses", "users", column: "updated_by"
   add_foreign_key "research_groups", "cine_broad_areas"
   add_foreign_key "research_groups", "cine_specific_areas"
   add_foreign_key "research_groups", "oecd_knowledge_areas"

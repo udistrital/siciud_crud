@@ -31,9 +31,6 @@ Rails.application.routes.draw do
       get "/types_all", to: "types#all_types_and_subtypes"
       put "/types/:id/active", to: "types#change_active"
 
-      #Enpoint para listar las lineas de investigacion
-      resources :research_focus, only: [:index, :show]
-
       #Enpoint para actualizar los documentos de los convenios
       put "agreement/:id/attach/", to: "agreement#attach"
 
