@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_15_230921) do
+ActiveRecord::Schema.define(version: 2021_04_15_232144) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -737,17 +737,6 @@ ActiveRecord::Schema.define(version: 2021_04_15_230921) do
     t.index ["researcher_id"], name: "index_group_members_on_researcher_id"
     t.index ["role_id"], name: "index_group_members_on_role_id"
     t.index ["updated_by"], name: "index_group_members_on_updated_by"
-  end
-
-  create_table "group_states", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.boolean "active", default: true
-    t.bigint "created_by"
-    t.bigint "updated_by"
-    t.index ["created_by"], name: "index_group_states_on_created_by"
-    t.index ["updated_by"], name: "index_group_states_on_updated_by"
   end
 
   create_table "historical_colciencias_ranks", force: :cascade do |t|
@@ -1586,8 +1575,6 @@ ActiveRecord::Schema.define(version: 2021_04_15_230921) do
   add_foreign_key "group_members", "gm_states"
   add_foreign_key "group_members", "users", column: "created_by"
   add_foreign_key "group_members", "users", column: "updated_by"
-  add_foreign_key "group_states", "users", column: "created_by"
-  add_foreign_key "group_states", "users", column: "updated_by"
   add_foreign_key "historical_colciencias_ranks", "oecd_knowledge_areas"
   add_foreign_key "historical_colciencias_ranks", "oecd_knowledge_subareas"
   add_foreign_key "historical_colciencias_ranks", "users", column: "created_by"
