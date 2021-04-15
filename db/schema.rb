@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_13_213941) do
+ActiveRecord::Schema.define(version: 2021_04_15_222441) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -328,13 +328,11 @@ ActiveRecord::Schema.define(version: 2021_04_13_213941) do
   create_table "calls_product_types", force: :cascade do |t|
     t.integer "quantity"
     t.bigint "call_id"
-    t.bigint "product_type_id"
     t.text "alternate_indicator"
     t.bigint "required_type_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["call_id"], name: "index_calls_product_types_on_call_id"
-    t.index ["product_type_id"], name: "index_calls_product_types_on_product_type_id"
     t.index ["required_type_id"], name: "index_calls_product_types_on_required_type_id"
   end
 
@@ -350,14 +348,12 @@ ActiveRecord::Schema.define(version: 2021_04_13_213941) do
 
   create_table "categories", force: :cascade do |t|
     t.string "name"
-    t.bigint "product_type_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
     t.index ["created_by"], name: "index_categories_on_created_by"
-    t.index ["product_type_id"], name: "index_categories_on_product_type_id"
     t.index ["updated_by"], name: "index_categories_on_updated_by"
   end
 
@@ -1139,20 +1135,6 @@ ActiveRecord::Schema.define(version: 2021_04_13_213941) do
     t.index ["updated_by"], name: "index_plant_ind_prototypes_on_updated_by"
   end
 
-  create_table "product_types", force: :cascade do |t|
-    t.string "name"
-    t.text "indicator"
-    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.bigint "product_typology_id"
-    t.boolean "active", default: true
-    t.bigint "created_by"
-    t.bigint "updated_by"
-    t.index ["created_by"], name: "index_product_types_on_created_by"
-    t.index ["product_typology_id"], name: "index_product_types_on_product_typology_id"
-    t.index ["updated_by"], name: "index_product_types_on_updated_by"
-  end
-
   create_table "product_typologies", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
@@ -1569,11 +1551,9 @@ ActiveRecord::Schema.define(version: 2021_04_13_213941) do
   add_foreign_key "calls", "call_user_roles"
   add_foreign_key "calls", "duration_types"
   add_foreign_key "calls_product_types", "calls"
-  add_foreign_key "calls_product_types", "product_types"
   add_foreign_key "calls_product_types", "required_types"
   add_foreign_key "calls_required_documents", "calls"
   add_foreign_key "calls_required_documents", "required_documents"
-  add_foreign_key "categories", "product_types"
   add_foreign_key "categories", "users", column: "created_by"
   add_foreign_key "categories", "users", column: "updated_by"
   add_foreign_key "cine_broad_areas", "users", column: "created_by"
@@ -1718,9 +1698,6 @@ ActiveRecord::Schema.define(version: 2021_04_13_213941) do
   add_foreign_key "plant_ind_prototypes", "subtypes", column: "plt_type_id"
   add_foreign_key "plant_ind_prototypes", "users", column: "created_by"
   add_foreign_key "plant_ind_prototypes", "users", column: "updated_by"
-  add_foreign_key "product_types", "product_typologies"
-  add_foreign_key "product_types", "users", column: "created_by"
-  add_foreign_key "product_types", "users", column: "updated_by"
   add_foreign_key "product_typologies", "users", column: "created_by"
   add_foreign_key "product_typologies", "users", column: "updated_by"
   add_foreign_key "research_creation_works", "colciencias_calls"
