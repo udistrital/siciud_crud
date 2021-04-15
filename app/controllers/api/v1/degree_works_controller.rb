@@ -1,6 +1,8 @@
 module Api
   module V1
     class DegreeWorksController < AbstractProductResearchUnitController
+      include Swagger::DegreeWorkApi
+
       before_action :set_research_group
       before_action :set_degree_work, only: [:show, :update, :change_active]
       before_action only: [:change_active] do

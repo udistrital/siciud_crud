@@ -1,17 +1,17 @@
-module Swagger::PaperApi
+module Swagger::DegreeWorkApi
   extend ActiveSupport::Concern
   include Swagger::Blocks
 
   included do
-    swagger_path '/research_units/{research_unit_id}/papers/{id}' do
+    swagger_path '/research_units/{research_group_id}/degree_works/{id}' do
       operation :get do
-        key :summary, 'Get a Paper of a Research Unit by ID'
-        key :description, 'Returns a single paper'
-        key :operationId, :get_paper_by_id
+        key :summary, 'Get a degree_works of a Research Unit by ID'
+        key :description, 'Returns a single degree_works'
+        key :operationId, :get_degree_work_by_id
         key :produces, ['application/json',]
-        key :tags, ['Products::GNK::Papers']
+        key :tags, ['Products::CTIHRT::DegreeWorks']
 
-        parameter name: :research_unit_id do
+        parameter name: :research_group_id do
           key :in, :path
           key :description, 'ID of research unit to fetch'
           key :required, true
@@ -21,16 +21,16 @@ module Swagger::PaperApi
 
         parameter name: :id do
           key :in, :path
-          key :description, 'ID of paper of a research unit to fetch'
+          key :description, 'ID of degree_works of a research unit to fetch'
           key :required, true
           key :type, :integer
           key :format, :int64
         end
 
         response 200 do
-          key :description, 'paper response'
+          key :description, 'degree_works response'
           schema do
-            key :'$ref', :PaperOutput
+            key :'$ref', :DegreeWorkOutput
           end
         end
         response 404 do
@@ -45,13 +45,13 @@ module Swagger::PaperApi
       end
 
       operation :put do
-        key :summary, 'Update Paper by ID'
-        key :description, 'Returns the updated paper'
-        key :operationId, :update_paper
+        key :summary, 'Update Pdegree_works by ID'
+        key :description, 'Returns the updated degree_works'
+        key :operationId, :update_degree_work_by_id
         key :produces, ['application/json',]
-        key :tags, ['Products::GNK::Papers']
+        key :tags, ['Products::CTIHRT::DegreeWorks']
 
-        parameter name: :research_unit_id do
+        parameter name: :research_group_id do
           key :in, :path
           key :description, 'ID of research unit to fetch'
           key :required, true
@@ -61,25 +61,25 @@ module Swagger::PaperApi
 
         parameter name: :id do
           key :in, :path
-          key :description, 'ID of paper of a research unit to fetch'
+          key :description, 'ID of Plant or Industrial Prototype of a research unit to fetch'
           key :required, true
           key :type, :integer
           key :format, :int64
         end
 
-        parameter name: :paper do
+        parameter name: :degree_work do
           key :in, :body
-          key :description, 'Paper to update'
+          key :description, 'Degree works to update'
           key :required, true
           schema do
-            key :'$ref', :PaperInputPut
+            key :'$ref', :DegreeWorkInputPut
           end
         end
 
         response 200 do
-          key :description, 'paper response'
+          key :description, 'Degree works response'
           schema do
-            key :'$ref', :PaperOutput
+            key :'$ref', :DegreeWorkOutput
           end
         end
         response 422 do
@@ -94,15 +94,15 @@ module Swagger::PaperApi
       end
     end
 
-    swagger_path '/research_units/{research_unit_id}/papers/' do
+    swagger_path '/research_units/{research_group_id}/degree_works/' do
       operation :get do
-        key :summary, 'Get all Papers'
-        key :description, 'Returns all papers'
-        key :operationId, :get_papers
+        key :summary, 'Get all Degree works'
+        key :description, 'Returns all Degree works '
+        key :operationId, :get_degree_work
         key :produces, ['application/json',]
-        key :tags, ['Products::GNK::Papers']
+        key :tags, ['Products::CTIHRT::DegreeWorks']
 
-        parameter name: :research_unit_id do
+        parameter name: :research_group_id do
           key :in, :path
           key :description, 'ID of research unit to fetch'
           key :required, true
@@ -110,12 +110,20 @@ module Swagger::PaperApi
           key :format, :int64
         end
 
+        parameter name: :dw_type_id do
+          key :in, :query
+          key :description, 'ID of type to fetch'
+          key :required, false
+          key :type, :integer
+          key :format, :int64
+        end
+
         response 200 do
-          key :description, 'paper response'
+          key :description, 'Degree works response'
           schema do
             key :type, :array
             items do
-              key :'$ref', :PaperDxOutput
+              key :'$ref', :DegreeWorkDxOutput
             end
           end
         end
@@ -125,13 +133,13 @@ module Swagger::PaperApi
       end
 
       operation :post do
-        key :summary, 'Create a new Paper'
-        key :description, 'Returns the created paper'
-        key :operationId, :create_paper
+        key :summary, 'Create a new Degree works'
+        key :description, 'Returns the created Degree works'
+        key :operationId, :create_degree_work
         key :produces, ['application/json',]
-        key :tags, ['Products::GNK::Papers']
+        key :tags, ['Products::CTIHRT::DegreeWorks']
 
-        parameter name: :research_unit_id do
+        parameter name: :research_group_id do
           key :in, :path
           key :description, 'ID of research unit to fetch'
           key :required, true
@@ -139,19 +147,19 @@ module Swagger::PaperApi
           key :format, :int64
         end
 
-        parameter name: :paper do
+        parameter name: :degree_work do
           key :in, :body
-          key :description, 'Paper to register'
+          key :description, 'Degree works to register'
           key :required, true
           schema do
-            key :'$ref', :PaperInputPost
+            key :'$ref', :DegreeWorkInputPost
           end
         end
 
         response 201 do
-          key :description, 'paper response'
+          key :description, 'Degree works response'
           schema do
-            key :'$ref', :PaperOutput
+            key :'$ref', :DegreeWorkOutput
           end
         end
         response 422 do

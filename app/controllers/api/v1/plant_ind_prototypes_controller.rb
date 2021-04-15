@@ -1,6 +1,8 @@
 module Api
   module V1
     class PlantIndPrototypesController < AbstractProductResearchUnitController
+      include Swagger::PlantIndPrototypeApi
+
       before_action :set_research_group
       before_action :set_plant_ind_prototype, only: [:show, :update, :change_active]
       before_action only: [:change_active] do

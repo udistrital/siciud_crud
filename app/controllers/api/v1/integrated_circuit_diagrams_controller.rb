@@ -1,6 +1,8 @@
 module Api
   module V1
     class IntegratedCircuitDiagramsController < AbstractProductResearchUnitController
+      include Swagger::IntegratedCircuitDiagramApi
+
       before_action :set_research_group
       before_action :set_integrated_circuit_diagram, only: [:show, :update, :change_active]
       before_action only: [:change_active] do
