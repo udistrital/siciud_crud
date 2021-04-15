@@ -1,4 +1,5 @@
 class Document < ApplicationRecord
+  include Swagger::DocumentSchema
   belongs_to :documentable, polymorphic: true
   belongs_to :document_type, class_name: 'Subtype', optional: true
 

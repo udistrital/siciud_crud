@@ -1,6 +1,8 @@
 module Api
   module V1
     class DocumentsController < ApplicationController
+      include Swagger::DocumentApi
+      
       before_action :set_general_context
       before_action :set_document, only: [:show, :update, :deactivate]
 
