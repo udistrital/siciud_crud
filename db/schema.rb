@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_15_222441) do
+ActiveRecord::Schema.define(version: 2021_04_15_230029) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -133,13 +133,11 @@ ActiveRecord::Schema.define(version: 2021_04_15_222441) do
   end
 
   create_table "arp_assignments", force: :cascade do |t|
-    t.bigint "product_typology_id"
     t.bigint "agreement_research_project_id"
     t.integer "completedPercentage"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["agreement_research_project_id"], name: "index_arp_assignments_on_agreement_research_project_id"
-    t.index ["product_typology_id"], name: "index_arp_assignments_on_product_typology_id"
   end
 
   create_table "arp_expenses", force: :cascade do |t|
@@ -1135,17 +1133,6 @@ ActiveRecord::Schema.define(version: 2021_04_15_222441) do
     t.index ["updated_by"], name: "index_plant_ind_prototypes_on_updated_by"
   end
 
-  create_table "product_typologies", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.boolean "active", default: true
-    t.bigint "created_by"
-    t.bigint "updated_by"
-    t.index ["created_by"], name: "index_product_typologies_on_created_by"
-    t.index ["updated_by"], name: "index_product_typologies_on_updated_by"
-  end
-
   create_table "required_documents", force: :cascade do |t|
     t.string "document_name"
     t.datetime "created_at", null: false
@@ -1527,7 +1514,6 @@ ActiveRecord::Schema.define(version: 2021_04_15_222441) do
 
   add_foreign_key "arp_assignment_reports", "arp_assignments"
   add_foreign_key "arp_assignments", "agreement_research_projects"
-  add_foreign_key "arp_assignments", "product_typologies"
   add_foreign_key "awards", "research_creation_works"
   add_foreign_key "awards", "users", column: "created_by"
   add_foreign_key "awards", "users", column: "updated_by"
@@ -1698,8 +1684,6 @@ ActiveRecord::Schema.define(version: 2021_04_15_222441) do
   add_foreign_key "plant_ind_prototypes", "subtypes", column: "plt_type_id"
   add_foreign_key "plant_ind_prototypes", "users", column: "created_by"
   add_foreign_key "plant_ind_prototypes", "users", column: "updated_by"
-  add_foreign_key "product_typologies", "users", column: "created_by"
-  add_foreign_key "product_typologies", "users", column: "updated_by"
   add_foreign_key "research_creation_works", "colciencias_calls"
   add_foreign_key "research_creation_works", "geo_cities"
   add_foreign_key "research_creation_works", "research_groups"
