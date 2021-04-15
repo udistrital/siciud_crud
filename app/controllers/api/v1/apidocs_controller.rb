@@ -67,6 +67,7 @@ module Api
         GroupTypesController,
         GmStatesController,
         RoleController,
+        TypesController,
         UserRolesController,
         UsersController,
 
@@ -114,6 +115,7 @@ module Api
         GroupType,
         GmState,
         Role,
+        Type,
         UserRole,
         User,
 
