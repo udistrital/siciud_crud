@@ -1,5 +1,6 @@
 class IndustrialDesign < ApplicationRecord
-
+  include Swagger::IndustrialDesignSchema
+  
   belongs_to :category, class_name: 'Subtype', foreign_key: 'category_id', optional: true
   belongs_to :colciencias_call, optional: true
   belongs_to :research_group

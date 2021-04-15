@@ -1,17 +1,17 @@
-module Swagger::PaperApi
+module Swagger::PlantIndPrototypeApi
   extend ActiveSupport::Concern
   include Swagger::Blocks
 
   included do
-    swagger_path '/research_units/{research_unit_id}/papers/{id}' do
+    swagger_path '/research_units/{research_group_id}/plant_ind_prototypes/{id}' do
       operation :get do
-        key :summary, 'Get a Paper of a Research Unit by ID'
-        key :description, 'Returns a single paper'
-        key :operationId, :get_paper_by_id
+        key :summary, 'Get a Pilot Plant and Industrial Prototypes of a Research Unit by ID'
+        key :description, 'Returns a single Pilot Plant and Industrial Prototypes'
+        key :operationId, :get_plant_ind_prototype_by_id
         key :produces, ['application/json',]
-        key :tags, ['Products::GNK::Papers']
+        key :tags, ['Products::TDI::PlantIndPrototypes']
 
-        parameter name: :research_unit_id do
+        parameter name: :research_group_id do
           key :in, :path
           key :description, 'ID of research unit to fetch'
           key :required, true
@@ -21,16 +21,16 @@ module Swagger::PaperApi
 
         parameter name: :id do
           key :in, :path
-          key :description, 'ID of paper of a research unit to fetch'
+          key :description, 'ID of Pilot Plant and Industrial Prototypes of a research unit to fetch'
           key :required, true
           key :type, :integer
           key :format, :int64
         end
 
         response 200 do
-          key :description, 'paper response'
+          key :description, 'Pilot Plant and Industrial Prototypes response'
           schema do
-            key :'$ref', :PaperOutput
+            key :'$ref', :PlantIndPrototypeOutput
           end
         end
         response 404 do
@@ -45,13 +45,13 @@ module Swagger::PaperApi
       end
 
       operation :put do
-        key :summary, 'Update Paper by ID'
-        key :description, 'Returns the updated paper'
-        key :operationId, :update_paper
+        key :summary, 'Update Pilot Plant or Industrial Prototype by ID'
+        key :description, 'Returns the updated Pilot Plant or Industrial Prototype'
+        key :operationId, :update_plant_ind_prototype_by_id
         key :produces, ['application/json',]
-        key :tags, ['Products::GNK::Papers']
+        key :tags, ['Products::TDI::PlantIndPrototypes']
 
-        parameter name: :research_unit_id do
+        parameter name: :research_group_id do
           key :in, :path
           key :description, 'ID of research unit to fetch'
           key :required, true
@@ -61,25 +61,25 @@ module Swagger::PaperApi
 
         parameter name: :id do
           key :in, :path
-          key :description, 'ID of paper of a research unit to fetch'
+          key :description, 'ID of Plant or Industrial Prototype of a research unit to fetch'
           key :required, true
           key :type, :integer
           key :format, :int64
         end
 
-        parameter name: :paper do
+        parameter name: :plant_ind_prototypes do
           key :in, :body
-          key :description, 'Paper to update'
+          key :description, 'Pilot Plant or Industrial Prototype to update'
           key :required, true
           schema do
-            key :'$ref', :PaperInputPut
+            key :'$ref', :PlantIndPrototypeInputPut
           end
         end
 
         response 200 do
-          key :description, 'paper response'
+          key :description, 'Pilot Plant or Industrial Prototype response'
           schema do
-            key :'$ref', :PaperOutput
+            key :'$ref', :PlantIndPrototypeOutput
           end
         end
         response 422 do
@@ -94,15 +94,15 @@ module Swagger::PaperApi
       end
     end
 
-    swagger_path '/research_units/{research_unit_id}/papers/' do
+    swagger_path '/research_units/{research_group_id}/plant_ind_prototypes/' do
       operation :get do
-        key :summary, 'Get all Papers'
-        key :description, 'Returns all papers'
-        key :operationId, :get_papers
+        key :summary, 'Get all Plant or Industrial Prototype'
+        key :description, 'Returns all Plant or Industrial Prototype'
+        key :operationId, :get_plant_ind_prototypes
         key :produces, ['application/json',]
-        key :tags, ['Products::GNK::Papers']
+        key :tags, ['Products::TDI::PlantIndPrototypes']
 
-        parameter name: :research_unit_id do
+        parameter name: :research_group_id do
           key :in, :path
           key :description, 'ID of research unit to fetch'
           key :required, true
@@ -110,12 +110,20 @@ module Swagger::PaperApi
           key :format, :int64
         end
 
+        parameter name: :plt_type_id do
+          key :in, :query
+          key :description, 'ID of type to fetch'
+          key :required, false
+          key :type, :integer
+          key :format, :int64
+        end
+
         response 200 do
-          key :description, 'paper response'
+          key :description, 'Plant or Industrial Prototype response'
           schema do
             key :type, :array
             items do
-              key :'$ref', :PaperDxOutput
+              key :'$ref', :PlantIndPrototypeDxOutput
             end
           end
         end
@@ -125,13 +133,13 @@ module Swagger::PaperApi
       end
 
       operation :post do
-        key :summary, 'Create a new Paper'
-        key :description, 'Returns the created paper'
-        key :operationId, :create_paper
+        key :summary, 'Create a new Plant or Industrial Prototype'
+        key :description, 'Returns the created Plant or Industrial Prototype'
+        key :operationId, :create_plant_ind_prototypes
         key :produces, ['application/json',]
-        key :tags, ['Products::GNK::Papers']
+        key :tags, ['Products::TDI::PlantIndPrototypes']
 
-        parameter name: :research_unit_id do
+        parameter name: :research_group_id do
           key :in, :path
           key :description, 'ID of research unit to fetch'
           key :required, true
@@ -139,19 +147,19 @@ module Swagger::PaperApi
           key :format, :int64
         end
 
-        parameter name: :paper do
+        parameter name: :plant_ind_prototypes do
           key :in, :body
-          key :description, 'Paper to register'
+          key :description, 'Plant or Industrial Prototype to register'
           key :required, true
           schema do
-            key :'$ref', :PaperInputPost
+            key :'$ref', :PlantIndPrototypeInputPost
           end
         end
 
         response 201 do
-          key :description, 'paper response'
+          key :description, 'Plant or Industrial Prototype response'
           schema do
-            key :'$ref', :PaperOutput
+            key :'$ref', :PlantIndPrototypeOutput
           end
         end
         response 422 do

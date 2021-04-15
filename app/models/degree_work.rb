@@ -1,4 +1,5 @@
 class DegreeWork < ApplicationRecord
+  include Swagger::DegreeWorkSchema
 
   belongs_to :category, class_name: 'Subtype', foreign_key: 'category_id', optional: true
   belongs_to :colciencias_call, optional: true
