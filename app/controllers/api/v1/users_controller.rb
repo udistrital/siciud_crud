@@ -66,15 +66,14 @@ module Api
 
       # Only allow a trusted parameter "white list" through.
       def user_params_to_create
-        params.require(:user).permit(:identification_number, :oas_user_id,
-                                     :user_role_id, :active,
+        params.require(:user).permit(:identification_number,
+                                     :oas_user_id, :user_role_id,
                                      :created_by)
       end
 
       def user_params_to_update
         params.require(:user).permit(:identification_number, :oas_user_id,
-                                     :user_role_id, :active,
-                                     :updated_by)
+                                     :user_role_id, :updated_by)
       end
 
       def user_params_to_deactivate

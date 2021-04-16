@@ -51,12 +51,12 @@ module Swagger::UserApi
           key :format, :int64
         end
 
-        parameter name: :User do
+        parameter name: :user do
           key :in, :body
           key :description, 'User to update'
           key :required, true
           schema do
-            key :'$ref', :UserInput
+            key :'$ref', :UserInputPut
           end
         end
 
@@ -86,6 +86,13 @@ module Swagger::UserApi
         key :produces, ['application/json',]
         key :tags, ['Users']
 
+        parameter name: :identification_number do
+          key :in, :query
+          key :description, 'user identification number'
+          key :required, true
+          key :type, :string
+        end
+
         response 200 do
           key :description, 'user response'
           schema do
@@ -112,11 +119,54 @@ module Swagger::UserApi
           key :description, 'User to register'
           key :required, true
           schema do
-            key :'$ref', :UserInput
+            key :'$ref', :UserInputPost
           end
         end
 
         response 201 do
+          key :description, 'user response'
+          schema do
+            key :'$ref', :UserOutput
+          end
+        end
+        response 422 do
+          key :description, 'Unprocessable Entity'
+          schema do
+            key :'$ref', :ErrorUnprocessableEntity
+          end
+        end
+        response :default do
+          key :description, 'Unexpected Error'
+        end
+      end
+    end
+
+    swagger_path '/users/{id}/active' do
+      operation :put do
+        key :summary, 'Activate or Deactivate a User by ID'
+        key :description, 'Returns the user activated or deactivated '
+        key :operationId, :active_user
+        key :produces, ['application/json',]
+        key :tags, ['Users']
+
+        parameter name: :id do
+          key :in, :path
+          key :description, 'ID of User to activate/deactivate'
+          key :required, true
+          key :type, :integer
+          key :format, :int64
+        end
+
+        parameter name: :user do
+          key :in, :body
+          key :description, 'User to update'
+          key :required, true
+          schema do
+            key :'$ref', :UserInputActive
+          end
+        end
+
+        response 200 do
           key :description, 'user response'
           schema do
             key :'$ref', :UserOutput
