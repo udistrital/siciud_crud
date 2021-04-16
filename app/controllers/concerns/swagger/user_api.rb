@@ -144,7 +144,7 @@ module Swagger::UserApi
     swagger_path '/users/{id}/active' do
       operation :put do
         key :summary, 'Activate or Deactivate a User by ID'
-        key :description, 'Returns the user activated or deactivated '
+        key :description, 'Returns the user activated or deactivated'
         key :operationId, :active_user
         key :produces, ['application/json',]
         key :tags, ['Users']
