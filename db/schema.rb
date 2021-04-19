@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_19_225834) do
+ActiveRecord::Schema.define(version: 2021_04_19_230809) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -999,17 +999,6 @@ ActiveRecord::Schema.define(version: 2021_04_19_225834) do
     t.index ["updated_by"], name: "index_papers_on_updated_by"
   end
 
-  create_table "participant_types", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.boolean "active", default: true
-    t.bigint "created_by"
-    t.bigint "updated_by"
-    t.index ["created_by"], name: "index_participant_types_on_created_by"
-    t.index ["updated_by"], name: "index_participant_types_on_updated_by"
-  end
-
   create_table "patent_states", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
@@ -1597,8 +1586,6 @@ ActiveRecord::Schema.define(version: 2021_04_19_225834) do
   add_foreign_key "papers", "subtypes", column: "paper_type_id"
   add_foreign_key "papers", "users", column: "created_by"
   add_foreign_key "papers", "users", column: "updated_by"
-  add_foreign_key "participant_types", "users", column: "created_by"
-  add_foreign_key "participant_types", "users", column: "updated_by"
   add_foreign_key "patent_states", "users", column: "created_by"
   add_foreign_key "patent_states", "users", column: "updated_by"
   add_foreign_key "patents", "colciencias_calls"
