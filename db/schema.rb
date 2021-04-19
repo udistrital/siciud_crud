@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_19_232708) do
+ActiveRecord::Schema.define(version: 2021_04_19_234105) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1397,17 +1397,6 @@ ActiveRecord::Schema.define(version: 2021_04_19_232708) do
     t.index ["updated_by"], name: "index_vegetable_varieties_on_updated_by"
   end
 
-  create_table "work_types", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.boolean "active", default: true
-    t.bigint "created_by"
-    t.bigint "updated_by"
-    t.index ["created_by"], name: "index_work_types_on_created_by"
-    t.index ["updated_by"], name: "index_work_types_on_updated_by"
-  end
-
   add_foreign_key "arp_assignment_reports", "arp_assignments"
   add_foreign_key "arp_assignments", "agreement_research_projects"
   add_foreign_key "awards", "research_creation_works"
@@ -1615,8 +1604,6 @@ ActiveRecord::Schema.define(version: 2021_04_19_232708) do
   add_foreign_key "vegetable_varieties", "subtypes", column: "petition_status_id"
   add_foreign_key "vegetable_varieties", "users", column: "created_by"
   add_foreign_key "vegetable_varieties", "users", column: "updated_by"
-  add_foreign_key "work_types", "users", column: "created_by"
-  add_foreign_key "work_types", "users", column: "updated_by"
 
   create_view "complete_users", sql_definition: <<-SQL
       SELECT u.id,
