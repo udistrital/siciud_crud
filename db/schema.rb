@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_19_224250) do
+ActiveRecord::Schema.define(version: 2021_04_19_225834) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -966,17 +966,6 @@ ActiveRecord::Schema.define(version: 2021_04_19_224250) do
     t.index ["updated_by"], name: "index_oecd_knowledge_subareas_on_updated_by"
   end
 
-  create_table "paper_types", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.boolean "active", default: true
-    t.bigint "created_by"
-    t.bigint "updated_by"
-    t.index ["created_by"], name: "index_paper_types_on_created_by"
-    t.index ["updated_by"], name: "index_paper_types_on_updated_by"
-  end
-
   create_table "papers", force: :cascade do |t|
     t.string "title"
     t.date "publication_date"
@@ -1600,8 +1589,6 @@ ActiveRecord::Schema.define(version: 2021_04_19_224250) do
   add_foreign_key "oecd_knowledge_subareas", "oecd_knowledge_areas"
   add_foreign_key "oecd_knowledge_subareas", "users", column: "created_by"
   add_foreign_key "oecd_knowledge_subareas", "users", column: "updated_by"
-  add_foreign_key "paper_types", "users", column: "created_by"
-  add_foreign_key "paper_types", "users", column: "updated_by"
   add_foreign_key "papers", "colciencias_calls"
   add_foreign_key "papers", "geo_cities"
   add_foreign_key "papers", "journals"
