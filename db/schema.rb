@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_19_234105) do
+ActiveRecord::Schema.define(version: 2021_04_19_234633) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -849,17 +849,6 @@ ActiveRecord::Schema.define(version: 2021_04_19_234105) do
     t.index ["updated_by"], name: "index_journals_on_updated_by"
   end
 
-  create_table "knwl_spec_areas", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.boolean "active", default: true
-    t.bigint "created_by"
-    t.bigint "updated_by"
-    t.index ["created_by"], name: "index_knwl_spec_areas_on_created_by"
-    t.index ["updated_by"], name: "index_knwl_spec_areas_on_updated_by"
-  end
-
   create_table "new_animal_breeds", force: :cascade do |t|
     t.string "name"
     t.date "date"
@@ -1508,8 +1497,6 @@ ActiveRecord::Schema.define(version: 2021_04_19_234105) do
   add_foreign_key "ip_livestock_breeds", "users", column: "updated_by"
   add_foreign_key "journals", "users", column: "created_by"
   add_foreign_key "journals", "users", column: "updated_by"
-  add_foreign_key "knwl_spec_areas", "users", column: "created_by"
-  add_foreign_key "knwl_spec_areas", "users", column: "updated_by"
   add_foreign_key "new_animal_breeds", "colciencias_calls"
   add_foreign_key "new_animal_breeds", "geo_cities"
   add_foreign_key "new_animal_breeds", "research_groups"
