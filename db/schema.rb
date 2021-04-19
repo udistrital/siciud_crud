@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_19_232246) do
+ActiveRecord::Schema.define(version: 2021_04_19_232708) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1011,17 +1011,6 @@ ActiveRecord::Schema.define(version: 2021_04_19_232246) do
     t.index ["updated_by"], name: "index_patents_on_updated_by"
   end
 
-  create_table "petition_statuses", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.boolean "active", default: true
-    t.bigint "created_by"
-    t.bigint "updated_by"
-    t.index ["created_by"], name: "index_petition_statuses_on_created_by"
-    t.index ["updated_by"], name: "index_petition_statuses_on_updated_by"
-  end
-
   create_table "plan_periods", force: :cascade do |t|
     t.string "description"
     t.integer "planable_id"
@@ -1568,8 +1557,6 @@ ActiveRecord::Schema.define(version: 2021_04_19_232246) do
   add_foreign_key "patents", "subtypes", column: "patent_state_id"
   add_foreign_key "patents", "users", column: "created_by"
   add_foreign_key "patents", "users", column: "updated_by"
-  add_foreign_key "petition_statuses", "users", column: "created_by"
-  add_foreign_key "petition_statuses", "users", column: "updated_by"
   add_foreign_key "plant_ind_prototypes", "colciencias_calls"
   add_foreign_key "plant_ind_prototypes", "geo_cities"
   add_foreign_key "plant_ind_prototypes", "research_groups"
