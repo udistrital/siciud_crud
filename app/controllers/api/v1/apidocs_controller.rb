@@ -82,7 +82,6 @@ module Api
         OecdKnowledgeArea,
         OecdKnowledgeSubarea,
         KnwlSpecArea,
-        Category,
         Editorial,
         ExtParticipant,
         BookChapter,
