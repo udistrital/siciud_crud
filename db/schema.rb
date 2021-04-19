@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_15_233226) do
+ActiveRecord::Schema.define(version: 2021_04_19_224250) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -342,17 +342,6 @@ ActiveRecord::Schema.define(version: 2021_04_15_233226) do
     t.datetime "updated_at", null: false
     t.index ["call_id"], name: "index_calls_required_documents_on_call_id"
     t.index ["required_document_id"], name: "index_calls_required_documents_on_required_document_id"
-  end
-
-  create_table "categories", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.boolean "active", default: true
-    t.bigint "created_by"
-    t.bigint "updated_by"
-    t.index ["created_by"], name: "index_categories_on_created_by"
-    t.index ["updated_by"], name: "index_categories_on_updated_by"
   end
 
   create_table "cine_broad_areas", force: :cascade do |t|
@@ -1502,8 +1491,6 @@ ActiveRecord::Schema.define(version: 2021_04_15_233226) do
   add_foreign_key "calls_product_types", "required_types"
   add_foreign_key "calls_required_documents", "calls"
   add_foreign_key "calls_required_documents", "required_documents"
-  add_foreign_key "categories", "users", column: "created_by"
-  add_foreign_key "categories", "users", column: "updated_by"
   add_foreign_key "cine_broad_areas", "users", column: "created_by"
   add_foreign_key "cine_broad_areas", "users", column: "updated_by"
   add_foreign_key "cine_detailed_areas", "cine_specific_areas"
