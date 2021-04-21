@@ -70,6 +70,7 @@ module Api
         params.require(:event).permit(:eve_name, :eve_start_date, :eve_finish_date,
                                       :eve_organizers, :eve_entities, :category_id,
                                       :colciencias_call_id, :eve_observation, :eve_type_id,
+                                      :participation_id,
                                       :created_by)
       end
 
@@ -77,6 +78,7 @@ module Api
         params.require(:event).permit(:eve_name, :eve_start_date, :eve_finish_date,
                                       :eve_organizers, :eve_entities, :category_id,
                                       :colciencias_call_id, :eve_observation, :eve_type_id,
+                                      :participation_id,
                                       :updated_by)
       end
 
