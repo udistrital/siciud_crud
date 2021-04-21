@@ -3,7 +3,7 @@ module Swagger::NewAnimalBreedApi
   include Swagger::Blocks
 
   included do
-    swagger_path '/research_group/{research_group_id}/new_animal_breeds/{id}' do
+    swagger_path '/research_units/{research_group_id}/new_animal_breeds/{id}' do
       operation :get do
         key :summary, 'Get a New Animal Breed of a Research Unit by ID'
         key :description, 'Returns a single new animal breed of a research unit by ID'
@@ -67,12 +67,12 @@ module Swagger::NewAnimalBreedApi
           key :format, :int64
         end
 
-        parameter name: :book do
+        parameter name: :new_animal_breed do
           key :in, :body
           key :description, 'New animal breed to update'
           key :required, true
           schema do
-            key :'$ref', :NewAnimalBreedInput
+            key :'$ref', :NewAnimalBreedInputPut
           end
         end
 
@@ -94,7 +94,7 @@ module Swagger::NewAnimalBreedApi
       end
     end
 
-    swagger_path '/research_group/{research_group_id}/new_animal_breeds/' do
+    swagger_path '/research_units/{research_group_id}/new_animal_breeds/' do
       operation :get do
         key :summary, 'Get all New Animal Breeds'
         key :description, 'Returns all new animal breeds'
@@ -144,11 +144,62 @@ module Swagger::NewAnimalBreedApi
           key :description, 'New Animal Breed to register'
           key :required, true
           schema do
-            key :'$ref', :BookInput
+            key :'$ref', :NewAnimalBreedInputPost
           end
         end
 
         response 201 do
+          key :description, 'new animal breed response'
+          schema do
+            key :'$ref', :NewAnimalBreedOutput
+          end
+        end
+        response 422 do
+          key :description, 'Unprocessable Entity'
+          schema do
+            key :'$ref', :ErrorUnprocessableEntity
+          end
+        end
+        response :default do
+          key :description, 'Unexpected Error'
+        end
+      end
+    end
+
+    swagger_path '/research_units/{research_group_id}/new_animal_breeds/{id}/active' do
+      operation :put do
+        key :summary, 'Activate or deactivate a new animal breed by ID'
+        key :description, 'Returns the activated/deactivated new animal breed by id of a research unit by research_group_id'
+        key :operationId, :change_active_new_animal_breed
+        key :produces, ['application/json',]
+        key :tags, ['Products::GNK::New Animal Breeds']
+
+        parameter name: :research_group_id do
+          key :in, :path
+          key :description, 'ID of research unit to fetch'
+          key :required, true
+          key :type, :integer
+          key :format, :int64
+        end
+
+        parameter name: :id do
+          key :in, :path
+          key :description, 'ID of new animal breed of a research unit to fetch'
+          key :required, true
+          key :type, :integer
+          key :format, :int64
+        end
+
+        parameter name: :new_animal_breed do
+          key :in, :body
+          key :description, 'New animal breed to update'
+          key :required, true
+          schema do
+            key :'$ref', :ChangeActive
+          end
+        end
+
+        response 200 do
           key :description, 'new animal breed response'
           schema do
             key :'$ref', :NewAnimalBreedOutput
