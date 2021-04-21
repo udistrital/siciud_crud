@@ -3,7 +3,7 @@ module Swagger::HistoricalColcienciasRankApi
   include Swagger::Blocks
 
   included do
-    swagger_path '/research_group/{research_group_id}/historical_colciencias_ranks/{id}' do
+    swagger_path '/research_units/{research_unit_id}/historical_colciencias_ranks/{id}' do
       operation :get do
         key :summary, 'Get a Historical Colciencias Rank of a Research Unit by ID'
         key :description, 'Returns a single historical colciencias rank'
@@ -11,7 +11,7 @@ module Swagger::HistoricalColcienciasRankApi
         key :produces, ['application/json',]
         key :tags, ['Colciencias::Historical Colciencias Ranks']
 
-        parameter name: :research_group_id do
+        parameter name: :research_unit_id do
           key :in, :path
           key :description, 'ID of research unit to fetch'
           key :required, true
@@ -51,7 +51,7 @@ module Swagger::HistoricalColcienciasRankApi
         key :produces, ['application/json',]
         key :tags, ['Colciencias::Historical Colciencias Ranks']
 
-        parameter name: :research_group_id do
+        parameter name: :research_unit_id do
           key :in, :path
           key :description, 'ID of research unit to fetch'
           key :required, true
@@ -72,7 +72,7 @@ module Swagger::HistoricalColcienciasRankApi
           key :description, 'Historical Colciencias Rank to update'
           key :required, true
           schema do
-            key :'$ref', :HistoricalColcienciasRankInput
+            key :'$ref', :HistoricalColcienciasRankInputPut
           end
         end
 
@@ -94,7 +94,7 @@ module Swagger::HistoricalColcienciasRankApi
       end
     end
 
-    swagger_path '/research_group/{research_group_id}/historical_colciencias_ranks/' do
+    swagger_path '/research_units/{research_unit_id}/historical_colciencias_ranks/' do
       operation :get do
         key :summary, 'Get all Historical Colciencias Ranks of a Research Unit by ID'
         key :description, 'Returns all historical colciencias ranks'
@@ -102,7 +102,7 @@ module Swagger::HistoricalColcienciasRankApi
         key :produces, ['application/json',]
         key :tags, ['Colciencias::Historical Colciencias Ranks']
 
-        parameter name: :research_group_id do
+        parameter name: :research_unit_id do
           key :in, :path
           key :description, 'ID of research unit to fetch'
           key :required, true
@@ -131,7 +131,7 @@ module Swagger::HistoricalColcienciasRankApi
         key :produces, ['application/json',]
         key :tags, ['Colciencias::Historical Colciencias Ranks']
 
-        parameter name: :research_group_id do
+        parameter name: :research_unit_id do
           key :in, :path
           key :description, 'ID of research unit to fetch'
           key :required, true
@@ -141,10 +141,10 @@ module Swagger::HistoricalColcienciasRankApi
 
         parameter name: :historical_colciencias_rank do
           key :in, :body
-          key :description, 'Hisotrical Colciencias Rank to register'
+          key :description, 'Historical Colciencias Rank to register'
           key :required, true
           schema do
-            key :'$ref', :HistoricalColcienciasRankInput
+            key :'$ref', :HistoricalColcienciasRankInputPost
           end
         end
 

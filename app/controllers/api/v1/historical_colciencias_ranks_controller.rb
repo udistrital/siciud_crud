@@ -6,13 +6,6 @@ module Api
       before_action :set_research_group
       before_action :set_historical_colc_rank, only: [:show, :update]
 
-      rescue_from ActiveRecord::RecordNotFound do |e|
-        render json: {error: e.message}, status: :not_found
-      end
-      rescue_from ActiveRecord::RecordInvalid do |e|
-        render json: {error: e.message}, status: :unprocessable_entity
-      end
-
       def index
         @historical_colciencias_rank = @research_group.historical_colciencias_ranks
         render json: @historical_colciencias_rank, status: :ok
@@ -23,7 +16,8 @@ module Api
       end
 
       def create
-        @historical_colciencias_rank = @research_group.historical_colciencias_ranks.new(historical_colc_params)
+        @historical_colciencias_rank = @research_group.historical_colciencias_ranks.new(
+          hist_colc_params_to_create)
         if @historical_colciencias_rank.save
           render json: @historical_colciencias_rank, status: :created
         else
@@ -32,7 +26,7 @@ module Api
       end
 
       def update
-        if @historical_colciencias_rank.update(historical_colc_params)
+        if @historical_colciencias_rank.update(hist_colc_params_to_update)
           render json: @historical_colciencias_rank, status: :ok
         else
           render json: @historical_colciencias_rank.errors, status: :unprocessable_entity
@@ -41,11 +35,20 @@ module Api
 
       private
 
-      def historical_colc_params
+      def hist_colc_params_to_create
         params.require(:historical_colciencias_rank).permit(:colciencias_call_id,
                                                             :colciencias_category_id,
                                                             :oecd_knowledge_area_id,
-                                                            :oecd_knowledge_subarea_id)
+                                                            :oecd_knowledge_subarea_id,
+                                                            :created_by)
+      end
+
+      def hist_colc_params_to_update
+        params.require(:historical_colciencias_rank).permit(:colciencias_call_id,
+                                                            :colciencias_category_id,
+                                                            :oecd_knowledge_area_id,
+                                                            :oecd_knowledge_subarea_id,
+                                                            :updated_by)
       end
 
       def set_research_group
@@ -55,7 +58,7 @@ module Api
       def set_historical_colc_rank
         @historical_colciencias_rank = @research_group.historical_colciencias_ranks.find_by(id: params[:id])
         unless @historical_colciencias_rank
-          render json: {error: "Couldn't find historical colciencias rank with 'id'=#{params["id"]}"}
+          render json: { error: "Couldn't find historical colciencias rank with 'id'=#{params["id"]}" }
         end
       end
     end

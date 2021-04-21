@@ -4,11 +4,6 @@ module Swagger::NewAnimalBreedSchema
 
   included do
     swagger_schema :NewAnimalBreed do
-      key :required, [:id]
-      property :id do
-        key :type, :integer
-        key :format, :int64
-      end
       property :name do
         key :type, :string
       end
@@ -16,7 +11,7 @@ module Swagger::NewAnimalBreedSchema
         key :type, :integer
         key :format, :int64
       end
-      property  :cycle_type_id do
+      property :colciencias_call_id do
         key :type, :integer
         key :format, :int64
       end
@@ -24,82 +19,51 @@ module Swagger::NewAnimalBreedSchema
         key :type, :string
         key :format, :date
       end
-      property  :geo_city_id do
+      property :geo_city_id do
         key :type, :integer
         key :format, :int64
       end
-      property  :observation do
+      property :observation do
         key :type, :string
       end
-      property  :petition_status_id do
+      property :petition_status_id do
         key :type, :integer
         key :format, :int64
-      end
-      property  :research_group_id do
-        key :type, :integer
-        key :format, :int64
-      end
-      property :active do
-        key :type, :boolean
-        key :default, true
-      end
-      property :created_by do
-        key :type, :integer
-        key :format, :int64
-      end
-      property :updated_by do
-        key :type, :integer
-        key :format, :int64
-      end
-      property :created_at do
-        key :type, :string
-        key :format, 'date-time'
-      end
-      property :updated_at do
-        key :type, :string
-        key :format, 'date-time'
       end
     end
 
-    swagger_schema :NewAnimalBreedInput do
-      property :new_animal_breed do
-        property :name do
-          key :type, :string
+    swagger_schema :NewAnimalBreedInputPost do
+      allOf do
+        schema do
+          property :new_animal_breed do
+            key :'$ref', :NewAnimalBreed
+          end
         end
-        property :category_id do
-          key :type, :integer
-          key :format, :int64
+        schema do
+          property :new_animal_breed do
+            property :created_by do
+              key :type, :integer
+              key :format, :int64
+            end
+          end
         end
-        property  :cycle_type_id do
-          key :type, :integer
-          key :format, :int64
+      end
+    end
+
+    swagger_schema :NewAnimalBreedInputPut do
+      allOf do
+        schema do
+          property :new_animal_breed do
+            key :'$ref', :NewAnimalBreed
+          end
         end
-        property :date do
-          key :type, :string
-          key :format, :date
-        end
-        property  :geo_city_id do
-          key :type, :integer
-          key :format, :int64
-        end
-        property  :observation do
-          key :type, :string
-        end
-        property  :petition_status_id do
-          key :type, :integer
-          key :format, :int64
-        end
-        property :active do
-          key :type, :boolean
-          key :default, true
-        end
-        property :created_by do
-          key :type, :integer
-          key :format, :int64
-        end
-        property :updated_by do
-          key :type, :integer
-          key :format, :int64
+        schema do
+          property :new_animal_breed do
+            property :updated_by do
+              key :type, :integer
+              key :format, :int64
+            end
+          end
         end
       end
     end
@@ -110,11 +74,19 @@ module Swagger::NewAnimalBreedSchema
           key :'$ref', :NewAnimalBreed
         end
         schema do
+          property :id do
+            key :type, :integer
+            key :format, :int64
+          end
           property :category_name do
             key :type, :string
           end
-          property :cycle_type_name do
+          property :colciencias_call_name do
             key :type, :string
+          end
+          property :colciencias_call_year do
+            key :type, :integer
+            key :format, :int64
           end
           property :geo_city_name do
             key :type, :string
@@ -135,6 +107,30 @@ module Swagger::NewAnimalBreedSchema
           end
           property :petition_status_name do
             key :type, :string
+          end
+          property :research_group_id do
+            key :type, :integer
+            key :format, :int64
+          end
+          property :active do
+            key :type, :boolean
+            key :default, true
+          end
+          property :created_by do
+            key :type, :integer
+            key :format, :int64
+          end
+          property :updated_by do
+            key :type, :integer
+            key :format, :int64
+          end
+          property :created_at do
+            key :type, :string
+            key :format, 'date-time'
+          end
+          property :updated_at do
+            key :type, :string
+            key :format, 'date-time'
           end
         end
       end

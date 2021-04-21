@@ -3,7 +3,7 @@ module Swagger::ResearcherApi
   include Swagger::Blocks
 
   included do
-    swagger_path '/researcher/{id}' do
+    swagger_path '/researchers/{id}' do
       operation :get do
         key :summary, 'Get a Researcher by ID'
         key :description, 'Returns a single researcher'
@@ -51,12 +51,12 @@ module Swagger::ResearcherApi
           key :format, :int64
         end
 
-        parameter name: :Researcher do
+        parameter name: :researcher do
           key :in, :body
           key :description, 'Researcher to update'
           key :required, true
           schema do
-            key :'$ref', :ResearcherInput
+            key :'$ref', :ResearcherInputPut
           end
         end
 
@@ -78,13 +78,20 @@ module Swagger::ResearcherApi
       end
     end
 
-    swagger_path '/researcher/' do
+    swagger_path '/researchers/' do
       operation :get do
-        key :summary, 'Get all Researchers'
-        key :description, 'Returns all researchers'
+        key :summary, 'Get all Researchers or search a researcher by the identification_number'
+        key :description, 'Returns all researchers or search a researcher by the identification_number'
         key :operationId, :get_researchers
         key :produces, ['application/json',]
         key :tags, ['Researchers']
+
+        parameter name: :identification_number do
+          key :in, :query
+          key :description, 'researcher identification number'
+          key :required, false
+          key :type, :string
+        end
 
         response 200 do
           key :description, 'researcher response'
@@ -112,7 +119,7 @@ module Swagger::ResearcherApi
           key :description, 'Researcher to register'
           key :required, true
           schema do
-            key :'$ref', :ResearcherInput
+            key :'$ref', :ResearcherInputPost
           end
         end
 
@@ -126,6 +133,36 @@ module Swagger::ResearcherApi
           key :description, 'Unprocessable Entity'
           schema do
             key :'$ref', :ErrorUnprocessableEntity
+          end
+        end
+        response :default do
+          key :description, 'Unexpected Error'
+        end
+      end
+    end
+
+    swagger_path '/researcher_research_units/' do
+      operation :get do
+        key :summary, 'Search research units of an Investigator by identity document'
+        key :description, 'Search research units of an Investigator by identity document'
+        key :operationId, :get_researcher_research_units
+        key :produces, ['application/json',]
+        key :tags, ['Researchers']
+
+        parameter name: :identification_number do
+          key :in, :query
+          key :description, 'researcher identification number'
+          key :required, false
+          key :type, :string
+        end
+
+        response 200 do
+          key :description, 'researcher response'
+          schema do
+            key :type, :array
+            items do
+              key :'$ref', :ResearcherResearchUnitOutput
+            end
           end
         end
         response :default do

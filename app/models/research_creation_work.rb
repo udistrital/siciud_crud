@@ -4,6 +4,7 @@ class ResearchCreationWork < ApplicationRecord
   belongs_to :category, class_name: 'Subtype', foreign_key: 'category_id', optional: true
   belongs_to :colciencias_call, optional: true
   belongs_to :knwl_spec_area, class_name: 'Subtype', foreign_key: 'knwl_spec_area_id', optional: true
+  belongs_to :nature, class_name: 'Subtype', foreign_key: 'nature_id', optional: true
   belongs_to :research_group
 
   has_many :awards

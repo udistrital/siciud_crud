@@ -1,5 +1,6 @@
 class ApplicationRecord < ActiveRecord::Base
   include Swagger::ErrorSchema
+  include Swagger::ChangeActiveSchema
 
   self.abstract_class = true
 

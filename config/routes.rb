@@ -62,6 +62,7 @@ Rails.application.routes.draw do
       resources :arp_role, only: [:index, :show, :create]
 
       resources :user_roles, only: [:index, :show, :create, :update]
+      put "/user_roles/:id/active", to: "user_roles#change_active"
 
       resources :agreement_research_project, only: [] do
         resources :contribution_rp_item, only: [:index, :show, :create, :update]

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_15_233226) do
+ActiveRecord::Schema.define(version: 2021_04_21_223802) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -259,7 +259,6 @@ ActiveRecord::Schema.define(version: 2021_04_15_233226) do
     t.string "isbn"
     t.string "url"
     t.text "observation"
-    t.bigint "editorial_id"
     t.bigint "research_group_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -269,10 +268,12 @@ ActiveRecord::Schema.define(version: 2021_04_15_233226) do
     t.bigint "updated_by"
     t.bigint "category_id"
     t.bigint "colciencias_call_id"
+    t.bigint "book_type_id"
+    t.string "editorial_name"
+    t.index ["book_type_id"], name: "index_books_on_book_type_id"
     t.index ["category_id"], name: "index_books_on_category_id"
     t.index ["colciencias_call_id"], name: "index_books_on_colciencias_call_id"
     t.index ["created_by"], name: "index_books_on_created_by"
-    t.index ["editorial_id"], name: "index_books_on_editorial_id"
     t.index ["geo_city_id"], name: "index_books_on_geo_city_id"
     t.index ["research_group_id"], name: "index_books_on_research_group_id"
     t.index ["updated_by"], name: "index_books_on_updated_by"
@@ -342,17 +343,6 @@ ActiveRecord::Schema.define(version: 2021_04_15_233226) do
     t.datetime "updated_at", null: false
     t.index ["call_id"], name: "index_calls_required_documents_on_call_id"
     t.index ["required_document_id"], name: "index_calls_required_documents_on_required_document_id"
-  end
-
-  create_table "categories", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.boolean "active", default: true
-    t.bigint "created_by"
-    t.bigint "updated_by"
-    t.index ["created_by"], name: "index_categories_on_created_by"
-    t.index ["updated_by"], name: "index_categories_on_updated_by"
   end
 
   create_table "cine_broad_areas", force: :cascade do |t|
@@ -473,17 +463,6 @@ ActiveRecord::Schema.define(version: 2021_04_15_233226) do
     t.index ["created_by"], name: "index_curricular_prj_ids_research_groups_on_created_by"
     t.index ["research_group_id"], name: "index_curricular_prj_ids_research_groups_on_research_group_id"
     t.index ["updated_by"], name: "index_curricular_prj_ids_research_groups_on_updated_by"
-  end
-
-  create_table "cycle_types", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.boolean "active", default: true
-    t.bigint "created_by"
-    t.bigint "updated_by"
-    t.index ["created_by"], name: "index_cycle_types_on_created_by"
-    t.index ["updated_by"], name: "index_cycle_types_on_updated_by"
   end
 
   create_table "degree_works", force: :cascade do |t|
@@ -871,17 +850,6 @@ ActiveRecord::Schema.define(version: 2021_04_15_233226) do
     t.index ["updated_by"], name: "index_journals_on_updated_by"
   end
 
-  create_table "knwl_spec_areas", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.boolean "active", default: true
-    t.bigint "created_by"
-    t.bigint "updated_by"
-    t.index ["created_by"], name: "index_knwl_spec_areas_on_created_by"
-    t.index ["updated_by"], name: "index_knwl_spec_areas_on_updated_by"
-  end
-
   create_table "new_animal_breeds", force: :cascade do |t|
     t.string "name"
     t.date "date"
@@ -895,12 +863,10 @@ ActiveRecord::Schema.define(version: 2021_04_15_233226) do
     t.bigint "updated_by"
     t.bigint "category_id"
     t.bigint "colciencias_call_id"
-    t.bigint "cycle_type_id"
     t.bigint "petition_status_id"
     t.index ["category_id"], name: "index_new_animal_breeds_on_category_id"
     t.index ["colciencias_call_id"], name: "index_new_animal_breeds_on_colciencias_call_id"
     t.index ["created_by"], name: "index_new_animal_breeds_on_created_by"
-    t.index ["cycle_type_id"], name: "index_new_animal_breeds_on_cycle_type_id"
     t.index ["geo_city_id"], name: "index_new_animal_breeds_on_geo_city_id"
     t.index ["petition_status_id"], name: "index_new_animal_breeds_on_petition_status_id"
     t.index ["research_group_id"], name: "index_new_animal_breeds_on_research_group_id"
@@ -977,17 +943,6 @@ ActiveRecord::Schema.define(version: 2021_04_15_233226) do
     t.index ["updated_by"], name: "index_oecd_knowledge_subareas_on_updated_by"
   end
 
-  create_table "paper_types", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.boolean "active", default: true
-    t.bigint "created_by"
-    t.bigint "updated_by"
-    t.index ["created_by"], name: "index_paper_types_on_created_by"
-    t.index ["updated_by"], name: "index_paper_types_on_updated_by"
-  end
-
   create_table "papers", force: :cascade do |t|
     t.string "title"
     t.date "publication_date"
@@ -1021,28 +976,6 @@ ActiveRecord::Schema.define(version: 2021_04_15_233226) do
     t.index ["updated_by"], name: "index_papers_on_updated_by"
   end
 
-  create_table "participant_types", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.boolean "active", default: true
-    t.bigint "created_by"
-    t.bigint "updated_by"
-    t.index ["created_by"], name: "index_participant_types_on_created_by"
-    t.index ["updated_by"], name: "index_participant_types_on_updated_by"
-  end
-
-  create_table "patent_states", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.boolean "active", default: true
-    t.bigint "created_by"
-    t.bigint "updated_by"
-    t.index ["created_by"], name: "index_patent_states_on_created_by"
-    t.index ["updated_by"], name: "index_patent_states_on_updated_by"
-  end
-
   create_table "patents", force: :cascade do |t|
     t.string "patent_number"
     t.string "title"
@@ -1064,17 +997,6 @@ ActiveRecord::Schema.define(version: 2021_04_15_233226) do
     t.index ["patent_state_id"], name: "index_patents_on_patent_state_id"
     t.index ["research_group_id"], name: "index_patents_on_research_group_id"
     t.index ["updated_by"], name: "index_patents_on_updated_by"
-  end
-
-  create_table "petition_statuses", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.boolean "active", default: true
-    t.bigint "created_by"
-    t.bigint "updated_by"
-    t.index ["created_by"], name: "index_petition_statuses_on_created_by"
-    t.index ["updated_by"], name: "index_petition_statuses_on_updated_by"
   end
 
   create_table "plan_periods", force: :cascade do |t|
@@ -1126,7 +1048,6 @@ ActiveRecord::Schema.define(version: 2021_04_15_233226) do
   create_table "research_creation_works", force: :cascade do |t|
     t.string "title"
     t.date "creation_and_selection_date"
-    t.string "nature_of_work"
     t.string "registered_project_title"
     t.string "url"
     t.text "observation"
@@ -1140,11 +1061,13 @@ ActiveRecord::Schema.define(version: 2021_04_15_233226) do
     t.bigint "category_id"
     t.bigint "colciencias_call_id"
     t.bigint "knwl_spec_area_id"
+    t.bigint "nature_id"
     t.index ["category_id"], name: "index_research_creation_works_on_category_id"
     t.index ["colciencias_call_id"], name: "index_research_creation_works_on_colciencias_call_id"
     t.index ["created_by"], name: "index_research_creation_works_on_created_by"
     t.index ["geo_city_id"], name: "index_research_creation_works_on_geo_city_id"
     t.index ["knwl_spec_area_id"], name: "index_research_creation_works_on_knwl_spec_area_id"
+    t.index ["nature_id"], name: "index_research_creation_works_on_nature_id"
     t.index ["research_group_id"], name: "index_research_creation_works_on_research_group_id"
     t.index ["updated_by"], name: "index_research_creation_works_on_updated_by"
   end
@@ -1463,17 +1386,6 @@ ActiveRecord::Schema.define(version: 2021_04_15_233226) do
     t.index ["updated_by"], name: "index_vegetable_varieties_on_updated_by"
   end
 
-  create_table "work_types", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.boolean "active", default: true
-    t.bigint "created_by"
-    t.bigint "updated_by"
-    t.index ["created_by"], name: "index_work_types_on_created_by"
-    t.index ["updated_by"], name: "index_work_types_on_updated_by"
-  end
-
   add_foreign_key "arp_assignment_reports", "arp_assignments"
   add_foreign_key "arp_assignments", "agreement_research_projects"
   add_foreign_key "awards", "research_creation_works"
@@ -1487,9 +1399,9 @@ ActiveRecord::Schema.define(version: 2021_04_15_233226) do
   add_foreign_key "book_chapters", "users", column: "created_by"
   add_foreign_key "book_chapters", "users", column: "updated_by"
   add_foreign_key "books", "colciencias_calls"
-  add_foreign_key "books", "editorials"
   add_foreign_key "books", "geo_cities"
   add_foreign_key "books", "research_groups"
+  add_foreign_key "books", "subtypes", column: "book_type_id"
   add_foreign_key "books", "subtypes", column: "category_id"
   add_foreign_key "books", "users", column: "created_by"
   add_foreign_key "books", "users", column: "updated_by"
@@ -1502,8 +1414,6 @@ ActiveRecord::Schema.define(version: 2021_04_15_233226) do
   add_foreign_key "calls_product_types", "required_types"
   add_foreign_key "calls_required_documents", "calls"
   add_foreign_key "calls_required_documents", "required_documents"
-  add_foreign_key "categories", "users", column: "created_by"
-  add_foreign_key "categories", "users", column: "updated_by"
   add_foreign_key "cine_broad_areas", "users", column: "created_by"
   add_foreign_key "cine_broad_areas", "users", column: "updated_by"
   add_foreign_key "cine_detailed_areas", "cine_specific_areas"
@@ -1519,8 +1429,6 @@ ActiveRecord::Schema.define(version: 2021_04_15_233226) do
   add_foreign_key "curricular_prj_ids_research_groups", "research_groups"
   add_foreign_key "curricular_prj_ids_research_groups", "users", column: "created_by"
   add_foreign_key "curricular_prj_ids_research_groups", "users", column: "updated_by"
-  add_foreign_key "cycle_types", "users", column: "created_by"
-  add_foreign_key "cycle_types", "users", column: "updated_by"
   add_foreign_key "degree_works", "colciencias_calls"
   add_foreign_key "degree_works", "research_groups"
   add_foreign_key "degree_works", "subtypes", column: "category_id"
@@ -1589,13 +1497,9 @@ ActiveRecord::Schema.define(version: 2021_04_15_233226) do
   add_foreign_key "ip_livestock_breeds", "users", column: "updated_by"
   add_foreign_key "journals", "users", column: "created_by"
   add_foreign_key "journals", "users", column: "updated_by"
-  add_foreign_key "knwl_spec_areas", "users", column: "created_by"
-  add_foreign_key "knwl_spec_areas", "users", column: "updated_by"
   add_foreign_key "new_animal_breeds", "colciencias_calls"
   add_foreign_key "new_animal_breeds", "geo_cities"
   add_foreign_key "new_animal_breeds", "research_groups"
-  add_foreign_key "new_animal_breeds", "subtypes", column: "category_id"
-  add_foreign_key "new_animal_breeds", "subtypes", column: "cycle_type_id"
   add_foreign_key "new_animal_breeds", "subtypes", column: "petition_status_id"
   add_foreign_key "new_animal_breeds", "users", column: "created_by"
   add_foreign_key "new_animal_breeds", "users", column: "updated_by"
@@ -1613,8 +1517,6 @@ ActiveRecord::Schema.define(version: 2021_04_15_233226) do
   add_foreign_key "oecd_knowledge_subareas", "oecd_knowledge_areas"
   add_foreign_key "oecd_knowledge_subareas", "users", column: "created_by"
   add_foreign_key "oecd_knowledge_subareas", "users", column: "updated_by"
-  add_foreign_key "paper_types", "users", column: "created_by"
-  add_foreign_key "paper_types", "users", column: "updated_by"
   add_foreign_key "papers", "colciencias_calls"
   add_foreign_key "papers", "geo_cities"
   add_foreign_key "papers", "journals"
@@ -1623,18 +1525,12 @@ ActiveRecord::Schema.define(version: 2021_04_15_233226) do
   add_foreign_key "papers", "subtypes", column: "paper_type_id"
   add_foreign_key "papers", "users", column: "created_by"
   add_foreign_key "papers", "users", column: "updated_by"
-  add_foreign_key "participant_types", "users", column: "created_by"
-  add_foreign_key "participant_types", "users", column: "updated_by"
-  add_foreign_key "patent_states", "users", column: "created_by"
-  add_foreign_key "patent_states", "users", column: "updated_by"
   add_foreign_key "patents", "colciencias_calls"
   add_foreign_key "patents", "research_groups"
   add_foreign_key "patents", "subtypes", column: "category_id"
   add_foreign_key "patents", "subtypes", column: "patent_state_id"
   add_foreign_key "patents", "users", column: "created_by"
   add_foreign_key "patents", "users", column: "updated_by"
-  add_foreign_key "petition_statuses", "users", column: "created_by"
-  add_foreign_key "petition_statuses", "users", column: "updated_by"
   add_foreign_key "plant_ind_prototypes", "colciencias_calls"
   add_foreign_key "plant_ind_prototypes", "geo_cities"
   add_foreign_key "plant_ind_prototypes", "research_groups"
@@ -1647,6 +1543,7 @@ ActiveRecord::Schema.define(version: 2021_04_15_233226) do
   add_foreign_key "research_creation_works", "research_groups"
   add_foreign_key "research_creation_works", "subtypes", column: "category_id"
   add_foreign_key "research_creation_works", "subtypes", column: "knwl_spec_area_id"
+  add_foreign_key "research_creation_works", "subtypes", column: "nature_id"
   add_foreign_key "research_creation_works", "users", column: "created_by"
   add_foreign_key "research_creation_works", "users", column: "updated_by"
   add_foreign_key "research_groups", "cine_broad_areas"
@@ -1693,8 +1590,6 @@ ActiveRecord::Schema.define(version: 2021_04_15_233226) do
   add_foreign_key "vegetable_varieties", "subtypes", column: "petition_status_id"
   add_foreign_key "vegetable_varieties", "users", column: "created_by"
   add_foreign_key "vegetable_varieties", "users", column: "updated_by"
-  add_foreign_key "work_types", "users", column: "created_by"
-  add_foreign_key "work_types", "users", column: "updated_by"
 
   create_view "complete_users", sql_definition: <<-SQL
       SELECT u.id,
@@ -1709,40 +1604,6 @@ ActiveRecord::Schema.define(version: 2021_04_15_233226) do
       u.updated_at
      FROM (users u
        LEFT JOIN user_roles ur ON ((u.user_role_id = ur.id)));
-  SQL
-  create_view "complete_books", sql_definition: <<-SQL
-      SELECT b.id,
-      b.title,
-      b.category_id,
-      st.st_name AS category_name,
-      b.colciencias_call_id,
-      cc.name AS colciencias_call_name,
-      cc.year AS colciencias_call_year,
-      b.editorial_id,
-      e.name AS editorial_name,
-      b.geo_city_id,
-      gcity.name AS geo_city_name,
-      gs.geo_country_id,
-      gctry.name AS geo_country_name,
-      gcity.geo_state_id,
-      gs.name AS geo_state_name,
-      b.isbn,
-      b.observation,
-      b.publication_date,
-      b.research_group_id,
-      b.url,
-      b.active,
-      b.created_by,
-      b.updated_by,
-      b.created_at,
-      b.updated_at
-     FROM ((((((books b
-       LEFT JOIN subtypes st ON ((b.category_id = st.id)))
-       LEFT JOIN colciencias_calls cc ON ((b.colciencias_call_id = cc.id)))
-       LEFT JOIN editorials e ON ((b.editorial_id = e.id)))
-       LEFT JOIN geo_cities gcity ON ((b.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
   SQL
   create_view "complete_book_chapters", sql_definition: <<-SQL
       SELECT bc.id,
@@ -1926,41 +1787,6 @@ ActiveRecord::Schema.define(version: 2021_04_15_233226) do
        LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
        LEFT JOIN subtypes stpt ON ((vv.petition_status_id = stpt.id)));
   SQL
-  create_view "complete_new_animal_bs", sql_definition: <<-SQL
-      SELECT nab.id,
-      nab.name,
-      nab.category_id,
-      stc.st_name AS category_name,
-      nab.colciencias_call_id,
-      cc.name AS colciencias_call_name,
-      cc.year AS colciencias_call_year,
-      nab.cycle_type_id,
-      stcc.st_name AS cycle_type_name,
-      nab.date,
-      nab.geo_city_id,
-      gcity.name AS geo_city_name,
-      gs.geo_country_id,
-      gctry.name AS geo_country_name,
-      gcity.geo_state_id,
-      gs.name AS geo_state_name,
-      nab.petition_status_id,
-      stpt.st_name AS petition_status_name,
-      nab.observation,
-      nab.research_group_id,
-      nab.active,
-      nab.created_by,
-      nab.updated_by,
-      nab.created_at,
-      nab.updated_at
-     FROM (((((((new_animal_breeds nab
-       LEFT JOIN subtypes stc ON ((nab.category_id = stc.id)))
-       LEFT JOIN colciencias_calls cc ON ((nab.colciencias_call_id = cc.id)))
-       LEFT JOIN subtypes stcc ON ((nab.cycle_type_id = stcc.id)))
-       LEFT JOIN geo_cities gcity ON ((nab.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
-       LEFT JOIN subtypes stpt ON ((nab.petition_status_id = stpt.id)));
-  SQL
   create_view "complete_ipl_breeds", sql_definition: <<-SQL
       SELECT iplb.id,
       iplb.name,
@@ -1990,44 +1816,6 @@ ActiveRecord::Schema.define(version: 2021_04_15_233226) do
        LEFT JOIN geo_cities gcity ON ((iplb.geo_city_id = gcity.id)))
        LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
        LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
-  SQL
-  create_view "complete_research_cws", sql_definition: <<-SQL
-      SELECT rcw.id,
-      rcw.title,
-      rcw.category_id,
-      stc.st_name AS category_name,
-      rcw.colciencias_call_id,
-      cc.name AS colciencias_call_name,
-      cc.year AS colciencias_call_year,
-      rcw.creation_and_selection_date,
-      rcw.geo_city_id,
-      gcity.name AS geo_city_name,
-      gs.geo_country_id,
-      gctry.name AS geo_country_name,
-      gcity.geo_state_id,
-      gs.name AS geo_state_name,
-      rcw.knwl_spec_area_id,
-      stksa.st_name AS knwl_spec_area_name,
-      rcw.nature_of_work,
-      rcw.observation,
-      rcw.registered_project_title,
-      rcw.url,
-      ARRAY( SELECT rcwwt.subtype_id
-             FROM research_creation_works_work_types rcwwt
-            WHERE (rcw.id = rcwwt.research_creation_work_id)) AS work_type_ids,
-      rcw.research_group_id,
-      rcw.active,
-      rcw.created_by,
-      rcw.updated_by,
-      rcw.created_at,
-      rcw.updated_at
-     FROM ((((((research_creation_works rcw
-       LEFT JOIN subtypes stc ON ((rcw.category_id = stc.id)))
-       LEFT JOIN colciencias_calls cc ON ((rcw.colciencias_call_id = cc.id)))
-       LEFT JOIN geo_cities gcity ON ((rcw.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
-       LEFT JOIN subtypes stksa ON ((rcw.knwl_spec_area_id = stksa.id)));
   SQL
   create_view "research_units_by_researchers", sql_definition: <<-SQL
       SELECT rs.id,
@@ -2397,5 +2185,112 @@ ActiveRecord::Schema.define(version: 2021_04_15_233226) do
        LEFT JOIN geo_cities gcity ON ((nsr.geo_city_id = gcity.id)))
        LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
        LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_new_animal_bs", sql_definition: <<-SQL
+      SELECT nab.id,
+      nab.name,
+      nab.category_id,
+      stc.st_name AS category_name,
+      nab.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      nab.date,
+      nab.geo_city_id,
+      gcity.name AS geo_city_name,
+      gs.geo_country_id,
+      gctry.name AS geo_country_name,
+      gcity.geo_state_id,
+      gs.name AS geo_state_name,
+      nab.petition_status_id,
+      stpt.st_name AS petition_status_name,
+      nab.observation,
+      nab.research_group_id,
+      nab.active,
+      nab.created_by,
+      nab.updated_by,
+      nab.created_at,
+      nab.updated_at
+     FROM ((((((new_animal_breeds nab
+       LEFT JOIN subtypes stc ON ((nab.category_id = stc.id)))
+       LEFT JOIN colciencias_calls cc ON ((nab.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((nab.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
+       LEFT JOIN subtypes stpt ON ((nab.petition_status_id = stpt.id)));
+  SQL
+  create_view "complete_books", sql_definition: <<-SQL
+      SELECT b.id,
+      b.title,
+      b.book_type_id,
+      tbk.st_name AS book_type_name,
+      b.category_id,
+      st.st_name AS category_name,
+      b.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      b.editorial_name,
+      b.geo_city_id,
+      gcity.name AS geo_city_name,
+      gs.geo_country_id,
+      gctry.name AS geo_country_name,
+      gcity.geo_state_id,
+      gs.name AS geo_state_name,
+      b.isbn,
+      b.observation,
+      b.publication_date,
+      b.research_group_id,
+      b.url,
+      b.active,
+      b.created_by,
+      b.updated_by,
+      b.created_at,
+      b.updated_at
+     FROM ((((((books b
+       LEFT JOIN subtypes st ON ((b.category_id = st.id)))
+       LEFT JOIN subtypes tbk ON ((b.book_type_id = tbk.id)))
+       LEFT JOIN colciencias_calls cc ON ((b.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((b.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_research_cws", sql_definition: <<-SQL
+      SELECT rcw.id,
+      rcw.title,
+      rcw.category_id,
+      stc.st_name AS category_name,
+      rcw.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      rcw.creation_and_selection_date,
+      rcw.geo_city_id,
+      gcity.name AS geo_city_name,
+      gs.geo_country_id,
+      gctry.name AS geo_country_name,
+      gcity.geo_state_id,
+      gs.name AS geo_state_name,
+      rcw.knwl_spec_area_id,
+      stksa.st_name AS knwl_spec_area_name,
+      rcw.nature_id,
+      stnt.st_name AS nature_name,
+      rcw.observation,
+      rcw.registered_project_title,
+      rcw.url,
+      ARRAY( SELECT rcwwt.subtype_id
+             FROM research_creation_works_work_types rcwwt
+            WHERE (rcw.id = rcwwt.research_creation_work_id)) AS work_type_ids,
+      rcw.research_group_id,
+      rcw.active,
+      rcw.created_by,
+      rcw.updated_by,
+      rcw.created_at,
+      rcw.updated_at
+     FROM (((((((research_creation_works rcw
+       LEFT JOIN subtypes stc ON ((rcw.category_id = stc.id)))
+       LEFT JOIN subtypes stnt ON ((rcw.nature_id = stnt.id)))
+       LEFT JOIN colciencias_calls cc ON ((rcw.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((rcw.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
+       LEFT JOIN subtypes stksa ON ((rcw.knwl_spec_area_id = stksa.id)));
   SQL
 end

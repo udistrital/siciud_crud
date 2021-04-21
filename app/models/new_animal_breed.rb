@@ -3,7 +3,6 @@ class NewAnimalBreed < ApplicationRecord
 
   belongs_to :category, class_name: 'Subtype', foreign_key: 'category_id', optional: true
   belongs_to :colciencias_call, optional: true
-  belongs_to :cycle_type, class_name: 'Subtype', foreign_key: 'cycle_type_id', optional: true
   belongs_to :petition_status, class_name: 'Subtype', foreign_key: 'petition_status_id', optional: true
   belongs_to :research_group
 

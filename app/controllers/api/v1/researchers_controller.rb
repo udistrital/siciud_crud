@@ -10,14 +10,8 @@ module Api
         if (id_number = params[:identification_number])
           @researchers = ResearcherSearchService.search_researcher(@researchers,
                                                                    id_number)
-          if @researchers.empty?
-            render json: { 'message': 'Usuario no existe' }, status: :not_found
-          else
-            render json: @researchers
-          end
-        else
-          paginate json: @researchers
         end
+        render json: @researchers
       end
 
       def show
