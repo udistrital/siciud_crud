@@ -195,7 +195,9 @@ module Swagger::NewAnimalBreedApi
           key :description, 'New animal breed to update'
           key :required, true
           schema do
-            key :'$ref', :ChangeActive
+            property :new_animal_breed do
+              key :'$ref', :ChangeActive
+            end
           end
         end
 

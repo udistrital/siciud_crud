@@ -17,22 +17,14 @@ module Api
         render json: @books
       end
 
-      # GET /research_group/:id/books/1
+      # GET /research_units/:id/books/1
       def show
         render json: @book
       end
 
-      # POST /research_group/:id/books
+      # POST /research_units/:id/books
       def create
         @book = @research_group.books.new(book_params_to_create)
-
-        editorial = set_editorial(params[:book][:editorial_name],
-                                  @book.created_by)
-        if editorial
-          @book.editorial = editorial
-        else
-          return
-        end
 
         if @book.save
           render json: @book, status: :created
@@ -41,16 +33,8 @@ module Api
         end
       end
 
-      # PUT /research_group/:id/books/1
+      # PUT /research_units/:id/books/1
       def update
-        editorial = set_editorial(params[:book][:editorial_name],
-                                  @book.created_by)
-        if editorial
-          @book.editorial = editorial
-        else
-          return
-        end
-
         if @book.update(book_params_to_update)
           render json: @book
         else
@@ -58,7 +42,7 @@ module Api
         end
       end
 
-      # PUT /research_group/:id/books/1/active
+      # PUT /research_units/:id/books/1/active
       def change_active
         if @book.update(book_params_to_deactivate)
           render json: @book
@@ -78,15 +62,17 @@ module Api
       def book_params_to_create
         params.require(:book).permit(:title, :publication_date, :isbn,
                                      :url, :observation, :category_id,
-                                     :colciencias_call_id, :geo_city_id,
-                                     :created_by)
+                                     :colciencias_call_id, :editorial_name,
+                                     :geo_city_id,
+                                     :book_type_id, :created_by)
       end
 
       def book_params_to_update
         params.require(:book).permit(:title, :publication_date, :isbn,
                                      :url, :observation, :category_id,
-                                     :colciencias_call_id, :geo_city_id,
-                                     :updated_by)
+                                     :colciencias_call_id, :editorial_name,
+                                     :geo_city_id,
+                                     :book_type_id, :updated_by)
       end
 
       def book_params_to_deactivate

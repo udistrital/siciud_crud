@@ -21,13 +21,6 @@ class AbstractProductSerializer < AbstractGeneralSerializer
     end
   end
 
-  def editorial_name
-    editorial = self.object.editorial
-    if editorial
-      editorial.name
-    end
-  end
-
   # GEOS
 
   def geo_city_name

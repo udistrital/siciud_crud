@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_21_000307) do
+ActiveRecord::Schema.define(version: 2021_04_21_220614) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -259,7 +259,6 @@ ActiveRecord::Schema.define(version: 2021_04_21_000307) do
     t.string "isbn"
     t.string "url"
     t.text "observation"
-    t.bigint "editorial_id"
     t.bigint "research_group_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -269,10 +268,12 @@ ActiveRecord::Schema.define(version: 2021_04_21_000307) do
     t.bigint "updated_by"
     t.bigint "category_id"
     t.bigint "colciencias_call_id"
+    t.bigint "book_type_id"
+    t.string "editorial_name"
+    t.index ["book_type_id"], name: "index_books_on_book_type_id"
     t.index ["category_id"], name: "index_books_on_category_id"
     t.index ["colciencias_call_id"], name: "index_books_on_colciencias_call_id"
     t.index ["created_by"], name: "index_books_on_created_by"
-    t.index ["editorial_id"], name: "index_books_on_editorial_id"
     t.index ["geo_city_id"], name: "index_books_on_geo_city_id"
     t.index ["research_group_id"], name: "index_books_on_research_group_id"
     t.index ["updated_by"], name: "index_books_on_updated_by"
@@ -1397,9 +1398,9 @@ ActiveRecord::Schema.define(version: 2021_04_21_000307) do
   add_foreign_key "book_chapters", "users", column: "created_by"
   add_foreign_key "book_chapters", "users", column: "updated_by"
   add_foreign_key "books", "colciencias_calls"
-  add_foreign_key "books", "editorials"
   add_foreign_key "books", "geo_cities"
   add_foreign_key "books", "research_groups"
+  add_foreign_key "books", "subtypes", column: "book_type_id"
   add_foreign_key "books", "subtypes", column: "category_id"
   add_foreign_key "books", "users", column: "created_by"
   add_foreign_key "books", "users", column: "updated_by"
@@ -1601,40 +1602,6 @@ ActiveRecord::Schema.define(version: 2021_04_21_000307) do
       u.updated_at
      FROM (users u
        LEFT JOIN user_roles ur ON ((u.user_role_id = ur.id)));
-  SQL
-  create_view "complete_books", sql_definition: <<-SQL
-      SELECT b.id,
-      b.title,
-      b.category_id,
-      st.st_name AS category_name,
-      b.colciencias_call_id,
-      cc.name AS colciencias_call_name,
-      cc.year AS colciencias_call_year,
-      b.editorial_id,
-      e.name AS editorial_name,
-      b.geo_city_id,
-      gcity.name AS geo_city_name,
-      gs.geo_country_id,
-      gctry.name AS geo_country_name,
-      gcity.geo_state_id,
-      gs.name AS geo_state_name,
-      b.isbn,
-      b.observation,
-      b.publication_date,
-      b.research_group_id,
-      b.url,
-      b.active,
-      b.created_by,
-      b.updated_by,
-      b.created_at,
-      b.updated_at
-     FROM ((((((books b
-       LEFT JOIN subtypes st ON ((b.category_id = st.id)))
-       LEFT JOIN colciencias_calls cc ON ((b.colciencias_call_id = cc.id)))
-       LEFT JOIN editorials e ON ((b.editorial_id = e.id)))
-       LEFT JOIN geo_cities gcity ON ((b.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
   SQL
   create_view "complete_book_chapters", sql_definition: <<-SQL
       SELECT bc.id,
@@ -2286,5 +2253,40 @@ ActiveRecord::Schema.define(version: 2021_04_21_000307) do
        LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
        LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
        LEFT JOIN subtypes stpt ON ((nab.petition_status_id = stpt.id)));
+  SQL
+  create_view "complete_books", sql_definition: <<-SQL
+      SELECT b.id,
+      b.title,
+      b.book_type_id,
+      tbk.st_name AS book_type_name,
+      b.category_id,
+      st.st_name AS category_name,
+      b.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      b.editorial_name,
+      b.geo_city_id,
+      gcity.name AS geo_city_name,
+      gs.geo_country_id,
+      gctry.name AS geo_country_name,
+      gcity.geo_state_id,
+      gs.name AS geo_state_name,
+      b.isbn,
+      b.observation,
+      b.publication_date,
+      b.research_group_id,
+      b.url,
+      b.active,
+      b.created_by,
+      b.updated_by,
+      b.created_at,
+      b.updated_at
+     FROM ((((((books b
+       LEFT JOIN subtypes st ON ((b.category_id = st.id)))
+       LEFT JOIN subtypes tbk ON ((b.book_type_id = tbk.id)))
+       LEFT JOIN colciencias_calls cc ON ((b.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((b.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
   SQL
 end
