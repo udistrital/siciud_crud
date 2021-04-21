@@ -66,6 +66,7 @@ module Api
                                        :observation, :category_id,
                                        :colciencias_call_id,
                                        :patent_state_id,
+                                       :patent_type_id,
                                        :created_by, geo_country_ids: [])
       end
 
@@ -76,6 +77,7 @@ module Api
                                        :observation, :category_id,
                                        :colciencias_call_id,
                                        :patent_state_id,
+                                       :patent_type_id,
                                        :updated_by, geo_country_ids: [])
       end
 

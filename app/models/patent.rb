@@ -4,6 +4,7 @@ class Patent < ApplicationRecord
   belongs_to :category, class_name: 'Subtype', foreign_key: 'category_id', optional: true
   belongs_to :colciencias_call, optional: true
   belongs_to :patent_state, class_name: 'Subtype', foreign_key: 'patent_state_id', optional: true
+  belongs_to :patent_type, class_name: 'Subtype', foreign_key: 'patent_type_id', optional: true
   belongs_to :research_group
 
   # Countries of obtaining

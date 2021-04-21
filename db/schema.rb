@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_21_230259) do
+ActiveRecord::Schema.define(version: 2021_04_21_231108) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -993,10 +993,12 @@ ActiveRecord::Schema.define(version: 2021_04_21_230259) do
     t.bigint "category_id"
     t.bigint "colciencias_call_id"
     t.bigint "patent_state_id"
+    t.bigint "patent_type_id"
     t.index ["category_id"], name: "index_patents_on_category_id"
     t.index ["colciencias_call_id"], name: "index_patents_on_colciencias_call_id"
     t.index ["created_by"], name: "index_patents_on_created_by"
     t.index ["patent_state_id"], name: "index_patents_on_patent_state_id"
+    t.index ["patent_type_id"], name: "index_patents_on_patent_type_id"
     t.index ["research_group_id"], name: "index_patents_on_research_group_id"
     t.index ["updated_by"], name: "index_patents_on_updated_by"
   end
@@ -1532,6 +1534,7 @@ ActiveRecord::Schema.define(version: 2021_04_21_230259) do
   add_foreign_key "patents", "research_groups"
   add_foreign_key "patents", "subtypes", column: "category_id"
   add_foreign_key "patents", "subtypes", column: "patent_state_id"
+  add_foreign_key "patents", "subtypes", column: "patent_type_id"
   add_foreign_key "patents", "users", column: "created_by"
   add_foreign_key "patents", "users", column: "updated_by"
   add_foreign_key "plant_ind_prototypes", "colciencias_calls"
