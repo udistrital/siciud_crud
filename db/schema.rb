@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_19_234633) do
+ActiveRecord::Schema.define(version: 2021_04_21_000307) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -862,12 +862,10 @@ ActiveRecord::Schema.define(version: 2021_04_19_234633) do
     t.bigint "updated_by"
     t.bigint "category_id"
     t.bigint "colciencias_call_id"
-    t.bigint "cycle_type_id"
     t.bigint "petition_status_id"
     t.index ["category_id"], name: "index_new_animal_breeds_on_category_id"
     t.index ["colciencias_call_id"], name: "index_new_animal_breeds_on_colciencias_call_id"
     t.index ["created_by"], name: "index_new_animal_breeds_on_created_by"
-    t.index ["cycle_type_id"], name: "index_new_animal_breeds_on_cycle_type_id"
     t.index ["geo_city_id"], name: "index_new_animal_breeds_on_geo_city_id"
     t.index ["petition_status_id"], name: "index_new_animal_breeds_on_petition_status_id"
     t.index ["research_group_id"], name: "index_new_animal_breeds_on_research_group_id"
@@ -1500,8 +1498,6 @@ ActiveRecord::Schema.define(version: 2021_04_19_234633) do
   add_foreign_key "new_animal_breeds", "colciencias_calls"
   add_foreign_key "new_animal_breeds", "geo_cities"
   add_foreign_key "new_animal_breeds", "research_groups"
-  add_foreign_key "new_animal_breeds", "subtypes", column: "category_id"
-  add_foreign_key "new_animal_breeds", "subtypes", column: "cycle_type_id"
   add_foreign_key "new_animal_breeds", "subtypes", column: "petition_status_id"
   add_foreign_key "new_animal_breeds", "users", column: "created_by"
   add_foreign_key "new_animal_breeds", "users", column: "updated_by"
@@ -1821,41 +1817,6 @@ ActiveRecord::Schema.define(version: 2021_04_19_234633) do
        LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
        LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
        LEFT JOIN subtypes stpt ON ((vv.petition_status_id = stpt.id)));
-  SQL
-  create_view "complete_new_animal_bs", sql_definition: <<-SQL
-      SELECT nab.id,
-      nab.name,
-      nab.category_id,
-      stc.st_name AS category_name,
-      nab.colciencias_call_id,
-      cc.name AS colciencias_call_name,
-      cc.year AS colciencias_call_year,
-      nab.cycle_type_id,
-      stcc.st_name AS cycle_type_name,
-      nab.date,
-      nab.geo_city_id,
-      gcity.name AS geo_city_name,
-      gs.geo_country_id,
-      gctry.name AS geo_country_name,
-      gcity.geo_state_id,
-      gs.name AS geo_state_name,
-      nab.petition_status_id,
-      stpt.st_name AS petition_status_name,
-      nab.observation,
-      nab.research_group_id,
-      nab.active,
-      nab.created_by,
-      nab.updated_by,
-      nab.created_at,
-      nab.updated_at
-     FROM (((((((new_animal_breeds nab
-       LEFT JOIN subtypes stc ON ((nab.category_id = stc.id)))
-       LEFT JOIN colciencias_calls cc ON ((nab.colciencias_call_id = cc.id)))
-       LEFT JOIN subtypes stcc ON ((nab.cycle_type_id = stcc.id)))
-       LEFT JOIN geo_cities gcity ON ((nab.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
-       LEFT JOIN subtypes stpt ON ((nab.petition_status_id = stpt.id)));
   SQL
   create_view "complete_ipl_breeds", sql_definition: <<-SQL
       SELECT iplb.id,
@@ -2293,5 +2254,37 @@ ActiveRecord::Schema.define(version: 2021_04_19_234633) do
        LEFT JOIN geo_cities gcity ON ((nsr.geo_city_id = gcity.id)))
        LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
        LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_new_animal_bs", sql_definition: <<-SQL
+      SELECT nab.id,
+      nab.name,
+      nab.category_id,
+      stc.st_name AS category_name,
+      nab.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      nab.date,
+      nab.geo_city_id,
+      gcity.name AS geo_city_name,
+      gs.geo_country_id,
+      gctry.name AS geo_country_name,
+      gcity.geo_state_id,
+      gs.name AS geo_state_name,
+      nab.petition_status_id,
+      stpt.st_name AS petition_status_name,
+      nab.observation,
+      nab.research_group_id,
+      nab.active,
+      nab.created_by,
+      nab.updated_by,
+      nab.created_at,
+      nab.updated_at
+     FROM ((((((new_animal_breeds nab
+       LEFT JOIN subtypes stc ON ((nab.category_id = stc.id)))
+       LEFT JOIN colciencias_calls cc ON ((nab.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((nab.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
+       LEFT JOIN subtypes stpt ON ((nab.petition_status_id = stpt.id)));
   SQL
 end
