@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_21_220614) do
+ActiveRecord::Schema.define(version: 2021_04_21_223802) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1048,7 +1048,6 @@ ActiveRecord::Schema.define(version: 2021_04_21_220614) do
   create_table "research_creation_works", force: :cascade do |t|
     t.string "title"
     t.date "creation_and_selection_date"
-    t.string "nature_of_work"
     t.string "registered_project_title"
     t.string "url"
     t.text "observation"
@@ -1062,11 +1061,13 @@ ActiveRecord::Schema.define(version: 2021_04_21_220614) do
     t.bigint "category_id"
     t.bigint "colciencias_call_id"
     t.bigint "knwl_spec_area_id"
+    t.bigint "nature_id"
     t.index ["category_id"], name: "index_research_creation_works_on_category_id"
     t.index ["colciencias_call_id"], name: "index_research_creation_works_on_colciencias_call_id"
     t.index ["created_by"], name: "index_research_creation_works_on_created_by"
     t.index ["geo_city_id"], name: "index_research_creation_works_on_geo_city_id"
     t.index ["knwl_spec_area_id"], name: "index_research_creation_works_on_knwl_spec_area_id"
+    t.index ["nature_id"], name: "index_research_creation_works_on_nature_id"
     t.index ["research_group_id"], name: "index_research_creation_works_on_research_group_id"
     t.index ["updated_by"], name: "index_research_creation_works_on_updated_by"
   end
@@ -1542,6 +1543,7 @@ ActiveRecord::Schema.define(version: 2021_04_21_220614) do
   add_foreign_key "research_creation_works", "research_groups"
   add_foreign_key "research_creation_works", "subtypes", column: "category_id"
   add_foreign_key "research_creation_works", "subtypes", column: "knwl_spec_area_id"
+  add_foreign_key "research_creation_works", "subtypes", column: "nature_id"
   add_foreign_key "research_creation_works", "users", column: "created_by"
   add_foreign_key "research_creation_works", "users", column: "updated_by"
   add_foreign_key "research_groups", "cine_broad_areas"
@@ -1814,44 +1816,6 @@ ActiveRecord::Schema.define(version: 2021_04_21_220614) do
        LEFT JOIN geo_cities gcity ON ((iplb.geo_city_id = gcity.id)))
        LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
        LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
-  SQL
-  create_view "complete_research_cws", sql_definition: <<-SQL
-      SELECT rcw.id,
-      rcw.title,
-      rcw.category_id,
-      stc.st_name AS category_name,
-      rcw.colciencias_call_id,
-      cc.name AS colciencias_call_name,
-      cc.year AS colciencias_call_year,
-      rcw.creation_and_selection_date,
-      rcw.geo_city_id,
-      gcity.name AS geo_city_name,
-      gs.geo_country_id,
-      gctry.name AS geo_country_name,
-      gcity.geo_state_id,
-      gs.name AS geo_state_name,
-      rcw.knwl_spec_area_id,
-      stksa.st_name AS knwl_spec_area_name,
-      rcw.nature_of_work,
-      rcw.observation,
-      rcw.registered_project_title,
-      rcw.url,
-      ARRAY( SELECT rcwwt.subtype_id
-             FROM research_creation_works_work_types rcwwt
-            WHERE (rcw.id = rcwwt.research_creation_work_id)) AS work_type_ids,
-      rcw.research_group_id,
-      rcw.active,
-      rcw.created_by,
-      rcw.updated_by,
-      rcw.created_at,
-      rcw.updated_at
-     FROM ((((((research_creation_works rcw
-       LEFT JOIN subtypes stc ON ((rcw.category_id = stc.id)))
-       LEFT JOIN colciencias_calls cc ON ((rcw.colciencias_call_id = cc.id)))
-       LEFT JOIN geo_cities gcity ON ((rcw.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
-       LEFT JOIN subtypes stksa ON ((rcw.knwl_spec_area_id = stksa.id)));
   SQL
   create_view "research_units_by_researchers", sql_definition: <<-SQL
       SELECT rs.id,
@@ -2288,5 +2252,45 @@ ActiveRecord::Schema.define(version: 2021_04_21_220614) do
        LEFT JOIN geo_cities gcity ON ((b.geo_city_id = gcity.id)))
        LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
        LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_research_cws", sql_definition: <<-SQL
+      SELECT rcw.id,
+      rcw.title,
+      rcw.category_id,
+      stc.st_name AS category_name,
+      rcw.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      rcw.creation_and_selection_date,
+      rcw.geo_city_id,
+      gcity.name AS geo_city_name,
+      gs.geo_country_id,
+      gctry.name AS geo_country_name,
+      gcity.geo_state_id,
+      gs.name AS geo_state_name,
+      rcw.knwl_spec_area_id,
+      stksa.st_name AS knwl_spec_area_name,
+      rcw.nature_id,
+      stnt.st_name AS nature_name,
+      rcw.observation,
+      rcw.registered_project_title,
+      rcw.url,
+      ARRAY( SELECT rcwwt.subtype_id
+             FROM research_creation_works_work_types rcwwt
+            WHERE (rcw.id = rcwwt.research_creation_work_id)) AS work_type_ids,
+      rcw.research_group_id,
+      rcw.active,
+      rcw.created_by,
+      rcw.updated_by,
+      rcw.created_at,
+      rcw.updated_at
+     FROM (((((((research_creation_works rcw
+       LEFT JOIN subtypes stc ON ((rcw.category_id = stc.id)))
+       LEFT JOIN subtypes stnt ON ((rcw.nature_id = stnt.id)))
+       LEFT JOIN colciencias_calls cc ON ((rcw.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((rcw.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
+       LEFT JOIN subtypes stksa ON ((rcw.knwl_spec_area_id = stksa.id)));
   SQL
 end
