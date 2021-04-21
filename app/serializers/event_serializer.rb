@@ -3,6 +3,14 @@ class EventSerializer < AbstractProductSerializer
              :eve_organizers, :eve_entities, :category_id,
              :category_name, :colciencias_call_id, :colciencias_call_name,
              :colciencias_call_year, :eve_observation,
-             :research_group_id, :eve_type_id,
+             :research_group_id, :eve_type_id, :participation_id,
+             :participation_name,
              :active, :created_by, :updated_by
+
+  def participation_name
+    participation = self.object.participation
+    if participation
+      participation.st_name
+    end
+  end
 end

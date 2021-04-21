@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_21_223802) do
+ActiveRecord::Schema.define(version: 2021_04_21_230259) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -552,10 +552,12 @@ ActiveRecord::Schema.define(version: 2021_04_21_223802) do
     t.bigint "updated_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "participation_id"
     t.index ["category_id"], name: "index_events_on_category_id"
     t.index ["colciencias_call_id"], name: "index_events_on_colciencias_call_id"
     t.index ["created_by"], name: "index_events_on_created_by"
     t.index ["eve_type_id"], name: "index_events_on_eve_type_id"
+    t.index ["participation_id"], name: "index_events_on_participation_id"
     t.index ["research_group_id"], name: "index_events_on_research_group_id"
     t.index ["updated_by"], name: "index_events_on_updated_by"
   end
@@ -1444,6 +1446,7 @@ ActiveRecord::Schema.define(version: 2021_04_21_223802) do
   add_foreign_key "events", "research_groups"
   add_foreign_key "events", "subtypes", column: "category_id"
   add_foreign_key "events", "subtypes", column: "eve_type_id"
+  add_foreign_key "events", "subtypes", column: "participation_id"
   add_foreign_key "events", "users", column: "created_by"
   add_foreign_key "events", "users", column: "updated_by"
   add_foreign_key "ext_participants", "subtypes", column: "participant_type_id"
@@ -1909,32 +1912,6 @@ ActiveRecord::Schema.define(version: 2021_04_21_223802) do
      FROM (documents doc
        LEFT JOIN subtypes dt ON ((dt.id = doc.document_type_id)));
   SQL
-  create_view "complete_events", sql_definition: <<-SQL
-      SELECT eve.id,
-      eve.category_id,
-      st.st_name AS category_name,
-      eve.colciencias_call_id,
-      cc.name AS colciencias_call_name,
-      cc.year AS colciencias_call_year,
-      eve.eve_name,
-      eve.eve_start_date,
-      eve.eve_finish_date,
-      eve.eve_organizers,
-      eve.eve_entities,
-      eve.eve_observation,
-      eve.eve_type_id,
-      evt.st_name AS eve_type_name,
-      eve.research_group_id,
-      eve.active,
-      eve.created_by,
-      eve.updated_by,
-      eve.created_at,
-      eve.updated_at
-     FROM (((events eve
-       LEFT JOIN subtypes st ON ((eve.category_id = st.id)))
-       LEFT JOIN subtypes evt ON ((eve.eve_type_id = evt.id)))
-       LEFT JOIN colciencias_calls cc ON ((eve.colciencias_call_id = cc.id)));
-  SQL
   create_view "complete_degree_works", sql_definition: <<-SQL
       SELECT dw.id,
       dw.category_id,
@@ -2292,5 +2269,34 @@ ActiveRecord::Schema.define(version: 2021_04_21_223802) do
        LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
        LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
        LEFT JOIN subtypes stksa ON ((rcw.knwl_spec_area_id = stksa.id)));
+  SQL
+  create_view "complete_events", sql_definition: <<-SQL
+      SELECT eve.id,
+      eve.category_id,
+      st.st_name AS category_name,
+      eve.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      eve.eve_name,
+      eve.eve_start_date,
+      eve.eve_finish_date,
+      eve.eve_organizers,
+      eve.eve_entities,
+      eve.eve_observation,
+      eve.eve_type_id,
+      evt.st_name AS eve_type_name,
+      eve.participation_id,
+      part.st_name AS participation_name,
+      eve.research_group_id,
+      eve.active,
+      eve.created_by,
+      eve.updated_by,
+      eve.created_at,
+      eve.updated_at
+     FROM ((((events eve
+       LEFT JOIN subtypes st ON ((eve.category_id = st.id)))
+       LEFT JOIN subtypes evt ON ((eve.eve_type_id = evt.id)))
+       LEFT JOIN subtypes part ON ((eve.participation_id = part.id)))
+       LEFT JOIN colciencias_calls cc ON ((eve.colciencias_call_id = cc.id)));
   SQL
 end
