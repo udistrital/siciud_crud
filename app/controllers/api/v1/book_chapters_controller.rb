@@ -25,16 +25,7 @@ module Api
       # POST /research_group/:id/book_chapters
       def create
         @book_chapter = @research_group.book_chapters.new(
-          book_chapter_params_to_create.except(:editorial_name)
-        )
-
-        editorial = set_editorial(params[:book_chapter][:editorial_name],
-                                  @book_chapter.created_by)
-        if editorial
-          @book_chapter.editorial = editorial
-        else
-          return
-        end
+          book_chapter_params_to_create)
 
         if @book_chapter.save
           render json: @book_chapter, status: :created
@@ -45,15 +36,7 @@ module Api
 
       # PATCH/PUT /research_group/:id/book_chapters/1
       def update
-        editorial = set_editorial(params[:book_chapter][:editorial_name],
-                                  @book_chapter.created_by)
-        if editorial
-          @book_chapter.editorial = editorial
-        else
-          return
-        end
-
-        if @book_chapter.update(book_chapter_params_to_update.except(:editorial_name))
+        if @book_chapter.update(book_chapter_params_to_update)
           render json: @book_chapter
         else
           render json: @book_chapter.errors, status: :unprocessable_entity
@@ -84,8 +67,7 @@ module Api
                                              :category_id, :colciencias_call_id,
                                              :geo_city_id,
                                              :editorial_name,
-                                             :active,
-                                             :created_by, :updated_by)
+                                             :created_by)
       end
 
       def book_chapter_params_to_update
@@ -95,19 +77,11 @@ module Api
                                              :category_id, :colciencias_call_id,
                                              :geo_city_id,
                                              :editorial_name,
-                                             :active,
-                                             :created_by, :updated_by)
+                                             :updated_by)
       end
 
       def book_chap_params_to_deactivate
-        params.require(:book_chapter).permit(:book_title, :title,
-                                             :publication_date, :isbn,
-                                             :doi, :url, :observation,
-                                             :category_id, :colciencias_call_id,
-                                             :geo_city_id,
-                                             :editorial_name,
-                                             :active,
-                                             :created_by, :updated_by)
+        params.require(:book_chapter).permit(:active, :updated_by)
       end
     end
   end
