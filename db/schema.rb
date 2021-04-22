@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_21_231108) do
+ActiveRecord::Schema.define(version: 2021_04_21_231652) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1730,34 +1730,6 @@ ActiveRecord::Schema.define(version: 2021_04_21_231108) do
        LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
        LEFT JOIN journals j ON ((sn.journal_id = j.id)));
   SQL
-  create_view "complete_patents", sql_definition: <<-SQL
-      SELECT p.id,
-      p.title,
-      p.category_id,
-      stc.st_name AS category_name,
-      p.colciencias_call_id,
-      cc.name AS colciencias_call_name,
-      cc.year AS colciencias_call_year,
-      p.date_of_obtaining,
-      ARRAY( SELECT gcp.geo_country_id
-             FROM geo_countries_patents gcp
-            WHERE (p.id = gcp.patent_id)) AS geo_country_ids,
-      p.industrial_publication_gazette,
-      p.observation,
-      p.patent_state_id,
-      stps.st_name AS patent_state_name,
-      p.patent_number,
-      p.research_group_id,
-      p.active,
-      p.created_by,
-      p.updated_by,
-      p.created_at,
-      p.updated_at
-     FROM (((patents p
-       LEFT JOIN subtypes stc ON ((p.category_id = stc.id)))
-       LEFT JOIN colciencias_calls cc ON ((p.colciencias_call_id = cc.id)))
-       LEFT JOIN subtypes stps ON ((p.patent_state_id = stps.id)));
-  SQL
   create_view "complete_vegetable_varieties", sql_definition: <<-SQL
       SELECT vv.id,
       vv.name,
@@ -2301,5 +2273,36 @@ ActiveRecord::Schema.define(version: 2021_04_21_231108) do
        LEFT JOIN subtypes evt ON ((eve.eve_type_id = evt.id)))
        LEFT JOIN subtypes part ON ((eve.participation_id = part.id)))
        LEFT JOIN colciencias_calls cc ON ((eve.colciencias_call_id = cc.id)));
+  SQL
+  create_view "complete_patents", sql_definition: <<-SQL
+      SELECT p.id,
+      p.title,
+      p.category_id,
+      stc.st_name AS category_name,
+      p.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      p.date_of_obtaining,
+      ARRAY( SELECT gcp.geo_country_id
+             FROM geo_countries_patents gcp
+            WHERE (p.id = gcp.patent_id)) AS geo_country_ids,
+      p.industrial_publication_gazette,
+      p.observation,
+      p.patent_state_id,
+      stps.st_name AS patent_state_name,
+      p.patent_type_id,
+      pttp.st_name AS patent_type_name,
+      p.patent_number,
+      p.research_group_id,
+      p.active,
+      p.created_by,
+      p.updated_by,
+      p.created_at,
+      p.updated_at
+     FROM ((((patents p
+       LEFT JOIN subtypes stc ON ((p.category_id = stc.id)))
+       LEFT JOIN subtypes pttp ON ((p.patent_type_id = pttp.id)))
+       LEFT JOIN colciencias_calls cc ON ((p.colciencias_call_id = cc.id)))
+       LEFT JOIN subtypes stps ON ((p.patent_state_id = stps.id)));
   SQL
 end
