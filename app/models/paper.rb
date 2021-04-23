@@ -3,7 +3,6 @@ class Paper < ApplicationRecord
 
   belongs_to :category, class_name: 'Subtype', foreign_key: 'category_id', optional: true
   belongs_to :colciencias_call, optional: true
-  belongs_to :journal
   belongs_to :paper_type, class_name: 'Subtype', foreign_key: 'paper_type_id', optional: true
   belongs_to :research_group
 
