@@ -86,7 +86,7 @@ module Swagger::ScientificNoteSchema
         end
         schema do
           property :scientific_note do
-            property :created_by do
+            property :updated_by do
               key :type, :integer
               key :format, :int64
             end
