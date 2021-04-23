@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_22_184830) do
+ActiveRecord::Schema.define(version: 2021_04_22_212238) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -516,17 +516,6 @@ ActiveRecord::Schema.define(version: 2021_04_22_184830) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-  end
-
-  create_table "editorials", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.boolean "active", default: true
-    t.bigint "created_by"
-    t.bigint "updated_by"
-    t.index ["created_by"], name: "index_editorials_on_created_by"
-    t.index ["updated_by"], name: "index_editorials_on_updated_by"
   end
 
   create_table "entity_types", force: :cascade do |t|
@@ -1440,8 +1429,6 @@ ActiveRecord::Schema.define(version: 2021_04_22_184830) do
   add_foreign_key "documents", "subtypes", column: "document_type_id"
   add_foreign_key "documents", "users", column: "created_by"
   add_foreign_key "documents", "users", column: "updated_by"
-  add_foreign_key "editorials", "users", column: "created_by"
-  add_foreign_key "editorials", "users", column: "updated_by"
   add_foreign_key "events", "colciencias_calls"
   add_foreign_key "events", "research_groups"
   add_foreign_key "events", "subtypes", column: "category_id"
