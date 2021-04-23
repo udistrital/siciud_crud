@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_23_230653) do
+ActiveRecord::Schema.define(version: 2021_04_23_230849) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -831,17 +831,6 @@ ActiveRecord::Schema.define(version: 2021_04_23_230653) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "journals", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.boolean "active", default: true
-    t.bigint "created_by"
-    t.bigint "updated_by"
-    t.index ["created_by"], name: "index_journals_on_created_by"
-    t.index ["updated_by"], name: "index_journals_on_updated_by"
-  end
-
   create_table "new_animal_breeds", force: :cascade do |t|
     t.string "name"
     t.date "date"
@@ -1486,8 +1475,6 @@ ActiveRecord::Schema.define(version: 2021_04_23_230653) do
   add_foreign_key "ip_livestock_breeds", "subtypes", column: "category_id"
   add_foreign_key "ip_livestock_breeds", "users", column: "created_by"
   add_foreign_key "ip_livestock_breeds", "users", column: "updated_by"
-  add_foreign_key "journals", "users", column: "created_by"
-  add_foreign_key "journals", "users", column: "updated_by"
   add_foreign_key "new_animal_breeds", "colciencias_calls"
   add_foreign_key "new_animal_breeds", "geo_cities"
   add_foreign_key "new_animal_breeds", "research_groups"
