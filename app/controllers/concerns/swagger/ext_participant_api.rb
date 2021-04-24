@@ -2,6 +2,16 @@ module Swagger::ExtParticipantApi
   extend ActiveSupport::Concern
   include Swagger::Blocks
 
+  PRODUCT_ARRAY = [:books, :book_chapters,
+                   :ip_livestock_breeds, :new_animal_breeds,
+                   :papers, :patents, :research_creation_works,
+                   :scientific_notes, :vegetable_varieties,
+                   :industrial_designs, :integrated_circuit_diagrams,
+                   :software, :plant_ind_prototypes,
+                   :new_scientific_records,
+                   :events,
+                   :degree_works]
+
   included do
     swagger_path '/{product_name}/{producible_id}/ext_participants/{id}' do
       operation :get do
@@ -15,7 +25,7 @@ module Swagger::ExtParticipantApi
           key :in, :path
           key :description, 'Product name or production name to fetch, e. g.,
             books, papers and patents, among others (see all the names of the production "url names").'
-          key :enum, $product_array
+          key :enum, PRODUCT_ARRAY
           key :required, true
           key :type, :string
         end
@@ -62,7 +72,7 @@ module Swagger::ExtParticipantApi
           key :in, :path
           key :description, 'Product name or production name to fetch, e. g.,
             books, papers and patents, among others (see all the names of the production "url names").'
-          key :enum, $product_array
+          key :enum, PRODUCT_ARRAY
           key :required, true
           key :type, :string
         end
@@ -120,7 +130,7 @@ module Swagger::ExtParticipantApi
           key :in, :path
           key :description, 'Product name or production name to fetch, e. g.,
             books, papers and patents, among others (see all the names of the production "url names").'
-          key :enum, $product_array
+          key :enum, PRODUCT_ARRAY
           key :required, true
           key :type, :string
         end
@@ -157,7 +167,7 @@ module Swagger::ExtParticipantApi
           key :in, :path
           key :description, 'Product name or production name to fetch, e. g.,
             books, papers and patents, among others (see all the names of the production "url names").'
-          key :enum, $product_array
+          key :enum, PRODUCT_ARRAY
           key :required, true
           key :type, :string
         end
