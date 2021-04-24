@@ -72,7 +72,7 @@ module Api
       # Only allow a trusted parameter "white list" through.
       def rcw_params_to_create
         params.require(:research_creation_work).permit(
-          :title, :creation_and_selection_date, :nature_id,
+          :title, :colciencias_call_id, :creation_and_selection_date, :nature_id,
           :registered_project_title, :url, :observation, :knwl_spec_area_id,
           :category_id, :geo_city_id, :created_by, work_type_ids: []
         )
@@ -80,7 +80,7 @@ module Api
 
       def rcw_params_to_update
         params.require(:research_creation_work).permit(
-          :title, :creation_and_selection_date, :nature_id,
+          :title, :colciencias_call_id, :creation_and_selection_date, :nature_id,
           :registered_project_title, :url, :observation, :knwl_spec_area_id,
           :category_id, :geo_city_id, :updated_by, work_type_ids: []
         )

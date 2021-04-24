@@ -24,14 +24,7 @@ module Api
 
       # POST /research_group/:id/papers
       def create
-        @paper = @research_group.papers.new(
-          paper_params_to_create.except(:journal_name))
-        journal = set_journal(params[:paper][:journal_name], @paper.created_by)
-        if journal
-          @paper.journal = journal
-        else
-          return
-        end
+        @paper = @research_group.papers.new(paper_params_to_create)
 
         if @paper.save
           render json: @paper, status: :created
@@ -42,26 +35,10 @@ module Api
 
       # PATCH/PUT /research_group/:id/papers/1
       def update
-        journal = set_journal(params[:paper][:journal_name], @paper.created_by)
-        if journal
-          @paper.journal = journal
+        if @paper.update(paper_params_to_update)
+          render json: @paper
         else
-          return
-        end
-
-        if @paper.created_by.nil?
-          # Update user of created_by only this is nil
-          if @paper.update(paper_params_to_update.except(:journal_name))
-            render json: @paper
-          else
-            render json: @paper.errors, status: :unprocessable_entity
-          end
-        else
-          if @paper.update(paper_params_to_update.except(:journal_name))
-            render json: @paper
-          else
-            render json: @paper.errors, status: :unprocessable_entity
-          end
+          render json: @paper.errors, status: :unprocessable_entity
         end
       end
 

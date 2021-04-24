@@ -2,6 +2,17 @@ module Swagger::DocumentApi
   extend ActiveSupport::Concern
   include Swagger::Blocks
 
+  product_array = [:books, :book_chapters,
+                   :ip_livestock_breeds, :new_animal_breeds,
+                   :papers, :patents, :research_creation_works,
+                   :scientific_notes, :vegetable_varieties,
+                   :industrial_designs, :integrated_circuit_diagrams,
+                   :software, :plant_ind_prototypes,
+                   :new_scientific_records,
+                   :events,
+                   :degree_works]
+  RU_PRODUCT_ARRAY = [:research_units] + product_array
+
   included do
     swagger_path '/{context}/{context_id}/documents/{id}' do
       operation :get do
@@ -15,15 +26,7 @@ module Swagger::DocumentApi
           key :in, :path
           key :description, 'Research units, product name or production name to fetch, e. g.,
             research_units, books, papers and patents, among others (see all the names of the production "url names").'
-          key :enum, [:research_units, :books, :book_chapters,
-                      :ip_livestock_breeds, :new_animal_breeds,
-                      :papers, :patents, :research_creation_works,
-                      :scientific_notes, :vegetable_varieties,
-                      :industrial_designs, :integrated_circuit_diagrams,
-                      :software, :plant_ind_prototypes,
-                      :new_scientific_records,
-                      :events,
-                      :degree_works]
+          key :enum, RU_PRODUCT_ARRAY
           key :required, true
           key :type, :string
         end
@@ -72,15 +75,7 @@ module Swagger::DocumentApi
           key :in, :path
           key :description, 'Research units, product name or production name to fetch, e. g.,
             research_units, books, papers and patents, among others (see all the names of the production "url names").'
-          key :enum, [:research_units, :books, :book_chapters,
-                      :ip_livestock_breeds, :new_animal_breeds,
-                      :papers, :patents, :research_creation_works,
-                      :scientific_notes, :vegetable_varieties,
-                      :industrial_designs, :integrated_circuit_diagrams,
-                      :software, :plant_ind_prototypes,
-                      :new_scientific_records,
-                      :events,
-                      :degree_works]
+          key :enum, RU_PRODUCT_ARRAY
           key :required, true
           key :type, :string
         end
@@ -140,15 +135,7 @@ module Swagger::DocumentApi
           key :in, :path
           key :description, 'Research units, product name or production name to fetch, e. g.,
             research_units, books, papers and patents, among others (see all the names of the production "url names").'
-          key :enum, [:research_units, :books, :book_chapters,
-                      :ip_livestock_breeds, :new_animal_breeds,
-                      :papers, :patents, :research_creation_works,
-                      :scientific_notes, :vegetable_varieties,
-                      :industrial_designs, :integrated_circuit_diagrams,
-                      :software, :plant_ind_prototypes,
-                      :new_scientific_records,
-                      :events,
-                      :degree_works]
+          key :enum, RU_PRODUCT_ARRAY
           key :required, true
           key :type, :string
         end
@@ -181,15 +168,7 @@ module Swagger::DocumentApi
           key :in, :path
           key :description, 'Research units, product name or production name to fetch, e. g.,
             research_units, books, papers and patents, among others (see all the names of the production "url names").'
-          key :enum, [:research_units, :books, :book_chapters,
-                      :ip_livestock_breeds, :new_animal_breeds,
-                      :papers, :patents, :research_creation_works,
-                      :scientific_notes, :vegetable_varieties,
-                      :industrial_designs, :integrated_circuit_diagrams,
-                      :software, :plant_ind_prototypes,
-                      :new_scientific_records,
-                      :events,
-                      :degree_works]
+          key :enum, RU_PRODUCT_ARRAY
           key :required, true
           key :type, :string
         end

@@ -3,7 +3,7 @@ module Swagger::PaperApi
   include Swagger::Blocks
 
   included do
-    swagger_path '/research_units/{research_unit_id}/papers/{id}' do
+    swagger_path '/research_units/{research_group_id}/papers/{id}' do
       operation :get do
         key :summary, 'Get a Paper of a Research Unit by ID'
         key :description, 'Returns a single paper'
@@ -11,7 +11,7 @@ module Swagger::PaperApi
         key :produces, ['application/json',]
         key :tags, ['Products::GNK::Papers']
 
-        parameter name: :research_unit_id do
+        parameter name: :research_group_id do
           key :in, :path
           key :description, 'ID of research unit to fetch'
           key :required, true
@@ -51,7 +51,7 @@ module Swagger::PaperApi
         key :produces, ['application/json',]
         key :tags, ['Products::GNK::Papers']
 
-        parameter name: :research_unit_id do
+        parameter name: :research_group_id do
           key :in, :path
           key :description, 'ID of research unit to fetch'
           key :required, true
@@ -94,7 +94,7 @@ module Swagger::PaperApi
       end
     end
 
-    swagger_path '/research_units/{research_unit_id}/papers/' do
+    swagger_path '/research_units/{research_group_id}/papers/' do
       operation :get do
         key :summary, 'Get all Papers'
         key :description, 'Returns all papers'
@@ -102,7 +102,7 @@ module Swagger::PaperApi
         key :produces, ['application/json',]
         key :tags, ['Products::GNK::Papers']
 
-        parameter name: :research_unit_id do
+        parameter name: :research_group_id do
           key :in, :path
           key :description, 'ID of research unit to fetch'
           key :required, true
@@ -131,7 +131,7 @@ module Swagger::PaperApi
         key :produces, ['application/json',]
         key :tags, ['Products::GNK::Papers']
 
-        parameter name: :research_unit_id do
+        parameter name: :research_group_id do
           key :in, :path
           key :description, 'ID of research unit to fetch'
           key :required, true
@@ -165,5 +165,59 @@ module Swagger::PaperApi
         end
       end
     end
+
+    swagger_path '/research_units/{research_group_id}/papers/{id}/active' do
+      operation :put do
+        key :summary, 'Activate or deactivate a Paper by ID'
+        key :description, 'Returns the activated/deactivated paper'
+        key :operationId, :change_active_paper
+        key :produces, ['application/json',]
+        key :tags, ['Products::GNK::Papers']
+
+        parameter name: :research_group_id do
+          key :in, :path
+          key :description, 'ID of research unit to fetch'
+          key :required, true
+          key :type, :integer
+          key :format, :int64
+        end
+
+        parameter name: :id do
+          key :in, :path
+          key :description, 'ID of paper of a research unit to fetch'
+          key :required, true
+          key :type, :integer
+          key :format, :int64
+        end
+
+        parameter name: :paper do
+          key :in, :body
+          key :description, 'Paper to activate/deactivate'
+          key :required, true
+          schema do
+            property :paper do
+              key :'$ref', :ChangeActive
+            end
+          end
+        end
+
+        response 200 do
+          key :description, 'paper response'
+          schema do
+            key :'$ref', :PaperOutput
+          end
+        end
+        response 422 do
+          key :description, 'Unprocessable Entity'
+          schema do
+            key :'$ref', :ErrorUnprocessableEntity
+          end
+        end
+        response :default do
+          key :description, 'Unexpected Error'
+        end
+      end
+    end
+
   end
 end

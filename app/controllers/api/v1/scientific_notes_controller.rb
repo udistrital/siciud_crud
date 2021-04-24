@@ -25,14 +25,7 @@ module Api
       # POST /research_group/:id/scientific_notes
       def create
         @scientific_note = @research_group.scientific_notes.new(
-          sci_note_params_to_create.except(:journal_name))
-        journal = set_journal(params[:scientific_note][:journal_name],
-                              @scientific_note.created_by)
-        if journal
-          @scientific_note.journal = journal
-        else
-          return
-        end
+          sci_note_params_to_create)
 
         if @scientific_note.save
           render json: @scientific_note, status: :created
@@ -43,16 +36,7 @@ module Api
 
       # PATCH/PUT /research_group/:id/scientific_notes/1
       def update
-        journal = set_journal(params[:scientific_note][:journal_name],
-                              @scientific_note.created_by)
-        if journal
-          @scientific_note.journal = journal
-        else
-          return
-        end
-
-        if @scientific_note.update(
-          sci_note_params_to_update.except(:journal_name))
+        if @scientific_note.update(sci_note_params_to_update)
           render json: @scientific_note
         else
           render json: @scientific_note.errors, status: :unprocessable_entity
