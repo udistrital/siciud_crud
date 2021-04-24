@@ -9,6 +9,7 @@ module Api
       # GET /research_creation_works/:id/awards
       def index
         @awards = @research_creation_work.awards
+        @awards = DxService.load(@awards, params)
 
         render json: @awards
       end
