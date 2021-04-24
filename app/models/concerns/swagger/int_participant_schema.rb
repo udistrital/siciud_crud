@@ -4,69 +4,48 @@ module Swagger::IntParticipantSchema
 
   included do
     swagger_schema :IntParticipant do
-      key :required, [:id]
-      property :id do
-        key :type, :integer
-        key :format, :int64
-      end
       property :participant_type_id do
         key :type, :integer
         key :format, :int64
       end
-      property  :producible_id do
+      property :researcher_id do
         key :type, :integer
         key :format, :int64
-      end
-      property  :producible_type do
-        key :type, :string
-      end
-      property  :researcher_id do
-        key :type, :integer
-        key :format, :int64
-      end
-      property :active do
-        key :type, :boolean
-        key :default, true
-      end
-      property :created_by do
-        key :type, :integer
-        key :format, :int64
-      end
-      property :updated_by do
-        key :type, :integer
-        key :format, :int64
-      end
-      property :created_at do
-        key :type, :string
-        key :format, 'date-time'
-      end
-      property :updated_at do
-        key :type, :string
-        key :format, 'date-time'
       end
     end
 
-    swagger_schema :IntParticipantInput do
-      property :int_participant do
-        property :participant_type_id do
-          key :type, :integer
-          key :format, :int64
+    swagger_schema :IntParticipantInputPut do
+      allOf do
+        schema do
+          property :int_participant do
+            key :'$ref', :IntParticipant
+          end
         end
-        property  :researcher_id do
-          key :type, :integer
-          key :format, :int64
+        schema do
+          property :int_participant do
+            property :updated_by do
+              key :type, :integer
+              key :format, :int64
+            end
+          end
         end
-        property :active do
-          key :type, :boolean
-          key :default, true
+      end
+    end
+
+    swagger_schema :IntParticipantInputPost do
+      allOf do
+        schema do
+          property :int_participant do
+            key :'$ref', :IntParticipant
+          end
         end
-        property :created_by do
-          key :type, :integer
-          key :format, :int64
-        end
-        property :updated_by do
-          key :type, :integer
-          key :format, :int64
+        schema do
+          property :int_participant do
+            property :created_by do
+              key :type, :integer
+              key :format, :int64
+            end
+          end
         end
       end
     end
@@ -76,7 +55,60 @@ module Swagger::IntParticipantSchema
         schema do
           key :'$ref', :IntParticipant
         end
+        schema do
+          property :id do
+            key :type, :integer
+            key :format, :int64
+          end
+          property :oas_researcher_id do
+            key :type, :string
+          end
+          property :participant_type_name do
+            key :type, :string
+          end
+          property :product_type_id do
+            key :type, :integer
+            key :format, :int64
+          end
+          property :product_type do
+            key :type, :string
+          end
+          property :active do
+            key :type, :boolean
+            key :default, true
+          end
+          property :created_by do
+            key :type, :integer
+            key :format, :int64
+          end
+          property :updated_by do
+            key :type, :integer
+            key :format, :int64
+          end
+          property :created_at do
+            key :type, :string
+            key :format, 'date-time'
+          end
+          property :updated_at do
+            key :type, :string
+            key :format, 'date-time'
+          end
+        end
       end
     end
+
+    swagger_schema :IntParticipantDxOutput do
+      allOf do
+        schema do
+          property :data do
+            key :type, :array
+            items do
+              key :'$ref', :IntParticipantOutput
+            end
+          end
+        end
+      end
+    end
+
   end
 end
