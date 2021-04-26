@@ -21,10 +21,6 @@ module Swagger::IndustrialDesignSchema
         key :type, :integer
         key :format, :int64
       end
-      property :research_group_id do
-        key :type, :integer
-        key :format, :int64
-      end
       property :colciencias_call_id do
         key :type, :integer
         key :format, :int64
@@ -80,6 +76,10 @@ module Swagger::IndustrialDesignSchema
           key :'$ref', :IndustrialDesign
         end
         schema do
+          property :id do
+            key :type, :integer
+            key :format, :int64
+          end
           property :category_name do
             key :type, :string
           end
@@ -106,6 +106,10 @@ module Swagger::IndustrialDesignSchema
           end
           property :geo_state_name do
             key :type, :string
+          end
+          property :research_group_id do
+            key :type, :integer
+            key :format, :int64
           end
           property :active do
             key :type, :boolean

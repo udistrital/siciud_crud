@@ -165,5 +165,59 @@ module Swagger::IndustrialDesignApi
         end
       end
     end
+
+    swagger_path '/research_units/{research_group_id}/industrial_designs/{id}/active' do
+      operation :put do
+        key :summary, 'Activate or deactivate a Industrial Design by ID'
+        key :description, 'Returns the activated/deactivated Industrial Design'
+        key :operationId, :change_active_industrial_design_by_id
+        key :produces, ['application/json',]
+        key :tags, ['Products::TDI::IndustrialDesign']
+
+        parameter name: :research_group_id do
+          key :in, :path
+          key :description, 'ID of research unit to fetch'
+          key :required, true
+          key :type, :integer
+          key :format, :int64
+        end
+
+        parameter name: :id do
+          key :in, :path
+          key :description, 'ID of Industrial Design of a research unit to fetch'
+          key :required, true
+          key :type, :integer
+          key :format, :int64
+        end
+
+        parameter name: :industrial_design do
+          key :in, :body
+          key :description, 'Industrial Design to activate/deactivate'
+          key :required, true
+          schema do
+            property :industrial_design do
+              key :'$ref', :ChangeActive
+            end
+          end
+        end
+
+        response 200 do
+          key :description, 'Industrial Design response'
+          schema do
+            key :'$ref', :IndustrialDesignOutput
+          end
+        end
+        response 422 do
+          key :description, 'Unprocessable Entity'
+          schema do
+            key :'$ref', :ErrorUnprocessableEntity
+          end
+        end
+        response :default do
+          key :description, 'Unexpected Error'
+        end
+      end
+    end
+
   end
 end
