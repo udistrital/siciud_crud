@@ -3,7 +3,7 @@ module Swagger::SoftwareApi
   include Swagger::Blocks
 
   included do
-    swagger_path '/research_units/{research_unit_id}/software/{id}' do
+    swagger_path '/research_units/{research_group_id}/software/{id}' do
       operation :get do
         key :summary, 'Get a Software of a Research Unit by ID'
         key :description, 'Returns a single software'
@@ -11,7 +11,7 @@ module Swagger::SoftwareApi
         key :produces, ['application/json',]
         key :tags, ['Products::TDI::Software']
 
-        parameter name: :research_unit_id do
+        parameter name: :research_group_id do
           key :in, :path
           key :description, 'ID of research unit to fetch'
           key :required, true
@@ -51,7 +51,7 @@ module Swagger::SoftwareApi
         key :produces, ['application/json',]
         key :tags, ['Products::TDI::Software']
 
-        parameter name: :research_unit_id do
+        parameter name: :research_group_id do
           key :in, :path
           key :description, 'ID of research unit to fetch'
           key :required, true
@@ -94,7 +94,7 @@ module Swagger::SoftwareApi
       end
     end
 
-    swagger_path '/research_units/{research_unit_id}/software/' do
+    swagger_path '/research_units/{research_group_id}/software/' do
       operation :get do
         key :summary, 'Get all Software'
         key :description, 'Returns all software'
@@ -102,7 +102,7 @@ module Swagger::SoftwareApi
         key :produces, ['application/json',]
         key :tags, ['Products::TDI::Software']
 
-        parameter name: :research_unit_id do
+        parameter name: :research_group_id do
           key :in, :path
           key :description, 'ID of research unit to fetch'
           key :required, true
@@ -131,7 +131,7 @@ module Swagger::SoftwareApi
         key :produces, ['application/json',]
         key :tags, ['Products::TDI::Software']
 
-        parameter name: :research_unit_id do
+        parameter name: :research_group_id do
           key :in, :path
           key :description, 'ID of research unit to fetch'
           key :required, true
@@ -165,5 +165,57 @@ module Swagger::SoftwareApi
         end
       end
     end
+
+    swagger_path '/research_units/{research_group_id}/software/{id}/active' do
+      operation :put do
+        key :summary, 'Activate or deactivate a Software by ID'
+        key :description, 'Returns the activated/deactivated software'
+        key :operationId, :change_active_software
+        key :produces, ['application/json',]
+        key :tags, ['Products::TDI::Software']
+
+        parameter name: :research_group_id do
+          key :in, :path
+          key :description, 'ID of research unit to fetch'
+          key :required, true
+          key :type, :integer
+          key :format, :int64
+        end
+
+        parameter name: :id do
+          key :in, :path
+          key :description, 'ID of software of a research unit to fetch'
+          key :required, true
+          key :type, :integer
+          key :format, :int64
+        end
+
+        parameter name: :software do
+          key :in, :body
+          key :description, 'Software to update'
+          key :required, true
+          schema do
+            key :'$ref', :SoftwareInputPut
+          end
+        end
+
+        response 200 do
+          key :description, 'Software response'
+          schema do
+            key :'$ref', :SoftwareOutput
+          end
+        end
+        response 422 do
+          key :description, 'Unprocessable Entity'
+          schema do
+            key :'$ref', :ErrorUnprocessableEntity
+          end
+        end
+        response :default do
+          key :description, 'Unexpected Error'
+        end
+      end
+    end
+
   end
 end
