@@ -23,13 +23,13 @@ Rails.application.routes.draw do
       end
 
       # Types and Subtypes endpoints
-      resources :types, only: [:index, :show, :create, :update] do
-        resources :subtypes, only: [:index, :show, :create, :update]
-        put "/subtypes/:id/active", to: "subtypes#change_active"
-      end
-      get "/subtypes", to: "subtypes#all_subtypes"
-      get "/types_all", to: "types#all_types_and_subtypes"
+      resources :types, only: [:index, :show, :create, :update]
       put "/types/:id/active", to: "types#change_active"
+
+      resources :subtypes, only: [:index, :show, :create, :update]
+      put "/subtypes/:id/active", to: "subtypes#change_active"
+
+      get "/types_all", to: "types#all_types_and_subtypes"
 
       #Enpoint para actualizar los documentos de los convenios
       put "agreement/:id/attach/", to: "agreement#attach"
