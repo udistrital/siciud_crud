@@ -4,8 +4,7 @@ module Api
       include Swagger::SubtypeApi
 
       before_action :set_type, only: [:index, :show, :create, :update, :change_active]
-      before_action :set_subtype, only: [:show, :change_active]
-      before_action :set_subtype_to_update, only: [:update]
+      before_action :set_subtype, only: [:show, :update, :change_active]
       before_action only: [:change_active] do
         active_in_body_params? subtype_params_to_deactivate
       end
@@ -34,23 +33,10 @@ module Api
 
       # PATCH/PUT types/:type_id/subtypes/1
       def update
-        if @type.id != params[:type_id]
-          if @subtype.update(subtype_params_to_update)
-            @subtype.type_id = params[:type_id]
-            if @subtype.save
-              render json: @subtype
-            else
-              render json: @subtype.errors, status: :unprocessable_entity
-            end
-          else
-            render json: @subtype.errors, status: :unprocessable_entity
-          end
+        if @subtype.update(subtype_params_to_update)
+          render json: @subtype
         else
-          if @subtype.update(subtype_params_to_update)
-            render json: @subtype
-          else
-            render json: @subtype.errors, status: :unprocessable_entity
-          end
+          render json: @subtype.errors, status: :unprocessable_entity
         end
       end
 
@@ -80,18 +66,14 @@ module Api
         @subtype = @type.subtypes.find(params[:id])
       end
 
-      def set_subtype_to_update
-        @subtype = Subtype.find(params[:id])
-      end
-
       # Only allow a trusted parameter "white list" through.
       def subtype_params_to_create
-        params.require(:subtype).permit(:st_name, :st_description, :parent_id,
+        params.require(:subtype).permit(:st_name, :st_description, :parent_id, :type_id,
                                         :created_by)
       end
 
       def subtype_params_to_update
-        params.require(:subtype).permit(:st_name, :st_description, :parent_id,
+        params.require(:subtype).permit(:st_name, :st_description, :parent_id, :type_id,
                                         :updated_by)
       end
 
