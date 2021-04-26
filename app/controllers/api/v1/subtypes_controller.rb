@@ -3,26 +3,25 @@ module Api
     class SubtypesController < ApplicationController
       include Swagger::SubtypeApi
 
-      before_action :set_type, only: [:index, :show, :create, :update, :change_active]
       before_action :set_subtype, only: [:show, :update, :change_active]
       before_action only: [:change_active] do
         active_in_body_params? subtype_params_to_deactivate
       end
 
-      # GET types/:type_id/subtypes
+      # GET /subtypes
       def index
-        @subtypes = @type.subtypes
+        @subtypes = Subtype.all.order(:id)
         render json: @subtypes
       end
 
-      # GET types/:type_id/subtypes/1
+      # GET /subtypes/1
       def show
         render json: @subtype
       end
 
-      # POST types/:type_id/subtypes
+      # POST /subtypes
       def create
-        @subtype = @type.subtypes.new(subtype_params_to_create)
+        @subtype = Subtype.new(subtype_params_to_create)
 
         if @subtype.save
           render json: @subtype, status: :created
@@ -40,7 +39,7 @@ module Api
         end
       end
 
-      # PUT types/:type_id/subtypes/1/active
+      # PUT /subtypes/1/active
       def change_active
         if @subtype.update(subtype_params_to_deactivate)
           render json: @subtype
@@ -50,30 +49,31 @@ module Api
       end
 
       # GET /subtypes
-      def all_subtypes
-        @subtypes = Subtype.all.order(:id)
+      def subtypes_by_type
+        @type = Type.find(params[:type_id])
+        @subtypes = @type.subtypes.order(:id)
+
         render json: @subtypes
       end
 
       private
 
       # Use callbacks to share common setup or constraints between actions.
-      def set_type
-        @type = Type.find(params[:type_id])
-      end
 
       def set_subtype
-        @subtype = @type.subtypes.find(params[:id])
+        @subtype = Subtype.find(params[:id])
       end
 
       # Only allow a trusted parameter "white list" through.
       def subtype_params_to_create
-        params.require(:subtype).permit(:st_name, :st_description, :parent_id, :type_id,
+        params.require(:subtype).permit(:st_name, :st_description,
+                                        :parent_id, :type_id,
                                         :created_by)
       end
 
       def subtype_params_to_update
-        params.require(:subtype).permit(:st_name, :st_description, :parent_id, :type_id,
+        params.require(:subtype).permit(:st_name, :st_description,
+                                        :parent_id, :type_id,
                                         :updated_by)
       end
 
