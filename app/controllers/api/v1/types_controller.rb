@@ -3,10 +3,7 @@ module Api
     class TypesController < ApplicationController
       include Swagger::TypeApi
 
-      before_action :set_type, only: [:show, :update, :change_active]
-      before_action only: [:change_active] do
-        active_in_body_params? type_params_to_deactivate
-      end
+      before_action :set_type, only: [:show, :update]
 
       # GET /types
       def index
@@ -40,15 +37,6 @@ module Api
         end
       end
 
-      # PUT /types/1/active
-      def change_active
-        if @type.update(type_params_to_deactivate)
-          render json: @type
-        else
-          render json: @type.errors, status: :unprocessable_entity
-        end
-      end
-
       # GET /types_all
       def all_types_and_subtypes
         @types = CompleteType.all
@@ -66,16 +54,12 @@ module Api
       # Only allow a trusted parameter "white list" through.
       def type_params_to_create
         params.require(:type).permit(:t_name, :t_description,
-                                     :created_by)
+                                     :active, :created_by)
       end
 
       def type_params_to_update
         params.require(:type).permit(:t_name, :t_description,
-                                     :updated_by)
-      end
-
-      def type_params_to_deactivate
-        params.require(:type).permit(:active, :updated_by)
+                                     :active, :updated_by)
       end
     end
   end

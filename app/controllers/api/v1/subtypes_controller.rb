@@ -3,10 +3,7 @@ module Api
     class SubtypesController < ApplicationController
       include Swagger::SubtypeApi
 
-      before_action :set_subtype, only: [:show, :update, :change_active]
-      before_action only: [:change_active] do
-        active_in_body_params? subtype_params_to_deactivate
-      end
+      before_action :set_subtype, only: [:show, :update]
 
       # GET /subtypes
       def index
@@ -39,15 +36,6 @@ module Api
         end
       end
 
-      # PUT /subtypes/1/active
-      def change_active
-        if @subtype.update(subtype_params_to_deactivate)
-          render json: @subtype
-        else
-          render json: @subtype.errors, status: :unprocessable_entity
-        end
-      end
-
       # GET /subtypes
       def subtypes_by_type
         @type = Type.find(params[:type_id])
@@ -67,18 +55,14 @@ module Api
       # Only allow a trusted parameter "white list" through.
       def subtype_params_to_create
         params.require(:subtype).permit(:st_name, :st_description,
-                                        :parent_id, :type_id,
+                                        :parent_id, :type_id, :active,
                                         :created_by)
       end
 
       def subtype_params_to_update
         params.require(:subtype).permit(:st_name, :st_description,
-                                        :parent_id, :type_id,
+                                        :parent_id, :type_id, :active,
                                         :updated_by)
-      end
-
-      def subtype_params_to_deactivate
-        params.require(:subtype).permit(:active, :updated_by)
       end
     end
   end
