@@ -16,6 +16,10 @@ module Swagger::VegetableVarietySchema
         key :type, :integer
         key :format, :int64
       end
+      property :colciencias_call_id do
+        key :type, :integer
+        key :format, :int64
+      end
       property :cycle_type_id do
         key :type, :integer
         key :format, :int64
@@ -116,6 +120,13 @@ module Swagger::VegetableVarietySchema
         schema do
           property :category_name do
             key :type, :string
+          end
+          property :colciencias_call_name do
+            key :type, :string
+          end
+          property :colciencias_call_year do
+            key :type, :integer
+            key :format, :int64
           end
           property :cycle_type_name do
             key :type, :string
