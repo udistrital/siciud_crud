@@ -7,8 +7,6 @@ Rails.application.routes.draw do
   get "/api" => redirect("/api/v1/apidocs/")
   namespace :api do
     namespace :v1 do
-      get "country", to: "country#index"
-      get "country/:name", to: "country#show"
       resources :apidocs, only: [:index]
 
       # General endpoints
