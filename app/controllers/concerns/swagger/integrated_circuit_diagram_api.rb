@@ -1,5 +1,4 @@
-module Swagger::Integrated
-  Circuit DiagramApi
+module Swagger::IntegratedCircuitDiagramApi
   extend ActiveSupport::Concern
   include Swagger::Blocks
 
@@ -10,7 +9,7 @@ module Swagger::Integrated
         key :description, 'Returns a single Integrated Circuit Diagram'
         key :operationId, :get_integrated_circuit_diagram_by_id
         key :produces, ['application/json',]
-        key :tags, ['Products::TDI::Integrated Circuit Diagram']
+        key :tags, ['Products::TDI::Integrated Circuit Diagrams']
 
         parameter name: :research_group_id do
           key :in, :path
@@ -50,7 +49,7 @@ module Swagger::Integrated
         key :description, 'Returns the updated Integrated Circuit Diagram'
         key :operationId, :update_integrated_circuit_diagram_by_id
         key :produces, ['application/json',]
-        key :tags, ['Products::TDI::Integrated Circuit Diagram']
+        key :tags, ['Products::TDI::Integrated Circuit Diagrams']
 
         parameter name: :research_group_id do
           key :in, :path
@@ -98,10 +97,10 @@ module Swagger::Integrated
     swagger_path '/research_units/{research_group_id}/integrated_circuit_diagrams/' do
       operation :get do
         key :summary, 'Get all Integrated Circuit Diagram'
-        key :description, 'Returns all Integrated Circuit Diagram'
+        key :description, 'Returns all Integrated Circuit Diagrams'
         key :operationId, :get_integrated_circuit_diagram
         key :produces, ['application/json',]
-        key :tags, ['Products::TDI::Integrated Circuit Diagram']
+        key :tags, ['Products::TDI::Integrated Circuit Diagrams']
 
         parameter name: :research_group_id do
           key :in, :path
@@ -130,7 +129,7 @@ module Swagger::Integrated
         key :description, 'Returns the created Integrated Circuit Diagram'
         key :operationId, :create_integrated_circuit_diagram
         key :produces, ['application/json',]
-        key :tags, ['Products::TDI::Integrated Circuit Diagram']
+        key :tags, ['Products::TDI::Integrated Circuit Diagrams']
 
         parameter name: :research_group_id do
           key :in, :path
@@ -173,7 +172,7 @@ module Swagger::Integrated
         key :description, 'Returns the activated/deactivated Integrated Circuit Diagram'
         key :operationId, :change_active_integrated_circuit_diagram_by_id
         key :produces, ['application/json',]
-        key :tags, ['Products::TDI::Integrated Circuit Diagram']
+        key :tags, ['Products::TDI::Integrated Circuit Diagrams']
 
         parameter name: :research_group_id do
           key :in, :path
@@ -193,7 +192,7 @@ module Swagger::Integrated
 
         parameter name: :integrated_circuit_diagram do
           key :in, :body
-          key :description, 'Integrated Circuit Diagram to activate/deactivate'
+          key :description, 'new Integrated Circuit Diagram to update'
           key :required, true
           schema do
             property :integrated_circuit_diagram do

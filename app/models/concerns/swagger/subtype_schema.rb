@@ -10,6 +10,10 @@ module Swagger::SubtypeSchema
       property :st_description do
         key :type, :string
       end
+      property :type_id do
+        key :type, :integer
+        key :format, :int64
+      end
       property :parent_id do
         key :type, :integer
         key :format, :int64
@@ -64,10 +68,6 @@ module Swagger::SubtypeSchema
           end
           property :parent_name do
             key :type, :string
-          end
-          property :type_id do
-            key :type, :integer
-            key :format, :int64
           end
           property :type_name do
             key :type, :string

@@ -3,21 +3,13 @@ module Swagger::SubtypeApi
   include Swagger::Blocks
 
   included do
-    swagger_path '/types/{type_id}/subtypes/{id}' do
+    swagger_path '/subtypes/{id}' do
       operation :get do
-        key :summary, 'Get a subype of a type by type_id and id'
+        key :summary, 'Get a subypes by id'
         key :description, 'Returns a single subtype'
         key :operationId, :get_subtype_by_id
         key :produces, ['application/json',]
         key :tags, ['Subtypes']
-
-        parameter name: :type_id do
-          key :in, :path
-          key :description, 'ID of type to fetch'
-          key :required, true
-          key :type, :integer
-          key :format, :int64
-        end
 
         parameter name: :id do
           key :in, :path
@@ -45,19 +37,11 @@ module Swagger::SubtypeApi
       end
 
       operation :put do
-        key :summary, 'Update subype of a type by type_id and id'
+        key :summary, 'Update subtype by id'
         key :description, 'Returns the updated subtype'
         key :operationId, :update_subtype
         key :produces, ['application/json',]
         key :tags, ['Subtypes']
-
-        parameter name: :type_id do
-          key :in, :path
-          key :description, 'ID of type to fetch'
-          key :required, true
-          key :type, :integer
-          key :format, :int64
-        end
 
         parameter name: :id do
           key :in, :path
@@ -94,21 +78,13 @@ module Swagger::SubtypeApi
       end
     end
 
-    swagger_path '/types/{type_id}/subtypes/' do
+    swagger_path '/subtypes/' do
       operation :get do
-        key :summary, 'Get all subtypes of a type'
-        key :description, 'Returns all subtypes of a type'
+        key :summary, 'Get all subtypes'
+        key :description, 'Returns all subtypes'
         key :operationId, :get_subtypes
         key :produces, ['application/json',]
         key :tags, ['Subtypes']
-
-        parameter name: :type_id do
-          key :in, :path
-          key :description, 'ID of type to fetch'
-          key :required, true
-          key :type, :integer
-          key :format, :int64
-        end
 
         response 200 do
           key :description, 'subtype response'
@@ -130,14 +106,6 @@ module Swagger::SubtypeApi
         key :operationId, :create_subtype
         key :produces, ['application/json',]
         key :tags, ['Subtypes']
-
-        parameter name: :type_id do
-          key :in, :path
-          key :description, 'ID of type to fetch'
-          key :required, true
-          key :type, :integer
-          key :format, :int64
-        end
 
         parameter name: :subtype do
           key :in, :body
@@ -166,13 +134,21 @@ module Swagger::SubtypeApi
       end
     end
 
-    swagger_path '/subtypes/' do
+    swagger_path '/subtypes/by-type/{type_id}' do
       operation :get do
-        key :summary, 'Get all subtypes'
-        key :description, 'Returns all subtypes'
-        key :operationId, :get_subtypes
+        key :summary, 'Get all subtypes of a type by id'
+        key :description, 'Returns all subtype of a type by id'
+        key :operationId, :get_subtypes_by_type
         key :produces, ['application/json',]
         key :tags, ['Subtypes']
+
+        parameter name: :type_id do
+          key :in, :path
+          key :description, 'ID of type to fetch'
+          key :required, true
+          key :type, :integer
+          key :format, :int64
+        end
 
         response 200 do
           key :description, 'subtype response'
