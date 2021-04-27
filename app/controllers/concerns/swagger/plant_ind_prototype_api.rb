@@ -9,7 +9,7 @@ module Swagger::PlantIndPrototypeApi
         key :description, 'Returns a single Pilot Plant and Industrial Prototypes'
         key :operationId, :get_plant_ind_prototype_by_id
         key :produces, ['application/json',]
-        key :tags, ['Products::TDI::PlantIndPrototypes']
+        key :tags, ['Products::TDI::Pilot Plant and Industrial Prototypes']
 
         parameter name: :research_group_id do
           key :in, :path
@@ -49,7 +49,7 @@ module Swagger::PlantIndPrototypeApi
         key :description, 'Returns the updated Pilot Plant or Industrial Prototype'
         key :operationId, :update_plant_ind_prototype_by_id
         key :produces, ['application/json',]
-        key :tags, ['Products::TDI::PlantIndPrototypes']
+        key :tags, ['Products::TDI::Pilot Plant and Industrial Prototypes']
 
         parameter name: :research_group_id do
           key :in, :path
@@ -100,7 +100,7 @@ module Swagger::PlantIndPrototypeApi
         key :description, 'Returns all Plant or Industrial Prototype'
         key :operationId, :get_plant_ind_prototypes
         key :produces, ['application/json',]
-        key :tags, ['Products::TDI::PlantIndPrototypes']
+        key :tags, ['Products::TDI::Pilot Plant and Industrial Prototypes']
 
         parameter name: :research_group_id do
           key :in, :path
@@ -137,7 +137,7 @@ module Swagger::PlantIndPrototypeApi
         key :description, 'Returns the created Plant or Industrial Prototype'
         key :operationId, :create_plant_ind_prototypes
         key :produces, ['application/json',]
-        key :tags, ['Products::TDI::PlantIndPrototypes']
+        key :tags, ['Products::TDI::Pilot Plant and Industrial Prototypes']
 
         parameter name: :research_group_id do
           key :in, :path
@@ -173,5 +173,59 @@ module Swagger::PlantIndPrototypeApi
         end
       end
     end
+
+    swagger_path '/research_units/{research_group_id}/papers/{id}/active' do
+      operation :put do
+        key :summary, 'Activate or deactivate a Pilot Plant or Industrial Prototype by ID'
+        key :description, 'Returns the activated/deactivated Pilot Plant or Industrial Prototype'
+        key :operationId, :update_plant_ind_prototype_by_id
+        key :produces, ['application/json',]
+        key :tags, ['Products::TDI::Pilot Plant and Industrial Prototypes']
+
+        parameter name: :research_group_id do
+          key :in, :path
+          key :description, 'ID of research unit to fetch'
+          key :required, true
+          key :type, :integer
+          key :format, :int64
+        end
+
+        parameter name: :id do
+          key :in, :path
+          key :description, 'ID of Plant or Industrial Prototype of a research unit to fetch'
+          key :required, true
+          key :type, :integer
+          key :format, :int64
+        end
+
+        parameter name: :plant_ind_prototypes do
+          key :in, :body
+          key :description, 'Pilot Plant or Industrial Prototype to activate/deactivate'
+          key :required, true
+          schema do
+            property :plant_ind_prototypes do
+              key :'$ref', :ChangeActive
+            end
+          end
+        end
+
+        response 200 do
+          key :description, 'Pilot Plant or Industrial Prototype response'
+          schema do
+            key :'$ref', :PlantIndPrototypeOutput
+          end
+        end
+        response 422 do
+          key :description, 'Unprocessable Entity'
+          schema do
+            key :'$ref', :ErrorUnprocessableEntity
+          end
+        end
+        response :default do
+          key :description, 'Unexpected Error'
+        end
+      end
+    end
+
   end
 end

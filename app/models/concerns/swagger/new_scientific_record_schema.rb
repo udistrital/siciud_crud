@@ -86,6 +86,10 @@ module Swagger::NewScientificRecordSchema
           key :'$ref', :NewScientificRecord
         end
         schema do
+          property :id do
+            key :type, :integer
+            key :format, :int64
+          end
           property :category_name do
             key :type, :string
           end

@@ -80,6 +80,10 @@ module Swagger::DegreeWorkSchema
             key :'$ref', :DegreeWork
           end
           schema do
+            property :id do
+              key :type, :integer
+              key :format, :int64
+            end
             property :category_name do
               key :type, :string
             end
