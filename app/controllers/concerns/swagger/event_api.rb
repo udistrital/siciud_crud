@@ -1,15 +1,15 @@
-module Swagger::IpLivestockBreedApi
+module Swagger::EventApi
   extend ActiveSupport::Concern
   include Swagger::Blocks
 
   included do
-    swagger_path '/research_group/{research_group_id}/ip_livestock_breeds/{id}' do
+    swagger_path '/research_units/{research_group_id}/events/{id}' do
       operation :get do
-        key :summary, 'Get a Improved Population of Livestock Breed of a Research Unit by ID'
-        key :description, 'Returns a single improved population of livestock breed of a Research Unit by ID'
-        key :operationId, :get_ip_livestock_breed_by_id
+        key :summary, 'Get a Event of a Research Unit by ID'
+        key :description, 'Returns a single event'
+        key :operationId, :get_event_by_id
         key :produces, ['application/json',]
-        key :tags, ['Products::GNK::Improved Population of Livestock Breeds']
+        key :tags, ['Products::Social Appropriation of Knowledge::Events']
 
         parameter name: :research_group_id do
           key :in, :path
@@ -21,16 +21,16 @@ module Swagger::IpLivestockBreedApi
 
         parameter name: :id do
           key :in, :path
-          key :description, 'ID of improved population of livestock breed of a research unit to fetch'
+          key :description, 'ID of event of a research unit to fetch'
           key :required, true
           key :type, :integer
           key :format, :int64
         end
 
         response 200 do
-          key :description, 'improved population of livestock breed response'
+          key :description, 'event response'
           schema do
-            key :'$ref', :IpLivestockBreedOutput
+            key :'$ref', :EventOutput
           end
         end
         response 404 do
@@ -45,11 +45,11 @@ module Swagger::IpLivestockBreedApi
       end
 
       operation :put do
-        key :summary, 'Update Improved Population of Livestock Breed by ID'
-        key :description, 'Returns the updated improved population of livestock breed of a Research Unit by ID'
-        key :operationId, :update_ip_livestock_breed
+        key :summary, 'Update event by ID'
+        key :description, 'Returns the updated event'
+        key :operationId, :update_event
         key :produces, ['application/json',]
-        key :tags, ['Products::GNK::Improved Population of Livestock Breeds']
+        key :tags, ['Products::Social Appropriation of Knowledge::Events']
 
         parameter name: :research_group_id do
           key :in, :path
@@ -61,25 +61,25 @@ module Swagger::IpLivestockBreedApi
 
         parameter name: :id do
           key :in, :path
-          key :description, 'ID of improved population of livestock breed of a research unit to fetch'
+          key :description, 'ID of event of a research unit to fetch'
           key :required, true
           key :type, :integer
           key :format, :int64
         end
 
-        parameter name: :ip_livestock_breed do
+        parameter name: :event do
           key :in, :body
-          key :description, 'Improved Population of Livestock Breed to update'
+          key :description, 'event to update'
           key :required, true
           schema do
-            key :'$ref', :IpLivestockBreedInput
+            key :'$ref', :EventInputPut
           end
         end
 
         response 200 do
-          key :description, 'improved population of livestock breed response'
+          key :description, 'event response'
           schema do
-            key :'$ref', :IpLivestockBreedOutput
+            key :'$ref', :EventOutput
           end
         end
         response 422 do
@@ -94,13 +94,13 @@ module Swagger::IpLivestockBreedApi
       end
     end
 
-    swagger_path '/research_group/{research_group_id}/ip_livestock_breeds/' do
+    swagger_path '/research_units/{research_group_id}/events/' do
       operation :get do
-        key :summary, 'Get all Improved Population of Livestock Breeds'
-        key :description, 'Returns all improved population of livestock breeds of a Research Unit'
-        key :operationId, :get_ip_livestock_breeds
+        key :summary, 'Get all events'
+        key :description, 'Returns all events'
+        key :operationId, :get_events
         key :produces, ['application/json',]
-        key :tags, ['Products::GNK::Improved Population of Livestock Breeds']
+        key :tags, ['Products::Social Appropriation of Knowledge::Events']
 
         parameter name: :research_group_id do
           key :in, :path
@@ -111,11 +111,11 @@ module Swagger::IpLivestockBreedApi
         end
 
         response 200 do
-          key :description, 'improved population of livestock breed response'
+          key :description, 'event response'
           schema do
             key :type, :array
             items do
-              key :'$ref', :IpLivestockBreedOutput
+              key :'$ref', :EventDxOutput
             end
           end
         end
@@ -125,11 +125,11 @@ module Swagger::IpLivestockBreedApi
       end
 
       operation :post do
-        key :summary, 'Create a new Improved Population of Livestock Breed'
-        key :description, 'Returns the created improved population of livestock breed of a Research Unit'
-        key :operationId, :create_ip_livestock_breed
+        key :summary, 'Create a new event'
+        key :description, 'Returns the created event'
+        key :operationId, :create_event
         key :produces, ['application/json',]
-        key :tags, ['Products::GNK::Improved Population of Livestock Breeds']
+        key :tags, ['Products::Social Appropriation of Knowledge::Events']
 
         parameter name: :research_group_id do
           key :in, :path
@@ -139,19 +139,19 @@ module Swagger::IpLivestockBreedApi
           key :format, :int64
         end
 
-        parameter name: :ip_livestock_breed do
+        parameter name: :event do
           key :in, :body
-          key :description, 'Improved Population of Livestock Breed to register'
+          key :description, 'event to register'
           key :required, true
           schema do
-            key :'$ref', :IpLivestockBreedInput
+            key :'$ref', :EventInputPost
           end
         end
 
         response 201 do
-          key :description, 'improved population of livestock breed response'
+          key :description, 'event response'
           schema do
-            key :'$ref', :IpLivestockBreedOutput
+            key :'$ref', :EventOutput
           end
         end
         response 422 do
@@ -166,13 +166,13 @@ module Swagger::IpLivestockBreedApi
       end
     end
 
-    swagger_path '/research_units/{research_group_id}/ip_livestock_breeds/{id}/active' do
+    swagger_path '/research_units/{research_group_id}/events/{id}/active' do
       operation :put do
-        key :summary, 'Activate or deactivate a Improved Population of Livestock Breed by ID'
-        key :description, 'Returns the activated/deactivated improved population of livestock breed of a Research Unit by ID'
-        key :operationId, :update_ip_livestock_breed
+        key :summary, 'Activate or deactivate a event by ID'
+        key :description, 'Returns the activated/deactivated event'
+        key :operationId, :change_active_event
         key :produces, ['application/json',]
-        key :tags, ['Products::GNK::Improved Population of Livestock Breeds']
+        key :tags, ['Products::Social Appropriation of Knowledge::Events']
 
         parameter name: :research_group_id do
           key :in, :path
@@ -184,27 +184,27 @@ module Swagger::IpLivestockBreedApi
 
         parameter name: :id do
           key :in, :path
-          key :description, 'ID of improved population of livestock breed of a research unit to fetch'
+          key :description, 'ID of event of a research unit to fetch'
           key :required, true
           key :type, :integer
           key :format, :int64
         end
 
-        parameter name: :ip_livestock_breed do
+        parameter name: :event do
           key :in, :body
-          key :description, 'Improved Population of Livestock Breed to update'
+          key :description, 'event to activate/deactivate'
           key :required, true
           schema do
-            property :ip_livestock_breed do
+            property :event do
               key :'$ref', :ChangeActive
             end
           end
         end
 
         response 200 do
-          key :description, 'improved population of livestock breed response'
+          key :description, 'event response'
           schema do
-            key :'$ref', :IpLivestockBreedOutput
+            key :'$ref', :eventOutput
           end
         end
         response 422 do
@@ -218,5 +218,6 @@ module Swagger::IpLivestockBreedApi
         end
       end
     end
+
   end
 end

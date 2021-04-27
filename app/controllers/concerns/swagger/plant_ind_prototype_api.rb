@@ -174,7 +174,7 @@ module Swagger::PlantIndPrototypeApi
       end
     end
 
-    swagger_path '/research_units/{research_group_id}/papers/{id}/active' do
+    swagger_path '/research_units/{research_group_id}/plant_ind_prototypes/{id}/active' do
       operation :put do
         key :summary, 'Activate or deactivate a Pilot Plant or Industrial Prototype by ID'
         key :description, 'Returns the activated/deactivated Pilot Plant or Industrial Prototype'
