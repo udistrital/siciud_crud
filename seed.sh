@@ -8,7 +8,7 @@ rake db:seed
 rake import_oecd:load_data
 rake import_cine:load_data
 # rails import_types_subtypes:create_data
-rails import_types_subtypes:update_data
+#rails import_types_subtypes:update_data
 rake import_research_groups:data
 rake add_group_roles:data
 rake import_researchers:data
