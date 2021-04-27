@@ -1,15 +1,15 @@
-module Swagger::PlantIndPrototypeApi
+module Swagger::EventApi
   extend ActiveSupport::Concern
   include Swagger::Blocks
 
   included do
-    swagger_path '/research_units/{research_group_id}/plant_ind_prototypes/{id}' do
+    swagger_path '/research_units/{research_group_id}/events/{id}' do
       operation :get do
-        key :summary, 'Get a Pilot Plant and Industrial Prototypes of a Research Unit by ID'
-        key :description, 'Returns a single Pilot Plant and Industrial Prototypes'
-        key :operationId, :get_plant_ind_prototype_by_id
+        key :summary, 'Get a Event of a Research Unit by ID'
+        key :description, 'Returns a single event'
+        key :operationId, :get_event_by_id
         key :produces, ['application/json',]
-        key :tags, ['Products::TDI::Pilot Plant and Industrial Prototypes']
+        key :tags, ['Products::Social Appropriation of Knowledge::Events']
 
         parameter name: :research_group_id do
           key :in, :path
@@ -21,16 +21,16 @@ module Swagger::PlantIndPrototypeApi
 
         parameter name: :id do
           key :in, :path
-          key :description, 'ID of Pilot Plant and Industrial Prototypes of a research unit to fetch'
+          key :description, 'ID of event of a research unit to fetch'
           key :required, true
           key :type, :integer
           key :format, :int64
         end
 
         response 200 do
-          key :description, 'Pilot Plant and Industrial Prototypes response'
+          key :description, 'event response'
           schema do
-            key :'$ref', :PlantIndPrototypeOutput
+            key :'$ref', :EventOutput
           end
         end
         response 404 do
@@ -45,11 +45,11 @@ module Swagger::PlantIndPrototypeApi
       end
 
       operation :put do
-        key :summary, 'Update Pilot Plant or Industrial Prototype by ID'
-        key :description, 'Returns the updated Pilot Plant or Industrial Prototype'
-        key :operationId, :update_plant_ind_prototype_by_id
+        key :summary, 'Update event by ID'
+        key :description, 'Returns the updated event'
+        key :operationId, :update_event
         key :produces, ['application/json',]
-        key :tags, ['Products::TDI::Pilot Plant and Industrial Prototypes']
+        key :tags, ['Products::Social Appropriation of Knowledge::Events']
 
         parameter name: :research_group_id do
           key :in, :path
@@ -61,25 +61,25 @@ module Swagger::PlantIndPrototypeApi
 
         parameter name: :id do
           key :in, :path
-          key :description, 'ID of Plant or Industrial Prototype of a research unit to fetch'
+          key :description, 'ID of event of a research unit to fetch'
           key :required, true
           key :type, :integer
           key :format, :int64
         end
 
-        parameter name: :plant_ind_prototypes do
+        parameter name: :event do
           key :in, :body
-          key :description, 'Pilot Plant or Industrial Prototype to update'
+          key :description, 'event to update'
           key :required, true
           schema do
-            key :'$ref', :PlantIndPrototypeInputPut
+            key :'$ref', :EventInputPut
           end
         end
 
         response 200 do
-          key :description, 'Pilot Plant or Industrial Prototype response'
+          key :description, 'event response'
           schema do
-            key :'$ref', :PlantIndPrototypeOutput
+            key :'$ref', :EventOutput
           end
         end
         response 422 do
@@ -94,13 +94,13 @@ module Swagger::PlantIndPrototypeApi
       end
     end
 
-    swagger_path '/research_units/{research_group_id}/plant_ind_prototypes/' do
+    swagger_path '/research_units/{research_group_id}/events/' do
       operation :get do
-        key :summary, 'Get all Plant or Industrial Prototype'
-        key :description, 'Returns all Plant or Industrial Prototype'
-        key :operationId, :get_plant_ind_prototypes
+        key :summary, 'Get all events'
+        key :description, 'Returns all events'
+        key :operationId, :get_events
         key :produces, ['application/json',]
-        key :tags, ['Products::TDI::Pilot Plant and Industrial Prototypes']
+        key :tags, ['Products::Social Appropriation of Knowledge::Events']
 
         parameter name: :research_group_id do
           key :in, :path
@@ -110,20 +110,12 @@ module Swagger::PlantIndPrototypeApi
           key :format, :int64
         end
 
-        parameter name: :plt_type_id do
-          key :in, :query
-          key :description, 'ID of type to fetch'
-          key :required, false
-          key :type, :integer
-          key :format, :int64
-        end
-
         response 200 do
-          key :description, 'Plant or Industrial Prototype response'
+          key :description, 'event response'
           schema do
             key :type, :array
             items do
-              key :'$ref', :PlantIndPrototypeDxOutput
+              key :'$ref', :EventDxOutput
             end
           end
         end
@@ -133,11 +125,11 @@ module Swagger::PlantIndPrototypeApi
       end
 
       operation :post do
-        key :summary, 'Create a new Plant or Industrial Prototype'
-        key :description, 'Returns the created Plant or Industrial Prototype'
-        key :operationId, :create_plant_ind_prototypes
+        key :summary, 'Create a new event'
+        key :description, 'Returns the created event'
+        key :operationId, :create_event
         key :produces, ['application/json',]
-        key :tags, ['Products::TDI::Pilot Plant and Industrial Prototypes']
+        key :tags, ['Products::Social Appropriation of Knowledge::Events']
 
         parameter name: :research_group_id do
           key :in, :path
@@ -147,19 +139,19 @@ module Swagger::PlantIndPrototypeApi
           key :format, :int64
         end
 
-        parameter name: :plant_ind_prototypes do
+        parameter name: :event do
           key :in, :body
-          key :description, 'Plant or Industrial Prototype to register'
+          key :description, 'event to register'
           key :required, true
           schema do
-            key :'$ref', :PlantIndPrototypeInputPost
+            key :'$ref', :EventInputPost
           end
         end
 
         response 201 do
-          key :description, 'Plant or Industrial Prototype response'
+          key :description, 'event response'
           schema do
-            key :'$ref', :PlantIndPrototypeOutput
+            key :'$ref', :EventOutput
           end
         end
         response 422 do
@@ -174,13 +166,13 @@ module Swagger::PlantIndPrototypeApi
       end
     end
 
-    swagger_path '/research_units/{research_group_id}/plant_ind_prototypes/{id}/active' do
+    swagger_path '/research_units/{research_group_id}/events/{id}/active' do
       operation :put do
-        key :summary, 'Activate or deactivate a Pilot Plant or Industrial Prototype by ID'
-        key :description, 'Returns the activated/deactivated Pilot Plant or Industrial Prototype'
-        key :operationId, :update_plant_ind_prototype_by_id
+        key :summary, 'Activate or deactivate a event by ID'
+        key :description, 'Returns the activated/deactivated event'
+        key :operationId, :change_active_event
         key :produces, ['application/json',]
-        key :tags, ['Products::TDI::Pilot Plant and Industrial Prototypes']
+        key :tags, ['Products::Social Appropriation of Knowledge::Events']
 
         parameter name: :research_group_id do
           key :in, :path
@@ -192,27 +184,27 @@ module Swagger::PlantIndPrototypeApi
 
         parameter name: :id do
           key :in, :path
-          key :description, 'ID of Plant or Industrial Prototype of a research unit to fetch'
+          key :description, 'ID of event of a research unit to fetch'
           key :required, true
           key :type, :integer
           key :format, :int64
         end
 
-        parameter name: :plant_ind_prototypes do
+        parameter name: :event do
           key :in, :body
-          key :description, 'Pilot Plant or Industrial Prototype to activate/deactivate'
+          key :description, 'event to activate/deactivate'
           key :required, true
           schema do
-            property :plant_ind_prototypes do
+            property :event do
               key :'$ref', :ChangeActive
             end
           end
         end
 
         response 200 do
-          key :description, 'Pilot Plant or Industrial Prototype response'
+          key :description, 'event response'
           schema do
-            key :'$ref', :PlantIndPrototypeOutput
+            key :'$ref', :eventOutput
           end
         end
         response 422 do
