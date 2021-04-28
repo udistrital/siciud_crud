@@ -1,3 +1,4 @@
+
 # siciud_crud
 
 ## Descripción
@@ -15,9 +16,9 @@ por ejemplo: Actas de creación de las Unidades de Investigación) labor apoyada
 
 # Modelo de Datos
 
-![entrada](https://github.com/udistrital/siciud_crud/blob/master/docs/research-unit-ER.png)
+![entrada](https://github.com/udistrital/siciud_crud/blob/feature-products-pr1/docs/Modulo-Grupos-MER.png)
 
-[Modelo de Datos API SICIUD](https://github.com/udistrital/siciud_crud/blob/master/docs/research-unit-ER.png)
+[Modelo de Datos API SICIUD](https://github.com/udistrital/siciud_crud/blob/feature-products-pr1/docs/Modulo-Grupos-MER.png)
 
 # Especificaciones Técnicas
 
