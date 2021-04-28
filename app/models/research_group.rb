@@ -43,13 +43,7 @@ class ResearchGroup < ApplicationRecord
 
   has_many :degree_works, dependent: :destroy
 
-
   has_many :documents, as: :documentable
-
-  #Validaciones de los campos obligatorios
-  validates :name, :acronym, :cidc_registration_date,
-            :cidc_act_number, :faculty_act_number, :faculty_registration_date,
-            :group_state_id, presence: true
 
   # Tracking inherited from ApplicationRecord, fields:
   # created_by and updated_by, see application_record.rb

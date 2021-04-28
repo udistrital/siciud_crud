@@ -163,6 +163,8 @@ namespace :import_research_groups do
       facultyregistrationdate = case row[:cgsfechafac]
                                 when 'NULL'
                                   '12/12/2000'
+                                when nil
+                                  '12/12/2000'
                                 else
                                   row[:cgsfechafac]
                                 end

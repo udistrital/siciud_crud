@@ -28,8 +28,13 @@ namespace :import_oecd do
       superadmin = User.where(user_role_id: 1, identification_number: '1234567890',
                               oas_user_id: nil).limit(1)[0]
       if superadmin.nil?
+        print_message('OECD - Creating superadmin', task_logger)
         superadmin = User.create!(user_role_id: 1, identification_number: '1234567890')
+        puts superadmin.errors
+        puts "que pasa"
+        print_message('OECD - Created superadmin', task_logger)
       end
+      puts "salte"
       superadmin_id = superadmin.id
     rescue ActiveRecord::RecordInvalid => e_ri
       print_error_message_and_exit("Error creating or validating superadmin. #{e_ri}",

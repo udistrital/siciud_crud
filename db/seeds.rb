@@ -22,4 +22,6 @@ UserRole.create(name: "Gestor")
 UserRole.create(name: "Editor")
 UserRole.create(name: "Lector")
 UserRole.create(name: "Integrante")
+
+User.create!(user_role_id: 1, identification_number: '1234567890')
 puts "Seed complete"
