@@ -109,7 +109,7 @@ namespace :import_research_groups do
     ActiveRecord::Base.connection.reset_pk_sequence!('faculty_ids_research_groups')
     ActiveRecord::Base.connection.reset_pk_sequence!('curricular_prj_ids_research_groups')
     ActiveRecord::Base.connection.reset_pk_sequence!('research_groups')
-    CSV.foreach('lib/data/cidc_grup_semill-23122020.csv', { :headers => [
+    CSV.foreach('lib/data/cidc_grup_semill_202104281057.csv', { :headers => [
       :cgsid,
       :cgscodigo,
       :cgsnombre,
@@ -177,13 +177,22 @@ namespace :import_research_groups do
                                 end
       end
 
+      unit_type_id = case row[:cgstipo]
+                     when "1"
+                       "3"
+                     when "2"
+                       "4"
+                     else
+                       row[:cgstipo]
+                     end
+
       begin
         groups = ResearchGroup.create!(
           legacy_siciud_id: row[:cgsid],
           name: row[:cgsnombre],
           acronym: row[:cgssiglas],
           group_state_id: row[:cgsestado],
-          group_type_id: row[:cgstipo],
+          group_type_id: unit_type_id,
           cidc_registration_date: row[:cgsfeccreacion],
           cidc_act_number: row[:cgsnumerocidc],
           faculty_registration_date: facultyregistrationdate,
@@ -197,7 +206,6 @@ namespace :import_research_groups do
           vision: row[:cgsvision],
           description: row[:cgsdescripcion],
           created_by: User.find_by(identification_number: '1234567890').id,
-          updated_by: User.find_by(identification_number: '1234567890').id,
         )
         faculties = FacultyIdsResearchGroup.create(
           research_group_id: groups.id,

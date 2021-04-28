@@ -5,7 +5,7 @@ namespace :import_researchers do
     puts 'Cleaning up Model'
     Researcher.destroy_all
     ActiveRecord::Base.connection.reset_pk_sequence!('researchers')
-    CSV.foreach('lib/data/group_members_valid231220.csv', { :headers => [
+    CSV.foreach('lib/data/group_members_valid_202104281045.csv', { :headers => [
       :documento,
       :idpapel,
       :papel,
@@ -30,13 +30,11 @@ namespace :import_researchers do
         mobile_number_one: row[:celular],
         mobile_number_two: row[:celular2],
         address: row[:direccion],
-        created_by: User.find_by(identification_number: '1234567890').id,
-        updated_by: User.find_by(identification_number: '1234567890').id
+        created_by: User.find_by(identification_number: '1234567890').id
       )
       user = User.create(
         identification_number: row[:documento],
         created_by: User.find_by(identification_number: '1234567890').id,
-        updated_by: User.find_by(identification_number: '1234567890').id,
         user_role_id: 5
       )
       puts "Researcher with doc: '#{researcher.identification_number}' created"
