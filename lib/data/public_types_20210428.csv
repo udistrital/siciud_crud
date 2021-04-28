@@ -1,0 +1,171 @@
+1,Unidad de Investigación - Estado,Estados de las unidades de investigación
+2,Unidad de Investigación - Tipo,null
+3,Producto - Tipología,
+5,Artículo - Tipo,null
+6,Patente - Estado,null
+7,Ciclo - Tipo,null
+8,Petición - Estado,null
+9,Obra -Tipo,null
+10,Área y/o Especialidad de Conocimiento,null
+11,Artículo - Categoría,null
+12,Libros resultados de investigación - Categoría,null
+13,Capítulo de Libro - Categoría,null
+14,Patente - Tipo,null
+15,Patente - Categoría,null
+16,Variedad Vegetal - Categoría,null
+17,Nueva Raza Animal - Categoría,null
+18,Poblaciones mejoradas de razas pecuarias - Categoría,null
+19,Obras o productos de investigación-creación en Artes Arquitectura y Diseño - Categoría,null
+20,Nota Científica - Categoría,null
+21,Unidad de Investigación - Documento,null
+22,Artículo - Documento,null
+23,Libro - Documento,null
+24,Capítulo de Libro - Documento,null
+25,Patente - Documento,null
+26,Variedad Vegetal - Documento,null
+27,Nueva Raza Animal - Documento,null
+28,Poblaciones mejoradas de razas pecuarias - Documento,null
+29,Obras o productos de investigación-creación en Artes Arquitectura y Diseño - Documento,null
+30,Nota Científica - Documento,null
+31,Participante - Tipo,null
+32,Diseño Industrial - Categoría,null
+33,Esquema de circuito integrado - Categoría,null
+34,Software - Categoría,null
+35,Planta piloto - Categoría,null
+36,Prototipo industrial - Categoría,null
+37,Signos distintivos - Categoría,null
+38,Productos nutraceúticos - Categoría,null
+39,Colección científica - Categoría,null
+40,Nuevo registro científico - Categoría,null
+41,Planta piloto y Prototipo industrial - Tipo,null
+42,Diseño Industrial - Documento,null
+43,Esquema de circuito integrado - Documento,null
+44,Software - Documento,null
+45,Planta piloto - Documento,null
+46,Prototipo industrial - Documento,null
+47,Signos distintivos - Documento,null
+48,Productos nutraceúticos - Documento,null
+49,Colección científica - Documento,null
+50,Nuevo registro científico - Documento,null
+51,Evento - Tipo,null
+52,Dirección de Tesis y Trabajo de Grado - Tipo,null
+53,Unidad de Investigación - Línea de Investigación,null
+54,Convocatoria -Tipología,null
+55,Certificado de radicación-avalada por la OTRI-Bogotá,"Certificado de radicación de tramite ante la entidad correspondiente (ICA), avalada por la OTRI-Bogotá
+"
+56,Secreto empresarial - Documento,null
+57,Secreto empresarial - Categoría,
+58,Empresa de base tecnológica - Documento,Empresa de base tecnológica (Spin- off y Start-up) 
+59,Empresa de base tecnológica - Categoría,null
+60,Nueva Raza Animal - Estado,null
+61,Variedad vegetal- Ciclo,null
+62,Variedades vegetales - Estado,null
+63,Innovación generada en la gestión empresarial - Documento,null
+64,Variedad vegetal - Estado,null
+65,Evento - Participación,Evento - Participación
+66,Empresas creativas y culturales - Documento,null
+67,Productos resultados de la creación o investigación-creación - Documento,Productos resultados - Documentos
+68,Productos resultados de la creación o investigación-creación,null
+69,Certificado de curaduría o reconocimiento recibido por la obra,null
+70,Productos resultados de la creación o investigación-creación - Categoría,null
+71,Naturaleza - Tipo,null
+72,Empresas creativas y culturales - Categoría,null
+73,Innovación generada en la gestión empresarial - Categoría,null
+74,Innovación en procedimiento y servicio - Documento,null
+75,Innovación en procedimiento y servicio - Categoría,null
+76,Norma - Categoría,null
+77,Norma - Documento,null
+78,Reglamentos - Documento,null
+79,Reglamentos - Categoría,null
+80,Legislaciones - Documento,null
+81,Legislaciones - Categoría,null
+82,Guías práctica clínica - Categoría,null
+83,Guías práctica clínica - Documento,null
+84,Guías manejo clínico forense - Categoría,null
+85,Guías manejo clínico forense - Documento,null
+86,Manuales y Modelos de atención diferencial a víctimas - Categoría,null
+87,Manuales y Modelos de atención diferencial a víctimas - Documento,null
+88,Protocolos de atención a usuarios/víctimas (pacientes) - Categoría,null
+89,Protocolos de atención a usuarios/víctimas (pacientes) - Documento,null
+90,Protocolos de vigilancia epidemiológica - Categoría,null
+91,Protocolos de vigilancia epidemiológica - Documento,null
+92,Actos de Ley - Categoría,null
+93,Actos de Ley - Documento,null
+94,Proyectos de ley - Categorìa,null
+95,Proyectos de ley - Documento,null
+96,Conceptos técnicos - Categoría,null
+97,Conceptos técnicos - Documento,null
+98,Registros de Acuerdos de licencia - Categoría,null
+99,Registros de Acuerdos de licencia - Documento,null
+100,Procesos de apropiacion social del conocimiento para el fortalecimiento o solucion de asuntos de interes - Categoría,null
+101,Procesos de apropiacion social del conocimiento para el fortalecimiento o solucion de asuntos de interes - Documento,null
+102,Procesos de apropiación social del conocimiento para la generación de insumos de política pública y normatividad - Documento,null
+103,Procesos de apropiación social del conocimiento para la generación de insumos de política pública y normatividad - Categoría,null
+104,Procesos de Apropiación social del conocimiento para el fortalecimiento de cadenas productivas - Categoría,null
+105,Procesos de Apropiación social del conocimiento para el fortalecimiento de cadenas productivas - Documento,null
+106,Procesos de apropiación social del conocimiento resultado del trabajo conjunto entre un Centro de Ciencia y un grupo de Investigación - Categoría,null
+107,Procesos de apropiación social del conocimiento resultado del trabajo conjunto entre un Centro de Ciencia y un grupo de Investigación - Documento,null
+108,Eventos científicos con componentes de apropiación - Categoría,null
+109,ECA_B,null
+110,Eventos científicos con componentes de apropiación - Documento,null
+111,Red de conocimiento especializado  - Categoría,null
+112,Red de conocimiento especializado  - Documento,null
+113,Talleres de Creación - Categoría,null
+114,Talleres de Creación - Documento,null
+115,"Eventos artísticos, de arquitectura o de diseño - Documento","Eventos artísticos, de arquitectura o de diseño con componentes de apropiación"
+116,"Eventos artísticos, de arquitectura o de diseño - Categoría",null
+117,Documento de trabajo (Working paper) - Categoría,null
+118,Documento de trabajo (Working paper) - Documento,null
+119,Nueva Secuencia Genética - Categoría,null
+120,Nueva Secuencia Genética - Documento,null
+121,Ediciones de revista o libro de divulgación científica - Categoría,null
+122,Ediciones de revista o libro de divulgación científica - Documento,null
+123,Informe Final de Investigación - Categoría,null
+124,Informe Final de Investigación - Documento,null
+125,Informes técnicos - Categoría,null
+126,Informes técnicos - Documento,null
+127,Consultorías científicas- tecnologías  - Categoría,null
+128,Consultorías científicas- tecnologías - Documento,null
+129,"Consultorías en arte, arquitectura y diseño - Categoría",null
+130,"Consultorías en arte, arquitectura y diseño - Documento",null
+131,Libro - Tipo,Son los tipos de libros que permiten clasificar un libro (pueden ser de diferentes tipologías)
+132,Publicaciones editoriales no especializadas - Categoría,null
+133,Publicaciones editoriales no especializadas - Documento,null
+134,Producciones de contenido digital - Categoría,null
+135,Producciones de contenido digital - Documentos,null
+136,Producción de estrategias y contenido transmedia - Categoría,null
+137,Producción de estrategias y contenido transmedia - Documento,null
+138,Desarrollos web - Categoría,null
+139,Desarrollos web - Documento,null
+140,Libro de divulgación o compilación de divulgación - Categoría,null
+141,Libro de divulgación o compilación de divulgación - Documento,null
+142,Libros de formación (Q2 y Q3) - Categoría,null
+143,Libros de formación (Q2 y Q3) - Documento,null
+144,Manuales y guías especializados - Categoría,null
+145,Manuales y guías especializados - Documento,null
+146,Generaciones de Contenidos - Categoría,null
+147,Generaciones de Contenidos - Documento,null
+148,Boletines divulgativos - Categoría,null
+149,Boletines divulgativos - Documento,null
+150,Libros de creación (piloto) - Categoría,null
+151,Libros de creación (piloto) - Documento,null
+152,Dirección de Tesis de Doctorado - Categoría,null
+153,Dirección de Tesis de Doctorado - Documento,null
+154,Dirección de Trabajo de Grado de Maestría - Categoría,null
+155,Dirección de Trabajo de Grado de Maestría - Documento,null
+156,Proyecto de Investigación y Desarrollo - Categoría,null
+157,Proyecto de Investigación y Desarrollo - Documentos,null
+158,Proyecto de Investigación- Creación - Categoría,null
+159,Proyecto de Investigación- Creación -Documento,null
+160,Dirección de Trabajos de grado de Pregrado - Categoría,null
+161,Dirección de Trabajos de grado de Pregrado - Documento,null
+162,Proyecto ID+I con formación - Categoría,null
+163,Proyecto ID+I con formación - Documento,null
+164,Proyecto de extensión y responsabilidad social en CTeI - Categoría,null
+165,Proyecto de extensión y responsabilidad social en CTeI - Documento,null
+166,Apoyo a creación programa o curso de formación de investigadores - categoría,null
+167,Apoyo a creación programa o curso de formación de investigadores - Documento,null
+168,Acompañamiento y asesoría de línea temática del Programa Ondas - Categoría,null
+169,Acompañamiento y asesoría de línea temática del Programa Ondas - Documento,null
+170,Proyecto,null
+171,Facultad,null

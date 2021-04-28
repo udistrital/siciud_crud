@@ -30,8 +30,6 @@ namespace :import_oecd do
       if superadmin.nil?
         print_message('OECD - Creating superadmin', task_logger)
         superadmin = User.create!(user_role_id: 1, identification_number: '1234567890')
-        puts superadmin.errors
-        puts "que pasa"
         print_message('OECD - Created superadmin', task_logger)
       end
       puts "salte"

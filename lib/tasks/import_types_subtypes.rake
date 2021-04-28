@@ -44,7 +44,7 @@ namespace :import_types_subtypes do
 
     print_message("Import/Create Types - ID user #{superadmin_id}",
                   task_logger)
-    CSV.foreach('lib/data/types_14042021.csv', { :headers => [
+    CSV.foreach('lib/data/public_types_20210428.csv', { :headers => [
       :id,
       :t_name,
       :t_description]
@@ -64,7 +64,7 @@ namespace :import_types_subtypes do
     ActiveRecord::Base.connection.reset_pk_sequence!('types')
     print_message('Type data successfully imported!', task_logger)
 
-    CSV.foreach('lib/data/subtypes_14042021.csv', { :headers => [
+    CSV.foreach('lib/data/public_subtypes_20210428.csv', { :headers => [
       :id,
       :parent_id,
       :type_id,
@@ -120,7 +120,7 @@ namespace :import_types_subtypes do
 
     print_message("Import/Create Types - ID user #{superadmin_id}",
                   task_logger)
-    CSV.foreach('lib/data/types_14042021.csv', { :headers => [
+    CSV.foreach('lib/data/public_subtypes_20210428.csv', { :headers => [
       :id,
       :t_name,
       :t_description]
@@ -155,7 +155,7 @@ namespace :import_types_subtypes do
     ActiveRecord::Base.connection.reset_pk_sequence!('types')
     print_message('Type data successfully imported/updated!', task_logger)
 
-    CSV.foreach('lib/data/subtypes_14042021.csv', { :headers => [
+    CSV.foreach('lib/data/public_subtypes_20210428.csv', { :headers => [
       :id,
       :parent_id,
       :type_id,
