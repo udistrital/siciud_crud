@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_27_162045) do
+ActiveRecord::Schema.define(version: 2021_04_29_172226) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1647,26 +1647,6 @@ ActiveRecord::Schema.define(version: 2021_04_27_162045) do
        JOIN roles rl ON ((rl.id = gm.role_id)))
        JOIN research_groups rg ON ((gm.research_group_id = rg.id)));
   SQL
-  create_view "complete_types", sql_definition: <<-SQL
-      SELECT st.type_id,
-      t.t_name AS type_name,
-      t.t_description AS type_description,
-      t.active AS type_active,
-      st.parent_id,
-      p.st_name AS parent_name,
-      p.st_description AS parent_description,
-      p.type_id AS parent_type_id,
-      pt.t_name AS parent_type_name,
-      pt.active AS parent_type_active,
-      st.id,
-      st.st_name AS name,
-      st.st_description AS description,
-      st.active
-     FROM (((types t
-       RIGHT JOIN subtypes st ON ((t.id = st.type_id)))
-       LEFT JOIN subtypes p ON ((st.parent_id = p.id)))
-       LEFT JOIN types pt ON ((p.type_id = pt.id)));
-  SQL
   create_view "complete_int_participants", sql_definition: <<-SQL
       SELECT intp.id,
       intp.producible_type AS product_type,
@@ -2257,5 +2237,25 @@ ActiveRecord::Schema.define(version: 2021_04_27_162045) do
        LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
        LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
        LEFT JOIN subtypes stpt ON ((p.paper_type_id = stpt.id)));
+  SQL
+  create_view "complete_types", sql_definition: <<-SQL
+      SELECT st.type_id,
+      t.t_name AS type_name,
+      t.t_description AS type_description,
+      t.active AS type_active,
+      st.parent_id,
+      p.st_name AS parent_name,
+      p.st_description AS parent_description,
+      p.type_id AS parent_type_id,
+      pt.t_name AS parent_type_name,
+      pt.active AS parent_type_active,
+      st.id,
+      st.st_name AS name,
+      st.st_description AS description,
+      st.active
+     FROM (((types t
+       LEFT JOIN subtypes st ON ((t.id = st.type_id)))
+       LEFT JOIN subtypes p ON ((st.parent_id = p.id)))
+       LEFT JOIN types pt ON ((p.type_id = pt.id)));
   SQL
 end
