@@ -5,7 +5,7 @@ module Api
 
       before_action :set_research_group, only: [:index, :create]
       before_action :set_technical_concept, only: [:show, :update]
-      
+
       # GET /research_units/:id/technical_concepts
       def index
         @technical_concepts = CompleteTechnicalConcept.where(
