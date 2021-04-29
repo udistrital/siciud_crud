@@ -38,6 +38,7 @@ class ResearchGroup < ApplicationRecord
   has_many :software, dependent: :destroy
   has_many :plant_ind_prototypes, dependent: :destroy
   has_many :new_scientific_records, dependent: :destroy
+  has_many :technical_concepts
 
   has_many :events, dependent: :destroy
 
