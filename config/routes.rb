@@ -153,6 +153,8 @@ Rails.application.routes.draw do
         resources :new_scientific_records, only: [:index, :show, :create, :update]
         put "/new_scientific_records/:id/active", to: "new_scientific_records#change_active"
 
+        resources :technical_concepts, only: [:index, :create]
+
         # Social appropriation of knowledge
         resources :events, only: [:index, :show, :create, :update]
         put "/events/:id/active", to: "events#change_active"
@@ -161,6 +163,8 @@ Rails.application.routes.draw do
         resources :degree_works, only: [:index, :show, :create, :update]
         put "/degree_works/:id/active", to: "degree_works#change_active"
       end
+
+      resources :technical_concepts, only: [:show, :update]
 
       # RESEARCH UNIT PRODUCT ENDPOINTS
       ## Participants in product creation and documents
