@@ -50,6 +50,7 @@ module Api
         VegetableVarietiesController,
         IntParticipantsController,
         EventsController,
+        DistinctiveSignsController,
         IndustrialDesignsController,
         IntegratedCircuitDiagramsController,
         NewScientificRecordsController,
@@ -106,6 +107,7 @@ module Api
         TechnicalConcept,
         NewScientificRecord,
         DegreeWork,
+        DistinctiveSign,
         IndustrialDesign,
         IntegratedCircuitDiagram,
 

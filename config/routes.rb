@@ -155,6 +155,8 @@ Rails.application.routes.draw do
 
         resources :technical_concepts, only: [:index, :create]
 
+        resources :distinctive_signs, only: [:index, :create]
+
         # Social appropriation of knowledge
         resources :events, only: [:index, :show, :create, :update]
         put "/events/:id/active", to: "events#change_active"
@@ -164,7 +166,9 @@ Rails.application.routes.draw do
         put "/degree_works/:id/active", to: "degree_works#change_active"
       end
 
+      # Technological development and innovation
       resources :technical_concepts, only: [:show, :update]
+      resources :distinctive_signs, only: [:show, :update]
 
       # RESEARCH UNIT PRODUCT ENDPOINTS
       ## Participants in product creation and documents

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_29_223511) do
+ActiveRecord::Schema.define(version: 2021_04_30_182437) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -464,6 +464,28 @@ ActiveRecord::Schema.define(version: 2021_04_29_223511) do
     t.index ["dw_type_id"], name: "index_degree_works_on_dw_type_id"
     t.index ["research_group_id"], name: "index_degree_works_on_research_group_id"
     t.index ["updated_by"], name: "index_degree_works_on_updated_by"
+  end
+
+  create_table "distinctive_signs", force: :cascade do |t|
+    t.string "registration_title"
+    t.string "registration_number"
+    t.date "date_of_obtaining"
+    t.bigint "geo_city_id"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "observation"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_distinctive_signs_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_distinctive_signs_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_distinctive_signs_on_created_by"
+    t.index ["geo_city_id"], name: "index_distinctive_signs_on_geo_city_id"
+    t.index ["research_group_id"], name: "index_distinctive_signs_on_research_group_id"
+    t.index ["updated_by"], name: "index_distinctive_signs_on_updated_by"
   end
 
   create_table "document_types", force: :cascade do |t|
@@ -1418,6 +1440,12 @@ ActiveRecord::Schema.define(version: 2021_04_29_223511) do
   add_foreign_key "degree_works", "subtypes", column: "dw_type_id"
   add_foreign_key "degree_works", "users", column: "created_by"
   add_foreign_key "degree_works", "users", column: "updated_by"
+  add_foreign_key "distinctive_signs", "colciencias_calls"
+  add_foreign_key "distinctive_signs", "geo_cities"
+  add_foreign_key "distinctive_signs", "research_groups"
+  add_foreign_key "distinctive_signs", "subtypes", column: "category_id"
+  add_foreign_key "distinctive_signs", "users", column: "created_by"
+  add_foreign_key "distinctive_signs", "users", column: "updated_by"
   add_foreign_key "documents", "subtypes", column: "document_type_id"
   add_foreign_key "documents", "users", column: "created_by"
   add_foreign_key "documents", "users", column: "updated_by"
@@ -2314,6 +2342,36 @@ ActiveRecord::Schema.define(version: 2021_04_29_223511) do
        LEFT JOIN subtypes st ON ((tc.category_id = st.id)))
        LEFT JOIN colciencias_calls cc ON ((tc.colciencias_call_id = cc.id)))
        LEFT JOIN geo_cities gcity ON ((tc.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_distinctive_signs", sql_definition: <<-SQL
+      SELECT ds.id,
+      ds.registration_title,
+      ds.category_id,
+      st.st_name AS category_name,
+      ds.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      ds.date_of_obtaining,
+      ds.geo_city_id,
+      gcity.name AS geo_city_name,
+      gs.geo_country_id,
+      gctry.name AS geo_country_name,
+      gcity.geo_state_id,
+      gs.name AS geo_state_name,
+      ds.observation,
+      ds.registration_number,
+      ds.research_group_id,
+      ds.active,
+      ds.created_by,
+      ds.updated_by,
+      ds.created_at,
+      ds.updated_at
+     FROM (((((distinctive_signs ds
+       LEFT JOIN subtypes st ON ((ds.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((ds.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((ds.geo_city_id = gcity.id)))
        LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
        LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
   SQL
