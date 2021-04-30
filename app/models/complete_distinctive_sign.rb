@@ -1,4 +1,4 @@
-class CompleteNewAnimalB < ApplicationRecord
+class CompleteDistinctiveSign < ApplicationRecord
   self.primary_key = :id
 
   def readonly?

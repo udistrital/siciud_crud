@@ -39,6 +39,8 @@ class ResearchGroup < ApplicationRecord
   has_many :plant_ind_prototypes, dependent: :destroy
   has_many :new_scientific_records, dependent: :destroy
   has_many :technical_concepts
+  has_many :distinctive_signs
+  has_many :nutraceutical_products
 
   has_many :events, dependent: :destroy
 
