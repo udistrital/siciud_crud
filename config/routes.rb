@@ -157,6 +157,9 @@ Rails.application.routes.draw do
 
         resources :distinctive_signs, only: [:index, :create]
 
+        resources :nutraceutical_products, only: [:index, :create]
+
+
         # Social appropriation of knowledge
         resources :events, only: [:index, :show, :create, :update]
         put "/events/:id/active", to: "events#change_active"
@@ -169,6 +172,7 @@ Rails.application.routes.draw do
       # Technological development and innovation
       resources :technical_concepts, only: [:show, :update]
       resources :distinctive_signs, only: [:show, :update]
+      resources :nutraceutical_products, only: [:show, :update]
 
       # RESEARCH UNIT PRODUCT ENDPOINTS
       ## Participants in product creation and documents
@@ -177,7 +181,7 @@ Rails.application.routes.draw do
                 :vegetable_varieties, :industrial_designs,
                 :integrated_circuit_diagrams, :software,
                 :plant_ind_prototypes, :new_scientific_records,
-                :technical_concepts,
+                :technical_concepts, :distinctive_signs, :nutraceutical_products,
                 :events, :degree_works,
                 only: [] do
         resources :ext_participants, only: [:index, :show, :create, :update]
