@@ -78,6 +78,15 @@ class ApplicationController < ActionController::API
     elsif params[:degree_work_id]
       id = params[:degree_work_id]
       @context = DegreeWork.find(id)
+    elsif params[:technical_concept_id]
+      id = params[:technical_concept_id]
+      @context = TechnicalConcept.find(id)
+    elsif params[:distinctive_sign_id]
+      id = params[:distinctive_sign_id]
+      @context = DistinctiveSign.find(id)
+    elsif params[:nutraceutical_product_id]
+      id = params[:nutraceutical_product_id]
+      @context = NutraceuticalProduct.find(id)
     end
   end
 end
