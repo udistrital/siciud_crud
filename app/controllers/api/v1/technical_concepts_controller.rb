@@ -31,7 +31,7 @@ module Api
         end
       end
 
-      # PUT /technical_concepts/1
+      # PATCH/PUT /technical_concepts/1
       def update
         if @technical_concept.update(tc_params_to_update)
           render json: @technical_concept

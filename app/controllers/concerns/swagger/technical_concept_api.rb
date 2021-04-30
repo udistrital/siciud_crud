@@ -76,6 +76,49 @@ module Swagger::TechnicalConceptApi
           key :description, 'Unexpected Error'
         end
       end
+
+      operation :patch do
+        key :summary, 'Activate or deactivate a Technical Concept by ID'
+        key :description, 'Returns the activated/deactivated technical concept'
+        key :operationId, :change_active_technical_concept
+        key :produces, ['application/json',]
+        key :tags, ['Products::TDI::Technical Concepts']
+
+        parameter name: :id do
+          key :in, :path
+          key :description, 'ID of technical concept to fetch'
+          key :required, true
+          key :type, :integer
+          key :format, :int64
+        end
+
+        parameter name: :technical_concept do
+          key :in, :body
+          key :description, 'Technical Concept to update'
+          key :required, true
+          schema do
+            property :technical_concept do
+              key :'$ref', :ChangeActive
+            end
+          end
+        end
+
+        response 200 do
+          key :description, 'technical concept response'
+          schema do
+            key :'$ref', :TechnicalConceptOutput
+          end
+        end
+        response 422 do
+          key :description, 'Unprocessable Entity'
+          schema do
+            key :'$ref', :ErrorUnprocessableEntity
+          end
+        end
+        response :default do
+          key :description, 'Unexpected Error'
+        end
+      end
     end
 
     swagger_path '/research_units/{research_group_id}/technical_concepts/' do
