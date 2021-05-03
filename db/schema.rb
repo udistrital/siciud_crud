@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_03_174751) do
+ActiveRecord::Schema.define(version: 2021_05_03_204807) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -517,6 +517,29 @@ ActiveRecord::Schema.define(version: 2021_05_03_174751) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "enterprise_secrets", force: :cascade do |t|
+    t.string "name"
+    t.string "contract_number"
+    t.float "contract_value"
+    t.date "date_of_obtaining"
+    t.bigint "geo_city_id"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "observation"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_enterprise_secrets_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_enterprise_secrets_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_enterprise_secrets_on_created_by"
+    t.index ["geo_city_id"], name: "index_enterprise_secrets_on_geo_city_id"
+    t.index ["research_group_id"], name: "index_enterprise_secrets_on_research_group_id"
+    t.index ["updated_by"], name: "index_enterprise_secrets_on_updated_by"
   end
 
   create_table "entity_types", force: :cascade do |t|
@@ -1498,6 +1521,12 @@ ActiveRecord::Schema.define(version: 2021_05_03_174751) do
   add_foreign_key "documents", "subtypes", column: "document_type_id"
   add_foreign_key "documents", "users", column: "created_by"
   add_foreign_key "documents", "users", column: "updated_by"
+  add_foreign_key "enterprise_secrets", "colciencias_calls"
+  add_foreign_key "enterprise_secrets", "geo_cities"
+  add_foreign_key "enterprise_secrets", "research_groups"
+  add_foreign_key "enterprise_secrets", "subtypes", column: "category_id"
+  add_foreign_key "enterprise_secrets", "users", column: "created_by"
+  add_foreign_key "enterprise_secrets", "users", column: "updated_by"
   add_foreign_key "events", "colciencias_calls"
   add_foreign_key "events", "geo_cities"
   add_foreign_key "events", "research_groups"
@@ -2498,6 +2527,37 @@ ActiveRecord::Schema.define(version: 2021_05_03_174751) do
        LEFT JOIN subtypes st ON ((sc.category_id = st.id)))
        LEFT JOIN colciencias_calls cc ON ((sc.colciencias_call_id = cc.id)))
        LEFT JOIN geo_cities gcity ON ((sc.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_enterprise_secrets", sql_definition: <<-SQL
+      SELECT ens.id,
+      ens.name,
+      ens.category_id,
+      st.st_name AS category_name,
+      ens.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      ens.contract_number,
+      ens.contract_value,
+      ens.date_of_obtaining,
+      ens.geo_city_id,
+      gcity.name AS geo_city_name,
+      gs.geo_country_id,
+      gctry.name AS geo_country_name,
+      gcity.geo_state_id,
+      gs.name AS geo_state_name,
+      ens.observation,
+      ens.research_group_id,
+      ens.active,
+      ens.created_by,
+      ens.updated_by,
+      ens.created_at,
+      ens.updated_at
+     FROM (((((enterprise_secrets ens
+       LEFT JOIN subtypes st ON ((ens.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((ens.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((ens.geo_city_id = gcity.id)))
        LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
        LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
   SQL

@@ -90,6 +90,9 @@ class ApplicationController < ActionController::API
     elsif params[:scientific_collection_id]
       id = params[:scientific_collection_id]
       @context = ScientificCollection.find(id)
+    elsif params[:enterprise_secret_id]
+      id = params[:enterprise_secret_id]
+      @context = EnterpriseSecret.find(id)
     end
   end
 end
