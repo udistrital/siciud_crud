@@ -51,6 +51,7 @@ module Api
         IntParticipantsController,
         EventsController,
         DistinctiveSignsController,
+        EnterpriseSecretsController,
         IndustrialDesignsController,
         IntegratedCircuitDiagramsController,
         NewScientificRecordsController,
@@ -112,6 +113,7 @@ module Api
         NutraceuticalProduct,
         DegreeWork,
         DistinctiveSign,
+        EnterpriseSecret,
         IndustrialDesign,
         IntegratedCircuitDiagram,
 
