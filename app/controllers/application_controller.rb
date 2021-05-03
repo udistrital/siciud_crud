@@ -87,6 +87,9 @@ class ApplicationController < ActionController::API
     elsif params[:nutraceutical_product_id]
       id = params[:nutraceutical_product_id]
       @context = NutraceuticalProduct.find(id)
+    elsif params[:scientific_collection_id]
+      id = params[:scientific_collection_id]
+      @context = ScientificCollection.find(id)
     end
   end
 end
