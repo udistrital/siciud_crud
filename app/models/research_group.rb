@@ -41,6 +41,7 @@ class ResearchGroup < ApplicationRecord
   has_many :technical_concepts
   has_many :distinctive_signs
   has_many :nutraceutical_products
+  has_many :scientific_collections
 
   has_many :events, dependent: :destroy
 
