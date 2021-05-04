@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  get "/health", to: "health#health"
   namespace :api do
     namespace :v1 do
       get 'arp_assignment_reports/index'
@@ -42,9 +44,6 @@ Rails.application.routes.draw do
       put "agreement/:id/attach/", to: "agreement#attach"
       #Enpoint para listar los snies
       resources :snies, only: [:index, :show]
-
-      # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-      get "/health", to: "health#health"
 
       resources :gm_states, only: [:index, :show]
       resources :role, only: [:index, :show]
