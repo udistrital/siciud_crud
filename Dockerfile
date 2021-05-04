@@ -1,5 +1,5 @@
 FROM ruby:2.6.2
-RUN apt-get update -qq && apt-get install -y nodejs postgresql-client
+RUN apt-get update -qq && apt-get install -y nodejs postgresql-client python-dev
 RUN pip install awscli
 RUN mkdir /myapp
 WORKDIR /myapp
