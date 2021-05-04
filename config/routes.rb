@@ -154,11 +154,10 @@ Rails.application.routes.draw do
         put "/new_scientific_records/:id/active", to: "new_scientific_records#change_active"
 
         resources :technical_concepts, only: [:index, :create]
-
         resources :distinctive_signs, only: [:index, :create]
-
         resources :nutraceutical_products, only: [:index, :create]
-
+        resources :scientific_collections, only: [:index, :create]
+        resources :enterprise_secrets, only: [:index, :create]
 
         # Social appropriation of knowledge
         resources :events, only: [:index, :show, :create, :update]
@@ -173,6 +172,8 @@ Rails.application.routes.draw do
       resources :technical_concepts, only: [:show, :update]
       resources :distinctive_signs, only: [:show, :update]
       resources :nutraceutical_products, only: [:show, :update]
+      resources :scientific_collections, only: [:show, :update]
+      resources :enterprise_secrets, only: [:show, :update]
 
       # RESEARCH UNIT PRODUCT ENDPOINTS
       ## Participants in product creation and documents
@@ -180,8 +181,9 @@ Rails.application.routes.draw do
                 :papers, :patents, :research_creation_works, :scientific_notes,
                 :vegetable_varieties, :industrial_designs,
                 :integrated_circuit_diagrams, :software,
-                :plant_ind_prototypes, :new_scientific_records,
+                :plant_ind_prototypes, :new_scientific_records, :scientific_collections,
                 :technical_concepts, :distinctive_signs, :nutraceutical_products,
+                :enterprise_secrets,
                 :events, :degree_works,
                 only: [] do
         resources :ext_participants, only: [:index, :show, :create, :update]
