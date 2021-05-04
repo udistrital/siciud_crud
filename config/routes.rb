@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  get "/health", to: "health#health"
+
   namespace :api do
     namespace :v1 do
       get 'arp_assignment_reports/index'
@@ -30,9 +33,6 @@ Rails.application.routes.draw do
 
       #Enpoint para actualizar los documentos de los convenios
       put "agreement/:id/attach/", to: "agreement#attach"
-
-      # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-      get "/health", to: "health#health"
 
       resources :gm_states, only: [:index, :show]
       resources :role, only: [:index, :show]
@@ -158,6 +158,7 @@ Rails.application.routes.draw do
         resources :nutraceutical_products, only: [:index, :create]
         resources :scientific_collections, only: [:index, :create]
         resources :enterprise_secrets, only: [:index, :create]
+        resources :enterprises, only: [:index, :create]
 
         # Social appropriation of knowledge
         resources :events, only: [:index, :show, :create, :update]
@@ -174,6 +175,7 @@ Rails.application.routes.draw do
       resources :nutraceutical_products, only: [:show, :update]
       resources :scientific_collections, only: [:show, :update]
       resources :enterprise_secrets, only: [:show, :update]
+      resources :enterprises, only: [:show, :update]
 
       # RESEARCH UNIT PRODUCT ENDPOINTS
       ## Participants in product creation and documents
@@ -183,7 +185,7 @@ Rails.application.routes.draw do
                 :integrated_circuit_diagrams, :software,
                 :plant_ind_prototypes, :new_scientific_records, :scientific_collections,
                 :technical_concepts, :distinctive_signs, :nutraceutical_products,
-                :enterprise_secrets,
+                :enterprise_secrets, :enterprises,
                 :events, :degree_works,
                 only: [] do
         resources :ext_participants, only: [:index, :show, :create, :update]

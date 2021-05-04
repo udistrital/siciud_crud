@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_03_204807) do
+ActiveRecord::Schema.define(version: 2021_05_04_141140) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -540,6 +540,31 @@ ActiveRecord::Schema.define(version: 2021_05_03_204807) do
     t.index ["geo_city_id"], name: "index_enterprise_secrets_on_geo_city_id"
     t.index ["research_group_id"], name: "index_enterprise_secrets_on_research_group_id"
     t.index ["updated_by"], name: "index_enterprise_secrets_on_updated_by"
+  end
+
+  create_table "enterprises", force: :cascade do |t|
+    t.string "name"
+    t.string "nit"
+    t.string "comercial_name"
+    t.date "date_of_obtaining"
+    t.bigint "product_type_id"
+    t.bigint "geo_city_id"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "observation"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_enterprises_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_enterprises_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_enterprises_on_created_by"
+    t.index ["geo_city_id"], name: "index_enterprises_on_geo_city_id"
+    t.index ["product_type_id"], name: "index_enterprises_on_product_type_id"
+    t.index ["research_group_id"], name: "index_enterprises_on_research_group_id"
+    t.index ["updated_by"], name: "index_enterprises_on_updated_by"
   end
 
   create_table "entity_types", force: :cascade do |t|
@@ -1527,6 +1552,13 @@ ActiveRecord::Schema.define(version: 2021_05_03_204807) do
   add_foreign_key "enterprise_secrets", "subtypes", column: "category_id"
   add_foreign_key "enterprise_secrets", "users", column: "created_by"
   add_foreign_key "enterprise_secrets", "users", column: "updated_by"
+  add_foreign_key "enterprises", "colciencias_calls"
+  add_foreign_key "enterprises", "geo_cities"
+  add_foreign_key "enterprises", "research_groups"
+  add_foreign_key "enterprises", "subtypes", column: "category_id"
+  add_foreign_key "enterprises", "subtypes", column: "product_type_id"
+  add_foreign_key "enterprises", "users", column: "created_by"
+  add_foreign_key "enterprises", "users", column: "updated_by"
   add_foreign_key "events", "colciencias_calls"
   add_foreign_key "events", "geo_cities"
   add_foreign_key "events", "research_groups"
@@ -2560,5 +2592,39 @@ ActiveRecord::Schema.define(version: 2021_05_03_204807) do
        LEFT JOIN geo_cities gcity ON ((ens.geo_city_id = gcity.id)))
        LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
        LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_enterprises", sql_definition: <<-SQL
+      SELECT ent.id,
+      ent.name,
+      ent.category_id,
+      st.st_name AS category_name,
+      ent.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      ent.comercial_name,
+      ent.date_of_obtaining,
+      ent.geo_city_id,
+      gcity.name AS geo_city_name,
+      gs.geo_country_id,
+      gctry.name AS geo_country_name,
+      gcity.geo_state_id,
+      gs.name AS geo_state_name,
+      ent.nit,
+      ent.observation,
+      ent.product_type_id,
+      pt.st_name AS product_type_name,
+      ent.research_group_id,
+      ent.active,
+      ent.created_by,
+      ent.updated_by,
+      ent.created_at,
+      ent.updated_at
+     FROM ((((((enterprises ent
+       LEFT JOIN subtypes st ON ((ent.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((ent.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((ent.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
+       LEFT JOIN subtypes pt ON ((ent.product_type_id = pt.id)));
   SQL
 end
