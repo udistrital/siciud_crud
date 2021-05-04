@@ -9,6 +9,10 @@ Rails.application.routes.draw do
   get "/api" => redirect("/api/v1/apidocs/")
   namespace :api do
     namespace :v1 do
+      # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+      get "/health", to: "health#health"
+      
+      
       get "country", to: "country#index"
       get "country/:name", to: "country#show"
       resources :apidocs, only: [:index]
