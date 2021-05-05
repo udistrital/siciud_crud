@@ -96,6 +96,9 @@ class ApplicationController < ActionController::API
     elsif params[:enterprise_id]
       id = params[:enterprise_id]
       @context = Enterprise.find(id)
+    elsif params[:innovation_id]
+      id = params[:innovation_id]
+      @context = Innovation.find(id)
     end
   end
 end

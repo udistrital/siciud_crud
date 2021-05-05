@@ -94,7 +94,7 @@ module Swagger::TechnicalConceptApi
 
         parameter name: :technical_concept do
           key :in, :body
-          key :description, 'Technical Concept to update'
+          key :description, 'Technical Concept to activate or deactivate'
           key :required, true
           schema do
             property :technical_concept do

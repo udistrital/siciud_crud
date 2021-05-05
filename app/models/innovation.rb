@@ -1,9 +1,9 @@
-class Enterprise < ApplicationRecord
-  include Swagger::EnterpriseSchema
+class Innovation < ApplicationRecord
+  include Swagger::InnovationSchema
 
   belongs_to :category, class_name: 'Subtype', foreign_key: 'category_id', optional: true
   belongs_to :colciencias_call, optional: true
-  belongs_to :product_type, class_name: 'Subtype', foreign_key: 'product_type_id'
+  belongs_to :product_type, class_name: 'Subtype', foreign_key: 'product_type_id', optional: true
   belongs_to :research_group
 
   belongs_to :geo_city
