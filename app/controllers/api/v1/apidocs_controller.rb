@@ -54,6 +54,7 @@ module Api
         EnterprisesController,
         EnterpriseSecretsController,
         IndustrialDesignsController,
+        InnovationsController,
         IntegratedCircuitDiagramsController,
         NewScientificRecordsController,
         NutraceuticalProductsController,
@@ -117,6 +118,7 @@ module Api
         Enterprise,
         EnterpriseSecret,
         IndustrialDesign,
+        Innovation,
         IntegratedCircuitDiagram,
 
         ApplicationRecord,

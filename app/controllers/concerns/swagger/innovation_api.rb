@@ -1,28 +1,28 @@
-module Swagger::EnterpriseApi
+module Swagger::InnovationApi
   extend ActiveSupport::Concern
   include Swagger::Blocks
 
   included do
-    swagger_path '/enterprises/{id}' do
+    swagger_path '/innovations/{id}' do
       operation :get do
-        key :summary, 'Get a Enterprise by ID'
-        key :description, 'Returns a single Enterprise'
-        key :operationId, :get_enterprise_by_id
+        key :summary, 'Get a Innovation by ID'
+        key :description, 'Returns a single innovation'
+        key :operationId, :get_innovation_by_id
         key :produces, ['application/json',]
-        key :tags, ['Products::TDI::Enterprises']
+        key :tags, ['Products::TDI::Innovations']
 
         parameter name: :id do
           key :in, :path
-          key :description, 'ID of Enterprise to fetch'
+          key :description, 'ID of Innovation to fetch'
           key :required, true
           key :type, :integer
           key :format, :int64
         end
 
         response 200 do
-          key :description, 'Enterprise response'
+          key :description, 'innovation response'
           schema do
-            key :'$ref', :EnterpriseOutput
+            key :'$ref', :InnovationOutput
           end
         end
         response 404 do
@@ -37,33 +37,33 @@ module Swagger::EnterpriseApi
       end
 
       operation :put do
-        key :summary, 'Update Enterprise by ID'
-        key :description, 'Returns the updated Enterprise'
-        key :operationId, :update_enterprise
+        key :summary, 'Update Innovation by ID'
+        key :description, 'Returns the updated Innovation'
+        key :operationId, :update_innovation
         key :produces, ['application/json',]
-        key :tags, ['Products::TDI::Enterprises']
+        key :tags, ['Products::TDI::Innovations']
 
         parameter name: :id do
           key :in, :path
-          key :description, 'ID of Enterprise to fetch'
+          key :description, 'ID of Innovation to fetch'
           key :required, true
           key :type, :integer
           key :format, :int64
         end
 
-        parameter name: :enterprise do
+        parameter name: :innovation do
           key :in, :body
-          key :description, 'Enterprise to update'
+          key :description, 'innovation to update'
           key :required, true
           schema do
-            key :'$ref', :EnterpriseInputPut
+            key :'$ref', :InnovationInputPut
           end
         end
 
         response 200 do
-          key :description, 'Enterprise response'
+          key :description, 'innovation response'
           schema do
-            key :'$ref', :EnterpriseOutput
+            key :'$ref', :InnovationOutput
           end
         end
         response 422 do
@@ -78,35 +78,35 @@ module Swagger::EnterpriseApi
       end
 
       operation :patch do
-        key :summary, 'Activate or deactivate a Enterprise by ID'
-        key :description, 'Returns the activated/deactivated Enterprise'
-        key :operationId, :change_active_enterprise
+        key :summary, 'Activate or deactivate a Innovation by ID'
+        key :description, 'Returns the activated/deactivated Innovation'
+        key :operationId, :change_active_innovation
         key :produces, ['application/json',]
-        key :tags, ['Products::TDI::Enterprises']
+        key :tags, ['Products::TDI::Innovations']
 
         parameter name: :id do
           key :in, :path
-          key :description, 'ID of Enterprise to fetch'
+          key :description, 'ID of Innovation to fetch'
           key :required, true
           key :type, :integer
           key :format, :int64
         end
 
-        parameter name: :enterprise do
+        parameter name: :innovation do
           key :in, :body
-          key :description, 'Enterprise to activate or deactivate'
+          key :description, 'Innovation to activate or deactivate'
           key :required, true
           schema do
-            property :enterprise do
+            property :innovation do
               key :'$ref', :ChangeActive
             end
           end
         end
 
         response 200 do
-          key :description, 'Enterprise response'
+          key :description, 'innovation response'
           schema do
-            key :'$ref', :EnterpriseOutput
+            key :'$ref', :InnovationOutput
           end
         end
         response 422 do
@@ -121,13 +121,13 @@ module Swagger::EnterpriseApi
       end
     end
 
-    swagger_path '/research_units/{research_group_id}/enterprises/' do
+    swagger_path '/research_units/{research_group_id}/innovations/' do
       operation :get do
-        key :summary, 'Get all Enterprises'
-        key :description, 'Returns all Enterprises'
-        key :operationId, :get_enterprises
+        key :summary, 'Get all Innovations'
+        key :description, 'Returns all Innovations'
+        key :operationId, :get_innovations
         key :produces, ['application/json',]
-        key :tags, ['Products::TDI::Enterprises']
+        key :tags, ['Products::TDI::Innovations']
 
         parameter name: :research_group_id do
           key :in, :path
@@ -138,11 +138,11 @@ module Swagger::EnterpriseApi
         end
 
         response 200 do
-          key :description, 'Enterprise response'
+          key :description, 'innovation response'
           schema do
             key :type, :array
             items do
-              key :'$ref', :EnterpriseDxOutput
+              key :'$ref', :InnovationDxOutput
             end
           end
         end
@@ -152,11 +152,11 @@ module Swagger::EnterpriseApi
       end
 
       operation :post do
-        key :summary, 'Create a new Enterprises'
-        key :description, 'Returns the created Enterprise'
-        key :operationId, :create_enterprise
+        key :summary, 'Create a new Innovations'
+        key :description, 'Returns the created Innovation'
+        key :operationId, :create_innovation
         key :produces, ['application/json',]
-        key :tags, ['Products::TDI::Enterprises']
+        key :tags, ['Products::TDI::Innovations']
 
         parameter name: :research_group_id do
           key :in, :path
@@ -166,19 +166,19 @@ module Swagger::EnterpriseApi
           key :format, :int64
         end
 
-        parameter name: :enterprise do
+        parameter name: :innovation do
           key :in, :body
-          key :description, 'Enterprise to register'
+          key :description, 'Innovation to register'
           key :required, true
           schema do
-            key :'$ref', :EnterpriseInputPost
+            key :'$ref', :InnovationInputPost
           end
         end
 
         response 201 do
-          key :description, 'Enterprise response'
+          key :description, 'innovation response'
           schema do
-            key :'$ref', :EnterpriseOutput
+            key :'$ref', :InnovationOutput
           end
         end
         response 422 do

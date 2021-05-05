@@ -94,7 +94,7 @@ module Swagger::EnterpriseSecretApi
 
         parameter name: :enterprise_secret do
           key :in, :body
-          key :description, 'Enterprise Secret to update'
+          key :description, 'Enterprise Secret to activate or deactivate'
           key :required, true
           schema do
             property :enterprise_secret do

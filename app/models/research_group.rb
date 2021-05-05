@@ -44,6 +44,7 @@ class ResearchGroup < ApplicationRecord
   has_many :scientific_collections
   has_many :enterprise_secrets
   has_many :enterprises
+  has_many :innovations
 
   has_many :events, dependent: :destroy
 
