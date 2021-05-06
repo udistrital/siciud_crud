@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_05_213302) do
+ActiveRecord::Schema.define(version: 2021_05_06_144756) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -366,6 +366,28 @@ ActiveRecord::Schema.define(version: 2021_05_05_213302) do
     t.index ["cine_broad_area_id"], name: "index_cine_specific_areas_on_cine_broad_area_id"
     t.index ["created_by"], name: "index_cine_specific_areas_on_created_by"
     t.index ["updated_by"], name: "index_cine_specific_areas_on_updated_by"
+  end
+
+  create_table "clinical_practice_guidelines", force: :cascade do |t|
+    t.string "title"
+    t.date "date_of_publication"
+    t.string "isbn"
+    t.bigint "geo_city_id"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "observation"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_clinical_practice_guidelines_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_clinical_practice_guidelines_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_clinical_practice_guidelines_on_created_by"
+    t.index ["geo_city_id"], name: "index_clinical_practice_guidelines_on_geo_city_id"
+    t.index ["research_group_id"], name: "index_clinical_practice_guidelines_on_research_group_id"
+    t.index ["updated_by"], name: "index_clinical_practice_guidelines_on_updated_by"
   end
 
   create_table "colciencias_calls", force: :cascade do |t|
@@ -1575,6 +1597,12 @@ ActiveRecord::Schema.define(version: 2021_05_05_213302) do
   add_foreign_key "cine_specific_areas", "cine_broad_areas"
   add_foreign_key "cine_specific_areas", "users", column: "created_by"
   add_foreign_key "cine_specific_areas", "users", column: "updated_by"
+  add_foreign_key "clinical_practice_guidelines", "colciencias_calls"
+  add_foreign_key "clinical_practice_guidelines", "geo_cities"
+  add_foreign_key "clinical_practice_guidelines", "research_groups"
+  add_foreign_key "clinical_practice_guidelines", "subtypes", column: "category_id"
+  add_foreign_key "clinical_practice_guidelines", "users", column: "created_by"
+  add_foreign_key "clinical_practice_guidelines", "users", column: "updated_by"
   add_foreign_key "colciencias_calls", "users", column: "created_by"
   add_foreign_key "colciencias_calls", "users", column: "updated_by"
   add_foreign_key "colciencias_categories", "users", column: "created_by"
@@ -2762,5 +2790,35 @@ ActiveRecord::Schema.define(version: 2021_05_05_213302) do
        LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
        LEFT JOIN subtypes pt ON ((reg.product_type_id = pt.id)))
        LEFT JOIN subtypes rt ON ((reg.regulation_type_id = rt.id)));
+  SQL
+  create_view "complete_clinical_pgs", sql_definition: <<-SQL
+      SELECT cpg.id,
+      cpg.title,
+      cpg.category_id,
+      st.st_name AS category_name,
+      cpg.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      cpg.date_of_publication,
+      cpg.geo_city_id,
+      gcity.name AS geo_city_name,
+      gs.geo_country_id,
+      gctry.name AS geo_country_name,
+      gcity.geo_state_id,
+      gs.name AS geo_state_name,
+      cpg.isbn,
+      cpg.observation,
+      cpg.research_group_id,
+      cpg.active,
+      cpg.created_by,
+      cpg.updated_by,
+      cpg.created_at,
+      cpg.updated_at
+     FROM (((((clinical_practice_guidelines cpg
+       LEFT JOIN subtypes st ON ((cpg.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((cpg.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((cpg.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
   SQL
 end
