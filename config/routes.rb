@@ -161,6 +161,9 @@ Rails.application.routes.draw do
         resources :enterprises, only: [:index, :create]
         resources :innovations, only: [:index, :create]
         resources :regulations, only: [:index, :create]
+        resources :clinical_practice_guidelines, only: [:index, :create]
+        resources :guide_manuals, only: [:index, :create]
+        resources :protocol_acts, only: [:index, :create]
 
         # Social appropriation of knowledge
         resources :events, only: [:index, :show, :create, :update]
@@ -180,6 +183,9 @@ Rails.application.routes.draw do
       resources :enterprises, only: [:show, :update]
       resources :innovations, only: [:show, :update]
       resources :regulations, only: [:show, :update]
+      resources :clinical_practice_guidelines, only: [:show, :update]
+      resources :guide_manuals, only: [:show, :update]
+      resources :protocol_acts, only: [:show, :update]
 
       # RESEARCH UNIT PRODUCT ENDPOINTS
       ## Participants in product creation and documents
@@ -190,6 +196,8 @@ Rails.application.routes.draw do
                 :plant_ind_prototypes, :new_scientific_records, :scientific_collections,
                 :technical_concepts, :distinctive_signs, :nutraceutical_products,
                 :enterprise_secrets, :enterprises, :innovations, :regulations,
+                :clinical_practice_guidelines, :guide_manuals,
+                :protocol_acts,
                 :events, :degree_works,
                 only: [] do
         resources :ext_participants, only: [:index, :show, :create, :update]

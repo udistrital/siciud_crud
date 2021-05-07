@@ -99,6 +99,18 @@ class ApplicationController < ActionController::API
     elsif params[:innovation_id]
       id = params[:innovation_id]
       @context = Innovation.find(id)
+    elsif params[:regulation_id]
+      id = params[:regulation_id]
+      @context = Regulation.find(id)
+    elsif params[:clinical_practice_guideline_id]
+      id = params[:clinical_practice_guideline_id]
+      @context = ClinicalPracticeGuideline.find(id)
+    elsif params[:guide_manual_id]
+      id = params[:guide_manual_id]
+      @context = GuideManual.find(id)
+    elsif params[:protocol_act_id]
+      id = params[:protocol_act_id]
+      @context = ProtocolAct.find(id)
     end
   end
 end
