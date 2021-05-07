@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_06_144756) do
+ActiveRecord::Schema.define(version: 2021_05_07_050346) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -779,6 +779,30 @@ ActiveRecord::Schema.define(version: 2021_05_06_144756) do
     t.index ["researcher_id"], name: "index_group_members_on_researcher_id"
     t.index ["role_id"], name: "index_group_members_on_role_id"
     t.index ["updated_by"], name: "index_group_members_on_updated_by"
+  end
+
+  create_table "guide_manuals", force: :cascade do |t|
+    t.string "title"
+    t.date "date_of_publication"
+    t.string "url"
+    t.bigint "product_type_id"
+    t.bigint "geo_city_id"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "observation"
+    t.boolean "active"
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_guide_manuals_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_guide_manuals_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_guide_manuals_on_created_by"
+    t.index ["geo_city_id"], name: "index_guide_manuals_on_geo_city_id"
+    t.index ["product_type_id"], name: "index_guide_manuals_on_product_type_id"
+    t.index ["research_group_id"], name: "index_guide_manuals_on_research_group_id"
+    t.index ["updated_by"], name: "index_guide_manuals_on_updated_by"
   end
 
   create_table "historical_colciencias_ranks", force: :cascade do |t|
@@ -1667,6 +1691,13 @@ ActiveRecord::Schema.define(version: 2021_05_06_144756) do
   add_foreign_key "group_members", "gm_states"
   add_foreign_key "group_members", "users", column: "created_by"
   add_foreign_key "group_members", "users", column: "updated_by"
+  add_foreign_key "guide_manuals", "colciencias_calls"
+  add_foreign_key "guide_manuals", "geo_cities"
+  add_foreign_key "guide_manuals", "research_groups"
+  add_foreign_key "guide_manuals", "subtypes", column: "category_id"
+  add_foreign_key "guide_manuals", "subtypes", column: "product_type_id"
+  add_foreign_key "guide_manuals", "users", column: "created_by"
+  add_foreign_key "guide_manuals", "users", column: "updated_by"
   add_foreign_key "historical_colciencias_ranks", "oecd_knowledge_areas"
   add_foreign_key "historical_colciencias_ranks", "oecd_knowledge_subareas"
   add_foreign_key "historical_colciencias_ranks", "users", column: "created_by"
@@ -2820,5 +2851,38 @@ ActiveRecord::Schema.define(version: 2021_05_06_144756) do
        LEFT JOIN geo_cities gcity ON ((cpg.geo_city_id = gcity.id)))
        LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
        LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_guide_manuals", sql_definition: <<-SQL
+      SELECT gm.id,
+      gm.title,
+      gm.category_id,
+      st.st_name AS category_name,
+      gm.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      gm.date_of_publication,
+      gm.geo_city_id,
+      gcity.name AS geo_city_name,
+      gs.geo_country_id,
+      gctry.name AS geo_country_name,
+      gcity.geo_state_id,
+      gs.name AS geo_state_name,
+      gm.observation,
+      gm.product_type_id,
+      pt.st_name AS product_type_name,
+      gm.research_group_id,
+      gm.url,
+      gm.active,
+      gm.created_by,
+      gm.updated_by,
+      gm.created_at,
+      gm.updated_at
+     FROM ((((((guide_manuals gm
+       LEFT JOIN subtypes st ON ((gm.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((gm.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((gm.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
+       LEFT JOIN subtypes pt ON ((gm.product_type_id = pt.id)));
   SQL
 end

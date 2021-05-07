@@ -105,6 +105,9 @@ class ApplicationController < ActionController::API
     elsif params[:clinical_practice_guideline_id]
       id = params[:clinical_practice_guideline_id]
       @context = ClinicalPracticeGuideline.find(id)
+    elsif params[:guide_manual_id]
+      id = params[:guide_manual_id]
+      @context = GuideManual.find(id)
     end
   end
 end
