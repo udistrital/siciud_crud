@@ -108,6 +108,9 @@ class ApplicationController < ActionController::API
     elsif params[:guide_manual_id]
       id = params[:guide_manual_id]
       @context = GuideManual.find(id)
+    elsif params[:protocol_act_id]
+      id = params[:protocol_act_id]
+      @context = ProtocolAct.find(id)
     end
   end
 end

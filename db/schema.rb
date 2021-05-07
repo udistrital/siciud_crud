@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_07_050346) do
+ActiveRecord::Schema.define(version: 2021_05_07_055128) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1158,6 +1158,29 @@ ActiveRecord::Schema.define(version: 2021_05_07_050346) do
     t.index ["updated_by"], name: "index_plant_ind_prototypes_on_updated_by"
   end
 
+  create_table "protocol_acts", force: :cascade do |t|
+    t.string "title"
+    t.date "date_of_publication"
+    t.bigint "geo_city_id"
+    t.bigint "category_id"
+    t.bigint "product_type_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "observation"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_protocol_acts_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_protocol_acts_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_protocol_acts_on_created_by"
+    t.index ["geo_city_id"], name: "index_protocol_acts_on_geo_city_id"
+    t.index ["product_type_id"], name: "index_protocol_acts_on_product_type_id"
+    t.index ["research_group_id"], name: "index_protocol_acts_on_research_group_id"
+    t.index ["updated_by"], name: "index_protocol_acts_on_updated_by"
+  end
+
   create_table "regulations", force: :cascade do |t|
     t.string "title"
     t.date "date_of_publication"
@@ -1780,6 +1803,13 @@ ActiveRecord::Schema.define(version: 2021_05_07_050346) do
   add_foreign_key "plant_ind_prototypes", "subtypes", column: "plt_type_id"
   add_foreign_key "plant_ind_prototypes", "users", column: "created_by"
   add_foreign_key "plant_ind_prototypes", "users", column: "updated_by"
+  add_foreign_key "protocol_acts", "colciencias_calls"
+  add_foreign_key "protocol_acts", "geo_cities"
+  add_foreign_key "protocol_acts", "research_groups"
+  add_foreign_key "protocol_acts", "subtypes", column: "category_id"
+  add_foreign_key "protocol_acts", "subtypes", column: "product_type_id"
+  add_foreign_key "protocol_acts", "users", column: "created_by"
+  add_foreign_key "protocol_acts", "users", column: "updated_by"
   add_foreign_key "regulations", "colciencias_calls"
   add_foreign_key "regulations", "geo_cities"
   add_foreign_key "regulations", "research_groups"
@@ -2884,5 +2914,37 @@ ActiveRecord::Schema.define(version: 2021_05_07_050346) do
        LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
        LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
        LEFT JOIN subtypes pt ON ((gm.product_type_id = pt.id)));
+  SQL
+  create_view "complete_protocol_acts", sql_definition: <<-SQL
+      SELECT pac.id,
+      pac.title,
+      pac.category_id,
+      st.st_name AS category_name,
+      pac.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      pac.date_of_publication,
+      pac.geo_city_id,
+      gcity.name AS geo_city_name,
+      gs.geo_country_id,
+      gctry.name AS geo_country_name,
+      gcity.geo_state_id,
+      gs.name AS geo_state_name,
+      pac.observation,
+      pac.product_type_id,
+      pt.st_name AS product_type_name,
+      pac.research_group_id,
+      pac.active,
+      pac.created_by,
+      pac.updated_by,
+      pac.created_at,
+      pac.updated_at
+     FROM ((((((protocol_acts pac
+       LEFT JOIN subtypes st ON ((pac.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((pac.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((pac.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
+       LEFT JOIN subtypes pt ON ((pac.product_type_id = pt.id)));
   SQL
 end
