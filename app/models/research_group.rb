@@ -50,6 +50,7 @@ class ResearchGroup < ApplicationRecord
   has_many :guide_manuals
   has_many :protocol_acts
   has_many :bills
+  has_many :license_agreements
 
   has_many :events, dependent: :destroy
 

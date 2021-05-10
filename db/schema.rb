@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_07_144523) do
+ActiveRecord::Schema.define(version: 2021_05_10_181844) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -969,6 +969,32 @@ ActiveRecord::Schema.define(version: 2021_05_07_144523) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "license_agreements", force: :cascade do |t|
+    t.string "work_name"
+    t.date "license_grant_date"
+    t.date "contract_date"
+    t.string "ncd_registry_number"
+    t.string "license_owner_institution"
+    t.bigint "geo_city_id"
+    t.bigint "contract_geo_city_id"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "observation"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_license_agreements_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_license_agreements_on_colciencias_call_id"
+    t.index ["contract_geo_city_id"], name: "index_license_agreements_on_contract_geo_city_id"
+    t.index ["created_by"], name: "index_license_agreements_on_created_by"
+    t.index ["geo_city_id"], name: "index_license_agreements_on_geo_city_id"
+    t.index ["research_group_id"], name: "index_license_agreements_on_research_group_id"
+    t.index ["updated_by"], name: "index_license_agreements_on_updated_by"
+  end
+
   create_table "new_animal_breeds", force: :cascade do |t|
     t.string "name"
     t.date "date"
@@ -1779,6 +1805,13 @@ ActiveRecord::Schema.define(version: 2021_05_07_144523) do
   add_foreign_key "ip_livestock_breeds", "subtypes", column: "category_id"
   add_foreign_key "ip_livestock_breeds", "users", column: "created_by"
   add_foreign_key "ip_livestock_breeds", "users", column: "updated_by"
+  add_foreign_key "license_agreements", "colciencias_calls"
+  add_foreign_key "license_agreements", "geo_cities"
+  add_foreign_key "license_agreements", "geo_cities", column: "contract_geo_city_id"
+  add_foreign_key "license_agreements", "research_groups"
+  add_foreign_key "license_agreements", "subtypes", column: "category_id"
+  add_foreign_key "license_agreements", "users", column: "created_by"
+  add_foreign_key "license_agreements", "users", column: "updated_by"
   add_foreign_key "new_animal_breeds", "colciencias_calls"
   add_foreign_key "new_animal_breeds", "geo_cities"
   add_foreign_key "new_animal_breeds", "research_groups"
@@ -2988,5 +3021,46 @@ ActiveRecord::Schema.define(version: 2021_05_07_144523) do
      FROM ((bills bl
        LEFT JOIN subtypes st ON ((bl.category_id = st.id)))
        LEFT JOIN colciencias_calls cc ON ((bl.colciencias_call_id = cc.id)));
+  SQL
+  create_view "complete_license_agreements", sql_definition: <<-SQL
+      SELECT la.id,
+      la.work_name,
+      la.category_id,
+      st.st_name AS category_name,
+      la.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      la.contract_date,
+      la.contract_geo_city_id,
+      cgcity.name AS contract_geo_city_name,
+      cgs.geo_country_id AS contract_geo_country_id,
+      cgctry.name AS contract_geo_country_name,
+      cgcity.geo_state_id AS contract_geo_state_id,
+      cgs.name AS contract_geo_state_name,
+      la.geo_city_id,
+      gcity.name AS geo_city_name,
+      gs.geo_country_id,
+      gctry.name AS geo_country_name,
+      gcity.geo_state_id,
+      gs.name AS geo_state_name,
+      la.license_grant_date,
+      la.license_owner_institution,
+      la.ncd_registry_number,
+      la.observation,
+      la.research_group_id,
+      la.active,
+      la.created_by,
+      la.updated_by,
+      la.created_at,
+      la.updated_at
+     FROM ((((((((license_agreements la
+       LEFT JOIN subtypes st ON ((la.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((la.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((la.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
+       LEFT JOIN geo_cities cgcity ON ((la.contract_geo_city_id = cgcity.id)))
+       LEFT JOIN geo_states cgs ON ((cgcity.geo_state_id = cgs.id)))
+       LEFT JOIN geo_countries cgctry ON ((cgs.geo_country_id = cgctry.id)));
   SQL
 end
