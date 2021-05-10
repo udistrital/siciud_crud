@@ -53,6 +53,7 @@ class ResearchGroup < ApplicationRecord
   has_many :license_agreements
 
   has_many :events, dependent: :destroy
+  has_many :appropriation_processes
 
   has_many :degree_works, dependent: :destroy
 
