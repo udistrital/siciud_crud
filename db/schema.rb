@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_07_055128) do
+ActiveRecord::Schema.define(version: 2021_05_07_144523) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -203,6 +203,24 @@ ActiveRecord::Schema.define(version: 2021_05_07_055128) do
     t.index ["created_by"], name: "index_awards_on_created_by"
     t.index ["research_creation_work_id"], name: "index_awards_on_research_creation_work_id"
     t.index ["updated_by"], name: "index_awards_on_updated_by"
+  end
+
+  create_table "bills", force: :cascade do |t|
+    t.string "title"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "observation"
+    t.boolean "active"
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_bills_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_bills_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_bills_on_created_by"
+    t.index ["research_group_id"], name: "index_bills_on_research_group_id"
+    t.index ["updated_by"], name: "index_bills_on_updated_by"
   end
 
   create_table "book_chapters", force: :cascade do |t|
@@ -1614,6 +1632,11 @@ ActiveRecord::Schema.define(version: 2021_05_07_055128) do
   add_foreign_key "awards", "research_creation_works"
   add_foreign_key "awards", "users", column: "created_by"
   add_foreign_key "awards", "users", column: "updated_by"
+  add_foreign_key "bills", "colciencias_calls"
+  add_foreign_key "bills", "research_groups"
+  add_foreign_key "bills", "subtypes", column: "category_id"
+  add_foreign_key "bills", "users", column: "created_by"
+  add_foreign_key "bills", "users", column: "updated_by"
   add_foreign_key "book_chapters", "colciencias_calls"
   add_foreign_key "book_chapters", "geo_cities"
   add_foreign_key "book_chapters", "research_groups"
@@ -2946,5 +2969,24 @@ ActiveRecord::Schema.define(version: 2021_05_07_055128) do
        LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
        LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
        LEFT JOIN subtypes pt ON ((pac.product_type_id = pt.id)));
+  SQL
+  create_view "complete_bills", sql_definition: <<-SQL
+      SELECT bl.id,
+      bl.title,
+      bl.category_id,
+      st.st_name AS category_name,
+      bl.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      bl.observation,
+      bl.research_group_id,
+      bl.active,
+      bl.created_by,
+      bl.updated_by,
+      bl.created_at,
+      bl.updated_at
+     FROM ((bills bl
+       LEFT JOIN subtypes st ON ((bl.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((bl.colciencias_call_id = cc.id)));
   SQL
 end

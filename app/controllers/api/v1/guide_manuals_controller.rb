@@ -8,8 +8,15 @@ module Api
 
       # GET /research_units/:id/guide_manuals
       def index
-        @guide_manuals = CompleteGuideManual.where(
-          research_group_id: params[:research_group_id])
+        if params[:product_type_id]
+          @guide_manuals = CompleteGuideManual.where(
+            "research_group_id = ? AND product_type_id = ?",
+            params[:research_group_id], params[:product_type_id]
+          )
+        else
+          @guide_manuals = CompleteGuideManual.where(
+            research_group_id: params[:research_group_id])
+        end
         @guide_manuals = DxService.load(@guide_manuals, params)
 
         render json: @guide_manuals

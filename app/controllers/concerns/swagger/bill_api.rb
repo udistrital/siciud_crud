@@ -1,28 +1,28 @@
-module Swagger::EnterpriseApi
+module Swagger::BillApi
   extend ActiveSupport::Concern
   include Swagger::Blocks
 
   included do
-    swagger_path '/enterprises/{id}' do
+    swagger_path '/bills/{id}' do
       operation :get do
-        key :summary, 'Get a Enterprise by ID'
-        key :description, 'Returns a single Enterprise'
-        key :operationId, :get_enterprise_by_id
+        key :summary, 'Get a Bill by ID'
+        key :description, 'Returns a single Bill'
+        key :operationId, :get_bill_by_id
         key :produces, ['application/json',]
-        key :tags, ['Products::TDI::Enterprises']
+        key :tags, ['Products::TDI::Bills']
 
         parameter name: :id do
           key :in, :path
-          key :description, 'ID of Enterprise to fetch'
+          key :description, 'ID of Bill to fetch'
           key :required, true
           key :type, :integer
           key :format, :int64
         end
 
         response 200 do
-          key :description, 'Enterprise response'
+          key :description, 'bill response'
           schema do
-            key :'$ref', :EnterpriseOutput
+            key :'$ref', :BillOutput
           end
         end
         response 404 do
@@ -37,33 +37,33 @@ module Swagger::EnterpriseApi
       end
 
       operation :put do
-        key :summary, 'Update Enterprise by ID'
-        key :description, 'Returns the updated Enterprise'
-        key :operationId, :update_enterprise
+        key :summary, 'Update Bill by ID'
+        key :description, 'Returns the updated Bill'
+        key :operationId, :update_bill
         key :produces, ['application/json',]
-        key :tags, ['Products::TDI::Enterprises']
+        key :tags, ['Products::TDI::Bills']
 
         parameter name: :id do
           key :in, :path
-          key :description, 'ID of Enterprise to fetch'
+          key :description, 'ID of Bill to fetch'
           key :required, true
           key :type, :integer
           key :format, :int64
         end
 
-        parameter name: :enterprise do
+        parameter name: :bill do
           key :in, :body
-          key :description, 'Enterprise to update'
+          key :description, 'Bill to update'
           key :required, true
           schema do
-            key :'$ref', :EnterpriseInputPut
+            key :'$ref', :BillInputPut
           end
         end
 
         response 200 do
-          key :description, 'Enterprise response'
+          key :description, 'bill response'
           schema do
-            key :'$ref', :EnterpriseOutput
+            key :'$ref', :BillOutput
           end
         end
         response 422 do
@@ -78,35 +78,35 @@ module Swagger::EnterpriseApi
       end
 
       operation :patch do
-        key :summary, 'Activate or deactivate a Enterprise by ID'
-        key :description, 'Returns the activated/deactivated Enterprise'
-        key :operationId, :change_active_enterprise
+        key :summary, 'Activate or deactivate a Bill by ID'
+        key :description, 'Returns the activated/deactivated Bill'
+        key :operationId, :change_active_bill
         key :produces, ['application/json',]
-        key :tags, ['Products::TDI::Enterprises']
+        key :tags, ['Products::TDI::Bills']
 
         parameter name: :id do
           key :in, :path
-          key :description, 'ID of Enterprise to fetch'
+          key :description, 'ID of Bill to fetch'
           key :required, true
           key :type, :integer
           key :format, :int64
         end
 
-        parameter name: :enterprise do
+        parameter name: :bill do
           key :in, :body
-          key :description, 'Enterprise to activate or deactivate'
+          key :description, 'Bill to activate or deactivate'
           key :required, true
           schema do
-            property :enterprise do
+            property :bill do
               key :'$ref', :ChangeActive
             end
           end
         end
 
         response 200 do
-          key :description, 'Enterprise response'
+          key :description, 'bill response'
           schema do
-            key :'$ref', :EnterpriseOutput
+            key :'$ref', :BillOutput
           end
         end
         response 422 do
@@ -121,13 +121,13 @@ module Swagger::EnterpriseApi
       end
     end
 
-    swagger_path '/research_units/{research_group_id}/enterprises/' do
+    swagger_path '/research_units/{research_group_id}/bills/' do
       operation :get do
-        key :summary, 'Get all Enterprises'
-        key :description, 'Returns all Enterprises'
-        key :operationId, :get_enterprises
+        key :summary, 'Get all Bills'
+        key :description, 'Returns all Bills'
+        key :operationId, :get_bills
         key :produces, ['application/json',]
-        key :tags, ['Products::TDI::Enterprises']
+        key :tags, ['Products::TDI::Bills']
 
         parameter name: :research_group_id do
           key :in, :path
@@ -137,20 +137,12 @@ module Swagger::EnterpriseApi
           key :format, :int64
         end
 
-        parameter name: :product_type_id do
-          key :in, :query
-          key :description, 'ID of type to fetch'
-          key :required, false
-          key :type, :integer
-          key :format, :int64
-        end
-
         response 200 do
-          key :description, 'Enterprise response'
+          key :description, 'bill response'
           schema do
             key :type, :array
             items do
-              key :'$ref', :EnterpriseDxOutput
+              key :'$ref', :BillDxOutput
             end
           end
         end
@@ -160,11 +152,11 @@ module Swagger::EnterpriseApi
       end
 
       operation :post do
-        key :summary, 'Create a new Enterprises'
-        key :description, 'Returns the created Enterprise'
-        key :operationId, :create_enterprise
+        key :summary, 'Create a new Bills'
+        key :description, 'Returns the created Bill'
+        key :operationId, :create_bill
         key :produces, ['application/json',]
-        key :tags, ['Products::TDI::Enterprises']
+        key :tags, ['Products::TDI::Bills']
 
         parameter name: :research_group_id do
           key :in, :path
@@ -174,19 +166,19 @@ module Swagger::EnterpriseApi
           key :format, :int64
         end
 
-        parameter name: :enterprise do
+        parameter name: :bill do
           key :in, :body
-          key :description, 'Enterprise to register'
+          key :description, 'Bill to register'
           key :required, true
           schema do
-            key :'$ref', :EnterpriseInputPost
+            key :'$ref', :BillInputPost
           end
         end
 
         response 201 do
-          key :description, 'Enterprise response'
+          key :description, 'bill response'
           schema do
-            key :'$ref', :EnterpriseOutput
+            key :'$ref', :BillOutput
           end
         end
         response 422 do

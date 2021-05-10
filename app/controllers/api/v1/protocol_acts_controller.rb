@@ -8,8 +8,15 @@ module Api
 
       # GET /research_units/:id/protocol_acts
       def index
-        @protocol_acts = CompleteProtocolAct.where(
-          research_group_id: params[:research_group_id])
+        if params[:product_type_id]
+          @protocol_acts = CompleteProtocolAct.where(
+            "research_group_id = ? AND product_type_id = ?",
+            params[:research_group_id], params[:product_type_id]
+          )
+        else
+          @protocol_acts = CompleteProtocolAct.where(
+            research_group_id: params[:research_group_id])
+        end
         @protocol_acts = DxService.load(@protocol_acts, params)
 
         render json: @protocol_acts

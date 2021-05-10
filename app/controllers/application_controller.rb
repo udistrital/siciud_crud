@@ -111,6 +111,9 @@ class ApplicationController < ActionController::API
     elsif params[:protocol_act_id]
       id = params[:protocol_act_id]
       @context = ProtocolAct.find(id)
+    elsif params[:bill_id]
+      id = params[:bill_id]
+      @context = Bill.find(id)
     end
   end
 end

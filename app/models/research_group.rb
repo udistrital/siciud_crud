@@ -49,6 +49,7 @@ class ResearchGroup < ApplicationRecord
   has_many :clinical_practice_guidelines
   has_many :guide_manuals
   has_many :protocol_acts
+  has_many :bills
 
   has_many :events, dependent: :destroy
 
