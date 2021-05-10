@@ -137,6 +137,14 @@ module Swagger::EnterpriseApi
           key :format, :int64
         end
 
+        parameter name: :product_type_id do
+          key :in, :query
+          key :description, 'ID of type to fetch'
+          key :required, false
+          key :type, :integer
+          key :format, :int64
+        end
+
         response 200 do
           key :description, 'Enterprise response'
           schema do

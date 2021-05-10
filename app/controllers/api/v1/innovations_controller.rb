@@ -8,8 +8,15 @@ module Api
 
       # GET /research_units/:id/innovations
       def index
-        @innovations = CompleteInnovation.where(
-          research_group_id: params[:research_group_id])
+        if params[:product_type_id]
+          @innovations = CompleteInnovation.where(
+            "research_group_id = ? AND product_type_id = ?",
+            params[:research_group_id], params[:product_type_id]
+          )
+        else
+          @innovations = CompleteInnovation.where(
+            research_group_id: params[:research_group_id])
+        end
         @innovations = DxService.load(@innovations, params)
 
         render json: @innovations
