@@ -166,6 +166,7 @@ Rails.application.routes.draw do
         resources :protocol_acts, only: [:index, :create]
         resources :bills, only: [:index, :create]
         resources :license_agreements, only: [:index, :create]
+        resources :knowledge_networks, only: [:index, :create]
 
         # Social appropriation of knowledge
         resources :events, only: [:index, :show, :create, :update]
@@ -191,6 +192,7 @@ Rails.application.routes.draw do
       resources :protocol_acts, only: [:show, :update]
       resources :bills, only: [:show, :update]
       resources :license_agreements, only: [:show, :update]
+      resources :knowledge_networks, only: [:show, :update]
 
       # Social appropriation of knowledge
       resources :appropriation_processes, only: [:show, :update]
@@ -206,7 +208,8 @@ Rails.application.routes.draw do
                 :enterprise_secrets, :enterprises, :innovations, :regulations,
                 :clinical_practice_guidelines, :guide_manuals,
                 :protocol_acts, :bills, :license_agreements,
-                :events, :appropriation_processes, :degree_works,
+                :events, :appropriation_processes, :knowledge_networks,
+                :degree_works,
                 only: [] do
         resources :ext_participants, only: [:index, :show, :create, :update]
         resources :int_participants, only: [:index, :show, :create, :update]

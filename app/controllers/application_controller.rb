@@ -120,6 +120,9 @@ class ApplicationController < ActionController::API
     elsif params[:appropriation_process_id]
       id = params[:appropriation_process_id]
       @context = AppropriationProcess.find(id)
+    elsif params[:appropriation_process_id]
+      id = params[:appropriation_process_id]
+      @context = AppropriationProcess.find(id)
     end
   end
 end
