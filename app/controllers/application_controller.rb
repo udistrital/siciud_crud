@@ -114,6 +114,12 @@ class ApplicationController < ActionController::API
     elsif params[:bill_id]
       id = params[:bill_id]
       @context = Bill.find(id)
+    elsif params[:license_agreement_id]
+      id = params[:license_agreement_id]
+      @context = LicenseAgreement.find(id)
+    elsif params[:appropriation_process_id]
+      id = params[:appropriation_process_id]
+      @context = AppropriationProcess.find(id)
     end
   end
 end
