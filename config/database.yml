@@ -30,3 +30,12 @@ test:
 production:
   <<: *default
 #  database: <%#= ENV['SICIUD_CRUD_PGDB_PROD'] %>
+
+migrations:
+  <<: *default
+  database: <%= ENV['PG_MIGRATION_DBNAME'] %>
+  host: <%= ENV['PG_MIGRATION_HOST'] %>
+  port: <%= ENV['PG_MIGRATION_PORT'] %>
+  username: <%= ENV['PG_MIGRATION_USER'] %>
+  password: <%= ENV['PG_MIGRATION_PASS'] %>
+  schema_search_path: <%= ENV['PG_MIGRATION_SCHEMA'] %>
