@@ -1,14 +1,12 @@
-
-
 module Swagger::BookChapterApi
   extend ActiveSupport::Concern
   include Swagger::Blocks
 
   included do
-    swagger_path '/research_group/{research_group_id}/book_chapters/{id}' do
+    swagger_path '/research_units/{research_group_id}/book_chapters/{id}' do
       operation :get do
-        key :summary, 'Get a Book Chapter from a Research Unit by ID'
-        key :description, 'Returns a single book chapter'
+        key :summary, 'Get a Book Chapter of a Research Unit by ID'
+        key :description, 'Get a book chapter if it exists, specified with its id and the id of the research unit to which it belongs'
         key :operationId, :get_book_chapter_by_id
         key :produces, ['application/json',]
         key :tags, ['Products::GNK::Book Chapters']
@@ -23,7 +21,7 @@ module Swagger::BookChapterApi
 
         parameter name: :id do
           key :in, :path
-          key :description, 'ID of book chapter from a research unit to fetch'
+          key :description, 'book chapter ID of a research unit to fetch'
           key :required, true
           key :type, :integer
           key :format, :int64
@@ -55,7 +53,7 @@ module Swagger::BookChapterApi
 
         parameter name: :research_group_id do
           key :in, :path
-          key :description, 'ID of research unit to fetch'
+          key :description, 'research unit ID to fetch'
           key :required, true
           key :type, :integer
           key :format, :int64
@@ -63,7 +61,7 @@ module Swagger::BookChapterApi
 
         parameter name: :id do
           key :in, :path
-          key :description, 'ID of book chapter from a research unit to fetch'
+          key :description, 'book chapter ID of a research unit to fetch'
           key :required, true
           key :type, :integer
           key :format, :int64
@@ -74,7 +72,7 @@ module Swagger::BookChapterApi
           key :description, 'Book Chapter to update'
           key :required, true
           schema do
-            key :'$ref', :BookChapterInput
+            key :'$ref', :BookChapterInputPut
           end
         end
 
@@ -96,7 +94,7 @@ module Swagger::BookChapterApi
       end
     end
 
-    swagger_path '/research_group/{research_group_id}/book_chapters/' do
+    swagger_path '/research_units/{research_group_id}/book_chapters/' do
       operation :get do
         key :summary, 'Get all Book Chapters'
         key :description, 'Returns all book chapters'
@@ -146,7 +144,7 @@ module Swagger::BookChapterApi
           key :description, 'Book Chapter to register'
           key :required, true
           schema do
-            key :'$ref', :BookChapterInput
+            key :'$ref', :BookChapterInputPost
           end
         end
 
@@ -167,5 +165,59 @@ module Swagger::BookChapterApi
         end
       end
     end
+
+    swagger_path '/research_units/{research_group_id}/book_chapters/{id}/active' do
+      operation :put do
+        key :summary, 'Activate or deactivate a Book Chapter by ID'
+        key :description, 'Activate/deactivate the book chapter if it exists'
+        key :operationId, :change_active_book_chapter
+        key :produces, ['application/json',]
+        key :tags, ['Products::GNK::Book Chapters']
+
+        parameter name: :research_group_id do
+          key :in, :path
+          key :description, 'research unit ID to fetch'
+          key :required, true
+          key :type, :integer
+          key :format, :int64
+        end
+
+        parameter name: :id do
+          key :in, :path
+          key :description, 'book chapter ID of a research unit to fetch'
+          key :required, true
+          key :type, :integer
+          key :format, :int64
+        end
+
+        parameter name: :book_chapter do
+          key :in, :body
+          key :description, 'Book Chapter to activate/deactivate'
+          key :required, true
+          schema do
+            property :book_chapter do
+              key :'$ref', :ChangeActive
+            end
+          end
+        end
+
+        response 200 do
+          key :description, 'book chapter response'
+          schema do
+            key :'$ref', :BookChapterOutput
+          end
+        end
+        response 422 do
+          key :description, 'Unprocessable Entity'
+          schema do
+            key :'$ref', :ErrorUnprocessableEntity
+          end
+        end
+        response :default do
+          key :description, 'Unexpected Error'
+        end
+      end
+    end
+
   end
 end

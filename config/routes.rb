@@ -7,8 +7,6 @@ Rails.application.routes.draw do
   get "/api" => redirect("/api/v1/apidocs/")
   namespace :api do
     namespace :v1 do
-      get "country", to: "country#index"
-      get "country/:name", to: "country#show"
       resources :apidocs, only: [:index]
 
       # General endpoints
@@ -22,33 +20,24 @@ Rails.application.routes.draw do
         resources :geo_cities, only: [:index, :show]
       end
 
+      # Types and Subtypes endpoints
+      resources :types, only: [:index, :show, :create, :update]
 
-      # Endpoint para listar las unidades de investigacion
-      resources :research_unit, only: [:index, :show]
+      resources :subtypes, only: [:index, :show, :create, :update]
+      get "/subtypes/by-type/:type_id", to: "subtypes#subtypes_by_type"
 
-      #Endpoint para listar los estados de los grupos de investigacion
-      resources :group_states, only: [:index, :show]
-      resources :state_seedbed, only: [:index, :show]
-      resources :group_types, only: [:index, :create, :update]
+      get "/types_all", to: "types#all_types_and_subtypes"
 
-      #Enpoint para listar las lineas de investigacion
-      resources :research_focus, only: [:index, :show]
-
-      #Enpoint para actualizar los documentos de los grupos de investigacion
-      put "research_group/:id/attach/", to: "research_group#attach"
-      #Enpoint para actualizar los documentos de los grupos de investigacion
-      put "research_seedbed/:id/attach/", to: "research_seedbed#attach"
       #Enpoint para actualizar los documentos de los convenios
       put "agreement/:id/attach/", to: "agreement#attach"
-      #Enpoint para listar los snies
-      resources :snies, only: [:index, :show]
 
       # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
       get "/health", to: "health#health"
 
       resources :gm_states, only: [:index, :show]
       resources :role, only: [:index, :show]
-      resources :researcher, only: [:index, :show, :update, :create]
+      resources :researchers, only: [:index, :show, :update, :create]
+      get "researcher_research_units", to: "researchers#researcher_research_units"
 
       resources :funding_entity, only: [:index, :show, :create, :update] do
         resources :fe_contact, only: [:index, :show, :update, :create]
@@ -70,6 +59,7 @@ Rails.application.routes.draw do
       resources :arp_role, only: [:index, :show, :create]
 
       resources :user_roles, only: [:index, :show, :create, :update]
+      put "/user_roles/:id/active", to: "user_roles#change_active"
 
       resources :agreement_research_project, only: [] do
         resources :contribution_rp_item, only: [:index, :show, :create, :update]
@@ -98,107 +88,99 @@ Rails.application.routes.draw do
         put "arp_payment/:id/attach/", to: "arp_payment#attach"
       end
       resources :users, only: [:index, :show, :create, :update]
+      put "/users/:id/active", to: "users#change_active"
 
       # Enpoint CRUD de los grupos de investigacion
-      resources :research_group, only: [:index, :show, :create, :update] do
+      resources :research_group, only: [:index, :show, :create, :update], path: 'research_units' do
+        resources :documents, only: [:index, :show, :create, :update]
+
         #    member do
         resources :group_member, only: [:index, :show, :create]
-        put "/group_member/:id/deactivate/", to: "group_member#deactivate"
-        # GET    /research_group/:id/plan_periods                                         plan_periods#index                    [Endpoint para listar los periodos de un plan de accion]
-        # POST   /research_group/:id/plan_periods                                         plan_periods#create                   [Endpoint para crear los periodos de un plan de accion]
-        # GET    /research_group/:id/plan_periods/:id                                     plan_periods#show                     [Endpoint para mostrar un periodo de un plan de accion]
-        # PATCH  /research_group/:id/plan_periods/:id                                     plan_periods#update                   [Endpoint para editar un periodo de un plan de accion]
-        # PUT    /research_group/:id/plan_periods/:id                                     plan_periods#update                   [Endpoint para actualizar un periodo de un plan de accion]
-        # DELETE /research_group/:id/plan_periods/:id                                     plan_periods#destroy                  [Endpoint para eliminar un periodo de un plan de accion]
+        put "/group_member/:id/deactivate", to: "group_member#deactivate"
 
         resources :plan_periods do
           #       member do
-
-          # GET    /research_group/:id/plan_periods/:id/research_project_plans              research_project_plans#index          [Endpoint para listar los proyectos de investigacion de un plan de accion]
-          # POST   /research_group/:id/plan_periods/:id/research_project_plans              research_project_plans#create         [Endpoint para crear los proyectos de investigacion de un plan de accion]
-          # GET    /research_group/:id/plan_periods/:id/research_project_plans/:id          research_project_plans#show           [Endpoint para mostrar un proyecto de investigacion de un plan de accion]
-          # PATCH  /research_group/:id/plan_periods/:id/research_project_plans/:id          research_project_plans#update         [Endpoint para editar un proyecto de investigacion de un plan de accion]
-          # PUT    /research_group/:id/plan_periods/:id/research_project_plans/:id          research_project_plans#update         [Endpoint para actualizar un proyecto de investigacion de un plan de accion]
-          # DELETE /research_group/:id/plan_periods/:id/research_project_plans/:id          research_project_plans#destroy        [Endpoint para eliminar un proyecto de investigacion de un plan de accion]
-
           resources :research_project_plan
-
-          # GET    /research_group/:id/plan_periods/:id/researcher_formation_plans          researcher_formation_plans#index      [Endpoint para listar los planes de formacion de investigadores de un plan de accion]
-          # POST   /research_group/:id/plan_periods/:id/researcher_formation_plans          researcher_formation_plans#create     [Endpoint para crear los planes de formacion de investigadores de un plan de accion]
-          # GET    /research_group/:id/plan_periods/:id/researcher_formation_plans/:id      researcher_formation_plans#show       [Endpoint para mostrar un plan de formacion de investigadores de un plan de accion]
-          # PATCH  /research_group/:id/plan_periods/:id/researcher_formation_plans/:id      researcher_formation_plans#update     [Endpoint para editar un plan de formacion de investigadores de un plan de accion]
-          # PUT    /research_group/:id/plan_periods/:id/researcher_formation_plans/:id      researcher_formation_plans#update     [Endpoint para actualizar un plan de formacion de investigadores de un plan de accion]
-          # DELETE /research_group/:id/plan_periods/:id/researcher_formation_plans/:id      researcher_formation_plans#destroy    [Endpoint para eliminar un plan de formacion de investigadores de un plan de accion]
-
           resources :researcher_formation_plan
-
-          # GET    /research_group/:id/plan_periods/:id/result_transfer_plans               result_transfer_plans#index           [Endpoint para listar los planes de transferencia de resultados de un plan de accion]
-          # POST   /research_group/:id/plan_periods/:id/result_transfer_plans               result_transfer_plans#create          [Endpoint para crear los planes de transferencia de resultados de un plan de accion]
-          # GET    /research_group/:id/plan_periods/:id/result_transfer_plans/:id           result_transfer_plans#show            [Endpoint para mostrar un plan de transferencia de resultados de un plan de accion]
-          # PATCH  /research_group/:id/plan_periods/:id/result_transfer_plans/:id           result_transfer_plans#update          [Endpoint para editar un plan de transferencia de resultados de un plan de accion]
-          # PUT    /research_group/:id/plan_periods/:id/result_transfer_plans/:id           result_transfer_plans#update          [Endpoint para actualizar un plan de transferencia de resultados de un plan de accion]
-          # DELETE /research_group/:id/plan_periods/:id/result_transfer_plans/:id           result_transfer_plans#destroy         [Endpoint para eliminar un plan de transferencia de resultados de un plan de accion]
-
           resources :result_transfer_plan
-
-          # GET    /research_group/:id/plan_periods/:id/social_appropriation_plans          social_appropriation_plans#index      [Endpoint para listar los planes de apropiacion social de un plan de accion]
-          # POST   /research_group/:id/plan_periods/:id/social_appropriation_plans          social_appropriation_plans#create     [Endpoint para crear los planes de apropiacion social de un plan de accion]
-          # GET    /research_group/:id/plan_periods/:id/social_appropriation_plans/:id      social_appropriation_plans#show       [Endpoint para mostrar un plan de apropiacion social de un plan de accion]
-          # PATCH  /research_group/:id/plan_periods/:id/social_appropriation_plans/:id      social_appropriation_plans#update     [Endpoint para editar un plan de apropiacion social de un plan de accion]
-          # PUT    /research_group/:id/plan_periods/:id/social_appropriation_plans/:id      social_appropriation_plans#update     [Endpoint para actualizar un plan de apropiacion social de un plan de accion]
-          # DELETE /research_group/:id/plan_periods/:id/social_appropriation_plans/:id      social_appropriation_plans#destroy    [Endpoint para eliminar un plan de apropiacion social de un plan de accion]
-
           resources :social_appropriation_plan
-
         end
 
         resources :historical_colciencias_ranks, only: [:index, :show, :create, :update]
 
-
         # PRODUCTS ENDPOINTS BY TYPOLOGY
         # New generation products endpoints
-        # Book
         resources :books, only: [:index, :show, :create, :update]
+        put "/books/:id/active", to: "books#change_active"
 
-        # Book chapter
         resources :book_chapters, only: [:index, :show, :create, :update]
-        put "book_chapters/:id/attach/", to: "book_chapters#attach"
+        put "book_chapters/:id/active/", to: "book_chapters#change_active"
 
         resources :ip_livestock_breeds, only: [:index, :show, :create, :update]
-        put "ip_livestock_breeds/:id/attach/", to: "ip_livestock_breeds#attach"
+        put "/ip_livestock_breeds/:id/active", to: "ip_livestock_breeds#change_active"
 
         resources :new_animal_breeds, only: [:index, :show, :create, :update]
-        put "new_animal_breeds/:id/attach/", to: "new_animal_breeds#attach"
+        put "/new_animal_breeds/:id/active", to: "new_animal_breeds#change_active"
 
         resources :papers, only: [:index, :show, :create, :update]
+        put "/papers/:id/active", to: "papers#change_active"
+
         resources :patents, only: [:index, :show, :create, :update]
+        put "/patents/:id/active", to: "patents#change_active"
+
         resources :research_creation_works, only: [:index, :show, :create, :update]
+        put "/research_creation_works/:id/active", to: "research_creation_works#change_active"
+
         resources :scientific_notes, only: [:index, :show, :create, :update]
+        put "/scientific_notes/:id/active", to: "scientific_notes#change_active"
+
         resources :vegetable_varieties, only: [:index, :show, :create, :update]
+        put "/vegetable_varieties/:id/active", to: "vegetable_varieties#change_active"
+
+        # Technological development and innovation
+        resources :industrial_designs, only: [:index, :show, :create, :update]
+        put "/industrial_designs/:id/active", to: "industrial_designs#change_active"
+
+        resources :integrated_circuit_diagrams, only: [:index, :show, :create, :update]
+        put "/integrated_circuit_diagrams/:id/active", to: "integrated_circuit_diagrams#change_active"
+
+        resources :software, only: [:index, :show, :create, :update]
+        put "/software/:id/active", to: "software#change_active"
+
+        resources :plant_ind_prototypes, only: [:index, :show, :create, :update]
+        put "/plant_ind_prototypes/:id/active", to: "plant_ind_prototypes#change_active"
+
+        resources :new_scientific_records, only: [:index, :show, :create, :update]
+        put "/new_scientific_records/:id/active", to: "new_scientific_records#change_active"
+
+        # Social appropriation of knowledge
+        resources :events, only: [:index, :show, :create, :update]
+        put "/events/:id/active", to: "events#change_active"
+
+        # Human Resource Training for CTel
+        resources :degree_works, only: [:index, :show, :create, :update]
+        put "/degree_works/:id/active", to: "degree_works#change_active"
       end
 
       # RESEARCH UNIT PRODUCT ENDPOINTS
-      ## Participants in product creation
+      ## Participants in product creation and documents
       resources :books, :book_chapters, :ip_livestock_breeds, :new_animal_breeds,
                 :papers, :patents, :research_creation_works, :scientific_notes,
-                :vegetable_varieties, only: [] do
+                :vegetable_varieties, :industrial_designs,
+                :integrated_circuit_diagrams, :software,
+                :plant_ind_prototypes, :new_scientific_records,
+                :events, :degree_works,
+                only: [] do
         resources :ext_participants, only: [:index, :show, :create, :update]
         resources :int_participants, only: [:index, :show, :create, :update]
+        resources :documents, only: [:index, :show, :create, :update]
       end
 
       ## General
-      resources :product_typologies, only: [:index, :show, :create, :update]
-      resources :product_types, only: [:index, :show, :create, :update]
-      resources :categories, only: [:index, :show, :create, :update]
-      resources :cycle_types, only: [:index, :show, :create, :update]
       resources :editorials, only: [:index, :show, :create, :update]
       resources :journals, only: [:index, :show, :create, :update]
-      resources :knwl_spec_areas, only: [:index, :show, :create, :update]
-      resources :paper_types, only: [:index, :show, :create, :update]
-      resources :participant_types, only: [:index, :show, :create, :update]
-      resources :patent_states, only: [:index, :show, :create, :update]
-      resources :petition_statuses, only: [:index, :show, :create, :update]
-      resources :work_types, only: [:index, :show, :create, :update]
+      resources :institutions, only: [:index, :show, :create, :update]
+      put "/institutions/:id/active", to: "institutions#change_active"
 
       ## Endpoints research_creation_works
       resources :research_creation_works, only: [] do
@@ -207,59 +189,6 @@ Rails.application.routes.draw do
 
       resources :colciencias_calls, only: [:index, :create, :update]
       resources :colciencias_categories, only: [:index, :create, :update]
-
-
-      resources :research_seedbed, only: [:index, :show, :create, :update] do
-        #member do
-        resources :seedbed_member, only: [:index, :show, :create]
-        put "/seedbed_member/:id/deactivate/", to: "seedbed_member#deactivate"
-        # GET    /research_seedbed/:id/plan_periods                                         plan_periods#index                    [Endpoint para listar los periodos de un plan de accion]
-        # POST   /research_seedbed/:id/plan_periods                                         plan_periods#create                   [Endpoint para crear los periodos de un plan de accion]
-        # GET    /research_seedbed/:id/plan_periods/:id                                     plan_periods#show                     [Endpoint para mostrar un periodo de un plan de accion]
-        # PATCH  /research_seedbed/:id/plan_periods/:id                                     plan_periods#update                   [Endpoint para editar un periodo de un plan de accion]
-        # PUT    /research_seedbed/:id/plan_periods/:id                                     plan_periods#update                   [Endpoint para actualizar un periodo de un plan de accion]
-        # DELETE /research_seedbed/:id/plan_periods/:id                                     plan_periods#destroy                  [Endpoint para eliminar un periodo de un plan de accion]
-
-        resources :plan_periods do
-          #   member do
-
-          # GET    /research_seedbed/:id/plan_periods/:id/research_project_plans              research_project_plans#index          [Endpoint para listar los proyectos de investigacion de un plan de accion]
-          # POST   /research_seedbed/:id/plan_periods/:id/research_project_plans              research_project_plans#create         [Endpoint para crear los proyectos de investigacion de un plan de accion]
-          # GET    /research_seedbed/:id/plan_periods/:id/research_project_plans/:id          research_project_plans#show           [Endpoint para mostrar un proyecto de investigacion de un plan de accion]
-          # PATCH  /research_seedbed/:id/plan_periods/:id/research_project_plans/:id          research_project_plans#update         [Endpoint para editar un proyecto de investigacion de un plan de accion]
-          # PUT    /research_seedbed/:id/plan_periods/:id/research_project_plans/:id          research_project_plans#update         [Endpoint para actualizar un proyecto de investigacion de un plan de accion]
-          # DELETE /research_seedbed/:id/plan_periods/:id/research_project_plans/:id          research_project_plans#destroy        [Endpoint para eliminar un proyecto de investigacion de un plan de accion]
-
-          resources :research_project_plan
-
-          # GET    /research_seedbed/:id/plan_periods/:id/researcher_formation_plans          researcher_formation_plans#index      [Endpoint para listar los planes de formacion de investigadores de un plan de accion]
-          # POST   /research_seedbed/:id/plan_periods/:id/researcher_formation_plans          researcher_formation_plans#create     [Endpoint para crear los planes de formacion de investigadores de un plan de accion]
-          # GET    /research_seedbed/:id/plan_periods/:id/researcher_formation_plans/:id      researcher_formation_plans#show       [Endpoint para mostrar un plan de formacion de investigadores de un plan de accion]
-          # PATCH  /research_seedbed/:id/plan_periods/:id/researcher_formation_plans/:id      researcher_formation_plans#update     [Endpoint para editar un plan de formacion de investigadores de un plan de accion]
-          # PUT    /research_seedbed/:id/plan_periods/:id/researcher_formation_plans/:id      researcher_formation_plans#update     [Endpoint para actualizar un plan de formacion de investigadores de un plan de accion]
-          # DELETE /research_seedbed/:id/plan_periods/:id/researcher_formation_plans/:id      researcher_formation_plans#destroy    [Endpoint para eliminar un plan de formacion de investigadores de un plan de accion]
-
-          resources :researcher_formation_plan
-
-          # GET    /research_seedbed/:id/plan_periods/:id/result_transfer_plans               result_transfer_plans#index           [Endpoint para listar los planes de transferencia de resultados de un plan de accion]
-          # POST   /research_seedbed/:id/plan_periods/:id/result_transfer_plans               result_transfer_plans#create          [Endpoint para crear los planes de transferencia de resultados de un plan de accion]
-          # GET    /research_seedbed/:id/plan_periods/:id/result_transfer_plans/:id           result_transfer_plans#show            [Endpoint para mostrar un plan de transferencia de resultados de un plan de accion]
-          # PATCH  /research_seedbed/:id/plan_periods/:id/result_transfer_plans/:id           result_transfer_plans#update          [Endpoint para editar un plan de transferencia de resultados de un plan de accion]
-          # PUT    /research_seedbed/:id/plan_periods/:id/result_transfer_plans/:id           result_transfer_plans#update          [Endpoint para actualizar un plan de transferencia de resultados de un plan de accion]
-          # DELETE /research_seedbed/:id/plan_periods/:id/result_transfer_plans/:id           result_transfer_plans#destroy         [Endpoint para eliminar un plan de transferencia de resultados de un plan de accion]
-
-          resources :result_transfer_plan
-
-          # GET    /research_seedbed/:id/plan_periods/:id/social_appropriation_plans          social_appropriation_plans#index      [Endpoint para listar los planes de apropiacion social de un plan de accion]
-          # POST   /research_seedbed/:id/plan_periods/:id/social_appropriation_plans          social_appropriation_plans#create     [Endpoint para crear los planes de apropiacion social de un plan de accion]
-          # GET    /research_seedbed/:id/plan_periods/:id/social_appropriation_plans/:id      social_appropriation_plans#show       [Endpoint para mostrar un plan de apropiacion social de un plan de accion]
-          # PATCH  /research_seedbed/:id/plan_periods/:id/social_appropriation_plans/:id      social_appropriation_plans#update     [Endpoint para editar un plan de apropiacion social de un plan de accion]
-          # PUT    /research_seedbed/:id/plan_periods/:id/social_appropriation_plans/:id      social_appropriation_plans#update     [Endpoint para actualizar un plan de apropiacion social de un plan de accion]
-          # DELETE /research_seedbed/:id/plan_periods/:id/social_appropriation_plans/:id      social_appropriation_plans#destroy    [Endpoint para eliminar un plan de apropiacion social de un plan de accion]
-
-          resources :social_appropriation_plan
-        end
-      end
 
       # Main endpoints for Calls
       resources :calls, only: [:index, :show, :create, :update] do
@@ -275,12 +204,10 @@ Rails.application.routes.draw do
       resources :item_calls, only: [:index]
       resources :required_documents, only: [:index]
 
-
       # Endpoints OECD
       resources :oecd_knowledge_areas, only: [:index, :create, :update]
       resources :oecd_knowledge_subareas, only: [:index, :create, :update]
       resources :oecd_disciplines, only: [:index, :create, :update]
-
 
       # Endpoints CINE
       resources :cine_broad_areas, only: [:index, :create, :update]

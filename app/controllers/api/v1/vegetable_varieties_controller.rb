@@ -4,12 +4,15 @@ module Api
       include Swagger::VegetableVarietyApi
 
       before_action :set_research_group
-      before_action :set_vegetable_variety, only: [:show, :update]
+      before_action :set_vegetable_variety, only: [:show, :update, :change_active]
+      before_action only: [:change_active] do
+        active_in_body_params? vv_params_to_deactivate
+      end
 
       # GET /research_group/:id/vegetable_varieties
       def index
         v_varieties = CompleteVegetableVariety.where(
-            research_group_id: params[:research_group_id])
+          research_group_id: params[:research_group_id])
         @vegetable_varieties = DxService.load(v_varieties, params)
         render json: @vegetable_varieties
       end
@@ -22,7 +25,7 @@ module Api
       # POST /research_group/:id/vegetable_varieties
       def create
         @vegetable_variety = @research_group.vegetable_varieties.new(
-            vegetable_variety_params)
+          vv_params_to_create)
 
         if @vegetable_variety.save
           render json: @vegetable_variety, status: :created
@@ -33,19 +36,19 @@ module Api
 
       # PATCH/PUT /research_group/:id/vegetable_varieties/1
       def update
-        if @vegetable_variety.created_by.nil?
-          # Update user of created_by only this is nil
-          if @vegetable_variety.update(vegetable_variety_params)
-            render json: @vegetable_variety
-          else
-            render json: @vegetable_variety.errors, status: :unprocessable_entity
-          end
+        if @vegetable_variety.update(vv_params_to_update)
+          render json: @vegetable_variety
         else
-          if @vegetable_variety.update(vegetable_variety_params.except(:created_by))
-            render json: @vegetable_variety
-          else
-            render json: @vegetable_variety.errors, status: :unprocessable_entity
-          end
+          render json: @vegetable_variety.errors, status: :unprocessable_entity
+        end
+      end
+
+      # PUT /research_group/:id/vegetable_varieties/1/active
+      def change_active
+        if @vegetable_variety.update(vv_params_to_deactivate)
+          render json: @vegetable_variety
+        else
+          render json: @vegetable_variety.errors, status: :unprocessable_entity
         end
       end
 
@@ -57,12 +60,24 @@ module Api
       end
 
       # Only allow a trusted parameter "white list" through.
-      def vegetable_variety_params
-        params.require(:vegetable_variety).permit(:name, :date, :observation,
-                                                  :cycle_type_id, :petition_status_id,
-                                                  :vegetable_variety_document,
-                                                  :category_id, :geo_city_id, :active,
-                                                  :created_by, :updated_by)
+      def vv_params_to_create
+        params.require(:vegetable_variety).permit(
+          :name, :date, :observation,
+          :cycle_type_id, :petition_status_id,
+          :category_id, :colciencias_call_id,
+          :geo_city_id, :created_by)
+      end
+
+      def vv_params_to_update
+        params.require(:vegetable_variety).permit(
+          :name, :date, :observation,
+          :cycle_type_id, :petition_status_id,
+          :category_id, :colciencias_call_id,
+          :geo_city_id, :updated_by)
+      end
+
+      def vv_params_to_deactivate
+        params.require(:vegetable_variety).permit(:active, :updated_by)
       end
     end
   end

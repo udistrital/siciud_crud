@@ -51,23 +51,14 @@ group :test do
   gem 'database_cleaner', '~> 1.7'
 end
 
-#gem 'city-state'
-gem 'countries'
-#gem 'country_select', '~> 4.0'
-gem 'city-state'
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'active_model_serializers', '~> 0.10.9'
 #gem 'swagger-docs'
 gem 'swagger-blocks'
-gem 'active_storage_validations'
-#gem 'file_validators'
 
 # gem json used to parse string to array
 gem 'json'
 
 # gem scenic used to  database views
 gem 'scenic'
-
-# gem mime magic
-gem 'mimemagic', github: 'mimemagicrb/mimemagic', ref: '01f92d86d15d85cfd0f20dabd025dcbd36a8a60f'

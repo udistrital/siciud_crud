@@ -16,6 +16,10 @@ module Swagger::IpLivestockBreedSchema
         key :type, :integer
         key :format, :int64
       end
+      property :colciencias_call_id do
+        key :type, :integer
+        key :format, :int64
+      end
       property  :consecutive_number_ma do
         key :type, :string
       end
@@ -122,6 +126,13 @@ module Swagger::IpLivestockBreedSchema
             items do
               property :category_name do
                 key :type, :string
+              end
+              property :colciencias_call_name do
+                key :type, :string
+              end
+              property :colciencias_call_year do
+                key :type, :integer
+                key :format, :int64
               end
               property :geo_city_name do
                 key :type, :string

@@ -16,6 +16,10 @@ module Swagger::ResearchCreationWorkSchema
         key :type, :integer
         key :format, :int64
       end
+      property :colciencias_call_id do
+        key :type, :integer
+        key :format, :int64
+      end
       property :creation_and_selection_date do
         key :type, :string
         key :format, :date
@@ -126,6 +130,13 @@ module Swagger::ResearchCreationWorkSchema
         schema do
           property :category_name do
             key :type, :string
+          end
+          property :colciencias_call_name do
+            key :type, :string
+          end
+          property :colciencias_call_year do
+            key :type, :integer
+            key :format, :int64
           end
           property :geo_city_name do
             key :type, :string

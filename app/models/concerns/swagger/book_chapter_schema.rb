@@ -4,11 +4,6 @@ module Swagger::BookChapterSchema
 
   included do
     swagger_schema :BookChapter do
-      key :required, [:id]
-      property :id do
-        key :type, :integer
-        key :format, :int64
-      end
       property :book_title do
         key :type, :string
       end
@@ -19,12 +14,15 @@ module Swagger::BookChapterSchema
         key :type, :integer
         key :format, :int64
       end
+      property :colciencias_call_id do
+        key :type, :integer
+        key :format, :int64
+      end
       property :doi do
         key :type, :string
       end
-      property :editorial_id do
-        key :type, :integer
-        key :format, :int64
+      property :editorial_name do
+        key :type, :string
       end
       property :geo_city_id do
         key :type, :integer
@@ -40,81 +38,43 @@ module Swagger::BookChapterSchema
         key :type, :string
         key :format, :date
       end
-      property :research_group_id do
-        key :type, :integer
-        key :format, :int64
-      end
       property :url do
         key :type, :string
       end
-      property :active do
-        key :type, :boolean
-        key :default, true
-      end
-      property :created_by do
-        key :type, :integer
-        key :format, :int64
-      end
-      property :updated_by do
-        key :type, :integer
-        key :format, :int64
-      end
-      property :created_at do
-        key :type, :string
-        key :format, 'date-time'
-      end
-      property :updated_at do
-        key :type, :string
-        key :format, 'date-time'
+    end
+
+    swagger_schema :BookChapterInputPost do
+      allOf do
+        schema do
+          property :book_chapter do
+            key :'$ref', :BookChapter
+          end
+        end
+        schema do
+          property :book_chapter do
+            property :created_by do
+              key :type, :integer
+              key :format, :int64
+            end
+          end
+        end
       end
     end
 
-    swagger_schema :BookChapterInput do
-      property :book_chapter do
-        property :book_title do
-          key :type, :string
+    swagger_schema :BookChapterInputPut do
+      allOf do
+        schema do
+          property :book_chapter do
+            key :'$ref', :BookChapter
+          end
         end
-        property :title do
-          key :type, :string
-        end
-        property :category_id do
-          key :type, :integer
-          key :format, :int64
-        end
-        property :doi do
-          key :type, :string
-        end
-        property :editorial_name do
-          key :type, :string
-        end
-        property :geo_city_id do
-          key :type, :integer
-          key :format, :int64
-        end
-        property :isbn do
-          key :type, :string
-        end
-        property :observation do
-          key :type, :string
-        end
-        property :publication_date do
-          key :type, :string
-          key :format, :date
-        end
-        property :url do
-          key :type, :string
-        end
-        property :active do
-          key :type, :boolean
-          key :default, true
-        end
-        property :created_by do
-          key :type, :integer
-          key :format, :int64
-        end
-        property :updated_by do
-          key :type, :integer
-          key :format, :int64
+        schema do
+          property :book_chapter do
+            property :updated_by do
+              key :type, :integer
+              key :format, :int64
+            end
+          end
         end
       end
     end
@@ -125,8 +85,19 @@ module Swagger::BookChapterSchema
           key :'$ref', :BookChapter
         end
         schema do
+          property :id do
+            key :type, :integer
+            key :format, :int64
+          end
           property :category_name do
             key :type, :string
+          end
+          property :colciencias_call_name do
+            key :type, :string
+          end
+          property :colciencias_call_year do
+            key :type, :integer
+            key :format, :int64
           end
           property :editorial_name do
             key :type, :string
@@ -147,6 +118,30 @@ module Swagger::BookChapterSchema
           end
           property :geo_state_name do
             key :type, :string
+          end
+          property :research_group_id do
+            key :type, :integer
+            key :format, :int64
+          end
+          property :active do
+            key :type, :boolean
+            key :default, true
+          end
+          property :created_by do
+            key :type, :integer
+            key :format, :int64
+          end
+          property :updated_by do
+            key :type, :integer
+            key :format, :int64
+          end
+          property :created_at do
+            key :type, :string
+            key :format, 'date-time'
+          end
+          property :updated_at do
+            key :type, :string
+            key :format, 'date-time'
           end
         end
       end
