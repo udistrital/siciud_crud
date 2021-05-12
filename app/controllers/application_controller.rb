@@ -78,6 +78,51 @@ class ApplicationController < ActionController::API
     elsif params[:degree_work_id]
       id = params[:degree_work_id]
       @context = DegreeWork.find(id)
+    elsif params[:technical_concept_id]
+      id = params[:technical_concept_id]
+      @context = TechnicalConcept.find(id)
+    elsif params[:distinctive_sign_id]
+      id = params[:distinctive_sign_id]
+      @context = DistinctiveSign.find(id)
+    elsif params[:nutraceutical_product_id]
+      id = params[:nutraceutical_product_id]
+      @context = NutraceuticalProduct.find(id)
+    elsif params[:scientific_collection_id]
+      id = params[:scientific_collection_id]
+      @context = ScientificCollection.find(id)
+    elsif params[:enterprise_secret_id]
+      id = params[:enterprise_secret_id]
+      @context = EnterpriseSecret.find(id)
+    elsif params[:enterprise_id]
+      id = params[:enterprise_id]
+      @context = Enterprise.find(id)
+    elsif params[:innovation_id]
+      id = params[:innovation_id]
+      @context = Innovation.find(id)
+    elsif params[:regulation_id]
+      id = params[:regulation_id]
+      @context = Regulation.find(id)
+    elsif params[:clinical_practice_guideline_id]
+      id = params[:clinical_practice_guideline_id]
+      @context = ClinicalPracticeGuideline.find(id)
+    elsif params[:guide_manual_id]
+      id = params[:guide_manual_id]
+      @context = GuideManual.find(id)
+    elsif params[:protocol_act_id]
+      id = params[:protocol_act_id]
+      @context = ProtocolAct.find(id)
+    elsif params[:bill_id]
+      id = params[:bill_id]
+      @context = Bill.find(id)
+    elsif params[:license_agreement_id]
+      id = params[:license_agreement_id]
+      @context = LicenseAgreement.find(id)
+    elsif params[:appropriation_process_id]
+      id = params[:appropriation_process_id]
+      @context = AppropriationProcess.find(id)
+    elsif params[:appropriation_process_id]
+      id = params[:appropriation_process_id]
+      @context = AppropriationProcess.find(id)
     end
   end
 end

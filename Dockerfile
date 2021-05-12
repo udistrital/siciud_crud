@@ -6,6 +6,7 @@ RUN apt-get update -qq && \
   unzip awscli-bundle.zip && \
   ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws && \
   rm -rf ./awscli-bundle awscli-bundle.zip
+
 RUN mkdir /myapp
 WORKDIR /myapp
 COPY Gemfile /myapp/Gemfile
