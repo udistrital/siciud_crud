@@ -38,8 +38,23 @@ class ResearchGroup < ApplicationRecord
   has_many :software, dependent: :destroy
   has_many :plant_ind_prototypes, dependent: :destroy
   has_many :new_scientific_records, dependent: :destroy
+  has_many :technical_concepts, dependent: :destroy
+  has_many :distinctive_signs, dependent: :destroy
+  has_many :nutraceutical_products, dependent: :destroy
+  has_many :scientific_collections, dependent: :destroy
+  has_many :enterprise_secrets, dependent: :destroy
+  has_many :enterprises, dependent: :destroy
+  has_many :innovations, dependent: :destroy
+  has_many :regulations, dependent: :destroy
+  has_many :clinical_practice_guidelines, dependent: :destroy
+  has_many :guide_manuals, dependent: :destroy
+  has_many :protocol_acts, dependent: :destroy
+  has_many :bills, dependent: :destroy
+  has_many :license_agreements, dependent: :destroy
 
   has_many :events, dependent: :destroy
+  has_many :appropriation_processes, dependent: :destroy
+  has_many :knowledge_networks, dependent: :destroy
 
   has_many :degree_works, dependent: :destroy
 

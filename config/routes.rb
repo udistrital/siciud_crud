@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-  get "/health", to: "health#health"
+  root to: "health#health"
+
   namespace :api do
     namespace :v1 do
       get 'arp_assignment_reports/index'
@@ -152,14 +153,49 @@ Rails.application.routes.draw do
         resources :new_scientific_records, only: [:index, :show, :create, :update]
         put "/new_scientific_records/:id/active", to: "new_scientific_records#change_active"
 
+        resources :technical_concepts, only: [:index, :create]
+        resources :distinctive_signs, only: [:index, :create]
+        resources :nutraceutical_products, only: [:index, :create]
+        resources :scientific_collections, only: [:index, :create]
+        resources :enterprise_secrets, only: [:index, :create]
+        resources :enterprises, only: [:index, :create]
+        resources :innovations, only: [:index, :create]
+        resources :regulations, only: [:index, :create]
+        resources :clinical_practice_guidelines, only: [:index, :create]
+        resources :guide_manuals, only: [:index, :create]
+        resources :protocol_acts, only: [:index, :create]
+        resources :bills, only: [:index, :create]
+        resources :license_agreements, only: [:index, :create]
+        resources :knowledge_networks, only: [:index, :create]
+
         # Social appropriation of knowledge
         resources :events, only: [:index, :show, :create, :update]
         put "/events/:id/active", to: "events#change_active"
+        resources :appropriation_processes, only: [:index, :create]
 
         # Human Resource Training for CTel
         resources :degree_works, only: [:index, :show, :create, :update]
         put "/degree_works/:id/active", to: "degree_works#change_active"
       end
+
+      # Technological development and innovation
+      resources :technical_concepts, only: [:show, :update]
+      resources :distinctive_signs, only: [:show, :update]
+      resources :nutraceutical_products, only: [:show, :update]
+      resources :scientific_collections, only: [:show, :update]
+      resources :enterprise_secrets, only: [:show, :update]
+      resources :enterprises, only: [:show, :update]
+      resources :innovations, only: [:show, :update]
+      resources :regulations, only: [:show, :update]
+      resources :clinical_practice_guidelines, only: [:show, :update]
+      resources :guide_manuals, only: [:show, :update]
+      resources :protocol_acts, only: [:show, :update]
+      resources :bills, only: [:show, :update]
+      resources :license_agreements, only: [:show, :update]
+      resources :knowledge_networks, only: [:show, :update]
+
+      # Social appropriation of knowledge
+      resources :appropriation_processes, only: [:show, :update]
 
       # RESEARCH UNIT PRODUCT ENDPOINTS
       ## Participants in product creation and documents
@@ -167,19 +203,18 @@ Rails.application.routes.draw do
                 :papers, :patents, :research_creation_works, :scientific_notes,
                 :vegetable_varieties, :industrial_designs,
                 :integrated_circuit_diagrams, :software,
-                :plant_ind_prototypes, :new_scientific_records,
-                :events, :degree_works,
+                :plant_ind_prototypes, :new_scientific_records, :scientific_collections,
+                :technical_concepts, :distinctive_signs, :nutraceutical_products,
+                :enterprise_secrets, :enterprises, :innovations, :regulations,
+                :clinical_practice_guidelines, :guide_manuals,
+                :protocol_acts, :bills, :license_agreements,
+                :events, :appropriation_processes, :knowledge_networks,
+                :degree_works,
                 only: [] do
         resources :ext_participants, only: [:index, :show, :create, :update]
         resources :int_participants, only: [:index, :show, :create, :update]
         resources :documents, only: [:index, :show, :create, :update]
       end
-
-      ## General
-      resources :editorials, only: [:index, :show, :create, :update]
-      resources :journals, only: [:index, :show, :create, :update]
-      resources :institutions, only: [:index, :show, :create, :update]
-      put "/institutions/:id/active", to: "institutions#change_active"
 
       ## Endpoints research_creation_works
       resources :research_creation_works, only: [] do
