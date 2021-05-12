@@ -1,7 +1,4 @@
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-  get "/health", to: "health#health"
-
   namespace :api do
     namespace :v1 do
       get 'arp_assignment_reports/index'
@@ -10,6 +7,10 @@ Rails.application.routes.draw do
   get "/api" => redirect("/api/v1/apidocs/")
   namespace :api do
     namespace :v1 do
+
+      # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+      get "/health", to: "health#health"
+
       resources :apidocs, only: [:index]
 
       # General endpoints
