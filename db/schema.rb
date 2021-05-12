@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_10_201552) do
+ActiveRecord::Schema.define(version: 2021_05_11_201806) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -993,6 +993,31 @@ ActiveRecord::Schema.define(version: 2021_05_10_201552) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "knowledge_networks", force: :cascade do |t|
+    t.string "name"
+    t.date "start_date"
+    t.date "finish_date"
+    t.string "funding_institution"
+    t.string "funding_community"
+    t.string "web_page"
+    t.bigint "geo_city_id"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "observation"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_knowledge_networks_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_knowledge_networks_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_knowledge_networks_on_created_by"
+    t.index ["geo_city_id"], name: "index_knowledge_networks_on_geo_city_id"
+    t.index ["research_group_id"], name: "index_knowledge_networks_on_research_group_id"
+    t.index ["updated_by"], name: "index_knowledge_networks_on_updated_by"
+  end
+
   create_table "license_agreements", force: :cascade do |t|
     t.string "work_name"
     t.date "license_grant_date"
@@ -1835,6 +1860,12 @@ ActiveRecord::Schema.define(version: 2021_05_10_201552) do
   add_foreign_key "ip_livestock_breeds", "subtypes", column: "category_id"
   add_foreign_key "ip_livestock_breeds", "users", column: "created_by"
   add_foreign_key "ip_livestock_breeds", "users", column: "updated_by"
+  add_foreign_key "knowledge_networks", "colciencias_calls"
+  add_foreign_key "knowledge_networks", "geo_cities"
+  add_foreign_key "knowledge_networks", "research_groups"
+  add_foreign_key "knowledge_networks", "subtypes", column: "category_id"
+  add_foreign_key "knowledge_networks", "users", column: "created_by"
+  add_foreign_key "knowledge_networks", "users", column: "updated_by"
   add_foreign_key "license_agreements", "colciencias_calls"
   add_foreign_key "license_agreements", "geo_cities"
   add_foreign_key "license_agreements", "geo_cities", column: "contract_geo_city_id"
@@ -3118,5 +3149,38 @@ ActiveRecord::Schema.define(version: 2021_05_10_201552) do
        LEFT JOIN subtypes st ON ((ap.category_id = st.id)))
        LEFT JOIN colciencias_calls cc ON ((ap.colciencias_call_id = cc.id)))
        LEFT JOIN subtypes pt ON ((ap.product_type_id = pt.id)));
+  SQL
+  create_view "complete_knowledge_networks", sql_definition: <<-SQL
+      SELECT kn.id,
+      kn.name,
+      kn.category_id,
+      st.st_name AS category_name,
+      kn.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      kn.funding_community,
+      kn.funding_institution,
+      kn.geo_city_id,
+      gcity.name AS geo_city_name,
+      gs.geo_country_id,
+      gctry.name AS geo_country_name,
+      gcity.geo_state_id,
+      gs.name AS geo_state_name,
+      kn.start_date,
+      kn.finish_date,
+      kn.observation,
+      kn.research_group_id,
+      kn.web_page,
+      kn.active,
+      kn.created_by,
+      kn.updated_by,
+      kn.created_at,
+      kn.updated_at
+     FROM (((((knowledge_networks kn
+       LEFT JOIN subtypes st ON ((kn.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((kn.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((kn.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
   SQL
 end
