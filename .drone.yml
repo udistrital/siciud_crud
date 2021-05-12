@@ -47,6 +47,38 @@ steps:
     event:
     - push
 
+- name: drop_create_database
+  image: ruby:2.6.2
+  commands:
+    - bundle install
+    - bundle exec rails db:drop
+    - bundle exec rails db:create
+  when:
+    branch:
+      - release/*
+    event:
+      - push
+
+- name: ror_migrate
+  image: ruby:2.6.2
+  commands:
+    - bundle exec rails db:migrate
+  when:
+    branch:
+      - release/*
+    event:
+      - push
+
+- name: ror_rollback
+  image: ruby:2.6.2
+  commands:
+    - bundle exec rails db:rollback
+  when:
+    branch:
+      - release/*
+    event:
+      - failure
+
 - name: publish_to_ecr_release
   image: plugins/ecr
   settings:
