@@ -3,35 +3,28 @@ module Api
     class BooksController < AbstractProductResearchUnitController
       include Swagger::BookApi
 
-      before_action :set_research_group, only: [:index, :show, :create, :update]
-      before_action :set_book, only: [:show, :update]
+      before_action :set_research_group
+      before_action :set_book, only: [:show, :update, :change_active]
+      before_action only: [:change_active] do
+        active_in_body_params? book_params_to_deactivate
+      end
 
-      # GET /research_group/:id/books
+      # GET /research_units/:id/books
       def index
         books_by_ru = CompleteBook.where(
-            research_group_id: params[:research_group_id])
+          research_group_id: params[:research_group_id])
         @books = DxService.load(books_by_ru, params)
         render json: @books
       end
 
-      # GET /research_group/:id/books/1
+      # GET /research_units/:id/books/1
       def show
         render json: @book
       end
 
-      # POST /research_group/:id/books
+      # POST /research_units/:id/books
       def create
-        @book = @research_group.books.new(
-            book_params.except(:editorial_name)
-        )
-
-        editorial = set_editorial(params[:book][:editorial_name],
-                                  @book.created_by, @book.updated_by)
-        if editorial
-          @book.editorial = editorial
-        else
-          return
-        end
+        @book = @research_group.books.new(book_params_to_create)
 
         if @book.save
           render json: @book, status: :created
@@ -40,29 +33,21 @@ module Api
         end
       end
 
-      # PATCH/PUT /research_group/:id/books/1
+      # PUT /research_units/:id/books/1
       def update
-        editorial = set_editorial(params[:book][:editorial_name],
-                                  @book.created_by, @book.updated_by)
-        if editorial
-          @book.editorial = editorial
+        if @book.update(book_params_to_update)
+          render json: @book
         else
-          return
+          render json: @book.errors, status: :unprocessable_entity
         end
+      end
 
-        if @book.created_by.nil?
-          # Update user of created_by only this is nil
-          if @book.update(book_params.except(:editorial_name))
-            render json: @book
-          else
-            render json: @book.errors, status: :unprocessable_entity
-          end
+      # PUT /research_units/:id/books/1/active
+      def change_active
+        if @book.update(book_params_to_deactivate)
+          render json: @book
         else
-          if @book.update(book_params.except(:editorial_name, :created_by))
-            render json: @book
-          else
-            render json: @book.errors, status: :unprocessable_entity
-          end
+          render json: @book.errors, status: :unprocessable_entity
         end
       end
 
@@ -74,12 +59,24 @@ module Api
       end
 
       # Only allow a trusted parameter "white list" through.
-      def book_params
+      def book_params_to_create
         params.require(:book).permit(:title, :publication_date, :isbn,
                                      :url, :observation, :category_id,
-                                     :geo_city_id, :book_document,
-                                     :editorial_name, :active,
-                                     :created_by, :updated_by)
+                                     :colciencias_call_id, :editorial_name,
+                                     :geo_city_id,
+                                     :book_type_id, :created_by)
+      end
+
+      def book_params_to_update
+        params.require(:book).permit(:title, :publication_date, :isbn,
+                                     :url, :observation, :category_id,
+                                     :colciencias_call_id, :editorial_name,
+                                     :geo_city_id,
+                                     :book_type_id, :updated_by)
+      end
+
+      def book_params_to_deactivate
+        params.require(:book).permit(:active, :updated_by)
       end
     end
   end

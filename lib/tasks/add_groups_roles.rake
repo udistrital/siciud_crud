@@ -3,6 +3,7 @@ namespace :add_group_roles do
 	task data: :environment do
 		puts 'Cleaning up Model'
 		Role.destroy_all
+		ActiveRecord::Base.connection.reset_pk_sequence!('roles')
         roles = {
         0 => 'Sin asignar',
         1 => 'Director',

@@ -3,7 +3,7 @@ module Swagger::BookApi
   include Swagger::Blocks
 
   included do
-    swagger_path '/research_group/{research_group_id}/books/{id}' do
+    swagger_path '/research_units/{research_group_id}/books/{id}' do
       operation :get do
         key :summary, 'Get a Book of a Research Unit by ID'
         key :description, 'Returns a single book'
@@ -72,7 +72,7 @@ module Swagger::BookApi
           key :description, 'Book to update'
           key :required, true
           schema do
-            key :'$ref', :BookInput
+            key :'$ref', :BookInputPut
           end
         end
 
@@ -94,7 +94,7 @@ module Swagger::BookApi
       end
     end
 
-    swagger_path '/research_group/{research_group_id}/books/' do
+    swagger_path '/research_units/{research_group_id}/books/' do
       operation :get do
         key :summary, 'Get all Books'
         key :description, 'Returns all books'
@@ -144,7 +144,7 @@ module Swagger::BookApi
           key :description, 'Book to register'
           key :required, true
           schema do
-            key :'$ref', :BookInput
+            key :'$ref', :BookInputPost
           end
         end
 
@@ -165,5 +165,59 @@ module Swagger::BookApi
         end
       end
     end
+
+    swagger_path '/research_units/{research_group_id}/books/{id}/active' do
+      operation :put do
+        key :summary, 'Activate or deactivate a book by ID'
+        key :description, 'Returns the activated/deactivated book by id of a research unit by research_group_id'
+        key :operationId, :change_active_book
+        key :produces, ['application/json',]
+        key :tags, ['Products::GNK::Books']
+
+        parameter name: :research_group_id do
+          key :in, :path
+          key :description, 'ID of research unit to fetch'
+          key :required, true
+          key :type, :integer
+          key :format, :int64
+        end
+
+        parameter name: :id do
+          key :in, :path
+          key :description, 'ID of book of a research unit to fetch'
+          key :required, true
+          key :type, :integer
+          key :format, :int64
+        end
+
+        parameter name: :book do
+          key :in, :body
+          key :description, 'Book to activate/deactivate'
+          key :required, true
+          schema do
+            property :book do
+              key :'$ref', :ChangeActive
+            end
+          end
+        end
+
+        response 200 do
+          key :description, 'book response'
+          schema do
+            key :'$ref', :BookOutput
+          end
+        end
+        response 422 do
+          key :description, 'Unprocessable Entity'
+          schema do
+            key :'$ref', :ErrorUnprocessableEntity
+          end
+        end
+        response :default do
+          key :description, 'Unexpected Error'
+        end
+      end
+    end
+
   end
 end

@@ -5,7 +5,7 @@ module Swagger::UserRoleApi
   included do
     swagger_path '/user_roles/{id}' do
       operation :get do
-        key :summary, 'Get a User Role of a Research Unit by ID'
+        key :summary, 'Get a User Role by ID'
         key :description, 'Returns a single user role'
         key :operationId, :get_user_role_by_id
         key :produces, ['application/json',]
@@ -56,7 +56,7 @@ module Swagger::UserRoleApi
           key :description, 'User Role to update'
           key :required, true
           schema do
-            key :'$ref', :UserRoleInput
+            key :'$ref', :UserRoleInputPut
           end
         end
 
@@ -86,6 +86,22 @@ module Swagger::UserRoleApi
         key :produces, ['application/json',]
         key :tags, ['User Roles']
 
+        parameter name: :per_page do
+          key :in, :query
+          key :description, 'number of records per page'
+          key :required, false
+          key :type, :integer
+          key :format, :int64
+        end
+
+        parameter name: :page do
+          key :in, :query
+          key :description, 'page number'
+          key :required, false
+          key :type, :integer
+          key :format, :int64
+        end
+
         response 200 do
           key :description, 'user role response'
           schema do
@@ -112,7 +128,7 @@ module Swagger::UserRoleApi
           key :description, 'User Role to register'
           key :required, true
           schema do
-            key :'$ref', :UserRoleInput
+            key :'$ref', :UserRoleInputPost
           end
         end
 
@@ -133,5 +149,49 @@ module Swagger::UserRoleApi
         end
       end
     end
+
+    swagger_path '/user_roles/{:id}/active' do
+      operation :put do
+        key :summary, 'Activate or Deactivate a User Role by ID'
+        key :description, 'Returns the user role activated or deactivated'
+        key :operationId, :active_user_role
+        key :produces, ['application/json',]
+        key :tags, ['User Roles']
+
+        parameter name: :id do
+          key :in, :path
+          key :description, 'ID of user role to activate/deactivate'
+          key :required, true
+          key :type, :integer
+          key :format, :int64
+        end
+
+        parameter name: :user_role do
+          key :in, :body
+          key :description, 'User Role to update'
+          key :required, true
+          schema do
+            key :'$ref', :UserRoleInputActive
+          end
+        end
+
+        response 200 do
+          key :description, 'user role response'
+          schema do
+            key :'$ref', :UserRoleOutput
+          end
+        end
+        response 422 do
+          key :description, 'Unprocessable Entity'
+          schema do
+            key :'$ref', :ErrorUnprocessableEntity
+          end
+        end
+        response :default do
+          key :description, 'Unexpected Error'
+        end
+      end
+    end
+    
   end
 end
