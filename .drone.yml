@@ -65,7 +65,7 @@ steps:
     RAILS_ENV: test
   commands:
     - bundle install
-    - bundle exec rails db:drop
+    - bundle exec rails db:drop RAILS_ENV=drone
     - bundle exec rails db:create
   when:
     branch:
