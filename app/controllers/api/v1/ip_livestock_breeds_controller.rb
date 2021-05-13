@@ -65,7 +65,8 @@ module Api
                                                    :consecutive_number_ma,
                                                    :observation, :category_id,
                                                    :colciencias_call_id,
-                                                   :geo_city_id, :created_by)
+                                                   :geo_city_id, :geo_country_id,
+                                                   :geo_state_id, :created_by)
       end
 
       def ipl_breed_params_to_update
@@ -73,7 +74,8 @@ module Api
                                                    :consecutive_number_ma,
                                                    :observation, :category_id,
                                                    :colciencias_call_id,
-                                                   :geo_city_id, :updated_by)
+                                                   :geo_city_id, :geo_country_id,
+                                                   :geo_state_id, :updated_by)
       end
 
       def ipl_breed_params_to_deactivate
