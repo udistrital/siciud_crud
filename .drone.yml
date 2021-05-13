@@ -62,12 +62,15 @@ steps:
       from_secret: PG_MIGRATION_PASS
     PG_MIGRATION_SCHEMA:
       from_secret: PG_MIGRATION_SCHEMA
+    region:
+      from_secret: AWS_REGION
   commands:
     - bundle install
     - echo "p = ENV['SICIUD_CRUD_PGDB']" | rails c
     - echo "p = ENV['PG_MIGRATION_SCHEMA']" | rails c
     - echo "p = ENV['PG_MIGRATION_DBNAME']" | rails c
     - echo "p = ENV['PG_MIGRATION_PORT']" | rails c
+    - echo "p = ENV['region']" | rails c
     - bundle exec rails db:migrate
 #     - echo "p = ENV['PG_MIGRATION_DBNAME']" | rails c
 #     - bundle exec rails db:drop
