@@ -64,7 +64,7 @@ steps:
       from_secret: PG_MIGRATION_SCHEMA
   commands:
     - bundle install
-    - export RAILS_ENV=test
+    - echo "p = ENV['PG_MIGRATION_DBNAME']" | rails c
     - bundle exec rails db:drop
     - bundle exec rails db:create
   when:
