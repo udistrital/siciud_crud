@@ -62,11 +62,9 @@ steps:
       from_secret: PG_MIGRATION_PASS
     PG_MIGRATION_SCHEMA:
       from_secret: PG_MIGRATION_SCHEMA
-    RAILS_ENV: test
   commands:
     - bundle install
-    - echo "DB is ${PG_MIGRATION_DBNAME}"
-    - echo "DB is $${PG_MIGRATION_DBNAME}"
+    - RAILS_ENV=test
     - bundle exec rails db:drop
     - bundle exec rails db:create
   when:
