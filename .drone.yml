@@ -64,7 +64,11 @@ steps:
       from_secret: PG_MIGRATION_SCHEMA
   commands:
     - bundle install
-    - bundle exec rails db:migrate RAILS_ENV=test
+    - echo $SICIUD_CRUD_PGUSER
+    - export SICIUD_CRUD_PGUSER="$(aws ssm get-parameter --name /${PARAMETER_STORE}/siciud_crud/db/username --output text --query Parameter.Value)"
+    - echo $SICIUD_CRUD_PGUSER
+    - export SICIUD_CRUD_PGPASS="$(aws ssm get-parameter --with-decryption --name /${PARAMETER_STORE}/siciud_crud/db/password --output text --query Parameter.Value)"
+    - bundle exec rails db:migrate
 #     - echo "p = ENV['PG_MIGRATION_DBNAME']" | rails c
 #     - bundle exec rails db:drop
 #     - bundle exec rails db:create
