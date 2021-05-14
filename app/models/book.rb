@@ -7,9 +7,9 @@ class Book < ApplicationRecord
   belongs_to :research_group
 
   # Publication place
-  belongs_to :geo_city
-  has_one :geo_state, through: :geo_city
-  has_one :geo_country, through: :geo_state
+  belongs_to :geo_city, optional: true
+  belongs_to :geo_state, optional: true
+  belongs_to :geo_country
 
   # Participants
   has_many :int_participants, as: :producible

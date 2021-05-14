@@ -74,7 +74,8 @@ module Api
         params.require(:research_creation_work).permit(
           :title, :colciencias_call_id, :creation_and_selection_date, :nature_id,
           :registered_project_title, :url, :observation, :knwl_spec_area_id,
-          :category_id, :geo_city_id, :created_by, work_type_ids: []
+          :category_id, :geo_city_id, :geo_country_id, :geo_state_id,
+          :created_by, work_type_ids: []
         )
       end
 
@@ -82,7 +83,8 @@ module Api
         params.require(:research_creation_work).permit(
           :title, :colciencias_call_id, :creation_and_selection_date, :nature_id,
           :registered_project_title, :url, :observation, :knwl_spec_area_id,
-          :category_id, :geo_city_id, :updated_by, work_type_ids: []
+          :category_id, :geo_city_id, :geo_country_id, :geo_state_id,
+          :updated_by, work_type_ids: []
         )
       end
 

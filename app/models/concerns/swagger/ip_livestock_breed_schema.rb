@@ -27,6 +27,14 @@ module Swagger::IpLivestockBreedSchema
         key :type, :integer
         key :format, :int64
       end
+      property :geo_country_id do
+        key :type, :integer
+        key :format, :int64
+      end
+      property :geo_state_id do
+        key :type, :integer
+        key :format, :int64
+      end
       property  :observation do
         key :type, :string
       end
@@ -73,6 +81,14 @@ module Swagger::IpLivestockBreedSchema
           key :type, :string
         end
         property  :geo_city_id do
+          key :type, :integer
+          key :format, :int64
+        end
+        property :geo_country_id do
+          key :type, :integer
+          key :format, :int64
+        end
+        property :geo_state_id do
           key :type, :integer
           key :format, :int64
         end
@@ -137,16 +153,8 @@ module Swagger::IpLivestockBreedSchema
               property :geo_city_name do
                 key :type, :string
               end
-              property :geo_country_id do
-                key :type, :integer
-                key :format, :int64
-              end
               property :geo_country_name do
                 key :type, :string
-              end
-              property :geo_state_id do
-                key :type, :integer
-                key :format, :int64
               end
               property :geo_state_name do
                 key :type, :string

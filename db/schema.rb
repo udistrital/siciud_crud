@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_11_201806) do
+ActiveRecord::Schema.define(version: 2021_05_14_230337) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -265,10 +265,14 @@ ActiveRecord::Schema.define(version: 2021_05_11_201806) do
     t.bigint "category_id"
     t.bigint "colciencias_call_id"
     t.string "editorial_name"
+    t.bigint "geo_state_id"
+    t.bigint "geo_country_id"
     t.index ["category_id"], name: "index_book_chapters_on_category_id"
     t.index ["colciencias_call_id"], name: "index_book_chapters_on_colciencias_call_id"
     t.index ["created_by"], name: "index_book_chapters_on_created_by"
     t.index ["geo_city_id"], name: "index_book_chapters_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_book_chapters_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_book_chapters_on_geo_state_id"
     t.index ["research_group_id"], name: "index_book_chapters_on_research_group_id"
     t.index ["updated_by"], name: "index_book_chapters_on_updated_by"
   end
@@ -290,11 +294,15 @@ ActiveRecord::Schema.define(version: 2021_05_11_201806) do
     t.bigint "colciencias_call_id"
     t.bigint "book_type_id"
     t.string "editorial_name"
+    t.bigint "geo_country_id"
+    t.bigint "geo_state_id"
     t.index ["book_type_id"], name: "index_books_on_book_type_id"
     t.index ["category_id"], name: "index_books_on_category_id"
     t.index ["colciencias_call_id"], name: "index_books_on_colciencias_call_id"
     t.index ["created_by"], name: "index_books_on_created_by"
     t.index ["geo_city_id"], name: "index_books_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_books_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_books_on_geo_state_id"
     t.index ["research_group_id"], name: "index_books_on_research_group_id"
     t.index ["updated_by"], name: "index_books_on_updated_by"
   end
@@ -979,10 +987,14 @@ ActiveRecord::Schema.define(version: 2021_05_11_201806) do
     t.bigint "updated_by"
     t.bigint "category_id"
     t.bigint "colciencias_call_id"
+    t.bigint "geo_state_id"
+    t.bigint "geo_country_id"
     t.index ["category_id"], name: "index_ip_livestock_breeds_on_category_id"
     t.index ["colciencias_call_id"], name: "index_ip_livestock_breeds_on_colciencias_call_id"
     t.index ["created_by"], name: "index_ip_livestock_breeds_on_created_by"
     t.index ["geo_city_id"], name: "index_ip_livestock_breeds_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_ip_livestock_breeds_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_ip_livestock_breeds_on_geo_state_id"
     t.index ["research_group_id"], name: "index_ip_livestock_breeds_on_research_group_id"
     t.index ["updated_by"], name: "index_ip_livestock_breeds_on_updated_by"
   end
@@ -1058,10 +1070,14 @@ ActiveRecord::Schema.define(version: 2021_05_11_201806) do
     t.bigint "category_id"
     t.bigint "colciencias_call_id"
     t.bigint "petition_status_id"
+    t.bigint "geo_state_id"
+    t.bigint "geo_country_id"
     t.index ["category_id"], name: "index_new_animal_breeds_on_category_id"
     t.index ["colciencias_call_id"], name: "index_new_animal_breeds_on_colciencias_call_id"
     t.index ["created_by"], name: "index_new_animal_breeds_on_created_by"
     t.index ["geo_city_id"], name: "index_new_animal_breeds_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_new_animal_breeds_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_new_animal_breeds_on_geo_state_id"
     t.index ["petition_status_id"], name: "index_new_animal_breeds_on_petition_status_id"
     t.index ["research_group_id"], name: "index_new_animal_breeds_on_research_group_id"
     t.index ["updated_by"], name: "index_new_animal_breeds_on_updated_by"
@@ -1183,10 +1199,14 @@ ActiveRecord::Schema.define(version: 2021_05_11_201806) do
     t.bigint "paper_type_id"
     t.bigint "colciencias_call_id"
     t.string "journal_name"
+    t.bigint "geo_country_id"
+    t.bigint "geo_state_id"
     t.index ["category_id"], name: "index_papers_on_category_id"
     t.index ["colciencias_call_id"], name: "index_papers_on_colciencias_call_id"
     t.index ["created_by"], name: "index_papers_on_created_by"
     t.index ["geo_city_id"], name: "index_papers_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_papers_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_papers_on_geo_state_id"
     t.index ["paper_type_id"], name: "index_papers_on_paper_type_id"
     t.index ["research_group_id"], name: "index_papers_on_research_group_id"
     t.index ["updated_by"], name: "index_papers_on_updated_by"
@@ -1329,10 +1349,14 @@ ActiveRecord::Schema.define(version: 2021_05_11_201806) do
     t.bigint "colciencias_call_id"
     t.bigint "knwl_spec_area_id"
     t.bigint "nature_id"
+    t.bigint "geo_state_id"
+    t.bigint "geo_country_id"
     t.index ["category_id"], name: "index_research_creation_works_on_category_id"
     t.index ["colciencias_call_id"], name: "index_research_creation_works_on_colciencias_call_id"
     t.index ["created_by"], name: "index_research_creation_works_on_created_by"
     t.index ["geo_city_id"], name: "index_research_creation_works_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_research_creation_works_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_research_creation_works_on_geo_state_id"
     t.index ["knwl_spec_area_id"], name: "index_research_creation_works_on_knwl_spec_area_id"
     t.index ["nature_id"], name: "index_research_creation_works_on_nature_id"
     t.index ["research_group_id"], name: "index_research_creation_works_on_research_group_id"
@@ -1522,10 +1546,14 @@ ActiveRecord::Schema.define(version: 2021_05_11_201806) do
     t.bigint "category_id"
     t.bigint "colciencias_call_id"
     t.string "journal_name"
+    t.bigint "geo_state_id"
+    t.bigint "geo_country_id"
     t.index ["category_id"], name: "index_scientific_notes_on_category_id"
     t.index ["colciencias_call_id"], name: "index_scientific_notes_on_colciencias_call_id"
     t.index ["created_by"], name: "index_scientific_notes_on_created_by"
     t.index ["geo_city_id"], name: "index_scientific_notes_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_scientific_notes_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_scientific_notes_on_geo_state_id"
     t.index ["research_group_id"], name: "index_scientific_notes_on_research_group_id"
     t.index ["updated_by"], name: "index_scientific_notes_on_updated_by"
   end
@@ -1692,11 +1720,15 @@ ActiveRecord::Schema.define(version: 2021_05_11_201806) do
     t.bigint "colciencias_call_id"
     t.bigint "cycle_type_id"
     t.bigint "petition_status_id"
+    t.bigint "geo_state_id"
+    t.bigint "geo_country_id"
     t.index ["category_id"], name: "index_vegetable_varieties_on_category_id"
     t.index ["colciencias_call_id"], name: "index_vegetable_varieties_on_colciencias_call_id"
     t.index ["created_by"], name: "index_vegetable_varieties_on_created_by"
     t.index ["cycle_type_id"], name: "index_vegetable_varieties_on_cycle_type_id"
     t.index ["geo_city_id"], name: "index_vegetable_varieties_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_vegetable_varieties_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_vegetable_varieties_on_geo_state_id"
     t.index ["petition_status_id"], name: "index_vegetable_varieties_on_petition_status_id"
     t.index ["research_group_id"], name: "index_vegetable_varieties_on_research_group_id"
     t.index ["updated_by"], name: "index_vegetable_varieties_on_updated_by"
@@ -1720,12 +1752,16 @@ ActiveRecord::Schema.define(version: 2021_05_11_201806) do
   add_foreign_key "bills", "users", column: "updated_by"
   add_foreign_key "book_chapters", "colciencias_calls"
   add_foreign_key "book_chapters", "geo_cities"
+  add_foreign_key "book_chapters", "geo_countries"
+  add_foreign_key "book_chapters", "geo_states"
   add_foreign_key "book_chapters", "research_groups"
   add_foreign_key "book_chapters", "subtypes", column: "category_id"
   add_foreign_key "book_chapters", "users", column: "created_by"
   add_foreign_key "book_chapters", "users", column: "updated_by"
   add_foreign_key "books", "colciencias_calls"
   add_foreign_key "books", "geo_cities"
+  add_foreign_key "books", "geo_countries"
+  add_foreign_key "books", "geo_states"
   add_foreign_key "books", "research_groups"
   add_foreign_key "books", "subtypes", column: "book_type_id"
   add_foreign_key "books", "subtypes", column: "category_id"
@@ -1856,6 +1892,8 @@ ActiveRecord::Schema.define(version: 2021_05_11_201806) do
   add_foreign_key "integrated_circuit_diagrams", "users", column: "updated_by"
   add_foreign_key "ip_livestock_breeds", "colciencias_calls"
   add_foreign_key "ip_livestock_breeds", "geo_cities"
+  add_foreign_key "ip_livestock_breeds", "geo_countries"
+  add_foreign_key "ip_livestock_breeds", "geo_states"
   add_foreign_key "ip_livestock_breeds", "research_groups"
   add_foreign_key "ip_livestock_breeds", "subtypes", column: "category_id"
   add_foreign_key "ip_livestock_breeds", "users", column: "created_by"
@@ -1875,6 +1913,8 @@ ActiveRecord::Schema.define(version: 2021_05_11_201806) do
   add_foreign_key "license_agreements", "users", column: "updated_by"
   add_foreign_key "new_animal_breeds", "colciencias_calls"
   add_foreign_key "new_animal_breeds", "geo_cities"
+  add_foreign_key "new_animal_breeds", "geo_countries"
+  add_foreign_key "new_animal_breeds", "geo_states"
   add_foreign_key "new_animal_breeds", "research_groups"
   add_foreign_key "new_animal_breeds", "subtypes", column: "petition_status_id"
   add_foreign_key "new_animal_breeds", "users", column: "created_by"
@@ -1901,6 +1941,8 @@ ActiveRecord::Schema.define(version: 2021_05_11_201806) do
   add_foreign_key "oecd_knowledge_subareas", "users", column: "updated_by"
   add_foreign_key "papers", "colciencias_calls"
   add_foreign_key "papers", "geo_cities"
+  add_foreign_key "papers", "geo_countries"
+  add_foreign_key "papers", "geo_states"
   add_foreign_key "papers", "research_groups"
   add_foreign_key "papers", "subtypes", column: "category_id"
   add_foreign_key "papers", "subtypes", column: "paper_type_id"
@@ -1937,6 +1979,8 @@ ActiveRecord::Schema.define(version: 2021_05_11_201806) do
   add_foreign_key "regulations", "users", column: "updated_by"
   add_foreign_key "research_creation_works", "colciencias_calls"
   add_foreign_key "research_creation_works", "geo_cities"
+  add_foreign_key "research_creation_works", "geo_countries"
+  add_foreign_key "research_creation_works", "geo_states"
   add_foreign_key "research_creation_works", "research_groups"
   add_foreign_key "research_creation_works", "subtypes", column: "category_id"
   add_foreign_key "research_creation_works", "subtypes", column: "knwl_spec_area_id"
@@ -1963,6 +2007,8 @@ ActiveRecord::Schema.define(version: 2021_05_11_201806) do
   add_foreign_key "scientific_collections", "users", column: "updated_by"
   add_foreign_key "scientific_notes", "colciencias_calls"
   add_foreign_key "scientific_notes", "geo_cities"
+  add_foreign_key "scientific_notes", "geo_countries"
+  add_foreign_key "scientific_notes", "geo_states"
   add_foreign_key "scientific_notes", "research_groups"
   add_foreign_key "scientific_notes", "subtypes", column: "category_id"
   add_foreign_key "scientific_notes", "users", column: "created_by"
@@ -1992,6 +2038,8 @@ ActiveRecord::Schema.define(version: 2021_05_11_201806) do
   add_foreign_key "users", "users", column: "updated_by"
   add_foreign_key "vegetable_varieties", "colciencias_calls"
   add_foreign_key "vegetable_varieties", "geo_cities"
+  add_foreign_key "vegetable_varieties", "geo_countries"
+  add_foreign_key "vegetable_varieties", "geo_states"
   add_foreign_key "vegetable_varieties", "research_groups"
   add_foreign_key "vegetable_varieties", "subtypes", column: "category_id"
   add_foreign_key "vegetable_varieties", "subtypes", column: "cycle_type_id"
@@ -2012,71 +2060,6 @@ ActiveRecord::Schema.define(version: 2021_05_11_201806) do
       u.updated_at
      FROM (users u
        LEFT JOIN user_roles ur ON ((u.user_role_id = ur.id)));
-  SQL
-  create_view "complete_vegetable_varieties", sql_definition: <<-SQL
-      SELECT vv.id,
-      vv.name,
-      vv.category_id,
-      stc.st_name AS category_name,
-      vv.colciencias_call_id,
-      cc.name AS colciencias_call_name,
-      cc.year AS colciencias_call_year,
-      vv.cycle_type_id,
-      stcc.st_name AS cycle_type_name,
-      vv.date,
-      vv.geo_city_id,
-      gcity.name AS geo_city_name,
-      gs.geo_country_id,
-      gctry.name AS geo_country_name,
-      gcity.geo_state_id,
-      gs.name AS geo_state_name,
-      vv.petition_status_id,
-      stpt.st_name AS petition_status_name,
-      vv.observation,
-      vv.research_group_id,
-      vv.active,
-      vv.created_by,
-      vv.updated_by,
-      vv.created_at,
-      vv.updated_at
-     FROM (((((((vegetable_varieties vv
-       LEFT JOIN subtypes stc ON ((vv.category_id = stc.id)))
-       LEFT JOIN colciencias_calls cc ON ((vv.colciencias_call_id = cc.id)))
-       LEFT JOIN subtypes stcc ON ((vv.cycle_type_id = stcc.id)))
-       LEFT JOIN geo_cities gcity ON ((vv.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
-       LEFT JOIN subtypes stpt ON ((vv.petition_status_id = stpt.id)));
-  SQL
-  create_view "complete_ipl_breeds", sql_definition: <<-SQL
-      SELECT iplb.id,
-      iplb.name,
-      iplb.category_id,
-      stc.st_name AS category_name,
-      iplb.colciencias_call_id,
-      cc.name AS colciencias_call_name,
-      cc.year AS colciencias_call_year,
-      iplb.consecutive_number_ma,
-      iplb.geo_city_id,
-      gcity.name AS geo_city_name,
-      gs.geo_country_id,
-      gctry.name AS geo_country_name,
-      gcity.geo_state_id,
-      gs.name AS geo_state_name,
-      iplb.observation,
-      iplb.publication_date,
-      iplb.research_group_id,
-      iplb.active,
-      iplb.created_by,
-      iplb.updated_by,
-      iplb.created_at,
-      iplb.updated_at
-     FROM (((((ip_livestock_breeds iplb
-       LEFT JOIN subtypes stc ON ((iplb.category_id = stc.id)))
-       LEFT JOIN colciencias_calls cc ON ((iplb.colciencias_call_id = cc.id)))
-       LEFT JOIN geo_cities gcity ON ((iplb.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
   SQL
   create_view "research_units_by_researchers", sql_definition: <<-SQL
       SELECT rs.id,
@@ -2401,113 +2384,6 @@ ActiveRecord::Schema.define(version: 2021_05_11_201806) do
        LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
        LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
   SQL
-  create_view "complete_new_animal_bs", sql_definition: <<-SQL
-      SELECT nab.id,
-      nab.name,
-      nab.category_id,
-      stc.st_name AS category_name,
-      nab.colciencias_call_id,
-      cc.name AS colciencias_call_name,
-      cc.year AS colciencias_call_year,
-      nab.date,
-      nab.geo_city_id,
-      gcity.name AS geo_city_name,
-      gs.geo_country_id,
-      gctry.name AS geo_country_name,
-      gcity.geo_state_id,
-      gs.name AS geo_state_name,
-      nab.petition_status_id,
-      stpt.st_name AS petition_status_name,
-      nab.observation,
-      nab.research_group_id,
-      nab.active,
-      nab.created_by,
-      nab.updated_by,
-      nab.created_at,
-      nab.updated_at
-     FROM ((((((new_animal_breeds nab
-       LEFT JOIN subtypes stc ON ((nab.category_id = stc.id)))
-       LEFT JOIN colciencias_calls cc ON ((nab.colciencias_call_id = cc.id)))
-       LEFT JOIN geo_cities gcity ON ((nab.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
-       LEFT JOIN subtypes stpt ON ((nab.petition_status_id = stpt.id)));
-  SQL
-  create_view "complete_books", sql_definition: <<-SQL
-      SELECT b.id,
-      b.title,
-      b.book_type_id,
-      tbk.st_name AS book_type_name,
-      b.category_id,
-      st.st_name AS category_name,
-      b.colciencias_call_id,
-      cc.name AS colciencias_call_name,
-      cc.year AS colciencias_call_year,
-      b.editorial_name,
-      b.geo_city_id,
-      gcity.name AS geo_city_name,
-      gs.geo_country_id,
-      gctry.name AS geo_country_name,
-      gcity.geo_state_id,
-      gs.name AS geo_state_name,
-      b.isbn,
-      b.observation,
-      b.publication_date,
-      b.research_group_id,
-      b.url,
-      b.active,
-      b.created_by,
-      b.updated_by,
-      b.created_at,
-      b.updated_at
-     FROM ((((((books b
-       LEFT JOIN subtypes st ON ((b.category_id = st.id)))
-       LEFT JOIN subtypes tbk ON ((b.book_type_id = tbk.id)))
-       LEFT JOIN colciencias_calls cc ON ((b.colciencias_call_id = cc.id)))
-       LEFT JOIN geo_cities gcity ON ((b.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
-  SQL
-  create_view "complete_research_cws", sql_definition: <<-SQL
-      SELECT rcw.id,
-      rcw.title,
-      rcw.category_id,
-      stc.st_name AS category_name,
-      rcw.colciencias_call_id,
-      cc.name AS colciencias_call_name,
-      cc.year AS colciencias_call_year,
-      rcw.creation_and_selection_date,
-      rcw.geo_city_id,
-      gcity.name AS geo_city_name,
-      gs.geo_country_id,
-      gctry.name AS geo_country_name,
-      gcity.geo_state_id,
-      gs.name AS geo_state_name,
-      rcw.knwl_spec_area_id,
-      stksa.st_name AS knwl_spec_area_name,
-      rcw.nature_id,
-      stnt.st_name AS nature_name,
-      rcw.observation,
-      rcw.registered_project_title,
-      rcw.url,
-      ARRAY( SELECT rcwwt.subtype_id
-             FROM research_creation_works_work_types rcwwt
-            WHERE (rcw.id = rcwwt.research_creation_work_id)) AS work_type_ids,
-      rcw.research_group_id,
-      rcw.active,
-      rcw.created_by,
-      rcw.updated_by,
-      rcw.created_at,
-      rcw.updated_at
-     FROM (((((((research_creation_works rcw
-       LEFT JOIN subtypes stc ON ((rcw.category_id = stc.id)))
-       LEFT JOIN subtypes stnt ON ((rcw.nature_id = stnt.id)))
-       LEFT JOIN colciencias_calls cc ON ((rcw.colciencias_call_id = cc.id)))
-       LEFT JOIN geo_cities gcity ON ((rcw.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
-       LEFT JOIN subtypes stksa ON ((rcw.knwl_spec_area_id = stksa.id)));
-  SQL
   create_view "complete_patents", sql_definition: <<-SQL
       SELECT p.id,
       p.title,
@@ -2538,40 +2414,6 @@ ActiveRecord::Schema.define(version: 2021_05_11_201806) do
        LEFT JOIN subtypes pttp ON ((p.patent_type_id = pttp.id)))
        LEFT JOIN colciencias_calls cc ON ((p.colciencias_call_id = cc.id)))
        LEFT JOIN subtypes stps ON ((p.patent_state_id = stps.id)));
-  SQL
-  create_view "complete_book_chapters", sql_definition: <<-SQL
-      SELECT bc.id,
-      bc.book_title,
-      bc.title,
-      bc.category_id,
-      st.st_name AS category_name,
-      bc.colciencias_call_id,
-      cc.name AS colciencias_call_name,
-      cc.year AS colciencias_call_year,
-      bc.doi,
-      bc.editorial_name,
-      bc.geo_city_id,
-      gcity.name AS geo_city_name,
-      gs.geo_country_id,
-      gctry.name AS geo_country_name,
-      gcity.geo_state_id,
-      gs.name AS geo_state_name,
-      bc.isbn,
-      bc.observation,
-      bc.publication_date,
-      bc.research_group_id,
-      bc.url,
-      bc.active,
-      bc.created_by,
-      bc.updated_by,
-      bc.created_at,
-      bc.updated_at
-     FROM (((((book_chapters bc
-       LEFT JOIN subtypes st ON ((bc.category_id = st.id)))
-       LEFT JOIN colciencias_calls cc ON ((bc.colciencias_call_id = cc.id)))
-       LEFT JOIN geo_cities gcity ON ((bc.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
   SQL
   create_view "complete_events", sql_definition: <<-SQL
       SELECT eve.id,
@@ -2610,85 +2452,6 @@ ActiveRecord::Schema.define(version: 2021_05_11_201806) do
        LEFT JOIN geo_cities gcity ON ((eve.geo_city_id = gcity.id)))
        LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
        LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
-  SQL
-  create_view "complete_scientific_notes", sql_definition: <<-SQL
-      SELECT sn.id,
-      sn.title,
-      sn.approval_date,
-      sn.category_id,
-      st.st_name AS category_name,
-      sn.colciencias_call_id,
-      cc.name AS colciencias_call_name,
-      cc.year AS colciencias_call_year,
-      sn.doi,
-      sn.final_page,
-      sn.geo_city_id,
-      gcity.name AS geo_city_name,
-      gs.geo_country_id,
-      gctry.name AS geo_country_name,
-      gcity.geo_state_id,
-      gs.name AS geo_state_name,
-      sn.initial_page,
-      sn.issn,
-      sn.journal_name,
-      sn.number_of_pages,
-      sn.observation,
-      sn.publication_date,
-      sn.research_group_id,
-      sn.url,
-      sn.volume,
-      sn.active,
-      sn.created_by,
-      sn.updated_by,
-      sn.created_at,
-      sn.updated_at
-     FROM (((((scientific_notes sn
-       LEFT JOIN subtypes st ON ((sn.category_id = st.id)))
-       LEFT JOIN colciencias_calls cc ON ((sn.colciencias_call_id = cc.id)))
-       LEFT JOIN geo_cities gcity ON ((sn.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
-  SQL
-  create_view "complete_papers", sql_definition: <<-SQL
-      SELECT p.id,
-      p.title,
-      p.approval_date,
-      p.category_id,
-      stc.st_name AS category_name,
-      p.colciencias_call_id,
-      cc.name AS colciencias_call_name,
-      cc.year AS colciencias_call_year,
-      p.doi,
-      p.final_page,
-      p.geo_city_id,
-      gcity.name AS geo_city_name,
-      gs.geo_country_id,
-      gctry.name AS geo_country_name,
-      gcity.geo_state_id,
-      gs.name AS geo_state_name,
-      p.initial_page,
-      p.issn,
-      p.journal_name,
-      p.number_of_pages,
-      p.observation,
-      p.paper_type_id,
-      stpt.st_name AS paper_type_name,
-      p.publication_date,
-      p.research_group_id,
-      p.url,
-      p.volume,
-      p.active,
-      p.created_by,
-      p.updated_by,
-      p.created_at,
-      p.updated_at
-     FROM ((((((papers p
-       LEFT JOIN subtypes stc ON ((p.category_id = stc.id)))
-       LEFT JOIN colciencias_calls cc ON ((p.colciencias_call_id = cc.id)))
-       LEFT JOIN geo_cities gcity ON ((p.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
-       LEFT JOIN subtypes stpt ON ((p.paper_type_id = stpt.id)));
   SQL
   create_view "complete_types", sql_definition: <<-SQL
       SELECT t.id AS type_id,
@@ -3182,5 +2945,290 @@ ActiveRecord::Schema.define(version: 2021_05_11_201806) do
        LEFT JOIN geo_cities gcity ON ((kn.geo_city_id = gcity.id)))
        LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
        LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_scientific_notes", sql_definition: <<-SQL
+      SELECT sn.id,
+      sn.title,
+      sn.approval_date,
+      sn.category_id,
+      st.st_name AS category_name,
+      sn.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      sn.doi,
+      sn.final_page,
+      sn.geo_city_id,
+      gcity.name AS geo_city_name,
+      sn.geo_country_id,
+      gctry.name AS geo_country_name,
+      sn.geo_state_id,
+      gs.name AS geo_state_name,
+      sn.initial_page,
+      sn.issn,
+      sn.journal_name,
+      sn.number_of_pages,
+      sn.observation,
+      sn.publication_date,
+      sn.research_group_id,
+      sn.url,
+      sn.volume,
+      sn.active,
+      sn.created_by,
+      sn.updated_by,
+      sn.created_at,
+      sn.updated_at
+     FROM (((((scientific_notes sn
+       LEFT JOIN subtypes st ON ((sn.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((sn.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((sn.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((sn.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((sn.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_books", sql_definition: <<-SQL
+      SELECT b.id,
+      b.title,
+      b.book_type_id,
+      tbk.st_name AS book_type_name,
+      b.category_id,
+      st.st_name AS category_name,
+      b.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      b.editorial_name,
+      b.geo_city_id,
+      gcity.name AS geo_city_name,
+      b.geo_country_id,
+      gctry.name AS geo_country_name,
+      b.geo_state_id,
+      gs.name AS geo_state_name,
+      b.isbn,
+      b.observation,
+      b.publication_date,
+      b.research_group_id,
+      b.url,
+      b.active,
+      b.created_by,
+      b.updated_by,
+      b.created_at,
+      b.updated_at
+     FROM ((((((books b
+       LEFT JOIN subtypes st ON ((b.category_id = st.id)))
+       LEFT JOIN subtypes tbk ON ((b.book_type_id = tbk.id)))
+       LEFT JOIN colciencias_calls cc ON ((b.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((b.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((b.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((b.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_papers", sql_definition: <<-SQL
+      SELECT p.id,
+      p.title,
+      p.approval_date,
+      p.category_id,
+      stc.st_name AS category_name,
+      p.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      p.doi,
+      p.final_page,
+      p.geo_city_id,
+      gcity.name AS geo_city_name,
+      p.geo_country_id,
+      gctry.name AS geo_country_name,
+      p.geo_state_id,
+      gs.name AS geo_state_name,
+      p.initial_page,
+      p.issn,
+      p.journal_name,
+      p.number_of_pages,
+      p.observation,
+      p.paper_type_id,
+      stpt.st_name AS paper_type_name,
+      p.publication_date,
+      p.research_group_id,
+      p.url,
+      p.volume,
+      p.active,
+      p.created_by,
+      p.updated_by,
+      p.created_at,
+      p.updated_at
+     FROM ((((((papers p
+       LEFT JOIN subtypes stc ON ((p.category_id = stc.id)))
+       LEFT JOIN colciencias_calls cc ON ((p.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((p.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((p.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((p.geo_country_id = gctry.id)))
+       LEFT JOIN subtypes stpt ON ((p.paper_type_id = stpt.id)));
+  SQL
+  create_view "complete_book_chapters", sql_definition: <<-SQL
+      SELECT bc.id,
+      bc.book_title,
+      bc.title,
+      bc.category_id,
+      st.st_name AS category_name,
+      bc.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      bc.doi,
+      bc.editorial_name,
+      bc.geo_city_id,
+      gcity.name AS geo_city_name,
+      bc.geo_country_id,
+      gctry.name AS geo_country_name,
+      bc.geo_state_id,
+      gs.name AS geo_state_name,
+      bc.isbn,
+      bc.observation,
+      bc.publication_date,
+      bc.research_group_id,
+      bc.url,
+      bc.active,
+      bc.created_by,
+      bc.updated_by,
+      bc.created_at,
+      bc.updated_at
+     FROM (((((book_chapters bc
+       LEFT JOIN subtypes st ON ((bc.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((bc.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((bc.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((bc.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((bc.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_vegetable_varieties", sql_definition: <<-SQL
+      SELECT vv.id,
+      vv.name,
+      vv.category_id,
+      stc.st_name AS category_name,
+      vv.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      vv.cycle_type_id,
+      stcc.st_name AS cycle_type_name,
+      vv.date,
+      vv.geo_city_id,
+      gcity.name AS geo_city_name,
+      vv.geo_country_id,
+      gctry.name AS geo_country_name,
+      vv.geo_state_id,
+      gs.name AS geo_state_name,
+      vv.petition_status_id,
+      stpt.st_name AS petition_status_name,
+      vv.observation,
+      vv.research_group_id,
+      vv.active,
+      vv.created_by,
+      vv.updated_by,
+      vv.created_at,
+      vv.updated_at
+     FROM (((((((vegetable_varieties vv
+       LEFT JOIN subtypes stc ON ((vv.category_id = stc.id)))
+       LEFT JOIN colciencias_calls cc ON ((vv.colciencias_call_id = cc.id)))
+       LEFT JOIN subtypes stcc ON ((vv.cycle_type_id = stcc.id)))
+       LEFT JOIN geo_cities gcity ON ((vv.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((vv.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((vv.geo_country_id = gctry.id)))
+       LEFT JOIN subtypes stpt ON ((vv.petition_status_id = stpt.id)));
+  SQL
+  create_view "complete_new_animal_bs", sql_definition: <<-SQL
+      SELECT nab.id,
+      nab.name,
+      nab.category_id,
+      stc.st_name AS category_name,
+      nab.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      nab.date,
+      nab.geo_city_id,
+      gcity.name AS geo_city_name,
+      nab.geo_country_id,
+      gctry.name AS geo_country_name,
+      nab.geo_state_id,
+      gs.name AS geo_state_name,
+      nab.petition_status_id,
+      stpt.st_name AS petition_status_name,
+      nab.observation,
+      nab.research_group_id,
+      nab.active,
+      nab.created_by,
+      nab.updated_by,
+      nab.created_at,
+      nab.updated_at
+     FROM ((((((new_animal_breeds nab
+       LEFT JOIN subtypes stc ON ((nab.category_id = stc.id)))
+       LEFT JOIN colciencias_calls cc ON ((nab.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((nab.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((nab.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((nab.geo_country_id = gctry.id)))
+       LEFT JOIN subtypes stpt ON ((nab.petition_status_id = stpt.id)));
+  SQL
+  create_view "complete_ipl_breeds", sql_definition: <<-SQL
+      SELECT iplb.id,
+      iplb.name,
+      iplb.category_id,
+      stc.st_name AS category_name,
+      iplb.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      iplb.consecutive_number_ma,
+      iplb.geo_city_id,
+      gcity.name AS geo_city_name,
+      iplb.geo_country_id,
+      gctry.name AS geo_country_name,
+      iplb.geo_state_id,
+      gs.name AS geo_state_name,
+      iplb.observation,
+      iplb.publication_date,
+      iplb.research_group_id,
+      iplb.active,
+      iplb.created_by,
+      iplb.updated_by,
+      iplb.created_at,
+      iplb.updated_at
+     FROM (((((ip_livestock_breeds iplb
+       LEFT JOIN subtypes stc ON ((iplb.category_id = stc.id)))
+       LEFT JOIN colciencias_calls cc ON ((iplb.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((iplb.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((iplb.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((iplb.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_research_cws", sql_definition: <<-SQL
+      SELECT rcw.id,
+      rcw.title,
+      rcw.category_id,
+      stc.st_name AS category_name,
+      rcw.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      rcw.creation_and_selection_date,
+      rcw.geo_city_id,
+      gcity.name AS geo_city_name,
+      rcw.geo_country_id,
+      gctry.name AS geo_country_name,
+      rcw.geo_state_id,
+      gs.name AS geo_state_name,
+      rcw.knwl_spec_area_id,
+      stksa.st_name AS knwl_spec_area_name,
+      rcw.nature_id,
+      stnt.st_name AS nature_name,
+      rcw.observation,
+      rcw.registered_project_title,
+      rcw.url,
+      ARRAY( SELECT rcwwt.subtype_id
+             FROM research_creation_works_work_types rcwwt
+            WHERE (rcw.id = rcwwt.research_creation_work_id)) AS work_type_ids,
+      rcw.research_group_id,
+      rcw.active,
+      rcw.created_by,
+      rcw.updated_by,
+      rcw.created_at,
+      rcw.updated_at
+     FROM (((((((research_creation_works rcw
+       LEFT JOIN subtypes stc ON ((rcw.category_id = stc.id)))
+       LEFT JOIN subtypes stnt ON ((rcw.nature_id = stnt.id)))
+       LEFT JOIN colciencias_calls cc ON ((rcw.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((rcw.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((rcw.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((rcw.geo_country_id = gctry.id)))
+       LEFT JOIN subtypes stksa ON ((rcw.knwl_spec_area_id = stksa.id)));
   SQL
 end
