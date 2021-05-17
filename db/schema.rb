@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_17_215735) do
+ActiveRecord::Schema.define(version: 2021_05_17_221821) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -679,11 +679,15 @@ ActiveRecord::Schema.define(version: 2021_05_17_215735) do
     t.datetime "updated_at", null: false
     t.bigint "participation_id"
     t.bigint "geo_city_id"
+    t.bigint "geo_state_id"
+    t.bigint "geo_country_id"
     t.index ["category_id"], name: "index_events_on_category_id"
     t.index ["colciencias_call_id"], name: "index_events_on_colciencias_call_id"
     t.index ["created_by"], name: "index_events_on_created_by"
     t.index ["eve_type_id"], name: "index_events_on_eve_type_id"
     t.index ["geo_city_id"], name: "index_events_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_events_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_events_on_geo_state_id"
     t.index ["participation_id"], name: "index_events_on_participation_id"
     t.index ["research_group_id"], name: "index_events_on_research_group_id"
     t.index ["updated_by"], name: "index_events_on_updated_by"
@@ -1054,10 +1058,14 @@ ActiveRecord::Schema.define(version: 2021_05_17_215735) do
     t.bigint "updated_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "geo_state_id"
+    t.bigint "geo_country_id"
     t.index ["category_id"], name: "index_knowledge_networks_on_category_id"
     t.index ["colciencias_call_id"], name: "index_knowledge_networks_on_colciencias_call_id"
     t.index ["created_by"], name: "index_knowledge_networks_on_created_by"
     t.index ["geo_city_id"], name: "index_knowledge_networks_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_knowledge_networks_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_knowledge_networks_on_geo_state_id"
     t.index ["research_group_id"], name: "index_knowledge_networks_on_research_group_id"
     t.index ["updated_by"], name: "index_knowledge_networks_on_updated_by"
   end
@@ -1907,6 +1915,8 @@ ActiveRecord::Schema.define(version: 2021_05_17_215735) do
   add_foreign_key "enterprises", "users", column: "updated_by"
   add_foreign_key "events", "colciencias_calls"
   add_foreign_key "events", "geo_cities"
+  add_foreign_key "events", "geo_countries"
+  add_foreign_key "events", "geo_states"
   add_foreign_key "events", "research_groups"
   add_foreign_key "events", "subtypes", column: "category_id"
   add_foreign_key "events", "subtypes", column: "eve_type_id"
@@ -1988,6 +1998,8 @@ ActiveRecord::Schema.define(version: 2021_05_17_215735) do
   add_foreign_key "ip_livestock_breeds", "users", column: "updated_by"
   add_foreign_key "knowledge_networks", "colciencias_calls"
   add_foreign_key "knowledge_networks", "geo_cities"
+  add_foreign_key "knowledge_networks", "geo_countries"
+  add_foreign_key "knowledge_networks", "geo_states"
   add_foreign_key "knowledge_networks", "research_groups"
   add_foreign_key "knowledge_networks", "subtypes", column: "category_id"
   add_foreign_key "knowledge_networks", "users", column: "created_by"
@@ -2364,44 +2376,6 @@ ActiveRecord::Schema.define(version: 2021_05_17_215735) do
        LEFT JOIN colciencias_calls cc ON ((p.colciencias_call_id = cc.id)))
        LEFT JOIN subtypes stps ON ((p.patent_state_id = stps.id)));
   SQL
-  create_view "complete_events", sql_definition: <<-SQL
-      SELECT eve.id,
-      eve.category_id,
-      st.st_name AS category_name,
-      eve.colciencias_call_id,
-      cc.name AS colciencias_call_name,
-      cc.year AS colciencias_call_year,
-      eve.eve_name,
-      eve.eve_start_date,
-      eve.eve_finish_date,
-      eve.eve_organizers,
-      eve.eve_entities,
-      eve.eve_observation,
-      eve.eve_type_id,
-      evt.st_name AS eve_type_name,
-      eve.geo_city_id,
-      gcity.name AS geo_city_name,
-      gs.geo_country_id,
-      gctry.name AS geo_country_name,
-      gcity.geo_state_id,
-      gs.name AS geo_state_name,
-      eve.participation_id,
-      part.st_name AS participation_name,
-      eve.research_group_id,
-      eve.active,
-      eve.created_by,
-      eve.updated_by,
-      eve.created_at,
-      eve.updated_at
-     FROM (((((((events eve
-       LEFT JOIN subtypes st ON ((eve.category_id = st.id)))
-       LEFT JOIN subtypes evt ON ((eve.eve_type_id = evt.id)))
-       LEFT JOIN subtypes part ON ((eve.participation_id = part.id)))
-       LEFT JOIN colciencias_calls cc ON ((eve.colciencias_call_id = cc.id)))
-       LEFT JOIN geo_cities gcity ON ((eve.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
-  SQL
   create_view "complete_types", sql_definition: <<-SQL
       SELECT t.id AS type_id,
       t.t_name AS type_name,
@@ -2463,39 +2437,6 @@ ActiveRecord::Schema.define(version: 2021_05_17_215735) do
        LEFT JOIN subtypes st ON ((ap.category_id = st.id)))
        LEFT JOIN colciencias_calls cc ON ((ap.colciencias_call_id = cc.id)))
        LEFT JOIN subtypes pt ON ((ap.product_type_id = pt.id)));
-  SQL
-  create_view "complete_knowledge_networks", sql_definition: <<-SQL
-      SELECT kn.id,
-      kn.name,
-      kn.category_id,
-      st.st_name AS category_name,
-      kn.colciencias_call_id,
-      cc.name AS colciencias_call_name,
-      cc.year AS colciencias_call_year,
-      kn.funding_community,
-      kn.funding_institution,
-      kn.geo_city_id,
-      gcity.name AS geo_city_name,
-      gs.geo_country_id,
-      gctry.name AS geo_country_name,
-      gcity.geo_state_id,
-      gs.name AS geo_state_name,
-      kn.start_date,
-      kn.finish_date,
-      kn.observation,
-      kn.research_group_id,
-      kn.web_page,
-      kn.active,
-      kn.created_by,
-      kn.updated_by,
-      kn.created_at,
-      kn.updated_at
-     FROM (((((knowledge_networks kn
-       LEFT JOIN subtypes st ON ((kn.category_id = st.id)))
-       LEFT JOIN colciencias_calls cc ON ((kn.colciencias_call_id = cc.id)))
-       LEFT JOIN geo_cities gcity ON ((kn.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
   SQL
   create_view "complete_scientific_notes", sql_definition: <<-SQL
       SELECT sn.id,
@@ -3338,5 +3279,76 @@ ActiveRecord::Schema.define(version: 2021_05_17_215735) do
        LEFT JOIN geo_cities cgcity ON ((la.contract_geo_city_id = cgcity.id)))
        LEFT JOIN geo_states cgs ON ((la.contract_geo_state_id = cgs.id)))
        LEFT JOIN geo_countries cgctry ON ((la.contract_geo_country_id = cgctry.id)));
+  SQL
+  create_view "complete_events", sql_definition: <<-SQL
+      SELECT eve.id,
+      eve.category_id,
+      st.st_name AS category_name,
+      eve.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      eve.eve_name,
+      eve.eve_start_date,
+      eve.eve_finish_date,
+      eve.eve_organizers,
+      eve.eve_entities,
+      eve.eve_observation,
+      eve.eve_type_id,
+      evt.st_name AS eve_type_name,
+      eve.geo_city_id,
+      gcity.name AS geo_city_name,
+      eve.geo_country_id,
+      gctry.name AS geo_country_name,
+      eve.geo_state_id,
+      gs.name AS geo_state_name,
+      eve.participation_id,
+      part.st_name AS participation_name,
+      eve.research_group_id,
+      eve.active,
+      eve.created_by,
+      eve.updated_by,
+      eve.created_at,
+      eve.updated_at
+     FROM (((((((events eve
+       LEFT JOIN subtypes st ON ((eve.category_id = st.id)))
+       LEFT JOIN subtypes evt ON ((eve.eve_type_id = evt.id)))
+       LEFT JOIN subtypes part ON ((eve.participation_id = part.id)))
+       LEFT JOIN colciencias_calls cc ON ((eve.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((eve.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((eve.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((eve.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_knowledge_networks", sql_definition: <<-SQL
+      SELECT kn.id,
+      kn.name,
+      kn.category_id,
+      st.st_name AS category_name,
+      kn.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      kn.funding_community,
+      kn.funding_institution,
+      kn.geo_city_id,
+      gcity.name AS geo_city_name,
+      kn.geo_country_id,
+      gctry.name AS geo_country_name,
+      kn.geo_state_id,
+      gs.name AS geo_state_name,
+      kn.start_date,
+      kn.finish_date,
+      kn.observation,
+      kn.research_group_id,
+      kn.web_page,
+      kn.active,
+      kn.created_by,
+      kn.updated_by,
+      kn.created_at,
+      kn.updated_at
+     FROM (((((knowledge_networks kn
+       LEFT JOIN subtypes st ON ((kn.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((kn.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((kn.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((kn.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((kn.geo_country_id = gctry.id)));
   SQL
 end
