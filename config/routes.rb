@@ -172,6 +172,7 @@ Rails.application.routes.draw do
         resources :events, only: [:index, :show, :create, :update]
         put "/events/:id/active", to: "events#change_active"
         resources :appropriation_processes, only: [:index, :create]
+        resources :creation_workshops, only: [:index, :create]
 
         # Human Resource Training for CTel
         resources :degree_works, only: [:index, :show, :create, :update]
@@ -196,6 +197,7 @@ Rails.application.routes.draw do
 
       # Social appropriation of knowledge
       resources :appropriation_processes, only: [:show, :update]
+      resources :creation_workshops, only: [:show, :update]
 
       # RESEARCH UNIT PRODUCT ENDPOINTS
       ## Participants in product creation and documents
@@ -209,6 +211,7 @@ Rails.application.routes.draw do
                 :clinical_practice_guidelines, :guide_manuals,
                 :protocol_acts, :bills, :license_agreements,
                 :events, :appropriation_processes, :knowledge_networks,
+                :creation_workshops,
                 :degree_works,
                 only: [] do
         resources :ext_participants, only: [:index, :show, :create, :update]

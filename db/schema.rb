@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_17_221821) do
+ActiveRecord::Schema.define(version: 2021_05_17_232614) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -504,6 +504,36 @@ ActiveRecord::Schema.define(version: 2021_05_17_221821) do
     t.datetime "updated_at", null: false
     t.index ["agreement_id"], name: "index_contributions_on_agreement_id"
     t.index ["funding_entity_id"], name: "index_contributions_on_funding_entity_id"
+  end
+
+  create_table "creation_workshops", force: :cascade do |t|
+    t.string "name"
+    t.date "start_date"
+    t.date "finish_date"
+    t.string "funding_institution"
+    t.string "organization_name"
+    t.bigint "geo_city_id"
+    t.bigint "geo_state_id"
+    t.bigint "geo_country_id"
+    t.bigint "participation_id"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "observation"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_creation_workshops_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_creation_workshops_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_creation_workshops_on_created_by"
+    t.index ["geo_city_id"], name: "index_creation_workshops_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_creation_workshops_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_creation_workshops_on_geo_state_id"
+    t.index ["participation_id"], name: "index_creation_workshops_on_participation_id"
+    t.index ["research_group_id"], name: "index_creation_workshops_on_research_group_id"
+    t.index ["updated_by"], name: "index_creation_workshops_on_updated_by"
   end
 
   create_table "curricular_prj_ids_research_groups", force: :cascade do |t|
@@ -1876,6 +1906,15 @@ ActiveRecord::Schema.define(version: 2021_05_17_221821) do
   add_foreign_key "colciencias_calls", "users", column: "updated_by"
   add_foreign_key "colciencias_categories", "users", column: "created_by"
   add_foreign_key "colciencias_categories", "users", column: "updated_by"
+  add_foreign_key "creation_workshops", "colciencias_calls"
+  add_foreign_key "creation_workshops", "geo_cities"
+  add_foreign_key "creation_workshops", "geo_countries"
+  add_foreign_key "creation_workshops", "geo_states"
+  add_foreign_key "creation_workshops", "research_groups"
+  add_foreign_key "creation_workshops", "subtypes", column: "category_id"
+  add_foreign_key "creation_workshops", "subtypes", column: "participation_id"
+  add_foreign_key "creation_workshops", "users", column: "created_by"
+  add_foreign_key "creation_workshops", "users", column: "updated_by"
   add_foreign_key "curricular_prj_ids_research_groups", "research_groups"
   add_foreign_key "curricular_prj_ids_research_groups", "users", column: "created_by"
   add_foreign_key "curricular_prj_ids_research_groups", "users", column: "updated_by"
@@ -3350,5 +3389,40 @@ ActiveRecord::Schema.define(version: 2021_05_17_221821) do
        LEFT JOIN geo_cities gcity ON ((kn.geo_city_id = gcity.id)))
        LEFT JOIN geo_states gs ON ((kn.geo_state_id = gs.id)))
        LEFT JOIN geo_countries gctry ON ((kn.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_creation_workshops", sql_definition: <<-SQL
+      SELECT cw.id,
+      cw.name,
+      cw.category_id,
+      st.st_name AS category_name,
+      cw.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      cw.funding_institution,
+      cw.geo_city_id,
+      gcity.name AS geo_city_name,
+      cw.geo_country_id,
+      gctry.name AS geo_country_name,
+      cw.geo_state_id,
+      gs.name AS geo_state_name,
+      cw.start_date,
+      cw.finish_date,
+      cw.observation,
+      cw.organization_name,
+      cw.participation_id,
+      prst.st_name AS participation_name,
+      cw.research_group_id,
+      cw.active,
+      cw.created_by,
+      cw.updated_by,
+      cw.created_at,
+      cw.updated_at
+     FROM ((((((creation_workshops cw
+       LEFT JOIN subtypes st ON ((cw.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((cw.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((cw.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((cw.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((cw.geo_country_id = gctry.id)))
+       LEFT JOIN subtypes prst ON ((cw.participation_id = prst.id)));
   SQL
 end
