@@ -66,14 +66,16 @@ module Api
       def icd_params_to_create
         params.require(:integrated_circuit_diagram).permit(
           :icd_registration_number, :icd_registration_title,
-          :icd_date_of_obtaining, :geo_city_id, :category_id,
+          :icd_date_of_obtaining, :geo_city_id, :geo_state_id,
+          :geo_country_id, :category_id,
           :colciencias_call_id, :observation, :created_by)
       end
 
       def icd_params_to_updated
         params.require(:integrated_circuit_diagram).permit(
           :icd_registration_number, :icd_registration_title,
-          :icd_date_of_obtaining, :geo_city_id, :category_id,
+          :icd_date_of_obtaining, :geo_city_id, :geo_state_id,
+          :geo_country_id, :category_id,
           :colciencias_call_id, :observation, :updated_by)
       end
 

@@ -51,7 +51,8 @@ module Api
       def tc_params_to_create
         params.require(:technical_concept).permit(:title, :request_date, :consecutive_number,
                                                   :send_date, :requesting_institution_name,
-                                                  :geo_city_id, :category_id, :research_group_id,
+                                                  :geo_city_id, :geo_state_id, :geo_country_id,
+                                                  :category_id, :research_group_id,
                                                   :colciencias_call_id, :observation,
                                                   :active, :created_by)
       end
@@ -59,7 +60,8 @@ module Api
       def tc_params_to_update
         params.require(:technical_concept).permit(:title, :request_date, :consecutive_number,
                                                   :send_date, :requesting_institution_name,
-                                                  :geo_city_id, :category_id, :research_group_id,
+                                                  :geo_city_id, :geo_state_id, :geo_country_id,
+                                                  :category_id, :research_group_id,
                                                   :colciencias_call_id, :observation,
                                                   :active, :updated_by)
       end
