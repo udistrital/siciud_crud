@@ -94,7 +94,7 @@ module Swagger::SoftwareApi
       end
     end
 
-    swagger_path '/research_units/{research_group_id}/software/' do
+    swagger_path '/research_units/{research_group_id}/software' do
       operation :get do
         key :summary, 'Get all Software'
         key :description, 'Returns all software'

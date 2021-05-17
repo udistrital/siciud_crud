@@ -94,7 +94,7 @@ module Swagger::DegreeWorkApi
       end
     end
 
-    swagger_path '/research_units/{research_group_id}/degree_works/' do
+    swagger_path '/research_units/{research_group_id}/degree_works' do
       operation :get do
         key :summary, 'Get all Degree works'
         key :description, 'Returns all Degree works '

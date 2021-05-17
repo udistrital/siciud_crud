@@ -94,7 +94,7 @@ module Swagger::AwardApi
       end
     end
 
-    swagger_path '/research_creation_works/{research_creation_work_id}/awards/' do
+    swagger_path '/research_creation_works/{research_creation_work_id}/awards' do
       operation :get do
         key :summary, 'Get all Awards from a Research Creation Work'
         key :description, 'Returns all awards from a Research Creation Work'

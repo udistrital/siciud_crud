@@ -94,7 +94,7 @@ module Swagger::ResearchCreationWorkApi
       end
     end
 
-    swagger_path '/research_group/{research_group_id}/research_creation_works/' do
+    swagger_path '/research_group/{research_group_id}/research_creation_works' do
       operation :get do
         key :summary, 'Get all Research Creation Works'
         key :description, 'Returns all research creation works'

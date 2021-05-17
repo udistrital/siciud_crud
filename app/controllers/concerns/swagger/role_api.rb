@@ -78,7 +78,7 @@ module Swagger::RoleApi
       # end
     end
 
-    swagger_path '/role/' do
+    swagger_path '/role' do
       operation :get do
         key :summary, 'Get all Roles'
         key :description, 'Returns all roles'

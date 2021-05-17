@@ -121,7 +121,7 @@ module Swagger::RegulationApi
       end
     end
 
-    swagger_path '/research_units/{research_group_id}/regulations/' do
+    swagger_path '/research_units/{research_group_id}/regulations' do
       operation :get do
         key :summary, 'Get all Regulations'
         key :description, 'Returns all Regulations'

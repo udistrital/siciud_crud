@@ -121,7 +121,7 @@ module Swagger::LicenseAgreementApi
       end
     end
 
-    swagger_path '/research_units/{research_group_id}/license_agreements/' do
+    swagger_path '/research_units/{research_group_id}/license_agreements' do
       operation :get do
         key :summary, 'Get all License Agreements'
         key :description, 'Returns all License Agreements'

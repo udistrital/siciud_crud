@@ -94,7 +94,7 @@ module Swagger::EventApi
       end
     end
 
-    swagger_path '/research_units/{research_group_id}/events/' do
+    swagger_path '/research_units/{research_group_id}/events' do
       operation :get do
         key :summary, 'Get all events'
         key :description, 'Returns all events'

@@ -94,7 +94,7 @@ module Swagger::PatentApi
       end
     end
 
-    swagger_path '/research_units/{research_group_id}/patents/' do
+    swagger_path '/research_units/{research_group_id}/patents' do
       operation :get do
         key :summary, 'Get all Patents'
         key :description, 'Returns all patents'

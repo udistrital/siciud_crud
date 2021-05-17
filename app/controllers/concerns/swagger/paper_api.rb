@@ -94,7 +94,7 @@ module Swagger::PaperApi
       end
     end
 
-    swagger_path '/research_units/{research_group_id}/papers/' do
+    swagger_path '/research_units/{research_group_id}/papers' do
       operation :get do
         key :summary, 'Get all Papers'
         key :description, 'Returns all papers'

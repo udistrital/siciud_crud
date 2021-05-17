@@ -121,7 +121,7 @@ module Swagger::DistinctiveSignApi
       end
     end
 
-    swagger_path '/research_units/{research_group_id}/distinctive_signs/' do
+    swagger_path '/research_units/{research_group_id}/distinctive_signs' do
       operation :get do
         key :summary, 'Get all Distinctive Signs'
         key :description, 'Returns all Distinctive Signs'

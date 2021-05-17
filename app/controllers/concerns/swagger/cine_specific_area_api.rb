@@ -45,7 +45,7 @@ module Swagger::CineSpecificAreaApi
       end
     end
 
-    swagger_path '/cine_specific_areas/' do
+    swagger_path '/cine_specific_areas' do
       operation :get do
         key :summary, 'Get all Specific Areas of ISCED'
         key :description, 'Returns all specific areas of ISCED'

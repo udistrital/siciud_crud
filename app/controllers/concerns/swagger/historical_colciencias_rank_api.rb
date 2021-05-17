@@ -94,7 +94,7 @@ module Swagger::HistoricalColcienciasRankApi
       end
     end
 
-    swagger_path '/research_units/{research_unit_id}/historical_colciencias_ranks/' do
+    swagger_path '/research_units/{research_unit_id}/historical_colciencias_ranks' do
       operation :get do
         key :summary, 'Get all Historical Colciencias Ranks of a Research Unit by ID'
         key :description, 'Returns all historical colciencias ranks'

@@ -121,7 +121,7 @@ module Swagger::TechnicalConceptApi
       end
     end
 
-    swagger_path '/research_units/{research_group_id}/technical_concepts/' do
+    swagger_path '/research_units/{research_group_id}/technical_concepts' do
       operation :get do
         key :summary, 'Get all Technical Concepts'
         key :description, 'Returns all technical concepts'

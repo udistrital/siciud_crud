@@ -121,7 +121,7 @@ module Swagger::AppropriationProcessApi
       end
     end
 
-    swagger_path '/research_units/{research_group_id}/appropriation_processes/' do
+    swagger_path '/research_units/{research_group_id}/appropriation_processes' do
       operation :get do
         key :summary, 'Get all Appropriation Processes'
         key :description, 'Returns all Appropriation Processes'

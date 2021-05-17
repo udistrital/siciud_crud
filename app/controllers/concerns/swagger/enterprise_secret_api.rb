@@ -121,7 +121,7 @@ module Swagger::EnterpriseSecretApi
       end
     end
 
-    swagger_path '/research_units/{research_group_id}/enterprise_secrets/' do
+    swagger_path '/research_units/{research_group_id}/enterprise_secrets' do
       operation :get do
         key :summary, 'Get all Enterprise Secrets'
         key :description, 'Returns all Enterprise Secrets'

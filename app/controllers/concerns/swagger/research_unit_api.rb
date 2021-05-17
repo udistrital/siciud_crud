@@ -78,7 +78,7 @@ module Swagger::ResearchUnitApi
       end
     end
 
-    swagger_path '/research_units/' do
+    swagger_path '/research_units' do
       operation :get do
         key :summary, 'Get all Research Units'
         key :description, 'Returns all Research Units'
