@@ -52,7 +52,8 @@ module Api
         params.require(:scientific_collection).permit(:name, :date_of_obtaining,
                                                       :managing_institution_name, :curator_name,
                                                       :last_conservatorship_date, :validity_and_use,
-                                                      :information_included, :geo_city_id, :category_id,
+                                                      :information_included, :geo_city_id, :geo_state_id,
+                                                      :geo_country_id, :category_id,
                                                       :research_group_id, :colciencias_call_id, :observation,
                                                       :active, :created_by)
       end
@@ -61,7 +62,8 @@ module Api
         params.require(:scientific_collection).permit(:name, :date_of_obtaining,
                                                       :managing_institution_name, :curator_name,
                                                       :last_conservatorship_date, :validity_and_use,
-                                                      :information_included, :geo_city_id, :category_id,
+                                                      :information_included, :geo_city_id, :geo_state_id,
+                                                      :geo_country_id, :category_id,
                                                       :research_group_id, :colciencias_call_id, :observation,
                                                       :active, :updated_by)
       end

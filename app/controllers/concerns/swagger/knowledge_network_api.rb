@@ -121,7 +121,7 @@ module Swagger::KnowledgeNetworkApi
       end
     end
 
-    swagger_path '/research_units/{research_group_id}/knowledge_networks/' do
+    swagger_path '/research_units/{research_group_id}/knowledge_networks' do
       operation :get do
         key :summary, 'Get all Knowledge Networks'
         key :description, 'Returns all Knowledge Networks'

@@ -4,7 +4,6 @@ module Swagger::VegetableVarietySchema
 
   included do
     swagger_schema :VegetableVariety do
-      key :required, [:id]
       property :id do
         key :type, :integer
         key :format, :int64
@@ -29,6 +28,14 @@ module Swagger::VegetableVarietySchema
         key :format, :date
       end
       property :geo_city_id do
+        key :type, :integer
+        key :format, :int64
+      end
+      property :geo_country_id do
+        key :type, :integer
+        key :format, :int64
+      end
+      property :geo_state_id do
         key :type, :integer
         key :format, :int64
       end
@@ -86,6 +93,14 @@ module Swagger::VegetableVarietySchema
           key :type, :integer
           key :format, :int64
         end
+        property :geo_country_id do
+          key :type, :integer
+          key :format, :int64
+        end
+        property :geo_state_id do
+          key :type, :integer
+          key :format, :int64
+        end
         property :observation do
           key :type, :string
         end
@@ -134,16 +149,8 @@ module Swagger::VegetableVarietySchema
           property :geo_city_name do
             key :type, :string
           end
-          property :geo_country_id do
-            key :type, :integer
-            key :format, :int64
-          end
           property :geo_country_name do
             key :type, :string
-          end
-          property :geo_state_id do
-            key :type, :integer
-            key :format, :int64
           end
           property :geo_state_name do
             key :type, :string

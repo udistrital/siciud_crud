@@ -51,7 +51,8 @@ module Api
       # Only allow a trusted parameter "white list" through.
       def ent_secret_params_to_create
         params.require(:enterprise_secret).permit(:name, :contract_number, :contract_value,
-                                                  :date_of_obtaining, :geo_city_id, :category_id,
+                                                  :date_of_obtaining, :geo_city_id,
+                                                  :geo_state_id, :geo_country_id, :category_id,
                                                   :research_group_id, :colciencias_call_id,
                                                   :observation,
                                                   :active, :created_by)
@@ -59,7 +60,8 @@ module Api
 
       def ent_secret_params_to_update
         params.require(:enterprise_secret).permit(:name, :contract_number, :contract_value,
-                                                  :date_of_obtaining, :geo_city_id, :category_id,
+                                                  :date_of_obtaining, :geo_city_id,
+                                                  :geo_state_id, :geo_country_id, :category_id,
                                                   :research_group_id, :colciencias_call_id,
                                                   :observation,
                                                   :active, :updated_by)

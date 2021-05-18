@@ -63,7 +63,7 @@ module Api
         params.require(:book).permit(:title, :publication_date, :isbn,
                                      :url, :observation, :category_id,
                                      :colciencias_call_id, :editorial_name,
-                                     :geo_city_id,
+                                     :geo_city_id, :geo_state_id, :geo_country_id,
                                      :book_type_id, :created_by)
       end
 
@@ -71,7 +71,7 @@ module Api
         params.require(:book).permit(:title, :publication_date, :isbn,
                                      :url, :observation, :category_id,
                                      :colciencias_call_id, :editorial_name,
-                                     :geo_city_id,
+                                     :geo_city_id, :geo_state_id, :geo_country_id,
                                      :book_type_id, :updated_by)
       end
 

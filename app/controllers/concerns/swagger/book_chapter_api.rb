@@ -94,7 +94,7 @@ module Swagger::BookChapterApi
       end
     end
 
-    swagger_path '/research_units/{research_group_id}/book_chapters/' do
+    swagger_path '/research_units/{research_group_id}/book_chapters' do
       operation :get do
         key :summary, 'Get all Book Chapters'
         key :description, 'Returns all book chapters'

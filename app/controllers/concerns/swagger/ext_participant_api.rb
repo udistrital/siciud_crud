@@ -118,7 +118,7 @@ module Swagger::ExtParticipantApi
       end
     end
 
-    swagger_path '/{product_name}/{producible_id}/ext_participants/' do
+    swagger_path '/{product_name}/{producible_id}/ext_participants' do
       operation :get do
         key :summary, 'Get all External Participants of a Product by ID'
         key :description, 'Returns all external participants'

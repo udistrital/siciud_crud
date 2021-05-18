@@ -121,7 +121,7 @@ module Swagger::BillApi
       end
     end
 
-    swagger_path '/research_units/{research_group_id}/bills/' do
+    swagger_path '/research_units/{research_group_id}/bills' do
       operation :get do
         key :summary, 'Get all Bills'
         key :description, 'Returns all Bills'

@@ -65,7 +65,7 @@ module Api
           :title, :publication_date, :approval_date, :volume,
           :number_of_pages, :initial_page, :final_page, :issn, :url, :doi,
           :observation, :category_id, :colciencias_call_id, :geo_city_id,
-          :journal_name, :created_by)
+          :geo_state_id, :geo_country_id, :journal_name, :created_by)
       end
 
       def sci_note_params_to_update
@@ -73,7 +73,7 @@ module Api
           :title, :publication_date, :approval_date, :volume,
           :number_of_pages, :initial_page, :final_page, :issn, :url, :doi,
           :observation, :category_id, :colciencias_call_id, :geo_city_id,
-          :journal_name, :updated_by)
+          :geo_state_id, :geo_country_id, :journal_name, :updated_by)
       end
 
       def sci_note_params_to_deactivate

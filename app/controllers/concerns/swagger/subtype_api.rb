@@ -78,7 +78,7 @@ module Swagger::SubtypeApi
       end
     end
 
-    swagger_path '/subtypes/' do
+    swagger_path '/subtypes' do
       operation :get do
         key :summary, 'Get all subtypes'
         key :description, 'Returns all subtypes'

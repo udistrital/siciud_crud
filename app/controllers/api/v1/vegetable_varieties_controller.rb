@@ -65,7 +65,8 @@ module Api
           :name, :date, :observation,
           :cycle_type_id, :petition_status_id,
           :category_id, :colciencias_call_id,
-          :geo_city_id, :created_by)
+          :geo_city_id, :geo_state_id, :geo_country_id,
+          :created_by)
       end
 
       def vv_params_to_update
@@ -73,7 +74,8 @@ module Api
           :name, :date, :observation,
           :cycle_type_id, :petition_status_id,
           :category_id, :colciencias_call_id,
-          :geo_city_id, :updated_by)
+          :geo_city_id, :geo_state_id, :geo_country_id,
+          :updated_by)
       end
 
       def vv_params_to_deactivate

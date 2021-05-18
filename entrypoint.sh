@@ -17,13 +17,11 @@ rails import_cine:load_data
 rails import_types_subtypes:create_data
 rails import_research_groups:data
 rails add_group_roles:data
-# rails import_researchers:data
-# rails import_research_groups_members:data
+rails import_researchers:data
+rails import_research_groups_members:data
 
-#  rails db -p <db/data/01-data-country.sql
-#  rails db -p <db/data/02-data-state.sql
-#  rails db -p <db/data/03-data-city.sql
-
-
+rails db -p <db/data/01-data-country.sql
+rails db -p <db/data/02-data-state.sql
+rails db -p <db/data/03-data-city.sql
 
 exec "$@"

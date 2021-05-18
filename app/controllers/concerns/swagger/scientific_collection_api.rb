@@ -121,7 +121,7 @@ module Swagger::ScientificCollectionApi
       end
     end
 
-    swagger_path '/research_units/{research_group_id}/scientific_collections/' do
+    swagger_path '/research_units/{research_group_id}/scientific_collections' do
       operation :get do
         key :summary, 'Get all Scientific Collections'
         key :description, 'Returns all Scientific Collections'

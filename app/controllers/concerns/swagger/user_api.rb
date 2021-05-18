@@ -78,7 +78,7 @@ module Swagger::UserApi
       end
     end
 
-    swagger_path '/users/' do
+    swagger_path '/users' do
       operation :get do
         key :summary, 'Get all Users'
         key :description, 'Returns all users'

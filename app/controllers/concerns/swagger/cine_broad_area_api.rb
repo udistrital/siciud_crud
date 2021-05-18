@@ -45,7 +45,7 @@ module Swagger::CineBroadAreaApi
       end
     end
 
-    swagger_path '/cine_broad_areas/' do
+    swagger_path '/cine_broad_areas' do
       operation :get do
         key :summary, 'Get all Broad Areas of ISCED'
         key :description, 'Returns all broad areas of ISCED'

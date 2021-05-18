@@ -50,14 +50,16 @@ module Api
       # Only allow a trusted parameter "white list" through.
       def dist_sign_params_to_create
         params.require(:distinctive_sign).permit(:registration_title, :registration_number,
-                                                 :date_of_obtaining, :geo_city_id, :category_id,
+                                                 :date_of_obtaining, :geo_city_id, :geo_state_id,
+                                                 :geo_country_id, :category_id,
                                                  :research_group_id, :colciencias_call_id,
                                                  :observation, :active, :created_by)
       end
 
       def dist_sign_params_to_update
         params.require(:distinctive_sign).permit(:registration_title, :registration_number,
-                                                 :date_of_obtaining, :geo_city_id, :category_id,
+                                                 :date_of_obtaining, :geo_city_id, :geo_state_id,
+                                                 :geo_country_id, :category_id,
                                                  :research_group_id, :colciencias_call_id,
                                                  :observation, :active, :updated_by)
       end

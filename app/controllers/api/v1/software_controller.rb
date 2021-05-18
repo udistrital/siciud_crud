@@ -63,14 +63,16 @@ module Api
       def software_params_to_create
         params.require(:software).permit(
           :sof_registration_number, :sof_product_title, :sof_date_of_obtaining,
-          :geo_city_id, :sof_description, :category_id, :colciencias_call_id,
+          :geo_city_id, :geo_state_id, :geo_country_id,
+          :sof_description, :category_id, :colciencias_call_id,
           :observation, :created_by)
       end
 
       def software_params_to_update
         params.require(:software).permit(
           :sof_registration_number, :sof_product_title, :sof_date_of_obtaining,
-          :geo_city_id, :sof_description, :category_id, :colciencias_call_id,
+          :geo_city_id, :geo_state_id, :geo_country_id,
+          :sof_description, :category_id, :colciencias_call_id,
           :observation, :updated_by)
       end
 

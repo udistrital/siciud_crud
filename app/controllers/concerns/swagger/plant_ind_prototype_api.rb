@@ -94,7 +94,7 @@ module Swagger::PlantIndPrototypeApi
       end
     end
 
-    swagger_path '/research_units/{research_group_id}/plant_ind_prototypes/' do
+    swagger_path '/research_units/{research_group_id}/plant_ind_prototypes' do
       operation :get do
         key :summary, 'Get all Plant or Industrial Prototype'
         key :description, 'Returns all Plant or Industrial Prototype'

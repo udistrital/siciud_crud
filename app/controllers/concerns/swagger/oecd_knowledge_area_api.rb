@@ -45,7 +45,7 @@ module Swagger::OecdKnowledgeAreaApi
       end
     end
 
-    swagger_path '/oecd_knowledge_areas/' do
+    swagger_path '/oecd_knowledge_areas' do
       operation :get do
         key :summary, 'Get all OECD knowledge areas'
         key :description, 'Returns all OECD knowledge areas'

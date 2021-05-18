@@ -94,7 +94,7 @@ module Swagger::IpLivestockBreedApi
       end
     end
 
-    swagger_path '/research_group/{research_group_id}/ip_livestock_breeds/' do
+    swagger_path '/research_group/{research_group_id}/ip_livestock_breeds' do
       operation :get do
         key :summary, 'Get all Improved Population of Livestock Breeds'
         key :description, 'Returns all improved population of livestock breeds of a Research Unit'

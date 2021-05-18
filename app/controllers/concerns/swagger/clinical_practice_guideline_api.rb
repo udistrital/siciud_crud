@@ -121,7 +121,7 @@ module Swagger::ClinicalPracticeGuidelineApi
       end
     end
 
-    swagger_path '/research_units/{research_group_id}/clinical_practice_guidelines/' do
+    swagger_path '/research_units/{research_group_id}/clinical_practice_guidelines' do
       operation :get do
         key :summary, 'Get all Clinical Practice Guidelines'
         key :description, 'Returns all Clinical Practice Guidelines'

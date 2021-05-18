@@ -45,7 +45,7 @@ module Swagger::OecdKnowledgeSubareaApi
       end
     end
 
-    swagger_path '/oecd_knowledge_subareas/' do
+    swagger_path '/oecd_knowledge_subareas' do
       operation :get do
         key :summary, 'Get all OECD knowledge subareas'
         key :description, 'Returns all OECD knowledge subareas'
