@@ -126,6 +126,9 @@ class ApplicationController < ActionController::API
     elsif params[:creation_workshop_id]
       id = params[:creation_workshop_id]
       @context = CreationWorkshop.find(id)
+    elsif params[:working_paper_id]
+      id = params[:working_paper_id]
+      @context = WorkingPaper.find(id)
     end
   end
 end

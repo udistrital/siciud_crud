@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_17_232614) do
+ActiveRecord::Schema.define(version: 2021_05_18_002127) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1844,6 +1844,28 @@ ActiveRecord::Schema.define(version: 2021_05_17_232614) do
     t.index ["updated_by"], name: "index_vegetable_varieties_on_updated_by"
   end
 
+  create_table "working_papers", force: :cascade do |t|
+    t.string "title"
+    t.date "elaboration_date"
+    t.string "related_institution"
+    t.string "doi"
+    t.string "web_page"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "observation"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_working_papers_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_working_papers_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_working_papers_on_created_by"
+    t.index ["research_group_id"], name: "index_working_papers_on_research_group_id"
+    t.index ["updated_by"], name: "index_working_papers_on_updated_by"
+  end
+
   add_foreign_key "appropriation_processes", "colciencias_calls"
   add_foreign_key "appropriation_processes", "research_groups"
   add_foreign_key "appropriation_processes", "subtypes", column: "category_id"
@@ -2205,6 +2227,11 @@ ActiveRecord::Schema.define(version: 2021_05_17_232614) do
   add_foreign_key "vegetable_varieties", "subtypes", column: "petition_status_id"
   add_foreign_key "vegetable_varieties", "users", column: "created_by"
   add_foreign_key "vegetable_varieties", "users", column: "updated_by"
+  add_foreign_key "working_papers", "colciencias_calls"
+  add_foreign_key "working_papers", "research_groups"
+  add_foreign_key "working_papers", "subtypes", column: "category_id"
+  add_foreign_key "working_papers", "users", column: "created_by"
+  add_foreign_key "working_papers", "users", column: "updated_by"
 
   create_view "complete_users", sql_definition: <<-SQL
       SELECT u.id,
@@ -3424,5 +3451,28 @@ ActiveRecord::Schema.define(version: 2021_05_17_232614) do
        LEFT JOIN geo_states gs ON ((cw.geo_state_id = gs.id)))
        LEFT JOIN geo_countries gctry ON ((cw.geo_country_id = gctry.id)))
        LEFT JOIN subtypes prst ON ((cw.participation_id = prst.id)));
+  SQL
+  create_view "complete_working_papers", sql_definition: <<-SQL
+      SELECT wp.id,
+      wp.title,
+      wp.category_id,
+      st.st_name AS category_name,
+      wp.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      wp.doi,
+      wp.elaboration_date,
+      wp.observation,
+      wp.related_institution,
+      wp.research_group_id,
+      wp.web_page,
+      wp.active,
+      wp.created_by,
+      wp.updated_by,
+      wp.created_at,
+      wp.updated_at
+     FROM ((working_papers wp
+       LEFT JOIN subtypes st ON ((wp.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((wp.colciencias_call_id = cc.id)));
   SQL
 end

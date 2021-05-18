@@ -56,6 +56,7 @@ class ResearchGroup < ApplicationRecord
   has_many :appropriation_processes, dependent: :destroy
   has_many :knowledge_networks, dependent: :destroy
   has_many :creation_workshops, dependent: :destroy
+  has_many :working_papers, dependent: :destroy
 
   has_many :degree_works, dependent: :destroy
 
