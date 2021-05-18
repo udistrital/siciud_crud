@@ -121,7 +121,7 @@ module Swagger::InnovationApi
       end
     end
 
-    swagger_path '/research_units/{research_group_id}/innovations/' do
+    swagger_path '/research_units/{research_group_id}/innovations' do
       operation :get do
         key :summary, 'Get all Innovations'
         key :description, 'Returns all Innovations'

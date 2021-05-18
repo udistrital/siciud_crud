@@ -72,14 +72,16 @@ module Api
       def pip_params_to_create
         params.require(:plant_ind_prototype).permit(
           :plt_name, :plt_registration_number, :plt_date_of_elaboration,
-          :geo_city_id, :category_id, :colciencias_call_id, :institution_name,
+          :geo_city_id, :geo_state_id, :geo_country_id,
+          :category_id, :colciencias_call_id, :institution_name,
           :observation, :plt_type_id, :created_by)
       end
 
       def pip_params_to_update
         params.require(:plant_ind_prototype).permit(
           :plt_name, :plt_registration_number, :plt_date_of_elaboration,
-          :geo_city_id, :category_id, :colciencias_call_id, :institution_name,
+          :geo_city_id, :geo_state_id, :geo_country_id,
+          :category_id, :colciencias_call_id, :institution_name,
           :observation, :plt_type_id, :updated_by)
       end
 

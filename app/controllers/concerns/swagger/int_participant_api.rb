@@ -118,7 +118,7 @@ module Swagger::IntParticipantApi
       end
     end
 
-    swagger_path '/{product_name}/{producible_id}/int_participants/' do
+    swagger_path '/{product_name}/{producible_id}/int_participants' do
       operation :get do
         key :summary, 'Get all Internal Participants of a Product by ID'
         key :description, 'Returns all internal participants'

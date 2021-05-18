@@ -121,7 +121,7 @@ module Swagger::NutraceuticalProductApi
       end
     end
 
-    swagger_path '/research_units/{research_group_id}/nutraceutical_products/' do
+    swagger_path '/research_units/{research_group_id}/nutraceutical_products' do
       operation :get do
         key :summary, 'Get all Nutraceutical Products'
         key :description, 'Returns all Nutraceutical Products'

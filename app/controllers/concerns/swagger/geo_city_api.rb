@@ -92,7 +92,7 @@ module Swagger::GeoCityApi
       # end
     end
 
-    swagger_path '/geo_states/{geo_state_id}/geo_cities/' do
+    swagger_path '/geo_states/{geo_state_id}/geo_cities' do
       operation :get do
         key :summary, 'Get all Cities'
         key :description, 'Returns all cities'

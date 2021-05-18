@@ -23,6 +23,14 @@ module Swagger::RegulationSchema
         key :type, :integer
         key :format, :int64
       end
+      property :geo_country_id do
+        key :type, :integer
+        key :format, :int64
+      end
+      property :geo_state_id do
+        key :type, :integer
+        key :format, :int64
+      end
       property :issuing_entity do
         key :type, :string
       end
@@ -106,16 +114,8 @@ module Swagger::RegulationSchema
           property :geo_city_name do
             key :type, :string
           end
-          property :geo_country_id do
-            key :type, :integer
-            key :format, :int64
-          end
           property :geo_country_name do
             key :type, :string
-          end
-          property :geo_state_id do
-            key :type, :integer
-            key :format, :int64
           end
           property :geo_state_name do
             key :type, :string

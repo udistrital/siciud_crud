@@ -123,7 +123,7 @@ module Swagger::DocumentApi
       end
     end
 
-    swagger_path '/{context}/{context_id}/documents/' do
+    swagger_path '/{context}/{context_id}/documents' do
       operation :get do
         key :summary, 'Get all Documents of a Research Unit or Product by ID'
         key :description, 'Returns all Documents of a Research Unit or Product by ID'

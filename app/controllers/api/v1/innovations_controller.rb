@@ -59,6 +59,7 @@ module Api
         params.require(:innovation).permit(:name, :nit, :company_name,
                                            :date_of_obtaining,
                                            :product_type_id, :geo_city_id,
+                                           :geo_state_id, :geo_country_id,
                                            :category_id, :research_group_id,
                                            :colciencias_call_id, :observation,
                                            :active, :created_by)
@@ -68,6 +69,7 @@ module Api
         params.require(:innovation).permit(:name, :nit, :company_name,
                                            :date_of_obtaining,
                                            :product_type_id, :geo_city_id,
+                                           :geo_state_id, :geo_country_id,
                                            :category_id, :research_group_id,
                                            :colciencias_call_id, :observation,
                                            :active, :updated_by)

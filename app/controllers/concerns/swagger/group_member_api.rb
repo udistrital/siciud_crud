@@ -94,7 +94,7 @@ module Swagger::GroupMemberApi
       end
     end
 
-    swagger_path '/research_group/{research_group_id}/group_member/' do
+    swagger_path '/research_group/{research_group_id}/group_member' do
       operation :get do
         key :summary, 'Get all Group Members'
         key :description, 'Returns all group members'

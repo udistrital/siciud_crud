@@ -121,7 +121,7 @@ module Swagger::ProtocolActApi
       end
     end
 
-    swagger_path '/research_units/{research_group_id}/protocol_acts/' do
+    swagger_path '/research_units/{research_group_id}/protocol_acts' do
       operation :get do
         key :summary, 'Get all Protocol Acts'
         key :description, 'Returns all Protocol Acts'

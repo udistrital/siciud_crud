@@ -92,7 +92,7 @@ module Swagger::GeoStateApi
       # end
     end
 
-    swagger_path '/geo_countries/{geo_country_id}/geo_states/' do
+    swagger_path '/geo_countries/{geo_country_id}/geo_states' do
       operation :get do
         key :summary, 'Get all States'
         key :description, 'Returns all states'

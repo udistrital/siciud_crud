@@ -66,7 +66,8 @@ module Api
       def nsr_params_to_create
         params.require(:new_scientific_record).permit(
           :nsr_name, :nsr_date_of_obtaining, :nsr_database_name, :nsr_database_url,
-          :geo_city_id, :category_id, :research_group_id, :colciencias_call_id,
+          :geo_city_id, :geo_state_id, :geo_country_id,
+          :category_id, :research_group_id, :colciencias_call_id,
           :nsr_certifying_institution, :nsr_issuing_institution, :observation,
           :created_by)
       end
@@ -74,7 +75,8 @@ module Api
       def nsr_params_to_update
         params.require(:new_scientific_record).permit(
           :nsr_name, :nsr_date_of_obtaining, :nsr_database_name, :nsr_database_url,
-          :geo_city_id, :category_id, :research_group_id, :colciencias_call_id,
+          :geo_city_id, :geo_state_id, :geo_country_id,
+          :category_id, :research_group_id, :colciencias_call_id,
           :nsr_certifying_institution, :nsr_issuing_institution, :observation,
           :updated_by)
       end

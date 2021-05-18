@@ -78,7 +78,7 @@ module Swagger::TypeApi
       end
     end
 
-    swagger_path '/types/' do
+    swagger_path '/types' do
       operation :get do
         key :summary, 'Get all Types'
         key :description, 'Returns all Types'
@@ -134,7 +134,7 @@ module Swagger::TypeApi
       end
     end
 
-    swagger_path '/types_all/' do
+    swagger_path '/types_all' do
       operation :get do
         key :summary, 'Get all Types with their subtypes'
         key :description, 'Returns all Types with their subtypes'

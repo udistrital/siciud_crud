@@ -58,6 +58,7 @@ module Api
       def regulation_params_to_create
         params.require(:regulation).permit(:title, :date_of_publication, :issuing_entity,
                                            :regulation_type_id, :product_type_id, :geo_city_id,
+                                           :geo_state_id, :geo_country_id,
                                            :category_id, :research_group_id, :colciencias_call_id,
                                            :observation, :active, :created_by)
       end
@@ -65,6 +66,7 @@ module Api
       def regulation_params_to_update
         params.require(:regulation).permit(:title, :date_of_publication, :issuing_entity,
                                            :regulation_type_id, :product_type_id, :geo_city_id,
+                                           :geo_state_id, :geo_country_id,
                                            :category_id, :research_group_id, :colciencias_call_id,
                                            :observation, :active, :updated_by)
       end

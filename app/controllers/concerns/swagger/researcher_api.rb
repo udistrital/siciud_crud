@@ -78,7 +78,7 @@ module Swagger::ResearcherApi
       end
     end
 
-    swagger_path '/researchers/' do
+    swagger_path '/researchers' do
       operation :get do
         key :summary, 'Get all Researchers or search a researcher by the identification_number'
         key :description, 'Returns all researchers or search a researcher by the identification_number'
@@ -141,7 +141,7 @@ module Swagger::ResearcherApi
       end
     end
 
-    swagger_path '/researcher_research_units/' do
+    swagger_path '/researcher_research_units' do
       operation :get do
         key :summary, 'Search research units of an Investigator by identity document'
         key :description, 'Search research units of an Investigator by identity document'

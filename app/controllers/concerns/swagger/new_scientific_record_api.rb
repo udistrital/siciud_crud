@@ -94,7 +94,7 @@ module Swagger::NewScientificRecordApi
       end
     end
 
-    swagger_path '/research_units/{research_group_id}/new_scientific_records/' do
+    swagger_path '/research_units/{research_group_id}/new_scientific_records' do
       operation :get do
         key :summary, 'Get all new Scientific Record'
         key :description, 'Returns all new Scientific Record'
