@@ -94,7 +94,7 @@ module Swagger::NewAnimalBreedApi
       end
     end
 
-    swagger_path '/research_units/{research_group_id}/new_animal_breeds/' do
+    swagger_path '/research_units/{research_group_id}/new_animal_breeds' do
       operation :get do
         key :summary, 'Get all New Animal Breeds'
         key :description, 'Returns all new animal breeds'

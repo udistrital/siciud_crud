@@ -121,7 +121,7 @@ module Swagger::EnterpriseApi
       end
     end
 
-    swagger_path '/research_units/{research_group_id}/enterprises/' do
+    swagger_path '/research_units/{research_group_id}/enterprises' do
       operation :get do
         key :summary, 'Get all Enterprises'
         key :description, 'Returns all Enterprises'

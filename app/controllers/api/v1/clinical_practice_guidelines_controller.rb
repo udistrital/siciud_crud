@@ -51,14 +51,16 @@ module Api
       # Only allow a trusted parameter "white list" through.
       def cpg_params_to_create
         params.require(:clinical_practice_guideline).permit(:title, :date_of_publication, :isbn,
-                                                            :geo_city_id, :category_id, :research_group_id,
+                                                            :geo_city_id, :geo_state_id, :geo_country_id,
+                                                            :category_id, :research_group_id,
                                                             :colciencias_call_id, :observation, :active,
                                                             :created_by)
       end
 
       def cpg_params_to_update
         params.require(:clinical_practice_guideline).permit(:title, :date_of_publication, :isbn,
-                                                            :geo_city_id, :category_id, :research_group_id,
+                                                            :geo_city_id, :geo_state_id, :geo_country_id,
+                                                            :category_id, :research_group_id,
                                                             :colciencias_call_id, :observation, :active,
                                                             :updated_by)
       end

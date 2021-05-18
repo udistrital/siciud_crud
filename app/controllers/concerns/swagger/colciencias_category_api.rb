@@ -78,7 +78,7 @@ module Swagger::ColcienciasCategoryApi
       end
     end
 
-    swagger_path '/colciencias_categories/' do
+    swagger_path '/colciencias_categories' do
       operation :get do
         key :summary, 'Get all Colciencias Categories'
         key :description, 'Returns all colciencias categories'

@@ -25,6 +25,14 @@ module Swagger::KnowledgeNetworkSchema
         key :type, :integer
         key :format, :int64
       end
+      property :geo_country_id do
+        key :type, :integer
+        key :format, :int64
+      end
+      property :geo_state_id do
+        key :type, :integer
+        key :format, :int64
+      end
       property :start_date do
         key :type, :string
         key :format, :date
@@ -108,16 +116,8 @@ module Swagger::KnowledgeNetworkSchema
           property :geo_city_name do
             key :type, :string
           end
-          property :geo_country_id do
-            key :type, :integer
-            key :format, :int64
-          end
           property :geo_country_name do
             key :type, :string
-          end
-          property :geo_state_id do
-            key :type, :integer
-            key :format, :int64
           end
           property :geo_state_name do
             key :type, :string

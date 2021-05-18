@@ -52,7 +52,8 @@ module Api
       def knwl_network_params_to_create
         params.require(:knowledge_network).permit(:name, :start_date, :finish_date,
                                                   :funding_institution, :funding_community,
-                                                  :web_page, :geo_city_id, :category_id,
+                                                  :web_page, :geo_city_id, :geo_state_id,
+                                                  :geo_country_id, :category_id,
                                                   :research_group_id, :colciencias_call_id,
                                                   :observation, :active, :created_by)
       end
@@ -60,7 +61,8 @@ module Api
       def knwl_network_params_to_update
         params.require(:knowledge_network).permit(:name, :start_date, :finish_date,
                                                   :funding_institution, :funding_community,
-                                                  :web_page, :geo_city_id, :category_id,
+                                                  :web_page, :geo_city_id, :geo_state_id,
+                                                  :geo_country_id, :category_id,
                                                   :research_group_id, :colciencias_call_id,
                                                   :observation, :active, :updated_by)
       end

@@ -94,7 +94,7 @@ module Swagger::VegetableVarietyApi
       end
     end
 
-    swagger_path '/research_group/{research_group_id}/vegetable_varieties/' do
+    swagger_path '/research_group/{research_group_id}/vegetable_varieties' do
       operation :get do
         key :summary, 'Get all Vegetable Varieties'
         key :description, 'Returns all Vegetable Varieties of a Research Unit'

@@ -78,7 +78,7 @@ module Swagger::UserRoleApi
       end
     end
 
-    swagger_path '/user_roles/' do
+    swagger_path '/user_roles' do
       operation :get do
         key :summary, 'Get all User Roles'
         key :description, 'Returns all user roles'

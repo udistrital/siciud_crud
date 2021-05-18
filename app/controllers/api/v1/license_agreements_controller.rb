@@ -52,7 +52,9 @@ module Api
       def license_agr_params_to_create
         params.require(:license_agreement).permit(:work_name, :license_grant_date, :contract_date,
                                                   :ncd_registry_number, :license_owner_institution,
-                                                  :geo_city_id, :contract_geo_city_id, :category_id,
+                                                  :geo_city_id, :geo_state_id, :geo_country_id,
+                                                  :contract_geo_city_id, :contract_geo_state_id,
+                                                  :contract_geo_country_id, :category_id,
                                                   :research_group_id, :colciencias_call_id,
                                                   :observation, :active, :created_by)
       end
@@ -60,7 +62,9 @@ module Api
       def license_agr_params_to_update
         params.require(:license_agreement).permit(:work_name, :license_grant_date, :contract_date,
                                                   :ncd_registry_number, :license_owner_institution,
-                                                  :geo_city_id, :contract_geo_city_id, :category_id,
+                                                  :geo_city_id, :geo_state_id, :geo_country_id,
+                                                  :contract_geo_city_id, :contract_geo_state_id,
+                                                  :contract_geo_country_id, :category_id,
                                                   :research_group_id, :colciencias_call_id,
                                                   :observation, :active, :updated_by)
       end

@@ -94,7 +94,7 @@ module Swagger::BookApi
       end
     end
 
-    swagger_path '/research_units/{research_group_id}/books/' do
+    swagger_path '/research_units/{research_group_id}/books' do
       operation :get do
         key :summary, 'Get all Books'
         key :description, 'Returns all books'

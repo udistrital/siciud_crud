@@ -30,6 +30,14 @@ module Swagger::ScientificNoteSchema
         key :type, :integer
         key :format, :int64
       end
+      property :geo_country_id do
+        key :type, :integer
+        key :format, :int64
+      end
+      property :geo_state_id do
+        key :type, :integer
+        key :format, :int64
+      end
       property :initial_page do
         key :type, :integer
         key :format, :int64
@@ -118,16 +126,8 @@ module Swagger::ScientificNoteSchema
           property :geo_city_name do
             key :type, :string
           end
-          property :geo_country_id do
-            key :type, :integer
-            key :format, :int64
-          end
           property :geo_country_name do
             key :type, :string
-          end
-          property :geo_state_id do
-            key :type, :integer
-            key :format, :int64
           end
           property :geo_state_name do
             key :type, :string

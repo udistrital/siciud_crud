@@ -23,21 +23,32 @@ namespace :import_researchers do
     ]
     }
     ) do |row|
-      researcher = Researcher.create(
-        identification_number: row[:documento],
-        phone_number_one: row[:telefono],
-        phone_number_two: row[:telefono2],
-        mobile_number_one: row[:celular],
-        mobile_number_two: row[:celular2],
-        address: row[:direccion],
-        created_by: User.find_by(identification_number: '1234567890').id
-      )
-      user = User.create(
-        identification_number: row[:documento],
-        created_by: User.find_by(identification_number: '1234567890').id,
-        user_role_id: 5
-      )
-      puts "Researcher with doc: '#{researcher.identification_number}' created"
+
+      researcher_exists = Researcher.find_by(identification_number: row[:documento])
+
+      if researcher_exists.nil?
+        researcher = Researcher.create(
+          identification_number: row[:documento],
+          phone_number_one: row[:telefono],
+          phone_number_two: row[:telefono2],
+          mobile_number_one: row[:celular],
+          mobile_number_two: row[:celular2],
+          address: row[:direccion],
+          created_by: User.find_by(identification_number: '1234567890').id
+        )
+        puts "Researcher with doc: '#{researcher.identification_number}' created"
+      end
+
+      user_exists = User.find_by(identification_number: row[:documento])
+
+      if user_exists.nil?
+        user = User.create(
+          identification_number: row[:documento],
+          created_by: User.find_by(identification_number: '1234567890').id,
+          user_role_id: 5
+        )
+        puts "User with doc: '#{user.identification_number}' created"
+      end
     end
     puts "Researcher data successfully imported!"
   end

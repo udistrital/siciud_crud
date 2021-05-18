@@ -94,7 +94,7 @@ module Swagger::IntegratedCircuitDiagramApi
       end
     end
 
-    swagger_path '/research_units/{research_group_id}/integrated_circuit_diagrams/' do
+    swagger_path '/research_units/{research_group_id}/integrated_circuit_diagrams' do
       operation :get do
         key :summary, 'Get all Integrated Circuit Diagram'
         key :description, 'Returns all Integrated Circuit Diagrams'

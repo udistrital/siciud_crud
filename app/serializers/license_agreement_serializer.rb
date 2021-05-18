@@ -17,49 +17,17 @@ class LicenseAgreementSerializer < AbstractProductSerializer
     end
   end
 
-  def contract_geo_state_id
-    contract_geo_city = self.object.contract_geo_city
-    if contract_geo_city
-      contract_geo_state = GeoState.find(contract_geo_city.geo_state_id)
-      if contract_geo_state
-        contract_geo_state.id
-      end
-    end
-  end
-
   def contract_geo_state_name
-    contract_geo_city = self.object.contract_geo_city
-    if contract_geo_city
-      contract_geo_state = GeoState.find(contract_geo_city.geo_state_id)
-      if contract_geo_state
-        contract_geo_state.name
-      end
-    end
-  end
-
-  def contract_geo_country_id
-    contract_geo_city = self.object.contract_geo_city
-    if contract_geo_city
-      contract_geo_state = GeoState.find(contract_geo_city.geo_state_id)
-      if contract_geo_state
-        contract_geo_country = GeoCountry.find(contract_geo_state.geo_country_id)
-        if contract_geo_country
-          contract_geo_country.id
-        end
-      end
+    contract_geo_state = self.object.contract_geo_state
+    if contract_geo_state
+      contract_geo_state.name
     end
   end
 
   def contract_geo_country_name
-    contract_geo_city = self.object.contract_geo_city
-    if contract_geo_city
-      contract_geo_state = GeoState.find(contract_geo_city.geo_state_id)
-      if contract_geo_state
-        contract_geo_country = GeoCountry.find(contract_geo_state.geo_country_id)
-        if contract_geo_country
-          contract_geo_country.name
-        end
-      end
+    contract_geo_country = self.object.contract_geo_country
+    if contract_geo_country
+      contract_geo_country.name
     end
   end
 

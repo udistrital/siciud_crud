@@ -94,7 +94,7 @@ module Swagger::ScientificNoteApi
       end
     end
 
-    swagger_path '/research_units/{research_group_id}/scientific_notes/' do
+    swagger_path '/research_units/{research_group_id}/scientific_notes' do
       operation :get do
         key :summary, 'Get all Scientific Notes'
         key :description, 'Returns all scientific notes of a research unit to fetch'

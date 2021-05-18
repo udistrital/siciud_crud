@@ -67,7 +67,9 @@ module Api
                                       :observation, :category_id,
                                       :colciencias_call_id,
                                       :paper_type_id,
-                                      :geo_city_id, :journal_name,
+                                      :geo_city_id, :geo_state_id,
+                                      :geo_country_id,
+                                      :journal_name,
                                       :created_by)
       end
 
@@ -76,9 +78,12 @@ module Api
                                       :approval_date, :volume,
                                       :number_of_pages, :initial_page,
                                       :final_page, :issn, :url, :doi,
-                                      :observation, :category_id, :paper_type_id,
+                                      :observation, :category_id,
+                                      :paper_type_id,
                                       :colciencias_call_id,
-                                      :geo_city_id, :journal_name, :updated_by)
+                                      :geo_city_id, :geo_state_id,
+                                      :geo_country_id,
+                                      :journal_name, :updated_by)
       end
 
       def paper_params_to_deactivate
