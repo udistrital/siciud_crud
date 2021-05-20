@@ -129,6 +129,9 @@ class ApplicationController < ActionController::API
     elsif params[:working_paper_id]
       id = params[:working_paper_id]
       @context = WorkingPaper.find(id)
+    elsif params[:new_genetic_sequence_id]
+      id = params[:new_genetic_sequence_id]
+      @context = NewGeneticSequence.find(id)
     end
   end
 end
