@@ -1,16 +1,21 @@
 class IpLivestockBreed < ApplicationRecord
+  include Swagger::IpLivestockBreedSchema
+
   # Improved populations of livestock breeds model.
-  belongs_to :category
+  belongs_to :category, class_name: 'Subtype', foreign_key: 'category_id', optional: true
+  belongs_to :colciencias_call, optional: true
   belongs_to :research_group
 
   # Publication place
   belongs_to :geo_city, optional: true
-  has_one :geo_state, through: :geo_city
-  has_one :geo_country, through: :geo_state
+  belongs_to :geo_state, optional: true
+  belongs_to :geo_country
 
   # Participants
   has_many :int_participants, as: :producible
   has_many :ext_participants, as: :producible
+
+  has_many :documents, as: :documentable
 
   # Tracking inherited from ApplicationRecord, fields:
   # created_by and updated_by, see application_record.rb

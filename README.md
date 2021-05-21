@@ -1,3 +1,4 @@
+
 # siciud_crud
 
 ## Descripción
@@ -15,9 +16,9 @@ por ejemplo: Actas de creación de las Unidades de Investigación) labor apoyada
 
 # Modelo de Datos
 
-![entrada](https://github.com/edissonca/siciud-backend/blob/GROUP-003/docs/research-unit-ER.png)
+![entrada](https://github.com/udistrital/siciud_crud/blob/feature-products-pr1/docs/Modulo-Grupos-MER.png)
 
-[Modelo de Datos API SICIUD](https://github.com/edissonca/siciud-backend/blob/GROUP-003/docs/research-unit-ER.png)
+[Modelo de Datos API SICIUD](https://github.com/udistrital/siciud_crud/blob/feature-products-pr1/docs/Modulo-Grupos-MER.png)
 
 # Especificaciones Técnicas
 
@@ -27,9 +28,9 @@ Este proyecto está desarrollado en el lenguaje Ruby versión 2.6, generado medi
 framework [Ruby on Rails](https://rubyonrails.org/) versión 5.2 y como motor de base de datos
 PostgreSQL.
 
-* [Ruby](https://www.ruby-lang.org/es/) 2.6.x
-* [Ruby on Rails](https://rubyonrails.org/) 5.2.x
-* [PostgreSQL](https://www.postgresql.org/) 12.x
+* [Ruby](https://www.ruby-lang.org/es/) 2.6.2
+* [Ruby on Rails](https://rubyonrails.org/) 5.2.3
+* [PostgreSQL](https://www.postgresql.org/) 12
 
 ## Instalación
 
@@ -61,21 +62,39 @@ rails s
 
 ## Variables de Entorno
 
-```bash
-SICIUD_CRUD__PGDB=[nombre de la base de datos]
-SICIUD_CRUD__PGPASS=[password del usuario]
-SICIUD_CRUD__PGURLS=[direccion de la base de datos]
-SICIUD_CRUD__PGUSER=[usuario con acceso a la base de datos]
-SICIUD_CRUD__PGSCHEMA=[esquema donde se ubican las tablas]
-SICIUD_CRUD_API_PORT=[puerto de ejecucion]
+```sh
+SICIUD_CRUD_PGDB=[nombre de la base de datos]
+SICIUD_CRUD_PGHOST=[host de la base de datos]
+SICIUD_CRUD_PGPORT=[puerto de la base de datos]
+SICIUD_CRUD_PGUSER=[usuario con acceso a la base de datos]
+SICIUD_CRUD_PGPASS=[contraseña del usuario]
+SICIUD_CRUD_PGSCHEMA=[esquema de la base de datos]
 ```
 
 ## Ejecución del Proyecto
 
 ### Ejecución Dockerfile
 
-```bash
-# Does not apply
+```sh
+# 1. Clonar el repositorio
+git clone -b development https://github.com/edissonca/siciud-backend.git
+
+# 2. Moverse a la carpeta del repositorio
+cd siciud-backend
+
+# 3. Establecer las variables de entorno descritas en "Variables de Entorno"
+
+# 4. Ejecutar el build
+docker build --build-arg SICIUD_CRUD_PGDB --build-arg SICIUD_CRUD_PGHOST --build-arg SICIUD_CRUD_PGPORT --build-arg SICIUD_CRUD_PGUSER --build-arg SICIUD_CRUD_PGPASS --build-arg SICIUD_CRUD_PGSCHEMA -t siciud_crud .
+
+# 5. Correr la imagen para generar el contenedor
+docker run -it --rm -p 8080:8080 siciud_crud
+
+# Use la opción "-e" para modificar la variable de entorno requerida, ejemplo
+docker run -it --rm -e SICIUD_CRUD_PGHOST="x.x.x.x" -p 8080:8080 siciud_crud
+
+# 6. Comprobar que funciona correctamente
+Realice una petición a cualquiera de los endpoints
 ```
 
 ### Ejecución docker-compose

@@ -10,31 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_10_205735) do
+ActiveRecord::Schema.define(version: 2021_05_18_002127) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "active_storage_attachments", force: :cascade do |t|
-    t.string "name", null: false
-    t.string "record_type", null: false
-    t.integer "record_id", null: false
-    t.integer "blob_id", null: false
-    t.datetime "created_at", null: false
-    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
-    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
-  end
-
-  create_table "active_storage_blobs", force: :cascade do |t|
-    t.string "key", null: false
-    t.string "filename", null: false
-    t.string "content_type"
-    t.text "metadata"
-    t.bigint "byte_size", null: false
-    t.string "checksum", null: false
-    t.datetime "created_at", null: false
-    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
-  end
 
   create_table "agreement_research_projects", force: :cascade do |t|
     t.string "code"
@@ -90,6 +69,30 @@ ActiveRecord::Schema.define(version: 2020_12_10_205735) do
     t.integer "research_group_id", null: false
   end
 
+  create_table "appropriation_processes", force: :cascade do |t|
+    t.string "name"
+    t.string "research_project_title"
+    t.date "start_date"
+    t.date "finish_date"
+    t.string "funding_institution"
+    t.bigint "category_id"
+    t.bigint "product_type_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "observation"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_appropriation_processes_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_appropriation_processes_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_appropriation_processes_on_created_by"
+    t.index ["product_type_id"], name: "index_appropriation_processes_on_product_type_id"
+    t.index ["research_group_id"], name: "index_appropriation_processes_on_research_group_id"
+    t.index ["updated_by"], name: "index_appropriation_processes_on_updated_by"
+  end
+
   create_table "arp_act_s_goals", force: :cascade do |t|
     t.integer "weight"
     t.integer "arp_activity_id"
@@ -133,13 +136,11 @@ ActiveRecord::Schema.define(version: 2020_12_10_205735) do
   end
 
   create_table "arp_assignments", force: :cascade do |t|
-    t.bigint "product_typology_id"
     t.bigint "agreement_research_project_id"
     t.integer "completedPercentage"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["agreement_research_project_id"], name: "index_arp_assignments_on_agreement_research_project_id"
-    t.index ["product_typology_id"], name: "index_arp_assignments_on_product_typology_id"
   end
 
   create_table "arp_expenses", force: :cascade do |t|
@@ -228,6 +229,24 @@ ActiveRecord::Schema.define(version: 2020_12_10_205735) do
     t.index ["updated_by"], name: "index_awards_on_updated_by"
   end
 
+  create_table "bills", force: :cascade do |t|
+    t.string "title"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "observation"
+    t.boolean "active"
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_bills_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_bills_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_bills_on_created_by"
+    t.index ["research_group_id"], name: "index_bills_on_research_group_id"
+    t.index ["updated_by"], name: "index_bills_on_updated_by"
+  end
+
   create_table "book_chapters", force: :cascade do |t|
     t.string "book_title"
     t.string "title"
@@ -236,20 +255,24 @@ ActiveRecord::Schema.define(version: 2020_12_10_205735) do
     t.string "doi"
     t.string "url"
     t.text "observation"
-    t.bigint "category_id"
-    t.bigint "editorial_id"
     t.bigint "research_group_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "geo_city_id"
-    t.string "book_chapter_document"
     t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
+    t.bigint "category_id"
+    t.bigint "colciencias_call_id"
+    t.string "editorial_name"
+    t.bigint "geo_state_id"
+    t.bigint "geo_country_id"
     t.index ["category_id"], name: "index_book_chapters_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_book_chapters_on_colciencias_call_id"
     t.index ["created_by"], name: "index_book_chapters_on_created_by"
-    t.index ["editorial_id"], name: "index_book_chapters_on_editorial_id"
     t.index ["geo_city_id"], name: "index_book_chapters_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_book_chapters_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_book_chapters_on_geo_state_id"
     t.index ["research_group_id"], name: "index_book_chapters_on_research_group_id"
     t.index ["updated_by"], name: "index_book_chapters_on_updated_by"
   end
@@ -260,8 +283,6 @@ ActiveRecord::Schema.define(version: 2020_12_10_205735) do
     t.string "isbn"
     t.string "url"
     t.text "observation"
-    t.bigint "category_id"
-    t.bigint "editorial_id"
     t.bigint "research_group_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -269,11 +290,19 @@ ActiveRecord::Schema.define(version: 2020_12_10_205735) do
     t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
-    t.string "book_document"
+    t.bigint "category_id"
+    t.bigint "colciencias_call_id"
+    t.bigint "book_type_id"
+    t.string "editorial_name"
+    t.bigint "geo_country_id"
+    t.bigint "geo_state_id"
+    t.index ["book_type_id"], name: "index_books_on_book_type_id"
     t.index ["category_id"], name: "index_books_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_books_on_colciencias_call_id"
     t.index ["created_by"], name: "index_books_on_created_by"
-    t.index ["editorial_id"], name: "index_books_on_editorial_id"
     t.index ["geo_city_id"], name: "index_books_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_books_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_books_on_geo_state_id"
     t.index ["research_group_id"], name: "index_books_on_research_group_id"
     t.index ["updated_by"], name: "index_books_on_updated_by"
   end
@@ -326,13 +355,11 @@ ActiveRecord::Schema.define(version: 2020_12_10_205735) do
   create_table "calls_product_types", force: :cascade do |t|
     t.integer "quantity"
     t.bigint "call_id"
-    t.bigint "product_type_id"
     t.text "alternate_indicator"
     t.bigint "required_type_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["call_id"], name: "index_calls_product_types_on_call_id"
-    t.index ["product_type_id"], name: "index_calls_product_types_on_product_type_id"
     t.index ["required_type_id"], name: "index_calls_product_types_on_required_type_id"
   end
 
@@ -344,19 +371,6 @@ ActiveRecord::Schema.define(version: 2020_12_10_205735) do
     t.datetime "updated_at", null: false
     t.index ["call_id"], name: "index_calls_required_documents_on_call_id"
     t.index ["required_document_id"], name: "index_calls_required_documents_on_required_document_id"
-  end
-
-  create_table "categories", force: :cascade do |t|
-    t.string "name"
-    t.bigint "product_type_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.boolean "active", default: true
-    t.bigint "created_by"
-    t.bigint "updated_by"
-    t.index ["created_by"], name: "index_categories_on_created_by"
-    t.index ["product_type_id"], name: "index_categories_on_product_type_id"
-    t.index ["updated_by"], name: "index_categories_on_updated_by"
   end
 
   create_table "cine_broad_areas", force: :cascade do |t|
@@ -402,6 +416,32 @@ ActiveRecord::Schema.define(version: 2020_12_10_205735) do
     t.index ["cine_broad_area_id"], name: "index_cine_specific_areas_on_cine_broad_area_id"
     t.index ["created_by"], name: "index_cine_specific_areas_on_created_by"
     t.index ["updated_by"], name: "index_cine_specific_areas_on_updated_by"
+  end
+
+  create_table "clinical_practice_guidelines", force: :cascade do |t|
+    t.string "title"
+    t.date "date_of_publication"
+    t.string "isbn"
+    t.bigint "geo_city_id"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "observation"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "geo_state_id"
+    t.bigint "geo_country_id"
+    t.index ["category_id"], name: "index_clinical_practice_guidelines_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_clinical_practice_guidelines_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_clinical_practice_guidelines_on_created_by"
+    t.index ["geo_city_id"], name: "index_clinical_practice_guidelines_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_clinical_practice_guidelines_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_clinical_practice_guidelines_on_geo_state_id"
+    t.index ["research_group_id"], name: "index_clinical_practice_guidelines_on_research_group_id"
+    t.index ["updated_by"], name: "index_clinical_practice_guidelines_on_updated_by"
   end
 
   create_table "colciencias_calls", force: :cascade do |t|
@@ -466,6 +506,36 @@ ActiveRecord::Schema.define(version: 2020_12_10_205735) do
     t.index ["funding_entity_id"], name: "index_contributions_on_funding_entity_id"
   end
 
+  create_table "creation_workshops", force: :cascade do |t|
+    t.string "name"
+    t.date "start_date"
+    t.date "finish_date"
+    t.string "funding_institution"
+    t.string "organization_name"
+    t.bigint "geo_city_id"
+    t.bigint "geo_state_id"
+    t.bigint "geo_country_id"
+    t.bigint "participation_id"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "observation"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_creation_workshops_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_creation_workshops_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_creation_workshops_on_created_by"
+    t.index ["geo_city_id"], name: "index_creation_workshops_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_creation_workshops_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_creation_workshops_on_geo_state_id"
+    t.index ["participation_id"], name: "index_creation_workshops_on_participation_id"
+    t.index ["research_group_id"], name: "index_creation_workshops_on_research_group_id"
+    t.index ["updated_by"], name: "index_creation_workshops_on_updated_by"
+  end
+
   create_table "curricular_prj_ids_research_groups", force: :cascade do |t|
     t.bigint "research_group_id"
     t.integer "curricular_project_id"
@@ -479,15 +549,53 @@ ActiveRecord::Schema.define(version: 2020_12_10_205735) do
     t.index ["updated_by"], name: "index_curricular_prj_ids_research_groups_on_updated_by"
   end
 
-  create_table "cycle_types", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+  create_table "degree_works", force: :cascade do |t|
+    t.string "dw_title"
+    t.date "dw_date"
+    t.string "dw_institution_name"
+    t.string "dw_recognition"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "dw_observation"
+    t.bigint "dw_type_id"
     t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
-    t.index ["created_by"], name: "index_cycle_types_on_created_by"
-    t.index ["updated_by"], name: "index_cycle_types_on_updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_degree_works_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_degree_works_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_degree_works_on_created_by"
+    t.index ["dw_type_id"], name: "index_degree_works_on_dw_type_id"
+    t.index ["research_group_id"], name: "index_degree_works_on_research_group_id"
+    t.index ["updated_by"], name: "index_degree_works_on_updated_by"
+  end
+
+  create_table "distinctive_signs", force: :cascade do |t|
+    t.string "registration_title"
+    t.string "registration_number"
+    t.date "date_of_obtaining"
+    t.bigint "geo_city_id"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "observation"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "geo_state_id"
+    t.bigint "geo_country_id"
+    t.index ["category_id"], name: "index_distinctive_signs_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_distinctive_signs_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_distinctive_signs_on_created_by"
+    t.index ["geo_city_id"], name: "index_distinctive_signs_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_distinctive_signs_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_distinctive_signs_on_geo_state_id"
+    t.index ["research_group_id"], name: "index_distinctive_signs_on_research_group_id"
+    t.index ["updated_by"], name: "index_distinctive_signs_on_updated_by"
   end
 
   create_table "document_types", force: :cascade do |t|
@@ -496,21 +604,85 @@ ActiveRecord::Schema.define(version: 2020_12_10_205735) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "documents", force: :cascade do |t|
+    t.string "documentable_type"
+    t.bigint "documentable_id"
+    t.string "doc_name", null: false
+    t.string "doc_path", null: false
+    t.bigint "doc_size", comment: "file size in bytes"
+    t.bigint "document_type_id"
+    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.string "nuxeo_id"
+    t.index ["created_by"], name: "index_documents_on_created_by"
+    t.index ["document_type_id"], name: "index_documents_on_document_type_id"
+    t.index ["documentable_type", "documentable_id"], name: "index_documents_on_documentable_type_and_documentable_id"
+    t.index ["updated_by"], name: "index_documents_on_updated_by"
+  end
+
   create_table "duration_types", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "editorials", force: :cascade do |t|
+  create_table "enterprise_secrets", force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string "contract_number"
+    t.float "contract_value"
+    t.date "date_of_obtaining"
+    t.bigint "geo_city_id"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "observation"
     t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
-    t.index ["created_by"], name: "index_editorials_on_created_by"
-    t.index ["updated_by"], name: "index_editorials_on_updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "geo_state_id"
+    t.bigint "geo_country_id"
+    t.index ["category_id"], name: "index_enterprise_secrets_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_enterprise_secrets_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_enterprise_secrets_on_created_by"
+    t.index ["geo_city_id"], name: "index_enterprise_secrets_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_enterprise_secrets_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_enterprise_secrets_on_geo_state_id"
+    t.index ["research_group_id"], name: "index_enterprise_secrets_on_research_group_id"
+    t.index ["updated_by"], name: "index_enterprise_secrets_on_updated_by"
+  end
+
+  create_table "enterprises", force: :cascade do |t|
+    t.string "name"
+    t.string "nit"
+    t.string "comercial_name"
+    t.date "date_of_obtaining"
+    t.bigint "product_type_id"
+    t.bigint "geo_city_id"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "observation"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "geo_state_id"
+    t.bigint "geo_country_id"
+    t.index ["category_id"], name: "index_enterprises_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_enterprises_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_enterprises_on_created_by"
+    t.index ["geo_city_id"], name: "index_enterprises_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_enterprises_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_enterprises_on_geo_state_id"
+    t.index ["product_type_id"], name: "index_enterprises_on_product_type_id"
+    t.index ["research_group_id"], name: "index_enterprises_on_research_group_id"
+    t.index ["updated_by"], name: "index_enterprises_on_updated_by"
   end
 
   create_table "entity_types", force: :cascade do |t|
@@ -519,17 +691,49 @@ ActiveRecord::Schema.define(version: 2020_12_10_205735) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "events", force: :cascade do |t|
+    t.string "eve_name"
+    t.date "eve_start_date"
+    t.date "eve_finish_date"
+    t.string "eve_organizers"
+    t.string "eve_entities"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "eve_observation"
+    t.bigint "eve_type_id"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "participation_id"
+    t.bigint "geo_city_id"
+    t.bigint "geo_state_id"
+    t.bigint "geo_country_id"
+    t.index ["category_id"], name: "index_events_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_events_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_events_on_created_by"
+    t.index ["eve_type_id"], name: "index_events_on_eve_type_id"
+    t.index ["geo_city_id"], name: "index_events_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_events_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_events_on_geo_state_id"
+    t.index ["participation_id"], name: "index_events_on_participation_id"
+    t.index ["research_group_id"], name: "index_events_on_research_group_id"
+    t.index ["updated_by"], name: "index_events_on_updated_by"
+  end
+
   create_table "ext_participants", force: :cascade do |t|
     t.string "first_name"
     t.string "last_name"
     t.string "producible_type"
     t.bigint "producible_id"
-    t.bigint "participant_type_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
+    t.bigint "participant_type_id"
     t.index ["created_by"], name: "index_ext_participants_on_created_by"
     t.index ["participant_type_id"], name: "index_ext_participants_on_participant_type_id"
     t.index ["producible_type", "producible_id"], name: "index_ext_participants_on_producible_type_and_producible_id"
@@ -677,26 +881,32 @@ ActiveRecord::Schema.define(version: 2020_12_10_205735) do
     t.index ["updated_by"], name: "index_group_members_on_updated_by"
   end
 
-  create_table "group_states", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.boolean "active", default: true
+  create_table "guide_manuals", force: :cascade do |t|
+    t.string "title"
+    t.date "date_of_publication"
+    t.string "url"
+    t.bigint "product_type_id"
+    t.bigint "geo_city_id"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "observation"
+    t.boolean "active"
     t.bigint "created_by"
     t.bigint "updated_by"
-    t.index ["created_by"], name: "index_group_states_on_created_by"
-    t.index ["updated_by"], name: "index_group_states_on_updated_by"
-  end
-
-  create_table "group_types", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.boolean "active", default: true
-    t.bigint "created_by"
-    t.bigint "updated_by"
-    t.index ["created_by"], name: "index_group_types_on_created_by"
-    t.index ["updated_by"], name: "index_group_types_on_updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "geo_state_id"
+    t.bigint "geo_country_id"
+    t.index ["category_id"], name: "index_guide_manuals_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_guide_manuals_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_guide_manuals_on_created_by"
+    t.index ["geo_city_id"], name: "index_guide_manuals_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_guide_manuals_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_guide_manuals_on_geo_state_id"
+    t.index ["product_type_id"], name: "index_guide_manuals_on_product_type_id"
+    t.index ["research_group_id"], name: "index_guide_manuals_on_research_group_id"
+    t.index ["updated_by"], name: "index_guide_manuals_on_updated_by"
   end
 
   create_table "historical_colciencias_ranks", force: :cascade do |t|
@@ -719,16 +929,83 @@ ActiveRecord::Schema.define(version: 2020_12_10_205735) do
     t.index ["updated_by"], name: "index_historical_colciencias_ranks_on_updated_by"
   end
 
+  create_table "industrial_designs", force: :cascade do |t|
+    t.string "ind_dsg_registration_number"
+    t.string "ind_dsg_registration_title"
+    t.date "ind_dsg_date_of_obtaining"
+    t.string "ind_dsg_industrial_publication_gazette"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "observation"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "geo_city_id"
+    t.bigint "geo_state_id"
+    t.bigint "geo_country_id"
+    t.index ["category_id"], name: "index_industrial_designs_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_industrial_designs_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_industrial_designs_on_created_by"
+    t.index ["geo_city_id"], name: "index_industrial_designs_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_industrial_designs_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_industrial_designs_on_geo_state_id"
+    t.index ["research_group_id"], name: "index_industrial_designs_on_research_group_id"
+    t.index ["updated_by"], name: "index_industrial_designs_on_updated_by"
+  end
+
+  create_table "innovations", force: :cascade do |t|
+    t.string "name"
+    t.string "nit"
+    t.string "company_name"
+    t.date "date_of_obtaining"
+    t.bigint "product_type_id"
+    t.bigint "geo_city_id"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "observation"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "geo_state_id"
+    t.bigint "geo_country_id"
+    t.index ["category_id"], name: "index_innovations_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_innovations_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_innovations_on_created_by"
+    t.index ["geo_city_id"], name: "index_innovations_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_innovations_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_innovations_on_geo_state_id"
+    t.index ["product_type_id"], name: "index_innovations_on_product_type_id"
+    t.index ["research_group_id"], name: "index_innovations_on_research_group_id"
+    t.index ["updated_by"], name: "index_innovations_on_updated_by"
+  end
+
+  create_table "institutions", force: :cascade do |t|
+    t.string "inst_name"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_institutions_on_created_by"
+    t.index ["updated_by"], name: "index_institutions_on_updated_by"
+  end
+
   create_table "int_participants", force: :cascade do |t|
     t.string "producible_type"
     t.bigint "producible_id"
-    t.bigint "participant_type_id"
     t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.bigint "researcher_id"
     t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
+    t.bigint "participant_type_id"
     t.index ["created_by"], name: "index_int_participants_on_created_by"
     t.index ["participant_type_id"], name: "index_int_participants_on_participant_type_id"
     t.index ["producible_type", "producible_id"], name: "index_int_participants_on_producible_type_and_producible_id"
@@ -736,24 +1013,54 @@ ActiveRecord::Schema.define(version: 2020_12_10_205735) do
     t.index ["updated_by"], name: "index_int_participants_on_updated_by"
   end
 
+  create_table "integrated_circuit_diagrams", force: :cascade do |t|
+    t.string "icd_registration_number"
+    t.string "icd_registration_title"
+    t.date "icd_date_of_obtaining"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "observation"
+    t.boolean "active"
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "geo_city_id"
+    t.bigint "geo_state_id"
+    t.bigint "geo_country_id"
+    t.index ["category_id"], name: "index_integrated_circuit_diagrams_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_integrated_circuit_diagrams_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_integrated_circuit_diagrams_on_created_by"
+    t.index ["geo_city_id"], name: "index_integrated_circuit_diagrams_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_integrated_circuit_diagrams_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_integrated_circuit_diagrams_on_geo_state_id"
+    t.index ["research_group_id"], name: "index_integrated_circuit_diagrams_on_research_group_id"
+    t.index ["updated_by"], name: "index_integrated_circuit_diagrams_on_updated_by"
+  end
+
   create_table "ip_livestock_breeds", force: :cascade do |t|
     t.string "name"
     t.date "publication_date"
     t.string "consecutive_number_ma"
     t.text "observation"
-    t.bigint "category_id"
     t.bigint "research_group_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "geo_city_id"
-    t.string "certificate_ma_document"
-    t.string "ip_livestock_breed_document"
     t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
+    t.bigint "category_id"
+    t.bigint "colciencias_call_id"
+    t.bigint "geo_state_id"
+    t.bigint "geo_country_id"
     t.index ["category_id"], name: "index_ip_livestock_breeds_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_ip_livestock_breeds_on_colciencias_call_id"
     t.index ["created_by"], name: "index_ip_livestock_breeds_on_created_by"
     t.index ["geo_city_id"], name: "index_ip_livestock_breeds_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_ip_livestock_breeds_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_ip_livestock_breeds_on_geo_state_id"
     t.index ["research_group_id"], name: "index_ip_livestock_breeds_on_research_group_id"
     t.index ["updated_by"], name: "index_ip_livestock_breeds_on_updated_by"
   end
@@ -764,51 +1071,150 @@ ActiveRecord::Schema.define(version: 2020_12_10_205735) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "journals", force: :cascade do |t|
+  create_table "knowledge_networks", force: :cascade do |t|
     t.string "name"
+    t.date "start_date"
+    t.date "finish_date"
+    t.string "funding_institution"
+    t.string "funding_community"
+    t.string "web_page"
+    t.bigint "geo_city_id"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "observation"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "active", default: true
-    t.bigint "created_by"
-    t.bigint "updated_by"
-    t.index ["created_by"], name: "index_journals_on_created_by"
-    t.index ["updated_by"], name: "index_journals_on_updated_by"
+    t.bigint "geo_state_id"
+    t.bigint "geo_country_id"
+    t.index ["category_id"], name: "index_knowledge_networks_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_knowledge_networks_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_knowledge_networks_on_created_by"
+    t.index ["geo_city_id"], name: "index_knowledge_networks_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_knowledge_networks_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_knowledge_networks_on_geo_state_id"
+    t.index ["research_group_id"], name: "index_knowledge_networks_on_research_group_id"
+    t.index ["updated_by"], name: "index_knowledge_networks_on_updated_by"
   end
 
-  create_table "knwl_spec_areas", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+  create_table "license_agreements", force: :cascade do |t|
+    t.string "work_name"
+    t.date "license_grant_date"
+    t.date "contract_date"
+    t.string "ncd_registry_number"
+    t.string "license_owner_institution"
+    t.bigint "geo_city_id"
+    t.bigint "contract_geo_city_id"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "observation"
     t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
-    t.index ["created_by"], name: "index_knwl_spec_areas_on_created_by"
-    t.index ["updated_by"], name: "index_knwl_spec_areas_on_updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "geo_state_id"
+    t.bigint "geo_country_id"
+    t.bigint "contract_geo_state_id"
+    t.bigint "contract_geo_country_id"
+    t.index ["category_id"], name: "index_license_agreements_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_license_agreements_on_colciencias_call_id"
+    t.index ["contract_geo_city_id"], name: "index_license_agreements_on_contract_geo_city_id"
+    t.index ["contract_geo_country_id"], name: "index_license_agreements_on_contract_geo_country_id"
+    t.index ["contract_geo_state_id"], name: "index_license_agreements_on_contract_geo_state_id"
+    t.index ["created_by"], name: "index_license_agreements_on_created_by"
+    t.index ["geo_city_id"], name: "index_license_agreements_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_license_agreements_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_license_agreements_on_geo_state_id"
+    t.index ["research_group_id"], name: "index_license_agreements_on_research_group_id"
+    t.index ["updated_by"], name: "index_license_agreements_on_updated_by"
   end
 
   create_table "new_animal_breeds", force: :cascade do |t|
     t.string "name"
     t.date "date"
     t.text "observation"
-    t.bigint "cycle_type_id"
-    t.bigint "petition_status_id"
-    t.bigint "category_id"
     t.bigint "research_group_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "geo_city_id"
-    t.string "ccb_ica_document"
-    t.string "new_animal_breed_document"
     t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
+    t.bigint "category_id"
+    t.bigint "colciencias_call_id"
+    t.bigint "petition_status_id"
+    t.bigint "geo_state_id"
+    t.bigint "geo_country_id"
     t.index ["category_id"], name: "index_new_animal_breeds_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_new_animal_breeds_on_colciencias_call_id"
     t.index ["created_by"], name: "index_new_animal_breeds_on_created_by"
-    t.index ["cycle_type_id"], name: "index_new_animal_breeds_on_cycle_type_id"
     t.index ["geo_city_id"], name: "index_new_animal_breeds_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_new_animal_breeds_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_new_animal_breeds_on_geo_state_id"
     t.index ["petition_status_id"], name: "index_new_animal_breeds_on_petition_status_id"
     t.index ["research_group_id"], name: "index_new_animal_breeds_on_research_group_id"
     t.index ["updated_by"], name: "index_new_animal_breeds_on_updated_by"
+  end
+
+  create_table "new_scientific_records", force: :cascade do |t|
+    t.string "nsr_name"
+    t.date "nsr_date_of_obtaining"
+    t.string "nsr_database_name"
+    t.string "nsr_database_url"
+    t.string "nsr_certifying_institution"
+    t.string "nsr_issuing_institution"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "observation"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "geo_city_id"
+    t.bigint "geo_state_id"
+    t.bigint "geo_country_id"
+    t.index ["category_id"], name: "index_new_scientific_records_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_new_scientific_records_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_new_scientific_records_on_created_by"
+    t.index ["geo_city_id"], name: "index_new_scientific_records_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_new_scientific_records_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_new_scientific_records_on_geo_state_id"
+    t.index ["research_group_id"], name: "index_new_scientific_records_on_research_group_id"
+    t.index ["updated_by"], name: "index_new_scientific_records_on_updated_by"
+  end
+
+  create_table "nutraceutical_products", force: :cascade do |t|
+    t.string "name"
+    t.date "date_of_obtaining"
+    t.string "research_project_title"
+    t.string "consecutive_registration_invima"
+    t.bigint "geo_city_id"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "observation"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "geo_state_id"
+    t.bigint "geo_country_id"
+    t.index ["category_id"], name: "index_nutraceutical_products_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_nutraceutical_products_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_nutraceutical_products_on_created_by"
+    t.index ["geo_city_id"], name: "index_nutraceutical_products_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_nutraceutical_products_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_nutraceutical_products_on_geo_state_id"
+    t.index ["research_group_id"], name: "index_nutraceutical_products_on_research_group_id"
+    t.index ["updated_by"], name: "index_nutraceutical_products_on_updated_by"
   end
 
   create_table "oecd_disciplines", force: :cascade do |t|
@@ -856,17 +1262,6 @@ ActiveRecord::Schema.define(version: 2020_12_10_205735) do
     t.index ["updated_by"], name: "index_oecd_knowledge_subareas_on_updated_by"
   end
 
-  create_table "paper_types", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.boolean "active", default: true
-    t.bigint "created_by"
-    t.bigint "updated_by"
-    t.index ["created_by"], name: "index_paper_types_on_created_by"
-    t.index ["updated_by"], name: "index_paper_types_on_updated_by"
-  end
-
   create_table "papers", force: :cascade do |t|
     t.string "title"
     t.date "publication_date"
@@ -879,46 +1274,28 @@ ActiveRecord::Schema.define(version: 2020_12_10_205735) do
     t.string "url"
     t.string "doi"
     t.text "observation"
-    t.bigint "category_id"
-    t.bigint "journal_id"
-    t.bigint "paper_type_id"
     t.bigint "research_group_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "geo_city_id"
-    t.string "paper_document"
     t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
+    t.bigint "category_id"
+    t.bigint "paper_type_id"
+    t.bigint "colciencias_call_id"
+    t.string "journal_name"
+    t.bigint "geo_country_id"
+    t.bigint "geo_state_id"
     t.index ["category_id"], name: "index_papers_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_papers_on_colciencias_call_id"
     t.index ["created_by"], name: "index_papers_on_created_by"
     t.index ["geo_city_id"], name: "index_papers_on_geo_city_id"
-    t.index ["journal_id"], name: "index_papers_on_journal_id"
+    t.index ["geo_country_id"], name: "index_papers_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_papers_on_geo_state_id"
     t.index ["paper_type_id"], name: "index_papers_on_paper_type_id"
     t.index ["research_group_id"], name: "index_papers_on_research_group_id"
     t.index ["updated_by"], name: "index_papers_on_updated_by"
-  end
-
-  create_table "participant_types", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.boolean "active", default: true
-    t.bigint "created_by"
-    t.bigint "updated_by"
-    t.index ["created_by"], name: "index_participant_types_on_created_by"
-    t.index ["updated_by"], name: "index_participant_types_on_updated_by"
-  end
-
-  create_table "patent_states", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.boolean "active", default: true
-    t.bigint "created_by"
-    t.bigint "updated_by"
-    t.index ["created_by"], name: "index_patent_states_on_created_by"
-    t.index ["updated_by"], name: "index_patent_states_on_updated_by"
   end
 
   create_table "patents", force: :cascade do |t|
@@ -927,31 +1304,23 @@ ActiveRecord::Schema.define(version: 2020_12_10_205735) do
     t.date "date_of_obtaining"
     t.string "industrial_publication_gazette"
     t.text "observation"
-    t.bigint "category_id"
-    t.bigint "patent_state_id"
     t.bigint "research_group_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "patent_certificate_document"
     t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
+    t.bigint "category_id"
+    t.bigint "colciencias_call_id"
+    t.bigint "patent_state_id"
+    t.bigint "patent_type_id"
     t.index ["category_id"], name: "index_patents_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_patents_on_colciencias_call_id"
     t.index ["created_by"], name: "index_patents_on_created_by"
     t.index ["patent_state_id"], name: "index_patents_on_patent_state_id"
+    t.index ["patent_type_id"], name: "index_patents_on_patent_type_id"
     t.index ["research_group_id"], name: "index_patents_on_research_group_id"
     t.index ["updated_by"], name: "index_patents_on_updated_by"
-  end
-
-  create_table "petition_statuses", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.boolean "active", default: true
-    t.bigint "created_by"
-    t.bigint "updated_by"
-    t.index ["created_by"], name: "index_petition_statuses_on_created_by"
-    t.index ["updated_by"], name: "index_petition_statuses_on_updated_by"
   end
 
   create_table "plan_periods", force: :cascade do |t|
@@ -963,29 +1332,90 @@ ActiveRecord::Schema.define(version: 2020_12_10_205735) do
     t.index ["planable_id"], name: "index_plan_periods_on_planable_id"
   end
 
-  create_table "product_types", force: :cascade do |t|
-    t.string "name"
-    t.text "indicator"
-    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.bigint "product_typology_id"
-    t.boolean "active", default: true
+  create_table "plant_ind_prototypes", force: :cascade do |t|
+    t.string "plt_name"
+    t.string "plt_registration_number"
+    t.date "plt_date_of_elaboration"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "observation"
+    t.bigint "plt_type_id"
+    t.boolean "active"
     t.bigint "created_by"
     t.bigint "updated_by"
-    t.index ["created_by"], name: "index_product_types_on_created_by"
-    t.index ["product_typology_id"], name: "index_product_types_on_product_typology_id"
-    t.index ["updated_by"], name: "index_product_types_on_updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "geo_city_id"
+    t.string "institution_name"
+    t.bigint "geo_state_id"
+    t.bigint "geo_country_id"
+    t.index ["category_id"], name: "index_plant_ind_prototypes_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_plant_ind_prototypes_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_plant_ind_prototypes_on_created_by"
+    t.index ["geo_city_id"], name: "index_plant_ind_prototypes_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_plant_ind_prototypes_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_plant_ind_prototypes_on_geo_state_id"
+    t.index ["plt_type_id"], name: "index_plant_ind_prototypes_on_plt_type_id"
+    t.index ["research_group_id"], name: "index_plant_ind_prototypes_on_research_group_id"
+    t.index ["updated_by"], name: "index_plant_ind_prototypes_on_updated_by"
   end
 
-  create_table "product_typologies", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+  create_table "protocol_acts", force: :cascade do |t|
+    t.string "title"
+    t.date "date_of_publication"
+    t.bigint "geo_city_id"
+    t.bigint "category_id"
+    t.bigint "product_type_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "observation"
     t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
-    t.index ["created_by"], name: "index_product_typologies_on_created_by"
-    t.index ["updated_by"], name: "index_product_typologies_on_updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "geo_state_id"
+    t.bigint "geo_country_id"
+    t.index ["category_id"], name: "index_protocol_acts_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_protocol_acts_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_protocol_acts_on_created_by"
+    t.index ["geo_city_id"], name: "index_protocol_acts_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_protocol_acts_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_protocol_acts_on_geo_state_id"
+    t.index ["product_type_id"], name: "index_protocol_acts_on_product_type_id"
+    t.index ["research_group_id"], name: "index_protocol_acts_on_research_group_id"
+    t.index ["updated_by"], name: "index_protocol_acts_on_updated_by"
+  end
+
+  create_table "regulations", force: :cascade do |t|
+    t.string "title"
+    t.date "date_of_publication"
+    t.string "issuing_entity"
+    t.bigint "regulation_type_id"
+    t.bigint "product_type_id"
+    t.bigint "geo_city_id"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "observation"
+    t.boolean "active"
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "geo_state_id"
+    t.bigint "geo_country_id"
+    t.index ["category_id"], name: "index_regulations_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_regulations_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_regulations_on_created_by"
+    t.index ["geo_city_id"], name: "index_regulations_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_regulations_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_regulations_on_geo_state_id"
+    t.index ["product_type_id"], name: "index_regulations_on_product_type_id"
+    t.index ["regulation_type_id"], name: "index_regulations_on_regulation_type_id"
+    t.index ["research_group_id"], name: "index_regulations_on_research_group_id"
+    t.index ["updated_by"], name: "index_regulations_on_updated_by"
   end
 
   create_table "required_documents", force: :cascade do |t|
@@ -1003,52 +1433,42 @@ ActiveRecord::Schema.define(version: 2020_12_10_205735) do
   create_table "research_creation_works", force: :cascade do |t|
     t.string "title"
     t.date "creation_and_selection_date"
-    t.string "nature_of_work"
     t.string "registered_project_title"
     t.string "url"
     t.text "observation"
-    t.bigint "knwl_spec_area_id"
-    t.bigint "category_id"
     t.bigint "research_group_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "geo_city_id"
-    t.string "certificate_work_document"
     t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
+    t.bigint "category_id"
+    t.bigint "colciencias_call_id"
+    t.bigint "knwl_spec_area_id"
+    t.bigint "nature_id"
+    t.bigint "geo_state_id"
+    t.bigint "geo_country_id"
     t.index ["category_id"], name: "index_research_creation_works_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_research_creation_works_on_colciencias_call_id"
     t.index ["created_by"], name: "index_research_creation_works_on_created_by"
     t.index ["geo_city_id"], name: "index_research_creation_works_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_research_creation_works_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_research_creation_works_on_geo_state_id"
     t.index ["knwl_spec_area_id"], name: "index_research_creation_works_on_knwl_spec_area_id"
+    t.index ["nature_id"], name: "index_research_creation_works_on_nature_id"
     t.index ["research_group_id"], name: "index_research_creation_works_on_research_group_id"
     t.index ["updated_by"], name: "index_research_creation_works_on_updated_by"
   end
 
   create_table "research_creation_works_work_types", id: false, force: :cascade do |t|
-    t.bigint "work_type_id", null: false
     t.bigint "research_creation_work_id", null: false
+    t.bigint "subtype_id", null: false
   end
 
-  create_table "research_focuses", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.boolean "active", default: true
-    t.bigint "created_by"
-    t.bigint "updated_by"
-    t.index ["created_by"], name: "index_research_focuses_on_created_by"
-    t.index ["updated_by"], name: "index_research_focuses_on_updated_by"
-  end
-
-  create_table "research_focuses_groups", id: false, force: :cascade do |t|
-    t.integer "research_group_id", null: false
-    t.integer "research_focus_id", null: false
-  end
-
-  create_table "research_focuses_seedbeds", id: false, force: :cascade do |t|
-    t.integer "research_seedbed_id", null: false
-    t.integer "research_focus_id", null: false
+  create_table "research_focuses_units", id: false, force: :cascade do |t|
+    t.bigint "subtype_id", null: false
+    t.bigint "research_group_id", null: false
   end
 
   create_table "research_groups", force: :cascade do |t|
@@ -1068,8 +1488,6 @@ ActiveRecord::Schema.define(version: 2020_12_10_205735) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "snies_id"
-    t.bigint "group_type_id"
-    t.bigint "group_state_id"
     t.boolean "interinstitutional"
     t.bigint "cine_broad_area_id"
     t.bigint "cine_specific_area_id"
@@ -1078,9 +1496,8 @@ ActiveRecord::Schema.define(version: 2020_12_10_205735) do
     t.integer "legacy_siciud_id"
     t.bigint "created_by"
     t.bigint "updated_by"
-    t.string "cidc_act_document"
-    t.string "establishment_document"
-    t.string "faculty_act_document"
+    t.bigint "group_state_id"
+    t.bigint "group_type_id"
     t.index ["cine_broad_area_id"], name: "index_research_groups_on_cine_broad_area_id"
     t.index ["cine_specific_area_id"], name: "index_research_groups_on_cine_specific_area_id"
     t.index ["created_by"], name: "index_research_groups_on_created_by"
@@ -1179,6 +1596,36 @@ ActiveRecord::Schema.define(version: 2020_12_10_205735) do
     t.index ["updated_by"], name: "index_roles_on_updated_by"
   end
 
+  create_table "scientific_collections", force: :cascade do |t|
+    t.string "name"
+    t.date "date_of_obtaining"
+    t.string "managing_institution_name"
+    t.string "curator_name"
+    t.date "last_conservatorship_date"
+    t.date "validity_and_use"
+    t.text "information_included"
+    t.bigint "geo_city_id"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "observation"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "geo_state_id"
+    t.bigint "geo_country_id"
+    t.index ["category_id"], name: "index_scientific_collections_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_scientific_collections_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_scientific_collections_on_created_by"
+    t.index ["geo_city_id"], name: "index_scientific_collections_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_scientific_collections_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_scientific_collections_on_geo_state_id"
+    t.index ["research_group_id"], name: "index_scientific_collections_on_research_group_id"
+    t.index ["updated_by"], name: "index_scientific_collections_on_updated_by"
+  end
+
   create_table "scientific_notes", force: :cascade do |t|
     t.string "title"
     t.date "publication_date"
@@ -1190,21 +1637,25 @@ ActiveRecord::Schema.define(version: 2020_12_10_205735) do
     t.string "url"
     t.string "doi"
     t.text "observation"
-    t.bigint "category_id"
-    t.bigint "journal_id"
     t.bigint "research_group_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "geo_city_id"
     t.date "approval_date"
-    t.string "scientific_note_document"
     t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
+    t.bigint "category_id"
+    t.bigint "colciencias_call_id"
+    t.string "journal_name"
+    t.bigint "geo_state_id"
+    t.bigint "geo_country_id"
     t.index ["category_id"], name: "index_scientific_notes_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_scientific_notes_on_colciencias_call_id"
     t.index ["created_by"], name: "index_scientific_notes_on_created_by"
     t.index ["geo_city_id"], name: "index_scientific_notes_on_geo_city_id"
-    t.index ["journal_id"], name: "index_scientific_notes_on_journal_id"
+    t.index ["geo_country_id"], name: "index_scientific_notes_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_scientific_notes_on_geo_state_id"
     t.index ["research_group_id"], name: "index_scientific_notes_on_research_group_id"
     t.index ["updated_by"], name: "index_scientific_notes_on_updated_by"
   end
@@ -1250,10 +1701,93 @@ ActiveRecord::Schema.define(version: 2020_12_10_205735) do
     t.index ["plan_period_id"], name: "index_social_appropriation_plans_on_plan_period_id"
   end
 
+  create_table "software", force: :cascade do |t|
+    t.string "sof_registration_number"
+    t.string "sof_product_title"
+    t.date "sof_date_of_obtaining"
+    t.text "sof_description"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "observation"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "geo_city_id"
+    t.bigint "geo_state_id"
+    t.bigint "geo_country_id"
+    t.index ["category_id"], name: "index_software_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_software_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_software_on_created_by"
+    t.index ["geo_city_id"], name: "index_software_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_software_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_software_on_geo_state_id"
+    t.index ["research_group_id"], name: "index_software_on_research_group_id"
+    t.index ["updated_by"], name: "index_software_on_updated_by"
+  end
+
   create_table "state_seedbeds", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "subtypes", force: :cascade do |t|
+    t.string "st_name"
+    t.text "st_description"
+    t.bigint "parent_id"
+    t.bigint "type_id"
+    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.index ["created_by"], name: "index_subtypes_on_created_by"
+    t.index ["parent_id"], name: "index_subtypes_on_parent_id"
+    t.index ["type_id"], name: "index_subtypes_on_type_id"
+    t.index ["updated_by"], name: "index_subtypes_on_updated_by"
+  end
+
+  create_table "technical_concepts", force: :cascade do |t|
+    t.string "title"
+    t.date "request_date"
+    t.bigint "consecutive_number"
+    t.date "send_date"
+    t.string "requesting_institution_name"
+    t.bigint "geo_city_id"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "observation"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "geo_state_id"
+    t.bigint "geo_country_id"
+    t.index ["category_id"], name: "index_technical_concepts_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_technical_concepts_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_technical_concepts_on_created_by"
+    t.index ["geo_city_id"], name: "index_technical_concepts_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_technical_concepts_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_technical_concepts_on_geo_state_id"
+    t.index ["research_group_id"], name: "index_technical_concepts_on_research_group_id"
+    t.index ["updated_by"], name: "index_technical_concepts_on_updated_by"
+  end
+
+  create_table "types", force: :cascade do |t|
+    t.string "t_name", null: false
+    t.text "t_description"
+    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.index ["created_by"], name: "index_types_on_created_by"
+    t.index ["updated_by"], name: "index_types_on_updated_by"
   end
 
   create_table "user_roles", force: :cascade do |t|
@@ -1273,7 +1807,7 @@ ActiveRecord::Schema.define(version: 2020_12_10_205735) do
     t.string "identification_number"
     t.string "oas_user_id"
     t.bigint "user_role_id"
-    t.boolean "active"
+    t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
     t.index ["created_by"], name: "index_users_on_created_by"
@@ -1285,53 +1819,84 @@ ActiveRecord::Schema.define(version: 2020_12_10_205735) do
     t.string "name"
     t.date "date"
     t.text "observation"
-    t.bigint "cycle_type_id"
-    t.bigint "petition_status_id"
-    t.bigint "category_id"
     t.bigint "research_group_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "geo_city_id"
-    t.string "vegetable_variety_document"
     t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
+    t.bigint "category_id"
+    t.bigint "colciencias_call_id"
+    t.bigint "cycle_type_id"
+    t.bigint "petition_status_id"
+    t.bigint "geo_state_id"
+    t.bigint "geo_country_id"
     t.index ["category_id"], name: "index_vegetable_varieties_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_vegetable_varieties_on_colciencias_call_id"
     t.index ["created_by"], name: "index_vegetable_varieties_on_created_by"
     t.index ["cycle_type_id"], name: "index_vegetable_varieties_on_cycle_type_id"
     t.index ["geo_city_id"], name: "index_vegetable_varieties_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_vegetable_varieties_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_vegetable_varieties_on_geo_state_id"
     t.index ["petition_status_id"], name: "index_vegetable_varieties_on_petition_status_id"
     t.index ["research_group_id"], name: "index_vegetable_varieties_on_research_group_id"
     t.index ["updated_by"], name: "index_vegetable_varieties_on_updated_by"
   end
 
-  create_table "work_types", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+  create_table "working_papers", force: :cascade do |t|
+    t.string "title"
+    t.date "elaboration_date"
+    t.string "related_institution"
+    t.string "doi"
+    t.string "web_page"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "observation"
     t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
-    t.index ["created_by"], name: "index_work_types_on_created_by"
-    t.index ["updated_by"], name: "index_work_types_on_updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_working_papers_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_working_papers_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_working_papers_on_created_by"
+    t.index ["research_group_id"], name: "index_working_papers_on_research_group_id"
+    t.index ["updated_by"], name: "index_working_papers_on_updated_by"
   end
 
+  add_foreign_key "appropriation_processes", "colciencias_calls"
+  add_foreign_key "appropriation_processes", "research_groups"
+  add_foreign_key "appropriation_processes", "subtypes", column: "category_id"
+  add_foreign_key "appropriation_processes", "subtypes", column: "product_type_id"
+  add_foreign_key "appropriation_processes", "users", column: "created_by"
+  add_foreign_key "appropriation_processes", "users", column: "updated_by"
   add_foreign_key "arp_assignment_reports", "arp_assignments"
   add_foreign_key "arp_assignments", "agreement_research_projects"
-  add_foreign_key "arp_assignments", "product_typologies"
   add_foreign_key "awards", "research_creation_works"
   add_foreign_key "awards", "users", column: "created_by"
   add_foreign_key "awards", "users", column: "updated_by"
-  add_foreign_key "book_chapters", "categories"
-  add_foreign_key "book_chapters", "editorials"
+  add_foreign_key "bills", "colciencias_calls"
+  add_foreign_key "bills", "research_groups"
+  add_foreign_key "bills", "subtypes", column: "category_id"
+  add_foreign_key "bills", "users", column: "created_by"
+  add_foreign_key "bills", "users", column: "updated_by"
+  add_foreign_key "book_chapters", "colciencias_calls"
   add_foreign_key "book_chapters", "geo_cities"
+  add_foreign_key "book_chapters", "geo_countries"
+  add_foreign_key "book_chapters", "geo_states"
   add_foreign_key "book_chapters", "research_groups"
+  add_foreign_key "book_chapters", "subtypes", column: "category_id"
   add_foreign_key "book_chapters", "users", column: "created_by"
   add_foreign_key "book_chapters", "users", column: "updated_by"
-  add_foreign_key "books", "categories"
-  add_foreign_key "books", "editorials"
+  add_foreign_key "books", "colciencias_calls"
   add_foreign_key "books", "geo_cities"
+  add_foreign_key "books", "geo_countries"
+  add_foreign_key "books", "geo_states"
   add_foreign_key "books", "research_groups"
+  add_foreign_key "books", "subtypes", column: "book_type_id"
+  add_foreign_key "books", "subtypes", column: "category_id"
   add_foreign_key "books", "users", column: "created_by"
   add_foreign_key "books", "users", column: "updated_by"
   add_foreign_key "call_item_categories", "calls"
@@ -1340,13 +1905,9 @@ ActiveRecord::Schema.define(version: 2020_12_10_205735) do
   add_foreign_key "calls", "call_user_roles"
   add_foreign_key "calls", "duration_types"
   add_foreign_key "calls_product_types", "calls"
-  add_foreign_key "calls_product_types", "product_types"
   add_foreign_key "calls_product_types", "required_types"
   add_foreign_key "calls_required_documents", "calls"
   add_foreign_key "calls_required_documents", "required_documents"
-  add_foreign_key "categories", "product_types"
-  add_foreign_key "categories", "users", column: "created_by"
-  add_foreign_key "categories", "users", column: "updated_by"
   add_foreign_key "cine_broad_areas", "users", column: "created_by"
   add_foreign_key "cine_broad_areas", "users", column: "updated_by"
   add_foreign_key "cine_detailed_areas", "cine_specific_areas"
@@ -1355,18 +1916,75 @@ ActiveRecord::Schema.define(version: 2020_12_10_205735) do
   add_foreign_key "cine_specific_areas", "cine_broad_areas"
   add_foreign_key "cine_specific_areas", "users", column: "created_by"
   add_foreign_key "cine_specific_areas", "users", column: "updated_by"
+  add_foreign_key "clinical_practice_guidelines", "colciencias_calls"
+  add_foreign_key "clinical_practice_guidelines", "geo_cities"
+  add_foreign_key "clinical_practice_guidelines", "geo_countries"
+  add_foreign_key "clinical_practice_guidelines", "geo_states"
+  add_foreign_key "clinical_practice_guidelines", "research_groups"
+  add_foreign_key "clinical_practice_guidelines", "subtypes", column: "category_id"
+  add_foreign_key "clinical_practice_guidelines", "users", column: "created_by"
+  add_foreign_key "clinical_practice_guidelines", "users", column: "updated_by"
   add_foreign_key "colciencias_calls", "users", column: "created_by"
   add_foreign_key "colciencias_calls", "users", column: "updated_by"
   add_foreign_key "colciencias_categories", "users", column: "created_by"
   add_foreign_key "colciencias_categories", "users", column: "updated_by"
+  add_foreign_key "creation_workshops", "colciencias_calls"
+  add_foreign_key "creation_workshops", "geo_cities"
+  add_foreign_key "creation_workshops", "geo_countries"
+  add_foreign_key "creation_workshops", "geo_states"
+  add_foreign_key "creation_workshops", "research_groups"
+  add_foreign_key "creation_workshops", "subtypes", column: "category_id"
+  add_foreign_key "creation_workshops", "subtypes", column: "participation_id"
+  add_foreign_key "creation_workshops", "users", column: "created_by"
+  add_foreign_key "creation_workshops", "users", column: "updated_by"
   add_foreign_key "curricular_prj_ids_research_groups", "research_groups"
   add_foreign_key "curricular_prj_ids_research_groups", "users", column: "created_by"
   add_foreign_key "curricular_prj_ids_research_groups", "users", column: "updated_by"
-  add_foreign_key "cycle_types", "users", column: "created_by"
-  add_foreign_key "cycle_types", "users", column: "updated_by"
-  add_foreign_key "editorials", "users", column: "created_by"
-  add_foreign_key "editorials", "users", column: "updated_by"
-  add_foreign_key "ext_participants", "participant_types"
+  add_foreign_key "degree_works", "colciencias_calls"
+  add_foreign_key "degree_works", "research_groups"
+  add_foreign_key "degree_works", "subtypes", column: "category_id"
+  add_foreign_key "degree_works", "subtypes", column: "dw_type_id"
+  add_foreign_key "degree_works", "users", column: "created_by"
+  add_foreign_key "degree_works", "users", column: "updated_by"
+  add_foreign_key "distinctive_signs", "colciencias_calls"
+  add_foreign_key "distinctive_signs", "geo_cities"
+  add_foreign_key "distinctive_signs", "geo_countries"
+  add_foreign_key "distinctive_signs", "geo_states"
+  add_foreign_key "distinctive_signs", "research_groups"
+  add_foreign_key "distinctive_signs", "subtypes", column: "category_id"
+  add_foreign_key "distinctive_signs", "users", column: "created_by"
+  add_foreign_key "distinctive_signs", "users", column: "updated_by"
+  add_foreign_key "documents", "subtypes", column: "document_type_id"
+  add_foreign_key "documents", "users", column: "created_by"
+  add_foreign_key "documents", "users", column: "updated_by"
+  add_foreign_key "enterprise_secrets", "colciencias_calls"
+  add_foreign_key "enterprise_secrets", "geo_cities"
+  add_foreign_key "enterprise_secrets", "geo_countries"
+  add_foreign_key "enterprise_secrets", "geo_states"
+  add_foreign_key "enterprise_secrets", "research_groups"
+  add_foreign_key "enterprise_secrets", "subtypes", column: "category_id"
+  add_foreign_key "enterprise_secrets", "users", column: "created_by"
+  add_foreign_key "enterprise_secrets", "users", column: "updated_by"
+  add_foreign_key "enterprises", "colciencias_calls"
+  add_foreign_key "enterprises", "geo_cities"
+  add_foreign_key "enterprises", "geo_countries"
+  add_foreign_key "enterprises", "geo_states"
+  add_foreign_key "enterprises", "research_groups"
+  add_foreign_key "enterprises", "subtypes", column: "category_id"
+  add_foreign_key "enterprises", "subtypes", column: "product_type_id"
+  add_foreign_key "enterprises", "users", column: "created_by"
+  add_foreign_key "enterprises", "users", column: "updated_by"
+  add_foreign_key "events", "colciencias_calls"
+  add_foreign_key "events", "geo_cities"
+  add_foreign_key "events", "geo_countries"
+  add_foreign_key "events", "geo_states"
+  add_foreign_key "events", "research_groups"
+  add_foreign_key "events", "subtypes", column: "category_id"
+  add_foreign_key "events", "subtypes", column: "eve_type_id"
+  add_foreign_key "events", "subtypes", column: "participation_id"
+  add_foreign_key "events", "users", column: "created_by"
+  add_foreign_key "events", "users", column: "updated_by"
+  add_foreign_key "ext_participants", "subtypes", column: "participant_type_id"
   add_foreign_key "ext_participants", "users", column: "created_by"
   add_foreign_key "ext_participants", "users", column: "updated_by"
   add_foreign_key "faculty_ids_research_groups", "research_groups"
@@ -1387,34 +2005,101 @@ ActiveRecord::Schema.define(version: 2020_12_10_205735) do
   add_foreign_key "group_members", "gm_states"
   add_foreign_key "group_members", "users", column: "created_by"
   add_foreign_key "group_members", "users", column: "updated_by"
-  add_foreign_key "group_states", "users", column: "created_by"
-  add_foreign_key "group_states", "users", column: "updated_by"
-  add_foreign_key "group_types", "users", column: "created_by"
-  add_foreign_key "group_types", "users", column: "updated_by"
+  add_foreign_key "guide_manuals", "colciencias_calls"
+  add_foreign_key "guide_manuals", "geo_cities"
+  add_foreign_key "guide_manuals", "geo_countries"
+  add_foreign_key "guide_manuals", "geo_states"
+  add_foreign_key "guide_manuals", "research_groups"
+  add_foreign_key "guide_manuals", "subtypes", column: "category_id"
+  add_foreign_key "guide_manuals", "subtypes", column: "product_type_id"
+  add_foreign_key "guide_manuals", "users", column: "created_by"
+  add_foreign_key "guide_manuals", "users", column: "updated_by"
   add_foreign_key "historical_colciencias_ranks", "oecd_knowledge_areas"
   add_foreign_key "historical_colciencias_ranks", "oecd_knowledge_subareas"
   add_foreign_key "historical_colciencias_ranks", "users", column: "created_by"
   add_foreign_key "historical_colciencias_ranks", "users", column: "updated_by"
-  add_foreign_key "int_participants", "participant_types"
+  add_foreign_key "industrial_designs", "colciencias_calls"
+  add_foreign_key "industrial_designs", "geo_cities"
+  add_foreign_key "industrial_designs", "geo_countries"
+  add_foreign_key "industrial_designs", "geo_states"
+  add_foreign_key "industrial_designs", "research_groups"
+  add_foreign_key "industrial_designs", "subtypes", column: "category_id"
+  add_foreign_key "industrial_designs", "users", column: "created_by"
+  add_foreign_key "industrial_designs", "users", column: "updated_by"
+  add_foreign_key "innovations", "colciencias_calls"
+  add_foreign_key "innovations", "geo_cities"
+  add_foreign_key "innovations", "geo_countries"
+  add_foreign_key "innovations", "geo_states"
+  add_foreign_key "innovations", "research_groups"
+  add_foreign_key "innovations", "subtypes", column: "category_id"
+  add_foreign_key "innovations", "subtypes", column: "product_type_id"
+  add_foreign_key "innovations", "users", column: "created_by"
+  add_foreign_key "innovations", "users", column: "updated_by"
+  add_foreign_key "institutions", "users", column: "created_by"
+  add_foreign_key "institutions", "users", column: "updated_by"
   add_foreign_key "int_participants", "researchers"
+  add_foreign_key "int_participants", "subtypes", column: "participant_type_id"
   add_foreign_key "int_participants", "users", column: "created_by"
   add_foreign_key "int_participants", "users", column: "updated_by"
-  add_foreign_key "ip_livestock_breeds", "categories"
+  add_foreign_key "integrated_circuit_diagrams", "colciencias_calls"
+  add_foreign_key "integrated_circuit_diagrams", "geo_cities"
+  add_foreign_key "integrated_circuit_diagrams", "geo_countries"
+  add_foreign_key "integrated_circuit_diagrams", "geo_states"
+  add_foreign_key "integrated_circuit_diagrams", "research_groups"
+  add_foreign_key "integrated_circuit_diagrams", "subtypes", column: "category_id"
+  add_foreign_key "integrated_circuit_diagrams", "users", column: "created_by"
+  add_foreign_key "integrated_circuit_diagrams", "users", column: "updated_by"
+  add_foreign_key "ip_livestock_breeds", "colciencias_calls"
   add_foreign_key "ip_livestock_breeds", "geo_cities"
+  add_foreign_key "ip_livestock_breeds", "geo_countries"
+  add_foreign_key "ip_livestock_breeds", "geo_states"
   add_foreign_key "ip_livestock_breeds", "research_groups"
+  add_foreign_key "ip_livestock_breeds", "subtypes", column: "category_id"
   add_foreign_key "ip_livestock_breeds", "users", column: "created_by"
   add_foreign_key "ip_livestock_breeds", "users", column: "updated_by"
-  add_foreign_key "journals", "users", column: "created_by"
-  add_foreign_key "journals", "users", column: "updated_by"
-  add_foreign_key "knwl_spec_areas", "users", column: "created_by"
-  add_foreign_key "knwl_spec_areas", "users", column: "updated_by"
-  add_foreign_key "new_animal_breeds", "categories"
-  add_foreign_key "new_animal_breeds", "cycle_types"
+  add_foreign_key "knowledge_networks", "colciencias_calls"
+  add_foreign_key "knowledge_networks", "geo_cities"
+  add_foreign_key "knowledge_networks", "geo_countries"
+  add_foreign_key "knowledge_networks", "geo_states"
+  add_foreign_key "knowledge_networks", "research_groups"
+  add_foreign_key "knowledge_networks", "subtypes", column: "category_id"
+  add_foreign_key "knowledge_networks", "users", column: "created_by"
+  add_foreign_key "knowledge_networks", "users", column: "updated_by"
+  add_foreign_key "license_agreements", "colciencias_calls"
+  add_foreign_key "license_agreements", "geo_cities"
+  add_foreign_key "license_agreements", "geo_cities", column: "contract_geo_city_id"
+  add_foreign_key "license_agreements", "geo_countries"
+  add_foreign_key "license_agreements", "geo_countries", column: "contract_geo_country_id"
+  add_foreign_key "license_agreements", "geo_states"
+  add_foreign_key "license_agreements", "geo_states", column: "contract_geo_state_id"
+  add_foreign_key "license_agreements", "research_groups"
+  add_foreign_key "license_agreements", "subtypes", column: "category_id"
+  add_foreign_key "license_agreements", "users", column: "created_by"
+  add_foreign_key "license_agreements", "users", column: "updated_by"
+  add_foreign_key "new_animal_breeds", "colciencias_calls"
   add_foreign_key "new_animal_breeds", "geo_cities"
-  add_foreign_key "new_animal_breeds", "petition_statuses"
+  add_foreign_key "new_animal_breeds", "geo_countries"
+  add_foreign_key "new_animal_breeds", "geo_states"
   add_foreign_key "new_animal_breeds", "research_groups"
+  add_foreign_key "new_animal_breeds", "subtypes", column: "petition_status_id"
   add_foreign_key "new_animal_breeds", "users", column: "created_by"
   add_foreign_key "new_animal_breeds", "users", column: "updated_by"
+  add_foreign_key "new_scientific_records", "colciencias_calls"
+  add_foreign_key "new_scientific_records", "geo_cities"
+  add_foreign_key "new_scientific_records", "geo_countries"
+  add_foreign_key "new_scientific_records", "geo_states"
+  add_foreign_key "new_scientific_records", "research_groups"
+  add_foreign_key "new_scientific_records", "subtypes", column: "category_id"
+  add_foreign_key "new_scientific_records", "users", column: "created_by"
+  add_foreign_key "new_scientific_records", "users", column: "updated_by"
+  add_foreign_key "nutraceutical_products", "colciencias_calls"
+  add_foreign_key "nutraceutical_products", "geo_cities"
+  add_foreign_key "nutraceutical_products", "geo_countries"
+  add_foreign_key "nutraceutical_products", "geo_states"
+  add_foreign_key "nutraceutical_products", "research_groups"
+  add_foreign_key "nutraceutical_products", "subtypes", column: "category_id"
+  add_foreign_key "nutraceutical_products", "users", column: "created_by"
+  add_foreign_key "nutraceutical_products", "users", column: "updated_by"
   add_foreign_key "oecd_disciplines", "oecd_knowledge_subareas"
   add_foreign_key "oecd_disciplines", "users", column: "created_by"
   add_foreign_key "oecd_disciplines", "users", column: "updated_by"
@@ -1423,72 +2108,242 @@ ActiveRecord::Schema.define(version: 2020_12_10_205735) do
   add_foreign_key "oecd_knowledge_subareas", "oecd_knowledge_areas"
   add_foreign_key "oecd_knowledge_subareas", "users", column: "created_by"
   add_foreign_key "oecd_knowledge_subareas", "users", column: "updated_by"
-  add_foreign_key "paper_types", "users", column: "created_by"
-  add_foreign_key "paper_types", "users", column: "updated_by"
-  add_foreign_key "papers", "categories"
+  add_foreign_key "papers", "colciencias_calls"
   add_foreign_key "papers", "geo_cities"
-  add_foreign_key "papers", "journals"
-  add_foreign_key "papers", "paper_types"
+  add_foreign_key "papers", "geo_countries"
+  add_foreign_key "papers", "geo_states"
   add_foreign_key "papers", "research_groups"
+  add_foreign_key "papers", "subtypes", column: "category_id"
+  add_foreign_key "papers", "subtypes", column: "paper_type_id"
   add_foreign_key "papers", "users", column: "created_by"
   add_foreign_key "papers", "users", column: "updated_by"
-  add_foreign_key "participant_types", "users", column: "created_by"
-  add_foreign_key "participant_types", "users", column: "updated_by"
-  add_foreign_key "patent_states", "users", column: "created_by"
-  add_foreign_key "patent_states", "users", column: "updated_by"
-  add_foreign_key "patents", "categories"
-  add_foreign_key "patents", "patent_states"
+  add_foreign_key "patents", "colciencias_calls"
   add_foreign_key "patents", "research_groups"
+  add_foreign_key "patents", "subtypes", column: "category_id"
+  add_foreign_key "patents", "subtypes", column: "patent_state_id"
+  add_foreign_key "patents", "subtypes", column: "patent_type_id"
   add_foreign_key "patents", "users", column: "created_by"
   add_foreign_key "patents", "users", column: "updated_by"
-  add_foreign_key "petition_statuses", "users", column: "created_by"
-  add_foreign_key "petition_statuses", "users", column: "updated_by"
-  add_foreign_key "product_types", "product_typologies"
-  add_foreign_key "product_types", "users", column: "created_by"
-  add_foreign_key "product_types", "users", column: "updated_by"
-  add_foreign_key "product_typologies", "users", column: "created_by"
-  add_foreign_key "product_typologies", "users", column: "updated_by"
-  add_foreign_key "research_creation_works", "categories"
+  add_foreign_key "plant_ind_prototypes", "colciencias_calls"
+  add_foreign_key "plant_ind_prototypes", "geo_cities"
+  add_foreign_key "plant_ind_prototypes", "geo_countries"
+  add_foreign_key "plant_ind_prototypes", "geo_states"
+  add_foreign_key "plant_ind_prototypes", "research_groups"
+  add_foreign_key "plant_ind_prototypes", "subtypes", column: "category_id"
+  add_foreign_key "plant_ind_prototypes", "subtypes", column: "plt_type_id"
+  add_foreign_key "plant_ind_prototypes", "users", column: "created_by"
+  add_foreign_key "plant_ind_prototypes", "users", column: "updated_by"
+  add_foreign_key "protocol_acts", "colciencias_calls"
+  add_foreign_key "protocol_acts", "geo_cities"
+  add_foreign_key "protocol_acts", "geo_countries"
+  add_foreign_key "protocol_acts", "geo_states"
+  add_foreign_key "protocol_acts", "research_groups"
+  add_foreign_key "protocol_acts", "subtypes", column: "category_id"
+  add_foreign_key "protocol_acts", "subtypes", column: "product_type_id"
+  add_foreign_key "protocol_acts", "users", column: "created_by"
+  add_foreign_key "protocol_acts", "users", column: "updated_by"
+  add_foreign_key "regulations", "colciencias_calls"
+  add_foreign_key "regulations", "geo_cities"
+  add_foreign_key "regulations", "geo_countries"
+  add_foreign_key "regulations", "geo_states"
+  add_foreign_key "regulations", "research_groups"
+  add_foreign_key "regulations", "subtypes", column: "category_id"
+  add_foreign_key "regulations", "subtypes", column: "product_type_id"
+  add_foreign_key "regulations", "subtypes", column: "regulation_type_id"
+  add_foreign_key "regulations", "users", column: "created_by"
+  add_foreign_key "regulations", "users", column: "updated_by"
+  add_foreign_key "research_creation_works", "colciencias_calls"
   add_foreign_key "research_creation_works", "geo_cities"
-  add_foreign_key "research_creation_works", "knwl_spec_areas"
+  add_foreign_key "research_creation_works", "geo_countries"
+  add_foreign_key "research_creation_works", "geo_states"
   add_foreign_key "research_creation_works", "research_groups"
+  add_foreign_key "research_creation_works", "subtypes", column: "category_id"
+  add_foreign_key "research_creation_works", "subtypes", column: "knwl_spec_area_id"
+  add_foreign_key "research_creation_works", "subtypes", column: "nature_id"
   add_foreign_key "research_creation_works", "users", column: "created_by"
   add_foreign_key "research_creation_works", "users", column: "updated_by"
-  add_foreign_key "research_focuses", "users", column: "created_by"
-  add_foreign_key "research_focuses", "users", column: "updated_by"
   add_foreign_key "research_groups", "cine_broad_areas"
   add_foreign_key "research_groups", "cine_specific_areas"
-  add_foreign_key "research_groups", "group_states"
-  add_foreign_key "research_groups", "group_types"
   add_foreign_key "research_groups", "oecd_knowledge_areas"
   add_foreign_key "research_groups", "oecd_knowledge_subareas"
+  add_foreign_key "research_groups", "subtypes", column: "group_state_id"
+  add_foreign_key "research_groups", "subtypes", column: "group_type_id"
   add_foreign_key "research_groups", "users", column: "created_by"
   add_foreign_key "research_groups", "users", column: "updated_by"
   add_foreign_key "researchers", "users", column: "created_by"
   add_foreign_key "researchers", "users", column: "updated_by"
   add_foreign_key "roles", "users", column: "created_by"
   add_foreign_key "roles", "users", column: "updated_by"
-  add_foreign_key "scientific_notes", "categories"
+  add_foreign_key "scientific_collections", "colciencias_calls"
+  add_foreign_key "scientific_collections", "geo_cities"
+  add_foreign_key "scientific_collections", "geo_countries"
+  add_foreign_key "scientific_collections", "geo_states"
+  add_foreign_key "scientific_collections", "research_groups"
+  add_foreign_key "scientific_collections", "subtypes", column: "category_id"
+  add_foreign_key "scientific_collections", "users", column: "created_by"
+  add_foreign_key "scientific_collections", "users", column: "updated_by"
+  add_foreign_key "scientific_notes", "colciencias_calls"
   add_foreign_key "scientific_notes", "geo_cities"
-  add_foreign_key "scientific_notes", "journals"
+  add_foreign_key "scientific_notes", "geo_countries"
+  add_foreign_key "scientific_notes", "geo_states"
   add_foreign_key "scientific_notes", "research_groups"
+  add_foreign_key "scientific_notes", "subtypes", column: "category_id"
   add_foreign_key "scientific_notes", "users", column: "created_by"
   add_foreign_key "scientific_notes", "users", column: "updated_by"
+  add_foreign_key "software", "colciencias_calls"
+  add_foreign_key "software", "geo_cities"
+  add_foreign_key "software", "geo_countries"
+  add_foreign_key "software", "geo_states"
+  add_foreign_key "software", "research_groups"
+  add_foreign_key "software", "subtypes", column: "category_id"
+  add_foreign_key "software", "users", column: "created_by"
+  add_foreign_key "software", "users", column: "updated_by"
+  add_foreign_key "subtypes", "subtypes", column: "parent_id"
+  add_foreign_key "subtypes", "types"
+  add_foreign_key "subtypes", "users", column: "created_by"
+  add_foreign_key "subtypes", "users", column: "updated_by"
+  add_foreign_key "technical_concepts", "colciencias_calls"
+  add_foreign_key "technical_concepts", "geo_cities"
+  add_foreign_key "technical_concepts", "geo_countries"
+  add_foreign_key "technical_concepts", "geo_states"
+  add_foreign_key "technical_concepts", "research_groups"
+  add_foreign_key "technical_concepts", "subtypes", column: "category_id"
+  add_foreign_key "technical_concepts", "users", column: "created_by"
+  add_foreign_key "technical_concepts", "users", column: "updated_by"
+  add_foreign_key "types", "users", column: "created_by"
+  add_foreign_key "types", "users", column: "updated_by"
   add_foreign_key "user_roles", "users", column: "created_by"
   add_foreign_key "user_roles", "users", column: "updated_by"
   add_foreign_key "users", "user_roles"
   add_foreign_key "users", "users", column: "created_by"
   add_foreign_key "users", "users", column: "updated_by"
-  add_foreign_key "vegetable_varieties", "categories"
-  add_foreign_key "vegetable_varieties", "cycle_types"
+  add_foreign_key "vegetable_varieties", "colciencias_calls"
   add_foreign_key "vegetable_varieties", "geo_cities"
-  add_foreign_key "vegetable_varieties", "petition_statuses"
+  add_foreign_key "vegetable_varieties", "geo_countries"
+  add_foreign_key "vegetable_varieties", "geo_states"
   add_foreign_key "vegetable_varieties", "research_groups"
+  add_foreign_key "vegetable_varieties", "subtypes", column: "category_id"
+  add_foreign_key "vegetable_varieties", "subtypes", column: "cycle_type_id"
+  add_foreign_key "vegetable_varieties", "subtypes", column: "petition_status_id"
   add_foreign_key "vegetable_varieties", "users", column: "created_by"
   add_foreign_key "vegetable_varieties", "users", column: "updated_by"
-  add_foreign_key "work_types", "users", column: "created_by"
-  add_foreign_key "work_types", "users", column: "updated_by"
+  add_foreign_key "working_papers", "colciencias_calls"
+  add_foreign_key "working_papers", "research_groups"
+  add_foreign_key "working_papers", "subtypes", column: "category_id"
+  add_foreign_key "working_papers", "users", column: "created_by"
+  add_foreign_key "working_papers", "users", column: "updated_by"
 
+  create_view "complete_users", sql_definition: <<-SQL
+      SELECT u.id,
+      u.identification_number,
+      u.oas_user_id,
+      u.user_role_id,
+      ur.name AS user_role_name,
+      u.active,
+      u.created_by,
+      u.updated_by,
+      u.created_at,
+      u.updated_at
+     FROM (users u
+       LEFT JOIN user_roles ur ON ((u.user_role_id = ur.id)));
+  SQL
+  create_view "research_units_by_researchers", sql_definition: <<-SQL
+      SELECT rs.id,
+      rs.identification_number,
+      rs.oas_researcher_id,
+      rs.active AS researcher_is_active,
+      gm.id AS group_member_id,
+      gm.role_id,
+      rl.name AS role_name,
+      gm.gm_state_id,
+      gm.active AS group_member_is_active,
+      gm.research_group_id,
+      rg.name AS research_group_name,
+      rg.acronym,
+      rg.group_type_id,
+      rg.group_state_id,
+      rg.legacy_siciud_id
+     FROM (((researchers rs
+       JOIN group_members gm ON ((gm.researcher_id = rs.id)))
+       JOIN roles rl ON ((rl.id = gm.role_id)))
+       JOIN research_groups rg ON ((gm.research_group_id = rg.id)));
+  SQL
+  create_view "complete_int_participants", sql_definition: <<-SQL
+      SELECT intp.id,
+      intp.producible_type AS product_type,
+      intp.producible_id AS product_type_id,
+      intp.researcher_id,
+      r.oas_researcher_id,
+      intp.participant_type_id,
+      pt.st_name AS participant_type_name,
+      intp.active,
+      intp.created_by,
+      intp.updated_by,
+      intp.created_at,
+      intp.updated_at
+     FROM ((int_participants intp
+       LEFT JOIN researchers r ON ((r.id = intp.researcher_id)))
+       LEFT JOIN subtypes pt ON ((pt.id = intp.participant_type_id)));
+  SQL
+  create_view "complete_ext_participants", sql_definition: <<-SQL
+      SELECT extp.id,
+      extp.producible_type AS product_type,
+      extp.producible_id AS product_type_id,
+      extp.first_name,
+      extp.last_name,
+      extp.participant_type_id,
+      pt.st_name AS participant_type_name,
+      extp.active,
+      extp.created_by,
+      extp.updated_by,
+      extp.created_at,
+      extp.updated_at
+     FROM (ext_participants extp
+       LEFT JOIN subtypes pt ON ((pt.id = extp.participant_type_id)));
+  SQL
+  create_view "complete_documents", sql_definition: <<-SQL
+      SELECT doc.id,
+      doc.nuxeo_id,
+      doc.documentable_type AS product_type,
+      doc.documentable_id AS product_type_id,
+      doc.doc_name,
+      doc.doc_path,
+      doc.doc_size,
+      doc.document_type_id,
+      dt.st_name AS document_type_name,
+      doc.active,
+      doc.created_by,
+      doc.updated_by,
+      doc.created_at,
+      doc.updated_at
+     FROM (documents doc
+       LEFT JOIN subtypes dt ON ((dt.id = doc.document_type_id)));
+  SQL
+  create_view "complete_degree_works", sql_definition: <<-SQL
+      SELECT dw.id,
+      dw.category_id,
+      st.st_name AS category_name,
+      dw.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      dw.dw_title,
+      dw.dw_date,
+      dw.dw_institution_name,
+      dw.dw_recognition,
+      dw.dw_type_id,
+      dwt.st_name AS dw_type_name,
+      dw.dw_observation,
+      dw.research_group_id,
+      dw.active,
+      dw.created_by,
+      dw.updated_by,
+      dw.created_at,
+      dw.updated_at
+     FROM (((degree_works dw
+       LEFT JOIN subtypes st ON ((dw.category_id = st.id)))
+       LEFT JOIN subtypes dwt ON ((dw.category_id = dwt.id)))
+       LEFT JOIN colciencias_calls cc ON ((dw.colciencias_call_id = cc.id)));
+  SQL
   create_view "research_units", sql_definition: <<-SQL
       SELECT rg.id,
       rg.legacy_siciud_id,
@@ -1507,17 +2362,16 @@ ActiveRecord::Schema.define(version: 2020_12_10_205735) do
       rg.colciencias_code,
       rg.snies_id,
       rg.group_type_id,
-      ( SELECT group_types.name
-             FROM group_types
-            WHERE (group_types.id = rg.group_type_id)) AS group_type_name,
+      stgt.st_name AS group_type_name,
       rg.group_state_id,
-      ( SELECT group_states.name
-             FROM group_states
-            WHERE (group_states.id = rg.group_state_id)) AS group_state_name,
+      stgs.st_name AS group_state_name,
       rg.interinstitutional,
       ARRAY( SELECT group_members.researcher_id
              FROM group_members
             WHERE (group_members.research_group_id = rg.id)) AS member_ids,
+      ( SELECT count(*) AS count
+             FROM group_members
+            WHERE (group_members.research_group_id = rg.id)) AS member_count,
       ARRAY( SELECT faculty_ids_research_groups.faculty_id
              FROM faculty_ids_research_groups
             WHERE (faculty_ids_research_groups.research_group_id = rg.id)) AS faculty_ids,
@@ -1546,291 +2400,130 @@ ActiveRecord::Schema.define(version: 2020_12_10_205735) do
       ARRAY( SELECT oecd_disciplines_research_groups.oecd_discipline_id
              FROM oecd_disciplines_research_groups
             WHERE (oecd_disciplines_research_groups.research_group_id = rg.id)) AS oecd_discipline_ids,
-      ARRAY( SELECT research_focuses_groups.research_focus_id
-             FROM research_focuses_groups
-            WHERE (research_focuses_groups.research_group_id = rg.id)) AS research_focus_ids,
-      rg.cidc_act_document,
-      rg.establishment_document,
-      rg.faculty_act_document,
+      ARRAY( SELECT research_focuses_units.subtype_id
+             FROM research_focuses_units
+            WHERE (research_focuses_units.research_group_id = rg.id)) AS research_focus_ids,
       rg.created_at,
       rg.updated_at,
       rg.created_by,
       rg.updated_by
-     FROM research_groups rg;
-  SQL
-  create_view "complete_papers", sql_definition: <<-SQL
-      SELECT p.id,
-      p.title,
-      p.approval_date,
-      p.category_id,
-      c.name AS category_name,
-      p.doi,
-      p.final_page,
-      p.geo_city_id,
-      gcity.name AS geo_city_name,
-      gs.geo_country_id,
-      gctry.name AS geo_country_name,
-      gcity.geo_state_id,
-      gs.name AS geo_state_name,
-      p.initial_page,
-      p.issn,
-      p.journal_id,
-      j.name AS journal_name,
-      p.number_of_pages,
-      p.observation,
-      p.paper_type_id,
-      pt.name AS paper_type_name,
-      p.publication_date,
-      p.research_group_id,
-      p.url,
-      p.volume,
-      p.active,
-      p.created_by,
-      p.updated_by,
-      p.created_at,
-      p.updated_at
-     FROM ((((((papers p
-       LEFT JOIN categories c ON ((p.category_id = c.id)))
-       LEFT JOIN geo_cities gcity ON ((p.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
-       LEFT JOIN journals j ON ((p.journal_id = j.id)))
-       LEFT JOIN paper_types pt ON ((p.paper_type_id = pt.id)));
-  SQL
-  create_view "complete_books", sql_definition: <<-SQL
-      SELECT b.id,
-      b.title,
-      b.book_document,
-      b.category_id,
-      c.name AS category_name,
-      b.editorial_id,
-      e.name AS editorial_name,
-      b.geo_city_id,
-      gcity.name AS geo_city_name,
-      gs.geo_country_id,
-      gctry.name AS geo_country_name,
-      gcity.geo_state_id,
-      gs.name AS geo_state_name,
-      b.isbn,
-      b.observation,
-      b.publication_date,
-      b.research_group_id,
-      b.url,
-      b.active,
-      b.created_by,
-      b.updated_by,
-      b.created_at,
-      b.updated_at
-     FROM (((((books b
-       LEFT JOIN categories c ON ((b.category_id = c.id)))
-       LEFT JOIN editorials e ON ((b.editorial_id = e.id)))
-       LEFT JOIN geo_cities gcity ON ((b.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
-  SQL
-  create_view "complete_book_chapters", sql_definition: <<-SQL
-      SELECT bc.id,
-      bc.book_title,
-      bc.title,
-      bc.book_chapter_document,
-      bc.category_id,
-      c.name AS category_name,
-      bc.doi,
-      bc.editorial_id,
-      e.name AS editorial_name,
-      bc.geo_city_id,
-      gcity.name AS geo_city_name,
-      gs.geo_country_id,
-      gctry.name AS geo_country_name,
-      gcity.geo_state_id,
-      gs.name AS geo_state_name,
-      bc.isbn,
-      bc.observation,
-      bc.publication_date,
-      bc.research_group_id,
-      bc.url,
-      bc.active,
-      bc.created_by,
-      bc.updated_by,
-      bc.created_at,
-      bc.updated_at
-     FROM (((((book_chapters bc
-       LEFT JOIN categories c ON ((bc.category_id = c.id)))
-       LEFT JOIN editorials e ON ((bc.editorial_id = e.id)))
-       LEFT JOIN geo_cities gcity ON ((bc.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
-  SQL
-  create_view "complete_ipl_breeds", sql_definition: <<-SQL
-      SELECT iplb.id,
-      iplb.name,
-      iplb.category_id,
-      c.name AS category_name,
-      iplb.certificate_ma_document,
-      iplb.consecutive_number_ma,
-      iplb.geo_city_id,
-      gcity.name AS geo_city_name,
-      gs.geo_country_id,
-      gctry.name AS geo_country_name,
-      gcity.geo_state_id,
-      gs.name AS geo_state_name,
-      iplb.ip_livestock_breed_document,
-      iplb.observation,
-      iplb.publication_date,
-      iplb.research_group_id,
-      iplb.active,
-      iplb.created_by,
-      iplb.updated_by,
-      iplb.created_at,
-      iplb.updated_at
-     FROM ((((ip_livestock_breeds iplb
-       LEFT JOIN categories c ON ((iplb.category_id = c.id)))
-       LEFT JOIN geo_cities gcity ON ((iplb.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)));
-  SQL
-  create_view "complete_new_animal_bs", sql_definition: <<-SQL
-      SELECT nab.id,
-      nab.name,
-      nab.category_id,
-      c.name AS category_name,
-      nab.ccb_ica_document,
-      nab.cycle_type_id,
-      ct.name AS cycle_type_name,
-      nab.date,
-      nab.geo_city_id,
-      gcity.name AS geo_city_name,
-      gs.geo_country_id,
-      gctry.name AS geo_country_name,
-      gcity.geo_state_id,
-      gs.name AS geo_state_name,
-      nab.new_animal_breed_document,
-      nab.observation,
-      nab.petition_status_id,
-      ps.name AS petition_status_name,
-      nab.research_group_id,
-      nab.active,
-      nab.created_by,
-      nab.updated_by,
-      nab.created_at,
-      nab.updated_at
-     FROM ((((((new_animal_breeds nab
-       LEFT JOIN categories c ON ((nab.category_id = c.id)))
-       LEFT JOIN cycle_types ct ON ((nab.cycle_type_id = ct.id)))
-       LEFT JOIN geo_cities gcity ON ((nab.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
-       LEFT JOIN petition_statuses ps ON ((nab.petition_status_id = ps.id)));
+     FROM ((research_groups rg
+       LEFT JOIN subtypes stgt ON ((rg.group_type_id = stgt.id)))
+       LEFT JOIN subtypes stgs ON ((rg.group_state_id = stgs.id)));
   SQL
   create_view "complete_patents", sql_definition: <<-SQL
       SELECT p.id,
       p.title,
       p.category_id,
-      c.name AS category_name,
+      stc.st_name AS category_name,
+      p.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
       p.date_of_obtaining,
       ARRAY( SELECT gcp.geo_country_id
              FROM geo_countries_patents gcp
             WHERE (p.id = gcp.patent_id)) AS geo_country_ids,
       p.industrial_publication_gazette,
       p.observation,
-      p.patent_certificate_document,
-      p.patent_number,
       p.patent_state_id,
-      ps.name AS patent_state_name,
+      stps.st_name AS patent_state_name,
+      p.patent_type_id,
+      pttp.st_name AS patent_type_name,
+      p.patent_number,
       p.research_group_id,
       p.active,
       p.created_by,
       p.updated_by,
       p.created_at,
       p.updated_at
-     FROM ((patents p
-       LEFT JOIN categories c ON ((p.category_id = c.id)))
-       LEFT JOIN patent_states ps ON ((p.patent_state_id = ps.id)));
+     FROM ((((patents p
+       LEFT JOIN subtypes stc ON ((p.category_id = stc.id)))
+       LEFT JOIN subtypes pttp ON ((p.patent_type_id = pttp.id)))
+       LEFT JOIN colciencias_calls cc ON ((p.colciencias_call_id = cc.id)))
+       LEFT JOIN subtypes stps ON ((p.patent_state_id = stps.id)));
   SQL
-  create_view "complete_research_cws", sql_definition: <<-SQL
-      SELECT rcw.id,
-      rcw.title,
-      rcw.category_id,
-      c.name AS category_name,
-      rcw.creation_and_selection_date,
-      rcw.geo_city_id,
-      gcity.name AS geo_city_name,
-      gs.geo_country_id,
-      gctry.name AS geo_country_name,
-      gcity.geo_state_id,
-      gs.name AS geo_state_name,
-      rcw.knwl_spec_area_id,
-      ksa.name AS knwl_spec_area_name,
-      rcw.nature_of_work,
-      rcw.observation,
-      rcw.registered_project_title,
-      rcw.url,
-      ARRAY( SELECT rcwwt.work_type_id
-             FROM research_creation_works_work_types rcwwt
-            WHERE (rcw.id = rcwwt.research_creation_work_id)) AS work_type_ids,
-      rcw.research_group_id,
-      rcw.active,
-      rcw.created_by,
-      rcw.updated_by,
-      rcw.created_at,
-      rcw.updated_at
-     FROM (((((research_creation_works rcw
-       LEFT JOIN categories c ON ((rcw.category_id = c.id)))
-       LEFT JOIN geo_cities gcity ON ((rcw.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
-       LEFT JOIN knwl_spec_areas ksa ON ((rcw.knwl_spec_area_id = ksa.id)));
+  create_view "complete_types", sql_definition: <<-SQL
+      SELECT t.id AS type_id,
+      t.t_name AS type_name,
+      t.t_description AS type_description,
+      t.active AS type_active,
+      st.parent_id,
+      pst.st_name AS parent_name,
+      pst.st_description AS parent_description,
+      pst.active AS parent_active,
+      st.id,
+      st.st_name AS name,
+      st.st_description AS description,
+      st.active
+     FROM ((types t
+       LEFT JOIN subtypes st ON ((t.id = st.type_id)))
+       LEFT JOIN subtypes pst ON ((st.parent_id = pst.id)));
   SQL
-  create_view "complete_vegetable_varieties", sql_definition: <<-SQL
-      SELECT vv.id,
-      vv.name,
-      vv.category_id,
-      c.name AS category_name,
-      vv.cycle_type_id,
-      ct.name AS cycle_type_name,
-      vv.date,
-      vv.geo_city_id,
-      gcity.name AS geo_city_name,
-      gs.geo_country_id,
-      gctry.name AS geo_country_name,
-      gcity.geo_state_id,
-      gs.name AS geo_state_name,
-      vv.observation,
-      vv.petition_status_id,
-      ps.name AS petition_status_name,
-      vv.research_group_id,
-      vv.vegetable_variety_document,
-      vv.active,
-      vv.created_by,
-      vv.updated_by,
-      vv.created_at,
-      vv.updated_at
-     FROM ((((((vegetable_varieties vv
-       LEFT JOIN categories c ON ((vv.category_id = c.id)))
-       LEFT JOIN cycle_types ct ON ((vv.cycle_type_id = ct.id)))
-       LEFT JOIN geo_cities gcity ON ((vv.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
-       LEFT JOIN petition_statuses ps ON ((vv.petition_status_id = ps.id)));
+  create_view "complete_bills", sql_definition: <<-SQL
+      SELECT bl.id,
+      bl.title,
+      bl.category_id,
+      st.st_name AS category_name,
+      bl.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      bl.observation,
+      bl.research_group_id,
+      bl.active,
+      bl.created_by,
+      bl.updated_by,
+      bl.created_at,
+      bl.updated_at
+     FROM ((bills bl
+       LEFT JOIN subtypes st ON ((bl.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((bl.colciencias_call_id = cc.id)));
+  SQL
+  create_view "complete_appropriation_processes", sql_definition: <<-SQL
+      SELECT ap.id,
+      ap.name,
+      ap.category_id,
+      st.st_name AS category_name,
+      ap.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      ap.funding_institution,
+      ap.start_date,
+      ap.finish_date,
+      ap.observation,
+      ap.product_type_id,
+      pt.st_name AS product_type_name,
+      ap.research_group_id,
+      ap.research_project_title,
+      ap.active,
+      ap.created_by,
+      ap.updated_by,
+      ap.created_at,
+      ap.updated_at
+     FROM (((appropriation_processes ap
+       LEFT JOIN subtypes st ON ((ap.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((ap.colciencias_call_id = cc.id)))
+       LEFT JOIN subtypes pt ON ((ap.product_type_id = pt.id)));
   SQL
   create_view "complete_scientific_notes", sql_definition: <<-SQL
       SELECT sn.id,
       sn.title,
       sn.approval_date,
       sn.category_id,
-      c.name AS category_name,
+      st.st_name AS category_name,
+      sn.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
       sn.doi,
       sn.final_page,
       sn.geo_city_id,
       gcity.name AS geo_city_name,
-      gs.geo_country_id,
+      sn.geo_country_id,
       gctry.name AS geo_country_name,
-      gcity.geo_state_id,
+      sn.geo_state_id,
       gs.name AS geo_state_name,
       sn.initial_page,
       sn.issn,
-      sn.journal_id,
-      j.name AS journal_name,
+      sn.journal_name,
       sn.number_of_pages,
       sn.observation,
       sn.publication_date,
@@ -1843,10 +2536,943 @@ ActiveRecord::Schema.define(version: 2020_12_10_205735) do
       sn.created_at,
       sn.updated_at
      FROM (((((scientific_notes sn
-       LEFT JOIN categories c ON ((sn.category_id = c.id)))
+       LEFT JOIN subtypes st ON ((sn.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((sn.colciencias_call_id = cc.id)))
        LEFT JOIN geo_cities gcity ON ((sn.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((gcity.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((gs.geo_country_id = gctry.id)))
-       LEFT JOIN journals j ON ((sn.journal_id = j.id)));
+       LEFT JOIN geo_states gs ON ((sn.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((sn.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_books", sql_definition: <<-SQL
+      SELECT b.id,
+      b.title,
+      b.book_type_id,
+      tbk.st_name AS book_type_name,
+      b.category_id,
+      st.st_name AS category_name,
+      b.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      b.editorial_name,
+      b.geo_city_id,
+      gcity.name AS geo_city_name,
+      b.geo_country_id,
+      gctry.name AS geo_country_name,
+      b.geo_state_id,
+      gs.name AS geo_state_name,
+      b.isbn,
+      b.observation,
+      b.publication_date,
+      b.research_group_id,
+      b.url,
+      b.active,
+      b.created_by,
+      b.updated_by,
+      b.created_at,
+      b.updated_at
+     FROM ((((((books b
+       LEFT JOIN subtypes st ON ((b.category_id = st.id)))
+       LEFT JOIN subtypes tbk ON ((b.book_type_id = tbk.id)))
+       LEFT JOIN colciencias_calls cc ON ((b.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((b.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((b.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((b.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_papers", sql_definition: <<-SQL
+      SELECT p.id,
+      p.title,
+      p.approval_date,
+      p.category_id,
+      stc.st_name AS category_name,
+      p.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      p.doi,
+      p.final_page,
+      p.geo_city_id,
+      gcity.name AS geo_city_name,
+      p.geo_country_id,
+      gctry.name AS geo_country_name,
+      p.geo_state_id,
+      gs.name AS geo_state_name,
+      p.initial_page,
+      p.issn,
+      p.journal_name,
+      p.number_of_pages,
+      p.observation,
+      p.paper_type_id,
+      stpt.st_name AS paper_type_name,
+      p.publication_date,
+      p.research_group_id,
+      p.url,
+      p.volume,
+      p.active,
+      p.created_by,
+      p.updated_by,
+      p.created_at,
+      p.updated_at
+     FROM ((((((papers p
+       LEFT JOIN subtypes stc ON ((p.category_id = stc.id)))
+       LEFT JOIN colciencias_calls cc ON ((p.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((p.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((p.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((p.geo_country_id = gctry.id)))
+       LEFT JOIN subtypes stpt ON ((p.paper_type_id = stpt.id)));
+  SQL
+  create_view "complete_book_chapters", sql_definition: <<-SQL
+      SELECT bc.id,
+      bc.book_title,
+      bc.title,
+      bc.category_id,
+      st.st_name AS category_name,
+      bc.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      bc.doi,
+      bc.editorial_name,
+      bc.geo_city_id,
+      gcity.name AS geo_city_name,
+      bc.geo_country_id,
+      gctry.name AS geo_country_name,
+      bc.geo_state_id,
+      gs.name AS geo_state_name,
+      bc.isbn,
+      bc.observation,
+      bc.publication_date,
+      bc.research_group_id,
+      bc.url,
+      bc.active,
+      bc.created_by,
+      bc.updated_by,
+      bc.created_at,
+      bc.updated_at
+     FROM (((((book_chapters bc
+       LEFT JOIN subtypes st ON ((bc.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((bc.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((bc.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((bc.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((bc.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_vegetable_varieties", sql_definition: <<-SQL
+      SELECT vv.id,
+      vv.name,
+      vv.category_id,
+      stc.st_name AS category_name,
+      vv.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      vv.cycle_type_id,
+      stcc.st_name AS cycle_type_name,
+      vv.date,
+      vv.geo_city_id,
+      gcity.name AS geo_city_name,
+      vv.geo_country_id,
+      gctry.name AS geo_country_name,
+      vv.geo_state_id,
+      gs.name AS geo_state_name,
+      vv.petition_status_id,
+      stpt.st_name AS petition_status_name,
+      vv.observation,
+      vv.research_group_id,
+      vv.active,
+      vv.created_by,
+      vv.updated_by,
+      vv.created_at,
+      vv.updated_at
+     FROM (((((((vegetable_varieties vv
+       LEFT JOIN subtypes stc ON ((vv.category_id = stc.id)))
+       LEFT JOIN colciencias_calls cc ON ((vv.colciencias_call_id = cc.id)))
+       LEFT JOIN subtypes stcc ON ((vv.cycle_type_id = stcc.id)))
+       LEFT JOIN geo_cities gcity ON ((vv.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((vv.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((vv.geo_country_id = gctry.id)))
+       LEFT JOIN subtypes stpt ON ((vv.petition_status_id = stpt.id)));
+  SQL
+  create_view "complete_new_animal_bs", sql_definition: <<-SQL
+      SELECT nab.id,
+      nab.name,
+      nab.category_id,
+      stc.st_name AS category_name,
+      nab.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      nab.date,
+      nab.geo_city_id,
+      gcity.name AS geo_city_name,
+      nab.geo_country_id,
+      gctry.name AS geo_country_name,
+      nab.geo_state_id,
+      gs.name AS geo_state_name,
+      nab.petition_status_id,
+      stpt.st_name AS petition_status_name,
+      nab.observation,
+      nab.research_group_id,
+      nab.active,
+      nab.created_by,
+      nab.updated_by,
+      nab.created_at,
+      nab.updated_at
+     FROM ((((((new_animal_breeds nab
+       LEFT JOIN subtypes stc ON ((nab.category_id = stc.id)))
+       LEFT JOIN colciencias_calls cc ON ((nab.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((nab.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((nab.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((nab.geo_country_id = gctry.id)))
+       LEFT JOIN subtypes stpt ON ((nab.petition_status_id = stpt.id)));
+  SQL
+  create_view "complete_ipl_breeds", sql_definition: <<-SQL
+      SELECT iplb.id,
+      iplb.name,
+      iplb.category_id,
+      stc.st_name AS category_name,
+      iplb.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      iplb.consecutive_number_ma,
+      iplb.geo_city_id,
+      gcity.name AS geo_city_name,
+      iplb.geo_country_id,
+      gctry.name AS geo_country_name,
+      iplb.geo_state_id,
+      gs.name AS geo_state_name,
+      iplb.observation,
+      iplb.publication_date,
+      iplb.research_group_id,
+      iplb.active,
+      iplb.created_by,
+      iplb.updated_by,
+      iplb.created_at,
+      iplb.updated_at
+     FROM (((((ip_livestock_breeds iplb
+       LEFT JOIN subtypes stc ON ((iplb.category_id = stc.id)))
+       LEFT JOIN colciencias_calls cc ON ((iplb.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((iplb.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((iplb.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((iplb.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_research_cws", sql_definition: <<-SQL
+      SELECT rcw.id,
+      rcw.title,
+      rcw.category_id,
+      stc.st_name AS category_name,
+      rcw.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      rcw.creation_and_selection_date,
+      rcw.geo_city_id,
+      gcity.name AS geo_city_name,
+      rcw.geo_country_id,
+      gctry.name AS geo_country_name,
+      rcw.geo_state_id,
+      gs.name AS geo_state_name,
+      rcw.knwl_spec_area_id,
+      stksa.st_name AS knwl_spec_area_name,
+      rcw.nature_id,
+      stnt.st_name AS nature_name,
+      rcw.observation,
+      rcw.registered_project_title,
+      rcw.url,
+      ARRAY( SELECT rcwwt.subtype_id
+             FROM research_creation_works_work_types rcwwt
+            WHERE (rcw.id = rcwwt.research_creation_work_id)) AS work_type_ids,
+      rcw.research_group_id,
+      rcw.active,
+      rcw.created_by,
+      rcw.updated_by,
+      rcw.created_at,
+      rcw.updated_at
+     FROM (((((((research_creation_works rcw
+       LEFT JOIN subtypes stc ON ((rcw.category_id = stc.id)))
+       LEFT JOIN subtypes stnt ON ((rcw.nature_id = stnt.id)))
+       LEFT JOIN colciencias_calls cc ON ((rcw.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((rcw.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((rcw.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((rcw.geo_country_id = gctry.id)))
+       LEFT JOIN subtypes stksa ON ((rcw.knwl_spec_area_id = stksa.id)));
+  SQL
+  create_view "complete_industrial_designs", sql_definition: <<-SQL
+      SELECT ind.id,
+      ind.category_id,
+      st.st_name AS category_name,
+      ind.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      ind.geo_city_id,
+      gcity.name AS geo_city_name,
+      ind.geo_country_id,
+      gctry.name AS geo_country_name,
+      ind.geo_state_id,
+      gs.name AS geo_state_name,
+      ind.ind_dsg_date_of_obtaining,
+      ind.ind_dsg_industrial_publication_gazette,
+      ind.ind_dsg_registration_number,
+      ind.ind_dsg_registration_title,
+      ind.observation,
+      ind.research_group_id,
+      ind.active,
+      ind.created_by,
+      ind.updated_by,
+      ind.created_at,
+      ind.updated_at
+     FROM (((((industrial_designs ind
+       LEFT JOIN subtypes st ON ((ind.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((ind.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((ind.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((ind.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((ind.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_icds", sql_definition: <<-SQL
+      SELECT icd.id,
+      icd.category_id,
+      st.st_name AS category_name,
+      icd.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      icd.geo_city_id,
+      gcity.name AS geo_city_name,
+      icd.geo_country_id,
+      gctry.name AS geo_country_name,
+      icd.geo_state_id,
+      gs.name AS geo_state_name,
+      icd.icd_date_of_obtaining,
+      icd.icd_registration_number,
+      icd.icd_registration_title,
+      icd.observation,
+      icd.research_group_id,
+      icd.active,
+      icd.created_by,
+      icd.updated_by,
+      icd.created_at,
+      icd.updated_at
+     FROM (((((integrated_circuit_diagrams icd
+       LEFT JOIN subtypes st ON ((icd.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((icd.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((icd.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((icd.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((icd.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_software", sql_definition: <<-SQL
+      SELECT soft.id,
+      soft.category_id,
+      st.st_name AS category_name,
+      soft.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      soft.geo_city_id,
+      gcity.name AS geo_city_name,
+      soft.geo_country_id,
+      gctry.name AS geo_country_name,
+      soft.geo_state_id,
+      gs.name AS geo_state_name,
+      soft.sof_date_of_obtaining,
+      soft.sof_description,
+      soft.sof_product_title,
+      soft.sof_registration_number,
+      soft.observation,
+      soft.research_group_id,
+      soft.active,
+      soft.created_by,
+      soft.updated_by,
+      soft.created_at,
+      soft.updated_at
+     FROM (((((software soft
+       LEFT JOIN subtypes st ON ((soft.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((soft.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((soft.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((soft.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((soft.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_plt_ind_prots", sql_definition: <<-SQL
+      SELECT pltind.id,
+      pltind.category_id,
+      st.st_name AS category_name,
+      pltind.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      pltind.geo_city_id,
+      gcity.name AS geo_city_name,
+      pltind.geo_country_id,
+      gctry.name AS geo_country_name,
+      pltind.geo_state_id,
+      gs.name AS geo_state_name,
+      pltind.institution_name,
+      pltind.plt_name,
+      pltind.plt_date_of_elaboration,
+      pltind.plt_registration_number,
+      pltind.plt_type_id,
+      stplt.st_name AS plt_type_name,
+      pltind.observation,
+      pltind.research_group_id,
+      pltind.active,
+      pltind.created_by,
+      pltind.updated_by,
+      pltind.created_at,
+      pltind.updated_at
+     FROM ((((((plant_ind_prototypes pltind
+       LEFT JOIN subtypes st ON ((pltind.category_id = st.id)))
+       LEFT JOIN subtypes stplt ON ((pltind.plt_type_id = stplt.id)))
+       LEFT JOIN colciencias_calls cc ON ((pltind.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((pltind.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((pltind.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((pltind.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_distinctive_signs", sql_definition: <<-SQL
+      SELECT ds.id,
+      ds.registration_title,
+      ds.category_id,
+      st.st_name AS category_name,
+      ds.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      ds.date_of_obtaining,
+      ds.geo_city_id,
+      gcity.name AS geo_city_name,
+      ds.geo_country_id,
+      gctry.name AS geo_country_name,
+      ds.geo_state_id,
+      gs.name AS geo_state_name,
+      ds.observation,
+      ds.registration_number,
+      ds.research_group_id,
+      ds.active,
+      ds.created_by,
+      ds.updated_by,
+      ds.created_at,
+      ds.updated_at
+     FROM (((((distinctive_signs ds
+       LEFT JOIN subtypes st ON ((ds.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((ds.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((ds.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((ds.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((ds.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_nutraceutical_products", sql_definition: <<-SQL
+      SELECT np.id,
+      np.name,
+      np.category_id,
+      st.st_name AS category_name,
+      np.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      np.consecutive_registration_invima,
+      np.date_of_obtaining,
+      np.geo_city_id,
+      gcity.name AS geo_city_name,
+      np.geo_country_id,
+      gctry.name AS geo_country_name,
+      np.geo_state_id,
+      gs.name AS geo_state_name,
+      np.observation,
+      np.research_group_id,
+      np.research_project_title,
+      np.active,
+      np.created_by,
+      np.updated_by,
+      np.created_at,
+      np.updated_at
+     FROM (((((nutraceutical_products np
+       LEFT JOIN subtypes st ON ((np.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((np.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((np.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((np.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((np.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_scientific_collections", sql_definition: <<-SQL
+      SELECT sc.id,
+      sc.name,
+      sc.category_id,
+      st.st_name AS category_name,
+      sc.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      sc.curator_name,
+      sc.date_of_obtaining,
+      sc.geo_city_id,
+      gcity.name AS geo_city_name,
+      sc.geo_country_id,
+      gctry.name AS geo_country_name,
+      sc.geo_state_id,
+      gs.name AS geo_state_name,
+      sc.information_included,
+      sc.last_conservatorship_date,
+      sc.managing_institution_name,
+      sc.observation,
+      sc.research_group_id,
+      sc.validity_and_use,
+      sc.active,
+      sc.created_by,
+      sc.updated_by,
+      sc.created_at,
+      sc.updated_at
+     FROM (((((scientific_collections sc
+       LEFT JOIN subtypes st ON ((sc.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((sc.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((sc.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((sc.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((sc.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_new_scientific_records", sql_definition: <<-SQL
+      SELECT nsr.id,
+      nsr.category_id,
+      st.st_name AS category_name,
+      nsr.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      nsr.geo_city_id,
+      gcity.name AS geo_city_name,
+      nsr.geo_country_id,
+      gctry.name AS geo_country_name,
+      nsr.geo_state_id,
+      gs.name AS geo_state_name,
+      nsr.nsr_name,
+      nsr.nsr_date_of_obtaining,
+      nsr.nsr_database_name,
+      nsr.nsr_database_url,
+      nsr.nsr_certifying_institution,
+      nsr.nsr_issuing_institution,
+      nsr.observation,
+      nsr.research_group_id,
+      nsr.active,
+      nsr.created_by,
+      nsr.updated_by,
+      nsr.created_at,
+      nsr.updated_at
+     FROM (((((new_scientific_records nsr
+       LEFT JOIN subtypes st ON ((nsr.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((nsr.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((nsr.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((nsr.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((nsr.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_enterprise_secrets", sql_definition: <<-SQL
+      SELECT ens.id,
+      ens.name,
+      ens.category_id,
+      st.st_name AS category_name,
+      ens.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      ens.contract_number,
+      ens.contract_value,
+      ens.date_of_obtaining,
+      ens.geo_city_id,
+      gcity.name AS geo_city_name,
+      ens.geo_country_id,
+      gctry.name AS geo_country_name,
+      ens.geo_state_id,
+      gs.name AS geo_state_name,
+      ens.observation,
+      ens.research_group_id,
+      ens.active,
+      ens.created_by,
+      ens.updated_by,
+      ens.created_at,
+      ens.updated_at
+     FROM (((((enterprise_secrets ens
+       LEFT JOIN subtypes st ON ((ens.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((ens.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((ens.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((ens.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((ens.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_enterprises", sql_definition: <<-SQL
+      SELECT ent.id,
+      ent.name,
+      ent.category_id,
+      st.st_name AS category_name,
+      ent.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      ent.comercial_name,
+      ent.date_of_obtaining,
+      ent.geo_city_id,
+      gcity.name AS geo_city_name,
+      ent.geo_country_id,
+      gctry.name AS geo_country_name,
+      ent.geo_state_id,
+      gs.name AS geo_state_name,
+      ent.nit,
+      ent.observation,
+      ent.product_type_id,
+      pt.st_name AS product_type_name,
+      ent.research_group_id,
+      ent.active,
+      ent.created_by,
+      ent.updated_by,
+      ent.created_at,
+      ent.updated_at
+     FROM ((((((enterprises ent
+       LEFT JOIN subtypes st ON ((ent.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((ent.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((ent.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((ent.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((ent.geo_country_id = gctry.id)))
+       LEFT JOIN subtypes pt ON ((ent.product_type_id = pt.id)));
+  SQL
+  create_view "complete_innovations", sql_definition: <<-SQL
+      SELECT inn.id,
+      inn.name,
+      inn.category_id,
+      st.st_name AS category_name,
+      inn.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      inn.company_name,
+      inn.date_of_obtaining,
+      inn.geo_city_id,
+      gcity.name AS geo_city_name,
+      inn.geo_country_id,
+      gctry.name AS geo_country_name,
+      inn.geo_state_id,
+      gs.name AS geo_state_name,
+      inn.nit,
+      inn.observation,
+      inn.product_type_id,
+      pt.st_name AS product_type_name,
+      inn.research_group_id,
+      inn.active,
+      inn.created_by,
+      inn.updated_by,
+      inn.created_at,
+      inn.updated_at
+     FROM ((((((innovations inn
+       LEFT JOIN subtypes st ON ((inn.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((inn.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((inn.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((inn.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((inn.geo_country_id = gctry.id)))
+       LEFT JOIN subtypes pt ON ((inn.product_type_id = pt.id)));
+  SQL
+  create_view "complete_regulations", sql_definition: <<-SQL
+      SELECT reg.id,
+      reg.title,
+      reg.category_id,
+      st.st_name AS category_name,
+      reg.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      reg.date_of_publication,
+      reg.geo_city_id,
+      gcity.name AS geo_city_name,
+      reg.geo_country_id,
+      gctry.name AS geo_country_name,
+      reg.geo_state_id,
+      gs.name AS geo_state_name,
+      reg.issuing_entity,
+      reg.observation,
+      reg.product_type_id,
+      pt.st_name AS product_type_name,
+      reg.regulation_type_id,
+      rt.st_name AS regulation_type_name,
+      reg.research_group_id,
+      reg.active,
+      reg.created_by,
+      reg.updated_by,
+      reg.created_at,
+      reg.updated_at
+     FROM (((((((regulations reg
+       LEFT JOIN subtypes st ON ((reg.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((reg.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((reg.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((reg.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((reg.geo_country_id = gctry.id)))
+       LEFT JOIN subtypes pt ON ((reg.product_type_id = pt.id)))
+       LEFT JOIN subtypes rt ON ((reg.regulation_type_id = rt.id)));
+  SQL
+  create_view "complete_clinical_pgs", sql_definition: <<-SQL
+      SELECT cpg.id,
+      cpg.title,
+      cpg.category_id,
+      st.st_name AS category_name,
+      cpg.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      cpg.date_of_publication,
+      cpg.geo_city_id,
+      gcity.name AS geo_city_name,
+      cpg.geo_country_id,
+      gctry.name AS geo_country_name,
+      cpg.geo_state_id,
+      gs.name AS geo_state_name,
+      cpg.isbn,
+      cpg.observation,
+      cpg.research_group_id,
+      cpg.active,
+      cpg.created_by,
+      cpg.updated_by,
+      cpg.created_at,
+      cpg.updated_at
+     FROM (((((clinical_practice_guidelines cpg
+       LEFT JOIN subtypes st ON ((cpg.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((cpg.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((cpg.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((cpg.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((cpg.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_guide_manuals", sql_definition: <<-SQL
+      SELECT gm.id,
+      gm.title,
+      gm.category_id,
+      st.st_name AS category_name,
+      gm.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      gm.date_of_publication,
+      gm.geo_city_id,
+      gcity.name AS geo_city_name,
+      gm.geo_country_id,
+      gctry.name AS geo_country_name,
+      gm.geo_state_id,
+      gs.name AS geo_state_name,
+      gm.observation,
+      gm.product_type_id,
+      pt.st_name AS product_type_name,
+      gm.research_group_id,
+      gm.url,
+      gm.active,
+      gm.created_by,
+      gm.updated_by,
+      gm.created_at,
+      gm.updated_at
+     FROM ((((((guide_manuals gm
+       LEFT JOIN subtypes st ON ((gm.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((gm.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((gm.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((gm.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((gm.geo_country_id = gctry.id)))
+       LEFT JOIN subtypes pt ON ((gm.product_type_id = pt.id)));
+  SQL
+  create_view "complete_protocol_acts", sql_definition: <<-SQL
+      SELECT pac.id,
+      pac.title,
+      pac.category_id,
+      st.st_name AS category_name,
+      pac.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      pac.date_of_publication,
+      pac.geo_city_id,
+      gcity.name AS geo_city_name,
+      pac.geo_country_id,
+      gctry.name AS geo_country_name,
+      pac.geo_state_id,
+      gs.name AS geo_state_name,
+      pac.observation,
+      pac.product_type_id,
+      pt.st_name AS product_type_name,
+      pac.research_group_id,
+      pac.active,
+      pac.created_by,
+      pac.updated_by,
+      pac.created_at,
+      pac.updated_at
+     FROM ((((((protocol_acts pac
+       LEFT JOIN subtypes st ON ((pac.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((pac.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((pac.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((pac.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((pac.geo_country_id = gctry.id)))
+       LEFT JOIN subtypes pt ON ((pac.product_type_id = pt.id)));
+  SQL
+  create_view "complete_technical_concepts", sql_definition: <<-SQL
+      SELECT tc.id,
+      tc.title,
+      tc.category_id,
+      st.st_name AS category_name,
+      tc.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      tc.consecutive_number,
+      tc.geo_city_id,
+      gcity.name AS geo_city_name,
+      tc.geo_country_id,
+      gctry.name AS geo_country_name,
+      tc.geo_state_id,
+      gs.name AS geo_state_name,
+      tc.observation,
+      tc.request_date,
+      tc.requesting_institution_name,
+      tc.research_group_id,
+      tc.send_date,
+      tc.active,
+      tc.created_by,
+      tc.updated_by,
+      tc.created_at,
+      tc.updated_at
+     FROM (((((technical_concepts tc
+       LEFT JOIN subtypes st ON ((tc.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((tc.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((tc.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((tc.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((tc.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_license_agreements", sql_definition: <<-SQL
+      SELECT la.id,
+      la.work_name,
+      la.category_id,
+      st.st_name AS category_name,
+      la.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      la.contract_date,
+      la.contract_geo_city_id,
+      cgcity.name AS contract_geo_city_name,
+      la.contract_geo_country_id,
+      cgctry.name AS contract_geo_country_name,
+      la.contract_geo_state_id,
+      cgs.name AS contract_geo_state_name,
+      la.geo_city_id,
+      gcity.name AS geo_city_name,
+      la.geo_country_id,
+      gctry.name AS geo_country_name,
+      la.geo_state_id,
+      gs.name AS geo_state_name,
+      la.license_grant_date,
+      la.license_owner_institution,
+      la.ncd_registry_number,
+      la.observation,
+      la.research_group_id,
+      la.active,
+      la.created_by,
+      la.updated_by,
+      la.created_at,
+      la.updated_at
+     FROM ((((((((license_agreements la
+       LEFT JOIN subtypes st ON ((la.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((la.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((la.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((la.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((la.geo_country_id = gctry.id)))
+       LEFT JOIN geo_cities cgcity ON ((la.contract_geo_city_id = cgcity.id)))
+       LEFT JOIN geo_states cgs ON ((la.contract_geo_state_id = cgs.id)))
+       LEFT JOIN geo_countries cgctry ON ((la.contract_geo_country_id = cgctry.id)));
+  SQL
+  create_view "complete_events", sql_definition: <<-SQL
+      SELECT eve.id,
+      eve.category_id,
+      st.st_name AS category_name,
+      eve.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      eve.eve_name,
+      eve.eve_start_date,
+      eve.eve_finish_date,
+      eve.eve_organizers,
+      eve.eve_entities,
+      eve.eve_observation,
+      eve.eve_type_id,
+      evt.st_name AS eve_type_name,
+      eve.geo_city_id,
+      gcity.name AS geo_city_name,
+      eve.geo_country_id,
+      gctry.name AS geo_country_name,
+      eve.geo_state_id,
+      gs.name AS geo_state_name,
+      eve.participation_id,
+      part.st_name AS participation_name,
+      eve.research_group_id,
+      eve.active,
+      eve.created_by,
+      eve.updated_by,
+      eve.created_at,
+      eve.updated_at
+     FROM (((((((events eve
+       LEFT JOIN subtypes st ON ((eve.category_id = st.id)))
+       LEFT JOIN subtypes evt ON ((eve.eve_type_id = evt.id)))
+       LEFT JOIN subtypes part ON ((eve.participation_id = part.id)))
+       LEFT JOIN colciencias_calls cc ON ((eve.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((eve.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((eve.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((eve.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_knowledge_networks", sql_definition: <<-SQL
+      SELECT kn.id,
+      kn.name,
+      kn.category_id,
+      st.st_name AS category_name,
+      kn.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      kn.funding_community,
+      kn.funding_institution,
+      kn.geo_city_id,
+      gcity.name AS geo_city_name,
+      kn.geo_country_id,
+      gctry.name AS geo_country_name,
+      kn.geo_state_id,
+      gs.name AS geo_state_name,
+      kn.start_date,
+      kn.finish_date,
+      kn.observation,
+      kn.research_group_id,
+      kn.web_page,
+      kn.active,
+      kn.created_by,
+      kn.updated_by,
+      kn.created_at,
+      kn.updated_at
+     FROM (((((knowledge_networks kn
+       LEFT JOIN subtypes st ON ((kn.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((kn.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((kn.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((kn.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((kn.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_creation_workshops", sql_definition: <<-SQL
+      SELECT cw.id,
+      cw.name,
+      cw.category_id,
+      st.st_name AS category_name,
+      cw.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      cw.funding_institution,
+      cw.geo_city_id,
+      gcity.name AS geo_city_name,
+      cw.geo_country_id,
+      gctry.name AS geo_country_name,
+      cw.geo_state_id,
+      gs.name AS geo_state_name,
+      cw.start_date,
+      cw.finish_date,
+      cw.observation,
+      cw.organization_name,
+      cw.participation_id,
+      prst.st_name AS participation_name,
+      cw.research_group_id,
+      cw.active,
+      cw.created_by,
+      cw.updated_by,
+      cw.created_at,
+      cw.updated_at
+     FROM ((((((creation_workshops cw
+       LEFT JOIN subtypes st ON ((cw.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((cw.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((cw.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((cw.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((cw.geo_country_id = gctry.id)))
+       LEFT JOIN subtypes prst ON ((cw.participation_id = prst.id)));
+  SQL
+  create_view "complete_working_papers", sql_definition: <<-SQL
+      SELECT wp.id,
+      wp.title,
+      wp.category_id,
+      st.st_name AS category_name,
+      wp.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      wp.doi,
+      wp.elaboration_date,
+      wp.observation,
+      wp.related_institution,
+      wp.research_group_id,
+      wp.web_page,
+      wp.active,
+      wp.created_by,
+      wp.updated_by,
+      wp.created_at,
+      wp.updated_at
+     FROM ((working_papers wp
+       LEFT JOIN subtypes st ON ((wp.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((wp.colciencias_call_id = cc.id)));
   SQL
 end

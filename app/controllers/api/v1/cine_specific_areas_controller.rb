@@ -1,6 +1,8 @@
 module Api
   module V1
     class CineSpecificAreasController < ApplicationController
+      include Swagger::CineSpecificAreaApi
+
       before_action :set_specific_area, only: [:update]
 
       rescue_from ActiveRecord::RecordNotFound do |e|

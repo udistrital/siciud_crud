@@ -1,4 +1,6 @@
 class GeoCity < ApplicationRecord
+  include Swagger::GeoCitySchema
+
   belongs_to :geo_state
 
   # Products

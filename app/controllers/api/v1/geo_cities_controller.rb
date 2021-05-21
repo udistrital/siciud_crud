@@ -1,6 +1,8 @@
 module Api
   module V1
     class GeoCitiesController < ApplicationController
+      include Swagger::GeoCityApi
+
       before_action :set_geo_state
       before_action :set_geo_city, only: [:show]
 

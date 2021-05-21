@@ -1,22 +1,18 @@
 module Api
   module V1
     class IntParticipantsController < ApplicationController
-      before_action :set_context
+      include Swagger::IntParticipantApi
+
+      before_action :set_product_context
       before_action :set_int_participant, only: [:show, :update]
-
-      # Handling of database exceptions
-      rescue_from ActiveRecord::RecordNotFound do |e|
-        render json: {error: e.message}, status: :not_found
-      end
-
-      rescue_from ActiveRecord::RecordInvalid do |e|
-        render json: {error: e.message}, status: :unprocessable_entity
-      end
 
       # GET context/:id/int_participants
       def index
-        @int_participants = @context.int_participants.all.order(:id)
-
+        context_name = @context.class.name
+        @int_participants = CompleteIntParticipant.where(
+          product_type: context_name, product_type_id: @context.id
+        )
+        @int_participants = DxService.load(@int_participants, params)
         render json: @int_participants
       end
 
@@ -27,7 +23,7 @@ module Api
 
       # POST context/:id/int_participants
       def create
-        @int_participant = @context.int_participants.new(int_participant_params)
+        @int_participant = @context.int_participants.new(int_p_params_to_create)
 
         if @int_participant.save
           render json: @int_participant, status: :created
@@ -38,7 +34,7 @@ module Api
 
       # PATCH/PUT context/:id/int_participants/1
       def update
-        if @int_participant.update(int_participant_params)
+        if @int_participant.update(int_p_params_to_update)
           render json: @int_participant
         else
           render json: @int_participant.errors, status: :unprocessable_entity
@@ -53,41 +49,22 @@ module Api
       end
 
       # Only allow a trusted parameter "white list" through.
-      def int_participant_params
+      def int_p_params_to_create
         params.require(:int_participant).permit(:researcher_id,
-                                                :participant_type_id)
+                                                :participant_type_id,
+                                                :created_by)
       end
 
-      def set_context
-        if params[:book_id]
-          id = params[:book_id]
-          @context = Book.find(id)
-        elsif params[:book_chapter_id]
-          id = params[:book_chapter_id]
-          @context = BookChapter.find(id)
-        elsif params[:ip_livestock_breed_id]
-          id = params[:ip_livestock_breed_id]
-          @context = IpLivestockBreed.find(id)
-        elsif params[:new_animal_breed_id]
-          id = params[:new_animal_breed_id]
-          @context = NewAnimalBreed.find(id)
-        elsif params[:paper_id]
-          id = params[:paper_id]
-          @context = Paper.find(id)
-        elsif params[:patent_id]
-          id = params[:patent_id]
-          @context = Patent.find(id)
-        elsif params[:research_creation_work_id]
-          id = params[:research_creation_work_id]
-          @context = ResearchCreationWork.find(id)
-        elsif params[:scientific_note_id]
-          id = params[:scientific_note_id]
-          @context = ScientificNote.find(id)
-        elsif params[:vegetable_variety_id]
-          id = params[:vegetable_variety_id]
-          @context = VegetableVariety.find(id)
-        end
+      def int_p_params_to_update
+        params.require(:int_participant).permit(:researcher_id,
+                                                :participant_type_id,
+                                                :updated_by)
       end
+
+      def int_p_params_to_deactivate
+        params.require(:int_participant).permit(:active, :updated_by)
+      end
+
     end
   end
 end

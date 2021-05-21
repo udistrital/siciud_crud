@@ -1,0 +1,2 @@
+class CompletePltIndProt < ApplicationRecord
+end

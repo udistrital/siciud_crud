@@ -3,130 +3,79 @@ module Swagger::GroupMemberSchema
   include Swagger::Blocks
 
   included do
-    swagger_schema :GroupMemberComplete do
-      key :required, [:id, :name]
+    swagger_schema :GroupMember do
+      key :required, [:id]
       property :id do
         key :type, :integer
+        key :format, :int64
       end
-      property :researcher do
-        property :id do
-          key :type, :integer
-        end
-        property :codeNumber do
-          key :type, :integer
-        end
-        property :name do
-          key :type, :string
-        end
-        property :lastName do
-          key :type, :string
-        end
-        property :document_type_id do
-          key :type, :integer
-        end
-        property :birthPlace do
-          key :type, :string
-        end
-        property :faculty_id do
-          key :type, :integer
-        end
-        property :curricular_project_id do
-          key :type, :integer
-        end
-        property :snies_id do
-          key :type, :integer
-        end
-        property :researcher_type_id do
-          key :type, :integer
-        end
-        property :orcid_id do
-          key :type, :string
-        end
+      property :role_id do
+        key :type, :integer
+        key :format, :int64
       end
-      property :role do
+      property :researcher_id do
+        key :type, :integer
+        key :format, :int64
+      end
+      property :research_group_id do
+        key :type, :integer
+        key :format, :int64
+      end
+      property :gm_state_id do
+        key :type, :integer
+        key :format, :int64
+      end
+      property :active do
+        key :type, :boolean
+        key :default, true
+      end
+      property :created_by do
+        key :type, :integer
+        key :format, :int64
+      end
+      property :updated_by do
+        key :type, :integer
+        key :format, :int64
+      end
+      property :created_at do
         key :type, :string
+        key :format, 'date-time'
       end
-      property :state_researcher do
-        property :id do
-          key :type, :integer
-        end
-        property :name do
-          key :type, :string
-        end
+      property :updated_at do
+        key :type, :string
+        key :format, 'date-time'
       end
+    end
 
-      property :gm_periods do
-        key :type, :array
-        items do
-          property :id do
-            key :type, :string
-          end
-          property :initialDate do
-            key :type, :string
-            key :format, :date
-          end
-          property :finalDate do
-            key :type, :string
-            key :format, :date
-          end
-          property :role_id do
-            key :type, :integer
-          end
-          property :roleName do
-            key :type, :string
-          end
+    swagger_schema :GroupMemberInput do
+      property :group_member do
+        property :role_id do
+          key :type, :integer
+          key :format, :int64
+        end
+        property :researcher_id do
+          key :type, :integer
+          key :format, :int64
+        end
+        property :active do
+          key :type, :boolean
+          key :default, true
+        end
+        property :created_by do
+          key :type, :integer
+          key :format, :int64
+        end
+        property :updated_by do
+          key :type, :integer
+          key :format, :int64
         end
       end
     end
 
-    swagger_schema :GroupMemberBase do
-      #allOf do
-      #schema do
-      # key :'$ref', :GroupMember
-      # end
-      # schema do
-      #   key :required, [:name]
-      #   property :id do
-      #     key :type, :integer
-      #     key :format, :int64
-      #   end
-      # end
-      #end
-      key :type, :array
-      items do
-        property :id do
-          key :type, :integer
-          #key :format, :date
-        end
-        property :researcher do
-          property :name do
-            key :type, :string
-            #key :format, :date
-          end
-          property :lastName do
-            key :type, :string
-            #key :format, :date
-          end
-        end
-        property :role do
-          property :id do
-            key :type, :integer
-            #key :format, :date
-          end
-          property :name do
-            key :type, :string
-            #key :format, :date
-          end
-        end
-        property :state_researcher do
-          property :id do
-            key :type, :integer
-            #key :format, :date
-          end
-          property :name do
-            key :type, :string
-            #key :format, :date
-          end
+    swagger_schema :GroupMemberOutput do
+      allOf do
+        schema do
+          key :'$ref', :GroupMember
         end
       end
     end

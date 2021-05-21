@@ -1,6 +1,8 @@
 module Api
   module V1
     class ColcienciasCallsController < ApplicationController
+      include Swagger::ColcienciasCallApi
+
       before_action :set_colc_call, only: [:update]
 
       rescue_from ActiveRecord::RecordNotFound do |e|

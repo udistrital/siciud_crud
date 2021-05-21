@@ -1,54 +1,27 @@
 module Api
   module V1
     class ResearchGroupController < ApplicationController
+      include Swagger::ResearchUnitApi
+
       before_action :set_research_group, only: [:show, :update]
 
       # Handling of database exceptions
       rescue_from ActiveRecord::StatementInvalid do |e|
-        render json: {error: e.message}, status: :unprocessable_entity
+        render json: { error: e.message }, status: :unprocessable_entity
       end
 
+      # GET /research_units
       def index
-        @research_groups = ResearchGroup.joins(:group_type, :group_state)
-        if (gt_id = params[:group_type_id])
-          @research_groups = ResearchGroupsSearchService.filter_by_type(
-              @research_groups, gt_id)
-        end
-        if (filter = params[:filter])
-          filter = ResearchGroupsSearchService.str2array_and_remove_str(
-              filter, ['"or",'])
-          @research_groups = ResearchGroupsSearchService.search_with_query(
-              @research_groups, filter)
-        end
-
-        if (group = params[:group])
-          group = ResearchGroupsSearchService.str2array_direct(group)
-          response = ResearchGroupsSearchService.group_with_query(@research_groups, group, [])
-          render json: {'totalCount': @research_groups.count,
-                        'data': response}
-        else
-          if (sort = params[:sort])
-            order_list = ResearchGroupsSearchService.str2array_direct(sort)
-            @research_groups = ResearchGroupsSearchService.sort_with_query(
-                @research_groups, order_list)
-          end
-
-          if params[:skip] and params[:take] != 0
-            page = ((params[:skip].to_i / params[:take].to_i) + 1)
-            aux = @research_groups.paginate(:page => page,
-                                            :per_page => params[:take])
-          else
-            aux = @research_groups
-          end
-          render json: {'totalCount': @research_groups.count,
-                        'data': ActiveModelSerializers::SerializableResource.new(aux)}
-        end
+        @research_groups = DxService.load(ResearchUnit, params)
+        render json: @research_groups
       end
 
+      # GET /research_units/:id
       def show
         render json: @research_group
       end
 
+      # POST /research_units/:id
       def create
         @research_group = ResearchGroup.new(research_group_params)
 
@@ -65,34 +38,19 @@ module Api
         end
       end
 
+      # PUT /research_units/:id
       def update
-        if @research_group.created_by.nil?
-          # Update user of created_by only this is nil
-          if @research_group.update(research_group_params)
-            params.permit(:faculty_ids, :curricular_project_ids)
-            @research_group = save_data_by_key(@research_group)
+        if @research_group.update(research_group_params)
+          params.permit(:faculty_ids, :curricular_project_ids)
+          @research_group = save_data_by_key(@research_group)
 
-            if @research_group.save
-              render json: @research_group
-            else
-              render json: @research_group.errors, status: :unprocessable_entity
-            end
+          if @research_group.save
+            render json: @research_group
           else
             render json: @research_group.errors, status: :unprocessable_entity
           end
         else
-          if @research_group.update(research_group_params.except(:created_by))
-            params.permit(:faculty_ids, :curricular_project_ids)
-            @research_group = save_data_by_key(@research_group)
-
-            if @research_group.save
-              render json: @research_group
-            else
-              render json: @research_group.errors, status: :unprocessable_entity
-            end
-          else
-            render json: @research_group.errors, status: :unprocessable_entity
-          end
+          render json: @research_group.errors, status: :unprocessable_entity
         end
       end
 
@@ -101,13 +59,13 @@ module Api
       def save_data_by_key(research_gr)
         if params[:research_group].has_key?(:faculty_ids)
           research_gr = setFaculties(
-              (params[:research_group][:faculty_ids]).uniq,
-              research_gr)
+            (params[:research_group][:faculty_ids]).uniq,
+            research_gr)
         end
         if params[:research_group].has_key?(:curricular_project_ids)
           research_gr = setCurricularPrj(
-              (params[:research_group][:curricular_project_ids]).uniq,
-              research_gr)
+            (params[:research_group][:curricular_project_ids]).uniq,
+            research_gr)
         end
         if params[:research_group].has_key?(:oecd_discipline_ids)
           research_gr.oecd_discipline_ids = (params[:research_group][:oecd_discipline_ids]).map(&:to_i).uniq
@@ -158,8 +116,6 @@ module Api
                                                :oecd_knowledge_area_id,
                                                :legacy_siciud_id,
                                                :created_by, :updated_by,
-                                               :cidc_act_document, :establishment_document,
-                                               :faculty_act_document,
                                                research_focus_ids: [],
                                                oecd_discipline_ids: [])
       end

@@ -1,4 +1,6 @@
 class OecdKnowledgeArea < ApplicationRecord
+  include Swagger::OecdKnowledgeAreaSchema
+
   has_many :oecd_knowledge_subareas, dependent: :destroy
   has_many :research_groups, dependent: :destroy
   has_many :historical_colciencias_ranks, dependent: :destroy

@@ -1,2 +1,0 @@
-class GroupType < ApplicationRecord
-end

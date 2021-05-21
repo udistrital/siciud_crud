@@ -1,6 +1,8 @@
 module Api
   module V1
     class ColcienciasCategoriesController < ApplicationController
+      include Swagger::ColcienciasCategoryApi
+
       before_action :set_colc_category, only: [:update]
 
       rescue_from ActiveRecord::RecordNotFound do |e|

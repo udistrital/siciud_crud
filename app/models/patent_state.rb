@@ -1,2 +1,0 @@
-class PatentState < ApplicationRecord
-end

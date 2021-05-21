@@ -1,4 +1,4 @@
-class IntParticipantSerializer < AbstractProductNewKnwGenSerializer
+class IntParticipantSerializer < AbstractProductSerializer
   attributes :id, :participant_type_id, :participant_type_name,
              :researcher_id, :oas_researcher_id
 

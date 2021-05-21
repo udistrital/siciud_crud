@@ -1,11 +1,8 @@
 module Api
   module V1
     class RoleController < ApplicationController
+      include Swagger::RoleApi
       before_action :set_role, only: [:show]
-
-      rescue_from ActiveRecord::RecordNotFound do |e|
-        render json: { error: e.message }, status: :not_found
-      end
 
       #listar todos los posibles estados de un grupo
       def index

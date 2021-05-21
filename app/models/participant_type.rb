@@ -1,2 +1,0 @@
-class ParticipantType < ApplicationRecord
-end

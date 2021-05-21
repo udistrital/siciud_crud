@@ -1,6 +1,8 @@
 module Api
   module V1
     class GeoCountriesController < ApplicationController
+      include Swagger::GeoCountryApi
+
       before_action :set_geo_country, only: [:show]
 
       # Handling of database exceptions
