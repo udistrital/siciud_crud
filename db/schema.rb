@@ -1446,6 +1446,34 @@ ActiveRecord::Schema.define(version: 2021_05_20_213305) do
     t.index ["updated_by"], name: "index_regulations_on_updated_by"
   end
 
+  create_table "reports", force: :cascade do |t|
+    t.string "name"
+    t.string "project_name"
+    t.date "date_of_elaboration"
+    t.bigint "geo_city_id"
+    t.bigint "geo_state_id"
+    t.bigint "geo_country_id"
+    t.bigint "category_id"
+    t.bigint "product_type_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "observation"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_reports_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_reports_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_reports_on_created_by"
+    t.index ["geo_city_id"], name: "index_reports_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_reports_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_reports_on_geo_state_id"
+    t.index ["product_type_id"], name: "index_reports_on_product_type_id"
+    t.index ["research_group_id"], name: "index_reports_on_research_group_id"
+    t.index ["updated_by"], name: "index_reports_on_updated_by"
+  end
+
   create_table "required_documents", force: :cascade do |t|
     t.string "document_name"
     t.datetime "created_at", null: false
@@ -2188,6 +2216,15 @@ ActiveRecord::Schema.define(version: 2021_05_20_213305) do
   add_foreign_key "regulations", "subtypes", column: "regulation_type_id"
   add_foreign_key "regulations", "users", column: "created_by"
   add_foreign_key "regulations", "users", column: "updated_by"
+  add_foreign_key "reports", "colciencias_calls"
+  add_foreign_key "reports", "geo_cities"
+  add_foreign_key "reports", "geo_countries"
+  add_foreign_key "reports", "geo_states"
+  add_foreign_key "reports", "research_groups"
+  add_foreign_key "reports", "subtypes", column: "category_id"
+  add_foreign_key "reports", "subtypes", column: "product_type_id"
+  add_foreign_key "reports", "users", column: "created_by"
+  add_foreign_key "reports", "users", column: "updated_by"
   add_foreign_key "research_creation_works", "colciencias_calls"
   add_foreign_key "research_creation_works", "geo_cities"
   add_foreign_key "research_creation_works", "geo_countries"
