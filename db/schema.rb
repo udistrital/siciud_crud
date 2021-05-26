@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_18_002127) do
+ActiveRecord::Schema.define(version: 2021_05_26_043717) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1161,6 +1161,34 @@ ActiveRecord::Schema.define(version: 2021_05_18_002127) do
     t.index ["updated_by"], name: "index_new_animal_breeds_on_updated_by"
   end
 
+  create_table "new_genetic_sequences", force: :cascade do |t|
+    t.string "name"
+    t.date "obtaining_date"
+    t.string "certifying_institution"
+    t.string "database_name"
+    t.string "database_url"
+    t.bigint "geo_city_id"
+    t.bigint "geo_state_id"
+    t.bigint "geo_country_id"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "observation"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_new_genetic_sequences_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_new_genetic_sequences_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_new_genetic_sequences_on_created_by"
+    t.index ["geo_city_id"], name: "index_new_genetic_sequences_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_new_genetic_sequences_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_new_genetic_sequences_on_geo_state_id"
+    t.index ["research_group_id"], name: "index_new_genetic_sequences_on_research_group_id"
+    t.index ["updated_by"], name: "index_new_genetic_sequences_on_updated_by"
+  end
+
   create_table "new_scientific_records", force: :cascade do |t|
     t.string "nsr_name"
     t.date "nsr_date_of_obtaining"
@@ -1416,6 +1444,34 @@ ActiveRecord::Schema.define(version: 2021_05_18_002127) do
     t.index ["regulation_type_id"], name: "index_regulations_on_regulation_type_id"
     t.index ["research_group_id"], name: "index_regulations_on_research_group_id"
     t.index ["updated_by"], name: "index_regulations_on_updated_by"
+  end
+
+  create_table "reports", force: :cascade do |t|
+    t.string "name"
+    t.string "project_name"
+    t.date "date_of_elaboration"
+    t.bigint "geo_city_id"
+    t.bigint "geo_state_id"
+    t.bigint "geo_country_id"
+    t.bigint "category_id"
+    t.bigint "product_type_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "observation"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_reports_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_reports_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_reports_on_created_by"
+    t.index ["geo_city_id"], name: "index_reports_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_reports_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_reports_on_geo_state_id"
+    t.index ["product_type_id"], name: "index_reports_on_product_type_id"
+    t.index ["research_group_id"], name: "index_reports_on_research_group_id"
+    t.index ["updated_by"], name: "index_reports_on_updated_by"
   end
 
   create_table "required_documents", force: :cascade do |t|
@@ -2084,6 +2140,14 @@ ActiveRecord::Schema.define(version: 2021_05_18_002127) do
   add_foreign_key "new_animal_breeds", "subtypes", column: "petition_status_id"
   add_foreign_key "new_animal_breeds", "users", column: "created_by"
   add_foreign_key "new_animal_breeds", "users", column: "updated_by"
+  add_foreign_key "new_genetic_sequences", "colciencias_calls"
+  add_foreign_key "new_genetic_sequences", "geo_cities"
+  add_foreign_key "new_genetic_sequences", "geo_countries"
+  add_foreign_key "new_genetic_sequences", "geo_states"
+  add_foreign_key "new_genetic_sequences", "research_groups"
+  add_foreign_key "new_genetic_sequences", "subtypes", column: "category_id"
+  add_foreign_key "new_genetic_sequences", "users", column: "created_by"
+  add_foreign_key "new_genetic_sequences", "users", column: "updated_by"
   add_foreign_key "new_scientific_records", "colciencias_calls"
   add_foreign_key "new_scientific_records", "geo_cities"
   add_foreign_key "new_scientific_records", "geo_countries"
@@ -2152,6 +2216,15 @@ ActiveRecord::Schema.define(version: 2021_05_18_002127) do
   add_foreign_key "regulations", "subtypes", column: "regulation_type_id"
   add_foreign_key "regulations", "users", column: "created_by"
   add_foreign_key "regulations", "users", column: "updated_by"
+  add_foreign_key "reports", "colciencias_calls"
+  add_foreign_key "reports", "geo_cities"
+  add_foreign_key "reports", "geo_countries"
+  add_foreign_key "reports", "geo_states"
+  add_foreign_key "reports", "research_groups"
+  add_foreign_key "reports", "subtypes", column: "category_id"
+  add_foreign_key "reports", "subtypes", column: "product_type_id"
+  add_foreign_key "reports", "users", column: "created_by"
+  add_foreign_key "reports", "users", column: "updated_by"
   add_foreign_key "research_creation_works", "colciencias_calls"
   add_foreign_key "research_creation_works", "geo_cities"
   add_foreign_key "research_creation_works", "geo_countries"
@@ -3474,5 +3547,70 @@ ActiveRecord::Schema.define(version: 2021_05_18_002127) do
      FROM ((working_papers wp
        LEFT JOIN subtypes st ON ((wp.category_id = st.id)))
        LEFT JOIN colciencias_calls cc ON ((wp.colciencias_call_id = cc.id)));
+  SQL
+  create_view "complete_new_genetic_sequences", sql_definition: <<-SQL
+      SELECT ngs.id,
+      ngs.name,
+      ngs.category_id,
+      st.st_name AS category_name,
+      ngs.certifying_institution,
+      ngs.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      ngs.database_name,
+      ngs.database_url,
+      ngs.geo_city_id,
+      gcity.name AS geo_city_name,
+      ngs.geo_country_id,
+      gctry.name AS geo_country_name,
+      ngs.geo_state_id,
+      gs.name AS geo_state_name,
+      ngs.observation,
+      ngs.obtaining_date,
+      ngs.research_group_id,
+      ngs.active,
+      ngs.created_by,
+      ngs.updated_by,
+      ngs.created_at,
+      ngs.updated_at
+     FROM (((((new_genetic_sequences ngs
+       LEFT JOIN subtypes st ON ((ngs.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((ngs.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((ngs.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((ngs.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((ngs.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_reports", sql_definition: <<-SQL
+      SELECT rp.id,
+      rp.name,
+      rp.category_id,
+      st.st_name AS category_name,
+      rp.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      rp.date_of_elaboration,
+      rp.geo_city_id,
+      gcity.name AS geo_city_name,
+      rp.geo_country_id,
+      gctry.name AS geo_country_name,
+      rp.geo_state_id,
+      gs.name AS geo_state_name,
+      rp.observation,
+      rp.product_type_id,
+      pdt.st_name AS product_type_name,
+      rp.project_name,
+      rp.research_group_id,
+      rp.active,
+      rp.created_by,
+      rp.updated_by,
+      rp.created_at,
+      rp.updated_at
+     FROM ((((((reports rp
+       LEFT JOIN subtypes st ON ((rp.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((rp.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((rp.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((rp.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((rp.geo_country_id = gctry.id)))
+       LEFT JOIN subtypes pdt ON ((rp.product_type_id = pdt.id)));
   SQL
 end

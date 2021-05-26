@@ -168,6 +168,7 @@ Rails.application.routes.draw do
         resources :license_agreements, only: [:index, :create]
         resources :knowledge_networks, only: [:index, :create]
         resources :working_papers, only: [:index, :create]
+        resources :reports, only: [:index, :create]
 
         # Social appropriation of knowledge
         resources :events, only: [:index, :show, :create, :update]
@@ -200,6 +201,7 @@ Rails.application.routes.draw do
       resources :appropriation_processes, only: [:show, :update]
       resources :creation_workshops, only: [:show, :update]
       resources :working_papers, only: [:show, :update]
+      resources :reports, only: [:index, :create]
 
       # RESEARCH UNIT PRODUCT ENDPOINTS
       ## Participants in product creation and documents
@@ -213,7 +215,7 @@ Rails.application.routes.draw do
                 :clinical_practice_guidelines, :guide_manuals,
                 :protocol_acts, :bills, :license_agreements,
                 :events, :appropriation_processes, :knowledge_networks,
-                :creation_workshops, :working_papers,
+                :creation_workshops, :working_papers, :reports,
                 :degree_works,
                 only: [] do
         resources :ext_participants, only: [:index, :show, :create, :update]
