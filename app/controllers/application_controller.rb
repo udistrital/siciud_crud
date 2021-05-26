@@ -135,6 +135,9 @@ class ApplicationController < ActionController::API
     elsif params[:report_id]
       id = params[:report_id]
       @context = Report.find(id)
+    elsif params[:consultancy_id]
+      id = params[:consultancy_id]
+      @context = Consultancy.find(id)
     end
   end
 end

@@ -176,6 +176,7 @@ Rails.application.routes.draw do
         resources :working_papers, only: [:index, :create]
         resources :new_genetic_sequences, only: [:index, :create]
         resources :reports, only: [:index, :create]
+        resources :consultancies, only: [:index, :create]
 
         # Human Resource Training for CTel
         resources :degree_works, only: [:index, :show, :create, :update]
@@ -204,6 +205,7 @@ Rails.application.routes.draw do
       resources :working_papers, only: [:show, :update]
       resources :new_genetic_sequences, only: [:show, :update]
       resources :reports, only: [:show, :update]
+      resources :consultancies, only: [:show, :update]
 
       # RESEARCH UNIT PRODUCT ENDPOINTS
       ## Participants in product creation and documents
@@ -216,7 +218,7 @@ Rails.application.routes.draw do
                 :regulations, :clinical_practice_guidelines, :guide_manuals,
                 :protocol_acts, :bills, :license_agreements, :events,
                 :appropriation_processes, :knowledge_networks, :creation_workshops,
-                :working_papers, :new_genetic_sequences, :reports,
+                :working_papers, :new_genetic_sequences, :reports, :consultancies,
                 :degree_works,
                 only: [] do
         resources :ext_participants, only: [:index, :show, :create, :update]
