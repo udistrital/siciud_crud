@@ -9,6 +9,4 @@ if [ -n "${PARAMETER_STORE:-}" ]; then
   export SICIUD_CRUD_PGPASS="$(aws ssm get-parameter --with-decryption --name /${PARAMETER_STORE}/siciud_crud/db/password --output text --query Parameter.Value)"
 fi
 
-echo $SICIUD_CRUD_PGUSER
-
 exec "$@"
