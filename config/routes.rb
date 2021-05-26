@@ -167,14 +167,15 @@ Rails.application.routes.draw do
         resources :bills, only: [:index, :create]
         resources :license_agreements, only: [:index, :create]
         resources :knowledge_networks, only: [:index, :create]
-        resources :working_papers, only: [:index, :create]
-        resources :reports, only: [:index, :create]
 
         # Social appropriation of knowledge
         resources :events, only: [:index, :show, :create, :update]
         put "/events/:id/active", to: "events#change_active"
         resources :appropriation_processes, only: [:index, :create]
         resources :creation_workshops, only: [:index, :create]
+        resources :working_papers, only: [:index, :create]
+        resources :new_genetic_sequences, only: [:index, :create]
+        resources :reports, only: [:index, :create]
 
         # Human Resource Training for CTel
         resources :degree_works, only: [:index, :show, :create, :update]
@@ -201,21 +202,21 @@ Rails.application.routes.draw do
       resources :appropriation_processes, only: [:show, :update]
       resources :creation_workshops, only: [:show, :update]
       resources :working_papers, only: [:show, :update]
-      resources :reports, only: [:index, :create]
+      resources :new_genetic_sequences, only: [:show, :update]
+      resources :reports, only: [:show, :update]
 
       # RESEARCH UNIT PRODUCT ENDPOINTS
       ## Participants in product creation and documents
       resources :books, :book_chapters, :ip_livestock_breeds, :new_animal_breeds,
                 :papers, :patents, :research_creation_works, :scientific_notes,
-                :vegetable_varieties, :industrial_designs,
-                :integrated_circuit_diagrams, :software,
-                :plant_ind_prototypes, :new_scientific_records, :scientific_collections,
-                :technical_concepts, :distinctive_signs, :nutraceutical_products,
-                :enterprise_secrets, :enterprises, :innovations, :regulations,
-                :clinical_practice_guidelines, :guide_manuals,
-                :protocol_acts, :bills, :license_agreements,
-                :events, :appropriation_processes, :knowledge_networks,
-                :creation_workshops, :working_papers, :reports,
+                :vegetable_varieties, :industrial_designs, :integrated_circuit_diagrams,
+                :software, :plant_ind_prototypes, :new_scientific_records,
+                :scientific_collections, :technical_concepts, :distinctive_signs,
+                :nutraceutical_products, :enterprise_secrets, :enterprises, :innovations,
+                :regulations, :clinical_practice_guidelines, :guide_manuals,
+                :protocol_acts, :bills, :license_agreements, :events,
+                :appropriation_processes, :knowledge_networks, :creation_workshops,
+                :working_papers, :new_genetic_sequences, :reports,
                 :degree_works,
                 only: [] do
         resources :ext_participants, only: [:index, :show, :create, :update]
