@@ -1,4 +1,5 @@
 class Report < ApplicationRecord
+  include Swagger::ReportSchema
 
   belongs_to :category, class_name: 'Subtype', foreign_key: 'category_id', optional: true
   belongs_to :colciencias_call, optional: true

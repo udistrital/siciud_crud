@@ -132,6 +132,9 @@ class ApplicationController < ActionController::API
     elsif params[:new_genetic_sequence_id]
       id = params[:new_genetic_sequence_id]
       @context = NewGeneticSequence.find(id)
+    elsif params[:report_id]
+      id = params[:report_id]
+      @context = Report.find(id)
     end
   end
 end

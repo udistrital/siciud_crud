@@ -1,6 +1,8 @@
 module Api
   module V1
     class ReportsController < AbstractProductResearchUnitController
+      include Swagger::ReportApi
+
       before_action :set_research_group, only: [:index, :create]
       before_action :set_report, only: [:show, :update]
 
