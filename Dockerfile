@@ -1,5 +1,6 @@
 FROM ruby:2.6.2
 RUN apt-get update -qq && apt-get install -y nodejs postgresql-client
+
 RUN apt-get update -qq && \
   apt-get install -y --no-install-recommends unzip python-dev && \
   curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip" && \
