@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_10_201552) do
+ActiveRecord::Schema.define(version: 2021_05_31_220712) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1226,6 +1226,26 @@ ActiveRecord::Schema.define(version: 2021_05_10_201552) do
     t.index ["updated_by"], name: "index_plant_ind_prototypes_on_updated_by"
   end
 
+  create_table "procedures", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.index ["created_by"], name: "index_procedures_on_created_by"
+    t.index ["updated_by"], name: "index_procedures_on_updated_by"
+  end
+
+  create_table "professional_roles", force: :cascade do |t|
+    t.string "name"
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_professional_roles_on_created_by"
+    t.index ["updated_by"], name: "index_professional_roles_on_updated_by"
+  end
+
   create_table "protocol_acts", force: :cascade do |t|
     t.string "title"
     t.date "date_of_publication"
@@ -1889,6 +1909,10 @@ ActiveRecord::Schema.define(version: 2021_05_10_201552) do
   add_foreign_key "plant_ind_prototypes", "subtypes", column: "plt_type_id"
   add_foreign_key "plant_ind_prototypes", "users", column: "created_by"
   add_foreign_key "plant_ind_prototypes", "users", column: "updated_by"
+  add_foreign_key "procedures", "users", column: "created_by"
+  add_foreign_key "procedures", "users", column: "updated_by"
+  add_foreign_key "professional_roles", "users", column: "created_by"
+  add_foreign_key "professional_roles", "users", column: "updated_by"
   add_foreign_key "protocol_acts", "colciencias_calls"
   add_foreign_key "protocol_acts", "geo_cities"
   add_foreign_key "protocol_acts", "research_groups"

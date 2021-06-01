@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   get "/health", to: "health#health"
 
@@ -244,6 +245,11 @@ Rails.application.routes.draw do
       resources :cine_broad_areas, only: [:index, :create, :update]
       resources :cine_specific_areas, only: [:index, :create, :update]
       resources :cine_detailed_areas, only: [:index, :create, :update]
+
+
+      #rutas OTRI
+      resources :procedures, only: [:index, :show, :update, :create]
+      resources :professional_roles, only: [:index, :show, :update, :create]
     end
   end
 end

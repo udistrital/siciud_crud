@@ -78,6 +78,8 @@ module Api
         TypesController,
         UserRolesController,
         UsersController,
+        ProceduresController,
+        ProfessionalRolesController,
 
         ColcienciasCall,
         ColcienciasCategory,
@@ -134,6 +136,8 @@ module Api
         IndustrialDesign,
         Innovation,
         IntegratedCircuitDiagram,
+        Procedure,
+        ProfessionalRole,
 
         ApplicationRecord,
         self,
