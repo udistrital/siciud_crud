@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_26_132013) do
+ActiveRecord::Schema.define(version: 2021_06_01_025027) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1247,6 +1247,37 @@ ActiveRecord::Schema.define(version: 2021_05_26_132013) do
     t.index ["updated_by"], name: "index_new_scientific_records_on_updated_by"
   end
 
+  create_table "non_specialized_publications", force: :cascade do |t|
+    t.string "name"
+    t.string "project_title"
+    t.date "start_date"
+    t.date "final_date"
+    t.string "funding_institution"
+    t.string "url"
+    t.string "circulation_route"
+    t.string "target_audiences"
+    t.bigint "geo_city_id"
+    t.bigint "geo_state_id"
+    t.bigint "geo_country_id"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "observation"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_non_specialized_publications_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_non_specialized_publications_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_non_specialized_publications_on_created_by"
+    t.index ["geo_city_id"], name: "index_non_specialized_publications_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_non_specialized_publications_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_non_specialized_publications_on_geo_state_id"
+    t.index ["research_group_id"], name: "index_non_specialized_publications_on_research_group_id"
+    t.index ["updated_by"], name: "index_non_specialized_publications_on_updated_by"
+  end
+
   create_table "nutraceutical_products", force: :cascade do |t|
     t.string "name"
     t.date "date_of_obtaining"
@@ -2194,6 +2225,14 @@ ActiveRecord::Schema.define(version: 2021_05_26_132013) do
   add_foreign_key "new_scientific_records", "subtypes", column: "category_id"
   add_foreign_key "new_scientific_records", "users", column: "created_by"
   add_foreign_key "new_scientific_records", "users", column: "updated_by"
+  add_foreign_key "non_specialized_publications", "colciencias_calls"
+  add_foreign_key "non_specialized_publications", "geo_cities"
+  add_foreign_key "non_specialized_publications", "geo_countries"
+  add_foreign_key "non_specialized_publications", "geo_states"
+  add_foreign_key "non_specialized_publications", "research_groups"
+  add_foreign_key "non_specialized_publications", "subtypes", column: "category_id"
+  add_foreign_key "non_specialized_publications", "users", column: "created_by"
+  add_foreign_key "non_specialized_publications", "users", column: "updated_by"
   add_foreign_key "nutraceutical_products", "colciencias_calls"
   add_foreign_key "nutraceutical_products", "geo_cities"
   add_foreign_key "nutraceutical_products", "geo_countries"
@@ -3684,5 +3723,39 @@ ActiveRecord::Schema.define(version: 2021_05_26_132013) do
        LEFT JOIN geo_states gs ON ((cns.geo_state_id = gs.id)))
        LEFT JOIN geo_countries gctry ON ((cns.geo_country_id = gctry.id)))
        LEFT JOIN subtypes pdt ON ((cns.product_type_id = pdt.id)));
+  SQL
+  create_view "complete_non_spc_pubs", sql_definition: <<-SQL
+      SELECT nsp.id,
+      nsp.name,
+      nsp.category_id,
+      st.st_name AS category_name,
+      nsp.circulation_route,
+      nsp.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      nsp.final_date,
+      nsp.funding_institution,
+      nsp.geo_city_id,
+      gcity.name AS geo_city_name,
+      nsp.geo_country_id,
+      gctry.name AS geo_country_name,
+      nsp.geo_state_id,
+      gs.name AS geo_state_name,
+      nsp.observation,
+      nsp.research_group_id,
+      nsp.start_date,
+      nsp.target_audiences,
+      nsp.url,
+      nsp.active,
+      nsp.created_by,
+      nsp.updated_by,
+      nsp.created_at,
+      nsp.updated_at
+     FROM (((((non_specialized_publications nsp
+       LEFT JOIN subtypes st ON ((nsp.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((nsp.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((nsp.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((nsp.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((nsp.geo_country_id = gctry.id)));
   SQL
 end
