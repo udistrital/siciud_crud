@@ -55,7 +55,7 @@ module Api
                                        :oecd_discipline_ids,
                                        :created_by))
           @research_group = pre_save_data_by_key(@research_group)
-          @research_group = save_data_by_key(@research_group)
+          @research_group = pos_save_data_by_key(@research_group)
 
           if @research_group.save
             render json: @research_group
