@@ -57,6 +57,11 @@ class ResearchGroup < ApplicationRecord
   has_many :knowledge_networks, dependent: :destroy
   has_many :creation_workshops, dependent: :destroy
   has_many :working_papers, dependent: :destroy
+  has_many :new_genetic_sequences, dependent: :destroy
+  has_many :reports, dependent: :destroy
+  has_many :consultancies, dependent: :destroy
+  has_many :non_specialized_publications, dependent: :destroy
+  has_many :magazine_editions, dependent: :destroy
 
   has_many :degree_works, dependent: :destroy
 

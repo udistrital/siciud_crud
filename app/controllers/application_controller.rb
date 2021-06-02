@@ -129,6 +129,21 @@ class ApplicationController < ActionController::API
     elsif params[:working_paper_id]
       id = params[:working_paper_id]
       @context = WorkingPaper.find(id)
+    elsif params[:new_genetic_sequence_id]
+      id = params[:new_genetic_sequence_id]
+      @context = NewGeneticSequence.find(id)
+    elsif params[:report_id]
+      id = params[:report_id]
+      @context = Report.find(id)
+    elsif params[:consultancy_id]
+      id = params[:consultancy_id]
+      @context = Consultancy.find(id)
+    elsif params[:non_specialized_publication_id]
+      id = params[:non_specialized_publication_id]
+      @context = NonSpecializedPublication.find(id)
+    elsif params[:magazine_edition_id]
+      id = params[:magazine_edition_id]
+      @context = MagazineEdition.find(id)
     end
   end
 end

@@ -23,15 +23,22 @@ module Api
 
       # POST /research_units/:id
       def create
-        @research_group = ResearchGroup.new(research_group_params)
+        @research_group = ResearchGroup.new(
+          research_group_params.except(:cine_detailed_area_ids,
+                                       :curricular_project_ids,
+                                       :faculty_ids,
+                                       :research_focus_ids,
+                                       :oecd_discipline_ids,
+                                       :updated_by)
+        )
+        @research_group = pre_save_data_by_key(@research_group)
 
         unless @research_group.valid?
           render json: @research_group.errors, status: :unprocessable_entity and return
         end
-        params.permit(:faculty_ids, :curricular_project_ids)
-        @research_group = save_data_by_key(@research_group)
 
         if @research_group.save
+          @research_group = pos_save_data_by_key(@research_group)
           render json: @research_group, status: :created
         else
           render json: @research_group.errors, status: :unprocessable_entity
@@ -40,9 +47,15 @@ module Api
 
       # PUT /research_units/:id
       def update
-        if @research_group.update(research_group_params)
-          params.permit(:faculty_ids, :curricular_project_ids)
-          @research_group = save_data_by_key(@research_group)
+        if @research_group.update(
+          research_group_params.except(:cine_detailed_area_ids,
+                                       :curricular_project_ids,
+                                       :faculty_ids,
+                                       :research_focus_ids,
+                                       :oecd_discipline_ids,
+                                       :created_by))
+          @research_group = pre_save_data_by_key(@research_group)
+          @research_group = pos_save_data_by_key(@research_group)
 
           if @research_group.save
             render json: @research_group
@@ -56,7 +69,7 @@ module Api
 
       private
 
-      def save_data_by_key(research_gr)
+      def pre_save_data_by_key(research_gr)
         if params[:research_group].has_key?(:faculty_ids)
           research_gr = setFaculties(
             (params[:research_group][:faculty_ids]).uniq,
@@ -67,11 +80,18 @@ module Api
             (params[:research_group][:curricular_project_ids]).uniq,
             research_gr)
         end
+        return research_gr
+      end
+
+      def pos_save_data_by_key(research_gr)
         if params[:research_group].has_key?(:oecd_discipline_ids)
           research_gr.oecd_discipline_ids = (params[:research_group][:oecd_discipline_ids]).map(&:to_i).uniq
         end
         if params[:research_group].has_key?(:cine_detailed_area_ids)
           research_gr.cine_detailed_area_ids = (params[:research_group][:cine_detailed_area_ids]).map(&:to_i).uniq
+        end
+        if params[:research_group].has_key?(:research_focus_ids)
+          research_gr.research_focus_ids = (params[:research_group][:research_focus_ids]).map(&:to_i).uniq
         end
         research_gr
       end
@@ -116,6 +136,9 @@ module Api
                                                :oecd_knowledge_area_id,
                                                :legacy_siciud_id,
                                                :created_by, :updated_by,
+                                               cine_detailed_area_ids: [],
+                                               curricular_project_ids: [],
+                                               faculty_ids: [],
                                                research_focus_ids: [],
                                                oecd_discipline_ids: [])
       end

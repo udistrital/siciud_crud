@@ -56,7 +56,7 @@ module Swagger::ResearchUnitApi
           key :description, 'Research Unit to update'
           key :required, true
           schema do
-            key :'$ref', :ResearchUnitInput
+            key :'$ref', :ResearchUnitInputPut
           end
         end
 

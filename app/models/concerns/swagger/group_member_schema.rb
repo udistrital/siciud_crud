@@ -49,6 +49,10 @@ module Swagger::GroupMemberSchema
 
     swagger_schema :GroupMemberInput do
       property :group_member do
+        property :gm_state_id do
+          key :type, :integer
+          key :format, :int64
+        end
         property :role_id do
           key :type, :integer
           key :format, :int64
