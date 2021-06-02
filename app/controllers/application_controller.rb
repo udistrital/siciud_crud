@@ -138,6 +138,12 @@ class ApplicationController < ActionController::API
     elsif params[:consultancy_id]
       id = params[:consultancy_id]
       @context = Consultancy.find(id)
+    elsif params[:non_specialized_publication_id]
+      id = params[:non_specialized_publication_id]
+      @context = NonSpecializedPublication.find(id)
+    elsif params[:magazine_edition_id]
+      id = params[:magazine_edition_id]
+      @context = MagazineEdition.find(id)
     end
   end
 end
