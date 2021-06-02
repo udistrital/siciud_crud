@@ -77,12 +77,6 @@ module Swagger::ResearchUnitSchema
         key :type, :integer
         key :format, :int64
       end
-      property :member_ids do
-        key :type, :array
-        items do
-          key :type, :integer
-        end
-      end
       property :mission do
         key :type, :string
       end
@@ -165,6 +159,12 @@ module Swagger::ResearchUnitSchema
           key :'$ref', :ResearchUnit
         end
         schema do
+          property :member_ids do
+            key :type, :array
+            items do
+              key :type, :integer
+            end
+          end
           property :created_by do
             key :type, :integer
             key :format, :int64
