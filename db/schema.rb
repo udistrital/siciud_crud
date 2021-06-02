@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_01_025027) do
+ActiveRecord::Schema.define(version: 2021_06_02_020358) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1163,6 +1163,34 @@ ActiveRecord::Schema.define(version: 2021_06_01_025027) do
     t.index ["updated_by"], name: "index_license_agreements_on_updated_by"
   end
 
+  create_table "magazine_editions", force: :cascade do |t|
+    t.string "title"
+    t.string "editorial_name"
+    t.string "issn"
+    t.integer "publication_year"
+    t.bigint "geo_city_id"
+    t.bigint "geo_state_id"
+    t.bigint "geo_country_id"
+    t.date "editorial_date"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "observation"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_magazine_editions_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_magazine_editions_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_magazine_editions_on_created_by"
+    t.index ["geo_city_id"], name: "index_magazine_editions_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_magazine_editions_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_magazine_editions_on_geo_state_id"
+    t.index ["research_group_id"], name: "index_magazine_editions_on_research_group_id"
+    t.index ["updated_by"], name: "index_magazine_editions_on_updated_by"
+  end
+
   create_table "new_animal_breeds", force: :cascade do |t|
     t.string "name"
     t.date "date"
@@ -2201,6 +2229,14 @@ ActiveRecord::Schema.define(version: 2021_06_01_025027) do
   add_foreign_key "license_agreements", "subtypes", column: "category_id"
   add_foreign_key "license_agreements", "users", column: "created_by"
   add_foreign_key "license_agreements", "users", column: "updated_by"
+  add_foreign_key "magazine_editions", "colciencias_calls"
+  add_foreign_key "magazine_editions", "geo_cities"
+  add_foreign_key "magazine_editions", "geo_countries"
+  add_foreign_key "magazine_editions", "geo_states"
+  add_foreign_key "magazine_editions", "research_groups"
+  add_foreign_key "magazine_editions", "subtypes", column: "category_id"
+  add_foreign_key "magazine_editions", "users", column: "created_by"
+  add_foreign_key "magazine_editions", "users", column: "updated_by"
   add_foreign_key "new_animal_breeds", "colciencias_calls"
   add_foreign_key "new_animal_breeds", "geo_cities"
   add_foreign_key "new_animal_breeds", "geo_countries"
@@ -3757,5 +3793,37 @@ ActiveRecord::Schema.define(version: 2021_06_01_025027) do
        LEFT JOIN geo_cities gcity ON ((nsp.geo_city_id = gcity.id)))
        LEFT JOIN geo_states gs ON ((nsp.geo_state_id = gs.id)))
        LEFT JOIN geo_countries gctry ON ((nsp.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_magazine_editions", sql_definition: <<-SQL
+      SELECT me.id,
+      me.editorial_name,
+      me.editorial_date,
+      me.category_id,
+      st.st_name AS category_name,
+      me.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      me.geo_city_id,
+      gcity.name AS geo_city_name,
+      me.geo_country_id,
+      gctry.name AS geo_country_name,
+      me.geo_state_id,
+      gs.name AS geo_state_name,
+      me.issn,
+      me.observation,
+      me.publication_year,
+      me.research_group_id,
+      me.title,
+      me.active,
+      me.created_by,
+      me.updated_by,
+      me.created_at,
+      me.updated_at
+     FROM (((((magazine_editions me
+       LEFT JOIN subtypes st ON ((me.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((me.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((me.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((me.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((me.geo_country_id = gctry.id)));
   SQL
 end
