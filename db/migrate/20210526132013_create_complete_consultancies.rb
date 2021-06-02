@@ -1,0 +1,5 @@
+class CreateCompleteConsultancies < ActiveRecord::Migration[5.2]
+  def change
+    create_view :complete_consultancies
+  end
+end
