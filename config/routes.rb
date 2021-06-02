@@ -95,7 +95,7 @@ Rails.application.routes.draw do
         resources :documents, only: [:index, :show, :create, :update]
 
         #    member do
-        resources :group_member, only: [:index, :show, :create]
+        resources :group_member, only: [:index, :show, :create, :update]
         put "/group_member/:id/deactivate", to: "group_member#deactivate"
 
         resources :plan_periods do
