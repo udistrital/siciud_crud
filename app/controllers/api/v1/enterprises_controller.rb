@@ -57,14 +57,16 @@ module Api
       # Only allow a trusted parameter "white list" through.
       def enterprise_params_to_create
         params.require(:enterprise).permit(:name, :nit, :comercial_name, :date_of_obtaining,
-                                           :product_type_id, :geo_city_id, :category_id,
+                                           :product_type_id, :geo_city_id, :geo_state_id,
+                                           :geo_country_id, :category_id,
                                            :research_group_id, :colciencias_call_id,
                                            :observation, :active, :created_by)
       end
 
       def enterprise_params_to_update
         params.require(:enterprise).permit(:name, :nit, :comercial_name, :date_of_obtaining,
-                                           :product_type_id, :geo_city_id, :category_id,
+                                           :product_type_id, :geo_city_id, :geo_state_id,
+                                           :geo_country_id, :category_id,
                                            :research_group_id, :colciencias_call_id,
                                            :observation, :active, :updated_by)
       end

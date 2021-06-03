@@ -28,7 +28,7 @@ module Swagger::ProcedureSchema
       end
     end
 
-    swagger_schema :ProcedureInput do
+    swagger_schema :ProcedureInputPut do
       allOf do
         schema do
           property :procedure do

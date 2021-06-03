@@ -121,7 +121,7 @@
       end
     end
 
-    swagger_path '/research_units/{research_group_id}/guide_manuals/' do
+    swagger_path '/research_units/{research_group_id}/guide_manuals' do
       operation :get do
         key :summary, 'Get all Guide Manuals'
         key :description, 'Returns all Guide Manuals'

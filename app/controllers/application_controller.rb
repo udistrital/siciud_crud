@@ -120,6 +120,24 @@ class ApplicationController < ActionController::API
     elsif params[:appropriation_process_id]
       id = params[:appropriation_process_id]
       @context = AppropriationProcess.find(id)
+    elsif params[:appropriation_process_id]
+      id = params[:appropriation_process_id]
+      @context = AppropriationProcess.find(id)
+    elsif params[:creation_workshop_id]
+      id = params[:creation_workshop_id]
+      @context = CreationWorkshop.find(id)
+    elsif params[:working_paper_id]
+      id = params[:working_paper_id]
+      @context = WorkingPaper.find(id)
+    elsif params[:new_genetic_sequence_id]
+      id = params[:new_genetic_sequence_id]
+      @context = NewGeneticSequence.find(id)
+    elsif params[:report_id]
+      id = params[:report_id]
+      @context = Report.find(id)
+    elsif params[:consultancy_id]
+      id = params[:consultancy_id]
+      @context = Consultancy.find(id)
     end
   end
 end

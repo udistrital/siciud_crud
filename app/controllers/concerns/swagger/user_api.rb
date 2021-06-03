@@ -78,7 +78,7 @@ module Swagger::UserApi
       end
     end
 
-    swagger_path '/users/' do
+    swagger_path '/users' do
       operation :get do
         key :summary, 'Get all Users'
         key :description, 'Returns all users'
@@ -89,7 +89,7 @@ module Swagger::UserApi
         parameter name: :identification_number do
           key :in, :query
           key :description, 'user identification number'
-          key :required, true
+          key :required, false
           key :type, :string
         end
 

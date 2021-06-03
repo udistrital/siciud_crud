@@ -45,7 +45,7 @@ module Swagger::OecdDisciplineApi
       end
     end
 
-    swagger_path '/oecd_disciplines/' do
+    swagger_path '/oecd_disciplines' do
       operation :get do
         key :summary, 'Get all OECD disciplines'
         key :description, 'Returns all OECD disciplines'

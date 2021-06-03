@@ -78,7 +78,7 @@ module Swagger::GeoCountryApi
       # end
     end
 
-    swagger_path '/geo_countries/' do
+    swagger_path '/geo_countries' do
       operation :get do
         key :summary, 'Get all Countries'
         key :description, 'Returns all countries'

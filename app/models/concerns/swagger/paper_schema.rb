@@ -26,6 +26,10 @@ module Swagger::PaperSchema
         key :type, :integer
         key :format, :int64
       end
+      property :geo_country_id do
+        key :type, :integer
+        key :format, :int64
+      end
       property :final_page do
         key :type, :integer
         key :format, :int64
@@ -121,10 +125,6 @@ module Swagger::PaperSchema
           end
           property :geo_city_name do
             key :type, :string
-          end
-          property :geo_country_id do
-            key :type, :integer
-            key :format, :int64
           end
           property :geo_country_name do
             key :type, :string

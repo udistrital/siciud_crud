@@ -7,7 +7,7 @@ class EventSerializer < AbstractProductSerializer
              :geo_country_name, :geo_state_id, :geo_state_name,
              :research_group_id, :eve_type_id, :participation_id,
              :participation_name,
-             :active, :created_by, :updated_by
+             :active, :created_by, :updated_by, :created_at, :updated_at
 
   def participation_name
     participation = self.object.participation

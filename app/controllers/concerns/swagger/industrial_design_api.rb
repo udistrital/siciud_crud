@@ -94,7 +94,7 @@ module Swagger::IndustrialDesignApi
       end
     end
 
-    swagger_path '/research_units/{research_group_id}/industrial_designs/' do
+    swagger_path '/research_units/{research_group_id}/industrial_designs' do
       operation :get do
         key :summary, 'Get all Industrial Design'
         key :description, 'Returns all Industrial Design'

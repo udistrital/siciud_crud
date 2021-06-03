@@ -78,7 +78,7 @@ module Swagger::ColcienciasCallApi
       end
     end
 
-    swagger_path '/colciencias_calls/' do
+    swagger_path '/colciencias_calls' do
       operation :get do
         key :summary, 'Get all Colciencias Calls'
         key :description, 'Returns all colciencias calls'

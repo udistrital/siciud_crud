@@ -58,6 +58,7 @@ module Api
       # Only allow a trusted parameter "white list" through.
       def protocol_act_params_to_create
         params.require(:protocol_act).permit(:title, :date_of_publication, :geo_city_id,
+                                             :geo_state_id, :geo_country_id,
                                              :category_id, :product_type_id, :research_group_id,
                                              :colciencias_call_id, :observation,
                                              :active, :created_by)
@@ -65,6 +66,7 @@ module Api
 
       def protocol_act_params_to_update
         params.require(:protocol_act).permit(:title, :date_of_publication, :geo_city_id,
+                                             :geo_state_id, :geo_country_id,
                                              :category_id, :product_type_id, :research_group_id,
                                              :colciencias_call_id, :observation,
                                              :active, :updated_by)

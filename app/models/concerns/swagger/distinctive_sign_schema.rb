@@ -26,6 +26,14 @@ module Swagger::DistinctiveSignSchema
         key :type, :integer
         key :format, :int64
       end
+      property :geo_country_id do
+        key :type, :integer
+        key :format, :int64
+      end
+      property :geo_state_id do
+        key :type, :integer
+        key :format, :int64
+      end
       property :research_group_id do
         key :type, :integer
         key :format, :int64
@@ -98,16 +106,8 @@ module Swagger::DistinctiveSignSchema
           property :geo_city_name do
             key :type, :string
           end
-          property :geo_country_id do
-            key :type, :integer
-            key :format, :int64
-          end
           property :geo_country_name do
             key :type, :string
-          end
-          property :geo_state_id do
-            key :type, :integer
-            key :format, :int64
           end
           property :geo_state_name do
             key :type, :string

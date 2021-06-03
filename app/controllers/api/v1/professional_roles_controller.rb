@@ -21,7 +21,7 @@ module Api
         @professional_role = ProfessionalRole.new(professional_role_params_new)
 
         if @professional_role.save
-          render json: @professional_role, status: :created, location: @professional_role
+          render json: @professional_role, status: :created
         else
           render json: @professional_role.errors, status: :unprocessable_entity
         end

@@ -65,7 +65,7 @@ module Api
                                              :publication_date, :isbn,
                                              :doi, :url, :observation,
                                              :category_id, :colciencias_call_id,
-                                             :geo_city_id,
+                                             :geo_city_id, :geo_state_id, :geo_country_id,
                                              :editorial_name,
                                              :created_by)
       end
@@ -75,7 +75,7 @@ module Api
                                              :publication_date, :isbn,
                                              :doi, :url, :observation,
                                              :category_id, :colciencias_call_id,
-                                             :geo_city_id,
+                                             :geo_city_id, :geo_state_id, :geo_country_id,
                                              :editorial_name,
                                              :updated_by)
       end

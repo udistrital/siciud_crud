@@ -63,13 +63,16 @@ module Api
       def nab_params_to_create
         params.require(:new_animal_breed).permit(
           :name, :date, :observation, :petition_status_id,
-          :category_id, :colciencias_call_id, :geo_city_id, :created_by)
+          :category_id, :colciencias_call_id, :geo_city_id,
+          :geo_country_id, :geo_state_id, :created_by)
       end
 
       def nab_params_to_update
         params.require(:new_animal_breed).permit(
           :name, :date, :observation, :petition_status_id,
-          :category_id, :colciencias_call_id, :geo_city_id, :updated_by)
+          :category_id, :colciencias_call_id, :geo_city_id,
+          :geo_country_id, :geo_state_id,
+          :updated_by)
       end
 
       def nab_params_to_deactivate
