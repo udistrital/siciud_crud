@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_02_020358) do
+ActiveRecord::Schema.define(version: 2021_06_03_030303) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1504,6 +1504,42 @@ ActiveRecord::Schema.define(version: 2021_06_02_020358) do
     t.index ["updated_by"], name: "index_protocol_acts_on_updated_by"
   end
 
+  create_table "publications", force: :cascade do |t|
+    t.string "name"
+    t.string "project_title"
+    t.date "start_date"
+    t.date "final_date"
+    t.string "funding_institution"
+    t.string "url"
+    t.string "circulation_route"
+    t.string "target_audiences"
+    t.integer "duration"
+    t.bigint "duration_type_id"
+    t.bigint "geo_city_id"
+    t.bigint "geo_state_id"
+    t.bigint "geo_country_id"
+    t.bigint "category_id"
+    t.bigint "product_type_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "observation"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_publications_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_publications_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_publications_on_created_by"
+    t.index ["duration_type_id"], name: "index_publications_on_duration_type_id"
+    t.index ["geo_city_id"], name: "index_publications_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_publications_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_publications_on_geo_state_id"
+    t.index ["product_type_id"], name: "index_publications_on_product_type_id"
+    t.index ["research_group_id"], name: "index_publications_on_research_group_id"
+    t.index ["updated_by"], name: "index_publications_on_updated_by"
+  end
+
   create_table "regulations", force: :cascade do |t|
     t.string "title"
     t.date "date_of_publication"
@@ -2319,6 +2355,16 @@ ActiveRecord::Schema.define(version: 2021_06_02_020358) do
   add_foreign_key "protocol_acts", "subtypes", column: "product_type_id"
   add_foreign_key "protocol_acts", "users", column: "created_by"
   add_foreign_key "protocol_acts", "users", column: "updated_by"
+  add_foreign_key "publications", "colciencias_calls"
+  add_foreign_key "publications", "geo_cities"
+  add_foreign_key "publications", "geo_countries"
+  add_foreign_key "publications", "geo_states"
+  add_foreign_key "publications", "research_groups"
+  add_foreign_key "publications", "subtypes", column: "category_id"
+  add_foreign_key "publications", "subtypes", column: "duration_type_id"
+  add_foreign_key "publications", "subtypes", column: "product_type_id"
+  add_foreign_key "publications", "users", column: "created_by"
+  add_foreign_key "publications", "users", column: "updated_by"
   add_foreign_key "regulations", "colciencias_calls"
   add_foreign_key "regulations", "geo_cities"
   add_foreign_key "regulations", "geo_countries"
@@ -3825,5 +3871,46 @@ ActiveRecord::Schema.define(version: 2021_06_02_020358) do
        LEFT JOIN geo_cities gcity ON ((me.geo_city_id = gcity.id)))
        LEFT JOIN geo_states gs ON ((me.geo_state_id = gs.id)))
        LEFT JOIN geo_countries gctry ON ((me.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_publications", sql_definition: <<-SQL
+      SELECT p.category_id,
+      st.st_name AS category_name,
+      p.circulation_route,
+      p.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      p.duration,
+      p.duration_type_id,
+      dst.st_name AS duration_type_name,
+      p.funding_institution,
+      p.final_date,
+      p.geo_city_id,
+      gcity.name AS geo_city_name,
+      p.geo_country_id,
+      gctry.name AS geo_country_name,
+      p.geo_state_id,
+      gs.name AS geo_state_name,
+      p.name,
+      p.observation,
+      p.product_type_id,
+      pst.st_name AS product_type_name,
+      p.project_title,
+      p.start_date,
+      p.target_audiences,
+      p.url,
+      p.active,
+      p.research_group_id,
+      p.created_by,
+      p.updated_by,
+      p.created_at,
+      p.updated_at
+     FROM (((((((publications p
+       LEFT JOIN subtypes st ON ((p.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((p.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((p.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((p.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((p.geo_country_id = gctry.id)))
+       LEFT JOIN subtypes pst ON ((p.product_type_id = pst.id)))
+       LEFT JOIN subtypes dst ON ((p.duration_type_id = dst.id)));
   SQL
 end
