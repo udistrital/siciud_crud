@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_03_030303) do
+ActiveRecord::Schema.define(version: 2021_06_04_023421) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1853,6 +1853,36 @@ ActiveRecord::Schema.define(version: 2021_06_03_030303) do
     t.index ["state_researcher_id"], name: "index_seedbed_members_on_state_researcher_id"
   end
 
+  create_table "simple_books", force: :cascade do |t|
+    t.string "isbn"
+    t.string "title"
+    t.date "publication_date"
+    t.string "url"
+    t.string "editorial_name"
+    t.bigint "geo_city_id"
+    t.bigint "geo_state_id"
+    t.bigint "geo_country_id"
+    t.bigint "category_id"
+    t.bigint "product_type_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "observation"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_simple_books_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_simple_books_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_simple_books_on_created_by"
+    t.index ["geo_city_id"], name: "index_simple_books_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_simple_books_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_simple_books_on_geo_state_id"
+    t.index ["product_type_id"], name: "index_simple_books_on_product_type_id"
+    t.index ["research_group_id"], name: "index_simple_books_on_research_group_id"
+    t.index ["updated_by"], name: "index_simple_books_on_updated_by"
+  end
+
   create_table "sm_periods", force: :cascade do |t|
     t.date "initialDate"
     t.date "finalDate"
@@ -2422,6 +2452,15 @@ ActiveRecord::Schema.define(version: 2021_06_03_030303) do
   add_foreign_key "scientific_notes", "subtypes", column: "category_id"
   add_foreign_key "scientific_notes", "users", column: "created_by"
   add_foreign_key "scientific_notes", "users", column: "updated_by"
+  add_foreign_key "simple_books", "colciencias_calls"
+  add_foreign_key "simple_books", "geo_cities"
+  add_foreign_key "simple_books", "geo_countries"
+  add_foreign_key "simple_books", "geo_states"
+  add_foreign_key "simple_books", "research_groups"
+  add_foreign_key "simple_books", "subtypes", column: "category_id"
+  add_foreign_key "simple_books", "subtypes", column: "product_type_id"
+  add_foreign_key "simple_books", "users", column: "created_by"
+  add_foreign_key "simple_books", "users", column: "updated_by"
   add_foreign_key "software", "colciencias_calls"
   add_foreign_key "software", "geo_cities"
   add_foreign_key "software", "geo_countries"
@@ -3912,5 +3951,39 @@ ActiveRecord::Schema.define(version: 2021_06_03_030303) do
        LEFT JOIN geo_countries gctry ON ((p.geo_country_id = gctry.id)))
        LEFT JOIN subtypes pst ON ((p.product_type_id = pst.id)))
        LEFT JOIN subtypes dst ON ((p.duration_type_id = dst.id)));
+  SQL
+  create_view "complete_simple_books", sql_definition: <<-SQL
+      SELECT sb.category_id,
+      st.st_name AS category_name,
+      sb.editorial_name,
+      sb.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      sb.geo_city_id,
+      gcity.name AS geo_city_name,
+      sb.geo_country_id,
+      gctry.name AS geo_country_name,
+      sb.geo_state_id,
+      gs.name AS geo_state_name,
+      sb.isbn,
+      sb.observation,
+      sb.publication_date,
+      sb.product_type_id,
+      pst.st_name AS product_type_name,
+      sb.title,
+      sb.url,
+      sb.active,
+      sb.research_group_id,
+      sb.created_by,
+      sb.updated_by,
+      sb.created_at,
+      sb.updated_at
+     FROM ((((((simple_books sb
+       LEFT JOIN subtypes st ON ((sb.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((sb.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((sb.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((sb.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((sb.geo_country_id = gctry.id)))
+       LEFT JOIN subtypes pst ON ((sb.product_type_id = pst.id)));
   SQL
 end
