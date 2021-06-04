@@ -144,6 +144,12 @@ class ApplicationController < ActionController::API
     elsif params[:magazine_edition_id]
       id = params[:magazine_edition_id]
       @context = MagazineEdition.find(id)
+    elsif params[:publication_id]
+      id = params[:publication_id]
+      @context = Publication.find(id)
+    elsif params[:simple_book_id]
+      id = params[:simple_book_id]
+      @context = SimpleBook.find(id)
     end
   end
 end
