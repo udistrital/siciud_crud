@@ -3,7 +3,7 @@ class Publication < ApplicationRecord
 
   belongs_to :category, class_name: 'Subtype', foreign_key: 'category_id', optional: true
   belongs_to :product_type, class_name: 'Subtype', foreign_key: 'product_type_id', optional: true
-  belongs_to :duration_type_id, class_name: 'Subtype', foreign_key: 'duration_type_id', optional: true
+  belongs_to :duration_type, class_name: 'Subtype', foreign_key: 'duration_type_id', optional: true
   belongs_to :colciencias_call, optional: true
   belongs_to :research_group
 
