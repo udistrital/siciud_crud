@@ -150,6 +150,9 @@ class ApplicationController < ActionController::API
     elsif params[:simple_book_id]
       id = params[:simple_book_id]
       @context = SimpleBook.find(id)
+    elsif params[:content_generation_id]
+      id = params[:content_generation_id]
+      @context = ContentGeneration.find(id)
     end
   end
 end

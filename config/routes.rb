@@ -181,6 +181,7 @@ Rails.application.routes.draw do
         resources :magazine_editions, only: [:index, :create]
         resources :publications, only: [:index, :create]
         resources :simple_books, only: [:index, :create]
+        resources :content_generations, only: [:index, :create]
 
         # Human Resource Training for CTel
         resources :degree_works, only: [:index, :show, :create, :update]
@@ -214,6 +215,7 @@ Rails.application.routes.draw do
       resources :magazine_editions, only: [:show, :update]
       resources :publications, only: [:show, :update]
       resources :simple_books, only: [:show, :update]
+      resources :content_generations, only: [:show, :update]
 
       # RESEARCH UNIT PRODUCT ENDPOINTS
       ## Participants in product creation and documents
@@ -230,7 +232,7 @@ Rails.application.routes.draw do
                 :non_specialized_publications,
                 :magazine_editions,
                 :publications, :simple_books,
-                :degree_works,
+                :degree_works,:content_generations,
                 only: [] do
         resources :ext_participants, only: [:index, :show, :create, :update]
         resources :int_participants, only: [:index, :show, :create, :update]

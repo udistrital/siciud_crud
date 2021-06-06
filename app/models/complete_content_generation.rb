@@ -1,0 +1,2 @@
+class CompleteContentGeneration < ApplicationRecord
+end

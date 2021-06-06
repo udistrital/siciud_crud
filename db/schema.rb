@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_04_023421) do
+ActiveRecord::Schema.define(version: 2021_06_05_001110) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -494,6 +494,42 @@ ActiveRecord::Schema.define(version: 2021_06_04_023421) do
     t.index ["product_type_id"], name: "index_consultancies_on_product_type_id"
     t.index ["research_group_id"], name: "index_consultancies_on_research_group_id"
     t.index ["updated_by"], name: "index_consultancies_on_updated_by"
+  end
+
+  create_table "content_generations", force: :cascade do |t|
+    t.string "magazine_name"
+    t.string "isbn"
+    t.string "title"
+    t.date "generation_date"
+    t.string "doi"
+    t.string "bibliographic_reference"
+    t.string "web_page"
+    t.integer "volume"
+    t.integer "pages_number"
+    t.integer "start_page"
+    t.integer "final_page"
+    t.bigint "geo_city_id"
+    t.bigint "geo_state_id"
+    t.bigint "geo_country_id"
+    t.bigint "category_id"
+    t.bigint "product_type_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "observation"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_content_generations_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_content_generations_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_content_generations_on_created_by"
+    t.index ["geo_city_id"], name: "index_content_generations_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_content_generations_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_content_generations_on_geo_state_id"
+    t.index ["product_type_id"], name: "index_content_generations_on_product_type_id"
+    t.index ["research_group_id"], name: "index_content_generations_on_research_group_id"
+    t.index ["updated_by"], name: "index_content_generations_on_updated_by"
   end
 
   create_table "contribution_funding_entity_items", force: :cascade do |t|
@@ -2147,6 +2183,15 @@ ActiveRecord::Schema.define(version: 2021_06_04_023421) do
   add_foreign_key "consultancies", "subtypes", column: "product_type_id"
   add_foreign_key "consultancies", "users", column: "created_by"
   add_foreign_key "consultancies", "users", column: "updated_by"
+  add_foreign_key "content_generations", "colciencias_calls"
+  add_foreign_key "content_generations", "geo_cities"
+  add_foreign_key "content_generations", "geo_countries"
+  add_foreign_key "content_generations", "geo_states"
+  add_foreign_key "content_generations", "research_groups"
+  add_foreign_key "content_generations", "subtypes", column: "category_id"
+  add_foreign_key "content_generations", "subtypes", column: "product_type_id"
+  add_foreign_key "content_generations", "users", column: "created_by"
+  add_foreign_key "content_generations", "users", column: "updated_by"
   add_foreign_key "creation_workshops", "colciencias_calls"
   add_foreign_key "creation_workshops", "geo_cities"
   add_foreign_key "creation_workshops", "geo_countries"
@@ -3985,5 +4030,45 @@ ActiveRecord::Schema.define(version: 2021_06_04_023421) do
        LEFT JOIN geo_states gs ON ((sb.geo_state_id = gs.id)))
        LEFT JOIN geo_countries gctry ON ((sb.geo_country_id = gctry.id)))
        LEFT JOIN subtypes pst ON ((sb.product_type_id = pst.id)));
+  SQL
+  create_view "complete_content_generations", sql_definition: <<-SQL
+      SELECT cg.bibliographic_reference,
+      cg.category_id,
+      st.st_name AS category_name,
+      cg.doi,
+      cg.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      cg.final_page,
+      cg.generation_date,
+      cg.geo_city_id,
+      gcity.name AS geo_city_name,
+      cg.geo_country_id,
+      gctry.name AS geo_country_name,
+      cg.geo_state_id,
+      gs.name AS geo_state_name,
+      cg.isbn,
+      cg.magazine_name,
+      cg.pages_number,
+      cg.observation,
+      cg.product_type_id,
+      pst.st_name AS product_type_name,
+      cg.start_page,
+      cg.title,
+      cg.volume,
+      cg.web_page,
+      cg.active,
+      cg.research_group_id,
+      cg.created_by,
+      cg.updated_by,
+      cg.created_at,
+      cg.updated_at
+     FROM ((((((content_generations cg
+       LEFT JOIN subtypes st ON ((cg.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((cg.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((cg.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((cg.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((cg.geo_country_id = gctry.id)))
+       LEFT JOIN subtypes pst ON ((cg.product_type_id = pst.id)));
   SQL
 end
