@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_05_001110) do
+ActiveRecord::Schema.define(version: 2021_06_06_035801) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1021,6 +1021,33 @@ ActiveRecord::Schema.define(version: 2021_06_05_001110) do
     t.index ["updated_by"], name: "index_industrial_designs_on_updated_by"
   end
 
+  create_table "informative_bulletins", force: :cascade do |t|
+    t.string "title"
+    t.date "elaboration_date"
+    t.string "institution"
+    t.string "url"
+    t.bigint "geo_city_id"
+    t.bigint "geo_state_id"
+    t.bigint "geo_country_id"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "observation"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_informative_bulletins_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_informative_bulletins_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_informative_bulletins_on_created_by"
+    t.index ["geo_city_id"], name: "index_informative_bulletins_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_informative_bulletins_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_informative_bulletins_on_geo_state_id"
+    t.index ["research_group_id"], name: "index_informative_bulletins_on_research_group_id"
+    t.index ["updated_by"], name: "index_informative_bulletins_on_updated_by"
+  end
+
   create_table "innovations", force: :cascade do |t|
     t.string "name"
     t.string "nit"
@@ -1102,6 +1129,35 @@ ActiveRecord::Schema.define(version: 2021_06_05_001110) do
     t.index ["geo_state_id"], name: "index_integrated_circuit_diagrams_on_geo_state_id"
     t.index ["research_group_id"], name: "index_integrated_circuit_diagrams_on_research_group_id"
     t.index ["updated_by"], name: "index_integrated_circuit_diagrams_on_updated_by"
+  end
+
+  create_table "investigation_projects", force: :cascade do |t|
+    t.string "institution"
+    t.string "title"
+    t.integer "year"
+    t.string "funding_institution"
+    t.bigint "product_type_id"
+    t.bigint "geo_city_id"
+    t.bigint "geo_state_id"
+    t.bigint "geo_country_id"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "observation"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_investigation_projects_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_investigation_projects_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_investigation_projects_on_created_by"
+    t.index ["geo_city_id"], name: "index_investigation_projects_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_investigation_projects_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_investigation_projects_on_geo_state_id"
+    t.index ["product_type_id"], name: "index_investigation_projects_on_product_type_id"
+    t.index ["research_group_id"], name: "index_investigation_projects_on_research_group_id"
+    t.index ["updated_by"], name: "index_investigation_projects_on_updated_by"
   end
 
   create_table "ip_livestock_breeds", force: :cascade do |t|
@@ -2290,6 +2346,14 @@ ActiveRecord::Schema.define(version: 2021_06_05_001110) do
   add_foreign_key "industrial_designs", "subtypes", column: "category_id"
   add_foreign_key "industrial_designs", "users", column: "created_by"
   add_foreign_key "industrial_designs", "users", column: "updated_by"
+  add_foreign_key "informative_bulletins", "colciencias_calls"
+  add_foreign_key "informative_bulletins", "geo_cities"
+  add_foreign_key "informative_bulletins", "geo_countries"
+  add_foreign_key "informative_bulletins", "geo_states"
+  add_foreign_key "informative_bulletins", "research_groups"
+  add_foreign_key "informative_bulletins", "subtypes", column: "category_id"
+  add_foreign_key "informative_bulletins", "users", column: "created_by"
+  add_foreign_key "informative_bulletins", "users", column: "updated_by"
   add_foreign_key "innovations", "colciencias_calls"
   add_foreign_key "innovations", "geo_cities"
   add_foreign_key "innovations", "geo_countries"
@@ -2313,6 +2377,15 @@ ActiveRecord::Schema.define(version: 2021_06_05_001110) do
   add_foreign_key "integrated_circuit_diagrams", "subtypes", column: "category_id"
   add_foreign_key "integrated_circuit_diagrams", "users", column: "created_by"
   add_foreign_key "integrated_circuit_diagrams", "users", column: "updated_by"
+  add_foreign_key "investigation_projects", "colciencias_calls"
+  add_foreign_key "investigation_projects", "geo_cities"
+  add_foreign_key "investigation_projects", "geo_countries"
+  add_foreign_key "investigation_projects", "geo_states"
+  add_foreign_key "investigation_projects", "research_groups"
+  add_foreign_key "investigation_projects", "subtypes", column: "category_id"
+  add_foreign_key "investigation_projects", "subtypes", column: "product_type_id"
+  add_foreign_key "investigation_projects", "users", column: "created_by"
+  add_foreign_key "investigation_projects", "users", column: "updated_by"
   add_foreign_key "ip_livestock_breeds", "colciencias_calls"
   add_foreign_key "ip_livestock_breeds", "geo_cities"
   add_foreign_key "ip_livestock_breeds", "geo_countries"
@@ -4070,5 +4143,68 @@ ActiveRecord::Schema.define(version: 2021_06_05_001110) do
        LEFT JOIN geo_states gs ON ((cg.geo_state_id = gs.id)))
        LEFT JOIN geo_countries gctry ON ((cg.geo_country_id = gctry.id)))
        LEFT JOIN subtypes pst ON ((cg.product_type_id = pst.id)));
+  SQL
+  create_view "complete_informative_bulletins", sql_definition: <<-SQL
+      SELECT ib.category_id,
+      st.st_name AS category_name,
+      ib.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      ib.elaboration_date,
+      ib.geo_city_id,
+      gcity.name AS geo_city_name,
+      ib.geo_country_id,
+      gctry.name AS geo_country_name,
+      ib.geo_state_id,
+      gs.name AS geo_state_name,
+      ib.institution,
+      ib.observation,
+      ib.title,
+      ib.url,
+      ib.active,
+      ib.research_group_id,
+      ib.created_by,
+      ib.updated_by,
+      ib.created_at,
+      ib.updated_at
+     FROM (((((informative_bulletins ib
+       LEFT JOIN subtypes st ON ((ib.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((ib.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((ib.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((ib.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((ib.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_investigation_projects", sql_definition: <<-SQL
+      SELECT ip.category_id,
+      st.st_name AS category_name,
+      ip.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      ip.funding_institution,
+      ip.geo_city_id,
+      gcity.name AS geo_city_name,
+      ip.geo_country_id,
+      gctry.name AS geo_country_name,
+      ip.geo_state_id,
+      gs.name AS geo_state_name,
+      ip.institution,
+      ip.observation,
+      ip.product_type_id,
+      pst.st_name AS product_type_name,
+      ip.title,
+      ip.year,
+      ip.active,
+      ip.research_group_id,
+      ip.created_by,
+      ip.updated_by,
+      ip.created_at,
+      ip.updated_at
+     FROM ((((((investigation_projects ip
+       LEFT JOIN subtypes st ON ((ip.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((ip.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((ip.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((ip.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((ip.geo_country_id = gctry.id)))
+       LEFT JOIN subtypes pst ON ((ip.product_type_id = pst.id)));
   SQL
 end

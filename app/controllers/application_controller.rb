@@ -153,6 +153,12 @@ class ApplicationController < ActionController::API
     elsif params[:content_generation_id]
       id = params[:content_generation_id]
       @context = ContentGeneration.find(id)
+    elsif params[:informative_bulletin_id]
+      id = params[:informative_bulletin_id]
+      @context = InformativeBulletin.find(id)
+    elsif params[:investigation_project_id]
+      id = params[:investigation_project_id]
+      @context = InvestigationProject.find(id)
     end
   end
 end

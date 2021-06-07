@@ -65,6 +65,8 @@ class ResearchGroup < ApplicationRecord
   has_many :publications, dependent: :destroy
   has_many :simple_books, dependent: :destroy
   has_many :content_generations, dependent: :destroy
+  has_many :informative_bulletins, dependent: :destroy
+  has_many :investigation_projects, dependent: :destroy
 
   has_many :degree_works, dependent: :destroy
 
