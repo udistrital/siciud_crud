@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   
+
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root to: "health#health"
 
@@ -264,6 +265,10 @@ Rails.application.routes.draw do
       resources :procedures, only: [:index, :show, :update, :create]
       resources :professional_roles, only: [:index, :show, :update, :create]
       resources :task_models, only: [:index, :show, :update, :create]
+      resources :task_models, only: [:index, :show, :update, :create] do
+        resources :next_tasks, only: [:index, :create]
+      end
+      resources :next_tasks, only:  [:show, :update]
     end
   end
 end

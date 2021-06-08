@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_03_173349) do
+ActiveRecord::Schema.define(version: 2021_06_04_184641) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1247,6 +1247,19 @@ ActiveRecord::Schema.define(version: 2021_06_03_173349) do
     t.index ["updated_by"], name: "index_new_scientific_records_on_updated_by"
   end
 
+  create_table "next_tasks", force: :cascade do |t|
+    t.bigint "actual_task_id"
+    t.bigint "following_task_id"
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["actual_task_id"], name: "index_next_tasks_on_actual_task_id"
+    t.index ["created_by"], name: "index_next_tasks_on_created_by"
+    t.index ["following_task_id"], name: "index_next_tasks_on_following_task_id"
+    t.index ["updated_by"], name: "index_next_tasks_on_updated_by"
+  end
+
   create_table "nutraceutical_products", force: :cascade do |t|
     t.string "name"
     t.date "date_of_obtaining"
@@ -2229,6 +2242,10 @@ ActiveRecord::Schema.define(version: 2021_06_03_173349) do
   add_foreign_key "new_scientific_records", "subtypes", column: "category_id"
   add_foreign_key "new_scientific_records", "users", column: "created_by"
   add_foreign_key "new_scientific_records", "users", column: "updated_by"
+  add_foreign_key "next_tasks", "task_models", column: "actual_task_id"
+  add_foreign_key "next_tasks", "task_models", column: "following_task_id"
+  add_foreign_key "next_tasks", "users", column: "created_by"
+  add_foreign_key "next_tasks", "users", column: "updated_by"
   add_foreign_key "nutraceutical_products", "colciencias_calls"
   add_foreign_key "nutraceutical_products", "geo_cities"
   add_foreign_key "nutraceutical_products", "geo_countries"

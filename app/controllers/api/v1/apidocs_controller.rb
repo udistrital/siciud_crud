@@ -87,6 +87,7 @@ module Api
         ProceduresController,
         ProfessionalRolesController,
         TaskModelsController,
+        NextTasksController,
 
         ColcienciasCall,
         ColcienciasCategory,
@@ -152,6 +153,7 @@ module Api
         Procedure,
         ProfessionalRole,
         TaskModel,
+        NextTask,
 
         ApplicationRecord,
         self,
