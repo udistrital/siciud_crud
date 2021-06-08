@@ -88,6 +88,8 @@ module Api
         ProfessionalRolesController,
         TaskModelsController,
         NextTasksController,
+        TaskAttributesController,
+        ReadAttributesController,
 
         ColcienciasCall,
         ColcienciasCategory,
@@ -154,6 +156,8 @@ module Api
         ProfessionalRole,
         TaskModel,
         NextTask,
+        TaskAttribute,
+        ReadAttribute,
 
         ApplicationRecord,
         self,

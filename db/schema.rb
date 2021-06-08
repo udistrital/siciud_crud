@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_04_184641) do
+ActiveRecord::Schema.define(version: 2021_06_08_191651) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1478,6 +1478,19 @@ ActiveRecord::Schema.define(version: 2021_06_04_184641) do
     t.index ["updated_by"], name: "index_protocol_acts_on_updated_by"
   end
 
+  create_table "read_attributes", force: :cascade do |t|
+    t.bigint "task_attribute_id"
+    t.bigint "task_model_id"
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_read_attributes_on_created_by"
+    t.index ["task_attribute_id"], name: "index_read_attributes_on_task_attribute_id"
+    t.index ["task_model_id"], name: "index_read_attributes_on_task_model_id"
+    t.index ["updated_by"], name: "index_read_attributes_on_updated_by"
+  end
+
   create_table "regulations", force: :cascade do |t|
     t.string "title"
     t.date "date_of_publication"
@@ -1866,6 +1879,19 @@ ActiveRecord::Schema.define(version: 2021_06_04_184641) do
     t.index ["parent_id"], name: "index_subtypes_on_parent_id"
     t.index ["type_id"], name: "index_subtypes_on_type_id"
     t.index ["updated_by"], name: "index_subtypes_on_updated_by"
+  end
+
+  create_table "task_attributes", force: :cascade do |t|
+    t.bigint "attribute_sub_type_id"
+    t.bigint "task_model_id"
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["attribute_sub_type_id"], name: "index_task_attributes_on_attribute_sub_type_id"
+    t.index ["created_by"], name: "index_task_attributes_on_created_by"
+    t.index ["task_model_id"], name: "index_task_attributes_on_task_model_id"
+    t.index ["updated_by"], name: "index_task_attributes_on_updated_by"
   end
 
   create_table "task_models", force: :cascade do |t|
@@ -2300,6 +2326,10 @@ ActiveRecord::Schema.define(version: 2021_06_04_184641) do
   add_foreign_key "protocol_acts", "subtypes", column: "product_type_id"
   add_foreign_key "protocol_acts", "users", column: "created_by"
   add_foreign_key "protocol_acts", "users", column: "updated_by"
+  add_foreign_key "read_attributes", "task_attributes"
+  add_foreign_key "read_attributes", "task_models"
+  add_foreign_key "read_attributes", "users", column: "created_by"
+  add_foreign_key "read_attributes", "users", column: "updated_by"
   add_foreign_key "regulations", "colciencias_calls"
   add_foreign_key "regulations", "geo_cities"
   add_foreign_key "regulations", "geo_countries"
@@ -2369,6 +2399,10 @@ ActiveRecord::Schema.define(version: 2021_06_04_184641) do
   add_foreign_key "subtypes", "types"
   add_foreign_key "subtypes", "users", column: "created_by"
   add_foreign_key "subtypes", "users", column: "updated_by"
+  add_foreign_key "task_attributes", "subtypes", column: "attribute_sub_type_id"
+  add_foreign_key "task_attributes", "task_models"
+  add_foreign_key "task_attributes", "users", column: "created_by"
+  add_foreign_key "task_attributes", "users", column: "updated_by"
   add_foreign_key "task_models", "procedures"
   add_foreign_key "task_models", "professional_roles"
   add_foreign_key "task_models", "users", column: "created_by"
