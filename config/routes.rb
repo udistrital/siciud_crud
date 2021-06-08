@@ -183,11 +183,13 @@ Rails.application.routes.draw do
         resources :simple_books, only: [:index, :create]
         resources :content_generations, only: [:index, :create]
         resources :informative_bulletins, only: [:index, :create]
-        resources :investigation_projects, only: [:index, :create]
-
         # Human Resource Training for CTel
         resources :degree_works, only: [:index, :show, :create, :update]
         put "/degree_works/:id/active", to: "degree_works#change_active"
+        resources :investigation_projects, only: [:index, :create]
+        resources :idi_investigation_projects, only: [:index, :create]
+        resources :extension_projects, only: [:index, :create]
+
       end
 
       # Technological development and innovation
@@ -219,7 +221,11 @@ Rails.application.routes.draw do
       resources :simple_books, only: [:show, :update]
       resources :content_generations, only: [:show, :update]
       resources :informative_bulletins, only: [:show, :update]
+
+      # Human Resource Training for CTel
       resources :investigation_projects, only: [:show, :update]
+      resources :idi_investigation_projects, only: [:show, :update]
+      resources :extension_projects, only: [:show, :update]
 
       # RESEARCH UNIT PRODUCT ENDPOINTS
       ## Participants in product creation and documents
@@ -238,6 +244,7 @@ Rails.application.routes.draw do
                 :publications, :simple_books,
                 :degree_works,:content_generations,
                 :informative_bulletins, :investigation_projects,
+                :extension_projects,
                 only: [] do
         resources :ext_participants, only: [:index, :show, :create, :update]
         resources :int_participants, only: [:index, :show, :create, :update]

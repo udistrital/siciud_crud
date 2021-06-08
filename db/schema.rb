@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_06_035801) do
+ActiveRecord::Schema.define(version: 2021_06_07_024646) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -805,6 +805,36 @@ ActiveRecord::Schema.define(version: 2021_06_06_035801) do
     t.index ["updated_by"], name: "index_ext_participants_on_updated_by"
   end
 
+  create_table "extension_projects", force: :cascade do |t|
+    t.string "institution"
+    t.string "administrative_act"
+    t.string "project_name"
+    t.date "start_date"
+    t.string "name_ext_project"
+    t.date "final_date"
+    t.string "community_name"
+    t.bigint "geo_city_id"
+    t.bigint "geo_state_id"
+    t.bigint "geo_country_id"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "observation"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_extension_projects_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_extension_projects_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_extension_projects_on_created_by"
+    t.index ["geo_city_id"], name: "index_extension_projects_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_extension_projects_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_extension_projects_on_geo_state_id"
+    t.index ["research_group_id"], name: "index_extension_projects_on_research_group_id"
+    t.index ["updated_by"], name: "index_extension_projects_on_updated_by"
+  end
+
   create_table "faculty_ids_research_groups", force: :cascade do |t|
     t.bigint "research_group_id"
     t.integer "faculty_id"
@@ -992,6 +1022,34 @@ ActiveRecord::Schema.define(version: 2021_06_06_035801) do
     t.index ["oecd_knowledge_subarea_id"], name: "index_historical_colciencias_ranks_on_oecd_knowledge_subarea_id"
     t.index ["research_group_id"], name: "index_historical_colciencias_ranks_on_research_group_id"
     t.index ["updated_by"], name: "index_historical_colciencias_ranks_on_updated_by"
+  end
+
+  create_table "idi_investigation_projects", force: :cascade do |t|
+    t.string "institution"
+    t.string "contract_number"
+    t.string "title"
+    t.integer "year"
+    t.string "funding_institution"
+    t.bigint "geo_city_id"
+    t.bigint "geo_state_id"
+    t.bigint "geo_country_id"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "observation"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_idi_investigation_projects_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_idi_investigation_projects_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_idi_investigation_projects_on_created_by"
+    t.index ["geo_city_id"], name: "index_idi_investigation_projects_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_idi_investigation_projects_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_idi_investigation_projects_on_geo_state_id"
+    t.index ["research_group_id"], name: "index_idi_investigation_projects_on_research_group_id"
+    t.index ["updated_by"], name: "index_idi_investigation_projects_on_updated_by"
   end
 
   create_table "industrial_designs", force: :cascade do |t|
@@ -2307,6 +2365,14 @@ ActiveRecord::Schema.define(version: 2021_06_06_035801) do
   add_foreign_key "ext_participants", "subtypes", column: "participant_type_id"
   add_foreign_key "ext_participants", "users", column: "created_by"
   add_foreign_key "ext_participants", "users", column: "updated_by"
+  add_foreign_key "extension_projects", "colciencias_calls"
+  add_foreign_key "extension_projects", "geo_cities"
+  add_foreign_key "extension_projects", "geo_countries"
+  add_foreign_key "extension_projects", "geo_states"
+  add_foreign_key "extension_projects", "research_groups"
+  add_foreign_key "extension_projects", "subtypes", column: "category_id"
+  add_foreign_key "extension_projects", "users", column: "created_by"
+  add_foreign_key "extension_projects", "users", column: "updated_by"
   add_foreign_key "faculty_ids_research_groups", "research_groups"
   add_foreign_key "faculty_ids_research_groups", "users", column: "created_by"
   add_foreign_key "faculty_ids_research_groups", "users", column: "updated_by"
@@ -2338,6 +2404,14 @@ ActiveRecord::Schema.define(version: 2021_06_06_035801) do
   add_foreign_key "historical_colciencias_ranks", "oecd_knowledge_subareas"
   add_foreign_key "historical_colciencias_ranks", "users", column: "created_by"
   add_foreign_key "historical_colciencias_ranks", "users", column: "updated_by"
+  add_foreign_key "idi_investigation_projects", "colciencias_calls"
+  add_foreign_key "idi_investigation_projects", "geo_cities"
+  add_foreign_key "idi_investigation_projects", "geo_countries"
+  add_foreign_key "idi_investigation_projects", "geo_states"
+  add_foreign_key "idi_investigation_projects", "research_groups"
+  add_foreign_key "idi_investigation_projects", "subtypes", column: "category_id"
+  add_foreign_key "idi_investigation_projects", "users", column: "created_by"
+  add_foreign_key "idi_investigation_projects", "users", column: "updated_by"
   add_foreign_key "industrial_designs", "colciencias_calls"
   add_foreign_key "industrial_designs", "geo_cities"
   add_foreign_key "industrial_designs", "geo_countries"
@@ -4206,5 +4280,69 @@ ActiveRecord::Schema.define(version: 2021_06_06_035801) do
        LEFT JOIN geo_states gs ON ((ip.geo_state_id = gs.id)))
        LEFT JOIN geo_countries gctry ON ((ip.geo_country_id = gctry.id)))
        LEFT JOIN subtypes pst ON ((ip.product_type_id = pst.id)));
+  SQL
+  create_view "complete_idi_investigation_projects", sql_definition: <<-SQL
+      SELECT iip.category_id,
+      st.st_name AS category_name,
+      iip.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      iip.contract_number,
+      iip.funding_institution,
+      iip.geo_city_id,
+      gcity.name AS geo_city_name,
+      iip.geo_country_id,
+      gctry.name AS geo_country_name,
+      iip.geo_state_id,
+      gs.name AS geo_state_name,
+      iip.institution,
+      iip.observation,
+      iip.title,
+      iip.year,
+      iip.active,
+      iip.research_group_id,
+      iip.created_by,
+      iip.updated_by,
+      iip.created_at,
+      iip.updated_at
+     FROM (((((idi_investigation_projects iip
+       LEFT JOIN subtypes st ON ((iip.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((iip.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((iip.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((iip.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((iip.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_extension_projects", sql_definition: <<-SQL
+      SELECT ep.administrative_act,
+      ep.category_id,
+      st.st_name AS category_name,
+      ep.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      ep.community_name,
+      ep.final_date,
+      ep.geo_city_id,
+      gcity.name AS geo_city_name,
+      ep.geo_country_id,
+      gctry.name AS geo_country_name,
+      ep.geo_state_id,
+      gs.name AS geo_state_name,
+      ep.name_ext_project,
+      ep.institution,
+      ep.observation,
+      ep.project_name,
+      ep.start_date,
+      ep.active,
+      ep.research_group_id,
+      ep.created_by,
+      ep.updated_by,
+      ep.created_at,
+      ep.updated_at
+     FROM (((((extension_projects ep
+       LEFT JOIN subtypes st ON ((ep.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((ep.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((ep.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((ep.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((ep.geo_country_id = gctry.id)));
   SQL
 end

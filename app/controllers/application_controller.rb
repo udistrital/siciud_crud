@@ -159,6 +159,12 @@ class ApplicationController < ActionController::API
     elsif params[:investigation_project_id]
       id = params[:investigation_project_id]
       @context = InvestigationProject.find(id)
+    elsif params[:idi_investigation_project_id]
+      id = params[:idi_investigation_project_id]
+      @context = IdiInvestigationProject.find(id)
+    elsif params[:extension_project_id]
+      id = params[:extension_project_id]
+      @context = ExtensionProject.find(id)
     end
   end
 end

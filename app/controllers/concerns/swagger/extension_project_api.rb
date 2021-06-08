@@ -1,29 +1,28 @@
-
-module Swagger::InvestigationProjectApi
+module Swagger::ExtensionProjectApi
   extend ActiveSupport::Concern
   include Swagger::Blocks
 
   included do
-    swagger_path '/investigation_projects/{id}' do
+    swagger_path '/extension_projects/{id}' do
       operation :get do
-        key :summary, 'Get a Investigation Projects by ID'
-        key :description, 'Returns a single investigation project'
-        key :operationId, :get_investigation_project_by_id
+        key :summary, 'Get a Extension Project by ID'
+        key :description, 'Returns a single extension project'
+        key :operationId, :get_extension_project_by_id
         key :produces, ['application/json',]
-        key :tags, ['Products::CTIHRT::Investigation Projects']
+        key :tags, ['Products::CTIHRT::Extension Projects']
 
         parameter name: :id do
           key :in, :path
-          key :description, 'ID of investigation project to fetch'
+          key :description, 'ID of extension project to fetch'
           key :required, true
           key :type, :integer
           key :format, :int64
         end
 
         response 200 do
-          key :description, 'investigation project response'
+          key :description, 'extension project response'
           schema do
-            key :'$ref', :InvestigationProjectOutput
+            key :'$ref', :ExtensionProjectOutput
           end
         end
         response 404 do
@@ -38,33 +37,33 @@ module Swagger::InvestigationProjectApi
       end
 
       operation :put do
-        key :summary, 'Update Investigation Projects by ID'
-        key :description, 'Returns the updated investigation project'
-        key :operationId, :update_investigation_project
+        key :summary, 'Update Extension Project by ID'
+        key :description, 'Returns the updated extension project'
+        key :operationId, :update_extension_project
         key :produces, ['application/json',]
-        key :tags, ['Products::CTIHRT::Investigation Projects']
+        key :tags, ['Products::CTIHRT::Extension Projects']
 
         parameter name: :id do
           key :in, :path
-          key :description, 'ID of investigation project to fetch'
+          key :description, 'ID of extension project to fetch'
           key :required, true
           key :type, :integer
           key :format, :int64
         end
 
-        parameter name: :investigation_project do
+        parameter name: :extension_project do
           key :in, :body
-          key :description, 'Investigation Projects to update'
+          key :description, 'Extension Project to update'
           key :required, true
           schema do
-            key :'$ref', :InvestigationProjectInputPut
+            key :'$ref', :ExtensionProjectInputPut
           end
         end
 
         response 200 do
-          key :description, 'investigation project response'
+          key :description, 'extension project response'
           schema do
-            key :'$ref', :InvestigationProjectOutput
+            key :'$ref', :ExtensionProjectOutput
           end
         end
         response 422 do
@@ -79,35 +78,35 @@ module Swagger::InvestigationProjectApi
       end
 
       operation :patch do
-        key :summary, 'Activate or deactivate a Investigation Projects by ID'
-        key :description, 'Returns the activated/deactivated investigation project'
-        key :operationId, :change_active_investigation_project
+        key :summary, 'Activate or deactivate a Extension Project by ID'
+        key :description, 'Returns the activated/deactivated extension project'
+        key :operationId, :change_active_extension_project
         key :produces, ['application/json',]
-        key :tags, ['Products::CTIHRT::Investigation Projects']
+        key :tags, ['Products::CTIHRT::Extension Projects']
 
         parameter name: :id do
           key :in, :path
-          key :description, 'ID of investigation project to fetch'
+          key :description, 'ID of extension project to fetch'
           key :required, true
           key :type, :integer
           key :format, :int64
         end
 
-        parameter name: :investigation_project do
+        parameter name: :extension_project do
           key :in, :body
-          key :description, 'Investigation Projects to activate or deactivate'
+          key :description, 'Extension Project to activate or deactivate'
           key :required, true
           schema do
-            property :investigation_project do
+            property :extension_project do
               key :'$ref', :ChangeActive
             end
           end
         end
 
         response 200 do
-          key :description, 'investigation project response'
+          key :description, 'extension project response'
           schema do
-            key :'$ref', :InvestigationProjectOutput
+            key :'$ref', :ExtensionProjectOutput
           end
         end
         response 422 do
@@ -122,13 +121,13 @@ module Swagger::InvestigationProjectApi
       end
     end
 
-    swagger_path '/research_units/{research_group_id}/investigation_projects' do
+    swagger_path '/research_units/{research_group_id}/extension_projects' do
       operation :get do
-        key :summary, 'Get all Investigation Projects'
-        key :description, 'Returns all investigation projects'
-        key :operationId, :get_investigation_projects
+        key :summary, 'Get all Extension Projects'
+        key :description, 'Returns all Extension Projects'
+        key :operationId, :get_extension_projects
         key :produces, ['application/json',]
-        key :tags, ['Products::CTIHRT::Investigation Projects']
+        key :tags, ['Products::CTIHRT::Extension Projects']
 
         parameter name: :research_group_id do
           key :in, :path
@@ -138,20 +137,12 @@ module Swagger::InvestigationProjectApi
           key :format, :int64
         end
 
-        parameter name: :product_type_id do
-          key :in, :query
-          key :description, 'ID of type to fetch'
-          key :required, false
-          key :type, :integer
-          key :format, :int64
-        end
-
         response 200 do
-          key :description, 'investigation project response'
+          key :description, 'extension project response'
           schema do
             key :type, :array
             items do
-              key :'$ref', :InvestigationProjectDxOutput
+              key :'$ref', :ExtensionProjectDxOutput
             end
           end
         end
@@ -161,11 +152,11 @@ module Swagger::InvestigationProjectApi
       end
 
       operation :post do
-        key :summary, 'Create a new Investigation Projects'
-        key :description, 'Returns the created investigation project'
-        key :operationId, :create_investigation_project
+        key :summary, 'Create a new Extension Projects'
+        key :description, 'Returns the created extension project'
+        key :operationId, :create_extension_project
         key :produces, ['application/json',]
-        key :tags, ['Products::CTIHRT::Investigation Projects']
+        key :tags, ['Products::CTIHRT::Extension Projects']
 
         parameter name: :research_group_id do
           key :in, :path
@@ -175,19 +166,19 @@ module Swagger::InvestigationProjectApi
           key :format, :int64
         end
 
-        parameter name: :investigation_project do
+        parameter name: :extension_project do
           key :in, :body
-          key :description, 'Investigation Projects to register'
+          key :description, 'Extension Project to register'
           key :required, true
           schema do
-            key :'$ref', :InvestigationProjectInputPost
+            key :'$ref', :ExtensionProjectInputPost
           end
         end
 
         response 201 do
-          key :description, 'investigation project response'
+          key :description, 'extension project response'
           schema do
-            key :'$ref', :InvestigationProjectOutput
+            key :'$ref', :ExtensionProjectOutput
           end
         end
         response 422 do
