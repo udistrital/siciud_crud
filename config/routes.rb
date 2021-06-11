@@ -177,14 +177,20 @@ Rails.application.routes.draw do
         resources :new_genetic_sequences, only: [:index, :create]
         resources :reports, only: [:index, :create]
         resources :consultancies, only: [:index, :create]
-        resources :non_specialized_publications, only: [:index, :create]
         resources :magazine_editions, only: [:index, :create]
         resources :publications, only: [:index, :create]
         resources :simple_books, only: [:index, :create]
-
+        resources :content_generations, only: [:index, :create]
+        resources :informative_bulletins, only: [:index, :create]
         # Human Resource Training for CTel
         resources :degree_works, only: [:index, :show, :create, :update]
         put "/degree_works/:id/active", to: "degree_works#change_active"
+        resources :investigation_projects, only: [:index, :create]
+        resources :idi_investigation_projects, only: [:index, :create]
+        resources :extension_projects, only: [:index, :create]
+        resources :training_courses, only: [:index, :create]
+        resources :accompaniment_consultancies, only: [:index, :create]
+
       end
 
       # Technological development and innovation
@@ -210,10 +216,18 @@ Rails.application.routes.draw do
       resources :new_genetic_sequences, only: [:show, :update]
       resources :reports, only: [:show, :update]
       resources :consultancies, only: [:show, :update]
-      resources :non_specialized_publications, only: [:show, :update]
       resources :magazine_editions, only: [:show, :update]
       resources :publications, only: [:show, :update]
       resources :simple_books, only: [:show, :update]
+      resources :content_generations, only: [:show, :update]
+      resources :informative_bulletins, only: [:show, :update]
+
+      # Human Resource Training for CTel
+      resources :investigation_projects, only: [:show, :update]
+      resources :idi_investigation_projects, only: [:show, :update]
+      resources :extension_projects, only: [:show, :update]
+      resources :training_courses, only: [:show, :update]
+      resources :accompaniment_consultancies, only: [:show, :update]
 
       # RESEARCH UNIT PRODUCT ENDPOINTS
       ## Participants in product creation and documents
@@ -227,10 +241,12 @@ Rails.application.routes.draw do
                 :protocol_acts, :bills, :license_agreements, :events,
                 :appropriation_processes, :knowledge_networks, :creation_workshops,
                 :working_papers, :new_genetic_sequences, :reports, :consultancies,
-                :non_specialized_publications,
                 :magazine_editions,
                 :publications, :simple_books,
-                :degree_works,
+                :degree_works, :content_generations,
+                :informative_bulletins, :investigation_projects,
+                :extension_projects, :training_courses,
+                :accompaniment_consultancies,
                 only: [] do
         resources :ext_participants, only: [:index, :show, :create, :update]
         resources :int_participants, only: [:index, :show, :create, :update]

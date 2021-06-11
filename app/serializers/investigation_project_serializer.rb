@@ -1,8 +1,5 @@
-class PublicationSerializer < AbstractProductSerializer
-  attributes :id, :name, :project_title, :start_date,
-             :final_date, :funding_institution, :url,
-             :circulation_route, :target_audiences,
-             :duration, :duration_type_id,
+class InvestigationProjectSerializer < AbstractProductSerializer
+  attributes :id, :institution, :title, :year, :funding_institution,
              :product_type_id, :product_type_name,
              :category_id, :category_name,
              :colciencias_call_id, :colciencias_call_name, :colciencias_call_year,

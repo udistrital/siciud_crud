@@ -60,10 +60,17 @@ class ResearchGroup < ApplicationRecord
   has_many :new_genetic_sequences, dependent: :destroy
   has_many :reports, dependent: :destroy
   has_many :consultancies, dependent: :destroy
-  has_many :non_specialized_publications, dependent: :destroy
   has_many :magazine_editions, dependent: :destroy
   has_many :publications, dependent: :destroy
   has_many :simple_books, dependent: :destroy
+  has_many :content_generations, dependent: :destroy
+  has_many :informative_bulletins, dependent: :destroy
+  has_many :investigation_projects, dependent: :destroy
+  has_many :idi_investigation_projects, dependent: :destroy
+  has_many :extension_projects, dependent: :destroy
+  has_many :training_courses, dependent: :destroy
+  has_many :online_counselings, dependent: :destroy
+  has_many :accompaniment_consultancies, dependent: :destroy
 
   has_many :degree_works, dependent: :destroy
 
