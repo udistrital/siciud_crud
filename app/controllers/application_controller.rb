@@ -138,9 +138,6 @@ class ApplicationController < ActionController::API
     elsif params[:consultancy_id]
       id = params[:consultancy_id]
       @context = Consultancy.find(id)
-    elsif params[:non_specialized_publication_id]
-      id = params[:non_specialized_publication_id]
-      @context = NonSpecializedPublication.find(id)
     elsif params[:magazine_edition_id]
       id = params[:magazine_edition_id]
       @context = MagazineEdition.find(id)
@@ -168,9 +165,6 @@ class ApplicationController < ActionController::API
     elsif params[:training_course_id]
       id = params[:training_course_id]
       @context = TrainingCourse.find(id)
-    elsif params[:online_counseling_id]
-      id = params[:online_counseling_id]
-      @context = OnlineCounseling.find(id)
     elsif params[:accompaniment_consultancy_id]
       id = params[:accompaniment_consultancy_id]
       @context = AccompanimentConsultancy.find(id)
