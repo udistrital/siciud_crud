@@ -10,10 +10,36 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_07_024646) do
+ActiveRecord::Schema.define(version: 2021_06_09_020239) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "accompaniment_consultancies", force: :cascade do |t|
+    t.string "institution"
+    t.string "project_name"
+    t.date "date"
+    t.bigint "geo_city_id"
+    t.bigint "geo_state_id"
+    t.bigint "geo_country_id"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "observation"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_accompaniment_consultancies_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_accompaniment_consultancies_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_accompaniment_consultancies_on_created_by"
+    t.index ["geo_city_id"], name: "index_accompaniment_consultancies_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_accompaniment_consultancies_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_accompaniment_consultancies_on_geo_state_id"
+    t.index ["research_group_id"], name: "index_accompaniment_consultancies_on_research_group_id"
+    t.index ["updated_by"], name: "index_accompaniment_consultancies_on_updated_by"
+  end
 
   create_table "agreement_research_projects", force: :cascade do |t|
     t.string "code"
@@ -2138,6 +2164,35 @@ ActiveRecord::Schema.define(version: 2021_06_07_024646) do
     t.index ["updated_by"], name: "index_technical_concepts_on_updated_by"
   end
 
+  create_table "training_courses", force: :cascade do |t|
+    t.string "institution"
+    t.string "id_administrative_act"
+    t.string "program_name"
+    t.date "date"
+    t.string "faculty"
+    t.string "num_administrative_act"
+    t.bigint "geo_city_id"
+    t.bigint "geo_state_id"
+    t.bigint "geo_country_id"
+    t.bigint "category_id"
+    t.bigint "research_group_id"
+    t.bigint "colciencias_call_id"
+    t.text "observation"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_training_courses_on_category_id"
+    t.index ["colciencias_call_id"], name: "index_training_courses_on_colciencias_call_id"
+    t.index ["created_by"], name: "index_training_courses_on_created_by"
+    t.index ["geo_city_id"], name: "index_training_courses_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_training_courses_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_training_courses_on_geo_state_id"
+    t.index ["research_group_id"], name: "index_training_courses_on_research_group_id"
+    t.index ["updated_by"], name: "index_training_courses_on_updated_by"
+  end
+
   create_table "types", force: :cascade do |t|
     t.string "t_name", null: false
     t.text "t_description"
@@ -2226,6 +2281,14 @@ ActiveRecord::Schema.define(version: 2021_06_07_024646) do
     t.index ["updated_by"], name: "index_working_papers_on_updated_by"
   end
 
+  add_foreign_key "accompaniment_consultancies", "colciencias_calls"
+  add_foreign_key "accompaniment_consultancies", "geo_cities"
+  add_foreign_key "accompaniment_consultancies", "geo_countries"
+  add_foreign_key "accompaniment_consultancies", "geo_states"
+  add_foreign_key "accompaniment_consultancies", "research_groups"
+  add_foreign_key "accompaniment_consultancies", "subtypes", column: "category_id"
+  add_foreign_key "accompaniment_consultancies", "users", column: "created_by"
+  add_foreign_key "accompaniment_consultancies", "users", column: "updated_by"
   add_foreign_key "appropriation_processes", "colciencias_calls"
   add_foreign_key "appropriation_processes", "research_groups"
   add_foreign_key "appropriation_processes", "subtypes", column: "category_id"
@@ -2673,6 +2736,14 @@ ActiveRecord::Schema.define(version: 2021_06_07_024646) do
   add_foreign_key "technical_concepts", "subtypes", column: "category_id"
   add_foreign_key "technical_concepts", "users", column: "created_by"
   add_foreign_key "technical_concepts", "users", column: "updated_by"
+  add_foreign_key "training_courses", "colciencias_calls"
+  add_foreign_key "training_courses", "geo_cities"
+  add_foreign_key "training_courses", "geo_countries"
+  add_foreign_key "training_courses", "geo_states"
+  add_foreign_key "training_courses", "research_groups"
+  add_foreign_key "training_courses", "subtypes", column: "category_id"
+  add_foreign_key "training_courses", "users", column: "created_by"
+  add_foreign_key "training_courses", "users", column: "updated_by"
   add_foreign_key "types", "users", column: "created_by"
   add_foreign_key "types", "users", column: "updated_by"
   add_foreign_key "user_roles", "users", column: "created_by"
@@ -4344,5 +4415,66 @@ ActiveRecord::Schema.define(version: 2021_06_07_024646) do
        LEFT JOIN geo_cities gcity ON ((ep.geo_city_id = gcity.id)))
        LEFT JOIN geo_states gs ON ((ep.geo_state_id = gs.id)))
        LEFT JOIN geo_countries gctry ON ((ep.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_training_courses", sql_definition: <<-SQL
+      SELECT tc.category_id,
+      st.st_name AS category_name,
+      tc.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      tc.date,
+      tc.faculty,
+      tc.geo_city_id,
+      gcity.name AS geo_city_name,
+      tc.geo_country_id,
+      gctry.name AS geo_country_name,
+      tc.geo_state_id,
+      gs.name AS geo_state_name,
+      tc.id_administrative_act,
+      tc.institution,
+      tc.num_administrative_act,
+      tc.observation,
+      tc.program_name,
+      tc.active,
+      tc.research_group_id,
+      tc.created_by,
+      tc.updated_by,
+      tc.created_at,
+      tc.updated_at
+     FROM (((((training_courses tc
+       LEFT JOIN subtypes st ON ((tc.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((tc.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((tc.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((tc.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((tc.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_accompaniment_consultancies", sql_definition: <<-SQL
+      SELECT ac.category_id,
+      st.st_name AS category_name,
+      ac.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      ac.date,
+      ac.geo_city_id,
+      gcity.name AS geo_city_name,
+      ac.geo_country_id,
+      gctry.name AS geo_country_name,
+      ac.geo_state_id,
+      gs.name AS geo_state_name,
+      ac.institution,
+      ac.observation,
+      ac.project_name,
+      ac.active,
+      ac.research_group_id,
+      ac.created_by,
+      ac.updated_by,
+      ac.created_at,
+      ac.updated_at
+     FROM (((((accompaniment_consultancies ac
+       LEFT JOIN subtypes st ON ((ac.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((ac.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((ac.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((ac.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((ac.geo_country_id = gctry.id)));
   SQL
 end

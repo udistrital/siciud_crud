@@ -165,6 +165,15 @@ class ApplicationController < ActionController::API
     elsif params[:extension_project_id]
       id = params[:extension_project_id]
       @context = ExtensionProject.find(id)
+    elsif params[:training_course_id]
+      id = params[:training_course_id]
+      @context = TrainingCourse.find(id)
+    elsif params[:online_counseling_id]
+      id = params[:online_counseling_id]
+      @context = OnlineCounseling.find(id)
+    elsif params[:accompaniment_consultancy_id]
+      id = params[:accompaniment_consultancy_id]
+      @context = AccompanimentConsultancy.find(id)
     end
   end
 end

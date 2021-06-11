@@ -69,6 +69,9 @@ class ResearchGroup < ApplicationRecord
   has_many :investigation_projects, dependent: :destroy
   has_many :idi_investigation_projects, dependent: :destroy
   has_many :extension_projects, dependent: :destroy
+  has_many :training_courses, dependent: :destroy
+  has_many :online_counselings, dependent: :destroy
+  has_many :accompaniment_consultancies, dependent: :destroy
 
   has_many :degree_works, dependent: :destroy
 
