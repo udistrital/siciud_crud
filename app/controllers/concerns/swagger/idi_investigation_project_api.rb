@@ -192,6 +192,5 @@ module Swagger::IdiInvestigationProjectApi
         end
       end
     end
-
   end
 end

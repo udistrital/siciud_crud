@@ -201,6 +201,5 @@ module Swagger::InvestigationProjectApi
         end
       end
     end
-
   end
 end

@@ -192,6 +192,5 @@ module Swagger::TrainingCourseApi
         end
       end
     end
-
   end
 end

@@ -6,10 +6,6 @@ module Swagger::AccompanimentConsultancySchema
 
   included do
     swagger_schema :AccompanimentConsultancy do
-      property :active do
-        key :type, :boolean
-        key :default, true
-      end
       property :category_id do
         key :type, :integer
         key :format, :int64
@@ -46,6 +42,10 @@ module Swagger::AccompanimentConsultancySchema
       end
       property :observation do
         key :type, :string
+      end
+      property :active do
+        key :type, :boolean
+        key :default, true
       end
     end
 

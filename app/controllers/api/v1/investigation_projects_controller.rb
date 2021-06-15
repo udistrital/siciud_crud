@@ -4,7 +4,7 @@ module Api
       include Swagger::InvestigationProjectApi
 
       before_action :set_research_group, only: [:index, :create]
-      before_action :set_investigation_project, only: [:show, :update, :destroy]
+      before_action :set_investigation_project, only: [:show, :update]
 
       # GET research_units/:id/investigation_projects
       def index
@@ -77,6 +77,5 @@ module Api
                                                       :updated_by)
       end
     end
-
   end
 end

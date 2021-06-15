@@ -192,6 +192,5 @@ module Swagger::ExtensionProjectApi
         end
       end
     end
-
   end
 end

@@ -4,10 +4,6 @@ module Swagger::InvestigationProjectSchema
 
   included do
     swagger_schema :InvestigationProject do
-      property :active do
-        key :type, :boolean
-        key :default, true
-      end
       property :category_id do
         key :type, :integer
         key :format, :int64
@@ -51,6 +47,10 @@ module Swagger::InvestigationProjectSchema
       property :year do
         key :type, :integer
         key :format, :int64
+      end
+      property :active do
+        key :type, :boolean
+        key :default, true
       end
     end
 

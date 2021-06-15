@@ -4,10 +4,6 @@ module Swagger::ExtensionProjectSchema
 
   included do
     swagger_schema :ExtensionProject do
-      property :active do
-        key :type, :boolean
-        key :default, true
-      end
       property :administrative_act do
         key :type, :string
       end
@@ -57,6 +53,10 @@ module Swagger::ExtensionProjectSchema
       property :start_date do
         key :type, :string
         key :format, :date
+      end
+      property :active do
+        key :type, :boolean
+        key :default, true
       end
     end
 

@@ -4,10 +4,6 @@ module Swagger::IdiInvestigationProjectSchema
 
   included do
     swagger_schema :IdiInvestigationProject do
-      property :active do
-        key :type, :boolean
-        key :default, true
-      end
       property :category_id do
         key :type, :integer
         key :format, :int64
@@ -50,6 +46,10 @@ module Swagger::IdiInvestigationProjectSchema
       property :year do
         key :type, :integer
         key :format, :int64
+      end
+      property :active do
+        key :type, :boolean
+        key :default, true
       end
     end
 

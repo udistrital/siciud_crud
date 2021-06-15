@@ -5,10 +5,6 @@ module Swagger::TrainingCourseSchema
 
   included do
     swagger_schema :TrainingCourse do
-      property :active do
-        key :type, :boolean
-        key :default, true
-      end
       property :category_id do
         key :type, :integer
         key :format, :int64
@@ -54,6 +50,10 @@ module Swagger::TrainingCourseSchema
       property :research_group_id do
         key :type, :integer
         key :format, :int64
+      end
+      property :active do
+        key :type, :boolean
+        key :default, true
       end
     end
 

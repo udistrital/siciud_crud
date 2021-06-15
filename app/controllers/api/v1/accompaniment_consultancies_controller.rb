@@ -4,7 +4,7 @@ module Api
       include Swagger::AccompanimentConsultancyApi
 
       before_action :set_research_group, only: [:index, :create]
-      before_action :set_accompaniment_consultancy, only: [:show, :update, :destroy]
+      before_action :set_accompaniment_consultancy, only: [:show, :update]
 
       # GET research_units/:id/accompaniment_consultancies
       def index
@@ -22,7 +22,7 @@ module Api
       # POST research_units/:id/accompaniment_consultancies
       def create
         @accompaniment_consultancy = @research_group.accompaniment_consultancies.new(
-          accompaniment_consultancy_params_to_create)
+          acc_cons_params_to_create)
 
         if @accompaniment_consultancy.save
           render json: @accompaniment_consultancy, status: :created
@@ -33,7 +33,7 @@ module Api
 
       # PATCH/PUT /accompaniment_consultancies/1
       def update
-        if @accompaniment_consultancy.update(accompaniment_consultancy_params_to_update)
+        if @accompaniment_consultancy.update(acc_cons_params_to_update)
           render json: @accompaniment_consultancy
         else
           render json: @accompaniment_consultancy.errors, status: :unprocessable_entity
@@ -41,26 +41,28 @@ module Api
       end
 
       private
+
       # Use callbacks to share common setup or constraints between actions.
       def set_accompaniment_consultancy
         @accompaniment_consultancy = AccompanimentConsultancy.find(params[:id])
       end
 
       # Only allow a trusted parameter "white list" through.
-      def accompaniment_consultancy_params_to_create
+      def acc_cons_params_to_create
         params.require(:accompaniment_consultancy).permit(:institution, :project_name,
                                                           :date, :geo_city_id, :geo_state_id,
                                                           :geo_country_id, :category_id,
                                                           :research_group_id, :colciencias_call_id,
                                                           :observation, :active, :created_by)
-        end
-        # Only allow a trusted parameter "white list" through.
-        def accompaniment_consultancy_params_to_update
-          params.require(:accompaniment_consultancy).permit(:institution, :project_name,
-                                                            :date, :geo_city_id, :geo_state_id,
-                                                            :geo_country_id, :category_id,
-                                                            :research_group_id, :colciencias_call_id,
-                                                            :observation, :active, :updated_by)
+      end
+
+      # Only allow a trusted parameter "white list" through.
+      def acc_cons_params_to_update
+        params.require(:accompaniment_consultancy).permit(:institution, :project_name,
+                                                          :date, :geo_city_id, :geo_state_id,
+                                                          :geo_country_id, :category_id,
+                                                          :research_group_id, :colciencias_call_id,
+                                                          :observation, :active, :updated_by)
       end
     end
   end

@@ -4,7 +4,7 @@ module Api
       include Swagger::InformativeBulletinApi
 
       before_action :set_research_group, only: [:index, :create]
-      before_action :set_informative_bulletin, only: [:show, :update, :destroy]
+      before_action :set_informative_bulletin, only: [:show, :update]
 
       # GET /research_units/:id/informative_bulletins
       def index
@@ -41,11 +41,6 @@ module Api
         end
       end
 
-      # DELETE /informative_bulletins/1
-      def destroy
-        @informative_bulletin.destroy
-      end
-
       private
       # Use callbacks to share common setup or constraints between actions.
       def set_informative_bulletin
@@ -70,6 +65,5 @@ module Api
                                                      :active, :updated_by)
       end
     end
-
   end
 end

@@ -4,7 +4,7 @@ module Api
       include Swagger::TrainingCourseApi
 
       before_action :set_research_group, only: [:index, :create]
-      before_action :set_training_course, only: [:show, :update, :destroy]
+      before_action :set_training_course, only: [:show, :update]
 
       # GET research_units/:id/training_courses
       def index
@@ -22,7 +22,7 @@ module Api
       # POST research_units/:id/training_courses
       def create
         @training_course = @research_group.training_courses.new(
-          training_course_params_to_create)
+          training_crs_params_to_create)
 
         if @training_course.save
           render json: @training_course, status: :created
@@ -33,7 +33,7 @@ module Api
 
       # PATCH/PUT /training_courses/1
       def update
-        if @training_course.update(training_course_params_to_update)
+        if @training_course.update(training_crs_params_to_update)
           render json: @training_course
         else
           render json: @training_course.errors, status: :unprocessable_entity
@@ -47,7 +47,7 @@ module Api
       end
 
       # Only allow a trusted parameter "white list" through.
-      def training_course_params_to_create
+      def training_crs_params_to_create
         params.require(:training_course).permit(:institution, :id_administrative_act,
                                                 :program_name, :date, :faculty,
                                                 :num_administrative_act, :geo_city_id,
@@ -57,7 +57,7 @@ module Api
       end
 
       # Only allow a trusted parameter "white list" through.
-      def training_course_params_to_update
+      def training_crs_params_to_update
         params.require(:training_course).permit(:institution, :id_administrative_act,
                                                 :program_name, :date, :faculty,
                                                 :num_administrative_act, :geo_city_id,
@@ -65,8 +65,6 @@ module Api
                                                 :research_group_id, :colciencias_call_id,
                                                 :observation, :active, :updated_by)
       end
-
-
     end
   end
 end

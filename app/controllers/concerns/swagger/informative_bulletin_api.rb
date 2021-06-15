@@ -192,6 +192,5 @@ module Swagger::InformativeBulletinApi
         end
       end
     end
-
   end
 end

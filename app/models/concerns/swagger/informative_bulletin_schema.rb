@@ -5,10 +5,6 @@ module Swagger::InformativeBulletinSchema
 
   included do
     swagger_schema :InformativeBulletin do
-      property :active do
-        key :type, :boolean
-        key :default, true
-      end
       property :category_id do
         key :type, :integer
         key :format, :int64
@@ -48,6 +44,10 @@ module Swagger::InformativeBulletinSchema
       end
       property :url do
         key :type, :string
+      end
+      property :active do
+        key :type, :boolean
+        key :default, true
       end
     end
 
