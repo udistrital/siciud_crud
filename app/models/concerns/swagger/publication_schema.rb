@@ -4,10 +4,6 @@ module Swagger::PublicationSchema
 
   included do
     swagger_schema :Publication do
-      property :active do
-        key :type, :boolean
-        key :default, true
-      end
       property :category_id do
         key :type, :integer
         key :format, :int64
@@ -52,6 +48,9 @@ module Swagger::PublicationSchema
       property :observation do
         key :type, :string
       end
+      property :project_title do
+        key :type, :string
+      end
       property :product_type_id do
         key :type, :integer
         key :format, :int64
@@ -69,6 +68,10 @@ module Swagger::PublicationSchema
       end
       property :url do
         key :type, :string
+      end
+      property :active do
+        key :type, :boolean
+        key :default, true
       end
     end
 
