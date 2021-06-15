@@ -4,14 +4,15 @@ module Api
       include Swagger::ContentGenerationApi
 
       before_action :set_research_group, only: [:index, :create]
-      before_action :set_content_generation, only: [:show, :update, :destroy]
+      before_action :set_content_generation, only: [:show, :update]
 
       # GET /research_units/:id/content_generations
       def index
         if params[:product_type_id]
-        @content_generations = CompleteContentGeneration.where(
-          "research_group_id = ? AND product_type_id = ?",
-          research_group_id: params[:research_group_id])
+          @content_generations = CompleteContentGeneration.where(
+            "research_group_id = ? AND product_type_id = ?",
+            params[:research_group_id], params[:product_type_id]
+          )
         else
           @content_generations = CompleteContentGeneration.where(
             research_group_id: params[:research_group_id])
@@ -46,12 +47,8 @@ module Api
         end
       end
 
-      # DELETE /content_generations/1
-      def destroy
-        @content_generation.destroy
-      end
-
       private
+
       # Use callbacks to share common setup or constraints between actions.
       def set_content_generation
         @content_generation = ContentGeneration.find(params[:id])

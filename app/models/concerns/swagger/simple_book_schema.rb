@@ -5,10 +5,6 @@ module Swagger::SimpleBookSchema
 
   included do
     swagger_schema :SimpleBook do
-      property :active do
-        key :type, :boolean
-        key :default, true
-      end
       property :category_id do
         key :type, :integer
         key :format, :int64
@@ -55,6 +51,10 @@ module Swagger::SimpleBookSchema
       end
       property :url do
         key :type, :string
+      end
+      property :active do
+        key :type, :boolean
+        key :default, true
       end
     end
 

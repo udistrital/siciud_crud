@@ -4,12 +4,19 @@ module Api
       include Swagger::SimpleBookApi
 
       before_action :set_research_group, only: [:index, :create]
-      before_action :set_simple_book, only: [:show, :update, :destroy]
+      before_action :set_simple_book, only: [:show, :update]
 
       # GET /research_units/:id/simple_books
       def index
-        @simple_books = CompleteSimpleBook.where(
-          research_group_id: params[:research_group_id])
+        if params[:product_type_id]
+          @simple_books = CompleteSimpleBook.where(
+            "research_group_id = ? AND product_type_id = ?",
+            params[:research_group_id], params[:product_type_id]
+          )
+        else
+          @simple_books = CompleteSimpleBook.where(
+            research_group_id: params[:research_group_id])
+        end
         @simple_books = DxService.load(@simple_books, params)
 
         render json: @simple_books
@@ -41,6 +48,7 @@ module Api
       end
 
       private
+
       # Use callbacks to share common setup or constraints between actions.
       def set_simple_book
         @simple_book = SimpleBook.find(params[:id])

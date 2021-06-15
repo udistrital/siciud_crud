@@ -4,10 +4,6 @@ module Swagger::ContentGenerationSchema
 
   included do
     swagger_schema :ContentGeneration do
-      property :active do
-        key :type, :boolean
-        key :default, true
-      end
       property :bibliographic_reference do
         key :type, :string
       end
@@ -76,6 +72,10 @@ module Swagger::ContentGenerationSchema
       end
       property :web_page do
         key :type, :string
+      end
+      property :active do
+        key :type, :boolean
+        key :default, true
       end
     end
 

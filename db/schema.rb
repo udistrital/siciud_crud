@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_15_161223) do
+ActiveRecord::Schema.define(version: 2021_06_15_192005) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -4101,80 +4101,6 @@ ActiveRecord::Schema.define(version: 2021_06_15_161223) do
        LEFT JOIN geo_states gs ON ((me.geo_state_id = gs.id)))
        LEFT JOIN geo_countries gctry ON ((me.geo_country_id = gctry.id)));
   SQL
-  create_view "complete_simple_books", sql_definition: <<-SQL
-      SELECT sb.category_id,
-      st.st_name AS category_name,
-      sb.editorial_name,
-      sb.colciencias_call_id,
-      cc.name AS colciencias_call_name,
-      cc.year AS colciencias_call_year,
-      sb.geo_city_id,
-      gcity.name AS geo_city_name,
-      sb.geo_country_id,
-      gctry.name AS geo_country_name,
-      sb.geo_state_id,
-      gs.name AS geo_state_name,
-      sb.isbn,
-      sb.observation,
-      sb.publication_date,
-      sb.product_type_id,
-      pst.st_name AS product_type_name,
-      sb.title,
-      sb.url,
-      sb.active,
-      sb.research_group_id,
-      sb.created_by,
-      sb.updated_by,
-      sb.created_at,
-      sb.updated_at
-     FROM ((((((simple_books sb
-       LEFT JOIN subtypes st ON ((sb.category_id = st.id)))
-       LEFT JOIN colciencias_calls cc ON ((sb.colciencias_call_id = cc.id)))
-       LEFT JOIN geo_cities gcity ON ((sb.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((sb.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((sb.geo_country_id = gctry.id)))
-       LEFT JOIN subtypes pst ON ((sb.product_type_id = pst.id)));
-  SQL
-  create_view "complete_content_generations", sql_definition: <<-SQL
-      SELECT cg.bibliographic_reference,
-      cg.category_id,
-      st.st_name AS category_name,
-      cg.doi,
-      cg.colciencias_call_id,
-      cc.name AS colciencias_call_name,
-      cc.year AS colciencias_call_year,
-      cg.final_page,
-      cg.generation_date,
-      cg.geo_city_id,
-      gcity.name AS geo_city_name,
-      cg.geo_country_id,
-      gctry.name AS geo_country_name,
-      cg.geo_state_id,
-      gs.name AS geo_state_name,
-      cg.isbn,
-      cg.magazine_name,
-      cg.pages_number,
-      cg.observation,
-      cg.product_type_id,
-      pst.st_name AS product_type_name,
-      cg.start_page,
-      cg.title,
-      cg.volume,
-      cg.web_page,
-      cg.active,
-      cg.research_group_id,
-      cg.created_by,
-      cg.updated_by,
-      cg.created_at,
-      cg.updated_at
-     FROM ((((((content_generations cg
-       LEFT JOIN subtypes st ON ((cg.category_id = st.id)))
-       LEFT JOIN colciencias_calls cc ON ((cg.colciencias_call_id = cc.id)))
-       LEFT JOIN geo_cities gcity ON ((cg.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((cg.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((cg.geo_country_id = gctry.id)))
-       LEFT JOIN subtypes pst ON ((cg.product_type_id = pst.id)));
-  SQL
   create_view "complete_informative_bulletins", sql_definition: <<-SQL
       SELECT ib.category_id,
       st.st_name AS category_name,
@@ -4404,5 +4330,81 @@ ActiveRecord::Schema.define(version: 2021_06_15_161223) do
        LEFT JOIN geo_countries gctry ON ((p.geo_country_id = gctry.id)))
        LEFT JOIN subtypes pst ON ((p.product_type_id = pst.id)))
        LEFT JOIN subtypes dst ON ((p.duration_type_id = dst.id)));
+  SQL
+  create_view "complete_simple_books", sql_definition: <<-SQL
+      SELECT sb.id,
+      sb.category_id,
+      st.st_name AS category_name,
+      sb.editorial_name,
+      sb.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      sb.geo_city_id,
+      gcity.name AS geo_city_name,
+      sb.geo_country_id,
+      gctry.name AS geo_country_name,
+      sb.geo_state_id,
+      gs.name AS geo_state_name,
+      sb.isbn,
+      sb.observation,
+      sb.publication_date,
+      sb.product_type_id,
+      pst.st_name AS product_type_name,
+      sb.title,
+      sb.url,
+      sb.active,
+      sb.research_group_id,
+      sb.created_by,
+      sb.updated_by,
+      sb.created_at,
+      sb.updated_at
+     FROM ((((((simple_books sb
+       LEFT JOIN subtypes st ON ((sb.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((sb.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((sb.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((sb.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((sb.geo_country_id = gctry.id)))
+       LEFT JOIN subtypes pst ON ((sb.product_type_id = pst.id)));
+  SQL
+  create_view "complete_content_generations", sql_definition: <<-SQL
+      SELECT cg.id,
+      cg.bibliographic_reference,
+      cg.category_id,
+      st.st_name AS category_name,
+      cg.doi,
+      cg.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      cg.final_page,
+      cg.generation_date,
+      cg.geo_city_id,
+      gcity.name AS geo_city_name,
+      cg.geo_country_id,
+      gctry.name AS geo_country_name,
+      cg.geo_state_id,
+      gs.name AS geo_state_name,
+      cg.isbn,
+      cg.magazine_name,
+      cg.pages_number,
+      cg.observation,
+      cg.product_type_id,
+      pst.st_name AS product_type_name,
+      cg.start_page,
+      cg.title,
+      cg.volume,
+      cg.web_page,
+      cg.active,
+      cg.research_group_id,
+      cg.created_by,
+      cg.updated_by,
+      cg.created_at,
+      cg.updated_at
+     FROM ((((((content_generations cg
+       LEFT JOIN subtypes st ON ((cg.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((cg.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((cg.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((cg.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((cg.geo_country_id = gctry.id)))
+       LEFT JOIN subtypes pst ON ((cg.product_type_id = pst.id)));
   SQL
 end
