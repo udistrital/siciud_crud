@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_11_034206) do
+ActiveRecord::Schema.define(version: 2021_06_15_161223) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -4101,47 +4101,6 @@ ActiveRecord::Schema.define(version: 2021_06_11_034206) do
        LEFT JOIN geo_states gs ON ((me.geo_state_id = gs.id)))
        LEFT JOIN geo_countries gctry ON ((me.geo_country_id = gctry.id)));
   SQL
-  create_view "complete_publications", sql_definition: <<-SQL
-      SELECT p.category_id,
-      st.st_name AS category_name,
-      p.circulation_route,
-      p.colciencias_call_id,
-      cc.name AS colciencias_call_name,
-      cc.year AS colciencias_call_year,
-      p.duration,
-      p.duration_type_id,
-      dst.st_name AS duration_type_name,
-      p.funding_institution,
-      p.final_date,
-      p.geo_city_id,
-      gcity.name AS geo_city_name,
-      p.geo_country_id,
-      gctry.name AS geo_country_name,
-      p.geo_state_id,
-      gs.name AS geo_state_name,
-      p.name,
-      p.observation,
-      p.product_type_id,
-      pst.st_name AS product_type_name,
-      p.project_title,
-      p.start_date,
-      p.target_audiences,
-      p.url,
-      p.active,
-      p.research_group_id,
-      p.created_by,
-      p.updated_by,
-      p.created_at,
-      p.updated_at
-     FROM (((((((publications p
-       LEFT JOIN subtypes st ON ((p.category_id = st.id)))
-       LEFT JOIN colciencias_calls cc ON ((p.colciencias_call_id = cc.id)))
-       LEFT JOIN geo_cities gcity ON ((p.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((p.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((p.geo_country_id = gctry.id)))
-       LEFT JOIN subtypes pst ON ((p.product_type_id = pst.id)))
-       LEFT JOIN subtypes dst ON ((p.duration_type_id = dst.id)));
-  SQL
   create_view "complete_simple_books", sql_definition: <<-SQL
       SELECT sb.category_id,
       st.st_name AS category_name,
@@ -4403,5 +4362,47 @@ ActiveRecord::Schema.define(version: 2021_06_11_034206) do
        LEFT JOIN geo_cities gcity ON ((ac.geo_city_id = gcity.id)))
        LEFT JOIN geo_states gs ON ((ac.geo_state_id = gs.id)))
        LEFT JOIN geo_countries gctry ON ((ac.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_publications", sql_definition: <<-SQL
+      SELECT p.id,
+      p.category_id,
+      st.st_name AS category_name,
+      p.circulation_route,
+      p.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      p.duration,
+      p.duration_type_id,
+      dst.st_name AS duration_type_name,
+      p.funding_institution,
+      p.final_date,
+      p.geo_city_id,
+      gcity.name AS geo_city_name,
+      p.geo_country_id,
+      gctry.name AS geo_country_name,
+      p.geo_state_id,
+      gs.name AS geo_state_name,
+      p.name,
+      p.observation,
+      p.product_type_id,
+      pst.st_name AS product_type_name,
+      p.project_title,
+      p.start_date,
+      p.target_audiences,
+      p.url,
+      p.active,
+      p.research_group_id,
+      p.created_by,
+      p.updated_by,
+      p.created_at,
+      p.updated_at
+     FROM (((((((publications p
+       LEFT JOIN subtypes st ON ((p.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((p.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((p.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((p.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((p.geo_country_id = gctry.id)))
+       LEFT JOIN subtypes pst ON ((p.product_type_id = pst.id)))
+       LEFT JOIN subtypes dst ON ((p.duration_type_id = dst.id)));
   SQL
 end

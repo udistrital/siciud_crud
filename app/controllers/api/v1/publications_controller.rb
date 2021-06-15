@@ -4,7 +4,7 @@ module Api
       include Swagger::PublicationApi
 
       before_action :set_research_group, only: [:index, :create]
-      before_action :set_publication, only: [:show, :update, :destroy]
+      before_action :set_publication, only: [:show, :update]
 
       # GET research_units/:id/publications
       def index
