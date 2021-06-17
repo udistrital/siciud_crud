@@ -55,7 +55,7 @@ module Api
       def deactivate
         @gm_period = @group_member.gm_periods.last
         @gm_period.final_date = DateTime.now.in_time_zone(-5).to_date
-        @group_member.gm_state_id = 2
+        @group_member.gm_state_id = params[:group_member][:gm_state_id]
         if @group_member.save && @gm_period.save
           render json: @group_member
         else
