@@ -89,7 +89,7 @@ module Swagger::UserApi
         parameter name: :identification_number do
           key :in, :query
           key :description, 'user identification number'
-          key :required, true
+          key :required, false
           key :type, :string
         end
 

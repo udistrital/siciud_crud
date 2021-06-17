@@ -129,6 +129,45 @@ class ApplicationController < ActionController::API
     elsif params[:working_paper_id]
       id = params[:working_paper_id]
       @context = WorkingPaper.find(id)
+    elsif params[:new_genetic_sequence_id]
+      id = params[:new_genetic_sequence_id]
+      @context = NewGeneticSequence.find(id)
+    elsif params[:report_id]
+      id = params[:report_id]
+      @context = Report.find(id)
+    elsif params[:consultancy_id]
+      id = params[:consultancy_id]
+      @context = Consultancy.find(id)
+    elsif params[:magazine_edition_id]
+      id = params[:magazine_edition_id]
+      @context = MagazineEdition.find(id)
+    elsif params[:publication_id]
+      id = params[:publication_id]
+      @context = Publication.find(id)
+    elsif params[:simple_book_id]
+      id = params[:simple_book_id]
+      @context = SimpleBook.find(id)
+    elsif params[:content_generation_id]
+      id = params[:content_generation_id]
+      @context = ContentGeneration.find(id)
+    elsif params[:informative_bulletin_id]
+      id = params[:informative_bulletin_id]
+      @context = InformativeBulletin.find(id)
+    elsif params[:investigation_project_id]
+      id = params[:investigation_project_id]
+      @context = InvestigationProject.find(id)
+    elsif params[:idi_investigation_project_id]
+      id = params[:idi_investigation_project_id]
+      @context = IdiInvestigationProject.find(id)
+    elsif params[:extension_project_id]
+      id = params[:extension_project_id]
+      @context = ExtensionProject.find(id)
+    elsif params[:training_course_id]
+      id = params[:training_course_id]
+      @context = TrainingCourse.find(id)
+    elsif params[:accompaniment_consultancy_id]
+      id = params[:accompaniment_consultancy_id]
+      @context = AccompanimentConsultancy.find(id)
     end
   end
 end

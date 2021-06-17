@@ -49,6 +49,10 @@ module Swagger::GroupMemberSchema
 
     swagger_schema :GroupMemberInput do
       property :group_member do
+        property :gm_state_id do
+          key :type, :integer
+          key :format, :int64
+        end
         property :role_id do
           key :type, :integer
           key :format, :int64
@@ -76,6 +80,27 @@ module Swagger::GroupMemberSchema
       allOf do
         schema do
           key :'$ref', :GroupMember
+        end
+      end
+    end
+
+    swagger_schema :GroupMemberDeactivate do
+      property :group_member do
+        property :gm_state_id do
+          key :type, :integer
+          key :format, :int64
+        end
+        property :active do
+          key :type, :boolean
+          key :default, true
+        end
+        property :created_by do
+          key :type, :integer
+          key :format, :int64
+        end
+        property :updated_by do
+          key :type, :integer
+          key :format, :int64
         end
       end
     end
