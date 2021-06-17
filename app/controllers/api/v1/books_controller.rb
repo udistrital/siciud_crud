@@ -11,8 +11,15 @@ module Api
 
       # GET /research_units/:id/books
       def index
-        books_by_ru = CompleteBook.where(
-          research_group_id: params[:research_group_id])
+        if params[:book_type_id]
+          books_by_ru = CompleteBook.where(
+            "research_group_id = ? AND book_type_id = ?",
+            params[:research_group_id], params[:book_type_id]
+          )
+        else
+          books_by_ru = CompleteBook.where(
+            research_group_id: params[:research_group_id])
+        end
         @books = DxService.load(books_by_ru, params)
         render json: @books
       end
