@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_23_044822) do
+ActiveRecord::Schema.define(version: 2021_06_23_233225) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -4413,5 +4413,21 @@ ActiveRecord::Schema.define(version: 2021_06_23_044822) do
        LEFT JOIN geo_cities gcity ON ((ac.geo_city_id = gcity.id)))
        LEFT JOIN geo_states gs ON ((ac.geo_state_id = gs.id)))
        LEFT JOIN geo_countries gctry ON ((ac.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_gm_periods", sql_definition: <<-SQL
+      SELECT gp.id,
+      gp.initial_date,
+      gp.final_date,
+      gp.group_member_id,
+      gp.role_id,
+      r.name AS role_name,
+      gp.is_current,
+      gp.active,
+      gp.created_by,
+      gp.updated_by,
+      gp.created_at,
+      gp.updated_at
+     FROM (gm_periods gp
+       LEFT JOIN roles r ON ((gp.role_id = r.id)));
   SQL
 end

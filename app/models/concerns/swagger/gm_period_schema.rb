@@ -19,11 +19,6 @@ module Swagger::GmPeriodSchema
         key :format, :int64
         key :example, 1
       end
-      property :group_member_id do
-        key :type, :integer
-        key :format, :int64
-        key :example, 1
-      end
       property :is_current do
         key :type, :boolean
         key :default, true
@@ -43,6 +38,11 @@ module Swagger::GmPeriodSchema
         end
         schema do
           property :gm_period do
+            property :group_member_id do
+              key :type, :integer
+              key :format, :int64
+              key :example, 1
+            end
             property :updated_by do
               key :type, :integer
               key :format, :int64
@@ -82,6 +82,14 @@ module Swagger::GmPeriodSchema
             key :type, :integer
             key :format, :int64
             key :example, 1
+          end
+          property :group_member_id do
+            key :type, :integer
+            key :format, :int64
+            key :example, 1
+          end
+          property :role_name do
+            key :type, :string
           end
           property :created_by do
             key :type, :integer

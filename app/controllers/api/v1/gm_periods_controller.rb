@@ -11,7 +11,9 @@ module Api
 
       # GET /group_member/:group_member_id/gm_periods
       def index
-        @gm_periods = @group_member.gm_periods
+        @gm_periods = CompleteGmPeriod.where(
+          group_member_id: params[:group_member_id]
+        )
         @gm_periods = DxService.load(@gm_periods, params)
         render json: @gm_periods
       end
