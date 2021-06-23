@@ -96,7 +96,6 @@ Rails.application.routes.draw do
 
         #    member do
         resources :group_member, only: [:index, :show, :create, :update]
-        put "/group_member/:id/deactivate", to: "group_member#deactivate"
 
         resources :plan_periods do
           #       member do
@@ -257,6 +256,10 @@ Rails.application.routes.draw do
       resources :research_creation_works, only: [] do
         resources :awards, only: [:index, :show, :create, :update]
       end
+      resources :group_member, only: [] do
+        resources :gm_periods, only: [:index, :create]
+      end
+      resources :gm_periods, only: [:show, :update]
 
       resources :colciencias_calls, only: [:index, :create, :update]
       resources :colciencias_categories, only: [:index, :create, :update]
