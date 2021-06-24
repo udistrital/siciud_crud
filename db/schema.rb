@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_23_233225) do
+ActiveRecord::Schema.define(version: 2021_06_24_050020) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -2195,7 +2195,9 @@ ActiveRecord::Schema.define(version: 2021_06_23_233225) do
     t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
+    t.integer "faculties_ids", default: [], array: true
     t.index ["created_by"], name: "index_users_on_created_by"
+    t.index ["faculties_ids"], name: "index_users_on_faculties_ids", using: :gin
     t.index ["updated_by"], name: "index_users_on_updated_by"
     t.index ["user_role_id"], name: "index_users_on_user_role_id"
   end
@@ -3843,20 +3845,6 @@ ActiveRecord::Schema.define(version: 2021_06_23_233225) do
        LEFT JOIN subtypes st ON ((t.id = st.type_id)))
        LEFT JOIN subtypes pst ON ((st.parent_id = pst.id)));
   SQL
-  create_view "complete_users", sql_definition: <<-SQL
-      SELECT u.id,
-      u.identification_number,
-      u.oas_user_id,
-      u.user_role_id,
-      ur.name AS user_role_name,
-      u.active,
-      u.created_by,
-      u.updated_by,
-      u.created_at,
-      u.updated_at
-     FROM (users u
-       LEFT JOIN user_roles ur ON ((u.user_role_id = ur.id)));
-  SQL
   create_view "complete_vegetable_varieties", sql_definition: <<-SQL
       SELECT vv.id,
       vv.name,
@@ -4429,5 +4417,20 @@ ActiveRecord::Schema.define(version: 2021_06_23_233225) do
       gp.updated_at
      FROM (gm_periods gp
        LEFT JOIN roles r ON ((gp.role_id = r.id)));
+  SQL
+  create_view "complete_users", sql_definition: <<-SQL
+      SELECT u.id,
+      u.identification_number,
+      u.oas_user_id,
+      u.user_role_id,
+      ur.name AS user_role_name,
+      u.faculties_ids,
+      u.active,
+      u.created_by,
+      u.updated_by,
+      u.created_at,
+      u.updated_at
+     FROM (users u
+       LEFT JOIN user_roles ur ON ((u.user_role_id = ur.id)));
   SQL
 end

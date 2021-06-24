@@ -6,13 +6,22 @@ module Swagger::UserSchema
     swagger_schema :User do
       property :identification_number do
         key :type, :string
+        key :example, '1122334455'
       end
       property :oas_user_id do
         key :type, :string
+        key :example, '12345'
       end
       property :user_role_id do
         key :type, :integer
         key :format, :int64
+      end
+      property :faculties_ids do
+        key :type, :array
+        items do
+          key :type, :integer
+          key :format, :int64
+        end
       end
     end
 
