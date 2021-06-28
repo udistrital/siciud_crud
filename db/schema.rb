@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_24_053024) do
+ActiveRecord::Schema.define(version: 2021_06_28_212050) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1898,6 +1898,7 @@ ActiveRecord::Schema.define(version: 2021_06_24_053024) do
     t.bigint "created_by"
     t.bigint "updated_by"
     t.index ["created_by"], name: "index_researchers_on_created_by"
+    t.index ["identification_number"], name: "index_researchers_on_identification_number", unique: true
     t.index ["updated_by"], name: "index_researchers_on_updated_by"
   end
 
@@ -2198,6 +2199,7 @@ ActiveRecord::Schema.define(version: 2021_06_24_053024) do
     t.integer "faculties_ids", default: [], array: true
     t.index ["created_by"], name: "index_users_on_created_by"
     t.index ["faculties_ids"], name: "index_users_on_faculties_ids", using: :gin
+    t.index ["identification_number"], name: "index_users_on_identification_number", unique: true
     t.index ["updated_by"], name: "index_users_on_updated_by"
     t.index ["user_role_id"], name: "index_users_on_user_role_id"
   end
@@ -2652,6 +2654,7 @@ ActiveRecord::Schema.define(version: 2021_06_24_053024) do
   add_foreign_key "research_groups", "users", column: "created_by"
   add_foreign_key "research_groups", "users", column: "updated_by"
   add_foreign_key "researchers", "users", column: "created_by"
+  add_foreign_key "researchers", "users", column: "identification_number", primary_key: "identification_number", on_delete: :cascade
   add_foreign_key "researchers", "users", column: "updated_by"
   add_foreign_key "roles", "users", column: "created_by"
   add_foreign_key "roles", "users", column: "updated_by"
@@ -4351,21 +4354,6 @@ ActiveRecord::Schema.define(version: 2021_06_24_053024) do
      FROM (gm_periods gp
        LEFT JOIN roles r ON ((gp.role_id = r.id)));
   SQL
-  create_view "complete_users", sql_definition: <<-SQL
-      SELECT u.id,
-      u.identification_number,
-      u.oas_user_id,
-      u.user_role_id,
-      ur.name AS user_role_name,
-      u.faculties_ids,
-      u.active,
-      u.created_by,
-      u.updated_by,
-      u.created_at,
-      u.updated_at
-     FROM (users u
-       LEFT JOIN user_roles ur ON ((u.user_role_id = ur.id)));
-  SQL
   create_view "research_units", sql_definition: <<-SQL
       SELECT rg.id,
       rg.legacy_siciud_id,
@@ -4441,5 +4429,31 @@ ActiveRecord::Schema.define(version: 2021_06_24_053024) do
      FROM ((research_groups rg
        LEFT JOIN subtypes stgt ON ((rg.group_type_id = stgt.id)))
        LEFT JOIN subtypes stgs ON ((rg.group_state_id = stgs.id)));
+  SQL
+  create_view "complete_users", sql_definition: <<-SQL
+      SELECT u.id,
+      u.identification_number,
+      u.oas_user_id,
+      u.user_role_id,
+      ur.name AS user_role_name,
+      u.faculties_ids,
+      array_length(u.faculties_ids, 1) AS total_faculties,
+      ( SELECT count(*) AS count
+             FROM group_members gm
+            WHERE (r.id = gm.researcher_id)) AS total_structures,
+      ( SELECT count(*) AS count
+             FROM group_members gm
+            WHERE ((r.id = gm.researcher_id) AND (gm.gm_state_id = 1))) AS total_active_structures,
+      ( SELECT count(*) AS count
+             FROM group_members gm
+            WHERE ((r.id = gm.researcher_id) AND (gm.gm_state_id = 2))) AS total_inactive_structures,
+      u.active,
+      u.created_by,
+      u.updated_by,
+      u.created_at,
+      u.updated_at
+     FROM ((users u
+       LEFT JOIN user_roles ur ON ((u.user_role_id = ur.id)))
+       LEFT JOIN researchers r ON (((u.identification_number)::text = (r.identification_number)::text)));
   SQL
 end
