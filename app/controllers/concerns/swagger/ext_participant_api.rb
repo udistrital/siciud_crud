@@ -96,7 +96,65 @@ module Swagger::ExtParticipantApi
           key :description, 'External Participant to update'
           key :required, true
           schema do
-            key :'$ref', :ExtParticipantInput
+            key :'$ref', :ExtParticipantInputPut
+          end
+        end
+
+        response 200 do
+          key :description, 'external participant response'
+          schema do
+            key :'$ref', :ExtParticipantOutput
+          end
+        end
+        response 422 do
+          key :description, 'Unprocessable Entity'
+          schema do
+            key :'$ref', :ErrorUnprocessableEntity
+          end
+        end
+        response :default do
+          key :description, 'Unexpected Error'
+        end
+      end
+
+      operation :patch do
+        key :summary, 'Activate or deactivate a External Participant of a Product by ID'
+        key :description, 'Returns the updated external participant'
+        key :operationId, :change_active_external_participant
+        key :produces, ['application/json',]
+        key :tags, ['Products::External Participants']
+
+        parameter name: :product_name do
+          key :in, :path
+          key :description, 'Product name or production name to fetch, e. g.,
+            books, papers and patents, among others (see all the names of the production "url names").'
+          key :enum, PRODUCT_ARRAY
+          key :required, true
+          key :type, :string
+        end
+        parameter name: :producible_id do
+          key :in, :path
+          key :description, 'Product ID or production ID to fetch'
+          key :required, true
+          key :type, :integer
+          key :format, :int64
+        end
+        parameter name: :id do
+          key :in, :path
+          key :description, 'ID of external participant to fetch'
+          key :required, true
+          key :type, :integer
+          key :format, :int64
+        end
+
+        parameter name: :ext_participant do
+          key :in, :body
+          key :description, 'External Participant to activate or deactivate'
+          key :required, true
+          schema do
+            property :ext_participant do
+              key :'$ref', :ChangeActive
+            end
           end
         end
 
@@ -145,10 +203,7 @@ module Swagger::ExtParticipantApi
         response 200 do
           key :description, 'external participant response'
           schema do
-            key :type, :array
-            items do
-              key :'$ref', :ExtParticipantOutput
-            end
+            key :'$ref', :ExtParticipantDxOutput
           end
         end
         response :default do
@@ -184,7 +239,7 @@ module Swagger::ExtParticipantApi
           key :description, 'External Participant to register'
           key :required, true
           schema do
-            key :'$ref', :ExtParticipantInput
+            key :'$ref', :ExtParticipantInputPost
           end
         end
 

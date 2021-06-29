@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_28_212050) do
+ActiveRecord::Schema.define(version: 2021_06_29_002645) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -825,6 +825,7 @@ ActiveRecord::Schema.define(version: 2021_06_28_212050) do
     t.bigint "created_by"
     t.bigint "updated_by"
     t.bigint "participant_type_id"
+    t.string "orcid_id"
     t.index ["created_by"], name: "index_ext_participants_on_created_by"
     t.index ["participant_type_id"], name: "index_ext_participants_on_participant_type_id"
     t.index ["producible_type", "producible_id"], name: "index_ext_participants_on_producible_type_and_producible_id"

@@ -14,6 +14,13 @@ module Swagger::ExtParticipantSchema
         key :type, :integer
         key :format, :int64
       end
+      property :orcid_id do
+        key :type, :string
+      end
+      property :active do
+        key :type, :boolean
+        key :default, true
+      end
     end
 
     swagger_schema :ExtParticipantInputPut do
@@ -72,10 +79,6 @@ module Swagger::ExtParticipantSchema
           property :product_type do
             key :type, :string
           end
-          property :active do
-            key :type, :boolean
-            key :default, true
-          end
           property :created_by do
             key :type, :integer
             key :format, :int64
@@ -108,6 +111,5 @@ module Swagger::ExtParticipantSchema
         end
       end
     end
-
   end
 end
