@@ -35,7 +35,7 @@ Rails.application.routes.draw do
       put "agreement/:id/attach/", to: "agreement#attach"
 
       resources :gm_states, only: [:index, :show]
-      resources :role, only: [:index, :show]
+      resources :role, only: [:index, :show, :create, :update]
       resources :researchers, only: [:index, :show, :update, :create]
       get "researcher_research_units", to: "researchers#researcher_research_units"
 
@@ -59,7 +59,6 @@ Rails.application.routes.draw do
       resources :arp_role, only: [:index, :show, :create]
 
       resources :user_roles, only: [:index, :show, :create, :update]
-      put "/user_roles/:id/active", to: "user_roles#change_active"
 
       resources :agreement_research_project, only: [] do
         resources :contribution_rp_item, only: [:index, :show, :create, :update]

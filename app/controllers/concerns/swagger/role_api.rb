@@ -36,46 +36,89 @@ module Swagger::RoleApi
         end
       end
 
-      # operation :put do
-      #   key :summary, 'Update Role by ID'
-      #   key :description, 'Returns the updated role'
-      #   key :operationId, :update_role
-      #   key :produces, ['application/json',]
-      #   key :tags, ['Roles']
-      #
-      #   parameter name: :id do
-      #     key :in, :path
-      #     key :description, 'ID of role to fetch'
-      #     key :required, true
-      #     key :type, :integer
-      #     key :format, :int64
-      #   end
-      #
-      #   parameter name: :role do
-      #     key :in, :body
-      #     key :description, 'Role to update'
-      #     key :required, true
-      #     schema do
-      #       key :'$ref', :RoleInput
-      #     end
-      #   end
-      #
-      #   response 200 do
-      #     key :description, 'role response'
-      #     schema do
-      #       key :'$ref', :RoleOutput
-      #     end
-      #   end
-      #   response 422 do
-      #     key :description, 'Unprocessable Entity'
-      #     schema do
-      #       key :'$ref', :ErrorUnprocessableEntity
-      #     end
-      #   end
-      #   response :default do
-      #     key :description, 'Unexpected Error'
-      #   end
-      # end
+      operation :put do
+        key :summary, 'Update Role by ID'
+        key :description, 'Returns the updated role'
+        key :operationId, :update_role
+        key :produces, ['application/json',]
+        key :tags, ['Roles']
+
+        parameter name: :id do
+          key :in, :path
+          key :description, 'ID of role to fetch'
+          key :required, true
+          key :type, :integer
+          key :format, :int64
+        end
+
+        parameter name: :role do
+          key :in, :body
+          key :description, 'Role to update'
+          key :required, true
+          schema do
+            key :'$ref', :RoleInputPut
+          end
+        end
+
+        response 200 do
+          key :description, 'role response'
+          schema do
+            key :'$ref', :RoleOutput
+          end
+        end
+        response 422 do
+          key :description, 'Unprocessable Entity'
+          schema do
+            key :'$ref', :ErrorUnprocessableEntity
+          end
+        end
+        response :default do
+          key :description, 'Unexpected Error'
+        end
+      end
+
+      operation :patch do
+        key :summary, 'Activate or deactivate a Role by ID'
+        key :description, 'Returns the updated role'
+        key :operationId, :change_active_role
+        key :produces, ['application/json',]
+        key :tags, ['Roles']
+
+        parameter name: :id do
+          key :in, :path
+          key :description, 'ID of role to fetch'
+          key :required, true
+          key :type, :integer
+          key :format, :int64
+        end
+
+        parameter name: :role do
+          key :in, :body
+          key :description, 'Role to activate or deactivate'
+          key :required, true
+          schema do
+            property :role do
+              key :'$ref', :ChangeActive
+            end
+          end
+        end
+
+        response 200 do
+          key :description, 'role response'
+          schema do
+            key :'$ref', :RoleOutput
+          end
+        end
+        response 422 do
+          key :description, 'Unprocessable Entity'
+          schema do
+            key :'$ref', :ErrorUnprocessableEntity
+          end
+        end
+        response :default do
+          key :description, 'Unexpected Error'
+        end
+      end
     end
 
     swagger_path '/role' do
@@ -100,38 +143,38 @@ module Swagger::RoleApi
         end
       end
 
-      # operation :post do
-      #   key :summary, 'Create a new Role'
-      #   key :description, 'Returns the created role'
-      #   key :operationId, :create_role
-      #   key :produces, ['application/json',]
-      #   key :tags, ['Roles']
-      #
-      #   parameter name: :role do
-      #     key :in, :body
-      #     key :description, 'Role to register'
-      #     key :required, true
-      #     schema do
-      #       key :'$ref', :RoleInput
-      #     end
-      #   end
-      #
-      #   response 201 do
-      #     key :description, 'role response'
-      #     schema do
-      #       key :'$ref', :RoleOutput
-      #     end
-      #   end
-      #   response 422 do
-      #     key :description, 'Unprocessable Entity'
-      #     schema do
-      #       key :'$ref', :ErrorUnprocessableEntity
-      #     end
-      #   end
-      #   response :default do
-      #     key :description, 'Unexpected Error'
-      #   end
-      # end
+      operation :post do
+        key :summary, 'Create a new Role'
+        key :description, 'Returns the created role'
+        key :operationId, :create_role
+        key :produces, ['application/json',]
+        key :tags, ['Roles']
+
+        parameter name: :role do
+          key :in, :body
+          key :description, 'Role to register'
+          key :required, true
+          schema do
+            key :'$ref', :RoleInputPost
+          end
+        end
+
+        response 201 do
+          key :description, 'role response'
+          schema do
+            key :'$ref', :RoleOutput
+          end
+        end
+        response 422 do
+          key :description, 'Unprocessable Entity'
+          schema do
+            key :'$ref', :ErrorUnprocessableEntity
+          end
+        end
+        response :default do
+          key :description, 'Unexpected Error'
+        end
+      end
     end
   end
 end

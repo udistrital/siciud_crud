@@ -7,6 +7,10 @@ module Swagger::UserRoleSchema
       property :name do
         key :type, :string
       end
+      property :active do
+        key :type, :boolean
+        key :default, true
+      end
     end
 
     swagger_schema :UserRoleInputPost do
@@ -45,22 +49,6 @@ module Swagger::UserRoleSchema
       end
     end
 
-    swagger_schema :UserRoleInputActive do
-      allOf do
-        schema do
-          property :user_role do
-            property :active do
-              key :type, :boolean
-            end
-            property :updated_by do
-              key :type, :integer
-              key :format, :int64
-            end
-          end
-        end
-      end
-    end
-
     swagger_schema :UserRoleOutput do
       allOf do
         schema do
@@ -70,10 +58,6 @@ module Swagger::UserRoleSchema
           property :id do
             key :type, :integer
             key :format, :int64
-          end
-          property :active do
-            key :type, :boolean
-            key :default, true
           end
           property :created_by do
             key :type, :integer
@@ -94,6 +78,5 @@ module Swagger::UserRoleSchema
         end
       end
     end
-
   end
 end
