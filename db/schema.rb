@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_29_002645) do
+ActiveRecord::Schema.define(version: 2021_06_29_220641) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -3090,22 +3090,6 @@ ActiveRecord::Schema.define(version: 2021_06_29_002645) do
        LEFT JOIN geo_states gs ON ((eve.geo_state_id = gs.id)))
        LEFT JOIN geo_countries gctry ON ((eve.geo_country_id = gctry.id)));
   SQL
-  create_view "complete_ext_participants", sql_definition: <<-SQL
-      SELECT extp.id,
-      extp.producible_type AS product_type,
-      extp.producible_id AS product_type_id,
-      extp.first_name,
-      extp.last_name,
-      extp.participant_type_id,
-      pt.st_name AS participant_type_name,
-      extp.active,
-      extp.created_by,
-      extp.updated_by,
-      extp.created_at,
-      extp.updated_at
-     FROM (ext_participants extp
-       LEFT JOIN subtypes pt ON ((pt.id = extp.participant_type_id)));
-  SQL
   create_view "complete_guide_manuals", sql_definition: <<-SQL
       SELECT gm.id,
       gm.title,
@@ -4456,5 +4440,22 @@ ActiveRecord::Schema.define(version: 2021_06_29_002645) do
      FROM ((users u
        LEFT JOIN user_roles ur ON ((u.user_role_id = ur.id)))
        LEFT JOIN researchers r ON (((u.identification_number)::text = (r.identification_number)::text)));
+  SQL
+  create_view "complete_ext_participants", sql_definition: <<-SQL
+      SELECT extp.id,
+      extp.producible_type AS product_type,
+      extp.producible_id AS product_type_id,
+      extp.first_name,
+      extp.last_name,
+      extp.orcid_id,
+      extp.participant_type_id,
+      pt.st_name AS participant_type_name,
+      extp.active,
+      extp.created_by,
+      extp.updated_by,
+      extp.created_at,
+      extp.updated_at
+     FROM (ext_participants extp
+       LEFT JOIN subtypes pt ON ((pt.id = extp.participant_type_id)));
   SQL
 end

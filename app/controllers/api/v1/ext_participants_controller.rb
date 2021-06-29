@@ -44,7 +44,7 @@ module Api
 
       private
 
-      # Use callbacks to share common setup or constraints between actions.
+      # Use callbacks to share common setup or constraints bNetween actions.
       def set_ext_participant
         @ext_participant = @context.ext_participants.find(params[:id])
       end
