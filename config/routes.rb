@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root to: "health#health"
-  
+
   namespace :api do
     namespace :v1 do
       get 'arp_assignment_reports/index'
@@ -243,6 +243,7 @@ Rails.application.routes.draw do
                 :publications, :simple_books,
                 :degree_works, :content_generations,
                 :informative_bulletins, :investigation_projects,
+                :idi_investigation_projects,
                 :extension_projects, :training_courses,
                 :accompaniment_consultancies,
                 only: [] do
