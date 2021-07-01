@@ -3,11 +3,11 @@ module Api
     class GmPeriodsController < ApplicationController
       include Swagger::GmPeriodApi
 
-      before_action :validate_only_one_current, only: [:create, :update]
       before_action :validate_initial_date, only: [:create, :update]
       before_action :validate_final_date, only: [:create, :update]
       before_action :set_group_member, only: [:index, :create]
       before_action :set_gm_period, only: [:show, :update]
+      before_action :validate_only_one_current, only: [:create, :update]
 
       # GET /group_member/:group_member_id/gm_periods
       def index
@@ -71,12 +71,19 @@ module Api
         if params[:gm_period].has_key?(:final_date)
           fn_date = params[:gm_period][:final_date]
 
-          begin
-            fn_date.to_date
-          rescue ArgumentError
-            msg = "final_date is an invalid date. Use the format YYYY-MM-DD or DD-MM-YYYY."
-            msg += "Can use - or /"
-            return render json: { "error": msg }, status: :unprocessable_entity
+          if fn_date.nil?
+            if fn_date.is_a? String
+              msg = "final_date can't be blank"
+              return render json: { "error": msg }, status: :unprocessable_entity
+            end
+          else
+            begin
+              fn_date.to_date
+            rescue ArgumentError
+              msg = "final_date is an invalid date. Use the format YYYY-MM-DD or DD-MM-YYYY."
+              msg += "Can use - or /"
+              return render json: { "error": msg }, status: :unprocessable_entity
+            end
           end
         else
           msg = "key final_date required"
@@ -108,8 +115,14 @@ module Api
       def validate_only_one_current
         if params[:gm_period].has_key?(:is_current)
           if params[:gm_period][:is_current] == true
+            if @group_member.nil?
+              group_member_id = params[:gm_period][:group_member_id]
+            else
+              group_member_id = @group_member.id
+            end
+            
             current_period = GmPeriod.where(
-              group_member_id: params[:gm_period][:group_member_id],
+              group_member_id: group_member_id,
               is_current: true)
             unless current_period.length == 0
               msg = "A record already exists as current period, in other words, with is_current: true"
