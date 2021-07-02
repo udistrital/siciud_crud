@@ -70,13 +70,7 @@ module Api
       def validate_final_date
         if params[:gm_period].has_key?(:final_date)
           fn_date = params[:gm_period][:final_date]
-
-          if fn_date.nil?
-            if fn_date.is_a? String
-              msg = "final_date can't be blank"
-              return render json: { "error": msg }, status: :unprocessable_entity
-            end
-          else
+          unless fn_date.blank?
             begin
               fn_date.to_date
             rescue ArgumentError
@@ -85,19 +79,13 @@ module Api
               return render json: { "error": msg }, status: :unprocessable_entity
             end
           end
-        else
-          msg = "key final_date required"
-          return render json: { "error": msg }, status: :unprocessable_entity
         end
       end
 
       def validate_initial_date
         if params[:gm_period].has_key?(:initial_date)
           init_date = params[:gm_period][:initial_date]
-          if init_date.blank?
-            msg = "initial_date can't be blank"
-            return render json: { "error": msg }, status: :unprocessable_entity
-          else
+          unless init_date.blank?
             begin
               init_date.to_date
             rescue ArgumentError
@@ -106,9 +94,6 @@ module Api
               return render json: { "error": msg }, status: :unprocessable_entity
             end
           end
-        else
-          msg = "key initial_date required"
-          return render json: { "error": msg }, status: :unprocessable_entity
         end
       end
 
@@ -116,17 +101,28 @@ module Api
         if params[:gm_period].has_key?(:is_current)
           if params[:gm_period][:is_current] == true
             if @group_member.nil?
-              group_member_id = params[:gm_period][:group_member_id]
+              if params[:gm_period].has_key?(:group_member_id)
+                query = "group_member_id = #{params[:gm_period][:group_member_id]}"
+                query += " AND is_current = true AND id != #{params[:id]}"
+                query += " AND active = true"
+              elsif not @gm_period.nil?
+                query = "group_member_id = #{@gm_period.group_member_id}"
+                query += " AND is_current = true AND id != #{params[:id]}"
+                query += " AND active = true"
+              else
+                query = nil
+              end
             else
-              group_member_id = @group_member.id
+              query = "group_member_id = #{@group_member.id}"
+              query += " AND is_current = true AND active = true"
             end
-            
-            current_period = GmPeriod.where(
-              group_member_id: group_member_id,
-              is_current: true)
-            unless current_period.length == 0
-              msg = "A record already exists as current period, in other words, with is_current: true"
-              render json: { "error": msg }, status: :unprocessable_entity
+
+            unless query.nil?
+              current_period = GmPeriod.where(query)
+              unless current_period.length == 0
+                msg = "A record already exists as current period, in other words, with is_current: true"
+                render json: { "error": msg }, status: :unprocessable_entity
+              end
             end
           end
         else
