@@ -9,11 +9,11 @@ default: &default
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   timeout: 5000
   encoding: unicode
-  database: <%= ENV['SICIUD_CRUD_PGDB'] %>
-  host: <%= ENV['SICIUD_CRUD_PGHOST'] %>
-  port: <%= ENV['SICIUD_CRUD_PGPORT'] %>
-  username: <%= ENV['SICIUD_CRUD_PGUSER'] %>
-  password: <%= ENV['SICIUD_CRUD_PGPASS'] %>
+  database: <%= ENV['SICIUD_CRUD_PGDB'] || 'siciud_v2' %>
+  host: <%= ENV['SICIUD_CRUD_PGHOST'] || '192.168.0.4' %>
+  port: <%= ENV['SICIUD_CRUD_PGPORT'] || '3505' %>
+  username: <%= ENV['SICIUD_CRUD_PGUSER'] || 'postgres' %>
+  password: <%= ENV['SICIUD_CRUD_PGPASS'] || 'p0stg*3s' %>
   schema_search_path: <%= ENV['SICIUD_CRUD_PGSCHEMA'] %>
 
 development:
@@ -25,12 +25,7 @@ development:
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: <%= ENV['PG_MIGRATION_DBNAME'] %>
-  host: <%= ENV['PG_MIGRATION_HOST'] %>
-  port: <%= ENV['PG_MIGRATION_PORT'] %>
-  username: <%= ENV['PG_MIGRATION_USER'] %>
-  password: <%= ENV['PG_MIGRATION_PASS'] %>
-  schema_search_path: <%= ENV['PG_MIGRATION_SCHEMA'] %>
+#  database: <%#= ENV['SICIUD_CRUD_PGDB_TEST'] %>
 
 production:
   <<: *default

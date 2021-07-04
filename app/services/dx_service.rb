@@ -15,6 +15,19 @@ class DxService < ApplicationService
       @dbSet = @dbSet.where("id in ("+ ids +")")
     end
 
+    # 202107040544: Filtro por Facultades (faculties=17,66)
+    # TODO: Determinar si el model tiene el campo 'faculties'
+    fids = GetParam(:faculties)
+    unless fids.nil?
+      # unless @dbSet["faculties"]?
+        arr = []
+        fids.split(',').each do |id|
+          arr.push("faculty_ids @> '{"+ id +"}'")
+        end
+        @dbSet = @dbSet.where(arr.join(" OR "))
+      # end
+    end
+
     # Filtro
     filter = GetParam(:filter)
     unless filter.nil?

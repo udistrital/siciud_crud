@@ -2735,6 +2735,154 @@ ActiveRecord::Schema.define(version: 2021_06_29_220641) do
   add_foreign_key "working_papers", "users", column: "created_by"
   add_foreign_key "working_papers", "users", column: "updated_by"
 
+  create_view "research_units_by_researchers", sql_definition: <<-SQL
+      SELECT rs.id,
+      rs.identification_number,
+      rs.oas_researcher_id,
+      rs.active AS researcher_is_active,
+      gm.id AS group_member_id,
+      gm.role_id,
+      rl.name AS role_name,
+      gm.gm_state_id,
+      gm.active AS group_member_is_active,
+      gm.research_group_id,
+      rg.name AS research_group_name,
+      rg.acronym,
+      rg.group_type_id,
+      rg.group_state_id,
+      rg.legacy_siciud_id
+     FROM (((researchers rs
+       JOIN group_members gm ON ((gm.researcher_id = rs.id)))
+       JOIN roles rl ON ((rl.id = gm.role_id)))
+       JOIN research_groups rg ON ((gm.research_group_id = rg.id)));
+  SQL
+  create_view "complete_int_participants", sql_definition: <<-SQL
+      SELECT intp.id,
+      intp.producible_type AS product_type,
+      intp.producible_id AS product_type_id,
+      intp.researcher_id,
+      r.oas_researcher_id,
+      intp.participant_type_id,
+      pt.st_name AS participant_type_name,
+      intp.active,
+      intp.created_by,
+      intp.updated_by,
+      intp.created_at,
+      intp.updated_at
+     FROM ((int_participants intp
+       LEFT JOIN researchers r ON ((r.id = intp.researcher_id)))
+       LEFT JOIN subtypes pt ON ((pt.id = intp.participant_type_id)));
+  SQL
+  create_view "complete_documents", sql_definition: <<-SQL
+      SELECT doc.id,
+      doc.nuxeo_id,
+      doc.documentable_type AS product_type,
+      doc.documentable_id AS product_type_id,
+      doc.doc_name,
+      doc.doc_path,
+      doc.doc_size,
+      doc.document_type_id,
+      dt.st_name AS document_type_name,
+      doc.active,
+      doc.created_by,
+      doc.updated_by,
+      doc.created_at,
+      doc.updated_at
+     FROM (documents doc
+       LEFT JOIN subtypes dt ON ((dt.id = doc.document_type_id)));
+  SQL
+  create_view "complete_degree_works", sql_definition: <<-SQL
+      SELECT dw.id,
+      dw.category_id,
+      st.st_name AS category_name,
+      dw.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      dw.dw_title,
+      dw.dw_date,
+      dw.dw_institution_name,
+      dw.dw_recognition,
+      dw.dw_type_id,
+      dwt.st_name AS dw_type_name,
+      dw.dw_observation,
+      dw.research_group_id,
+      dw.active,
+      dw.created_by,
+      dw.updated_by,
+      dw.created_at,
+      dw.updated_at
+     FROM (((degree_works dw
+       LEFT JOIN subtypes st ON ((dw.category_id = st.id)))
+       LEFT JOIN subtypes dwt ON ((dw.category_id = dwt.id)))
+       LEFT JOIN colciencias_calls cc ON ((dw.colciencias_call_id = cc.id)));
+  SQL
+  create_view "complete_patents", sql_definition: <<-SQL
+      SELECT p.id,
+      p.title,
+      p.category_id,
+      stc.st_name AS category_name,
+      p.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      p.date_of_obtaining,
+      ARRAY( SELECT gcp.geo_country_id
+             FROM geo_countries_patents gcp
+            WHERE (p.id = gcp.patent_id)) AS geo_country_ids,
+      p.industrial_publication_gazette,
+      p.observation,
+      p.patent_state_id,
+      stps.st_name AS patent_state_name,
+      p.patent_type_id,
+      pttp.st_name AS patent_type_name,
+      p.patent_number,
+      p.research_group_id,
+      p.active,
+      p.created_by,
+      p.updated_by,
+      p.created_at,
+      p.updated_at
+     FROM ((((patents p
+       LEFT JOIN subtypes stc ON ((p.category_id = stc.id)))
+       LEFT JOIN subtypes pttp ON ((p.patent_type_id = pttp.id)))
+       LEFT JOIN colciencias_calls cc ON ((p.colciencias_call_id = cc.id)))
+       LEFT JOIN subtypes stps ON ((p.patent_state_id = stps.id)));
+  SQL
+  create_view "complete_types", sql_definition: <<-SQL
+      SELECT t.id AS type_id,
+      t.t_name AS type_name,
+      t.t_description AS type_description,
+      t.active AS type_active,
+      st.parent_id,
+      pst.st_name AS parent_name,
+      pst.st_description AS parent_description,
+      pst.active AS parent_active,
+      st.id,
+      st.st_name AS name,
+      st.st_description AS description,
+      st.active
+     FROM ((types t
+       LEFT JOIN subtypes st ON ((t.id = st.type_id)))
+       LEFT JOIN subtypes pst ON ((st.parent_id = pst.id)));
+  SQL
+  create_view "complete_bills", sql_definition: <<-SQL
+      SELECT bl.id,
+      bl.title,
+      bl.category_id,
+      st.st_name AS category_name,
+      bl.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      bl.observation,
+      bl.research_group_id,
+      bl.active,
+      bl.created_by,
+      bl.updated_by,
+      bl.created_at,
+      bl.updated_at
+     FROM ((bills bl
+       LEFT JOIN subtypes st ON ((bl.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((bl.colciencias_call_id = cc.id)));
+  SQL
   create_view "complete_appropriation_processes", sql_definition: <<-SQL
       SELECT ap.id,
       ap.name,
@@ -2761,58 +2909,43 @@ ActiveRecord::Schema.define(version: 2021_06_29_220641) do
        LEFT JOIN colciencias_calls cc ON ((ap.colciencias_call_id = cc.id)))
        LEFT JOIN subtypes pt ON ((ap.product_type_id = pt.id)));
   SQL
-  create_view "complete_bills", sql_definition: <<-SQL
-      SELECT bl.id,
-      bl.title,
-      bl.category_id,
+  create_view "complete_scientific_notes", sql_definition: <<-SQL
+      SELECT sn.id,
+      sn.title,
+      sn.approval_date,
+      sn.category_id,
       st.st_name AS category_name,
-      bl.colciencias_call_id,
+      sn.colciencias_call_id,
       cc.name AS colciencias_call_name,
       cc.year AS colciencias_call_year,
-      bl.observation,
-      bl.research_group_id,
-      bl.active,
-      bl.created_by,
-      bl.updated_by,
-      bl.created_at,
-      bl.updated_at
-     FROM ((bills bl
-       LEFT JOIN subtypes st ON ((bl.category_id = st.id)))
-       LEFT JOIN colciencias_calls cc ON ((bl.colciencias_call_id = cc.id)));
-  SQL
-  create_view "complete_book_chapters", sql_definition: <<-SQL
-      SELECT bc.id,
-      bc.book_title,
-      bc.title,
-      bc.category_id,
-      st.st_name AS category_name,
-      bc.colciencias_call_id,
-      cc.name AS colciencias_call_name,
-      cc.year AS colciencias_call_year,
-      bc.doi,
-      bc.editorial_name,
-      bc.geo_city_id,
+      sn.doi,
+      sn.final_page,
+      sn.geo_city_id,
       gcity.name AS geo_city_name,
-      bc.geo_country_id,
+      sn.geo_country_id,
       gctry.name AS geo_country_name,
-      bc.geo_state_id,
+      sn.geo_state_id,
       gs.name AS geo_state_name,
-      bc.isbn,
-      bc.observation,
-      bc.publication_date,
-      bc.research_group_id,
-      bc.url,
-      bc.active,
-      bc.created_by,
-      bc.updated_by,
-      bc.created_at,
-      bc.updated_at
-     FROM (((((book_chapters bc
-       LEFT JOIN subtypes st ON ((bc.category_id = st.id)))
-       LEFT JOIN colciencias_calls cc ON ((bc.colciencias_call_id = cc.id)))
-       LEFT JOIN geo_cities gcity ON ((bc.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((bc.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((bc.geo_country_id = gctry.id)));
+      sn.initial_page,
+      sn.issn,
+      sn.journal_name,
+      sn.number_of_pages,
+      sn.observation,
+      sn.publication_date,
+      sn.research_group_id,
+      sn.url,
+      sn.volume,
+      sn.active,
+      sn.created_by,
+      sn.updated_by,
+      sn.created_at,
+      sn.updated_at
+     FROM (((((scientific_notes sn
+       LEFT JOIN subtypes st ON ((sn.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((sn.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((sn.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((sn.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((sn.geo_country_id = gctry.id)));
   SQL
   create_view "complete_books", sql_definition: <<-SQL
       SELECT b.id,
@@ -2849,95 +2982,343 @@ ActiveRecord::Schema.define(version: 2021_06_29_220641) do
        LEFT JOIN geo_states gs ON ((b.geo_state_id = gs.id)))
        LEFT JOIN geo_countries gctry ON ((b.geo_country_id = gctry.id)));
   SQL
-  create_view "complete_clinical_pgs", sql_definition: <<-SQL
-      SELECT cpg.id,
-      cpg.title,
-      cpg.category_id,
-      st.st_name AS category_name,
-      cpg.colciencias_call_id,
+  create_view "complete_papers", sql_definition: <<-SQL
+      SELECT p.id,
+      p.title,
+      p.approval_date,
+      p.category_id,
+      stc.st_name AS category_name,
+      p.colciencias_call_id,
       cc.name AS colciencias_call_name,
       cc.year AS colciencias_call_year,
-      cpg.date_of_publication,
-      cpg.geo_city_id,
+      p.doi,
+      p.final_page,
+      p.geo_city_id,
       gcity.name AS geo_city_name,
-      cpg.geo_country_id,
+      p.geo_country_id,
       gctry.name AS geo_country_name,
-      cpg.geo_state_id,
+      p.geo_state_id,
       gs.name AS geo_state_name,
-      cpg.isbn,
-      cpg.observation,
-      cpg.research_group_id,
-      cpg.active,
-      cpg.created_by,
-      cpg.updated_by,
-      cpg.created_at,
-      cpg.updated_at
-     FROM (((((clinical_practice_guidelines cpg
-       LEFT JOIN subtypes st ON ((cpg.category_id = st.id)))
-       LEFT JOIN colciencias_calls cc ON ((cpg.colciencias_call_id = cc.id)))
-       LEFT JOIN geo_cities gcity ON ((cpg.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((cpg.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((cpg.geo_country_id = gctry.id)));
+      p.initial_page,
+      p.issn,
+      p.journal_name,
+      p.number_of_pages,
+      p.observation,
+      p.paper_type_id,
+      stpt.st_name AS paper_type_name,
+      p.publication_date,
+      p.research_group_id,
+      p.url,
+      p.volume,
+      p.active,
+      p.created_by,
+      p.updated_by,
+      p.created_at,
+      p.updated_at
+     FROM ((((((papers p
+       LEFT JOIN subtypes stc ON ((p.category_id = stc.id)))
+       LEFT JOIN colciencias_calls cc ON ((p.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((p.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((p.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((p.geo_country_id = gctry.id)))
+       LEFT JOIN subtypes stpt ON ((p.paper_type_id = stpt.id)));
   SQL
-  create_view "complete_creation_workshops", sql_definition: <<-SQL
-      SELECT cw.id,
-      cw.name,
-      cw.category_id,
+  create_view "complete_book_chapters", sql_definition: <<-SQL
+      SELECT bc.id,
+      bc.book_title,
+      bc.title,
+      bc.category_id,
       st.st_name AS category_name,
-      cw.colciencias_call_id,
+      bc.colciencias_call_id,
       cc.name AS colciencias_call_name,
       cc.year AS colciencias_call_year,
-      cw.funding_institution,
-      cw.geo_city_id,
+      bc.doi,
+      bc.editorial_name,
+      bc.geo_city_id,
       gcity.name AS geo_city_name,
-      cw.geo_country_id,
+      bc.geo_country_id,
       gctry.name AS geo_country_name,
-      cw.geo_state_id,
+      bc.geo_state_id,
       gs.name AS geo_state_name,
-      cw.start_date,
-      cw.finish_date,
-      cw.observation,
-      cw.organization_name,
-      cw.participation_id,
-      prst.st_name AS participation_name,
-      cw.research_group_id,
-      cw.active,
-      cw.created_by,
-      cw.updated_by,
-      cw.created_at,
-      cw.updated_at
-     FROM ((((((creation_workshops cw
-       LEFT JOIN subtypes st ON ((cw.category_id = st.id)))
-       LEFT JOIN colciencias_calls cc ON ((cw.colciencias_call_id = cc.id)))
-       LEFT JOIN geo_cities gcity ON ((cw.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((cw.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((cw.geo_country_id = gctry.id)))
-       LEFT JOIN subtypes prst ON ((cw.participation_id = prst.id)));
+      bc.isbn,
+      bc.observation,
+      bc.publication_date,
+      bc.research_group_id,
+      bc.url,
+      bc.active,
+      bc.created_by,
+      bc.updated_by,
+      bc.created_at,
+      bc.updated_at
+     FROM (((((book_chapters bc
+       LEFT JOIN subtypes st ON ((bc.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((bc.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((bc.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((bc.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((bc.geo_country_id = gctry.id)));
   SQL
-  create_view "complete_degree_works", sql_definition: <<-SQL
-      SELECT dw.id,
-      dw.category_id,
-      st.st_name AS category_name,
-      dw.colciencias_call_id,
+  create_view "complete_vegetable_varieties", sql_definition: <<-SQL
+      SELECT vv.id,
+      vv.name,
+      vv.category_id,
+      stc.st_name AS category_name,
+      vv.colciencias_call_id,
       cc.name AS colciencias_call_name,
       cc.year AS colciencias_call_year,
-      dw.dw_title,
-      dw.dw_date,
-      dw.dw_institution_name,
-      dw.dw_recognition,
-      dw.dw_type_id,
-      dwt.st_name AS dw_type_name,
-      dw.dw_observation,
-      dw.research_group_id,
-      dw.active,
-      dw.created_by,
-      dw.updated_by,
-      dw.created_at,
-      dw.updated_at
-     FROM (((degree_works dw
-       LEFT JOIN subtypes st ON ((dw.category_id = st.id)))
-       LEFT JOIN subtypes dwt ON ((dw.category_id = dwt.id)))
-       LEFT JOIN colciencias_calls cc ON ((dw.colciencias_call_id = cc.id)));
+      vv.cycle_type_id,
+      stcc.st_name AS cycle_type_name,
+      vv.date,
+      vv.geo_city_id,
+      gcity.name AS geo_city_name,
+      vv.geo_country_id,
+      gctry.name AS geo_country_name,
+      vv.geo_state_id,
+      gs.name AS geo_state_name,
+      vv.petition_status_id,
+      stpt.st_name AS petition_status_name,
+      vv.observation,
+      vv.research_group_id,
+      vv.active,
+      vv.created_by,
+      vv.updated_by,
+      vv.created_at,
+      vv.updated_at
+     FROM (((((((vegetable_varieties vv
+       LEFT JOIN subtypes stc ON ((vv.category_id = stc.id)))
+       LEFT JOIN colciencias_calls cc ON ((vv.colciencias_call_id = cc.id)))
+       LEFT JOIN subtypes stcc ON ((vv.cycle_type_id = stcc.id)))
+       LEFT JOIN geo_cities gcity ON ((vv.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((vv.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((vv.geo_country_id = gctry.id)))
+       LEFT JOIN subtypes stpt ON ((vv.petition_status_id = stpt.id)));
+  SQL
+  create_view "complete_new_animal_bs", sql_definition: <<-SQL
+      SELECT nab.id,
+      nab.name,
+      nab.category_id,
+      stc.st_name AS category_name,
+      nab.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      nab.date,
+      nab.geo_city_id,
+      gcity.name AS geo_city_name,
+      nab.geo_country_id,
+      gctry.name AS geo_country_name,
+      nab.geo_state_id,
+      gs.name AS geo_state_name,
+      nab.petition_status_id,
+      stpt.st_name AS petition_status_name,
+      nab.observation,
+      nab.research_group_id,
+      nab.active,
+      nab.created_by,
+      nab.updated_by,
+      nab.created_at,
+      nab.updated_at
+     FROM ((((((new_animal_breeds nab
+       LEFT JOIN subtypes stc ON ((nab.category_id = stc.id)))
+       LEFT JOIN colciencias_calls cc ON ((nab.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((nab.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((nab.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((nab.geo_country_id = gctry.id)))
+       LEFT JOIN subtypes stpt ON ((nab.petition_status_id = stpt.id)));
+  SQL
+  create_view "complete_ipl_breeds", sql_definition: <<-SQL
+      SELECT iplb.id,
+      iplb.name,
+      iplb.category_id,
+      stc.st_name AS category_name,
+      iplb.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      iplb.consecutive_number_ma,
+      iplb.geo_city_id,
+      gcity.name AS geo_city_name,
+      iplb.geo_country_id,
+      gctry.name AS geo_country_name,
+      iplb.geo_state_id,
+      gs.name AS geo_state_name,
+      iplb.observation,
+      iplb.publication_date,
+      iplb.research_group_id,
+      iplb.active,
+      iplb.created_by,
+      iplb.updated_by,
+      iplb.created_at,
+      iplb.updated_at
+     FROM (((((ip_livestock_breeds iplb
+       LEFT JOIN subtypes stc ON ((iplb.category_id = stc.id)))
+       LEFT JOIN colciencias_calls cc ON ((iplb.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((iplb.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((iplb.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((iplb.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_research_cws", sql_definition: <<-SQL
+      SELECT rcw.id,
+      rcw.title,
+      rcw.category_id,
+      stc.st_name AS category_name,
+      rcw.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      rcw.creation_and_selection_date,
+      rcw.geo_city_id,
+      gcity.name AS geo_city_name,
+      rcw.geo_country_id,
+      gctry.name AS geo_country_name,
+      rcw.geo_state_id,
+      gs.name AS geo_state_name,
+      rcw.knwl_spec_area_id,
+      stksa.st_name AS knwl_spec_area_name,
+      rcw.nature_id,
+      stnt.st_name AS nature_name,
+      rcw.observation,
+      rcw.registered_project_title,
+      rcw.url,
+      ARRAY( SELECT rcwwt.subtype_id
+             FROM research_creation_works_work_types rcwwt
+            WHERE (rcw.id = rcwwt.research_creation_work_id)) AS work_type_ids,
+      rcw.research_group_id,
+      rcw.active,
+      rcw.created_by,
+      rcw.updated_by,
+      rcw.created_at,
+      rcw.updated_at
+     FROM (((((((research_creation_works rcw
+       LEFT JOIN subtypes stc ON ((rcw.category_id = stc.id)))
+       LEFT JOIN subtypes stnt ON ((rcw.nature_id = stnt.id)))
+       LEFT JOIN colciencias_calls cc ON ((rcw.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((rcw.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((rcw.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((rcw.geo_country_id = gctry.id)))
+       LEFT JOIN subtypes stksa ON ((rcw.knwl_spec_area_id = stksa.id)));
+  SQL
+  create_view "complete_industrial_designs", sql_definition: <<-SQL
+      SELECT ind.id,
+      ind.category_id,
+      st.st_name AS category_name,
+      ind.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      ind.geo_city_id,
+      gcity.name AS geo_city_name,
+      ind.geo_country_id,
+      gctry.name AS geo_country_name,
+      ind.geo_state_id,
+      gs.name AS geo_state_name,
+      ind.ind_dsg_date_of_obtaining,
+      ind.ind_dsg_industrial_publication_gazette,
+      ind.ind_dsg_registration_number,
+      ind.ind_dsg_registration_title,
+      ind.observation,
+      ind.research_group_id,
+      ind.active,
+      ind.created_by,
+      ind.updated_by,
+      ind.created_at,
+      ind.updated_at
+     FROM (((((industrial_designs ind
+       LEFT JOIN subtypes st ON ((ind.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((ind.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((ind.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((ind.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((ind.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_icds", sql_definition: <<-SQL
+      SELECT icd.id,
+      icd.category_id,
+      st.st_name AS category_name,
+      icd.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      icd.geo_city_id,
+      gcity.name AS geo_city_name,
+      icd.geo_country_id,
+      gctry.name AS geo_country_name,
+      icd.geo_state_id,
+      gs.name AS geo_state_name,
+      icd.icd_date_of_obtaining,
+      icd.icd_registration_number,
+      icd.icd_registration_title,
+      icd.observation,
+      icd.research_group_id,
+      icd.active,
+      icd.created_by,
+      icd.updated_by,
+      icd.created_at,
+      icd.updated_at
+     FROM (((((integrated_circuit_diagrams icd
+       LEFT JOIN subtypes st ON ((icd.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((icd.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((icd.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((icd.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((icd.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_software", sql_definition: <<-SQL
+      SELECT soft.id,
+      soft.category_id,
+      st.st_name AS category_name,
+      soft.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      soft.geo_city_id,
+      gcity.name AS geo_city_name,
+      soft.geo_country_id,
+      gctry.name AS geo_country_name,
+      soft.geo_state_id,
+      gs.name AS geo_state_name,
+      soft.sof_date_of_obtaining,
+      soft.sof_description,
+      soft.sof_product_title,
+      soft.sof_registration_number,
+      soft.observation,
+      soft.research_group_id,
+      soft.active,
+      soft.created_by,
+      soft.updated_by,
+      soft.created_at,
+      soft.updated_at
+     FROM (((((software soft
+       LEFT JOIN subtypes st ON ((soft.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((soft.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((soft.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((soft.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((soft.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_plt_ind_prots", sql_definition: <<-SQL
+      SELECT pltind.id,
+      pltind.category_id,
+      st.st_name AS category_name,
+      pltind.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      pltind.geo_city_id,
+      gcity.name AS geo_city_name,
+      pltind.geo_country_id,
+      gctry.name AS geo_country_name,
+      pltind.geo_state_id,
+      gs.name AS geo_state_name,
+      pltind.institution_name,
+      pltind.plt_name,
+      pltind.plt_date_of_elaboration,
+      pltind.plt_registration_number,
+      pltind.plt_type_id,
+      stplt.st_name AS plt_type_name,
+      pltind.observation,
+      pltind.research_group_id,
+      pltind.active,
+      pltind.created_by,
+      pltind.updated_by,
+      pltind.created_at,
+      pltind.updated_at
+     FROM ((((((plant_ind_prototypes pltind
+       LEFT JOIN subtypes st ON ((pltind.category_id = st.id)))
+       LEFT JOIN subtypes stplt ON ((pltind.plt_type_id = stplt.id)))
+       LEFT JOIN colciencias_calls cc ON ((pltind.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((pltind.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((pltind.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((pltind.geo_country_id = gctry.id)));
   SQL
   create_view "complete_distinctive_signs", sql_definition: <<-SQL
       SELECT ds.id,
@@ -2969,23 +3350,103 @@ ActiveRecord::Schema.define(version: 2021_06_29_220641) do
        LEFT JOIN geo_states gs ON ((ds.geo_state_id = gs.id)))
        LEFT JOIN geo_countries gctry ON ((ds.geo_country_id = gctry.id)));
   SQL
-  create_view "complete_documents", sql_definition: <<-SQL
-      SELECT doc.id,
-      doc.nuxeo_id,
-      doc.documentable_type AS product_type,
-      doc.documentable_id AS product_type_id,
-      doc.doc_name,
-      doc.doc_path,
-      doc.doc_size,
-      doc.document_type_id,
-      dt.st_name AS document_type_name,
-      doc.active,
-      doc.created_by,
-      doc.updated_by,
-      doc.created_at,
-      doc.updated_at
-     FROM (documents doc
-       LEFT JOIN subtypes dt ON ((dt.id = doc.document_type_id)));
+  create_view "complete_nutraceutical_products", sql_definition: <<-SQL
+      SELECT np.id,
+      np.name,
+      np.category_id,
+      st.st_name AS category_name,
+      np.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      np.consecutive_registration_invima,
+      np.date_of_obtaining,
+      np.geo_city_id,
+      gcity.name AS geo_city_name,
+      np.geo_country_id,
+      gctry.name AS geo_country_name,
+      np.geo_state_id,
+      gs.name AS geo_state_name,
+      np.observation,
+      np.research_group_id,
+      np.research_project_title,
+      np.active,
+      np.created_by,
+      np.updated_by,
+      np.created_at,
+      np.updated_at
+     FROM (((((nutraceutical_products np
+       LEFT JOIN subtypes st ON ((np.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((np.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((np.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((np.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((np.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_scientific_collections", sql_definition: <<-SQL
+      SELECT sc.id,
+      sc.name,
+      sc.category_id,
+      st.st_name AS category_name,
+      sc.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      sc.curator_name,
+      sc.date_of_obtaining,
+      sc.geo_city_id,
+      gcity.name AS geo_city_name,
+      sc.geo_country_id,
+      gctry.name AS geo_country_name,
+      sc.geo_state_id,
+      gs.name AS geo_state_name,
+      sc.information_included,
+      sc.last_conservatorship_date,
+      sc.managing_institution_name,
+      sc.observation,
+      sc.research_group_id,
+      sc.validity_and_use,
+      sc.active,
+      sc.created_by,
+      sc.updated_by,
+      sc.created_at,
+      sc.updated_at
+     FROM (((((scientific_collections sc
+       LEFT JOIN subtypes st ON ((sc.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((sc.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((sc.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((sc.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((sc.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_new_scientific_records", sql_definition: <<-SQL
+      SELECT nsr.id,
+      nsr.category_id,
+      st.st_name AS category_name,
+      nsr.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      nsr.geo_city_id,
+      gcity.name AS geo_city_name,
+      nsr.geo_country_id,
+      gctry.name AS geo_country_name,
+      nsr.geo_state_id,
+      gs.name AS geo_state_name,
+      nsr.nsr_name,
+      nsr.nsr_date_of_obtaining,
+      nsr.nsr_database_name,
+      nsr.nsr_database_url,
+      nsr.nsr_certifying_institution,
+      nsr.nsr_issuing_institution,
+      nsr.observation,
+      nsr.research_group_id,
+      nsr.active,
+      nsr.created_by,
+      nsr.updated_by,
+      nsr.created_at,
+      nsr.updated_at
+     FROM (((((new_scientific_records nsr
+       LEFT JOIN subtypes st ON ((nsr.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((nsr.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((nsr.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((nsr.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((nsr.geo_country_id = gctry.id)));
   SQL
   create_view "complete_enterprise_secrets", sql_definition: <<-SQL
       SELECT ens.id,
@@ -3052,138 +3513,6 @@ ActiveRecord::Schema.define(version: 2021_06_29_220641) do
        LEFT JOIN geo_countries gctry ON ((ent.geo_country_id = gctry.id)))
        LEFT JOIN subtypes pt ON ((ent.product_type_id = pt.id)));
   SQL
-  create_view "complete_events", sql_definition: <<-SQL
-      SELECT eve.id,
-      eve.category_id,
-      st.st_name AS category_name,
-      eve.colciencias_call_id,
-      cc.name AS colciencias_call_name,
-      cc.year AS colciencias_call_year,
-      eve.eve_name,
-      eve.eve_start_date,
-      eve.eve_finish_date,
-      eve.eve_organizers,
-      eve.eve_entities,
-      eve.eve_observation,
-      eve.eve_type_id,
-      evt.st_name AS eve_type_name,
-      eve.geo_city_id,
-      gcity.name AS geo_city_name,
-      eve.geo_country_id,
-      gctry.name AS geo_country_name,
-      eve.geo_state_id,
-      gs.name AS geo_state_name,
-      eve.participation_id,
-      part.st_name AS participation_name,
-      eve.research_group_id,
-      eve.active,
-      eve.created_by,
-      eve.updated_by,
-      eve.created_at,
-      eve.updated_at
-     FROM (((((((events eve
-       LEFT JOIN subtypes st ON ((eve.category_id = st.id)))
-       LEFT JOIN subtypes evt ON ((eve.eve_type_id = evt.id)))
-       LEFT JOIN subtypes part ON ((eve.participation_id = part.id)))
-       LEFT JOIN colciencias_calls cc ON ((eve.colciencias_call_id = cc.id)))
-       LEFT JOIN geo_cities gcity ON ((eve.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((eve.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((eve.geo_country_id = gctry.id)));
-  SQL
-  create_view "complete_guide_manuals", sql_definition: <<-SQL
-      SELECT gm.id,
-      gm.title,
-      gm.category_id,
-      st.st_name AS category_name,
-      gm.colciencias_call_id,
-      cc.name AS colciencias_call_name,
-      cc.year AS colciencias_call_year,
-      gm.date_of_publication,
-      gm.geo_city_id,
-      gcity.name AS geo_city_name,
-      gm.geo_country_id,
-      gctry.name AS geo_country_name,
-      gm.geo_state_id,
-      gs.name AS geo_state_name,
-      gm.observation,
-      gm.product_type_id,
-      pt.st_name AS product_type_name,
-      gm.research_group_id,
-      gm.url,
-      gm.active,
-      gm.created_by,
-      gm.updated_by,
-      gm.created_at,
-      gm.updated_at
-     FROM ((((((guide_manuals gm
-       LEFT JOIN subtypes st ON ((gm.category_id = st.id)))
-       LEFT JOIN colciencias_calls cc ON ((gm.colciencias_call_id = cc.id)))
-       LEFT JOIN geo_cities gcity ON ((gm.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((gm.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((gm.geo_country_id = gctry.id)))
-       LEFT JOIN subtypes pt ON ((gm.product_type_id = pt.id)));
-  SQL
-  create_view "complete_icds", sql_definition: <<-SQL
-      SELECT icd.id,
-      icd.category_id,
-      st.st_name AS category_name,
-      icd.colciencias_call_id,
-      cc.name AS colciencias_call_name,
-      cc.year AS colciencias_call_year,
-      icd.geo_city_id,
-      gcity.name AS geo_city_name,
-      icd.geo_country_id,
-      gctry.name AS geo_country_name,
-      icd.geo_state_id,
-      gs.name AS geo_state_name,
-      icd.icd_date_of_obtaining,
-      icd.icd_registration_number,
-      icd.icd_registration_title,
-      icd.observation,
-      icd.research_group_id,
-      icd.active,
-      icd.created_by,
-      icd.updated_by,
-      icd.created_at,
-      icd.updated_at
-     FROM (((((integrated_circuit_diagrams icd
-       LEFT JOIN subtypes st ON ((icd.category_id = st.id)))
-       LEFT JOIN colciencias_calls cc ON ((icd.colciencias_call_id = cc.id)))
-       LEFT JOIN geo_cities gcity ON ((icd.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((icd.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((icd.geo_country_id = gctry.id)));
-  SQL
-  create_view "complete_industrial_designs", sql_definition: <<-SQL
-      SELECT ind.id,
-      ind.category_id,
-      st.st_name AS category_name,
-      ind.colciencias_call_id,
-      cc.name AS colciencias_call_name,
-      cc.year AS colciencias_call_year,
-      ind.geo_city_id,
-      gcity.name AS geo_city_name,
-      ind.geo_country_id,
-      gctry.name AS geo_country_name,
-      ind.geo_state_id,
-      gs.name AS geo_state_name,
-      ind.ind_dsg_date_of_obtaining,
-      ind.ind_dsg_industrial_publication_gazette,
-      ind.ind_dsg_registration_number,
-      ind.ind_dsg_registration_title,
-      ind.observation,
-      ind.research_group_id,
-      ind.active,
-      ind.created_by,
-      ind.updated_by,
-      ind.created_at,
-      ind.updated_at
-     FROM (((((industrial_designs ind
-       LEFT JOIN subtypes st ON ((ind.category_id = st.id)))
-       LEFT JOIN colciencias_calls cc ON ((ind.colciencias_call_id = cc.id)))
-       LEFT JOIN geo_cities gcity ON ((ind.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((ind.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((ind.geo_country_id = gctry.id)));
-  SQL
   create_view "complete_innovations", sql_definition: <<-SQL
       SELECT inn.id,
       inn.name,
@@ -3218,85 +3547,168 @@ ActiveRecord::Schema.define(version: 2021_06_29_220641) do
        LEFT JOIN geo_countries gctry ON ((inn.geo_country_id = gctry.id)))
        LEFT JOIN subtypes pt ON ((inn.product_type_id = pt.id)));
   SQL
-  create_view "complete_int_participants", sql_definition: <<-SQL
-      SELECT intp.id,
-      intp.producible_type AS product_type,
-      intp.producible_id AS product_type_id,
-      intp.researcher_id,
-      r.oas_researcher_id,
-      intp.participant_type_id,
-      pt.st_name AS participant_type_name,
-      intp.active,
-      intp.created_by,
-      intp.updated_by,
-      intp.created_at,
-      intp.updated_at
-     FROM ((int_participants intp
-       LEFT JOIN researchers r ON ((r.id = intp.researcher_id)))
-       LEFT JOIN subtypes pt ON ((pt.id = intp.participant_type_id)));
-  SQL
-  create_view "complete_ipl_breeds", sql_definition: <<-SQL
-      SELECT iplb.id,
-      iplb.name,
-      iplb.category_id,
-      stc.st_name AS category_name,
-      iplb.colciencias_call_id,
-      cc.name AS colciencias_call_name,
-      cc.year AS colciencias_call_year,
-      iplb.consecutive_number_ma,
-      iplb.geo_city_id,
-      gcity.name AS geo_city_name,
-      iplb.geo_country_id,
-      gctry.name AS geo_country_name,
-      iplb.geo_state_id,
-      gs.name AS geo_state_name,
-      iplb.observation,
-      iplb.publication_date,
-      iplb.research_group_id,
-      iplb.active,
-      iplb.created_by,
-      iplb.updated_by,
-      iplb.created_at,
-      iplb.updated_at
-     FROM (((((ip_livestock_breeds iplb
-       LEFT JOIN subtypes stc ON ((iplb.category_id = stc.id)))
-       LEFT JOIN colciencias_calls cc ON ((iplb.colciencias_call_id = cc.id)))
-       LEFT JOIN geo_cities gcity ON ((iplb.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((iplb.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((iplb.geo_country_id = gctry.id)));
-  SQL
-  create_view "complete_knowledge_networks", sql_definition: <<-SQL
-      SELECT kn.id,
-      kn.name,
-      kn.category_id,
+  create_view "complete_regulations", sql_definition: <<-SQL
+      SELECT reg.id,
+      reg.title,
+      reg.category_id,
       st.st_name AS category_name,
-      kn.colciencias_call_id,
+      reg.colciencias_call_id,
       cc.name AS colciencias_call_name,
       cc.year AS colciencias_call_year,
-      kn.funding_community,
-      kn.funding_institution,
-      kn.geo_city_id,
+      reg.date_of_publication,
+      reg.geo_city_id,
       gcity.name AS geo_city_name,
-      kn.geo_country_id,
+      reg.geo_country_id,
       gctry.name AS geo_country_name,
-      kn.geo_state_id,
+      reg.geo_state_id,
       gs.name AS geo_state_name,
-      kn.start_date,
-      kn.finish_date,
-      kn.observation,
-      kn.research_group_id,
-      kn.web_page,
-      kn.active,
-      kn.created_by,
-      kn.updated_by,
-      kn.created_at,
-      kn.updated_at
-     FROM (((((knowledge_networks kn
-       LEFT JOIN subtypes st ON ((kn.category_id = st.id)))
-       LEFT JOIN colciencias_calls cc ON ((kn.colciencias_call_id = cc.id)))
-       LEFT JOIN geo_cities gcity ON ((kn.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((kn.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((kn.geo_country_id = gctry.id)));
+      reg.issuing_entity,
+      reg.observation,
+      reg.product_type_id,
+      pt.st_name AS product_type_name,
+      reg.regulation_type_id,
+      rt.st_name AS regulation_type_name,
+      reg.research_group_id,
+      reg.active,
+      reg.created_by,
+      reg.updated_by,
+      reg.created_at,
+      reg.updated_at
+     FROM (((((((regulations reg
+       LEFT JOIN subtypes st ON ((reg.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((reg.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((reg.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((reg.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((reg.geo_country_id = gctry.id)))
+       LEFT JOIN subtypes pt ON ((reg.product_type_id = pt.id)))
+       LEFT JOIN subtypes rt ON ((reg.regulation_type_id = rt.id)));
+  SQL
+  create_view "complete_clinical_pgs", sql_definition: <<-SQL
+      SELECT cpg.id,
+      cpg.title,
+      cpg.category_id,
+      st.st_name AS category_name,
+      cpg.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      cpg.date_of_publication,
+      cpg.geo_city_id,
+      gcity.name AS geo_city_name,
+      cpg.geo_country_id,
+      gctry.name AS geo_country_name,
+      cpg.geo_state_id,
+      gs.name AS geo_state_name,
+      cpg.isbn,
+      cpg.observation,
+      cpg.research_group_id,
+      cpg.active,
+      cpg.created_by,
+      cpg.updated_by,
+      cpg.created_at,
+      cpg.updated_at
+     FROM (((((clinical_practice_guidelines cpg
+       LEFT JOIN subtypes st ON ((cpg.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((cpg.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((cpg.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((cpg.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((cpg.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_guide_manuals", sql_definition: <<-SQL
+      SELECT gm.id,
+      gm.title,
+      gm.category_id,
+      st.st_name AS category_name,
+      gm.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      gm.date_of_publication,
+      gm.geo_city_id,
+      gcity.name AS geo_city_name,
+      gm.geo_country_id,
+      gctry.name AS geo_country_name,
+      gm.geo_state_id,
+      gs.name AS geo_state_name,
+      gm.observation,
+      gm.product_type_id,
+      pt.st_name AS product_type_name,
+      gm.research_group_id,
+      gm.url,
+      gm.active,
+      gm.created_by,
+      gm.updated_by,
+      gm.created_at,
+      gm.updated_at
+     FROM ((((((guide_manuals gm
+       LEFT JOIN subtypes st ON ((gm.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((gm.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((gm.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((gm.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((gm.geo_country_id = gctry.id)))
+       LEFT JOIN subtypes pt ON ((gm.product_type_id = pt.id)));
+  SQL
+  create_view "complete_protocol_acts", sql_definition: <<-SQL
+      SELECT pac.id,
+      pac.title,
+      pac.category_id,
+      st.st_name AS category_name,
+      pac.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      pac.date_of_publication,
+      pac.geo_city_id,
+      gcity.name AS geo_city_name,
+      pac.geo_country_id,
+      gctry.name AS geo_country_name,
+      pac.geo_state_id,
+      gs.name AS geo_state_name,
+      pac.observation,
+      pac.product_type_id,
+      pt.st_name AS product_type_name,
+      pac.research_group_id,
+      pac.active,
+      pac.created_by,
+      pac.updated_by,
+      pac.created_at,
+      pac.updated_at
+     FROM ((((((protocol_acts pac
+       LEFT JOIN subtypes st ON ((pac.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((pac.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((pac.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((pac.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((pac.geo_country_id = gctry.id)))
+       LEFT JOIN subtypes pt ON ((pac.product_type_id = pt.id)));
+  SQL
+  create_view "complete_technical_concepts", sql_definition: <<-SQL
+      SELECT tc.id,
+      tc.title,
+      tc.category_id,
+      st.st_name AS category_name,
+      tc.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      tc.consecutive_number,
+      tc.geo_city_id,
+      gcity.name AS geo_city_name,
+      tc.geo_country_id,
+      gctry.name AS geo_country_name,
+      tc.geo_state_id,
+      gs.name AS geo_state_name,
+      tc.observation,
+      tc.request_date,
+      tc.requesting_institution_name,
+      tc.research_group_id,
+      tc.send_date,
+      tc.active,
+      tc.created_by,
+      tc.updated_by,
+      tc.created_at,
+      tc.updated_at
+     FROM (((((technical_concepts tc
+       LEFT JOIN subtypes st ON ((tc.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((tc.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((tc.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((tc.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((tc.geo_country_id = gctry.id)));
   SQL
   create_view "complete_license_agreements", sql_definition: <<-SQL
       SELECT la.id,
@@ -3339,37 +3751,134 @@ ActiveRecord::Schema.define(version: 2021_06_29_220641) do
        LEFT JOIN geo_states cgs ON ((la.contract_geo_state_id = cgs.id)))
        LEFT JOIN geo_countries cgctry ON ((la.contract_geo_country_id = cgctry.id)));
   SQL
-  create_view "complete_new_animal_bs", sql_definition: <<-SQL
-      SELECT nab.id,
-      nab.name,
-      nab.category_id,
-      stc.st_name AS category_name,
-      nab.colciencias_call_id,
+  create_view "complete_events", sql_definition: <<-SQL
+      SELECT eve.id,
+      eve.category_id,
+      st.st_name AS category_name,
+      eve.colciencias_call_id,
       cc.name AS colciencias_call_name,
       cc.year AS colciencias_call_year,
-      nab.date,
-      nab.geo_city_id,
+      eve.eve_name,
+      eve.eve_start_date,
+      eve.eve_finish_date,
+      eve.eve_organizers,
+      eve.eve_entities,
+      eve.eve_observation,
+      eve.eve_type_id,
+      evt.st_name AS eve_type_name,
+      eve.geo_city_id,
       gcity.name AS geo_city_name,
-      nab.geo_country_id,
+      eve.geo_country_id,
       gctry.name AS geo_country_name,
-      nab.geo_state_id,
+      eve.geo_state_id,
       gs.name AS geo_state_name,
-      nab.petition_status_id,
-      stpt.st_name AS petition_status_name,
-      nab.observation,
-      nab.research_group_id,
-      nab.active,
-      nab.created_by,
-      nab.updated_by,
-      nab.created_at,
-      nab.updated_at
-     FROM ((((((new_animal_breeds nab
-       LEFT JOIN subtypes stc ON ((nab.category_id = stc.id)))
-       LEFT JOIN colciencias_calls cc ON ((nab.colciencias_call_id = cc.id)))
-       LEFT JOIN geo_cities gcity ON ((nab.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((nab.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((nab.geo_country_id = gctry.id)))
-       LEFT JOIN subtypes stpt ON ((nab.petition_status_id = stpt.id)));
+      eve.participation_id,
+      part.st_name AS participation_name,
+      eve.research_group_id,
+      eve.active,
+      eve.created_by,
+      eve.updated_by,
+      eve.created_at,
+      eve.updated_at
+     FROM (((((((events eve
+       LEFT JOIN subtypes st ON ((eve.category_id = st.id)))
+       LEFT JOIN subtypes evt ON ((eve.eve_type_id = evt.id)))
+       LEFT JOIN subtypes part ON ((eve.participation_id = part.id)))
+       LEFT JOIN colciencias_calls cc ON ((eve.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((eve.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((eve.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((eve.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_knowledge_networks", sql_definition: <<-SQL
+      SELECT kn.id,
+      kn.name,
+      kn.category_id,
+      st.st_name AS category_name,
+      kn.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      kn.funding_community,
+      kn.funding_institution,
+      kn.geo_city_id,
+      gcity.name AS geo_city_name,
+      kn.geo_country_id,
+      gctry.name AS geo_country_name,
+      kn.geo_state_id,
+      gs.name AS geo_state_name,
+      kn.start_date,
+      kn.finish_date,
+      kn.observation,
+      kn.research_group_id,
+      kn.web_page,
+      kn.active,
+      kn.created_by,
+      kn.updated_by,
+      kn.created_at,
+      kn.updated_at
+     FROM (((((knowledge_networks kn
+       LEFT JOIN subtypes st ON ((kn.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((kn.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((kn.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((kn.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((kn.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_creation_workshops", sql_definition: <<-SQL
+      SELECT cw.id,
+      cw.name,
+      cw.category_id,
+      st.st_name AS category_name,
+      cw.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      cw.funding_institution,
+      cw.geo_city_id,
+      gcity.name AS geo_city_name,
+      cw.geo_country_id,
+      gctry.name AS geo_country_name,
+      cw.geo_state_id,
+      gs.name AS geo_state_name,
+      cw.start_date,
+      cw.finish_date,
+      cw.observation,
+      cw.organization_name,
+      cw.participation_id,
+      prst.st_name AS participation_name,
+      cw.research_group_id,
+      cw.active,
+      cw.created_by,
+      cw.updated_by,
+      cw.created_at,
+      cw.updated_at
+     FROM ((((((creation_workshops cw
+       LEFT JOIN subtypes st ON ((cw.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((cw.colciencias_call_id = cc.id)))
+       LEFT JOIN geo_cities gcity ON ((cw.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((cw.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((cw.geo_country_id = gctry.id)))
+       LEFT JOIN subtypes prst ON ((cw.participation_id = prst.id)));
+  SQL
+  create_view "complete_working_papers", sql_definition: <<-SQL
+      SELECT wp.id,
+      wp.title,
+      wp.category_id,
+      st.st_name AS category_name,
+      wp.colciencias_call_id,
+      cc.name AS colciencias_call_name,
+      cc.year AS colciencias_call_year,
+      wp.doi,
+      wp.elaboration_date,
+      wp.observation,
+      wp.related_institution,
+      wp.research_group_id,
+      wp.web_page,
+      wp.active,
+      wp.created_by,
+      wp.updated_by,
+      wp.created_at,
+      wp.updated_at
+     FROM ((working_papers wp
+       LEFT JOIN subtypes st ON ((wp.category_id = st.id)))
+       LEFT JOIN colciencias_calls cc ON ((wp.colciencias_call_id = cc.id)));
   SQL
   create_view "complete_new_genetic_sequences", sql_definition: <<-SQL
       SELECT ngs.id,
@@ -3402,515 +3911,6 @@ ActiveRecord::Schema.define(version: 2021_06_29_220641) do
        LEFT JOIN geo_cities gcity ON ((ngs.geo_city_id = gcity.id)))
        LEFT JOIN geo_states gs ON ((ngs.geo_state_id = gs.id)))
        LEFT JOIN geo_countries gctry ON ((ngs.geo_country_id = gctry.id)));
-  SQL
-  create_view "complete_new_scientific_records", sql_definition: <<-SQL
-      SELECT nsr.id,
-      nsr.category_id,
-      st.st_name AS category_name,
-      nsr.colciencias_call_id,
-      cc.name AS colciencias_call_name,
-      cc.year AS colciencias_call_year,
-      nsr.geo_city_id,
-      gcity.name AS geo_city_name,
-      nsr.geo_country_id,
-      gctry.name AS geo_country_name,
-      nsr.geo_state_id,
-      gs.name AS geo_state_name,
-      nsr.nsr_name,
-      nsr.nsr_date_of_obtaining,
-      nsr.nsr_database_name,
-      nsr.nsr_database_url,
-      nsr.nsr_certifying_institution,
-      nsr.nsr_issuing_institution,
-      nsr.observation,
-      nsr.research_group_id,
-      nsr.active,
-      nsr.created_by,
-      nsr.updated_by,
-      nsr.created_at,
-      nsr.updated_at
-     FROM (((((new_scientific_records nsr
-       LEFT JOIN subtypes st ON ((nsr.category_id = st.id)))
-       LEFT JOIN colciencias_calls cc ON ((nsr.colciencias_call_id = cc.id)))
-       LEFT JOIN geo_cities gcity ON ((nsr.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((nsr.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((nsr.geo_country_id = gctry.id)));
-  SQL
-  create_view "complete_nutraceutical_products", sql_definition: <<-SQL
-      SELECT np.id,
-      np.name,
-      np.category_id,
-      st.st_name AS category_name,
-      np.colciencias_call_id,
-      cc.name AS colciencias_call_name,
-      cc.year AS colciencias_call_year,
-      np.consecutive_registration_invima,
-      np.date_of_obtaining,
-      np.geo_city_id,
-      gcity.name AS geo_city_name,
-      np.geo_country_id,
-      gctry.name AS geo_country_name,
-      np.geo_state_id,
-      gs.name AS geo_state_name,
-      np.observation,
-      np.research_group_id,
-      np.research_project_title,
-      np.active,
-      np.created_by,
-      np.updated_by,
-      np.created_at,
-      np.updated_at
-     FROM (((((nutraceutical_products np
-       LEFT JOIN subtypes st ON ((np.category_id = st.id)))
-       LEFT JOIN colciencias_calls cc ON ((np.colciencias_call_id = cc.id)))
-       LEFT JOIN geo_cities gcity ON ((np.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((np.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((np.geo_country_id = gctry.id)));
-  SQL
-  create_view "complete_papers", sql_definition: <<-SQL
-      SELECT p.id,
-      p.title,
-      p.approval_date,
-      p.category_id,
-      stc.st_name AS category_name,
-      p.colciencias_call_id,
-      cc.name AS colciencias_call_name,
-      cc.year AS colciencias_call_year,
-      p.doi,
-      p.final_page,
-      p.geo_city_id,
-      gcity.name AS geo_city_name,
-      p.geo_country_id,
-      gctry.name AS geo_country_name,
-      p.geo_state_id,
-      gs.name AS geo_state_name,
-      p.initial_page,
-      p.issn,
-      p.journal_name,
-      p.number_of_pages,
-      p.observation,
-      p.paper_type_id,
-      stpt.st_name AS paper_type_name,
-      p.publication_date,
-      p.research_group_id,
-      p.url,
-      p.volume,
-      p.active,
-      p.created_by,
-      p.updated_by,
-      p.created_at,
-      p.updated_at
-     FROM ((((((papers p
-       LEFT JOIN subtypes stc ON ((p.category_id = stc.id)))
-       LEFT JOIN colciencias_calls cc ON ((p.colciencias_call_id = cc.id)))
-       LEFT JOIN geo_cities gcity ON ((p.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((p.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((p.geo_country_id = gctry.id)))
-       LEFT JOIN subtypes stpt ON ((p.paper_type_id = stpt.id)));
-  SQL
-  create_view "complete_patents", sql_definition: <<-SQL
-      SELECT p.id,
-      p.title,
-      p.category_id,
-      stc.st_name AS category_name,
-      p.colciencias_call_id,
-      cc.name AS colciencias_call_name,
-      cc.year AS colciencias_call_year,
-      p.date_of_obtaining,
-      ARRAY( SELECT gcp.geo_country_id
-             FROM geo_countries_patents gcp
-            WHERE (p.id = gcp.patent_id)) AS geo_country_ids,
-      p.industrial_publication_gazette,
-      p.observation,
-      p.patent_state_id,
-      stps.st_name AS patent_state_name,
-      p.patent_type_id,
-      pttp.st_name AS patent_type_name,
-      p.patent_number,
-      p.research_group_id,
-      p.active,
-      p.created_by,
-      p.updated_by,
-      p.created_at,
-      p.updated_at
-     FROM ((((patents p
-       LEFT JOIN subtypes stc ON ((p.category_id = stc.id)))
-       LEFT JOIN subtypes pttp ON ((p.patent_type_id = pttp.id)))
-       LEFT JOIN colciencias_calls cc ON ((p.colciencias_call_id = cc.id)))
-       LEFT JOIN subtypes stps ON ((p.patent_state_id = stps.id)));
-  SQL
-  create_view "complete_plt_ind_prots", sql_definition: <<-SQL
-      SELECT pltind.id,
-      pltind.category_id,
-      st.st_name AS category_name,
-      pltind.colciencias_call_id,
-      cc.name AS colciencias_call_name,
-      cc.year AS colciencias_call_year,
-      pltind.geo_city_id,
-      gcity.name AS geo_city_name,
-      pltind.geo_country_id,
-      gctry.name AS geo_country_name,
-      pltind.geo_state_id,
-      gs.name AS geo_state_name,
-      pltind.institution_name,
-      pltind.plt_name,
-      pltind.plt_date_of_elaboration,
-      pltind.plt_registration_number,
-      pltind.plt_type_id,
-      stplt.st_name AS plt_type_name,
-      pltind.observation,
-      pltind.research_group_id,
-      pltind.active,
-      pltind.created_by,
-      pltind.updated_by,
-      pltind.created_at,
-      pltind.updated_at
-     FROM ((((((plant_ind_prototypes pltind
-       LEFT JOIN subtypes st ON ((pltind.category_id = st.id)))
-       LEFT JOIN subtypes stplt ON ((pltind.plt_type_id = stplt.id)))
-       LEFT JOIN colciencias_calls cc ON ((pltind.colciencias_call_id = cc.id)))
-       LEFT JOIN geo_cities gcity ON ((pltind.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((pltind.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((pltind.geo_country_id = gctry.id)));
-  SQL
-  create_view "complete_protocol_acts", sql_definition: <<-SQL
-      SELECT pac.id,
-      pac.title,
-      pac.category_id,
-      st.st_name AS category_name,
-      pac.colciencias_call_id,
-      cc.name AS colciencias_call_name,
-      cc.year AS colciencias_call_year,
-      pac.date_of_publication,
-      pac.geo_city_id,
-      gcity.name AS geo_city_name,
-      pac.geo_country_id,
-      gctry.name AS geo_country_name,
-      pac.geo_state_id,
-      gs.name AS geo_state_name,
-      pac.observation,
-      pac.product_type_id,
-      pt.st_name AS product_type_name,
-      pac.research_group_id,
-      pac.active,
-      pac.created_by,
-      pac.updated_by,
-      pac.created_at,
-      pac.updated_at
-     FROM ((((((protocol_acts pac
-       LEFT JOIN subtypes st ON ((pac.category_id = st.id)))
-       LEFT JOIN colciencias_calls cc ON ((pac.colciencias_call_id = cc.id)))
-       LEFT JOIN geo_cities gcity ON ((pac.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((pac.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((pac.geo_country_id = gctry.id)))
-       LEFT JOIN subtypes pt ON ((pac.product_type_id = pt.id)));
-  SQL
-  create_view "complete_regulations", sql_definition: <<-SQL
-      SELECT reg.id,
-      reg.title,
-      reg.category_id,
-      st.st_name AS category_name,
-      reg.colciencias_call_id,
-      cc.name AS colciencias_call_name,
-      cc.year AS colciencias_call_year,
-      reg.date_of_publication,
-      reg.geo_city_id,
-      gcity.name AS geo_city_name,
-      reg.geo_country_id,
-      gctry.name AS geo_country_name,
-      reg.geo_state_id,
-      gs.name AS geo_state_name,
-      reg.issuing_entity,
-      reg.observation,
-      reg.product_type_id,
-      pt.st_name AS product_type_name,
-      reg.regulation_type_id,
-      rt.st_name AS regulation_type_name,
-      reg.research_group_id,
-      reg.active,
-      reg.created_by,
-      reg.updated_by,
-      reg.created_at,
-      reg.updated_at
-     FROM (((((((regulations reg
-       LEFT JOIN subtypes st ON ((reg.category_id = st.id)))
-       LEFT JOIN colciencias_calls cc ON ((reg.colciencias_call_id = cc.id)))
-       LEFT JOIN geo_cities gcity ON ((reg.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((reg.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((reg.geo_country_id = gctry.id)))
-       LEFT JOIN subtypes pt ON ((reg.product_type_id = pt.id)))
-       LEFT JOIN subtypes rt ON ((reg.regulation_type_id = rt.id)));
-  SQL
-  create_view "complete_research_cws", sql_definition: <<-SQL
-      SELECT rcw.id,
-      rcw.title,
-      rcw.category_id,
-      stc.st_name AS category_name,
-      rcw.colciencias_call_id,
-      cc.name AS colciencias_call_name,
-      cc.year AS colciencias_call_year,
-      rcw.creation_and_selection_date,
-      rcw.geo_city_id,
-      gcity.name AS geo_city_name,
-      rcw.geo_country_id,
-      gctry.name AS geo_country_name,
-      rcw.geo_state_id,
-      gs.name AS geo_state_name,
-      rcw.knwl_spec_area_id,
-      stksa.st_name AS knwl_spec_area_name,
-      rcw.nature_id,
-      stnt.st_name AS nature_name,
-      rcw.observation,
-      rcw.registered_project_title,
-      rcw.url,
-      ARRAY( SELECT rcwwt.subtype_id
-             FROM research_creation_works_work_types rcwwt
-            WHERE (rcw.id = rcwwt.research_creation_work_id)) AS work_type_ids,
-      rcw.research_group_id,
-      rcw.active,
-      rcw.created_by,
-      rcw.updated_by,
-      rcw.created_at,
-      rcw.updated_at
-     FROM (((((((research_creation_works rcw
-       LEFT JOIN subtypes stc ON ((rcw.category_id = stc.id)))
-       LEFT JOIN subtypes stnt ON ((rcw.nature_id = stnt.id)))
-       LEFT JOIN colciencias_calls cc ON ((rcw.colciencias_call_id = cc.id)))
-       LEFT JOIN geo_cities gcity ON ((rcw.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((rcw.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((rcw.geo_country_id = gctry.id)))
-       LEFT JOIN subtypes stksa ON ((rcw.knwl_spec_area_id = stksa.id)));
-  SQL
-  create_view "complete_scientific_collections", sql_definition: <<-SQL
-      SELECT sc.id,
-      sc.name,
-      sc.category_id,
-      st.st_name AS category_name,
-      sc.colciencias_call_id,
-      cc.name AS colciencias_call_name,
-      cc.year AS colciencias_call_year,
-      sc.curator_name,
-      sc.date_of_obtaining,
-      sc.geo_city_id,
-      gcity.name AS geo_city_name,
-      sc.geo_country_id,
-      gctry.name AS geo_country_name,
-      sc.geo_state_id,
-      gs.name AS geo_state_name,
-      sc.information_included,
-      sc.last_conservatorship_date,
-      sc.managing_institution_name,
-      sc.observation,
-      sc.research_group_id,
-      sc.validity_and_use,
-      sc.active,
-      sc.created_by,
-      sc.updated_by,
-      sc.created_at,
-      sc.updated_at
-     FROM (((((scientific_collections sc
-       LEFT JOIN subtypes st ON ((sc.category_id = st.id)))
-       LEFT JOIN colciencias_calls cc ON ((sc.colciencias_call_id = cc.id)))
-       LEFT JOIN geo_cities gcity ON ((sc.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((sc.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((sc.geo_country_id = gctry.id)));
-  SQL
-  create_view "complete_scientific_notes", sql_definition: <<-SQL
-      SELECT sn.id,
-      sn.title,
-      sn.approval_date,
-      sn.category_id,
-      st.st_name AS category_name,
-      sn.colciencias_call_id,
-      cc.name AS colciencias_call_name,
-      cc.year AS colciencias_call_year,
-      sn.doi,
-      sn.final_page,
-      sn.geo_city_id,
-      gcity.name AS geo_city_name,
-      sn.geo_country_id,
-      gctry.name AS geo_country_name,
-      sn.geo_state_id,
-      gs.name AS geo_state_name,
-      sn.initial_page,
-      sn.issn,
-      sn.journal_name,
-      sn.number_of_pages,
-      sn.observation,
-      sn.publication_date,
-      sn.research_group_id,
-      sn.url,
-      sn.volume,
-      sn.active,
-      sn.created_by,
-      sn.updated_by,
-      sn.created_at,
-      sn.updated_at
-     FROM (((((scientific_notes sn
-       LEFT JOIN subtypes st ON ((sn.category_id = st.id)))
-       LEFT JOIN colciencias_calls cc ON ((sn.colciencias_call_id = cc.id)))
-       LEFT JOIN geo_cities gcity ON ((sn.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((sn.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((sn.geo_country_id = gctry.id)));
-  SQL
-  create_view "complete_software", sql_definition: <<-SQL
-      SELECT soft.id,
-      soft.category_id,
-      st.st_name AS category_name,
-      soft.colciencias_call_id,
-      cc.name AS colciencias_call_name,
-      cc.year AS colciencias_call_year,
-      soft.geo_city_id,
-      gcity.name AS geo_city_name,
-      soft.geo_country_id,
-      gctry.name AS geo_country_name,
-      soft.geo_state_id,
-      gs.name AS geo_state_name,
-      soft.sof_date_of_obtaining,
-      soft.sof_description,
-      soft.sof_product_title,
-      soft.sof_registration_number,
-      soft.observation,
-      soft.research_group_id,
-      soft.active,
-      soft.created_by,
-      soft.updated_by,
-      soft.created_at,
-      soft.updated_at
-     FROM (((((software soft
-       LEFT JOIN subtypes st ON ((soft.category_id = st.id)))
-       LEFT JOIN colciencias_calls cc ON ((soft.colciencias_call_id = cc.id)))
-       LEFT JOIN geo_cities gcity ON ((soft.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((soft.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((soft.geo_country_id = gctry.id)));
-  SQL
-  create_view "complete_technical_concepts", sql_definition: <<-SQL
-      SELECT tc.id,
-      tc.title,
-      tc.category_id,
-      st.st_name AS category_name,
-      tc.colciencias_call_id,
-      cc.name AS colciencias_call_name,
-      cc.year AS colciencias_call_year,
-      tc.consecutive_number,
-      tc.geo_city_id,
-      gcity.name AS geo_city_name,
-      tc.geo_country_id,
-      gctry.name AS geo_country_name,
-      tc.geo_state_id,
-      gs.name AS geo_state_name,
-      tc.observation,
-      tc.request_date,
-      tc.requesting_institution_name,
-      tc.research_group_id,
-      tc.send_date,
-      tc.active,
-      tc.created_by,
-      tc.updated_by,
-      tc.created_at,
-      tc.updated_at
-     FROM (((((technical_concepts tc
-       LEFT JOIN subtypes st ON ((tc.category_id = st.id)))
-       LEFT JOIN colciencias_calls cc ON ((tc.colciencias_call_id = cc.id)))
-       LEFT JOIN geo_cities gcity ON ((tc.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((tc.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((tc.geo_country_id = gctry.id)));
-  SQL
-  create_view "complete_types", sql_definition: <<-SQL
-      SELECT t.id AS type_id,
-      t.t_name AS type_name,
-      t.t_description AS type_description,
-      t.active AS type_active,
-      st.parent_id,
-      pst.st_name AS parent_name,
-      pst.st_description AS parent_description,
-      pst.active AS parent_active,
-      st.id,
-      st.st_name AS name,
-      st.st_description AS description,
-      st.active
-     FROM ((types t
-       LEFT JOIN subtypes st ON ((t.id = st.type_id)))
-       LEFT JOIN subtypes pst ON ((st.parent_id = pst.id)));
-  SQL
-  create_view "complete_vegetable_varieties", sql_definition: <<-SQL
-      SELECT vv.id,
-      vv.name,
-      vv.category_id,
-      stc.st_name AS category_name,
-      vv.colciencias_call_id,
-      cc.name AS colciencias_call_name,
-      cc.year AS colciencias_call_year,
-      vv.cycle_type_id,
-      stcc.st_name AS cycle_type_name,
-      vv.date,
-      vv.geo_city_id,
-      gcity.name AS geo_city_name,
-      vv.geo_country_id,
-      gctry.name AS geo_country_name,
-      vv.geo_state_id,
-      gs.name AS geo_state_name,
-      vv.petition_status_id,
-      stpt.st_name AS petition_status_name,
-      vv.observation,
-      vv.research_group_id,
-      vv.active,
-      vv.created_by,
-      vv.updated_by,
-      vv.created_at,
-      vv.updated_at
-     FROM (((((((vegetable_varieties vv
-       LEFT JOIN subtypes stc ON ((vv.category_id = stc.id)))
-       LEFT JOIN colciencias_calls cc ON ((vv.colciencias_call_id = cc.id)))
-       LEFT JOIN subtypes stcc ON ((vv.cycle_type_id = stcc.id)))
-       LEFT JOIN geo_cities gcity ON ((vv.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((vv.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((vv.geo_country_id = gctry.id)))
-       LEFT JOIN subtypes stpt ON ((vv.petition_status_id = stpt.id)));
-  SQL
-  create_view "complete_working_papers", sql_definition: <<-SQL
-      SELECT wp.id,
-      wp.title,
-      wp.category_id,
-      st.st_name AS category_name,
-      wp.colciencias_call_id,
-      cc.name AS colciencias_call_name,
-      cc.year AS colciencias_call_year,
-      wp.doi,
-      wp.elaboration_date,
-      wp.observation,
-      wp.related_institution,
-      wp.research_group_id,
-      wp.web_page,
-      wp.active,
-      wp.created_by,
-      wp.updated_by,
-      wp.created_at,
-      wp.updated_at
-     FROM ((working_papers wp
-       LEFT JOIN subtypes st ON ((wp.category_id = st.id)))
-       LEFT JOIN colciencias_calls cc ON ((wp.colciencias_call_id = cc.id)));
-  SQL
-  create_view "research_units_by_researchers", sql_definition: <<-SQL
-      SELECT rs.id,
-      rs.identification_number,
-      rs.oas_researcher_id,
-      rs.active AS researcher_is_active,
-      gm.id AS group_member_id,
-      gm.role_id,
-      rl.name AS role_name,
-      gm.gm_state_id,
-      gm.active AS group_member_is_active,
-      gm.research_group_id,
-      rg.name AS research_group_name,
-      rg.acronym,
-      rg.group_type_id,
-      rg.group_state_id,
-      rg.legacy_siciud_id
-     FROM (((researchers rs
-       JOIN group_members gm ON ((gm.researcher_id = rs.id)))
-       JOIN roles rl ON ((rl.id = gm.role_id)))
-       JOIN research_groups rg ON ((gm.research_group_id = rg.id)));
   SQL
   create_view "complete_reports", sql_definition: <<-SQL
       SELECT rp.id,
