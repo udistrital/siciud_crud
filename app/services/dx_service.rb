@@ -28,6 +28,13 @@ class DxService < ApplicationService
       # end
     end
 
+    # 202107040722: Filtro por estado (state=1) (state=2)
+    # TODO: Determinar si el model tiene el campo 'group_state_id'
+    state = GetParam(:state)
+    unless state.nil?
+      @dbSet = @dbSet.where("group_state_id = "+ state)
+    end
+
     # Filtro
     filter = GetParam(:filter)
     unless filter.nil?
