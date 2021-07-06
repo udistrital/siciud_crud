@@ -1,7 +1,7 @@
 class Researcher < ApplicationRecord
   include Swagger::ResearcherSchema
 
-  has_one :user
+  belongs_to :user, foreign_key: 'identification_number', primary_key: 'identification_number'
   has_many :periods
   has_many :int_participants
 

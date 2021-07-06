@@ -83,26 +83,5 @@ module Swagger::GroupMemberSchema
         end
       end
     end
-
-    swagger_schema :GroupMemberDeactivate do
-      property :group_member do
-        property :gm_state_id do
-          key :type, :integer
-          key :format, :int64
-        end
-        property :active do
-          key :type, :boolean
-          key :default, true
-        end
-        property :created_by do
-          key :type, :integer
-          key :format, :int64
-        end
-        property :updated_by do
-          key :type, :integer
-          key :format, :int64
-        end
-      end
-    end
   end
 end

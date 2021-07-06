@@ -3,14 +3,7 @@ module Api
     class ColcienciasCallsController < ApplicationController
       include Swagger::ColcienciasCallApi
 
-      before_action :set_colc_call, only: [:update]
-
-      rescue_from ActiveRecord::RecordNotFound do |e|
-        render json: {error: e.message}, status: :not_found
-      end
-      rescue_from ActiveRecord::RecordInvalid do |e|
-        render json: {error: e.message}, status: :unprocessable_entity
-      end
+      before_action :set_colc_call, only: [:show, :update]
 
       def index
         @colciencias_call = ColcienciasCall.all.order(:year)

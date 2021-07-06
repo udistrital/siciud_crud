@@ -140,10 +140,7 @@ module Swagger::ExtensionProjectApi
         response 200 do
           key :description, 'extension project response'
           schema do
-            key :type, :array
-            items do
               key :'$ref', :ExtensionProjectDxOutput
-            end
           end
         end
         response :default do

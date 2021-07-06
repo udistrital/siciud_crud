@@ -1,7 +1,7 @@
 class UserSerializer < ActiveModel::Serializer
   attributes :id, :identification_number, :oas_user_id, :user_role_id,
-             :user_role_name, :active, :created_by, :updated_by,
-             :created_at, :updated_at
+             :user_role_name, :faculties_ids,
+             :active, :created_by, :updated_by, :created_at, :updated_at
 
 
   def user_role_name
