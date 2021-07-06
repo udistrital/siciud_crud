@@ -9,6 +9,7 @@ if [ -n "${PARAMETER_STORE:-}" ]; then
   export SICIUD_CRUD_PGPASS="$(aws ssm get-parameter --with-decryption --name /${PARAMETER_STORE}/siciud_crud/db/password --output text --query Parameter.Value)"
 fi
 
-rails db:migrate
+bundle exec rails db:migrate
+bundle exec rake table_setting:reset_pk_seq_all_tables
 
 exec "$@"
