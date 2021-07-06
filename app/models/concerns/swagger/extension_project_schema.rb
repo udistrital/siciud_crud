@@ -148,12 +148,12 @@ module Swagger::ExtensionProjectSchema
     swagger_schema :ExtensionProjectDxOutput do
       allOf do
         schema do
-          property :data do
-            key :type, :array
-            items do
-              key :'$ref', :ExtensionProjectOutput
+            property :data do
+              key :type, :array
+              items do
+                key :'$ref', :ExtensionProjectOutput
+              end
             end
-          end
         end
       end
     end

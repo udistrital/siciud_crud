@@ -1,21 +1,27 @@
-module Swagger::ExtParticipantSchema
+module Swagger::GmPeriodSchema
   extend ActiveSupport::Concern
   include Swagger::Blocks
 
   included do
-    swagger_schema :ExtParticipant do
-      property :first_name do
+    swagger_schema :GmPeriod do
+      property :initial_date do
         key :type, :string
+        key :format, :date
+        key :example, "2018-01-20"
       end
-      property :last_name do
+      property :final_date do
         key :type, :string
+        key :format, :date
+        key :example, "2018-01-20"
       end
-      property :participant_type_id do
+      property :role_id do
         key :type, :integer
         key :format, :int64
+        key :example, 1
       end
-      property :orcid_id do
-        key :type, :string
+      property :is_current do
+        key :type, :boolean
+        key :default, true
       end
       property :active do
         key :type, :boolean
@@ -23,69 +29,77 @@ module Swagger::ExtParticipantSchema
       end
     end
 
-    swagger_schema :ExtParticipantInputPut do
+    swagger_schema :GmPeriodInputPut do
       allOf do
         schema do
-          property :ext_participant do
-            key :'$ref', :ExtParticipant
+          property :gm_period do
+            key :'$ref', :GmPeriod
           end
         end
         schema do
-          property :ext_participant do
+          property :gm_period do
+            property :group_member_id do
+              key :type, :integer
+              key :format, :int64
+              key :example, 1
+            end
             property :updated_by do
               key :type, :integer
               key :format, :int64
+              key :example, 1
             end
           end
         end
       end
     end
 
-    swagger_schema :ExtParticipantInputPost do
+    swagger_schema :GmPeriodInputPost do
       allOf do
         schema do
-          property :ext_participant do
-            key :'$ref', :ExtParticipant
+          property :gm_period do
+            key :'$ref', :GmPeriod
           end
         end
         schema do
-          property :ext_participant do
+          property :gm_period do
             property :created_by do
               key :type, :integer
               key :format, :int64
+              key :example, 1
             end
           end
         end
       end
     end
 
-    swagger_schema :ExtParticipantOutput do
+    swagger_schema :GmPeriodOutput do
       allOf do
         schema do
-          key :'$ref', :ExtParticipant
+          key :'$ref', :GmPeriod
         end
         schema do
           property :id do
             key :type, :integer
             key :format, :int64
+            key :example, 1
           end
-          property :participant_type_name do
-            key :type, :string
-          end
-          property :product_type_id do
+          property :group_member_id do
             key :type, :integer
             key :format, :int64
+            key :example, 1
           end
-          property :product_type do
+          property :role_name do
             key :type, :string
           end
           property :created_by do
             key :type, :integer
             key :format, :int64
+            key :example, 1
           end
           property :updated_by do
             key :type, :integer
             key :format, :int64
+            key :example, 1
           end
           property :created_at do
             key :type, :string
@@ -98,14 +112,13 @@ module Swagger::ExtParticipantSchema
         end
       end
     end
-
-    swagger_schema :ExtParticipantDxOutput do
+    swagger_schema :GmPeriodDxOutput do
       allOf do
         schema do
           property :data do
             key :type, :array
             items do
-              key :'$ref', :ExtParticipantOutput
+              key :'$ref', :GmPeriodOutput
             end
           end
         end

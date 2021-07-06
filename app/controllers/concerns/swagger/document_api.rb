@@ -1,17 +1,10 @@
 module Swagger::DocumentApi
   extend ActiveSupport::Concern
   include Swagger::Blocks
+  require './app/models/concerns/constant.rb'
 
-  product_array = [:books, :book_chapters,
-                   :ip_livestock_breeds, :new_animal_breeds,
-                   :papers, :patents, :research_creation_works,
-                   :scientific_notes, :vegetable_varieties,
-                   :industrial_designs, :integrated_circuit_diagrams,
-                   :software, :plant_ind_prototypes,
-                   :new_scientific_records,
-                   :events,
-                   :degree_works]
-  RU_PRODUCT_ARRAY = [:research_units] + product_array
+  PRODUCT_ARRAY = get_product_array
+  RU_PRODUCT_ARRAY = [:research_units] + PRODUCT_ARRAY
 
   included do
     swagger_path '/{context}/{context_id}/documents/{id}' do

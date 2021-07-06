@@ -123,6 +123,9 @@ class ApplicationController < ActionController::API
     elsif params[:appropriation_process_id]
       id = params[:appropriation_process_id]
       @context = AppropriationProcess.find(id)
+    elsif params[:knowledge_network_id]
+      id = params[:knowledge_network_id]
+      @context = KnowledgeNetwork.find(id)
     elsif params[:creation_workshop_id]
       id = params[:creation_workshop_id]
       @context = CreationWorkshop.find(id)

@@ -12,6 +12,7 @@ RUN mkdir /myapp
 WORKDIR /myapp
 COPY Gemfile /myapp/Gemfile
 COPY Gemfile.lock /myapp/Gemfile.lock
+RUN gem install bundler:2.2.11
 RUN bundle install
 COPY . /myapp
 
@@ -22,4 +23,4 @@ ENTRYPOINT ["entrypoint.sh"]
 EXPOSE 8080
 
 # Start the main process.
-CMD ["rails", "server", "-b", "0.0.0.0", "-p", "8080"]
+CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0", "-p", "8080"]

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_15_225922) do
+ActiveRecord::Schema.define(version: 2021_06_29_220641) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -825,6 +825,7 @@ ActiveRecord::Schema.define(version: 2021_06_15_225922) do
     t.bigint "created_by"
     t.bigint "updated_by"
     t.bigint "participant_type_id"
+    t.string "orcid_id"
     t.index ["created_by"], name: "index_ext_participants_on_created_by"
     t.index ["participant_type_id"], name: "index_ext_participants_on_participant_type_id"
     t.index ["producible_type", "producible_id"], name: "index_ext_participants_on_producible_type_and_producible_id"
@@ -967,6 +968,7 @@ ActiveRecord::Schema.define(version: 2021_06_15_225922) do
     t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
+    t.boolean "is_current", default: true
     t.index ["created_by"], name: "index_gm_periods_on_created_by"
     t.index ["group_member_id"], name: "index_gm_periods_on_group_member_id"
     t.index ["role_id"], name: "index_gm_periods_on_role_id"
@@ -1897,6 +1899,7 @@ ActiveRecord::Schema.define(version: 2021_06_15_225922) do
     t.bigint "created_by"
     t.bigint "updated_by"
     t.index ["created_by"], name: "index_researchers_on_created_by"
+    t.index ["identification_number"], name: "index_researchers_on_identification_number", unique: true
     t.index ["updated_by"], name: "index_researchers_on_updated_by"
   end
 
@@ -2194,7 +2197,10 @@ ActiveRecord::Schema.define(version: 2021_06_15_225922) do
     t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
+    t.integer "faculties_ids", default: [], array: true
     t.index ["created_by"], name: "index_users_on_created_by"
+    t.index ["faculties_ids"], name: "index_users_on_faculties_ids", using: :gin
+    t.index ["identification_number"], name: "index_users_on_identification_number", unique: true
     t.index ["updated_by"], name: "index_users_on_updated_by"
     t.index ["user_role_id"], name: "index_users_on_user_role_id"
   end
@@ -2649,6 +2655,7 @@ ActiveRecord::Schema.define(version: 2021_06_15_225922) do
   add_foreign_key "research_groups", "users", column: "created_by"
   add_foreign_key "research_groups", "users", column: "updated_by"
   add_foreign_key "researchers", "users", column: "created_by"
+  add_foreign_key "researchers", "users", column: "identification_number", primary_key: "identification_number", on_delete: :cascade
   add_foreign_key "researchers", "users", column: "updated_by"
   add_foreign_key "roles", "users", column: "created_by"
   add_foreign_key "roles", "users", column: "updated_by"
@@ -2728,20 +2735,6 @@ ActiveRecord::Schema.define(version: 2021_06_15_225922) do
   add_foreign_key "working_papers", "users", column: "created_by"
   add_foreign_key "working_papers", "users", column: "updated_by"
 
-  create_view "complete_users", sql_definition: <<-SQL
-      SELECT u.id,
-      u.identification_number,
-      u.oas_user_id,
-      u.user_role_id,
-      ur.name AS user_role_name,
-      u.active,
-      u.created_by,
-      u.updated_by,
-      u.created_at,
-      u.updated_at
-     FROM (users u
-       LEFT JOIN user_roles ur ON ((u.user_role_id = ur.id)));
-  SQL
   create_view "research_units_by_researchers", sql_definition: <<-SQL
       SELECT rs.id,
       rs.identification_number,
@@ -2779,22 +2772,6 @@ ActiveRecord::Schema.define(version: 2021_06_15_225922) do
      FROM ((int_participants intp
        LEFT JOIN researchers r ON ((r.id = intp.researcher_id)))
        LEFT JOIN subtypes pt ON ((pt.id = intp.participant_type_id)));
-  SQL
-  create_view "complete_ext_participants", sql_definition: <<-SQL
-      SELECT extp.id,
-      extp.producible_type AS product_type,
-      extp.producible_id AS product_type_id,
-      extp.first_name,
-      extp.last_name,
-      extp.participant_type_id,
-      pt.st_name AS participant_type_name,
-      extp.active,
-      extp.created_by,
-      extp.updated_by,
-      extp.created_at,
-      extp.updated_at
-     FROM (ext_participants extp
-       LEFT JOIN subtypes pt ON ((pt.id = extp.participant_type_id)));
   SQL
   create_view "complete_documents", sql_definition: <<-SQL
       SELECT doc.id,
@@ -2838,73 +2815,6 @@ ActiveRecord::Schema.define(version: 2021_06_15_225922) do
        LEFT JOIN subtypes st ON ((dw.category_id = st.id)))
        LEFT JOIN subtypes dwt ON ((dw.category_id = dwt.id)))
        LEFT JOIN colciencias_calls cc ON ((dw.colciencias_call_id = cc.id)));
-  SQL
-  create_view "research_units", sql_definition: <<-SQL
-      SELECT rg.id,
-      rg.legacy_siciud_id,
-      rg.name,
-      rg.acronym,
-      rg.description,
-      rg.cidc_registration_date,
-      rg.cidc_act_number,
-      rg.faculty_act_number,
-      rg.faculty_registration_date,
-      rg.email,
-      rg.gruplac,
-      rg.webpage,
-      rg.mission,
-      rg.vision,
-      rg.colciencias_code,
-      rg.snies_id,
-      rg.group_type_id,
-      stgt.st_name AS group_type_name,
-      rg.group_state_id,
-      stgs.st_name AS group_state_name,
-      rg.interinstitutional,
-      ARRAY( SELECT group_members.researcher_id
-             FROM group_members
-            WHERE (group_members.research_group_id = rg.id)) AS member_ids,
-      ( SELECT count(*) AS count
-             FROM group_members
-            WHERE (group_members.research_group_id = rg.id)) AS member_count,
-      ARRAY( SELECT faculty_ids_research_groups.faculty_id
-             FROM faculty_ids_research_groups
-            WHERE (faculty_ids_research_groups.research_group_id = rg.id)) AS faculty_ids,
-      rg.cine_broad_area_id,
-      ( SELECT cine_broad_areas.name
-             FROM cine_broad_areas
-            WHERE (cine_broad_areas.id = rg.cine_broad_area_id)) AS cine_broad_area_name,
-      rg.cine_specific_area_id,
-      ( SELECT cine_specific_areas.name
-             FROM cine_specific_areas
-            WHERE (cine_specific_areas.id = rg.cine_specific_area_id)) AS cine_specific_area_name,
-      ARRAY( SELECT cine_detailed_areas_research_groups.cine_detailed_area_id
-             FROM cine_detailed_areas_research_groups
-            WHERE (cine_detailed_areas_research_groups.research_group_id = rg.id)) AS cine_detailed_area_ids,
-      ARRAY( SELECT curricular_prj_ids_research_groups.curricular_project_id
-             FROM curricular_prj_ids_research_groups
-            WHERE (curricular_prj_ids_research_groups.research_group_id = rg.id)) AS curricular_project_ids,
-      rg.oecd_knowledge_area_id,
-      ( SELECT oecd_knowledge_areas.name
-             FROM oecd_knowledge_areas
-            WHERE (oecd_knowledge_areas.id = rg.oecd_knowledge_area_id)) AS oecd_knowledge_area_name,
-      rg.oecd_knowledge_subarea_id,
-      ( SELECT oecd_knowledge_subareas.name
-             FROM oecd_knowledge_subareas
-            WHERE (oecd_knowledge_subareas.id = rg.oecd_knowledge_subarea_id)) AS oecd_knowledge_subarea_name,
-      ARRAY( SELECT oecd_disciplines_research_groups.oecd_discipline_id
-             FROM oecd_disciplines_research_groups
-            WHERE (oecd_disciplines_research_groups.research_group_id = rg.id)) AS oecd_discipline_ids,
-      ARRAY( SELECT research_focuses_units.subtype_id
-             FROM research_focuses_units
-            WHERE (research_focuses_units.research_group_id = rg.id)) AS research_focus_ids,
-      rg.created_at,
-      rg.updated_at,
-      rg.created_by,
-      rg.updated_by
-     FROM ((research_groups rg
-       LEFT JOIN subtypes stgt ON ((rg.group_type_id = stgt.id)))
-       LEFT JOIN subtypes stgs ON ((rg.group_state_id = stgs.id)));
   SQL
   create_view "complete_patents", sql_definition: <<-SQL
       SELECT p.id,
@@ -4412,5 +4322,140 @@ ActiveRecord::Schema.define(version: 2021_06_15_225922) do
        LEFT JOIN geo_cities gcity ON ((ac.geo_city_id = gcity.id)))
        LEFT JOIN geo_states gs ON ((ac.geo_state_id = gs.id)))
        LEFT JOIN geo_countries gctry ON ((ac.geo_country_id = gctry.id)));
+  SQL
+  create_view "complete_gm_periods", sql_definition: <<-SQL
+      SELECT gp.id,
+      gp.initial_date,
+      gp.final_date,
+      gp.group_member_id,
+      gp.role_id,
+      r.name AS role_name,
+      gp.is_current,
+      gp.active,
+      gp.created_by,
+      gp.updated_by,
+      gp.created_at,
+      gp.updated_at
+     FROM (gm_periods gp
+       LEFT JOIN roles r ON ((gp.role_id = r.id)));
+  SQL
+  create_view "research_units", sql_definition: <<-SQL
+      SELECT rg.id,
+      rg.legacy_siciud_id,
+      rg.name,
+      rg.acronym,
+      rg.description,
+      rg.cidc_registration_date,
+      rg.cidc_act_number,
+      rg.faculty_act_number,
+      rg.faculty_registration_date,
+      rg.email,
+      rg.gruplac,
+      rg.webpage,
+      rg.mission,
+      rg.vision,
+      rg.colciencias_code,
+      rg.snies_id,
+      rg.group_type_id,
+      stgt.st_name AS group_type_name,
+      rg.group_state_id,
+      stgs.st_name AS group_state_name,
+      rg.interinstitutional,
+      ARRAY( SELECT group_members.researcher_id
+             FROM group_members
+            WHERE (group_members.research_group_id = rg.id)) AS member_ids,
+      ( SELECT count(*) AS count
+             FROM group_members
+            WHERE (group_members.research_group_id = rg.id)) AS member_count,
+      ( SELECT count(*) AS count
+             FROM group_members
+            WHERE ((group_members.research_group_id = rg.id) AND (group_members.gm_state_id = 1))) AS active_member_count,
+      ( SELECT count(*) AS count
+             FROM group_members
+            WHERE ((group_members.research_group_id = rg.id) AND (group_members.gm_state_id = 2))) AS inactive_member_count,
+      ARRAY( SELECT faculty_ids_research_groups.faculty_id
+             FROM faculty_ids_research_groups
+            WHERE (faculty_ids_research_groups.research_group_id = rg.id)) AS faculty_ids,
+      ( SELECT count(*) AS count
+             FROM faculty_ids_research_groups
+            WHERE (faculty_ids_research_groups.research_group_id = rg.id)) AS total_faculties,
+      rg.cine_broad_area_id,
+      ( SELECT cine_broad_areas.name
+             FROM cine_broad_areas
+            WHERE (cine_broad_areas.id = rg.cine_broad_area_id)) AS cine_broad_area_name,
+      rg.cine_specific_area_id,
+      ( SELECT cine_specific_areas.name
+             FROM cine_specific_areas
+            WHERE (cine_specific_areas.id = rg.cine_specific_area_id)) AS cine_specific_area_name,
+      ARRAY( SELECT cine_detailed_areas_research_groups.cine_detailed_area_id
+             FROM cine_detailed_areas_research_groups
+            WHERE (cine_detailed_areas_research_groups.research_group_id = rg.id)) AS cine_detailed_area_ids,
+      ARRAY( SELECT curricular_prj_ids_research_groups.curricular_project_id
+             FROM curricular_prj_ids_research_groups
+            WHERE (curricular_prj_ids_research_groups.research_group_id = rg.id)) AS curricular_project_ids,
+      rg.oecd_knowledge_area_id,
+      ( SELECT oecd_knowledge_areas.name
+             FROM oecd_knowledge_areas
+            WHERE (oecd_knowledge_areas.id = rg.oecd_knowledge_area_id)) AS oecd_knowledge_area_name,
+      rg.oecd_knowledge_subarea_id,
+      ( SELECT oecd_knowledge_subareas.name
+             FROM oecd_knowledge_subareas
+            WHERE (oecd_knowledge_subareas.id = rg.oecd_knowledge_subarea_id)) AS oecd_knowledge_subarea_name,
+      ARRAY( SELECT oecd_disciplines_research_groups.oecd_discipline_id
+             FROM oecd_disciplines_research_groups
+            WHERE (oecd_disciplines_research_groups.research_group_id = rg.id)) AS oecd_discipline_ids,
+      ARRAY( SELECT research_focuses_units.subtype_id
+             FROM research_focuses_units
+            WHERE (research_focuses_units.research_group_id = rg.id)) AS research_focus_ids,
+      rg.created_at,
+      rg.updated_at,
+      rg.created_by,
+      rg.updated_by
+     FROM ((research_groups rg
+       LEFT JOIN subtypes stgt ON ((rg.group_type_id = stgt.id)))
+       LEFT JOIN subtypes stgs ON ((rg.group_state_id = stgs.id)));
+  SQL
+  create_view "complete_users", sql_definition: <<-SQL
+      SELECT u.id,
+      u.identification_number,
+      u.oas_user_id,
+      u.user_role_id,
+      ur.name AS user_role_name,
+      u.faculties_ids,
+      array_length(u.faculties_ids, 1) AS total_faculties,
+      ( SELECT count(*) AS count
+             FROM group_members gm
+            WHERE (r.id = gm.researcher_id)) AS total_structures,
+      ( SELECT count(*) AS count
+             FROM group_members gm
+            WHERE ((r.id = gm.researcher_id) AND (gm.gm_state_id = 1))) AS total_active_structures,
+      ( SELECT count(*) AS count
+             FROM group_members gm
+            WHERE ((r.id = gm.researcher_id) AND (gm.gm_state_id = 2))) AS total_inactive_structures,
+      u.active,
+      u.created_by,
+      u.updated_by,
+      u.created_at,
+      u.updated_at
+     FROM ((users u
+       LEFT JOIN user_roles ur ON ((u.user_role_id = ur.id)))
+       LEFT JOIN researchers r ON (((u.identification_number)::text = (r.identification_number)::text)));
+  SQL
+  create_view "complete_ext_participants", sql_definition: <<-SQL
+      SELECT extp.id,
+      extp.producible_type AS product_type,
+      extp.producible_id AS product_type_id,
+      extp.first_name,
+      extp.last_name,
+      extp.orcid_id,
+      extp.participant_type_id,
+      pt.st_name AS participant_type_name,
+      extp.active,
+      extp.created_by,
+      extp.updated_by,
+      extp.created_at,
+      extp.updated_at
+     FROM (ext_participants extp
+       LEFT JOIN subtypes pt ON ((pt.id = extp.participant_type_id)));
   SQL
 end
