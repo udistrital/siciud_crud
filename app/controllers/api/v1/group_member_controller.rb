@@ -17,6 +17,7 @@ module Api
       end
 
       def create
+        params[:group_member][:gm_state_id] = 1
         researcher_id = params[:group_member][:researcher_id]
         @group_member = @research_group.group_members.find_by(researcher_id: researcher_id)
         if @group_member

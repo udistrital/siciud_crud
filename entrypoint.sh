@@ -11,4 +11,5 @@ fi
 
 bundle exec rails db:migrate
 bundle exec rake table_setting:reset_pk_seq_all_tables
+
 exec "$@"
