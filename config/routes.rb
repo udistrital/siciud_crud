@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root to: "health#health"
-  
+
   namespace :api do
     namespace :v1 do
       get 'arp_assignment_reports/index'
@@ -35,7 +35,7 @@ Rails.application.routes.draw do
       put "agreement/:id/attach/", to: "agreement#attach"
 
       resources :gm_states, only: [:index, :show]
-      resources :role, only: [:index, :show]
+      resources :role, only: [:index, :show, :create, :update]
       resources :researchers, only: [:index, :show, :update, :create]
       get "researcher_research_units", to: "researchers#researcher_research_units"
 
@@ -59,7 +59,6 @@ Rails.application.routes.draw do
       resources :arp_role, only: [:index, :show, :create]
 
       resources :user_roles, only: [:index, :show, :create, :update]
-      put "/user_roles/:id/active", to: "user_roles#change_active"
 
       resources :agreement_research_project, only: [] do
         resources :contribution_rp_item, only: [:index, :show, :create, :update]
@@ -96,7 +95,6 @@ Rails.application.routes.draw do
 
         #    member do
         resources :group_member, only: [:index, :show, :create, :update]
-        put "/group_member/:id/deactivate", to: "group_member#deactivate"
 
         resources :plan_periods do
           #       member do
@@ -245,6 +243,7 @@ Rails.application.routes.draw do
                 :publications, :simple_books,
                 :degree_works, :content_generations,
                 :informative_bulletins, :investigation_projects,
+                :idi_investigation_projects,
                 :extension_projects, :training_courses,
                 :accompaniment_consultancies,
                 only: [] do
@@ -257,6 +256,10 @@ Rails.application.routes.draw do
       resources :research_creation_works, only: [] do
         resources :awards, only: [:index, :show, :create, :update]
       end
+      resources :group_member, only: [] do
+        resources :gm_periods, only: [:index, :create]
+      end
+      resources :gm_periods, only: [:show, :update]
 
       resources :colciencias_calls, only: [:index, :create, :update]
       resources :colciencias_categories, only: [:index, :create, :update]

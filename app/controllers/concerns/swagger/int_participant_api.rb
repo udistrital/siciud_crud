@@ -1,16 +1,9 @@
 module Swagger::IntParticipantApi
   extend ActiveSupport::Concern
   include Swagger::Blocks
+  require './app/models/concerns/constant.rb'
 
-  PRODUCT_ARRAY = [:books, :book_chapters,
-                   :ip_livestock_breeds, :new_animal_breeds,
-                   :papers, :patents, :research_creation_works,
-                   :scientific_notes, :vegetable_varieties,
-                   :industrial_designs, :integrated_circuit_diagrams,
-                   :software, :plant_ind_prototypes,
-                   :new_scientific_records,
-                   :events,
-                   :degree_works]
+  PRODUCT_ARRAY = get_product_array
 
   included do
     swagger_path '/{product_name}/{producible_id}/int_participants/{id}' do

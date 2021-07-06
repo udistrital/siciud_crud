@@ -68,12 +68,14 @@ module Api
       def user_params_to_create
         params.require(:user).permit(:identification_number,
                                      :oas_user_id, :user_role_id,
-                                     :created_by)
+                                     :created_by,
+                                     faculties_ids: [])
       end
 
       def user_params_to_update
         params.require(:user).permit(:identification_number, :oas_user_id,
-                                     :user_role_id, :updated_by)
+                                     :user_role_id, :updated_by,
+                                     faculties_ids: [])
       end
 
       def user_params_to_deactivate

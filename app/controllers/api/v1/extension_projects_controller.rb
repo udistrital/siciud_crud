@@ -10,6 +10,7 @@ module Api
       def index
         @extension_projects = CompleteExtensionProject.where(
           research_group_id: params[:research_group_id])
+        @extension_projects = DxService.load(@extension_projects, params)
 
         render json: @extension_projects
       end

@@ -44,7 +44,7 @@ module Api
 
       private
 
-      # Use callbacks to share common setup or constraints between actions.
+      # Use callbacks to share common setup or constraints bNetween actions.
       def set_ext_participant
         @ext_participant = @context.ext_participants.find(params[:id])
       end
@@ -53,22 +53,20 @@ module Api
       def ext_p_params_to_create
         params.require(:ext_participant).permit(:first_name,
                                                 :last_name,
+                                                :orcid_id,
                                                 :participant_type_id,
+                                                :active,
                                                 :created_by)
       end
 
       def ext_p_params_to_update
         params.require(:ext_participant).permit(:first_name,
                                                 :last_name,
+                                                :orcid_id,
                                                 :participant_type_id,
+                                                :active,
                                                 :updated_by)
       end
-
-      def ext_p_params_to_deactivate
-        params.require(:ext_participant).permit(:active,
-                                                :participant_type_id)
-      end
-
     end
   end
 end
