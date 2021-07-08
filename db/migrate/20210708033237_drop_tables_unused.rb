@@ -19,11 +19,12 @@ class DropTablesUnused < ActiveRecord::Migration[5.2]
     drop_table :arp_specific_goals
     drop_table :call_item_categories
     drop_table :calls_required_documents
+    drop_table :calls_product_types
+    drop_table :calls
     drop_table :call_user_roles
     drop_table :call_types
-    drop_table :calls_product_types
-    drop_table :contribution_funding_entity_items
     drop_table :contribution_rp_items
+    drop_table :contribution_funding_entity_items
     drop_table :contributions
     drop_table :document_types
     drop_table :entity_types
@@ -37,15 +38,14 @@ class DropTablesUnused < ActiveRecord::Migration[5.2]
     drop_table :plan_periods
     drop_table :item_categories
     drop_table :research_project_plans
-    drop_table :research_seedbeds
     drop_table :researcher_formation_plans
     drop_table :researcher_types
     drop_table :result_transfer_plans
     drop_table :seedbed_members
     drop_table :sm_periods
     drop_table :snies
+    drop_table :research_seedbeds
     drop_table :state_seedbeds
-    drop_table :calls
     drop_table :social_appropriation_plans
   end
 end
