@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_08_033237) do
+ActiveRecord::Schema.define(version: 2021_07_09_165258) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -155,6 +155,31 @@ ActiveRecord::Schema.define(version: 2021_07_08_033237) do
     t.index ["geo_state_id"], name: "index_books_on_geo_state_id"
     t.index ["research_group_id"], name: "index_books_on_research_group_id"
     t.index ["updated_by"], name: "index_books_on_updated_by"
+  end
+
+  create_table "calls", force: :cascade do |t|
+    t.text "call_name"
+    t.bigint "call_state_id"
+    t.string "call_code"
+    t.bigint "call_type_id"
+    t.bigint "call_beneficiary_id"
+    t.integer "call_duration"
+    t.date "call_start_date"
+    t.date "call_end_date"
+    t.float "call_global_budget"
+    t.float "call_max_budget_per_project"
+    t.text "call_directed_towards"
+    t.text "call_objective"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["call_beneficiary_id"], name: "index_calls_on_call_beneficiary_id"
+    t.index ["call_state_id"], name: "index_calls_on_call_state_id"
+    t.index ["call_type_id"], name: "index_calls_on_call_type_id"
+    t.index ["created_by"], name: "index_calls_on_created_by"
+    t.index ["updated_by"], name: "index_calls_on_updated_by"
   end
 
   create_table "cine_broad_areas", force: :cascade do |t|
@@ -1820,6 +1845,11 @@ ActiveRecord::Schema.define(version: 2021_07_08_033237) do
   add_foreign_key "books", "subtypes", column: "category_id"
   add_foreign_key "books", "users", column: "created_by"
   add_foreign_key "books", "users", column: "updated_by"
+  add_foreign_key "calls", "subtypes", column: "call_beneficiary_id"
+  add_foreign_key "calls", "subtypes", column: "call_state_id"
+  add_foreign_key "calls", "subtypes", column: "call_type_id"
+  add_foreign_key "calls", "users", column: "created_by"
+  add_foreign_key "calls", "users", column: "updated_by"
   add_foreign_key "cine_broad_areas", "users", column: "created_by"
   add_foreign_key "cine_broad_areas", "users", column: "updated_by"
   add_foreign_key "cine_detailed_areas", "cine_specific_areas"
@@ -3969,5 +3999,32 @@ ActiveRecord::Schema.define(version: 2021_07_08_033237) do
       extp.updated_at
      FROM (ext_participants extp
        LEFT JOIN subtypes pt ON ((pt.id = extp.participant_type_id)));
+  SQL
+  create_view "complete_calls", sql_definition: <<-SQL
+      SELECT c.id,
+      c.call_name,
+      c.call_code,
+      c.call_beneficiary_id,
+      sb.st_name AS call_beneficiary_name,
+      c.call_directed_towards,
+      c.call_duration,
+      c.call_global_budget,
+      c.call_max_budget_per_project,
+      c.call_objective,
+      c.call_start_date,
+      c.call_end_date,
+      c.call_state_id,
+      ss.st_name AS call_state_name,
+      c.call_type_id,
+      st.st_name AS call_type_name,
+      c.active,
+      c.created_at,
+      c.updated_at,
+      c.created_by,
+      c.updated_by
+     FROM (((calls c
+       LEFT JOIN subtypes sb ON ((sb.id = c.call_beneficiary_id)))
+       LEFT JOIN subtypes ss ON ((ss.id = c.call_state_id)))
+       LEFT JOIN subtypes st ON ((st.id = c.call_type_id)));
   SQL
 end
