@@ -37,7 +37,7 @@ class CallService
   end
 
   def self.validate_abbreviation(abbr)
-    pattern_not_word = /[^\wñÑ]/
+    pattern_not_word = /[^\wñÑáÁéÉíÍóÓúÚüÜ]/
     if abbr.blank?
       return [false, "The type has no description"]
     else
