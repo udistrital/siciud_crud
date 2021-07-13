@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_09_165258) do
+ActiveRecord::Schema.define(version: 2021_07_13_065427) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1652,6 +1652,8 @@ ActiveRecord::Schema.define(version: 2021_07_09_165258) do
     t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
+    t.boolean "required", default: false
+    t.boolean "multiple", default: false
     t.index ["created_by"], name: "index_subtypes_on_created_by"
     t.index ["parent_id"], name: "index_subtypes_on_parent_id"
     t.index ["type_id"], name: "index_subtypes_on_type_id"
@@ -2388,23 +2390,6 @@ ActiveRecord::Schema.define(version: 2021_07_09_165258) do
        LEFT JOIN subtypes pttp ON ((p.patent_type_id = pttp.id)))
        LEFT JOIN colciencias_calls cc ON ((p.colciencias_call_id = cc.id)))
        LEFT JOIN subtypes stps ON ((p.patent_state_id = stps.id)));
-  SQL
-  create_view "complete_types", sql_definition: <<-SQL
-      SELECT t.id AS type_id,
-      t.t_name AS type_name,
-      t.t_description AS type_description,
-      t.active AS type_active,
-      st.parent_id,
-      pst.st_name AS parent_name,
-      pst.st_description AS parent_description,
-      pst.active AS parent_active,
-      st.id,
-      st.st_name AS name,
-      st.st_description AS description,
-      st.active
-     FROM ((types t
-       LEFT JOIN subtypes st ON ((t.id = st.type_id)))
-       LEFT JOIN subtypes pst ON ((st.parent_id = pst.id)));
   SQL
   create_view "complete_bills", sql_definition: <<-SQL
       SELECT bl.id,
@@ -4026,5 +4011,24 @@ ActiveRecord::Schema.define(version: 2021_07_09_165258) do
        LEFT JOIN subtypes sb ON ((sb.id = c.call_beneficiary_id)))
        LEFT JOIN subtypes ss ON ((ss.id = c.call_state_id)))
        LEFT JOIN subtypes st ON ((st.id = c.call_type_id)));
+  SQL
+  create_view "complete_types", sql_definition: <<-SQL
+      SELECT t.id AS type_id,
+      t.t_name AS type_name,
+      t.t_description AS type_description,
+      t.active AS type_active,
+      st.parent_id,
+      pst.st_name AS parent_name,
+      pst.st_description AS parent_description,
+      pst.active AS parent_active,
+      st.id,
+      st.st_name AS name,
+      st.st_description AS description,
+      st.multiple,
+      st.required,
+      st.active
+     FROM ((types t
+       LEFT JOIN subtypes st ON ((t.id = st.type_id)))
+       LEFT JOIN subtypes pst ON ((st.parent_id = pst.id)));
   SQL
 end
