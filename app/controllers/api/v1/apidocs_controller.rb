@@ -24,6 +24,7 @@ module Api
       # For example, areas of knowledge or type of production.
       SWAGGERED_CLASSES = [
         CallsController,
+        IndicatorsController,
         CallItemsController,
         ColcienciasCallsController,
         ColcienciasCategoriesController,
@@ -99,6 +100,7 @@ module Api
         UsersController,
 
         Call,
+        Indicator,
         CallItem,
         ColcienciasCall,
         ColcienciasCategory,

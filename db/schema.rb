@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_14_042920) do
+ActiveRecord::Schema.define(version: 2021_07_14_053715) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -160,7 +160,7 @@ ActiveRecord::Schema.define(version: 2021_07_14_042920) do
   create_table "call_items", force: :cascade do |t|
     t.bigint "call_id"
     t.bigint "item_id"
-    t.decimal "ci_maximum_percentage", precision: 6, scale: 3
+    t.decimal "ci_maximum_percentage", precision: 5, scale: 2
     t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
@@ -786,6 +786,19 @@ ActiveRecord::Schema.define(version: 2021_07_14_042920) do
     t.index ["geo_state_id"], name: "index_idi_investigation_projects_on_geo_state_id"
     t.index ["research_group_id"], name: "index_idi_investigation_projects_on_research_group_id"
     t.index ["updated_by"], name: "index_idi_investigation_projects_on_updated_by"
+  end
+
+  create_table "indicators", force: :cascade do |t|
+    t.bigint "product_type_id"
+    t.text "ind_description"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_indicators_on_created_by"
+    t.index ["product_type_id"], name: "index_indicators_on_product_type_id"
+    t.index ["updated_by"], name: "index_indicators_on_updated_by"
   end
 
   create_table "industrial_designs", force: :cascade do |t|
@@ -2015,6 +2028,9 @@ ActiveRecord::Schema.define(version: 2021_07_14_042920) do
   add_foreign_key "idi_investigation_projects", "subtypes", column: "category_id"
   add_foreign_key "idi_investigation_projects", "users", column: "created_by"
   add_foreign_key "idi_investigation_projects", "users", column: "updated_by"
+  add_foreign_key "indicators", "subtypes", column: "product_type_id"
+  add_foreign_key "indicators", "users", column: "created_by"
+  add_foreign_key "indicators", "users", column: "updated_by"
   add_foreign_key "industrial_designs", "colciencias_calls"
   add_foreign_key "industrial_designs", "geo_cities"
   add_foreign_key "industrial_designs", "geo_countries"

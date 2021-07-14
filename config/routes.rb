@@ -206,10 +206,14 @@ Rails.application.routes.draw do
       resources :cine_detailed_areas, only: [:index, :create, :update]
 
       # Endpoints to Calls
+      resources :indicators, only: [:index, :show, :create, :update]
+
       resources :calls, only: [:index, :show, :create, :update] do
         resources :call_items, only: [:index, :create]
       end
       resources :call_items, only: [:show, :update]
+
+
     end
   end
 end
