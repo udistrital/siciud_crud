@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_13_065427) do
+ActiveRecord::Schema.define(version: 2021_07_14_042920) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -155,6 +155,21 @@ ActiveRecord::Schema.define(version: 2021_07_13_065427) do
     t.index ["geo_state_id"], name: "index_books_on_geo_state_id"
     t.index ["research_group_id"], name: "index_books_on_research_group_id"
     t.index ["updated_by"], name: "index_books_on_updated_by"
+  end
+
+  create_table "call_items", force: :cascade do |t|
+    t.bigint "call_id"
+    t.bigint "item_id"
+    t.decimal "ci_maximum_percentage", precision: 6, scale: 3
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["call_id"], name: "index_call_items_on_call_id"
+    t.index ["created_by"], name: "index_call_items_on_created_by"
+    t.index ["item_id"], name: "index_call_items_on_item_id"
+    t.index ["updated_by"], name: "index_call_items_on_updated_by"
   end
 
   create_table "calls", force: :cascade do |t|
@@ -1847,6 +1862,10 @@ ActiveRecord::Schema.define(version: 2021_07_13_065427) do
   add_foreign_key "books", "subtypes", column: "category_id"
   add_foreign_key "books", "users", column: "created_by"
   add_foreign_key "books", "users", column: "updated_by"
+  add_foreign_key "call_items", "calls"
+  add_foreign_key "call_items", "subtypes", column: "item_id"
+  add_foreign_key "call_items", "users", column: "created_by"
+  add_foreign_key "call_items", "users", column: "updated_by"
   add_foreign_key "calls", "subtypes", column: "call_beneficiary_id"
   add_foreign_key "calls", "subtypes", column: "call_state_id"
   add_foreign_key "calls", "subtypes", column: "call_type_id"
@@ -4030,5 +4049,19 @@ ActiveRecord::Schema.define(version: 2021_07_13_065427) do
      FROM ((types t
        LEFT JOIN subtypes st ON ((t.id = st.type_id)))
        LEFT JOIN subtypes pst ON ((st.parent_id = pst.id)));
+  SQL
+  create_view "complete_call_items", sql_definition: <<-SQL
+      SELECT ci.id,
+      ci.call_id,
+      ci.item_id,
+      s.st_name AS item_name,
+      ci.ci_maximum_percentage,
+      ci.active,
+      ci.created_by,
+      ci.updated_by,
+      ci.created_at,
+      ci.updated_at
+     FROM (call_items ci
+       LEFT JOIN subtypes s ON ((s.id = ci.item_id)));
   SQL
 end

@@ -5,6 +5,9 @@ class Call < ApplicationRecord
   belongs_to :call_state, class_name: 'Subtype', foreign_key: 'call_state_id', optional: true
   belongs_to :call_type, class_name: 'Subtype', foreign_key: 'call_type_id'
 
+  has_many :call_items
+  has_many :items, through: :call_items, source: :item
+
   validates :call_name, presence: true
   validates :call_code, uniqueness: true
   validates :call_duration,

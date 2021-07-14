@@ -41,6 +41,9 @@ class Subtype < ApplicationRecord
   has_many :ext_participants, class_name: 'ExtParticipant', foreign_key: 'participant_type_id', dependent: :destroy
   has_many :int_participants, class_name: 'IntParticipant', foreign_key: 'participant_type_id', dependent: :destroy
 
+  has_many :call_items
+  has_many :calls, through: :call_items, source: :call
+
   # Tracking inherited from ApplicationRecord, fields:
   # created_by and updated_by, see application_record.rb
   validates :st_name, presence: true, allow_blank: false, on: :create
