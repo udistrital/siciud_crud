@@ -210,9 +210,10 @@ Rails.application.routes.draw do
 
       resources :calls, only: [:index, :show, :create, :update] do
         resources :call_items, only: [:index, :create]
+        resources :calls_indicators, only: [:index, :create]
       end
       resources :call_items, only: [:show, :update]
-
+      resources :calls_indicators, only: [:show, :update]
 
     end
   end

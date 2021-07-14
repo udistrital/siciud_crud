@@ -25,6 +25,7 @@ module Api
       SWAGGERED_CLASSES = [
         CallsController,
         IndicatorsController,
+        CallsIndicatorsController,
         CallItemsController,
         ColcienciasCallsController,
         ColcienciasCategoriesController,
@@ -101,6 +102,7 @@ module Api
 
         Call,
         Indicator,
+        CallsIndicator,
         CallItem,
         ColcienciasCall,
         ColcienciasCategory,

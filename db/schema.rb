@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_14_053715) do
+ActiveRecord::Schema.define(version: 2021_07_14_070246) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -195,6 +195,22 @@ ActiveRecord::Schema.define(version: 2021_07_14_053715) do
     t.index ["call_type_id"], name: "index_calls_on_call_type_id"
     t.index ["created_by"], name: "index_calls_on_created_by"
     t.index ["updated_by"], name: "index_calls_on_updated_by"
+  end
+
+  create_table "calls_indicators", force: :cascade do |t|
+    t.bigint "call_id"
+    t.bigint "indicator_id"
+    t.boolean "clind_required"
+    t.integer "clind_quantity"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["call_id"], name: "index_calls_indicators_on_call_id"
+    t.index ["created_by"], name: "index_calls_indicators_on_created_by"
+    t.index ["indicator_id"], name: "index_calls_indicators_on_indicator_id"
+    t.index ["updated_by"], name: "index_calls_indicators_on_updated_by"
   end
 
   create_table "cine_broad_areas", force: :cascade do |t|
@@ -1884,6 +1900,10 @@ ActiveRecord::Schema.define(version: 2021_07_14_053715) do
   add_foreign_key "calls", "subtypes", column: "call_type_id"
   add_foreign_key "calls", "users", column: "created_by"
   add_foreign_key "calls", "users", column: "updated_by"
+  add_foreign_key "calls_indicators", "calls"
+  add_foreign_key "calls_indicators", "indicators"
+  add_foreign_key "calls_indicators", "users", column: "created_by"
+  add_foreign_key "calls_indicators", "users", column: "updated_by"
   add_foreign_key "cine_broad_areas", "users", column: "created_by"
   add_foreign_key "cine_broad_areas", "users", column: "updated_by"
   add_foreign_key "cine_detailed_areas", "cine_specific_areas"
@@ -4079,5 +4099,21 @@ ActiveRecord::Schema.define(version: 2021_07_14_053715) do
       ci.updated_at
      FROM (call_items ci
        LEFT JOIN subtypes s ON ((s.id = ci.item_id)));
+  SQL
+  create_view "complete_call_indicators", sql_definition: <<-SQL
+      SELECT cind.id,
+      cind.call_id,
+      cind.indicator_id,
+      i.ind_description AS indicator_description,
+      i.product_type_id,
+      s.st_name AS product_type_name,
+      cind.active,
+      cind.created_by,
+      cind.updated_by,
+      cind.created_at,
+      cind.updated_at
+     FROM ((calls_indicators cind
+       LEFT JOIN indicators i ON ((i.id = cind.indicator_id)))
+       LEFT JOIN subtypes s ON ((i.product_type_id = s.id)));
   SQL
 end

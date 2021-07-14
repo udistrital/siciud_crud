@@ -7,6 +7,8 @@ class Call < ApplicationRecord
 
   has_many :call_items
   has_many :items, through: :call_items, source: :item
+  has_many :calls_indicators
+  has_many :indicators, through: :calls_indicators
 
   validates :call_name, presence: true
   validates :call_code, uniqueness: true
