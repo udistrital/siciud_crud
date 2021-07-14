@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_14_070246) do
+ActiveRecord::Schema.define(version: 2021_07_14_074648) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -155,6 +155,21 @@ ActiveRecord::Schema.define(version: 2021_07_14_070246) do
     t.index ["geo_state_id"], name: "index_books_on_geo_state_id"
     t.index ["research_group_id"], name: "index_books_on_research_group_id"
     t.index ["updated_by"], name: "index_books_on_updated_by"
+  end
+
+  create_table "call_documents", force: :cascade do |t|
+    t.bigint "call_id"
+    t.bigint "document_id"
+    t.boolean "cd_required", default: true
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["call_id"], name: "index_call_documents_on_call_id"
+    t.index ["created_by"], name: "index_call_documents_on_created_by"
+    t.index ["document_id"], name: "index_call_documents_on_document_id"
+    t.index ["updated_by"], name: "index_call_documents_on_updated_by"
   end
 
   create_table "call_items", force: :cascade do |t|
@@ -1891,6 +1906,10 @@ ActiveRecord::Schema.define(version: 2021_07_14_070246) do
   add_foreign_key "books", "subtypes", column: "category_id"
   add_foreign_key "books", "users", column: "created_by"
   add_foreign_key "books", "users", column: "updated_by"
+  add_foreign_key "call_documents", "calls"
+  add_foreign_key "call_documents", "subtypes", column: "document_id"
+  add_foreign_key "call_documents", "users", column: "created_by"
+  add_foreign_key "call_documents", "users", column: "updated_by"
   add_foreign_key "call_items", "calls"
   add_foreign_key "call_items", "subtypes", column: "item_id"
   add_foreign_key "call_items", "users", column: "created_by"
@@ -4115,5 +4134,19 @@ ActiveRecord::Schema.define(version: 2021_07_14_070246) do
      FROM ((calls_indicators cind
        LEFT JOIN indicators i ON ((i.id = cind.indicator_id)))
        LEFT JOIN subtypes s ON ((i.product_type_id = s.id)));
+  SQL
+  create_view "complete_call_documents", sql_definition: <<-SQL
+      SELECT cd.id,
+      cd.call_id,
+      cd.document_id,
+      s.st_name AS document_name,
+      cd.cd_required,
+      cd.active,
+      cd.created_by,
+      cd.updated_by,
+      cd.created_at,
+      cd.updated_at
+     FROM (call_documents cd
+       LEFT JOIN subtypes s ON ((s.id = cd.document_id)));
   SQL
 end

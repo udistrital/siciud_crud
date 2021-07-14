@@ -9,6 +9,10 @@ class Call < ApplicationRecord
   has_many :items, through: :call_items, source: :item
   has_many :calls_indicators
   has_many :indicators, through: :calls_indicators
+  has_many :call_documents
+  has_many :c_documents, through: :call_documents, source: :document
+
+  has_many :documents, as: :documentable
 
   validates :call_name, presence: true
   validates :call_code, uniqueness: true

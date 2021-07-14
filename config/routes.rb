@@ -209,9 +209,11 @@ Rails.application.routes.draw do
       resources :indicators, only: [:index, :show, :create, :update]
 
       resources :calls, only: [:index, :show, :create, :update] do
+        resources :call_documents, only: [:index, :create]
         resources :call_items, only: [:index, :create]
         resources :calls_indicators, only: [:index, :create]
       end
+      resources :call_documents, only: [:show, :update]
       resources :call_items, only: [:show, :update]
       resources :calls_indicators, only: [:show, :update]
 

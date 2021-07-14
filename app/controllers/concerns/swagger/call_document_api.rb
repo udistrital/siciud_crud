@@ -1,28 +1,28 @@
-module Swagger::CallsIndicatorApi
+module Swagger::CallDocumentApi
   extend ActiveSupport::Concern
   include Swagger::Blocks
 
   included do
-    swagger_path '/calls_indicators/{id}' do
+    swagger_path '/call_documents/{id}' do
       operation :get do
-        key :summary, 'Get a calls indicator by ID'
-        key :description, 'Returns a single calls indicator'
-        key :operationId, :get_calls_indicator_by_id
+        key :summary, 'Get a call document by ID'
+        key :description, 'Returns a single call document'
+        key :operationId, :get_call_document_by_id
         key :produces, ['application/json',]
-        key :tags, ['Calls:: Calls Indicators']
+        key :tags, ['Calls:: Call Documents']
 
         parameter name: :id do
           key :in, :path
-          key :description, 'ID of calls indicator to fetch'
+          key :description, 'ID of call document to fetch'
           key :required, true
           key :type, :integer
           key :format, :int64
         end
 
         response 200 do
-          key :description, 'calls indicator response'
+          key :description, 'call document response'
           schema do
-            key :'$ref', :CallsIndicatorOutput
+            key :'$ref', :CallDocumentOutput
           end
         end
         response 404 do
@@ -37,33 +37,33 @@ module Swagger::CallsIndicatorApi
       end
 
       operation :put do
-        key :summary, 'Update calls indicator by ID'
-        key :description, 'Returns the updated calls indicator'
-        key :operationId, :update_calls_indicator
+        key :summary, 'Update call document by ID'
+        key :description, 'Returns the updated call document'
+        key :operationId, :update_call_document
         key :produces, ['application/json',]
-        key :tags, ['Calls:: Calls Indicators']
+        key :tags, ['Calls:: Call Documents']
 
         parameter name: :id do
           key :in, :path
-          key :description, 'ID of calls indicator to fetch'
+          key :description, 'ID of call document to fetch'
           key :required, true
           key :type, :integer
           key :format, :int64
         end
 
-        parameter name: :calls_indicator do
+        parameter name: :call_document do
           key :in, :body
-          key :description, 'calls indicator to update'
+          key :description, 'call document to update'
           key :required, true
           schema do
-            key :'$ref', :CallsIndicatorInputPut
+            key :'$ref', :CallDocumentInputPut
           end
         end
 
         response 200 do
-          key :description, 'calls indicator response'
+          key :description, 'call document response'
           schema do
-            key :'$ref', :CallsIndicatorOutput
+            key :'$ref', :CallDocumentOutput
           end
         end
         response 422 do
@@ -78,35 +78,35 @@ module Swagger::CallsIndicatorApi
       end
 
       operation :patch do
-        key :summary, 'Activate or deactivate a calls indicator by ID'
-        key :description, 'Returns the activated/deactivated calls indicator'
-        key :operationId, :change_active_calls_indicator
+        key :summary, 'Activate or deactivate a call document by ID'
+        key :description, 'Returns the activated/deactivated call document'
+        key :operationId, :change_active_call_document
         key :produces, ['application/json',]
-        key :tags, ['Calls:: Calls Indicators']
+        key :tags, ['Calls:: Call Documents']
 
         parameter name: :id do
           key :in, :path
-          key :description, 'ID of calls indicator to fetch'
+          key :description, 'ID of call document to fetch'
           key :required, true
           key :type, :integer
           key :format, :int64
         end
 
-        parameter name: :calls_indicator do
+        parameter name: :call_document do
           key :in, :body
-          key :description, 'calls indicator to activate or deactivate'
+          key :description, 'call document to activate or deactivate'
           key :required, true
           schema do
-            property :calls_indicator do
+            property :call_document do
               key :'$ref', :ChangeActive
             end
           end
         end
 
         response 200 do
-          key :description, 'calls indicator response'
+          key :description, 'call document response'
           schema do
-            key :'$ref', :CallsIndicatorOutput
+            key :'$ref', :CallDocumentOutput
           end
         end
         response 422 do
@@ -121,13 +121,13 @@ module Swagger::CallsIndicatorApi
       end
     end
 
-    swagger_path '/calls/{call_id}/calls_indicators' do
+    swagger_path '/calls/{call_id}/call_documents' do
       operation :get do
-        key :summary, 'Get all calls indicators'
-        key :description, 'Returns all calls indicators'
-        key :operationId, :get_calls_indicators
+        key :summary, 'Get all call documents'
+        key :description, 'Returns all call documents'
+        key :operationId, :get_call_documents
         key :produces, ['application/json',]
-        key :tags, ['Calls:: Calls Indicators']
+        key :tags, ['Calls:: Call Documents']
 
         parameter name: :call_id do
           key :in, :path
@@ -138,11 +138,11 @@ module Swagger::CallsIndicatorApi
         end
 
         response 200 do
-          key :description, 'calls indicator response'
+          key :description, 'call document response'
           schema do
             key :type, :array
             items do
-              key :'$ref', :CallsIndicatorDxOutput
+              key :'$ref', :CallDocumentDxOutput
             end
           end
         end
@@ -152,11 +152,11 @@ module Swagger::CallsIndicatorApi
       end
 
       operation :post do
-        key :summary, 'Create a new calls indicators'
-        key :description, 'Returns the created calls indicator'
-        key :operationId, :create_calls_indicator
+        key :summary, 'Create a new call documents'
+        key :description, 'Returns the created call document'
+        key :operationId, :create_call_document
         key :produces, ['application/json',]
-        key :tags, ['Calls:: Calls Indicators']
+        key :tags, ['Calls:: Call Documents']
 
         parameter name: :call_id do
           key :in, :path
@@ -166,19 +166,19 @@ module Swagger::CallsIndicatorApi
           key :format, :int64
         end
 
-        parameter name: :calls_indicator do
+        parameter name: :call_document do
           key :in, :body
-          key :description, 'calls indicator to register'
+          key :description, 'call document to register'
           key :required, true
           schema do
-            key :'$ref', :CallsIndicatorInputPost
+            key :'$ref', :CallDocumentInputPost
           end
         end
 
         response 201 do
-          key :description, 'calls indicator response'
+          key :description, 'call document response'
           schema do
-            key :'$ref', :CallsIndicatorOutput
+            key :'$ref', :CallDocumentOutput
           end
         end
         response 422 do

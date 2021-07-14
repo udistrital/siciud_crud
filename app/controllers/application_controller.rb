@@ -24,6 +24,9 @@ class ApplicationController < ActionController::API
     if params[:research_group_id]
       id = params[:research_group_id]
       @context = ResearchGroup.find(id)
+    elsif params[:call_id]
+      id = params[:call_id]
+      @context = Call.find(id)
     else
       set_product_context
     end
