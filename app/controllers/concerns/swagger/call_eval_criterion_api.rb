@@ -1,28 +1,28 @@
-module Swagger::TechnicalConceptApi
+module Swagger::CallEvalCriterionApi
   extend ActiveSupport::Concern
   include Swagger::Blocks
 
   included do
-    swagger_path '/technical_concepts/{id}' do
+    swagger_path '/call_eval_criteria/{id}' do
       operation :get do
-        key :summary, 'Get a Technical Concept by ID'
-        key :description, 'Returns a single technical concept'
-        key :operationId, :get_technical_concept_by_id
+        key :summary, 'Get a Call Evaluation Criterion by ID'
+        key :description, 'Returns a single call evaluation criterion'
+        key :operationId, :get_call_eval_criterion_by_id
         key :produces, ['application/json',]
-        key :tags, ['Products::TDI::Technical Concepts']
+        key :tags, ['Calls:: Call Evaluation Criteria']
 
         parameter name: :id do
           key :in, :path
-          key :description, 'ID of technical concept to fetch'
+          key :description, 'ID of call eval criterion to fetch'
           key :required, true
           key :type, :integer
           key :format, :int64
         end
 
         response 200 do
-          key :description, 'technical concept response'
+          key :description, 'call eval criterion response'
           schema do
-            key :'$ref', :TechnicalConceptOutput
+            key :'$ref', :CallEvalCriterionOutput
           end
         end
         response 404 do
@@ -37,33 +37,33 @@ module Swagger::TechnicalConceptApi
       end
 
       operation :put do
-        key :summary, 'Update Technical Concept by ID'
-        key :description, 'Returns the updated technical concept'
-        key :operationId, :update_technical_concept
+        key :summary, 'Update call eval criterion by ID'
+        key :description, 'Returns the updated call eval criterion'
+        key :operationId, :update_call_eval_criterion
         key :produces, ['application/json',]
-        key :tags, ['Products::TDI::Technical Concepts']
+        key :tags, ['Calls:: Call Evaluation Criteria']
 
         parameter name: :id do
           key :in, :path
-          key :description, 'ID of technical concept to fetch'
+          key :description, 'ID of call eval criterion to fetch'
           key :required, true
           key :type, :integer
           key :format, :int64
         end
 
-        parameter name: :technical_concept do
+        parameter name: :call_eval_criterion do
           key :in, :body
-          key :description, 'Technical Concept to update'
+          key :description, 'call eval criterion to update'
           key :required, true
           schema do
-            key :'$ref', :TechnicalConceptInputPut
+            key :'$ref', :CallEvalCriterionInputPut
           end
         end
 
         response 200 do
-          key :description, 'technical concept response'
+          key :description, 'call eval criterion response'
           schema do
-            key :'$ref', :TechnicalConceptOutput
+            key :'$ref', :CallEvalCriterionOutput
           end
         end
         response 422 do
@@ -78,35 +78,35 @@ module Swagger::TechnicalConceptApi
       end
 
       operation :patch do
-        key :summary, 'Activate or deactivate a Technical Concept by ID'
-        key :description, 'Returns the activated/deactivated technical concept'
-        key :operationId, :change_active_technical_concept
+        key :summary, 'Activate or deactivate a call eval criterion by ID'
+        key :description, 'Returns the activated/deactivated call eval criterion'
+        key :operationId, :change_active_call_eval_criterion
         key :produces, ['application/json',]
-        key :tags, ['Products::TDI::Technical Concepts']
+        key :tags, ['Calls:: Call Evaluation Criteria']
 
         parameter name: :id do
           key :in, :path
-          key :description, 'ID of technical concept to fetch'
+          key :description, 'ID of call eval criterion to fetch'
           key :required, true
           key :type, :integer
           key :format, :int64
         end
 
-        parameter name: :technical_concept do
+        parameter name: :call_eval_criterion do
           key :in, :body
-          key :description, 'Technical Concept to activate or deactivate'
+          key :description, 'call eval criterion to activate or deactivate'
           key :required, true
           schema do
-            property :technical_concept do
+            property :call_eval_criterion do
               key :'$ref', :ChangeActive
             end
           end
         end
 
         response 200 do
-          key :description, 'technical concept response'
+          key :description, 'call eval criterion response'
           schema do
-            key :'$ref', :TechnicalConceptOutput
+            key :'$ref', :CallEvalCriterionOutput
           end
         end
         response 422 do
@@ -121,28 +121,28 @@ module Swagger::TechnicalConceptApi
       end
     end
 
-    swagger_path '/research_units/{research_group_id}/technical_concepts' do
+    swagger_path '/calls/{call_id}/call_eval_criteria' do
       operation :get do
-        key :summary, 'Get all Technical Concepts'
-        key :description, 'Returns all technical concepts'
-        key :operationId, :get_technical_concepts
+        key :summary, 'Get all call eval criteria'
+        key :description, 'Returns all call eval criteria'
+        key :operationId, :get_call_eval_criteria
         key :produces, ['application/json',]
-        key :tags, ['Products::TDI::Technical Concepts']
+        key :tags, ['Calls:: Call Evaluation Criteria']
 
-        parameter name: :research_group_id do
+        parameter name: :call_id do
           key :in, :path
-          key :description, 'ID of research unit to fetch'
+          key :description, 'ID of call to fetch'
           key :required, true
           key :type, :integer
           key :format, :int64
         end
 
         response 200 do
-          key :description, 'technical concept response'
+          key :description, 'call eval criterion response'
           schema do
             key :type, :array
             items do
-              key :'$ref', :TechnicalConceptDxOutput
+              key :'$ref', :CallEvalCriterionDxOutput
             end
           end
         end
@@ -152,33 +152,33 @@ module Swagger::TechnicalConceptApi
       end
 
       operation :post do
-        key :summary, 'Create a new Technical Concept'
-        key :description, 'Returns the created technical concept'
-        key :operationId, :create_technical_concept
+        key :summary, 'Create a new call eval criterion'
+        key :description, 'Returns the created call eval criterion'
+        key :operationId, :create_call_eval_criterion
         key :produces, ['application/json',]
-        key :tags, ['Products::TDI::Technical Concepts']
+        key :tags, ['Calls:: Call Evaluation Criteria']
 
-        parameter name: :research_group_id do
+        parameter name: :call_id do
           key :in, :path
-          key :description, 'ID of research unit to fetch'
+          key :description, 'ID of call to fetch'
           key :required, true
           key :type, :integer
           key :format, :int64
         end
 
-        parameter name: :technical_concept do
+        parameter name: :call_eval_criterion do
           key :in, :body
-          key :description, 'Technical Concept to register'
+          key :description, 'call eval criterion to register'
           key :required, true
           schema do
-            key :'$ref', :TechnicalConceptInputPost
+            key :'$ref', :CallEvalCriterionInputPost
           end
         end
 
         response 201 do
-          key :description, 'technical concept response'
+          key :description, 'call eval criterion response'
           schema do
-            key :'$ref', :TechnicalConceptOutput
+            key :'$ref', :CallEvalCriterionOutput
           end
         end
         response 422 do

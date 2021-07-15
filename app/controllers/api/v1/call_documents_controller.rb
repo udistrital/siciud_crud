@@ -50,7 +50,7 @@ module Api
 
       # Only allow a trusted parameter "white list" through.
       def call_document_params_to_create
-        params.require(:call_document).permit(:call_id, :document_id,
+        params.require(:call_document).permit(:document_id,
                                               :cd_required, :active,
                                               :created_by)
       end

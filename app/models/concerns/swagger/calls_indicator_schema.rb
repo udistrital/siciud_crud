@@ -4,10 +4,6 @@ module Swagger::CallsIndicatorSchema
 
   included do
     swagger_schema :CallsIndicator do
-      property :call_id do
-        key :type, :integer
-        key :format, :int64
-      end
       property :indicator_id do
         key :type, :integer
         key :format, :int64
@@ -53,6 +49,10 @@ module Swagger::CallsIndicatorSchema
         end
         schema do
           property :calls_indicator do
+            property :call_id do
+              key :type, :integer
+              key :format, :int64
+            end
             property :updated_by do
               key :type, :integer
               key :format, :int64

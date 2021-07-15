@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_14_074648) do
+ActiveRecord::Schema.define(version: 2021_07_15_032355) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -170,6 +170,21 @@ ActiveRecord::Schema.define(version: 2021_07_14_074648) do
     t.index ["created_by"], name: "index_call_documents_on_created_by"
     t.index ["document_id"], name: "index_call_documents_on_document_id"
     t.index ["updated_by"], name: "index_call_documents_on_updated_by"
+  end
+
+  create_table "call_eval_criteria", force: :cascade do |t|
+    t.bigint "call_id"
+    t.bigint "eval_criterion_id"
+    t.decimal "cec_percentage", precision: 5, scale: 2
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["call_id"], name: "index_call_eval_criteria_on_call_id"
+    t.index ["created_by"], name: "index_call_eval_criteria_on_created_by"
+    t.index ["eval_criterion_id"], name: "index_call_eval_criteria_on_eval_criterion_id"
+    t.index ["updated_by"], name: "index_call_eval_criteria_on_updated_by"
   end
 
   create_table "call_items", force: :cascade do |t|
@@ -1910,6 +1925,10 @@ ActiveRecord::Schema.define(version: 2021_07_14_074648) do
   add_foreign_key "call_documents", "subtypes", column: "document_id"
   add_foreign_key "call_documents", "users", column: "created_by"
   add_foreign_key "call_documents", "users", column: "updated_by"
+  add_foreign_key "call_eval_criteria", "calls"
+  add_foreign_key "call_eval_criteria", "subtypes", column: "eval_criterion_id"
+  add_foreign_key "call_eval_criteria", "users", column: "created_by"
+  add_foreign_key "call_eval_criteria", "users", column: "updated_by"
   add_foreign_key "call_items", "calls"
   add_foreign_key "call_items", "subtypes", column: "item_id"
   add_foreign_key "call_items", "users", column: "created_by"
@@ -4148,5 +4167,19 @@ ActiveRecord::Schema.define(version: 2021_07_14_074648) do
       cd.updated_at
      FROM (call_documents cd
        LEFT JOIN subtypes s ON ((s.id = cd.document_id)));
+  SQL
+  create_view "complete_call_eval_criteria", sql_definition: <<-SQL
+      SELECT cec.id,
+      cec.call_id,
+      cec.eval_criterion_id,
+      s.st_name AS eval_criterion_name,
+      cec.cec_percentage,
+      cec.active,
+      cec.created_by,
+      cec.updated_by,
+      cec.created_at,
+      cec.updated_at
+     FROM (call_eval_criteria cec
+       LEFT JOIN subtypes s ON ((s.id = cec.eval_criterion_id)));
   SQL
 end

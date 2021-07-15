@@ -50,7 +50,7 @@ module Api
 
       # Only allow a trusted parameter "white list" through.
       def calls_ind_params_to_create
-        params.require(:calls_indicator).permit(:call_id, :indicator_id,
+        params.require(:calls_indicator).permit(:indicator_id,
                                                 :clind_required, :clind_quantity,
                                                 :active, :created_by)
       end

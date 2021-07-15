@@ -25,6 +25,7 @@ module Api
       SWAGGERED_CLASSES = [
         CallsController,
         CallDocumentsController,
+        CallEvalCriteriaController,
         IndicatorsController,
         CallsIndicatorsController,
         CallItemsController,
@@ -103,6 +104,7 @@ module Api
 
         Call,
         CallDocument,
+        CallEvalCriterion,
         Indicator,
         CallsIndicator,
         CallItem,
