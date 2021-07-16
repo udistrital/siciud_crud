@@ -7,6 +7,9 @@ module Swagger::CallSchema
       property :call_name do
         key :type, :string
       end
+      property :call_code do
+        key :type, :string
+      end
       property :call_beneficiary_id do
         key :type, :integer
         key :format, :int64
@@ -98,9 +101,6 @@ module Swagger::CallSchema
             key :format, :int64
           end
           property :call_beneficiary_name do
-            key :type, :string
-          end
-          property :call_code do
             key :type, :string
           end
           property :call_state_name do

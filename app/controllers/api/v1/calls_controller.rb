@@ -21,15 +21,11 @@ module Api
       # POST /calls
       def create
         @call = Call.new(call_params_to_create)
-        @call.call_code, msg = CallService.get_call_code(@call.call_type_id)
-        if @call.call_code.nil?
-          render json: { error: msg }, status: :unprocessable_entity
+
+        if @call.save
+          render json: @call, status: :created
         else
-          if @call.save
-            render json: @call, status: :created
-          else
-            render json: @call.errors, status: :unprocessable_entity
-          end
+          render json: @call.errors, status: :unprocessable_entity
         end
       end
 
@@ -51,7 +47,7 @@ module Api
 
       # Only allow a trusted parameter "white list" through.
       def call_params_to_create
-        params.require(:call).permit(:call_name, :call_state_id,
+        params.require(:call).permit(:call_name, :call_code, :call_state_id,
                                      :call_type_id, :call_beneficiary_id,
                                      :call_duration, :call_start_date, :call_end_date,
                                      :call_global_budget, :call_max_budget_per_project,
@@ -60,7 +56,7 @@ module Api
       end
 
       def call_params_to_update
-        params.require(:call).permit(:call_name, :call_state_id,
+        params.require(:call).permit(:call_name, :call_code, :call_state_id,
                                      :call_type_id, :call_beneficiary_id,
                                      :call_duration, :call_start_date, :call_end_date,
                                      :call_global_budget, :call_max_budget_per_project,
