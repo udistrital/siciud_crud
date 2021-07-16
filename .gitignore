@@ -43,3 +43,8 @@ swagger-ui/
 
 # Backups
 migrate_backup/
+
+# Other files temporarily
+/config/database.yml
+/db/schema.rb
+Gemfile.lock
