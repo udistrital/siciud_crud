@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_16_051242) do
+ActiveRecord::Schema.define(version: 2021_07_16_055523) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -241,6 +241,24 @@ ActiveRecord::Schema.define(version: 2021_07_16_051242) do
     t.index ["created_by"], name: "index_calls_indicators_on_created_by"
     t.index ["indicator_id"], name: "index_calls_indicators_on_indicator_id"
     t.index ["updated_by"], name: "index_calls_indicators_on_updated_by"
+  end
+
+  create_table "chapters", force: :cascade do |t|
+    t.string "sectionable_type"
+    t.bigint "sectionable_id"
+    t.bigint "ch_parent_id"
+    t.integer "ch_order"
+    t.text "ch_title"
+    t.text "ch_description"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["ch_parent_id"], name: "index_chapters_on_ch_parent_id"
+    t.index ["created_by"], name: "index_chapters_on_created_by"
+    t.index ["sectionable_type", "sectionable_id"], name: "index_chapters_on_sectionable_type_and_sectionable_id"
+    t.index ["updated_by"], name: "index_chapters_on_updated_by"
   end
 
   create_table "cine_broad_areas", force: :cascade do |t|
@@ -1958,6 +1976,9 @@ ActiveRecord::Schema.define(version: 2021_07_16_051242) do
   add_foreign_key "calls_indicators", "indicators"
   add_foreign_key "calls_indicators", "users", column: "created_by"
   add_foreign_key "calls_indicators", "users", column: "updated_by"
+  add_foreign_key "chapters", "chapters", column: "ch_parent_id"
+  add_foreign_key "chapters", "users", column: "created_by"
+  add_foreign_key "chapters", "users", column: "updated_by"
   add_foreign_key "cine_broad_areas", "users", column: "created_by"
   add_foreign_key "cine_broad_areas", "users", column: "updated_by"
   add_foreign_key "cine_detailed_areas", "cine_specific_areas"

@@ -15,6 +15,8 @@ class Call < ApplicationRecord
   has_many :eval_criteria, through: :call_eval_criteria, source: :eval_criterion
   has_many :schedule_activities
 
+  has_many :chapters, as: :sectionable
+
   has_many :documents, as: :documentable
 
   validates :call_name, presence: true

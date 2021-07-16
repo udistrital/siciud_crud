@@ -221,6 +221,10 @@ Rails.application.routes.draw do
       resources :calls_indicators, only: [:show, :update]
       resources :schedule_activities, only: [:show, :update]
 
+      #  Chapters or sections
+      resources :calls, only: [] do
+        resources :chapters, only: [:index, :show, :create, :update]
+      end
     end
   end
 end

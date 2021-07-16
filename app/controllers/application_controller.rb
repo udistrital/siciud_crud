@@ -32,6 +32,13 @@ class ApplicationController < ActionController::API
     end
   end
 
+  def set_chapter_context
+    if params[:call_id]
+      id = params[:call_id]
+      @chapter_context = Call.find(id)
+    end
+  end
+
   def set_product_context
     if params[:book_id]
       id = params[:book_id]
