@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_15_032355) do
+ActiveRecord::Schema.define(version: 2021_07_16_051242) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1595,6 +1595,22 @@ ActiveRecord::Schema.define(version: 2021_07_15_032355) do
     t.index ["updated_by"], name: "index_roles_on_updated_by"
   end
 
+  create_table "schedule_activities", force: :cascade do |t|
+    t.bigint "call_id"
+    t.integer "sa_order"
+    t.text "sa_description"
+    t.text "sa_date"
+    t.string "sa_responsible"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["call_id"], name: "index_schedule_activities_on_call_id"
+    t.index ["created_by"], name: "index_schedule_activities_on_created_by"
+    t.index ["updated_by"], name: "index_schedule_activities_on_updated_by"
+  end
+
   create_table "scientific_collections", force: :cascade do |t|
     t.string "name"
     t.date "date_of_obtaining"
@@ -2296,6 +2312,9 @@ ActiveRecord::Schema.define(version: 2021_07_15_032355) do
   add_foreign_key "researchers", "users", column: "updated_by"
   add_foreign_key "roles", "users", column: "created_by"
   add_foreign_key "roles", "users", column: "updated_by"
+  add_foreign_key "schedule_activities", "calls"
+  add_foreign_key "schedule_activities", "users", column: "created_by"
+  add_foreign_key "schedule_activities", "users", column: "updated_by"
   add_foreign_key "scientific_collections", "colciencias_calls"
   add_foreign_key "scientific_collections", "geo_cities"
   add_foreign_key "scientific_collections", "geo_countries"
