@@ -224,6 +224,7 @@ Rails.application.routes.draw do
       #  Chapters or sections
       resources :calls, only: [] do
         resources :chapters, only: [:index, :show, :create, :update]
+        resources :documents, only: [:index, :show, :create, :update]
       end
     end
   end
