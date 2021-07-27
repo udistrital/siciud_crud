@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_29_220641) do
+ActiveRecord::Schema.define(version: 2021_07_16_055523) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,60 +41,6 @@ ActiveRecord::Schema.define(version: 2021_06_29_220641) do
     t.index ["updated_by"], name: "index_accompaniment_consultancies_on_updated_by"
   end
 
-  create_table "agreement_research_projects", force: :cascade do |t|
-    t.string "code"
-    t.string "name"
-    t.string "year"
-    t.date "startDate"
-    t.date "approbationDate"
-    t.date "estimatedFinishDate"
-    t.date "closingDate"
-    t.integer "agreement_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["agreement_id"], name: "index_agreement_research_projects_on_agreement_id"
-  end
-
-  create_table "agreement_statuses", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "agreement_types", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "agreements", force: :cascade do |t|
-    t.string "name"
-    t.text "description"
-    t.integer "duration"
-    t.integer "availability"
-    t.integer "bizagiNumber"
-    t.date "registerDate"
-    t.date "startDate"
-    t.date "finalDate"
-    t.integer "agreementNumber"
-    t.integer "agreement_status_id"
-    t.integer "agreement_type_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["agreement_status_id"], name: "index_agreements_on_agreement_status_id"
-    t.index ["agreement_type_id"], name: "index_agreements_on_agreement_type_id"
-  end
-
-  create_table "agreements_group_members", id: false, force: :cascade do |t|
-    t.integer "agreement_id", null: false
-    t.integer "group_member_id", null: false
-  end
-
-  create_table "agreements_research_groups", id: false, force: :cascade do |t|
-    t.integer "agreement_id", null: false
-    t.integer "research_group_id", null: false
-  end
-
   create_table "appropriation_processes", force: :cascade do |t|
     t.string "name"
     t.string "research_project_title"
@@ -117,128 +63,6 @@ ActiveRecord::Schema.define(version: 2021_06_29_220641) do
     t.index ["product_type_id"], name: "index_appropriation_processes_on_product_type_id"
     t.index ["research_group_id"], name: "index_appropriation_processes_on_research_group_id"
     t.index ["updated_by"], name: "index_appropriation_processes_on_updated_by"
-  end
-
-  create_table "arp_act_s_goals", force: :cascade do |t|
-    t.integer "weight"
-    t.integer "arp_activity_id"
-    t.integer "arp_specific_goal_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["arp_activity_id"], name: "index_arp_act_s_goals_on_arp_activity_id"
-    t.index ["arp_specific_goal_id"], name: "index_arp_act_s_goals_on_arp_specific_goal_id"
-  end
-
-  create_table "arp_activities", force: :cascade do |t|
-    t.text "activity"
-    t.float "completedPercentage"
-    t.date "startDate"
-    t.date "finishDate"
-    t.integer "agreement_research_project_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["agreement_research_project_id"], name: "index_arp_activities_on_agreement_research_project_id"
-  end
-
-  create_table "arp_activity_reports", force: :cascade do |t|
-    t.integer "arp_activity_id"
-    t.float "completedPercentage"
-    t.integer "status"
-    t.text "comment"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["arp_activity_id"], name: "index_arp_activity_reports_on_arp_activity_id"
-  end
-
-  create_table "arp_assignment_reports", force: :cascade do |t|
-    t.string "name"
-    t.text "comment"
-    t.integer "percentage"
-    t.integer "status"
-    t.bigint "arp_assignment_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["arp_assignment_id"], name: "index_arp_assignment_reports_on_arp_assignment_id"
-  end
-
-  create_table "arp_assignments", force: :cascade do |t|
-    t.bigint "agreement_research_project_id"
-    t.integer "completedPercentage"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["agreement_research_project_id"], name: "index_arp_assignments_on_agreement_research_project_id"
-  end
-
-  create_table "arp_expenses", force: :cascade do |t|
-    t.string "name"
-    t.float "totalPayed"
-    t.float "remaining"
-    t.string "description"
-    t.date "date"
-    t.boolean "is_payed"
-    t.string "code"
-    t.string "bizagiCode"
-    t.integer "contribution_rp_item_id"
-    t.float "inKindValue"
-    t.float "inCashValue"
-    t.float "totalPayedInCash"
-    t.float "totalPayedInKind"
-    t.float "remainingInCash"
-    t.float "remainingInKind"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["contribution_rp_item_id"], name: "index_arp_expenses_on_contribution_rp_item_id"
-  end
-
-  create_table "arp_general_goals", force: :cascade do |t|
-    t.text "goal"
-    t.integer "agreement_research_project_id"
-    t.float "completedPercentage"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["agreement_research_project_id"], name: "index_arp_general_goals_on_agreement_research_project_id"
-  end
-
-  create_table "arp_members", force: :cascade do |t|
-    t.integer "arp_role_id"
-    t.integer "agreement_id"
-    t.integer "group_member_id"
-    t.integer "agreement_research_project_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["agreement_id"], name: "index_arp_members_on_agreement_id"
-    t.index ["agreement_research_project_id"], name: "index_arp_members_on_agreement_research_project_id"
-    t.index ["arp_role_id"], name: "index_arp_members_on_arp_role_id"
-    t.index ["group_member_id"], name: "index_arp_members_on_group_member_id"
-  end
-
-  create_table "arp_payments", force: :cascade do |t|
-    t.integer "inCashValue"
-    t.integer "inKindValue"
-    t.date "date"
-    t.string "bizagiCode"
-    t.integer "arp_expense_id"
-    t.string "cdpCode"
-    t.string "rpCode"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["arp_expense_id"], name: "index_arp_payments_on_arp_expense_id"
-  end
-
-  create_table "arp_roles", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "arp_specific_goals", force: :cascade do |t|
-    t.text "goal"
-    t.integer "arp_general_goal_id"
-    t.float "completedPercentage"
-    t.integer "weight"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["arp_general_goal_id"], name: "index_arp_specific_goals_on_arp_general_goal_id"
   end
 
   create_table "awards", force: :cascade do |t|
@@ -333,70 +157,108 @@ ActiveRecord::Schema.define(version: 2021_06_29_220641) do
     t.index ["updated_by"], name: "index_books_on_updated_by"
   end
 
-  create_table "call_item_categories", force: :cascade do |t|
-    t.float "percentage"
-    t.float "value"
-    t.float "maximum_percentage"
+  create_table "call_documents", force: :cascade do |t|
     t.bigint "call_id"
-    t.bigint "item_category_id"
+    t.bigint "document_id"
+    t.boolean "cd_required", default: true
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["call_id"], name: "index_call_item_categories_on_call_id"
-    t.index ["item_category_id"], name: "index_call_item_categories_on_item_category_id"
+    t.index ["call_id"], name: "index_call_documents_on_call_id"
+    t.index ["created_by"], name: "index_call_documents_on_created_by"
+    t.index ["document_id"], name: "index_call_documents_on_document_id"
+    t.index ["updated_by"], name: "index_call_documents_on_updated_by"
   end
 
-  create_table "call_types", force: :cascade do |t|
-    t.string "name"
+  create_table "call_eval_criteria", force: :cascade do |t|
+    t.bigint "call_id"
+    t.bigint "eval_criterion_id"
+    t.decimal "cec_percentage", precision: 5, scale: 2
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["call_id"], name: "index_call_eval_criteria_on_call_id"
+    t.index ["created_by"], name: "index_call_eval_criteria_on_created_by"
+    t.index ["eval_criterion_id"], name: "index_call_eval_criteria_on_eval_criterion_id"
+    t.index ["updated_by"], name: "index_call_eval_criteria_on_updated_by"
   end
 
-  create_table "call_user_roles", force: :cascade do |t|
-    t.string "name"
+  create_table "call_items", force: :cascade do |t|
+    t.bigint "call_id"
+    t.bigint "item_id"
+    t.decimal "ci_maximum_percentage", precision: 5, scale: 2
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["call_id"], name: "index_call_items_on_call_id"
+    t.index ["created_by"], name: "index_call_items_on_created_by"
+    t.index ["item_id"], name: "index_call_items_on_item_id"
+    t.index ["updated_by"], name: "index_call_items_on_updated_by"
   end
 
   create_table "calls", force: :cascade do |t|
-    t.integer "callNumber"
-    t.date "registerDate"
-    t.string "name"
-    t.text "description"
+    t.text "call_name"
+    t.bigint "call_state_id"
+    t.string "call_code"
     t.bigint "call_type_id"
-    t.bigint "call_user_role_id"
-    t.integer "duration"
-    t.bigint "duration_type_id"
-    t.float "globalBudget"
-    t.float "maxBudgetPerProject"
-    t.date "startDate"
-    t.date "closingDate"
-    t.text "directedTowards"
+    t.bigint "call_beneficiary_id"
+    t.integer "call_duration"
+    t.date "call_start_date"
+    t.date "call_end_date"
+    t.float "call_global_budget"
+    t.float "call_max_budget_per_project"
+    t.text "call_directed_towards"
+    t.text "call_objective"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["call_beneficiary_id"], name: "index_calls_on_call_beneficiary_id"
+    t.index ["call_state_id"], name: "index_calls_on_call_state_id"
     t.index ["call_type_id"], name: "index_calls_on_call_type_id"
-    t.index ["call_user_role_id"], name: "index_calls_on_call_user_role_id"
-    t.index ["duration_type_id"], name: "index_calls_on_duration_type_id"
+    t.index ["created_by"], name: "index_calls_on_created_by"
+    t.index ["updated_by"], name: "index_calls_on_updated_by"
   end
 
-  create_table "calls_product_types", force: :cascade do |t|
-    t.integer "quantity"
+  create_table "calls_indicators", force: :cascade do |t|
     t.bigint "call_id"
-    t.text "alternate_indicator"
-    t.bigint "required_type_id"
+    t.bigint "indicator_id"
+    t.boolean "clind_required"
+    t.integer "clind_quantity"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["call_id"], name: "index_calls_product_types_on_call_id"
-    t.index ["required_type_id"], name: "index_calls_product_types_on_required_type_id"
+    t.index ["call_id"], name: "index_calls_indicators_on_call_id"
+    t.index ["created_by"], name: "index_calls_indicators_on_created_by"
+    t.index ["indicator_id"], name: "index_calls_indicators_on_indicator_id"
+    t.index ["updated_by"], name: "index_calls_indicators_on_updated_by"
   end
 
-  create_table "calls_required_documents", force: :cascade do |t|
-    t.boolean "required"
-    t.bigint "call_id"
-    t.bigint "required_document_id"
+  create_table "chapters", force: :cascade do |t|
+    t.string "sectionable_type"
+    t.bigint "sectionable_id"
+    t.bigint "ch_parent_id"
+    t.integer "ch_order"
+    t.text "ch_title"
+    t.text "ch_description"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["call_id"], name: "index_calls_required_documents_on_call_id"
-    t.index ["required_document_id"], name: "index_calls_required_documents_on_required_document_id"
+    t.index ["ch_parent_id"], name: "index_chapters_on_ch_parent_id"
+    t.index ["created_by"], name: "index_chapters_on_created_by"
+    t.index ["sectionable_type", "sectionable_id"], name: "index_chapters_on_sectionable_type_and_sectionable_id"
+    t.index ["updated_by"], name: "index_chapters_on_updated_by"
   end
 
   create_table "cine_broad_areas", force: :cascade do |t|
@@ -558,45 +420,6 @@ ActiveRecord::Schema.define(version: 2021_06_29_220641) do
     t.index ["updated_by"], name: "index_content_generations_on_updated_by"
   end
 
-  create_table "contribution_funding_entity_items", force: :cascade do |t|
-    t.float "cashValue"
-    t.float "inKindValue"
-    t.integer "item_category_id"
-    t.integer "contribution_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["contribution_id"], name: "index_contribution_funding_entity_items_on_contribution_id"
-    t.index ["item_category_id"], name: "index_contribution_funding_entity_items_on_item_category_id"
-  end
-
-  create_table "contribution_rp_items", force: :cascade do |t|
-    t.float "cashValue"
-    t.float "inKindValue"
-    t.integer "agreement_research_project_id"
-    t.integer "contribution_funding_entity_item_id"
-    t.float "executedCash"
-    t.float "executedInKind"
-    t.float "remainingCash"
-    t.float "remainingInKind"
-    t.float "compromisedCash"
-    t.float "compromisedInKind"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["agreement_research_project_id"], name: "index_contribution_rp_items_on_agreement_research_project_id"
-    t.index ["contribution_funding_entity_item_id"], name: "index_contribution_rp_items_on_cont_funding_entity_item_id"
-  end
-
-  create_table "contributions", force: :cascade do |t|
-    t.integer "funding_entity_id"
-    t.integer "agreement_id"
-    t.float "inKindContribution"
-    t.float "cashContribution"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["agreement_id"], name: "index_contributions_on_agreement_id"
-    t.index ["funding_entity_id"], name: "index_contributions_on_funding_entity_id"
-  end
-
   create_table "creation_workshops", force: :cascade do |t|
     t.string "name"
     t.date "start_date"
@@ -689,12 +512,6 @@ ActiveRecord::Schema.define(version: 2021_06_29_220641) do
     t.index ["updated_by"], name: "index_distinctive_signs_on_updated_by"
   end
 
-  create_table "document_types", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "documents", force: :cascade do |t|
     t.string "documentable_type"
     t.bigint "documentable_id"
@@ -712,12 +529,6 @@ ActiveRecord::Schema.define(version: 2021_06_29_220641) do
     t.index ["document_type_id"], name: "index_documents_on_document_type_id"
     t.index ["documentable_type", "documentable_id"], name: "index_documents_on_documentable_type_and_documentable_id"
     t.index ["updated_by"], name: "index_documents_on_updated_by"
-  end
-
-  create_table "duration_types", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "enterprise_secrets", force: :cascade do |t|
@@ -774,12 +585,6 @@ ActiveRecord::Schema.define(version: 2021_06_29_220641) do
     t.index ["product_type_id"], name: "index_enterprises_on_product_type_id"
     t.index ["research_group_id"], name: "index_enterprises_on_research_group_id"
     t.index ["updated_by"], name: "index_enterprises_on_updated_by"
-  end
-
-  create_table "entity_types", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "events", force: :cascade do |t|
@@ -873,39 +678,6 @@ ActiveRecord::Schema.define(version: 2021_06_29_220641) do
     t.index ["created_by"], name: "index_faculty_ids_research_groups_on_created_by"
     t.index ["research_group_id"], name: "index_faculty_ids_research_groups_on_research_group_id"
     t.index ["updated_by"], name: "index_faculty_ids_research_groups_on_updated_by"
-  end
-
-  create_table "fe_contacts", force: :cascade do |t|
-    t.string "name"
-    t.string "lastName"
-    t.string "phoneNumber"
-    t.string "mobileNumber"
-    t.string "role"
-    t.string "email"
-    t.integer "funding_entity_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["funding_entity_id"], name: "index_fe_contacts_on_funding_entity_id"
-  end
-
-  create_table "funding_entities", force: :cascade do |t|
-    t.string "name"
-    t.string "country"
-    t.string "city"
-    t.string "phoneNumber"
-    t.string "mobileNumber"
-    t.integer "entity_type_id"
-    t.text "observation"
-    t.text "address"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["entity_type_id"], name: "index_funding_entities_on_entity_type_id"
-  end
-
-  create_table "genres", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "geo_cities", force: :cascade do |t|
@@ -1080,6 +852,19 @@ ActiveRecord::Schema.define(version: 2021_06_29_220641) do
     t.index ["updated_by"], name: "index_idi_investigation_projects_on_updated_by"
   end
 
+  create_table "indicators", force: :cascade do |t|
+    t.bigint "product_type_id"
+    t.text "ind_description"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_indicators_on_created_by"
+    t.index ["product_type_id"], name: "index_indicators_on_product_type_id"
+    t.index ["updated_by"], name: "index_indicators_on_updated_by"
+  end
+
   create_table "industrial_designs", force: :cascade do |t|
     t.string "ind_dsg_registration_number"
     t.string "ind_dsg_registration_title"
@@ -1161,17 +946,6 @@ ActiveRecord::Schema.define(version: 2021_06_29_220641) do
     t.index ["product_type_id"], name: "index_innovations_on_product_type_id"
     t.index ["research_group_id"], name: "index_innovations_on_research_group_id"
     t.index ["updated_by"], name: "index_innovations_on_updated_by"
-  end
-
-  create_table "institutions", force: :cascade do |t|
-    t.string "inst_name"
-    t.boolean "active", default: true
-    t.bigint "created_by"
-    t.bigint "updated_by"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["created_by"], name: "index_institutions_on_created_by"
-    t.index ["updated_by"], name: "index_institutions_on_updated_by"
   end
 
   create_table "int_participants", force: :cascade do |t|
@@ -1270,12 +1044,6 @@ ActiveRecord::Schema.define(version: 2021_06_29_220641) do
     t.index ["geo_state_id"], name: "index_ip_livestock_breeds_on_geo_state_id"
     t.index ["research_group_id"], name: "index_ip_livestock_breeds_on_research_group_id"
     t.index ["updated_by"], name: "index_ip_livestock_breeds_on_updated_by"
-  end
-
-  create_table "item_categories", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "knowledge_networks", force: :cascade do |t|
@@ -1586,15 +1354,6 @@ ActiveRecord::Schema.define(version: 2021_06_29_220641) do
     t.index ["updated_by"], name: "index_patents_on_updated_by"
   end
 
-  create_table "plan_periods", force: :cascade do |t|
-    t.string "description"
-    t.integer "planable_id"
-    t.string "planable_type"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["planable_id"], name: "index_plan_periods_on_planable_id"
-  end
-
   create_table "plant_ind_prototypes", force: :cascade do |t|
     t.string "plt_name"
     t.string "plt_registration_number"
@@ -1745,18 +1504,6 @@ ActiveRecord::Schema.define(version: 2021_06_29_220641) do
     t.index ["updated_by"], name: "index_reports_on_updated_by"
   end
 
-  create_table "required_documents", force: :cascade do |t|
-    t.string "document_name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "required_types", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "research_creation_works", force: :cascade do |t|
     t.string "title"
     t.date "creation_and_selection_date"
@@ -1835,54 +1582,6 @@ ActiveRecord::Schema.define(version: 2021_06_29_220641) do
     t.index ["updated_by"], name: "index_research_groups_on_updated_by"
   end
 
-  create_table "research_project_plans", force: :cascade do |t|
-    t.string "activity"
-    t.text "description"
-    t.text "goal"
-    t.integer "plan_period_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["plan_period_id"], name: "index_research_project_plans_on_plan_period_id"
-  end
-
-  create_table "research_seedbeds", force: :cascade do |t|
-    t.string "name"
-    t.string "acronym"
-    t.text "description"
-    t.date "cidcRegistrationDate"
-    t.date "facultyRegistrationDate"
-    t.integer "cidcActNumber"
-    t.integer "facultyActNumber"
-    t.integer "state_seedbed_id"
-    t.string "webpage"
-    t.string "mission"
-    t.string "vision"
-    t.integer "snies_id"
-    t.integer "researcher_focus_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "email"
-    t.index ["researcher_focus_id"], name: "index_research_seedbeds_on_researcher_focus_id"
-    t.index ["snies_id"], name: "index_research_seedbeds_on_snies_id"
-    t.index ["state_seedbed_id"], name: "index_research_seedbeds_on_state_seedbed_id"
-  end
-
-  create_table "researcher_formation_plans", force: :cascade do |t|
-    t.string "activity"
-    t.text "description"
-    t.text "goal"
-    t.integer "plan_period_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["plan_period_id"], name: "index_researcher_formation_plans_on_plan_period_id"
-  end
-
-  create_table "researcher_types", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "researchers", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -1903,16 +1602,6 @@ ActiveRecord::Schema.define(version: 2021_06_29_220641) do
     t.index ["updated_by"], name: "index_researchers_on_updated_by"
   end
 
-  create_table "result_transfer_plans", force: :cascade do |t|
-    t.string "activity"
-    t.text "description"
-    t.text "goal"
-    t.integer "plan_period_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["plan_period_id"], name: "index_result_transfer_plans_on_plan_period_id"
-  end
-
   create_table "roles", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
@@ -1922,6 +1611,22 @@ ActiveRecord::Schema.define(version: 2021_06_29_220641) do
     t.bigint "updated_by"
     t.index ["created_by"], name: "index_roles_on_created_by"
     t.index ["updated_by"], name: "index_roles_on_updated_by"
+  end
+
+  create_table "schedule_activities", force: :cascade do |t|
+    t.bigint "call_id"
+    t.integer "sa_order"
+    t.text "sa_description"
+    t.text "sa_date"
+    t.string "sa_responsible"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["call_id"], name: "index_schedule_activities_on_call_id"
+    t.index ["created_by"], name: "index_schedule_activities_on_created_by"
+    t.index ["updated_by"], name: "index_schedule_activities_on_updated_by"
   end
 
   create_table "scientific_collections", force: :cascade do |t|
@@ -1988,19 +1693,6 @@ ActiveRecord::Schema.define(version: 2021_06_29_220641) do
     t.index ["updated_by"], name: "index_scientific_notes_on_updated_by"
   end
 
-  create_table "seedbed_members", force: :cascade do |t|
-    t.integer "role_id"
-    t.integer "researcher_id"
-    t.integer "research_seedbed_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "state_researcher_id"
-    t.index ["research_seedbed_id"], name: "index_seedbed_members_on_research_seedbed_id"
-    t.index ["researcher_id"], name: "index_seedbed_members_on_researcher_id"
-    t.index ["role_id"], name: "index_seedbed_members_on_role_id"
-    t.index ["state_researcher_id"], name: "index_seedbed_members_on_state_researcher_id"
-  end
-
   create_table "simple_books", force: :cascade do |t|
     t.string "isbn"
     t.string "title"
@@ -2031,34 +1723,6 @@ ActiveRecord::Schema.define(version: 2021_06_29_220641) do
     t.index ["updated_by"], name: "index_simple_books_on_updated_by"
   end
 
-  create_table "sm_periods", force: :cascade do |t|
-    t.date "initialDate"
-    t.date "finalDate"
-    t.integer "role_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "seedbed_member_id"
-    t.index ["role_id"], name: "index_sm_periods_on_role_id"
-    t.index ["seedbed_member_id"], name: "index_sm_periods_on_seedbed_member_id"
-  end
-
-  create_table "snies", force: :cascade do |t|
-    t.integer "code"
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "social_appropriation_plans", force: :cascade do |t|
-    t.string "activity"
-    t.text "description"
-    t.text "goal"
-    t.integer "plan_period_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["plan_period_id"], name: "index_social_appropriation_plans_on_plan_period_id"
-  end
-
   create_table "software", force: :cascade do |t|
     t.string "sof_registration_number"
     t.string "sof_product_title"
@@ -2086,12 +1750,6 @@ ActiveRecord::Schema.define(version: 2021_06_29_220641) do
     t.index ["updated_by"], name: "index_software_on_updated_by"
   end
 
-  create_table "state_seedbeds", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "subtypes", force: :cascade do |t|
     t.string "st_name"
     t.text "st_description"
@@ -2102,6 +1760,8 @@ ActiveRecord::Schema.define(version: 2021_06_29_220641) do
     t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
+    t.boolean "required", default: false
+    t.boolean "multiple", default: false
     t.index ["created_by"], name: "index_subtypes_on_created_by"
     t.index ["parent_id"], name: "index_subtypes_on_parent_id"
     t.index ["type_id"], name: "index_subtypes_on_type_id"
@@ -2270,8 +1930,6 @@ ActiveRecord::Schema.define(version: 2021_06_29_220641) do
   add_foreign_key "appropriation_processes", "subtypes", column: "product_type_id"
   add_foreign_key "appropriation_processes", "users", column: "created_by"
   add_foreign_key "appropriation_processes", "users", column: "updated_by"
-  add_foreign_key "arp_assignment_reports", "arp_assignments"
-  add_foreign_key "arp_assignments", "agreement_research_projects"
   add_foreign_key "awards", "research_creation_works"
   add_foreign_key "awards", "users", column: "created_by"
   add_foreign_key "awards", "users", column: "updated_by"
@@ -2297,15 +1955,30 @@ ActiveRecord::Schema.define(version: 2021_06_29_220641) do
   add_foreign_key "books", "subtypes", column: "category_id"
   add_foreign_key "books", "users", column: "created_by"
   add_foreign_key "books", "users", column: "updated_by"
-  add_foreign_key "call_item_categories", "calls"
-  add_foreign_key "call_item_categories", "item_categories"
-  add_foreign_key "calls", "call_types"
-  add_foreign_key "calls", "call_user_roles"
-  add_foreign_key "calls", "duration_types"
-  add_foreign_key "calls_product_types", "calls"
-  add_foreign_key "calls_product_types", "required_types"
-  add_foreign_key "calls_required_documents", "calls"
-  add_foreign_key "calls_required_documents", "required_documents"
+  add_foreign_key "call_documents", "calls"
+  add_foreign_key "call_documents", "subtypes", column: "document_id"
+  add_foreign_key "call_documents", "users", column: "created_by"
+  add_foreign_key "call_documents", "users", column: "updated_by"
+  add_foreign_key "call_eval_criteria", "calls"
+  add_foreign_key "call_eval_criteria", "subtypes", column: "eval_criterion_id"
+  add_foreign_key "call_eval_criteria", "users", column: "created_by"
+  add_foreign_key "call_eval_criteria", "users", column: "updated_by"
+  add_foreign_key "call_items", "calls"
+  add_foreign_key "call_items", "subtypes", column: "item_id"
+  add_foreign_key "call_items", "users", column: "created_by"
+  add_foreign_key "call_items", "users", column: "updated_by"
+  add_foreign_key "calls", "subtypes", column: "call_beneficiary_id"
+  add_foreign_key "calls", "subtypes", column: "call_state_id"
+  add_foreign_key "calls", "subtypes", column: "call_type_id"
+  add_foreign_key "calls", "users", column: "created_by"
+  add_foreign_key "calls", "users", column: "updated_by"
+  add_foreign_key "calls_indicators", "calls"
+  add_foreign_key "calls_indicators", "indicators"
+  add_foreign_key "calls_indicators", "users", column: "created_by"
+  add_foreign_key "calls_indicators", "users", column: "updated_by"
+  add_foreign_key "chapters", "chapters", column: "ch_parent_id"
+  add_foreign_key "chapters", "users", column: "created_by"
+  add_foreign_key "chapters", "users", column: "updated_by"
   add_foreign_key "cine_broad_areas", "users", column: "created_by"
   add_foreign_key "cine_broad_areas", "users", column: "updated_by"
   add_foreign_key "cine_detailed_areas", "cine_specific_areas"
@@ -2450,6 +2123,9 @@ ActiveRecord::Schema.define(version: 2021_06_29_220641) do
   add_foreign_key "idi_investigation_projects", "subtypes", column: "category_id"
   add_foreign_key "idi_investigation_projects", "users", column: "created_by"
   add_foreign_key "idi_investigation_projects", "users", column: "updated_by"
+  add_foreign_key "indicators", "subtypes", column: "product_type_id"
+  add_foreign_key "indicators", "users", column: "created_by"
+  add_foreign_key "indicators", "users", column: "updated_by"
   add_foreign_key "industrial_designs", "colciencias_calls"
   add_foreign_key "industrial_designs", "geo_cities"
   add_foreign_key "industrial_designs", "geo_countries"
@@ -2475,8 +2151,6 @@ ActiveRecord::Schema.define(version: 2021_06_29_220641) do
   add_foreign_key "innovations", "subtypes", column: "product_type_id"
   add_foreign_key "innovations", "users", column: "created_by"
   add_foreign_key "innovations", "users", column: "updated_by"
-  add_foreign_key "institutions", "users", column: "created_by"
-  add_foreign_key "institutions", "users", column: "updated_by"
   add_foreign_key "int_participants", "researchers"
   add_foreign_key "int_participants", "subtypes", column: "participant_type_id"
   add_foreign_key "int_participants", "users", column: "created_by"
@@ -2659,6 +2333,9 @@ ActiveRecord::Schema.define(version: 2021_06_29_220641) do
   add_foreign_key "researchers", "users", column: "updated_by"
   add_foreign_key "roles", "users", column: "created_by"
   add_foreign_key "roles", "users", column: "updated_by"
+  add_foreign_key "schedule_activities", "calls"
+  add_foreign_key "schedule_activities", "users", column: "created_by"
+  add_foreign_key "schedule_activities", "users", column: "updated_by"
   add_foreign_key "scientific_collections", "colciencias_calls"
   add_foreign_key "scientific_collections", "geo_cities"
   add_foreign_key "scientific_collections", "geo_countries"
@@ -2846,23 +2523,6 @@ ActiveRecord::Schema.define(version: 2021_06_29_220641) do
        LEFT JOIN subtypes pttp ON ((p.patent_type_id = pttp.id)))
        LEFT JOIN colciencias_calls cc ON ((p.colciencias_call_id = cc.id)))
        LEFT JOIN subtypes stps ON ((p.patent_state_id = stps.id)));
-  SQL
-  create_view "complete_types", sql_definition: <<-SQL
-      SELECT t.id AS type_id,
-      t.t_name AS type_name,
-      t.t_description AS type_description,
-      t.active AS type_active,
-      st.parent_id,
-      pst.st_name AS parent_name,
-      pst.st_description AS parent_description,
-      pst.active AS parent_active,
-      st.id,
-      st.st_name AS name,
-      st.st_description AS description,
-      st.active
-     FROM ((types t
-       LEFT JOIN subtypes st ON ((t.id = st.type_id)))
-       LEFT JOIN subtypes pst ON ((st.parent_id = pst.id)));
   SQL
   create_view "complete_bills", sql_definition: <<-SQL
       SELECT bl.id,
@@ -4457,5 +4117,109 @@ ActiveRecord::Schema.define(version: 2021_06_29_220641) do
       extp.updated_at
      FROM (ext_participants extp
        LEFT JOIN subtypes pt ON ((pt.id = extp.participant_type_id)));
+  SQL
+  create_view "complete_calls", sql_definition: <<-SQL
+      SELECT c.id,
+      c.call_name,
+      c.call_code,
+      c.call_beneficiary_id,
+      sb.st_name AS call_beneficiary_name,
+      c.call_directed_towards,
+      c.call_duration,
+      c.call_global_budget,
+      c.call_max_budget_per_project,
+      c.call_objective,
+      c.call_start_date,
+      c.call_end_date,
+      c.call_state_id,
+      ss.st_name AS call_state_name,
+      c.call_type_id,
+      st.st_name AS call_type_name,
+      c.active,
+      c.created_at,
+      c.updated_at,
+      c.created_by,
+      c.updated_by
+     FROM (((calls c
+       LEFT JOIN subtypes sb ON ((sb.id = c.call_beneficiary_id)))
+       LEFT JOIN subtypes ss ON ((ss.id = c.call_state_id)))
+       LEFT JOIN subtypes st ON ((st.id = c.call_type_id)));
+  SQL
+  create_view "complete_types", sql_definition: <<-SQL
+      SELECT t.id AS type_id,
+      t.t_name AS type_name,
+      t.t_description AS type_description,
+      t.active AS type_active,
+      st.parent_id,
+      pst.st_name AS parent_name,
+      pst.st_description AS parent_description,
+      pst.active AS parent_active,
+      st.id,
+      st.st_name AS name,
+      st.st_description AS description,
+      st.multiple,
+      st.required,
+      st.active
+     FROM ((types t
+       LEFT JOIN subtypes st ON ((t.id = st.type_id)))
+       LEFT JOIN subtypes pst ON ((st.parent_id = pst.id)));
+  SQL
+  create_view "complete_call_items", sql_definition: <<-SQL
+      SELECT ci.id,
+      ci.call_id,
+      ci.item_id,
+      s.st_name AS item_name,
+      ci.ci_maximum_percentage,
+      ci.active,
+      ci.created_by,
+      ci.updated_by,
+      ci.created_at,
+      ci.updated_at
+     FROM (call_items ci
+       LEFT JOIN subtypes s ON ((s.id = ci.item_id)));
+  SQL
+  create_view "complete_call_indicators", sql_definition: <<-SQL
+      SELECT cind.id,
+      cind.call_id,
+      cind.indicator_id,
+      i.ind_description AS indicator_description,
+      i.product_type_id,
+      s.st_name AS product_type_name,
+      cind.active,
+      cind.created_by,
+      cind.updated_by,
+      cind.created_at,
+      cind.updated_at
+     FROM ((calls_indicators cind
+       LEFT JOIN indicators i ON ((i.id = cind.indicator_id)))
+       LEFT JOIN subtypes s ON ((i.product_type_id = s.id)));
+  SQL
+  create_view "complete_call_documents", sql_definition: <<-SQL
+      SELECT cd.id,
+      cd.call_id,
+      cd.document_id,
+      s.st_name AS document_name,
+      cd.cd_required,
+      cd.active,
+      cd.created_by,
+      cd.updated_by,
+      cd.created_at,
+      cd.updated_at
+     FROM (call_documents cd
+       LEFT JOIN subtypes s ON ((s.id = cd.document_id)));
+  SQL
+  create_view "complete_call_eval_criteria", sql_definition: <<-SQL
+      SELECT cec.id,
+      cec.call_id,
+      cec.eval_criterion_id,
+      s.st_name AS eval_criterion_name,
+      cec.cec_percentage,
+      cec.active,
+      cec.created_by,
+      cec.updated_by,
+      cec.created_at,
+      cec.updated_at
+     FROM (call_eval_criteria cec
+       LEFT JOIN subtypes s ON ((s.id = cec.eval_criterion_id)));
   SQL
 end

@@ -23,6 +23,14 @@ module Api
       # This list is ordered by the areas and groups that make up.
       # For example, areas of knowledge or type of production.
       SWAGGERED_CLASSES = [
+        CallsController,
+        CallDocumentsController,
+        CallEvalCriteriaController,
+        IndicatorsController,
+        CallsIndicatorsController,
+        CallItemsController,
+        ScheduleActivitiesController,
+        ChaptersController,
         ColcienciasCallsController,
         ColcienciasCategoriesController,
         HistoricalColcienciasRanksController,
@@ -96,6 +104,14 @@ module Api
         UserRolesController,
         UsersController,
 
+        Call,
+        CallDocument,
+        CallEvalCriterion,
+        Indicator,
+        CallsIndicator,
+        CallItem,
+        ScheduleActivity,
+        Chapter,
         ColcienciasCall,
         ColcienciasCategory,
         HistoricalColcienciasRank,

@@ -18,6 +18,18 @@ module Swagger::SubtypeSchema
         key :type, :integer
         key :format, :int64
       end
+      property :active do
+        key :type, :boolean
+        key :default, true
+      end
+      property :required do
+        key :type, :boolean
+        key :default, false
+      end
+      property :multiple do
+        key :type, :boolean
+        key :default, false
+      end
     end
 
     swagger_schema :SubtypeInputPost do
@@ -71,10 +83,6 @@ module Swagger::SubtypeSchema
           end
           property :type_name do
             key :type, :string
-          end
-          property :active do
-            key :type, :boolean
-            key :default, true
           end
           property :created_by do
             key :type, :integer

@@ -44,7 +44,6 @@ module Api
 
       # PUT context/:id/documents/1
       def deactivate
-        @document.active = false
         if @document.update(document_params_to_update)
           render json: @document
         else
