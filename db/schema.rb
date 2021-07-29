@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_27_044858) do
+ActiveRecord::Schema.define(version: 2021_07_29_063333) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -692,6 +692,88 @@ ActiveRecord::Schema.define(version: 2021_07_27_044858) do
     t.index ["created_by"], name: "index_faculty_ids_research_groups_on_created_by"
     t.index ["research_group_id"], name: "index_faculty_ids_research_groups_on_research_group_id"
     t.index ["updated_by"], name: "index_faculty_ids_research_groups_on_updated_by"
+  end
+
+  create_table "form_a_act_plans", force: :cascade do |t|
+    t.bigint "product_type_id"
+    t.bigint "indicator_id"
+    t.integer "goal"
+    t.integer "advanced_total", default: 0
+    t.integer "order", limit: 2
+    t.bigint "action_plan_id"
+    t.bigint "plan_type_id"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["action_plan_id"], name: "index_form_a_act_plans_on_action_plan_id"
+    t.index ["created_by"], name: "index_form_a_act_plans_on_created_by"
+    t.index ["indicator_id"], name: "index_form_a_act_plans_on_indicator_id"
+    t.index ["plan_type_id"], name: "index_form_a_act_plans_on_plan_type_id"
+    t.index ["product_type_id"], name: "index_form_a_act_plans_on_product_type_id"
+    t.index ["updated_by"], name: "index_form_a_act_plans_on_updated_by"
+  end
+
+  create_table "form_b_act_plans", force: :cascade do |t|
+    t.bigint "financing_type_id"
+    t.text "description"
+    t.bigint "goal_state_id"
+    t.boolean "goal_achieved", default: false
+    t.integer "order", limit: 2
+    t.bigint "action_plan_id"
+    t.bigint "plan_type_id"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["action_plan_id"], name: "index_form_b_act_plans_on_action_plan_id"
+    t.index ["created_by"], name: "index_form_b_act_plans_on_created_by"
+    t.index ["financing_type_id"], name: "index_form_b_act_plans_on_financing_type_id"
+    t.index ["goal_state_id"], name: "index_form_b_act_plans_on_goal_state_id"
+    t.index ["plan_type_id"], name: "index_form_b_act_plans_on_plan_type_id"
+    t.index ["updated_by"], name: "index_form_b_act_plans_on_updated_by"
+  end
+
+  create_table "form_c_act_plans", force: :cascade do |t|
+    t.bigint "product_type_id"
+    t.text "description"
+    t.integer "goal"
+    t.integer "advanced_total", default: 0
+    t.integer "order", limit: 2
+    t.bigint "action_plan_id"
+    t.bigint "plan_type_id"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["action_plan_id"], name: "index_form_c_act_plans_on_action_plan_id"
+    t.index ["created_by"], name: "index_form_c_act_plans_on_created_by"
+    t.index ["plan_type_id"], name: "index_form_c_act_plans_on_plan_type_id"
+    t.index ["product_type_id"], name: "index_form_c_act_plans_on_product_type_id"
+    t.index ["updated_by"], name: "index_form_c_act_plans_on_updated_by"
+  end
+
+  create_table "form_d_act_plans", force: :cascade do |t|
+    t.text "name"
+    t.text "description"
+    t.bigint "goal_state_id"
+    t.boolean "goal_achieved", default: false
+    t.integer "order", limit: 2
+    t.bigint "action_plan_id"
+    t.bigint "plan_type_id"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["action_plan_id"], name: "index_form_d_act_plans_on_action_plan_id"
+    t.index ["created_by"], name: "index_form_d_act_plans_on_created_by"
+    t.index ["goal_state_id"], name: "index_form_d_act_plans_on_goal_state_id"
+    t.index ["plan_type_id"], name: "index_form_d_act_plans_on_plan_type_id"
+    t.index ["updated_by"], name: "index_form_d_act_plans_on_updated_by"
   end
 
   create_table "geo_cities", force: :cascade do |t|
@@ -2104,6 +2186,28 @@ ActiveRecord::Schema.define(version: 2021_07_27_044858) do
   add_foreign_key "faculty_ids_research_groups", "research_groups"
   add_foreign_key "faculty_ids_research_groups", "users", column: "created_by"
   add_foreign_key "faculty_ids_research_groups", "users", column: "updated_by"
+  add_foreign_key "form_a_act_plans", "action_plans"
+  add_foreign_key "form_a_act_plans", "indicators"
+  add_foreign_key "form_a_act_plans", "subtypes", column: "plan_type_id"
+  add_foreign_key "form_a_act_plans", "subtypes", column: "product_type_id"
+  add_foreign_key "form_a_act_plans", "users", column: "created_by"
+  add_foreign_key "form_a_act_plans", "users", column: "updated_by"
+  add_foreign_key "form_b_act_plans", "action_plans"
+  add_foreign_key "form_b_act_plans", "subtypes", column: "financing_type_id"
+  add_foreign_key "form_b_act_plans", "subtypes", column: "goal_state_id"
+  add_foreign_key "form_b_act_plans", "subtypes", column: "plan_type_id"
+  add_foreign_key "form_b_act_plans", "users", column: "created_by"
+  add_foreign_key "form_b_act_plans", "users", column: "updated_by"
+  add_foreign_key "form_c_act_plans", "action_plans"
+  add_foreign_key "form_c_act_plans", "subtypes", column: "plan_type_id"
+  add_foreign_key "form_c_act_plans", "subtypes", column: "product_type_id"
+  add_foreign_key "form_c_act_plans", "users", column: "created_by"
+  add_foreign_key "form_c_act_plans", "users", column: "updated_by"
+  add_foreign_key "form_d_act_plans", "action_plans"
+  add_foreign_key "form_d_act_plans", "subtypes", column: "goal_state_id"
+  add_foreign_key "form_d_act_plans", "subtypes", column: "plan_type_id"
+  add_foreign_key "form_d_act_plans", "users", column: "created_by"
+  add_foreign_key "form_d_act_plans", "users", column: "updated_by"
   add_foreign_key "geo_cities", "geo_states"
   add_foreign_key "geo_cities", "users", column: "created_by"
   add_foreign_key "geo_cities", "users", column: "updated_by"
@@ -4238,5 +4342,21 @@ ActiveRecord::Schema.define(version: 2021_07_27_044858) do
       cec.updated_at
      FROM (call_eval_criteria cec
        LEFT JOIN subtypes s ON ((s.id = cec.eval_criterion_id)));
+  SQL
+  create_view "complete_action_plans", sql_definition: <<-SQL
+      SELECT ap.id,
+      ap.execution_validity,
+      ap.research_group_id,
+      rg.name AS research_group_name,
+      rg.acronym AS research_group_acronym,
+      rg.gruplac AS research_group_gruplac,
+      ap.is_draft,
+      ap.active,
+      ap.created_by,
+      ap.updated_by,
+      ap.created_at,
+      ap.updated_at
+     FROM (action_plans ap
+       LEFT JOIN research_groups rg ON ((rg.id = ap.research_group_id)));
   SQL
 end

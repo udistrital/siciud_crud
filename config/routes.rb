@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  resources :action_plans
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root to: "health#health"
   get "/api" => redirect("/api/v1/apidocs/")
@@ -32,8 +31,21 @@ Rails.application.routes.draw do
       resources :users, only: [:index, :show, :create, :update]
       put "/users/:id/active", to: "users#change_active"
 
+      # Action plan
+      resources :action_plans, only: [:index, :show, :update] do
+        resources :form_a_act_plans, only: [:index, :create]
+        resources :form_b_act_plans, only: [:index, :create]
+        resources :form_c_act_plans, only: [:index, :create]
+        resources :form_d_act_plans, only: [:index, :create]
+      end
+      resources :form_a_act_plans, only: [:show, :update]
+      resources :form_b_act_plans, only: [:show, :update]
+      resources :form_c_act_plans, only: [:show, :update]
+      resources :form_d_act_plans, only: [:show, :update]
+
       # Enpoint CRUD de los grupos de investigacion
       resources :research_group, only: [:index, :show, :create, :update], path: 'research_units' do
+        resources :action_plans, only: [:index, :create]
         resources :documents, only: [:index, :show, :create, :update]
         resources :group_member, only: [:index, :show, :create, :update]
         resources :historical_colciencias_ranks, only: [:index, :show, :create, :update]

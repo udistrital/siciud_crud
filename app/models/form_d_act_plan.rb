@@ -1,12 +1,8 @@
-class ActionPlan < ApplicationRecord
-  include Swagger::ActionPlanSchema
+class FormDActPlan < ApplicationRecord
 
-  belongs_to :research_group
-
-  has_many :form_a_act_plans
-  has_many :form_b_act_plans
-  has_many :form_c_act_plans
-  has_many :form_d_act_plans
+  belongs_to :action_plan
+  belongs_to :goal_state, class_name: 'Subtype', foreign_key: 'goal_state_id'
+  belongs_to :plan_type, class_name: 'Subtype', foreign_key: 'plan_type_id'
 
   # Tracking inherited from ApplicationRecord, fields:
   # created_by and updated_by, see application_record.rb
