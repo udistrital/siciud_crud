@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :action_plans
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root to: "health#health"
   get "/api" => redirect("/api/v1/apidocs/")

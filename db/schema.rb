@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_16_055523) do
+ActiveRecord::Schema.define(version: 2021_07_27_044858) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,6 +39,20 @@ ActiveRecord::Schema.define(version: 2021_07_16_055523) do
     t.index ["geo_state_id"], name: "index_accompaniment_consultancies_on_geo_state_id"
     t.index ["research_group_id"], name: "index_accompaniment_consultancies_on_research_group_id"
     t.index ["updated_by"], name: "index_accompaniment_consultancies_on_updated_by"
+  end
+
+  create_table "action_plans", force: :cascade do |t|
+    t.integer "execution_validity", limit: 2
+    t.boolean "is_draft", default: true
+    t.bigint "research_group_id"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_action_plans_on_created_by"
+    t.index ["research_group_id"], name: "index_action_plans_on_research_group_id"
+    t.index ["updated_by"], name: "index_action_plans_on_updated_by"
   end
 
   create_table "appropriation_processes", force: :cascade do |t|
@@ -1924,6 +1938,9 @@ ActiveRecord::Schema.define(version: 2021_07_16_055523) do
   add_foreign_key "accompaniment_consultancies", "subtypes", column: "category_id"
   add_foreign_key "accompaniment_consultancies", "users", column: "created_by"
   add_foreign_key "accompaniment_consultancies", "users", column: "updated_by"
+  add_foreign_key "action_plans", "research_groups"
+  add_foreign_key "action_plans", "users", column: "created_by"
+  add_foreign_key "action_plans", "users", column: "updated_by"
   add_foreign_key "appropriation_processes", "colciencias_calls"
   add_foreign_key "appropriation_processes", "research_groups"
   add_foreign_key "appropriation_processes", "subtypes", column: "category_id"
