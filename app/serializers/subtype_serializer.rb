@@ -1,7 +1,8 @@
 class SubtypeSerializer < ActiveModel::Serializer
   attributes :id, :st_name, :st_description, :parent_id,
-             :parent_name, :type_id, :type_name,:active,
-             :created_at, :updated_at, :created_by, :updated_by
+             :parent_name, :type_id, :type_name, :required,
+             :multiple, :active, :created_at, :updated_at,
+             :created_by, :updated_by
 
   def parent_name
     parent = self.object.parent
