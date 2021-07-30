@@ -47,7 +47,8 @@ module Api
           else
             render json: @action_plan.errors, status: :unprocessable_entity
           end
-        elsif @action_plan.is_draft != act_plan_params_to_update[:is_draft] or
+        elsif (@action_plan.is_draft != act_plan_params_to_update[:is_draft] and
+          act_plan_params_to_update.key? :is_draft) or
           @action_plan.active != act_plan_params_to_update[:active]
 
           if @action_plan.update(act_plan_params_to_update.except(:execution_validity,

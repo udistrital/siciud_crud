@@ -201,14 +201,6 @@ module Swagger::ActionPlanApi
         key :produces, ['application/json',]
         key :tags, ['Research Units::Action Plans']
 
-        parameter name: :research_group_id do
-          key :in, :query
-          key :description, 'ID of research unit to fetch'
-          key :required, true
-          key :type, :integer
-          key :format, :int64
-        end
-
         response 200 do
           key :description, 'action plan response'
           schema do
