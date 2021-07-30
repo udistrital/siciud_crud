@@ -30,7 +30,7 @@ module Api
       # POST /research_units/:id/action_plans
       def create
         @action_plan = @research_group.action_plans.new(
-          action_plan_params_to_create)
+          act_plan_params_to_create)
 
         if @action_plan.save
           render json: @action_plan, status: :created
@@ -41,8 +41,17 @@ module Api
 
       # PATCH/PUT /action_plans/1
       def update
-        if @action_plan.is_draft
-          if @action_plan.update(action_plan_params_to_update)
+        if @action_plan.is_draft or act_plan_params_to_update[:is_draft]
+          if @action_plan.update(act_plan_params_to_update)
+            render json: @action_plan
+          else
+            render json: @action_plan.errors, status: :unprocessable_entity
+          end
+        elsif @action_plan.is_draft != act_plan_params_to_update[:is_draft] or
+          @action_plan.active != act_plan_params_to_update[:active]
+
+          if @action_plan.update(act_plan_params_to_update.except(:execution_validity,
+                                                                  :research_group_id))
             render json: @action_plan
           else
             render json: @action_plan.errors, status: :unprocessable_entity
@@ -66,13 +75,13 @@ module Api
       end
 
       # Only allow a trusted parameter "white list" through.
-      def action_plan_params_to_create
+      def act_plan_params_to_create
         params.require(:action_plan).permit(:execution_validity,
                                             :is_draft, :research_group_id,
                                             :active, :created_by)
       end
 
-      def action_plan_params_to_update
+      def act_plan_params_to_update
         params.require(:action_plan).permit(:execution_validity,
                                             :is_draft, :research_group_id,
                                             :active, :updated_by)
