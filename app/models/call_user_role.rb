@@ -1,2 +1,0 @@
-class CallUserRole < ApplicationRecord
-end

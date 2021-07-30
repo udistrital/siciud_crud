@@ -55,13 +55,14 @@ module Api
       # Only allow a trusted parameter "white list" through.
       def subtype_params_to_create
         params.require(:subtype).permit(:st_name, :st_description,
-                                        :parent_id, :type_id, :active,
-                                        :created_by)
+                                        :parent_id, :type_id, :required,
+                                        :multiple, :active, :created_by)
       end
 
       def subtype_params_to_update
         params.require(:subtype).permit(:st_name, :st_description,
-                                        :parent_id, :type_id, :active,
+                                        :parent_id, :type_id, :required,
+                                        :multiple, :active,
                                         :updated_by)
       end
     end

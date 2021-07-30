@@ -138,7 +138,7 @@ module Swagger::TypeApi
       operation :get do
         key :summary, 'Get all Types with their subtypes'
         key :description, 'Returns all Types with their subtypes'
-        key :operationId, :get_types
+        key :operationId, :get_types_all
         key :produces, ['application/json',]
         key :tags, ['Types']
 
