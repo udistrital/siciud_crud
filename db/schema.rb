@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_29_063333) do
+ActiveRecord::Schema.define(version: 2021_07_30_203650) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -50,6 +50,7 @@ ActiveRecord::Schema.define(version: 2021_07_29_063333) do
     t.bigint "updated_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "published_at"
     t.index ["created_by"], name: "index_action_plans_on_created_by"
     t.index ["research_group_id"], name: "index_action_plans_on_research_group_id"
     t.index ["updated_by"], name: "index_action_plans_on_updated_by"
@@ -4343,6 +4344,31 @@ ActiveRecord::Schema.define(version: 2021_07_29_063333) do
      FROM (call_eval_criteria cec
        LEFT JOIN subtypes s ON ((s.id = cec.eval_criterion_id)));
   SQL
+  create_view "complete_form_a_act_ps", sql_definition: <<-SQL
+      SELECT faap.id,
+      faap.action_plan_id,
+      faap.advanced_total,
+      faap.goal,
+      faap.indicator_id,
+      i.ind_description AS indicator_description,
+      i.product_type_id AS indicator_product_type_id,
+      sip.st_name AS indicator_product_type_name,
+      faap."order",
+      faap.plan_type_id,
+      splt.st_name AS plan_type_name,
+      faap.product_type_id,
+      spt.st_name AS product_type_name,
+      faap.active,
+      faap.created_by,
+      faap.updated_by,
+      faap.created_at,
+      faap.updated_at
+     FROM ((((form_a_act_plans faap
+       LEFT JOIN indicators i ON ((faap.indicator_id = i.id)))
+       LEFT JOIN subtypes sip ON ((i.product_type_id = sip.id)))
+       LEFT JOIN subtypes spt ON ((faap.product_type_id = spt.id)))
+       LEFT JOIN subtypes splt ON ((faap.plan_type_id = splt.id)));
+  SQL
   create_view "complete_action_plans", sql_definition: <<-SQL
       SELECT ap.id,
       ap.execution_validity,
@@ -4354,6 +4380,7 @@ ActiveRecord::Schema.define(version: 2021_07_29_063333) do
       ap.active,
       ap.created_by,
       ap.updated_by,
+      ap.published_at,
       ap.created_at,
       ap.updated_at
      FROM (action_plans ap

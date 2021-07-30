@@ -1,51 +1,82 @@
-class FormAActPlansController < ApplicationController
-  before_action :set_form_a_act_plan, only: [:show, :update, :destroy]
+module Api
+  module V1
+    class FormAActPlansController < AbstractActionPlanController
+      include Swagger::FormAActPlanApi
 
-  # GET /form_a_act_plans
-  def index
-    @form_a_act_plans = FormAActPlan.all
+      before_action :set_action_plan_to_form, only: [:index, :create, :update]
+      before_action :set_form_a_act_plan, only: [:show, :update]
 
-    render json: @form_a_act_plans
-  end
+      # GET /action_plans/:id/form_a_act_plans
+      def index
+        @form_a_act_plans = CompleteFormAActP.where(
+          "action_plan_id = ?", params[:action_plan_id]
+        )
+        @form_a_act_plans = DxService.load(@form_a_act_plans, params)
 
-  # GET /form_a_act_plans/1
-  def show
-    render json: @form_a_act_plan
-  end
+        render json: @form_a_act_plans
+      end
 
-  # POST /form_a_act_plans
-  def create
-    @form_a_act_plan = FormAActPlan.new(form_a_act_plan_params)
+      # GET /form_a_act_plans/1
+      def show
+        render json: @form_a_act_plan
+      end
 
-    if @form_a_act_plan.save
-      render json: @form_a_act_plan, status: :created, location: @form_a_act_plan
-    else
-      render json: @form_a_act_plan.errors, status: :unprocessable_entity
+      # POST /action_plans/:id/form_a_act_plans
+      def create
+        @form_a_act_plan = @action_plan.form_a_act_plans.new(
+          form_a_act_p_params_to_create)
+
+        if @form_a_act_plan.save
+          render json: @form_a_act_plan, status: :created
+        else
+          render json: @form_a_act_plan.errors, status: :unprocessable_entity
+        end
+      end
+
+      # PATCH/PUT /form_a_act_plans/1
+      def update
+        puts "Actualizando Form A"
+        puts ""
+        puts "-----------------------"
+        result = ActionPlanService.is_upgradeable(@action_plan,
+                                                  form_a_act_p_params_to_update,
+                                                  [
+                                                    :product_type_id, :indicator_id,
+                                                    :goal, :advanced_total,
+                                                    :order, :action_plan_id,
+                                                    :plan_type_id],
+                                                  ", form a.")
+        if result[:is_upgradeable]
+          if @form_a_act_plan.update(result[:body_params])
+            render json: @form_a_act_plan
+          else
+            render json: @form_a_act_plan.errors, status: :unprocessable_entity
+          end
+        else
+          render json: { error: result[:msg] },
+                 status: :unprocessable_entity
+        end
+      end
+
+      private
+
+      # Use callbacks to share common setup or constraints between actions.
+      def set_form_a_act_plan
+        @form_a_act_plan = FormAActPlan.find(params[:id])
+      end
+
+      # Only allow a trusted parameter "white list" through.
+      def form_a_act_p_params_to_create
+        params.require(:form_a_act_plan).permit(:product_type_id, :indicator_id,
+                                                :goal, :advanced_total, :order, :action_plan_id,
+                                                :plan_type_id, :active, :created_by)
+      end
+
+      def form_a_act_p_params_to_update
+        params.require(:form_a_act_plan).permit(:product_type_id, :indicator_id,
+                                                :goal, :advanced_total, :order, :action_plan_id,
+                                                :plan_type_id, :active, :updated_by)
+      end
     end
   end
-
-  # PATCH/PUT /form_a_act_plans/1
-  def update
-    if @form_a_act_plan.update(form_a_act_plan_params)
-      render json: @form_a_act_plan
-    else
-      render json: @form_a_act_plan.errors, status: :unprocessable_entity
-    end
-  end
-
-  # DELETE /form_a_act_plans/1
-  def destroy
-    @form_a_act_plan.destroy
-  end
-
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_form_a_act_plan
-      @form_a_act_plan = FormAActPlan.find(params[:id])
-    end
-
-    # Only allow a trusted parameter "white list" through.
-    def form_a_act_plan_params
-      params.require(:form_a_act_plan).permit(:product_type_id, :indicator_id, :goal, :advanced_total, :order, :action_plan_id, :plan_type_id, :active, :created_by, :updated_by)
-    end
 end

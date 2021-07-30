@@ -2,7 +2,7 @@ class ActionPlanSerializer < ActiveModel::Serializer
   attributes :id, :execution_validity, :research_group_id,
              :research_group_name, :research_group_acronym,
              :research_group_gruplac, :is_draft, :active,
-             :created_by, :updated_by, :created_at, :updated_at
+             :created_by, :updated_by, :published_at, :created_at, :updated_at
 
 
   def research_group_acronym

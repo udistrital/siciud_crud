@@ -31,6 +31,9 @@ module Api
       def create
         @action_plan = @research_group.action_plans.new(
           act_plan_params_to_create)
+        unless @action_plan.is_draft
+          @action_plan.published_at = DateTime.now.in_time_zone(-5)
+        end
 
         if @action_plan.save
           render json: @action_plan, status: :created
@@ -41,25 +44,22 @@ module Api
 
       # PATCH/PUT /action_plans/1
       def update
-        if @action_plan.is_draft or act_plan_params_to_update[:is_draft]
-          if @action_plan.update(act_plan_params_to_update)
-            render json: @action_plan
-          else
-            render json: @action_plan.errors, status: :unprocessable_entity
+        result = ActionPlanService.is_upgradeable(@action_plan,
+                                                  act_plan_params_to_update,
+                                                  [
+                                                    :execution_validity,
+                                                    :research_group_id])
+        if result[:is_upgradeable]
+          unless act_plan_params_to_update[:is_draft]
+            @action_plan.published_at = DateTime.now.in_time_zone(-5)
           end
-        elsif (@action_plan.is_draft != act_plan_params_to_update[:is_draft] and
-          act_plan_params_to_update.key? :is_draft) or
-          @action_plan.active != act_plan_params_to_update[:active]
-
-          if @action_plan.update(act_plan_params_to_update.except(:execution_validity,
-                                                                  :research_group_id))
+          if @action_plan.update(result[:body_params])
             render json: @action_plan
           else
             render json: @action_plan.errors, status: :unprocessable_entity
           end
         else
-          msg = "The action plan cannot be edited because it is not a draft"
-          render json: { error: msg },
+          render json: { error: result[:msg] },
                  status: :unprocessable_entity
         end
       end

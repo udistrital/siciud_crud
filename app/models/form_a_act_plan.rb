@@ -1,4 +1,5 @@
 class FormAActPlan < ApplicationRecord
+  include Swagger::FormAActPlanSchema
 
   belongs_to :action_plan
   belongs_to :indicator
