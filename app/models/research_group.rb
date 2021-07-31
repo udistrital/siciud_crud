@@ -74,6 +74,9 @@ class ResearchGroup < ApplicationRecord
 
   has_many :degree_works, dependent: :destroy
 
+
+  has_many :action_plans
+
   has_many :documents, as: :documentable
 
   # Tracking inherited from ApplicationRecord, fields:
