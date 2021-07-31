@@ -35,17 +35,15 @@ module Api
 
       # PATCH/PUT /form_a_act_plans/1
       def update
-        puts "Actualizando Form A"
-        puts ""
-        puts "-----------------------"
-        result = ActionPlanService.is_upgradeable(@action_plan,
-                                                  form_a_act_p_params_to_update,
-                                                  [
-                                                    :product_type_id, :indicator_id,
-                                                    :goal, :advanced_total,
-                                                    :order, :action_plan_id,
-                                                    :plan_type_id],
-                                                  ", form a.")
+        result = ActionPlanService.form_is_upgradeable(@action_plan,
+                                                       @form_a_act_plan,
+                                                       form_a_act_p_params_to_update,
+                                                       [
+                                                         :product_type_id, :indicator_id,
+                                                         :goal, :advanced_total,
+                                                         :order, :action_plan_id,
+                                                         :plan_type_id],
+                                                       ", form a.")
         if result[:is_upgradeable]
           if @form_a_act_plan.update(result[:body_params])
             render json: @form_a_act_plan

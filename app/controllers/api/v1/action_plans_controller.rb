@@ -50,8 +50,8 @@ module Api
                                                     :execution_validity,
                                                     :research_group_id])
         if result[:is_upgradeable]
-          unless act_plan_params_to_update[:is_draft]
-            @action_plan.published_at = DateTime.now.in_time_zone(-5)
+          if ActionPlanService.is_publishable(@action_plan, act_plan_params_to_update)
+            @action_plan.published_at = DateTime.now
           end
           if @action_plan.update(result[:body_params])
             render json: @action_plan
