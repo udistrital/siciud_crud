@@ -13,7 +13,8 @@ class ActionPlanService
         msg: ""
       }
     elsif (action_plan.is_draft != body_params[:is_draft] and
-      body_params.key? :is_draft) or action_plan.active != body_params[:active]
+      body_params.key? :is_draft) or (action_plan.active != body_params[:active] and
+      body_params.key? :active)
       body_params = body_params.except(*except_list)
       result = {
         is_upgradeable: true,
@@ -37,14 +38,14 @@ class ActionPlanService
   end
 
   def self.form_is_upgradeable(action_plan, form, body_params, except_list, complement = ".")
-    puts "Sin cambios: #{record_unchanged(form, body_params)}"
     if action_plan.is_draft
       result = {
         is_upgradeable: true,
         body_params: body_params,
         msg: ""
       }
-    elsif form.active != body_params[:active]
+    elsif form.active != body_params[:active] and
+      body_params.key? :active
       result = {
         is_upgradeable: true,
         body_params: body_params.except(*except_list),
@@ -71,6 +72,13 @@ class ActionPlanService
   def self.record_unchanged(record, body_params, fields_to_exclude=[])
     exc = %w[id created_at updated_at created_by updated_by]
     exc += fields_to_exclude
-    record.as_json.except(*exc) == body_params.as_json.except(*exc)
+    aux_record = record.as_json.except(*exc)
+    aux_body_params = body_params.as_json.except(*exc)
+    unless aux_record.length == aux_body_params.length
+      common_keys = aux_body_params.keep_if { |k, v| aux_record.key? k}.keys
+      aux_record = aux_record.except(*(aux_record.keys - common_keys))
+      aux_body_params = aux_body_params.except(*(aux_body_params.keys - common_keys))
+    end
+    aux_record == aux_body_params
   end
 end

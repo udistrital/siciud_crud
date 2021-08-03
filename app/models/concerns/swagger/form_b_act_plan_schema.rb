@@ -1,20 +1,23 @@
-module Swagger::FormAActPlanSchema
+module Swagger::FormBActPlanSchema
   extend ActiveSupport::Concern
   include Swagger::Blocks
 
   included do
-    swagger_schema :FormAActPlan do
-      property :advanced_total do
+    swagger_schema :FormBActPlan do
+      property :description do
+        key :type, :string
+      end
+      property :financing_type_id do
         key :type, :integer
         key :format, :int64
       end
-      property :goal do
+      property :goal_state_id do
         key :type, :integer
         key :format, :int64
       end
-      property :indicator_id do
-        key :type, :integer
-        key :format, :int64
+      property :goal_achieved do
+        key :type, :boolean
+        key :default, false
       end
       property :order do
         key :type, :integer
@@ -24,25 +27,21 @@ module Swagger::FormAActPlanSchema
         key :type, :integer
         key :format, :int64
       end
-      property :product_type_id do
-        key :type, :integer
-        key :format, :int64
-      end
       property :active do
         key :type, :boolean
         key :default, true
       end
     end
 
-    swagger_schema :FormAActPlanInputPost do
+    swagger_schema :FormBActPlanInputPost do
       allOf do
         schema do
-          property :form_a_act_plan do
-            key :'$ref', :FormAActPlan
+          property :form_b_act_plan do
+            key :'$ref', :FormBActPlan
           end
         end
         schema do
-          property :form_a_act_plan do
+          property :form_b_act_plan do
             property :created_by do
               key :type, :integer
               key :format, :int64
@@ -52,15 +51,15 @@ module Swagger::FormAActPlanSchema
       end
     end
 
-    swagger_schema :FormAActPlanInputPut do
+    swagger_schema :FormBActPlanInputPut do
       allOf do
         schema do
-          property :form_a_act_plan do
-            key :'$ref', :FormAActPlan
+          property :form_b_act_plan do
+            key :'$ref', :FormBActPlan
           end
         end
         schema do
-          property :form_a_act_plan do
+          property :form_b_act_plan do
             property :action_plan_id do
               key :type, :integer
               key :format, :int64
@@ -74,10 +73,10 @@ module Swagger::FormAActPlanSchema
       end
     end
 
-    swagger_schema :FormAActPlanOutput do
+    swagger_schema :FormBActPlanOutput do
       allOf do
         schema do
-          key :'$ref', :FormAActPlan
+          key :'$ref', :FormBActPlan
         end
         schema do
           property :id do
@@ -88,20 +87,13 @@ module Swagger::FormAActPlanSchema
             key :type, :integer
             key :format, :int64
           end
-          property :indicator_description do
+          property :financing_type_name do
             key :type, :string
           end
-          property :indicator_product_type_id do
-            key :type, :integer
-            key :format, :int64
-          end
-          property :indicator_product_type_name do
+          property :goal_state_name do
             key :type, :string
           end
           property :plan_type_name do
-            key :type, :string
-          end
-          property :product_type_name do
             key :type, :string
           end
           property :created_by do
@@ -124,13 +116,13 @@ module Swagger::FormAActPlanSchema
       end
     end
 
-    swagger_schema :FormAActPlanDxOutput do
+    swagger_schema :FormBActPlanDxOutput do
       allOf do
         schema do
           property :data do
             key :type, :array
             items do
-              key :'$ref', :FormAActPlanOutput
+              key :'$ref', :FormBActPlanOutput
             end
           end
         end
