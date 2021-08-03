@@ -7,7 +7,7 @@ module Swagger::IndicatorSchema
       property :ind_description do
         key :type, :string
       end
-      property :product_type_id do
+      property :subtype_id do
         key :type, :integer
         key :format, :int64
       end
@@ -62,6 +62,9 @@ module Swagger::IndicatorSchema
           property :id do
             key :type, :integer
             key :format, :int64
+          end
+          property :subtype_name do
+            key :type, :string
           end
           property :created_by do
             key :type, :integer
