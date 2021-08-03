@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_03_181133) do
+ActiveRecord::Schema.define(version: 2021_08_03_183413) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -211,6 +211,7 @@ ActiveRecord::Schema.define(version: 2021_08_03_181133) do
     t.bigint "updated_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "ci_percentage", precision: 6, scale: 3
     t.index ["call_id"], name: "index_call_items_on_call_id"
     t.index ["created_by"], name: "index_call_items_on_created_by"
     t.index ["item_id"], name: "index_call_items_on_item_id"
@@ -4286,20 +4287,6 @@ ActiveRecord::Schema.define(version: 2021_08_03_181133) do
        LEFT JOIN subtypes st ON ((t.id = st.type_id)))
        LEFT JOIN subtypes pst ON ((st.parent_id = pst.id)));
   SQL
-  create_view "complete_call_items", sql_definition: <<-SQL
-      SELECT ci.id,
-      ci.call_id,
-      ci.item_id,
-      s.st_name AS item_name,
-      ci.ci_maximum_percentage,
-      ci.active,
-      ci.created_by,
-      ci.updated_by,
-      ci.created_at,
-      ci.updated_at
-     FROM (call_items ci
-       LEFT JOIN subtypes s ON ((s.id = ci.item_id)));
-  SQL
   create_view "complete_call_indicators", sql_definition: <<-SQL
       SELECT cind.id,
       cind.call_id,
@@ -4420,5 +4407,20 @@ ActiveRecord::Schema.define(version: 2021_08_03_181133) do
       i.updated_at
      FROM (indicators i
        LEFT JOIN subtypes sin ON ((sin.id = i.subtype_id)));
+  SQL
+  create_view "complete_call_items", sql_definition: <<-SQL
+      SELECT ci.id,
+      ci.call_id,
+      ci.item_id,
+      s.st_name AS item_name,
+      ci.ci_maximum_percentage,
+      ci.ci_percentage,
+      ci.active,
+      ci.created_by,
+      ci.updated_by,
+      ci.created_at,
+      ci.updated_at
+     FROM (call_items ci
+       LEFT JOIN subtypes s ON ((s.id = ci.item_id)));
   SQL
 end
