@@ -66,7 +66,7 @@ module Api
       # Only allow a trusted parameter "white list" through.
       def form_a_act_p_params_to_create
         params.require(:form_a_act_plan).permit(:product_type_id, :indicator_id,
-                                                :goal, :advanced_total, :order, :action_plan_id,
+                                                :goal, :advanced_total, :order,
                                                 :plan_type_id, :active, :created_by)
       end
 

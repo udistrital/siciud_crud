@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_30_203650) do
+ActiveRecord::Schema.define(version: 2021_08_03_181133) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -950,7 +950,7 @@ ActiveRecord::Schema.define(version: 2021_07_30_203650) do
   end
 
   create_table "indicators", force: :cascade do |t|
-    t.bigint "product_type_id"
+    t.bigint "subtype_id"
     t.text "ind_description"
     t.boolean "active", default: true
     t.bigint "created_by"
@@ -958,7 +958,7 @@ ActiveRecord::Schema.define(version: 2021_07_30_203650) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["created_by"], name: "index_indicators_on_created_by"
-    t.index ["product_type_id"], name: "index_indicators_on_product_type_id"
+    t.index ["subtype_id"], name: "index_indicators_on_subtype_id"
     t.index ["updated_by"], name: "index_indicators_on_updated_by"
   end
 
@@ -2245,7 +2245,7 @@ ActiveRecord::Schema.define(version: 2021_07_30_203650) do
   add_foreign_key "idi_investigation_projects", "subtypes", column: "category_id"
   add_foreign_key "idi_investigation_projects", "users", column: "created_by"
   add_foreign_key "idi_investigation_projects", "users", column: "updated_by"
-  add_foreign_key "indicators", "subtypes", column: "product_type_id"
+  add_foreign_key "indicators", "subtypes"
   add_foreign_key "indicators", "users", column: "created_by"
   add_foreign_key "indicators", "users", column: "updated_by"
   add_foreign_key "industrial_designs", "colciencias_calls"
@@ -4305,7 +4305,7 @@ ActiveRecord::Schema.define(version: 2021_07_30_203650) do
       cind.call_id,
       cind.indicator_id,
       i.ind_description AS indicator_description,
-      i.product_type_id,
+      i.subtype_id AS product_type_id,
       s.st_name AS product_type_name,
       cind.active,
       cind.created_by,
@@ -4314,7 +4314,7 @@ ActiveRecord::Schema.define(version: 2021_07_30_203650) do
       cind.updated_at
      FROM ((calls_indicators cind
        LEFT JOIN indicators i ON ((i.id = cind.indicator_id)))
-       LEFT JOIN subtypes s ON ((i.product_type_id = s.id)));
+       LEFT JOIN subtypes s ON ((i.subtype_id = s.id)));
   SQL
   create_view "complete_call_documents", sql_definition: <<-SQL
       SELECT cd.id,
@@ -4351,7 +4351,7 @@ ActiveRecord::Schema.define(version: 2021_07_30_203650) do
       faap.goal,
       faap.indicator_id,
       i.ind_description AS indicator_description,
-      i.product_type_id AS indicator_product_type_id,
+      i.subtype_id AS indicator_product_type_id,
       sip.st_name AS indicator_product_type_name,
       faap."order",
       faap.plan_type_id,
@@ -4365,7 +4365,7 @@ ActiveRecord::Schema.define(version: 2021_07_30_203650) do
       faap.updated_at
      FROM ((((form_a_act_plans faap
        LEFT JOIN indicators i ON ((faap.indicator_id = i.id)))
-       LEFT JOIN subtypes sip ON ((i.product_type_id = sip.id)))
+       LEFT JOIN subtypes sip ON ((i.subtype_id = sip.id)))
        LEFT JOIN subtypes spt ON ((faap.product_type_id = spt.id)))
        LEFT JOIN subtypes splt ON ((faap.plan_type_id = splt.id)));
   SQL
@@ -4385,5 +4385,40 @@ ActiveRecord::Schema.define(version: 2021_07_30_203650) do
       ap.updated_at
      FROM (action_plans ap
        LEFT JOIN research_groups rg ON ((rg.id = ap.research_group_id)));
+  SQL
+  create_view "complete_form_b_act_ps", sql_definition: <<-SQL
+      SELECT fbap.id,
+      fbap.action_plan_id,
+      fbap.description,
+      fbap.financing_type_id,
+      sft.st_name AS financing_type_name,
+      fbap.goal_achieved,
+      fbap.goal_state_id,
+      sgs.st_name AS goal_state_name,
+      fbap."order",
+      fbap.plan_type_id,
+      splt.st_name AS plan_type_name,
+      fbap.active,
+      fbap.created_by,
+      fbap.updated_by,
+      fbap.created_at,
+      fbap.updated_at
+     FROM (((form_b_act_plans fbap
+       LEFT JOIN subtypes sft ON ((sft.id = fbap.financing_type_id)))
+       LEFT JOIN subtypes sgs ON ((sgs.id = fbap.goal_state_id)))
+       LEFT JOIN subtypes splt ON ((fbap.plan_type_id = splt.id)));
+  SQL
+  create_view "complete_indicators", sql_definition: <<-SQL
+      SELECT i.id,
+      i.subtype_id,
+      sin.st_name AS subtype_name,
+      i.ind_description,
+      i.active,
+      i.created_by,
+      i.updated_by,
+      i.created_at,
+      i.updated_at
+     FROM (indicators i
+       LEFT JOIN subtypes sin ON ((sin.id = i.subtype_id)));
   SQL
 end

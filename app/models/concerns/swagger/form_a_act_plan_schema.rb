@@ -4,10 +4,6 @@ module Swagger::FormAActPlanSchema
 
   included do
     swagger_schema :FormAActPlan do
-      property :action_plan_id do
-        key :type, :integer
-        key :format, :int64
-      end
       property :advanced_total do
         key :type, :integer
         key :format, :int64
@@ -65,6 +61,10 @@ module Swagger::FormAActPlanSchema
         end
         schema do
           property :form_a_act_plan do
+            property :action_plan_id do
+              key :type, :integer
+              key :format, :int64
+            end
             property :updated_by do
               key :type, :integer
               key :format, :int64
@@ -81,6 +81,10 @@ module Swagger::FormAActPlanSchema
         end
         schema do
           property :id do
+            key :type, :integer
+            key :format, :int64
+          end
+          property :action_plan_id do
             key :type, :integer
             key :format, :int64
           end

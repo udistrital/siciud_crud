@@ -1,7 +1,7 @@
 class Indicator < ApplicationRecord
   include Swagger::IndicatorSchema
 
-  belongs_to :product_type, class_name: 'Subtype', foreign_key: 'product_type_id'
+  belongs_to :subtype
 
   validates :ind_description, presence: true, allow_nil: false
   # Tracking inherited from ApplicationRecord, fields:

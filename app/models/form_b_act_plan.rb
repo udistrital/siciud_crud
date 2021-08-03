@@ -1,4 +1,5 @@
 class FormBActPlan < ApplicationRecord
+  include Swagger::FormBActPlanSchema
 
   belongs_to :action_plan
   belongs_to :financing_type, class_name: 'Subtype', foreign_key: 'financing_type_id'

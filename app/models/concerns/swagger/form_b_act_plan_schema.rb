@@ -1,13 +1,29 @@
-module Swagger::IndicatorSchema
+module Swagger::FormBActPlanSchema
   extend ActiveSupport::Concern
   include Swagger::Blocks
 
   included do
-    swagger_schema :Indicator do
-      property :ind_description do
+    swagger_schema :FormBActPlan do
+      property :description do
         key :type, :string
       end
-      property :subtype_id do
+      property :financing_type_id do
+        key :type, :integer
+        key :format, :int64
+      end
+      property :goal_state_id do
+        key :type, :integer
+        key :format, :int64
+      end
+      property :goal_achieved do
+        key :type, :boolean
+        key :default, false
+      end
+      property :order do
+        key :type, :integer
+        key :format, :int64
+      end
+      property :plan_type_id do
         key :type, :integer
         key :format, :int64
       end
@@ -17,15 +33,15 @@ module Swagger::IndicatorSchema
       end
     end
 
-    swagger_schema :IndicatorInputPost do
+    swagger_schema :FormBActPlanInputPost do
       allOf do
         schema do
-          property :indicator do
-            key :'$ref', :Indicator
+          property :form_b_act_plan do
+            key :'$ref', :FormBActPlan
           end
         end
         schema do
-          property :indicator do
+          property :form_b_act_plan do
             property :created_by do
               key :type, :integer
               key :format, :int64
@@ -35,15 +51,19 @@ module Swagger::IndicatorSchema
       end
     end
 
-    swagger_schema :IndicatorInputPut do
+    swagger_schema :FormBActPlanInputPut do
       allOf do
         schema do
-          property :indicator do
-            key :'$ref', :Indicator
+          property :form_b_act_plan do
+            key :'$ref', :FormBActPlan
           end
         end
         schema do
-          property :indicator do
+          property :form_b_act_plan do
+            property :action_plan_id do
+              key :type, :integer
+              key :format, :int64
+            end
             property :updated_by do
               key :type, :integer
               key :format, :int64
@@ -53,17 +73,27 @@ module Swagger::IndicatorSchema
       end
     end
 
-    swagger_schema :IndicatorOutput do
+    swagger_schema :FormBActPlanOutput do
       allOf do
         schema do
-          key :'$ref', :Indicator
+          key :'$ref', :FormBActPlan
         end
         schema do
           property :id do
             key :type, :integer
             key :format, :int64
           end
-          property :subtype_name do
+          property :action_plan_id do
+            key :type, :integer
+            key :format, :int64
+          end
+          property :financing_type_name do
+            key :type, :string
+          end
+          property :goal_state_name do
+            key :type, :string
+          end
+          property :plan_type_name do
             key :type, :string
           end
           property :created_by do
@@ -86,13 +116,13 @@ module Swagger::IndicatorSchema
       end
     end
 
-    swagger_schema :IndicatorDxOutput do
+    swagger_schema :FormBActPlanDxOutput do
       allOf do
         schema do
           property :data do
             key :type, :array
             items do
-              key :'$ref', :IndicatorOutput
+              key :'$ref', :FormBActPlanOutput
             end
           end
         end
