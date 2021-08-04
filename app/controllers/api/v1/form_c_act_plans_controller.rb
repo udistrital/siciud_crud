@@ -46,7 +46,7 @@ module Api
                                                        ", form c.")
         if result[:is_upgradeable]
           if @form_c_act_plan.update(result[:body_params])
-            render json: @form_b_act_plan
+            render json: @form_c_act_plan
           else
             render json: @form_c_act_plan.errors, status: :unprocessable_entity
           end
