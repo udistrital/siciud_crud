@@ -98,6 +98,7 @@ module Api
         ActionPlansController,
         FormAActPlansController,
         FormBActPlansController,
+        FormCActPlansController,
         GroupMemberController,
         GmPeriodsController,
         GmStatesController,
@@ -138,6 +139,7 @@ module Api
         ActionPlan,
         FormAActPlan,
         FormBActPlan,
+        FormCActPlan,
         Paper,
         Patent,
         Award,
@@ -194,25 +196,6 @@ module Api
         ApplicationRecord,
         self,
       ].freeze
-
-      # SWAGGERED_CLASSES = [
-      #   Agreement,
-      #   GroupMember,
-      #   SeedbedMember,
-      #   FeContact,
-      #   ArpGeneralGoal,
-      #   ArpSpecificGoal,
-      #   ArpActivity,
-      #   AgreementController,
-      #   CountryController,
-      #   GroupMemberController,
-      #   SeedbedMemberController,
-      #   FeContactController,
-      #   ArpGeneralGoalController,
-      #   ArpSpecificGoalController,
-      #   ArpActivityController,
-      #   self,
-      # ].freeze
 
       def index
         render json: Swagger::Blocks.build_root_json(SWAGGERED_CLASSES)

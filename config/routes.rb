@@ -35,12 +35,12 @@ Rails.application.routes.draw do
       resources :action_plans, only: [:index, :show, :update] do
         resources :form_a_act_plans, only: [:index, :create, :update]
         resources :form_b_act_plans, only: [:index, :create, :update]
-        resources :form_c_act_plans, only: [:index, :create]
+        resources :form_c_act_plans, only: [:index, :create, :update]
         resources :form_d_act_plans, only: [:index, :create]
       end
       resources :form_a_act_plans, only: [:show]
       resources :form_b_act_plans, only: [:show]
-      resources :form_c_act_plans, only: [:show, :update]
+      resources :form_c_act_plans, only: [:show]
       resources :form_d_act_plans, only: [:show, :update]
 
       # Enpoint CRUD de los grupos de investigacion

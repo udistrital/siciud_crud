@@ -1,31 +1,31 @@
-module Swagger::ScheduleActivitySchema
+module Swagger::FormCActPlanSchema
   extend ActiveSupport::Concern
   include Swagger::Blocks
 
   included do
-    swagger_schema :ScheduleActivity do
-      property :sa_order do
+    swagger_schema :FormCActPlan do
+      property :advanced_total do
         key :type, :integer
         key :format, :int64
       end
-      property :sa_description do
+      property :description do
         key :type, :string
       end
-      property :sa_date do
-        key :type, :string
+      property :goal do
+        key :type, :integer
+        key :format, :int64
       end
-      property :sa_start_date do
-        key :type, :string
-        key :format, :date
-        key :example, '2021-10-28'
+      property :order do
+        key :type, :integer
+        key :format, :int64
       end
-      property :sa_end_date do
-        key :type, :string
-        key :format, :date
-        key :example, '2021-02-21'
+      property :plan_type_id do
+        key :type, :integer
+        key :format, :int64
       end
-      property :sa_responsible do
-        key :type, :string
+      property :product_type_id do
+        key :type, :integer
+        key :format, :int64
       end
       property :active do
         key :type, :boolean
@@ -33,15 +33,15 @@ module Swagger::ScheduleActivitySchema
       end
     end
 
-    swagger_schema :ScheduleActivityInputPost do
+    swagger_schema :FormCActPlanInputPost do
       allOf do
         schema do
-          property :schedule_activity do
-            key :'$ref', :ScheduleActivity
+          property :form_c_act_plan do
+            key :'$ref', :FormCActPlan
           end
         end
         schema do
-          property :schedule_activity do
+          property :form_c_act_plan do
             property :created_by do
               key :type, :integer
               key :format, :int64
@@ -51,16 +51,16 @@ module Swagger::ScheduleActivitySchema
       end
     end
 
-    swagger_schema :ScheduleActivityInputPut do
+    swagger_schema :FormCActPlanInputPut do
       allOf do
         schema do
-          property :schedule_activity do
-            key :'$ref', :ScheduleActivity
+          property :form_c_act_plan do
+            key :'$ref', :FormCActPlan
           end
         end
         schema do
-          property :schedule_activity do
-            property :call_id do
+          property :form_c_act_plan do
+            property :action_plan_id do
               key :type, :integer
               key :format, :int64
             end
@@ -73,19 +73,25 @@ module Swagger::ScheduleActivitySchema
       end
     end
 
-    swagger_schema :ScheduleActivityOutput do
+    swagger_schema :FormCActPlanOutput do
       allOf do
         schema do
-          key :'$ref', :ScheduleActivity
+          key :'$ref', :FormCActPlan
         end
         schema do
           property :id do
             key :type, :integer
             key :format, :int64
           end
-          property :call_id do
+          property :action_plan_id do
             key :type, :integer
             key :format, :int64
+          end
+          property :plan_type_name do
+            key :type, :string
+          end
+          property :product_type_name do
+            key :type, :string
           end
           property :created_by do
             key :type, :integer
@@ -107,13 +113,13 @@ module Swagger::ScheduleActivitySchema
       end
     end
 
-    swagger_schema :ScheduleActivityDxOutput do
+    swagger_schema :FormCActPlanDxOutput do
       allOf do
         schema do
           property :data do
             key :type, :array
             items do
-              key :'$ref', :ScheduleActivityOutput
+              key :'$ref', :FormCActPlanOutput
             end
           end
         end

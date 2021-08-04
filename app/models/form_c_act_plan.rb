@@ -1,4 +1,5 @@
 class FormCActPlan < ApplicationRecord
+  include Swagger::FormCActPlanSchema
 
   belongs_to :action_plan
   belongs_to :plan_type, class_name: 'Subtype', foreign_key: 'plan_type_id'

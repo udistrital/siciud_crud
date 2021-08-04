@@ -1,4 +1,4 @@
-class FormAActPlanSerializer < ActiveModel::Serializer
+class FormAActPlanSerializer < AbstractActionPlanSerializer
   attributes :id, :action_plan_id, :product_type_id, :product_type_name,
              :goal, :advanced_total, :order, :plan_type_id, :plan_type_name,
              :indicator_id, :indicator_description, :indicator_product_type_id,
@@ -26,20 +26,6 @@ class FormAActPlanSerializer < ActiveModel::Serializer
       if product_type
         product_type.st_name
       end
-    end
-  end
-
-  def product_type_name
-    product_type = self.object.product_type
-    if product_type
-      product_type.st_name
-    end
-  end
-
-  def plan_type_name
-    plan_type = self.object.plan_type
-    if plan_type
-      plan_type.st_name
     end
   end
 end
