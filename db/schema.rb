@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_03_183413) do
+ActiveRecord::Schema.define(version: 2021_08_04_025511) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -4422,5 +4422,25 @@ ActiveRecord::Schema.define(version: 2021_08_03_183413) do
       ci.updated_at
      FROM (call_items ci
        LEFT JOIN subtypes s ON ((s.id = ci.item_id)));
+  SQL
+  create_view "complete_form_c_act_ps", sql_definition: <<-SQL
+      SELECT fcap.id,
+      fcap.action_plan_id,
+      fcap.advanced_total,
+      fcap.description,
+      fcap.goal,
+      fcap."order",
+      fcap.plan_type_id,
+      spl.st_name AS plan_type_name,
+      fcap.product_type_id,
+      spt.st_name AS product_type_name,
+      fcap.active,
+      fcap.created_by,
+      fcap.updated_by,
+      fcap.created_at,
+      fcap.updated_at
+     FROM ((form_c_act_plans fcap
+       LEFT JOIN subtypes spl ON ((fcap.plan_type_id = spl.id)))
+       LEFT JOIN subtypes spt ON ((fcap.product_type_id = spt.id)));
   SQL
 end
