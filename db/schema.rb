@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_04_025511) do
+ActiveRecord::Schema.define(version: 2021_08_04_034406) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1722,6 +1722,8 @@ ActiveRecord::Schema.define(version: 2021_08_04_025511) do
     t.bigint "updated_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.date "sa_start_date"
+    t.date "sa_end_date"
     t.index ["call_id"], name: "index_schedule_activities_on_call_id"
     t.index ["created_by"], name: "index_schedule_activities_on_created_by"
     t.index ["updated_by"], name: "index_schedule_activities_on_updated_by"
