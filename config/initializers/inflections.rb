@@ -19,4 +19,5 @@ ActiveSupport::Inflector.inflections do |inflect|
   inflect.irregular 'axis', 'axes'
   inflect.irregular 'software', 'software'
   inflect.irregular 'criterion', 'criteria'
+  inflect.irregular 'procedure', 'procedures'
 end

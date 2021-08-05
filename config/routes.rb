@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  
+
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root to: "health#health"
   get "/api" => redirect("/api/v1/apidocs/")
@@ -239,6 +241,19 @@ Rails.application.routes.draw do
         resources :chapters, only: [:index, :show, :create, :update]
         resources :documents, only: [:index, :show, :create, :update]
       end
+
+      #rutas OTRI
+      resources :procedures, only: [:index, :show, :update, :create]
+      resources :professional_roles, only: [:index, :show, :update, :create]
+      resources :task_models, only: [:index, :show, :update, :create]
+      resources :task_models, only: [:index, :show, :update, :create] do
+        resources :next_tasks, only: [:index, :create]
+        resources :task_attributes, only: [:index, :create]
+        resources :read_attributes, only: [:index, :create]
+      end
+      resources :next_tasks, only:  [:show, :update]
+      resources :task_attributes, only: [:show, :update]
+      resources :read_attributes, only: [:show, :update]
     end
   end
 end

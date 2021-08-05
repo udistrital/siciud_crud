@@ -1318,6 +1318,19 @@ ActiveRecord::Schema.define(version: 2021_07_30_203650) do
     t.index ["updated_by"], name: "index_new_scientific_records_on_updated_by"
   end
 
+  create_table "next_tasks", force: :cascade do |t|
+    t.bigint "actual_task_id"
+    t.bigint "following_task_id"
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["actual_task_id"], name: "index_next_tasks_on_actual_task_id"
+    t.index ["created_by"], name: "index_next_tasks_on_created_by"
+    t.index ["following_task_id"], name: "index_next_tasks_on_following_task_id"
+    t.index ["updated_by"], name: "index_next_tasks_on_updated_by"
+  end
+
   create_table "nutraceutical_products", force: :cascade do |t|
     t.string "name"
     t.date "date_of_obtaining"
@@ -1480,6 +1493,26 @@ ActiveRecord::Schema.define(version: 2021_07_30_203650) do
     t.index ["updated_by"], name: "index_plant_ind_prototypes_on_updated_by"
   end
 
+  create_table "procedures", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.index ["created_by"], name: "index_procedures_on_created_by"
+    t.index ["updated_by"], name: "index_procedures_on_updated_by"
+  end
+
+  create_table "professional_roles", force: :cascade do |t|
+    t.string "name"
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_professional_roles_on_created_by"
+    t.index ["updated_by"], name: "index_professional_roles_on_updated_by"
+  end
+
   create_table "protocol_acts", force: :cascade do |t|
     t.string "title"
     t.date "date_of_publication"
@@ -1541,6 +1574,19 @@ ActiveRecord::Schema.define(version: 2021_07_30_203650) do
     t.index ["product_type_id"], name: "index_publications_on_product_type_id"
     t.index ["research_group_id"], name: "index_publications_on_research_group_id"
     t.index ["updated_by"], name: "index_publications_on_updated_by"
+
+  create_table "read_attributes", force: :cascade do |t|
+    t.bigint "task_attribute_id"
+    t.bigint "task_model_id"
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_read_attributes_on_created_by"
+    t.index ["updated_by"], name: "index_read_attributes_on_updated_by"
+    t.index ["task_attribute_id"], name: "index_read_attributes_on_task_attribute_id"
+    t.index ["task_model_id"], name: "index_read_attributes_on_task_model_id"
+    t.index ["updated_by"], name: "index_read_attributes_on_updated_by"
   end
 
   create_table "regulations", force: :cascade do |t|
@@ -1863,6 +1909,34 @@ ActiveRecord::Schema.define(version: 2021_07_30_203650) do
     t.index ["parent_id"], name: "index_subtypes_on_parent_id"
     t.index ["type_id"], name: "index_subtypes_on_type_id"
     t.index ["updated_by"], name: "index_subtypes_on_updated_by"
+  end
+
+  create_table "task_attributes", force: :cascade do |t|
+    t.bigint "attribute_sub_type_id"
+    t.bigint "task_model_id"
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["attribute_sub_type_id"], name: "index_task_attributes_on_attribute_sub_type_id"
+    t.index ["created_by"], name: "index_task_attributes_on_created_by"
+    t.index ["task_model_id"], name: "index_task_attributes_on_task_model_id"
+    t.index ["updated_by"], name: "index_task_attributes_on_updated_by"
+  end
+
+  create_table "task_models", force: :cascade do |t|
+    t.string "name"
+    t.integer "duration"
+    t.bigint "professional_role_id"
+    t.bigint "procedure_id"
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_task_models_on_created_by"
+    t.index ["procedure_id"], name: "index_task_models_on_procedure_id"
+    t.index ["professional_role_id"], name: "index_task_models_on_professional_role_id"
+    t.index ["updated_by"], name: "index_task_models_on_updated_by"
   end
 
   create_table "technical_concepts", force: :cascade do |t|
@@ -2353,6 +2427,10 @@ ActiveRecord::Schema.define(version: 2021_07_30_203650) do
   add_foreign_key "new_scientific_records", "subtypes", column: "category_id"
   add_foreign_key "new_scientific_records", "users", column: "created_by"
   add_foreign_key "new_scientific_records", "users", column: "updated_by"
+  add_foreign_key "next_tasks", "task_models", column: "actual_task_id"
+  add_foreign_key "next_tasks", "task_models", column: "following_task_id"
+  add_foreign_key "next_tasks", "users", column: "created_by"
+  add_foreign_key "next_tasks", "users", column: "updated_by"
   add_foreign_key "nutraceutical_products", "colciencias_calls"
   add_foreign_key "nutraceutical_products", "geo_cities"
   add_foreign_key "nutraceutical_products", "geo_countries"
@@ -2394,6 +2472,10 @@ ActiveRecord::Schema.define(version: 2021_07_30_203650) do
   add_foreign_key "plant_ind_prototypes", "subtypes", column: "plt_type_id"
   add_foreign_key "plant_ind_prototypes", "users", column: "created_by"
   add_foreign_key "plant_ind_prototypes", "users", column: "updated_by"
+  add_foreign_key "procedures", "users", column: "created_by"
+  add_foreign_key "procedures", "users", column: "updated_by"
+  add_foreign_key "professional_roles", "users", column: "created_by"
+  add_foreign_key "professional_roles", "users", column: "updated_by"
   add_foreign_key "protocol_acts", "colciencias_calls"
   add_foreign_key "protocol_acts", "geo_cities"
   add_foreign_key "protocol_acts", "geo_countries"
@@ -2413,6 +2495,10 @@ ActiveRecord::Schema.define(version: 2021_07_30_203650) do
   add_foreign_key "publications", "subtypes", column: "product_type_id"
   add_foreign_key "publications", "users", column: "created_by"
   add_foreign_key "publications", "users", column: "updated_by"
+  add_foreign_key "read_attributes", "task_attributes"
+  add_foreign_key "read_attributes", "task_models"
+  add_foreign_key "read_attributes", "users", column: "created_by"
+  add_foreign_key "read_attributes", "users", column: "updated_by"
   add_foreign_key "regulations", "colciencias_calls"
   add_foreign_key "regulations", "geo_cities"
   add_foreign_key "regulations", "geo_countries"
@@ -2495,6 +2581,14 @@ ActiveRecord::Schema.define(version: 2021_07_30_203650) do
   add_foreign_key "subtypes", "types"
   add_foreign_key "subtypes", "users", column: "created_by"
   add_foreign_key "subtypes", "users", column: "updated_by"
+  add_foreign_key "task_attributes", "subtypes", column: "attribute_sub_type_id"
+  add_foreign_key "task_attributes", "task_models"
+  add_foreign_key "task_attributes", "users", column: "created_by"
+  add_foreign_key "task_attributes", "users", column: "updated_by"
+  add_foreign_key "task_models", "procedures"
+  add_foreign_key "task_models", "professional_roles"
+  add_foreign_key "task_models", "users", column: "created_by"
+  add_foreign_key "task_models", "users", column: "updated_by"
   add_foreign_key "technical_concepts", "colciencias_calls"
   add_foreign_key "technical_concepts", "geo_cities"
   add_foreign_key "technical_concepts", "geo_countries"
