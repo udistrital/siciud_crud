@@ -1,8 +1,8 @@
 class FormAActPlanSerializer < AbstractActionPlanSerializer
   attributes :id, :action_plan_id, :product_type_id, :product_type_name,
              :goal, :advanced_total, :order, :plan_type_id, :plan_type_name,
-             :indicator_id, :indicator_description, :indicator_product_type_id,
-             :indicator_product_type_name,
+             :indicator_id, :indicator_description, :indicator_subtype_id,
+             :indicator_subtype_name,
              :active, :created_by, :updated_by, :created_at, :updated_at
 
   def indicator_description
@@ -12,19 +12,19 @@ class FormAActPlanSerializer < AbstractActionPlanSerializer
     end
   end
 
-  def indicator_product_type_id
+  def indicator_subtype_id
     indicator = self.object.indicator
     if indicator
-      indicator.product_type_id
+      indicator.subtype_id
     end
   end
 
-  def indicator_product_type_name
+  def indicator_subtype_name
     indicator = self.object.indicator
     if indicator
-      product_type = indicator.product_type
-      if product_type
-        product_type.st_name
+      subtype = indicator.subtype
+      if subtype
+        subtype.st_name
       end
     end
   end
