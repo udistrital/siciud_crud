@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :knwl_plans
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root to: "health#health"
   get "/api" => redirect("/api/v1/apidocs/")
@@ -36,12 +37,12 @@ Rails.application.routes.draw do
         resources :form_a_act_plans, only: [:index, :create, :update]
         resources :form_b_act_plans, only: [:index, :create, :update]
         resources :form_c_act_plans, only: [:index, :create, :update]
-        resources :form_d_act_plans, only: [:index, :create]
+        resources :form_d_act_plans, only: [:index, :create, :update]
       end
       resources :form_a_act_plans, only: [:show]
       resources :form_b_act_plans, only: [:show]
       resources :form_c_act_plans, only: [:show]
-      resources :form_d_act_plans, only: [:show, :update]
+      resources :form_d_act_plans, only: [:show]
 
       # Enpoint CRUD de los grupos de investigacion
       resources :research_group, only: [:index, :show, :create, :update], path: 'research_units' do

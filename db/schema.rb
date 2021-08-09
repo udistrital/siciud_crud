@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_04_034406) do
+ActiveRecord::Schema.define(version: 2021_08_09_150657) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1173,6 +1173,21 @@ ActiveRecord::Schema.define(version: 2021_08_04_034406) do
     t.index ["updated_by"], name: "index_knowledge_networks_on_updated_by"
   end
 
+  create_table "knwl_plans", force: :cascade do |t|
+    t.string "knwl_area_type"
+    t.bigint "knwl_area_id"
+    t.bigint "form_d_act_plan_id"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_knwl_plans_on_created_by"
+    t.index ["form_d_act_plan_id"], name: "index_knwl_plans_on_form_d_act_plan_id"
+    t.index ["knwl_area_type", "knwl_area_id"], name: "index_knwl_plans_on_knwl_area_type_and_knwl_area_id"
+    t.index ["updated_by"], name: "index_knwl_plans_on_updated_by"
+  end
+
   create_table "license_agreements", force: :cascade do |t|
     t.string "work_name"
     t.date "license_grant_date"
@@ -2313,6 +2328,9 @@ ActiveRecord::Schema.define(version: 2021_08_04_034406) do
   add_foreign_key "knowledge_networks", "subtypes", column: "category_id"
   add_foreign_key "knowledge_networks", "users", column: "created_by"
   add_foreign_key "knowledge_networks", "users", column: "updated_by"
+  add_foreign_key "knwl_plans", "form_d_act_plans"
+  add_foreign_key "knwl_plans", "users", column: "created_by"
+  add_foreign_key "knwl_plans", "users", column: "updated_by"
   add_foreign_key "license_agreements", "colciencias_calls"
   add_foreign_key "license_agreements", "geo_cities"
   add_foreign_key "license_agreements", "geo_cities", column: "contract_geo_city_id"
@@ -4397,19 +4415,6 @@ ActiveRecord::Schema.define(version: 2021_08_04_034406) do
        LEFT JOIN subtypes sgs ON ((sgs.id = fbap.goal_state_id)))
        LEFT JOIN subtypes splt ON ((fbap.plan_type_id = splt.id)));
   SQL
-  create_view "complete_indicators", sql_definition: <<-SQL
-      SELECT i.id,
-      i.subtype_id,
-      sin.st_name AS subtype_name,
-      i.ind_description,
-      i.active,
-      i.created_by,
-      i.updated_by,
-      i.created_at,
-      i.updated_at
-     FROM (indicators i
-       LEFT JOIN subtypes sin ON ((sin.id = i.subtype_id)));
-  SQL
   create_view "complete_call_items", sql_definition: <<-SQL
       SELECT ci.id,
       ci.call_id,
@@ -4444,5 +4449,21 @@ ActiveRecord::Schema.define(version: 2021_08_04_034406) do
      FROM ((form_c_act_plans fcap
        LEFT JOIN subtypes spl ON ((fcap.plan_type_id = spl.id)))
        LEFT JOIN subtypes spt ON ((fcap.product_type_id = spt.id)));
+  SQL
+  create_view "complete_indicators", sql_definition: <<-SQL
+      SELECT i.id,
+      i.subtype_id,
+      sin.st_name AS subtype_name,
+      sin.type_id,
+      t.t_name AS type_name,
+      i.ind_description,
+      i.active,
+      i.created_by,
+      i.updated_by,
+      i.created_at,
+      i.updated_at
+     FROM ((indicators i
+       LEFT JOIN subtypes sin ON ((sin.id = i.subtype_id)))
+       LEFT JOIN types t ON ((sin.type_id = t.id)));
   SQL
 end
