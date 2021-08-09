@@ -66,6 +66,13 @@ module Swagger::IndicatorSchema
           property :subtype_name do
             key :type, :string
           end
+          property :type_id do
+            key :type, :integer
+            key :format, :int64
+          end
+          property :type_name do
+            key :type, :string
+          end
           property :created_by do
             key :type, :integer
             key :format, :int64

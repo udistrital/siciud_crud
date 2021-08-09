@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_05_042741) do
+ActiveRecord::Schema.define(version: 2021_08_09_150657) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -4415,19 +4415,6 @@ ActiveRecord::Schema.define(version: 2021_08_05_042741) do
        LEFT JOIN subtypes sgs ON ((sgs.id = fbap.goal_state_id)))
        LEFT JOIN subtypes splt ON ((fbap.plan_type_id = splt.id)));
   SQL
-  create_view "complete_indicators", sql_definition: <<-SQL
-      SELECT i.id,
-      i.subtype_id,
-      sin.st_name AS subtype_name,
-      i.ind_description,
-      i.active,
-      i.created_by,
-      i.updated_by,
-      i.created_at,
-      i.updated_at
-     FROM (indicators i
-       LEFT JOIN subtypes sin ON ((sin.id = i.subtype_id)));
-  SQL
   create_view "complete_call_items", sql_definition: <<-SQL
       SELECT ci.id,
       ci.call_id,
@@ -4462,5 +4449,21 @@ ActiveRecord::Schema.define(version: 2021_08_05_042741) do
      FROM ((form_c_act_plans fcap
        LEFT JOIN subtypes spl ON ((fcap.plan_type_id = spl.id)))
        LEFT JOIN subtypes spt ON ((fcap.product_type_id = spt.id)));
+  SQL
+  create_view "complete_indicators", sql_definition: <<-SQL
+      SELECT i.id,
+      i.subtype_id,
+      sin.st_name AS subtype_name,
+      sin.type_id,
+      t.t_name AS type_name,
+      i.ind_description,
+      i.active,
+      i.created_by,
+      i.updated_by,
+      i.created_at,
+      i.updated_at
+     FROM ((indicators i
+       LEFT JOIN subtypes sin ON ((sin.id = i.subtype_id)))
+       LEFT JOIN types t ON ((sin.type_id = t.id)));
   SQL
 end
