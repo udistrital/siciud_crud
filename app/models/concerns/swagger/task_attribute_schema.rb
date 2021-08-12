@@ -56,6 +56,10 @@ module Swagger::TaskAttributeSchema
                         key :type, :integer
                         key :format, :int64
                     end
+                    property :active do
+                        key :type, :boolean
+                        key :default, true
+                    end
                     property :task_model_id do
                         key :type, :integer
                         key :format, :int64

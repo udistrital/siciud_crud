@@ -2,7 +2,7 @@ module Api
   module V1
     class ProfessionalRolesController < ApplicationController
       include Swagger::ProfessionalRoleApi
-      before_action :set_professional_role, only: [:show, :update]
+      before_action :set_professional_role, only: [:show, :update, :change_active]
 
       # GET /professional_roles
       def index
@@ -36,6 +36,15 @@ module Api
         end
       end
 
+      # PUT /professional_roles/:id/active
+      def change_active
+        if @professional_role.update(professional_role_params_to_deactivate)
+          render json: @professional_role
+        else
+          render json: @professional_role.errors, status: :unprocessable_entity
+        end
+      end
+
       private
         # Use callbacks to share common setup or constraints between actions.
         def set_professional_role
@@ -48,6 +57,9 @@ module Api
         end
         def professional_role_params_update
           params.require(:professional_role).permit(:name, :updated_by)
+        end
+        def professional_role_params_to_deactivate
+          params.require(:professional_role).permit(:active, :updated_by)
         end
     end
   end

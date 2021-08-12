@@ -132,5 +132,50 @@ module Swagger::TaskModelApi
           end
         end
       end
+
+      swagger_path '/task_models/{id}/active' do
+        operation :put do
+          key :summary, 'Activate or deactivate a Task model by ID'
+          key :description, 'Returns the activated/deactivated task model by id'
+          key :operationId, :change_active_task_model
+          key :produces, ['application/json',]
+          key :tags, ['TaskModels']
+  
+          parameter name: :id do
+            key :in, :path
+            key :description, 'ID of Task model to fetch'
+            key :required, true
+            key :type, :integer
+            key :format, :int64
+          end
+  
+          parameter name: :task_model do
+            key :in, :body
+            key :description, 'Task model to update'
+            key :required, true
+            schema do
+              property :task_model do
+                key :'$ref', :ChangeActive
+              end
+            end
+          end
+  
+          response 200 do
+            key :description, 'procedure response'
+            schema do
+              key :'$ref', :TaskModelOutput
+            end
+          end
+          response 422 do
+            key :description, 'Unprocessable Entity'
+            schema do
+              key :'$ref', :ErrorUnprocessableEntity
+            end
+          end
+          response :default do
+            key :description, 'Unexpected Error'
+          end
+        end
+      end
     end
   end

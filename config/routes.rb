@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   
 
+
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root to: "health#health"
   get "/api" => redirect("/api/v1/apidocs/")
@@ -244,16 +245,24 @@ Rails.application.routes.draw do
 
       #rutas OTRI
       resources :procedures, only: [:index, :show, :update, :create]
+      put "/procedures/:id/active", to: "procedures#change_active"
       resources :professional_roles, only: [:index, :show, :update, :create]
+      put "/professional_roles/:id/active", to: "professional_roles#change_active"
       resources :task_models, only: [:index, :show, :update, :create]
+      put "/task_models/:id/active", to: "task_models#change_active"
       resources :task_models, only: [:index, :show, :update, :create] do
         resources :next_tasks, only: [:index, :create]
         resources :task_attributes, only: [:index, :create]
         resources :read_attributes, only: [:index, :create]
       end
       resources :next_tasks, only:  [:show, :update]
+      put "/next_tasks/:id/active", to: "next_tasks#change_active"
       resources :task_attributes, only: [:show, :update]
+      put "/task_attributes/:id/active", to: "task_attributes#change_active"
       resources :read_attributes, only: [:show, :update]
+      put "/read_attributes/:id/active", to: "read_attributes#change_active"
+      resources :otri_professionals, only: [:index, :show, :update, :create]
+      put "/otri_professionals/:id/active", to: "otri_professionals#change_active"
     end
   end
 end

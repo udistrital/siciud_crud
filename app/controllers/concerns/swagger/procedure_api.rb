@@ -78,6 +78,51 @@ module Swagger::ProcedureApi
       end
     end
 
+    swagger_path '/procedures/{id}/active' do
+      operation :put do
+        key :summary, 'Activate or deactivate a Procedure by ID'
+        key :description, 'Returns the activated/deactivated procedure by id'
+        key :operationId, :change_active_procedure
+        key :produces, ['application/json',]
+        key :tags, ['Procedures']
+
+        parameter name: :id do
+          key :in, :path
+          key :description, 'ID of Procedure to fetch'
+          key :required, true
+          key :type, :integer
+          key :format, :int64
+        end
+
+        parameter name: :procedure do
+          key :in, :body
+          key :description, 'Procedure to update'
+          key :required, true
+          schema do
+            property :procedure do
+              key :'$ref', :ChangeActive
+            end
+          end
+        end
+
+        response 200 do
+          key :description, 'procedure response'
+          schema do
+            key :'$ref', :ProcedureOutput
+          end
+        end
+        response 422 do
+          key :description, 'Unprocessable Entity'
+          schema do
+            key :'$ref', :ErrorUnprocessableEntity
+          end
+        end
+        response :default do
+          key :description, 'Unexpected Error'
+        end
+      end
+    end
+
     swagger_path '/procedures/' do
       operation :get do
         key :summary, 'Get all Procedures'

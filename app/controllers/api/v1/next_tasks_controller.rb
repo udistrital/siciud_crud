@@ -3,7 +3,7 @@ module Api
     class NextTasksController < ApplicationController
       include Swagger::NextTaskApi
       before_action :set_task_model, only: [:index, :create]
-      before_action :set_next_task, only: [:show, :update]
+      before_action :set_next_task, only: [:show, :update, :change_active]
 
       # GET task_models/{task_model_id}/next_tasks
       def index
@@ -36,6 +36,16 @@ module Api
           render json: @next_task.errors, status: :unprocessable_entity
         end
       end
+
+      # PUT /next_tasks/:id/active
+      def change_active
+        if @next_task.update(next_task_params_to_deactivate)
+          render json: @next_task
+        else
+          render json: @next_task.errors, status: :unprocessable_entity
+        end
+      end
+
       private
         # Use callbacks to share common setup or constraints between actions.
         def set_next_task
@@ -49,7 +59,9 @@ module Api
         def next_task_params_update
           params.require(:next_task).permit( :following_task_id, :updated_by)
         end
-
+        def next_task_params_to_deactivate
+          params.require(:next_task).permit(:active, :updated_by)
+        end
          # Use callbacks to share common setup or constraints between actions.
          def set_task_model
           @actual_task_model = TaskModel.find(params[:task_model_id])

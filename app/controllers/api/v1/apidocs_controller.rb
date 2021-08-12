@@ -111,6 +111,7 @@ module Api
         NextTasksController,
         TaskAttributesController,
         ReadAttributesController,
+        OtriProfessionalsController,
 
         Call,
         CallDocument,
@@ -200,6 +201,7 @@ module Api
         NextTask,
         TaskAttribute,
         ReadAttribute,
+        OtriProfessional,
 
         ApplicationRecord,
         self,

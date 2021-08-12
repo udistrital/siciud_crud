@@ -1,28 +1,28 @@
-module Swagger::ProfessionalRoleApi
+module Swagger::OtriProfessionalApi
     extend ActiveSupport::Concern
     include Swagger::Blocks
   
     included do
-      swagger_path '/professional_roles/{id}' do
+      swagger_path '/otri_professionals/{id}' do
         operation :get do
-          key :summary, 'Get a Professional_role by ID'
-          key :description, 'Returns a single professional role'
-          key :operationId, :get_professional_role_by_id
+          key :summary, 'Get a Otri_professional by ID'
+          key :description, 'Returns a single otri professional'
+          key :operationId, :get_otri_professional_by_id
           key :produces, ['application/json',]
-          key :tags, ['ProfessionalRoles']
+          key :tags, ['OtriProfessionals']
   
           parameter name: :id do
             key :in, :path
-            key :description, 'ID of profesional role to fetch'
+            key :description, 'ID of otri professional to fetch'
             key :required, true
             key :type, :integer
             key :format, :int64
           end
   
           response 200 do
-            key :description, 'profesional role response'
+            key :description, 'otri professional response'
             schema do
-              key :'$ref', :ProfessionalRoleOutput
+              key :'$ref', :OtriProfessionalOutput
             end
           end
           response 404 do
@@ -37,33 +37,33 @@ module Swagger::ProfessionalRoleApi
         end
   
         operation :put do
-          key :summary, 'Update Professional_role by ID'
-          key :description, 'Returns the updated Professional role'
-          key :operationId, :update_professional_role
+          key :summary, 'Update Otri_professional by ID'
+          key :description, 'Returns the updated Otri professional'
+          key :operationId, :update_otri_professional
           key :produces, ['application/json',]
-          key :tags, ['ProfessionalRoles']
+          key :tags, ['OtriProfessionals']
   
           parameter name: :id do
             key :in, :path
-            key :description, 'ID of Professional role to fetch'
+            key :description, 'ID of Otri professional to fetch'
             key :required, true
             key :type, :integer
             key :format, :int64
           end
   
-          parameter name: :professional_role do
+          parameter name: :otri_professional do
             key :in, :body
-            key :description, 'Professional role to update'
+            key :description, 'Otri professional to update'
             key :required, true
             schema do
-              key :'$ref', :ProfessionalRoleInputPut
+              key :'$ref', :OtriProfessionalInputPut
             end
           end
   
           response 200 do
-            key :description, 'professional role response'
+            key :description, 'otri professional response'
             schema do
-              key :'$ref', :ProfessionalRoleOutput
+              key :'$ref', :OtriProfessionalOutput
             end
           end
           response 422 do
@@ -78,20 +78,20 @@ module Swagger::ProfessionalRoleApi
         end
       end
   
-      swagger_path '/professional_roles/' do
+      swagger_path '/otri_professionals/' do
         operation :get do
-          key :summary, 'Get all Professional_roles'
-          key :description, 'Returns all professional roles'
-          key :operationId, :get_professional_roles
+          key :summary, 'Get all Otri_professionals'
+          key :description, 'Returns all otri professionals'
+          key :operationId, :get_otri_professionals
           key :produces, ['application/json',]
-          key :tags, ['ProfessionalRoles']
+          key :tags, ['OtriProfessionals']
   
           response 200 do
-            key :description, 'professional role response'
+            key :description, 'otri professional response'
             schema do
               key :type, :array
               items do
-                key :'$ref', :ProfessionalRoleOutput
+                key :'$ref', :OtriProfessionalOutput
               end
             end
           end
@@ -100,25 +100,25 @@ module Swagger::ProfessionalRoleApi
           end
         end
         operation :post do
-          key :summary, 'Create a new Professional_role'
-          key :description, 'Returns the created Professional role'
-          key :operationId, :create_professional_role
+          key :summary, 'Create a new Otri_professional'
+          key :description, 'Returns the created otri professional'
+          key :operationId, :create_otri_professional
           key :produces, ['application/json',]
-          key :tags, ['ProfessionalRoles']
+          key :tags, ['OtriProfessionals']
   
-          parameter name: :professional_role do
+          parameter name: :otri_professional do
             key :in, :body
-            key :description, 'Professional role to register'
+            key :description, 'Otri professional to register'
             key :required, true
             schema do
-              key :'$ref', :ProfessionalRoleInputPost
+              key :'$ref', :OtriProfessionalInputPost
             end
           end
   
           response 201 do
-            key :description, 'professional role response'
+            key :description, 'otri professional response'
             schema do
-              key :'$ref', :ProfessionalRoleOutput
+              key :'$ref', :OtriProfessionalOutput
             end
           end
           response 422 do
@@ -133,37 +133,37 @@ module Swagger::ProfessionalRoleApi
         end
       end
 
-      swagger_path '/professional_roles/{id}/active' do
+      swagger_path '/otri_professionals/{id}/active' do
         operation :put do
-          key :summary, 'Activate or deactivate a Professional role by ID'
-          key :description, 'Returns the activated/deactivated professional role by id'
-          key :operationId, :change_active_professional_role
+          key :summary, 'Activate or deactivate a Otri_professional by ID'
+          key :description, 'Returns the activated/deactivated otri professional by id'
+          key :operationId, :change_active_otri_professional
           key :produces, ['application/json',]
-          key :tags, ['ProfessionalRoles']
+          key :tags, ['OtriProfessionals']
   
           parameter name: :id do
             key :in, :path
-            key :description, 'ID of Professional role to fetch'
+            key :description, 'ID of Otri professional to fetch'
             key :required, true
             key :type, :integer
             key :format, :int64
           end
   
-          parameter name: :professional_role do
+          parameter name: :otri_professional do
             key :in, :body
-            key :description, 'Professional role to update'
+            key :description, 'Otri professional to update'
             key :required, true
             schema do
-              property :professional_role do
+              property :otri_professional do
                 key :'$ref', :ChangeActive
               end
             end
           end
   
           response 200 do
-            key :description, 'professional role response'
+            key :description, 'otri professional response'
             schema do
-              key :'$ref', :ProfessionalRoleOutput
+              key :'$ref', :OtriProfessionalOutput
             end
           end
           response 422 do

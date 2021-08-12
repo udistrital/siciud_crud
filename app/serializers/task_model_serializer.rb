@@ -1,7 +1,7 @@
 class TaskModelSerializer < ActiveModel::Serializer
   attributes  :id, :name, :duration, :procedure_name, :procedure_id, 
               :professional_role_id, :professional_role_name, :created_by, 
-              :updated_by , :created_at, :updated_at
+              :updated_by , :created_at, :updated_at, :active
 
 
   def procedure_name

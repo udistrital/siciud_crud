@@ -149,5 +149,50 @@ module Swagger::ReadAttributeApi
           end
         end
       end
+
+      swagger_path '/read_attributes/{id}/active' do
+        operation :put do
+          key :summary, 'Activate or deactivate a Read attributes by ID'
+          key :description, 'Returns the activated/deactivated read attribute by id'
+          key :operationId, :change_active_read_attribute
+          key :produces, ['application/json',]
+          key :tags, ['ReadAttributes']
+  
+          parameter name: :id do
+            key :in, :path
+            key :description, 'ID of Read attribute to fetch'
+            key :required, true
+            key :type, :integer
+            key :format, :int64
+          end
+  
+          parameter name: :read_attribute do
+            key :in, :body
+            key :description, 'Read attribute to update'
+            key :required, true
+            schema do
+              property :read_attribute do
+                key :'$ref', :ChangeActive
+              end
+            end
+          end
+  
+          response 200 do
+            key :description, 'read attribute response'
+            schema do
+              key :'$ref', :ReadAttributeOutput
+            end
+          end
+          response 422 do
+            key :description, 'Unprocessable Entity'
+            schema do
+              key :'$ref', :ErrorUnprocessableEntity
+            end
+          end
+          response :default do
+            key :description, 'Unexpected Error'
+          end
+        end
+      end
     end
   end

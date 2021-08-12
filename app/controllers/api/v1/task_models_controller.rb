@@ -2,7 +2,7 @@ module Api
   module V1    
     class TaskModelsController < ApplicationController
       include Swagger::TaskModelApi
-      before_action :set_task_model, only: [:show, :update]
+      before_action :set_task_model, only: [:show, :update, :change_active]
 
       # GET /task_models
       def index
@@ -36,6 +36,15 @@ module Api
         end
       end
 
+      # PUT /task_models/:id/active
+      def change_active
+        if @task_model.update(task_model_params_to_deactivate)
+          render json: @task_model
+        else
+          render json: @task_model.errors, status: :unprocessable_entity
+        end
+      end
+
       private
         # Use callbacks to share common setup or constraints between actions.
         def set_task_model
@@ -48,6 +57,9 @@ module Api
         end
         def task_model_params_update
           params.require(:task_model).permit(:name, :duration, :professional_role_id, :procedure_id, :updated_by)
+        end
+        def task_model_params_to_deactivate
+          params.require(:task_model).permit(:active, :updated_by)
         end
     end
   end

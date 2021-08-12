@@ -3,7 +3,7 @@ module Api
     class TaskAttributesController < ApplicationController
       include Swagger::TaskAttributeApi
       before_action :set_task_model, only: [:index, :create]
-      before_action :set_task_attribute, only: [:show, :update]
+      before_action :set_task_attribute, only: [:show, :update, :change_active]
 
       # GET task_models/{task_model_id}/task_attributes
       def index
@@ -37,6 +37,15 @@ module Api
         end
       end
 
+      # PUT /task_attributes/:id/active
+      def change_active
+        if @task_attribute.update(task_attribute_params_to_deactivate)
+          render json: @task_attribute
+        else
+          render json: @task_attribute.errors, status: :unprocessable_entity
+        end
+      end
+
       private
         # Use callbacks to share common setup or constraints between actions.
         def set_task_attribute
@@ -53,6 +62,9 @@ module Api
         end
         def task_attribute_params_update
           params.require(:task_attribute).permit(:attribute_sub_type_id, :task_model_id, :updated_by)
+        end
+        def task_attribute_params_to_deactivate
+          params.require(:task_attribute).permit(:active, :updated_by)
         end
     end
   end

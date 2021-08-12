@@ -60,6 +60,10 @@ module Swagger::ProfessionalRoleSchema
             key :type, :integer
             key :format, :int64
           end
+          property :active do
+            key :type, :boolean
+            key :default, true
+          end
           property :updated_by do
             key :type, :integer
             key :format, :int64

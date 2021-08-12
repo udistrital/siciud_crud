@@ -2,7 +2,7 @@ module Api
   module V1
     class ProceduresController < ApplicationController
       include Swagger::ProcedureApi
-      before_action :set_procedure, only: [:show, :update]
+      before_action :set_procedure, only: [:show, :update, :change_active]
 
       # Lista los procedimientos a los cuales se le pueden asignar tareas en el model_task
       def index
@@ -35,12 +35,24 @@ module Api
         end
       end
 
+       # PUT /procedures/:id/active
+       def change_active
+        if @procedure.update(procedure_params_to_deactivate)
+          render json: @procedure
+        else
+          render json: @procedure.errors, status: :unprocessable_entity
+        end
+      end
+
       private
         def procedure_params_to_new
           params.require(:procedure).permit(:name, :created_by)
         end
         def procedure_params_to_update
           params.require(:procedure).permit(:name, :updated_by)
+        end
+        def procedure_params_to_deactivate
+          params.require(:procedure).permit(:active, :updated_by)
         end
         # Use callbacks to share common setup or constraints between actions.
         def set_procedure

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_30_203650) do
+ActiveRecord::Schema.define(version: 2021_08_11_220505) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -205,7 +205,7 @@ ActiveRecord::Schema.define(version: 2021_07_30_203650) do
   create_table "call_items", force: :cascade do |t|
     t.bigint "call_id"
     t.bigint "item_id"
-    t.decimal "ci_maximum_percentage", precision: 5, scale: 2
+    t.decimal "ci_maximum_percentage", precision: 6, scale: 3
     t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
@@ -1325,6 +1325,7 @@ ActiveRecord::Schema.define(version: 2021_07_30_203650) do
     t.bigint "updated_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "active", default: true
     t.index ["actual_task_id"], name: "index_next_tasks_on_actual_task_id"
     t.index ["created_by"], name: "index_next_tasks_on_created_by"
     t.index ["following_task_id"], name: "index_next_tasks_on_following_task_id"
@@ -1401,6 +1402,22 @@ ActiveRecord::Schema.define(version: 2021_07_30_203650) do
     t.index ["created_by"], name: "index_oecd_knowledge_subareas_on_created_by"
     t.index ["oecd_knowledge_area_id"], name: "index_oecd_knowledge_subareas_on_oecd_knowledge_area_id"
     t.index ["updated_by"], name: "index_oecd_knowledge_subareas_on_updated_by"
+  end
+
+  create_table "otri_professionals", force: :cascade do |t|
+    t.string "email"
+    t.string "phone"
+    t.bigint "user_id"
+    t.bigint "professional_role_id"
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.boolean "active"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_otri_professionals_on_created_by"
+    t.index ["professional_role_id"], name: "index_otri_professionals_on_professional_role_id"
+    t.index ["updated_by"], name: "index_otri_professionals_on_updated_by"
+    t.index ["user_id"], name: "index_otri_professionals_on_user_id"
   end
 
   create_table "papers", force: :cascade do |t|
@@ -1499,6 +1516,7 @@ ActiveRecord::Schema.define(version: 2021_07_30_203650) do
     t.datetime "updated_at", null: false
     t.bigint "created_by"
     t.bigint "updated_by"
+    t.boolean "active", default: true
     t.index ["created_by"], name: "index_procedures_on_created_by"
     t.index ["updated_by"], name: "index_procedures_on_updated_by"
   end
@@ -1509,6 +1527,7 @@ ActiveRecord::Schema.define(version: 2021_07_30_203650) do
     t.bigint "updated_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "active", default: true
     t.index ["created_by"], name: "index_professional_roles_on_created_by"
     t.index ["updated_by"], name: "index_professional_roles_on_updated_by"
   end
@@ -1574,6 +1593,7 @@ ActiveRecord::Schema.define(version: 2021_07_30_203650) do
     t.index ["product_type_id"], name: "index_publications_on_product_type_id"
     t.index ["research_group_id"], name: "index_publications_on_research_group_id"
     t.index ["updated_by"], name: "index_publications_on_updated_by"
+  end
 
   create_table "read_attributes", force: :cascade do |t|
     t.bigint "task_attribute_id"
@@ -1582,8 +1602,8 @@ ActiveRecord::Schema.define(version: 2021_07_30_203650) do
     t.bigint "updated_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "active", default: true
     t.index ["created_by"], name: "index_read_attributes_on_created_by"
-    t.index ["updated_by"], name: "index_read_attributes_on_updated_by"
     t.index ["task_attribute_id"], name: "index_read_attributes_on_task_attribute_id"
     t.index ["task_model_id"], name: "index_read_attributes_on_task_model_id"
     t.index ["updated_by"], name: "index_read_attributes_on_updated_by"
@@ -1918,6 +1938,7 @@ ActiveRecord::Schema.define(version: 2021_07_30_203650) do
     t.bigint "updated_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "active", default: true
     t.index ["attribute_sub_type_id"], name: "index_task_attributes_on_attribute_sub_type_id"
     t.index ["created_by"], name: "index_task_attributes_on_created_by"
     t.index ["task_model_id"], name: "index_task_attributes_on_task_model_id"
@@ -1933,6 +1954,7 @@ ActiveRecord::Schema.define(version: 2021_07_30_203650) do
     t.bigint "updated_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "active", default: true
     t.index ["created_by"], name: "index_task_models_on_created_by"
     t.index ["procedure_id"], name: "index_task_models_on_procedure_id"
     t.index ["professional_role_id"], name: "index_task_models_on_professional_role_id"
@@ -2447,6 +2469,10 @@ ActiveRecord::Schema.define(version: 2021_07_30_203650) do
   add_foreign_key "oecd_knowledge_subareas", "oecd_knowledge_areas"
   add_foreign_key "oecd_knowledge_subareas", "users", column: "created_by"
   add_foreign_key "oecd_knowledge_subareas", "users", column: "updated_by"
+  add_foreign_key "otri_professionals", "professional_roles"
+  add_foreign_key "otri_professionals", "users"
+  add_foreign_key "otri_professionals", "users", column: "created_by"
+  add_foreign_key "otri_professionals", "users", column: "updated_by"
   add_foreign_key "papers", "colciencias_calls"
   add_foreign_key "papers", "geo_cities"
   add_foreign_key "papers", "geo_countries"

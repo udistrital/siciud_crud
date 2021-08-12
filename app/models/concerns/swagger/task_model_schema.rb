@@ -74,6 +74,10 @@ module Swagger::TaskModelSchema
           property :professional_role_name do
             key :type, :string
           end
+          property :active do
+            key :type, :boolean
+            key :default, true
+          end
           property :created_by do
             key :type, :integer
             key :format, :int64

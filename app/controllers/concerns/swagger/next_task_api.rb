@@ -149,5 +149,50 @@ module Swagger::NextTaskApi
           end
         end
       end
+
+      swagger_path '/next_tasks/{id}/active' do
+        operation :put do
+          key :summary, 'Activate or deactivate a Next task by ID'
+          key :description, 'Returns the activated/deactivated next task by id'
+          key :operationId, :change_active_procedure
+          key :produces, ['application/json',]
+          key :tags, ['NextTasks']
+  
+          parameter name: :id do
+            key :in, :path
+            key :description, 'ID of Next task to fetch'
+            key :required, true
+            key :type, :integer
+            key :format, :int64
+          end
+  
+          parameter name: :next_task do
+            key :in, :body
+            key :description, 'Next task to update'
+            key :required, true
+            schema do
+              property :next_task do
+                key :'$ref', :ChangeActive
+              end
+            end
+          end
+  
+          response 200 do
+            key :description, 'next task response'
+            schema do
+              key :'$ref', :NextTaskOutput
+            end
+          end
+          response 422 do
+            key :description, 'Unprocessable Entity'
+            schema do
+              key :'$ref', :ErrorUnprocessableEntity
+            end
+          end
+          response :default do
+            key :description, 'Unexpected Error'
+          end
+        end
+      end
     end
   end

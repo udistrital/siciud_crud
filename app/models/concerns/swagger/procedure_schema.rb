@@ -56,6 +56,10 @@ module Swagger::ProcedureSchema
             key :type, :integer
             key :format, :int64
           end
+          property :active do
+            key :type, :boolean
+            key :default, true
+          end
           property :created_by do
             key :type, :integer
             key :format, :int64

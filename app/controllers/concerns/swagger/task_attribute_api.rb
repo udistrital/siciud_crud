@@ -149,5 +149,50 @@ module Swagger::TaskAttributeApi
           end
         end
       end
+
+      swagger_path '/task_attributes/{id}/active' do
+        operation :put do
+          key :summary, 'Activate or deactivate a Task attribute by ID'
+          key :description, 'Returns the activated/deactivated task attribute by id'
+          key :operationId, :change_active_task_attribute
+          key :produces, ['application/json',]
+          key :tags, ['TaskAttributes']
+  
+          parameter name: :id do
+            key :in, :path
+            key :description, 'ID of Task attribute to fetch'
+            key :required, true
+            key :type, :integer
+            key :format, :int64
+          end
+  
+          parameter name: :task_attribute do
+            key :in, :body
+            key :description, 'Task attribute to update'
+            key :required, true
+            schema do
+              property :task_attribute do
+                key :'$ref', :ChangeActive
+              end
+            end
+          end
+  
+          response 200 do
+            key :description, 'task attribute response'
+            schema do
+              key :'$ref', :TaskAttributeOutput
+            end
+          end
+          response 422 do
+            key :description, 'Unprocessable Entity'
+            schema do
+              key :'$ref', :ErrorUnprocessableEntity
+            end
+          end
+          response :default do
+            key :description, 'Unexpected Error'
+          end
+        end
+      end
     end
   end

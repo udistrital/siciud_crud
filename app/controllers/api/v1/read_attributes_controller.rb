@@ -3,7 +3,7 @@ module Api
     class ReadAttributesController < ApplicationController
       include Swagger::ReadAttributeApi
       before_action :set_task_model, only: [:index, :create]
-      before_action :set_read_attribute, only: [:show, :update]
+      before_action :set_read_attribute, only: [:show, :update, :change_active]
 
       # GET task_models/{task_model_id}/read_attributes
       def index
@@ -36,6 +36,15 @@ module Api
         end
       end
 
+      # PUT /task_models/:id/active
+      def change_active
+        if @read_attribute.update(read_attribute_params_to_deactivate)
+          render json: @read_attribute
+        else
+          render json: @read_attribute.errors, status: :unprocessable_entity
+        end
+      end
+
       private
         # Use callbacks to share common setup or constraints between actions.
         def set_read_attribute
@@ -51,6 +60,9 @@ module Api
         end
         def read_attribute_params_update
           params.require(:read_attribute).permit(:task_attribute_id,  :updated_by)
+        end
+        def read_attribute_params_to_deactivate
+          params.require(:read_attribute).permit(:active, :updated_by)
         end
     end
   end
