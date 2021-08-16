@@ -1,5 +1,4 @@
 class KnwlPlanSerializer < ActiveModel::Serializer
-  attributes :id, :active, :created_by, :updated_by
-  has_one :knwl_area
-  has_one :form_d_act_plan
+  attributes :id, :form_d_act_plan_id, :knwl_area_type, :knwl_area_id,
+             :active, :created_by, :updated_by, :created_at, :updated_at
 end

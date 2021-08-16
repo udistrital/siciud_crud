@@ -44,6 +44,8 @@ Rails.application.routes.draw do
       resources :form_c_act_plans, only: [:show]
       resources :form_d_act_plans, only: [:show]
 
+
+
       # Enpoint CRUD de los grupos de investigacion
       resources :research_group, only: [:index, :show, :create, :update], path: 'research_units' do
         resources :action_plans, only: [:index, :create]

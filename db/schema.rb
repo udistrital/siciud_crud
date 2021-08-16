@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_09_150657) do
+ActiveRecord::Schema.define(version: 2021_08_09_182618) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -4465,5 +4465,45 @@ ActiveRecord::Schema.define(version: 2021_08_09_150657) do
      FROM ((indicators i
        LEFT JOIN subtypes sin ON ((sin.id = i.subtype_id)))
        LEFT JOIN types t ON ((sin.type_id = t.id)));
+  SQL
+  create_view "complete_knwl_area_plan_oecds", sql_definition: <<-SQL
+      SELECT kp.id,
+      kp.form_d_act_plan_id,
+      kp.knwl_area_type,
+      kp.knwl_area_id,
+      od.name AS knwl_area_name,
+      oks.id AS knwl_area_parent_id,
+      oks.name AS knwl_area_parent_name,
+      oka.id AS knwl_area_grandparent_id,
+      oka.name AS knwl_area_grandparent_name,
+      kp.active,
+      kp.created_by,
+      kp.updated_by,
+      kp.created_at,
+      kp.updated_at
+     FROM (((knwl_plans kp
+       LEFT JOIN oecd_disciplines od ON ((kp.knwl_area_id = od.id)))
+       LEFT JOIN oecd_knowledge_subareas oks ON ((od.oecd_knowledge_subarea_id = oks.id)))
+       LEFT JOIN oecd_knowledge_areas oka ON ((oks.oecd_knowledge_area_id = oka.id)));
+  SQL
+  create_view "complete_knwl_area_plan_cines", sql_definition: <<-SQL
+      SELECT kp.id,
+      kp.form_d_act_plan_id,
+      kp.knwl_area_type,
+      kp.knwl_area_id,
+      cda.name AS knwl_area_name,
+      csa.id AS knwl_area_parent_id,
+      csa.name AS knwl_area_parent_name,
+      cba.id AS knwl_area_grandparent_id,
+      cba.name AS knwl_area_grandparent_name,
+      kp.active,
+      kp.created_by,
+      kp.updated_by,
+      kp.created_at,
+      kp.updated_at
+     FROM (((knwl_plans kp
+       LEFT JOIN cine_detailed_areas cda ON ((kp.knwl_area_id = cda.id)))
+       LEFT JOIN cine_specific_areas csa ON ((cda.cine_specific_area_id = csa.id)))
+       LEFT JOIN cine_broad_areas cba ON ((csa.cine_broad_area_id = cba.id)));
   SQL
 end
