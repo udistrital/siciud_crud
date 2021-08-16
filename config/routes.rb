@@ -1,7 +1,5 @@
 Rails.application.routes.draw do
   
-
-
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root to: "health#health"
   get "/api" => redirect("/api/v1/apidocs/")
@@ -263,6 +261,16 @@ Rails.application.routes.draw do
       put "/read_attributes/:id/active", to: "read_attributes#change_active"
       resources :otri_professionals, only: [:index, :show, :update, :create]
       put "/otri_professionals/:id/active", to: "otri_professionals#change_active"
+      resources :procedure_requests, only: [:index, :show, :update, :create] do
+        resources :technology_descriptions, only:[:index, :create]
+      end
+      put "/procedure_requests/:id/active", to: "procedure_requests#change_active"
+      resources :technology_descriptions, only:[:show, :update]
+      put "/technology_descriptions/:id/active", to: "technology_descriptions#change_active"
+
+      resources :request_has_procedures, only: [:index, :show, :create]
+      put "/request_has_procedures/:id/active", to: "request_has_procedures#change_active"
+
     end
   end
 end

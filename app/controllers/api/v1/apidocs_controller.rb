@@ -112,6 +112,9 @@ module Api
         TaskAttributesController,
         ReadAttributesController,
         OtriProfessionalsController,
+        ProcedureRequestsController,
+        RequestHasProceduresController,
+        TechnologyDescriptionsController,
 
         Call,
         CallDocument,
@@ -202,6 +205,9 @@ module Api
         TaskAttribute,
         ReadAttribute,
         OtriProfessional,
+        ProcedureRequest,
+        RequestHasProcedure,
+        TechnologyDescription,
 
         ApplicationRecord,
         self,

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_11_220505) do
+ActiveRecord::Schema.define(version: 2021_08_14_010856) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1411,7 +1411,7 @@ ActiveRecord::Schema.define(version: 2021_08_11_220505) do
     t.bigint "professional_role_id"
     t.bigint "created_by"
     t.bigint "updated_by"
-    t.boolean "active"
+    t.boolean "active", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["created_by"], name: "index_otri_professionals_on_created_by"
@@ -1508,6 +1508,17 @@ ActiveRecord::Schema.define(version: 2021_08_11_220505) do
     t.index ["plt_type_id"], name: "index_plant_ind_prototypes_on_plt_type_id"
     t.index ["research_group_id"], name: "index_plant_ind_prototypes_on_research_group_id"
     t.index ["updated_by"], name: "index_plant_ind_prototypes_on_updated_by"
+  end
+
+  create_table "procedure_requests", force: :cascade do |t|
+    t.text "approached_problem"
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.boolean "active", default: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_procedure_requests_on_created_by"
+    t.index ["updated_by"], name: "index_procedure_requests_on_updated_by"
   end
 
   create_table "procedures", force: :cascade do |t|
@@ -1665,6 +1676,20 @@ ActiveRecord::Schema.define(version: 2021_08_11_220505) do
     t.index ["product_type_id"], name: "index_reports_on_product_type_id"
     t.index ["research_group_id"], name: "index_reports_on_research_group_id"
     t.index ["updated_by"], name: "index_reports_on_updated_by"
+  end
+
+  create_table "request_has_procedures", force: :cascade do |t|
+    t.bigint "procedure_id"
+    t.bigint "procedure_request_id"
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.boolean "active", default: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_request_has_procedures_on_created_by"
+    t.index ["procedure_id"], name: "index_request_has_procedures_on_procedure_id"
+    t.index ["procedure_request_id"], name: "index_request_has_procedures_on_procedure_request_id"
+    t.index ["updated_by"], name: "index_request_has_procedures_on_updated_by"
   end
 
   create_table "research_creation_works", force: :cascade do |t|
@@ -1987,6 +2012,22 @@ ActiveRecord::Schema.define(version: 2021_08_11_220505) do
     t.index ["geo_state_id"], name: "index_technical_concepts_on_geo_state_id"
     t.index ["research_group_id"], name: "index_technical_concepts_on_research_group_id"
     t.index ["updated_by"], name: "index_technical_concepts_on_updated_by"
+  end
+
+  create_table "technology_descriptions", force: :cascade do |t|
+    t.string "denomination"
+    t.text "product_or_process_features"
+    t.string "artistic_representation"
+    t.string "key_words"
+    t.bigint "procedure_request_id"
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.boolean "active", default: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_technology_descriptions_on_created_by"
+    t.index ["procedure_request_id"], name: "index_technology_descriptions_on_procedure_request_id"
+    t.index ["updated_by"], name: "index_technology_descriptions_on_updated_by"
   end
 
   create_table "training_courses", force: :cascade do |t|
@@ -2498,6 +2539,8 @@ ActiveRecord::Schema.define(version: 2021_08_11_220505) do
   add_foreign_key "plant_ind_prototypes", "subtypes", column: "plt_type_id"
   add_foreign_key "plant_ind_prototypes", "users", column: "created_by"
   add_foreign_key "plant_ind_prototypes", "users", column: "updated_by"
+  add_foreign_key "procedure_requests", "users", column: "created_by"
+  add_foreign_key "procedure_requests", "users", column: "updated_by"
   add_foreign_key "procedures", "users", column: "created_by"
   add_foreign_key "procedures", "users", column: "updated_by"
   add_foreign_key "professional_roles", "users", column: "created_by"
@@ -2544,6 +2587,10 @@ ActiveRecord::Schema.define(version: 2021_08_11_220505) do
   add_foreign_key "reports", "subtypes", column: "product_type_id"
   add_foreign_key "reports", "users", column: "created_by"
   add_foreign_key "reports", "users", column: "updated_by"
+  add_foreign_key "request_has_procedures", "procedure_requests"
+  add_foreign_key "request_has_procedures", "procedures"
+  add_foreign_key "request_has_procedures", "users", column: "created_by"
+  add_foreign_key "request_has_procedures", "users", column: "updated_by"
   add_foreign_key "research_creation_works", "colciencias_calls"
   add_foreign_key "research_creation_works", "geo_cities"
   add_foreign_key "research_creation_works", "geo_countries"
@@ -2623,6 +2670,9 @@ ActiveRecord::Schema.define(version: 2021_08_11_220505) do
   add_foreign_key "technical_concepts", "subtypes", column: "category_id"
   add_foreign_key "technical_concepts", "users", column: "created_by"
   add_foreign_key "technical_concepts", "users", column: "updated_by"
+  add_foreign_key "technology_descriptions", "procedure_requests"
+  add_foreign_key "technology_descriptions", "users", column: "created_by"
+  add_foreign_key "technology_descriptions", "users", column: "updated_by"
   add_foreign_key "training_courses", "colciencias_calls"
   add_foreign_key "training_courses", "geo_cities"
   add_foreign_key "training_courses", "geo_countries"

@@ -7,7 +7,7 @@ class CreateOtriProfessionals < ActiveRecord::Migration[5.2]
       t.references :professional_role, foreign_key: true
       t.bigint :created_by
       t.bigint :updated_by
-      t.boolean :active
+      t.boolean :active, default: true
 
       t.timestamps
     end

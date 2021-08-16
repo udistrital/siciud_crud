@@ -1,28 +1,28 @@
-module Swagger::NextTaskApi
+module Swagger::ProcedureRequestApi
     extend ActiveSupport::Concern
     include Swagger::Blocks
   
     included do
-      swagger_path '/next_tasks/{id}' do
+      swagger_path '/procedure_requests/{id}' do
         operation :get do
-          key :summary, 'Get a Next Task by ID'
-          key :description, 'Returns a single Next Task'
-          key :operationId, :get_next_task_by_id
+          key :summary, 'Get a procedure_request by ID'
+          key :description, 'Returns a single Procedure request'
+          key :operationId, :get_procedure_request_by_id
           key :produces, ['application/json',]
-          key :tags, ['NextTasks']
+          key :tags, ['ProcedureRequests']
   
           parameter name: :id do
             key :in, :path
-            key :description, 'ID of NextTask to fetch'
+            key :description, 'ID of Procedure request to fetch'
             key :required, true
             key :type, :integer
             key :format, :int64
           end
   
           response 200 do
-            key :description, 'next task response'
+            key :description, 'Procedure request response'
             schema do
-              key :'$ref', :NextTaskOutput
+              key :'$ref', :ProcedureRequestOutput
             end
           end
           response 404 do
@@ -37,33 +37,33 @@ module Swagger::NextTaskApi
         end
   
         operation :put do
-          key :summary, 'Update Next Task by ID'
-          key :description, 'Returns the updated Next Task'
-          key :operationId, :update_next_task
+          key :summary, 'Update procedure_request by ID'
+          key :description, 'Returns the updated Procedure request'
+          key :operationId, :update_procedure_request
           key :produces, ['application/json',]
-          key :tags, ['NextTasks']
+          key :tags, ['ProcedureRequests']
   
           parameter name: :id do
             key :in, :path
-            key :description, 'ID of NextTask to fetch'
+            key :description, 'ID of Procedure request to fetch'
             key :required, true
             key :type, :integer
             key :format, :int64
           end
   
-          parameter name: :next_task do
+          parameter name: :procedure_request do
             key :in, :body
-            key :description, 'Next task to update'
+            key :description, 'Procedure request to update'
             key :required, true
             schema do
-              key :'$ref', :NextTaskInputPut
+              key :'$ref', :ProcedureRequestInputPut
             end
           end
   
           response 200 do
-            key :description, 'next task response'
+            key :description, 'Procedure request response'
             schema do
-              key :'$ref', :NextTaskOutput
+              key :'$ref', :ProcedureRequestOutput
             end
           end
           response 422 do
@@ -78,28 +78,20 @@ module Swagger::NextTaskApi
         end
       end
   
-      swagger_path '/task_models/{task_model_id}/next_tasks' do
+      swagger_path '/procedure_requests/' do
         operation :get do
-          key :summary, 'Get all NextTasks'
-          key :description, 'Returns all Next Tasks'
-          key :operationId, :get_next_tasks
+          key :summary, 'Get all procedure_requests'
+          key :description, 'Returns all Procedure requests'
+          key :operationId, :get_procedure_requests
           key :produces, ['application/json',]
-          key :tags, ['NextTasks']
-  
-          parameter name: :task_model_id do
-            key :in, :path
-            key :description, 'ID of task model to fetch'
-            key :required, true
-            key :type, :integer
-            key :format, :int64
-          end
+          key :tags, ['ProcedureRequests']
   
           response 200 do
-            key :description, 'next task response'
+            key :description, 'Procedure request response'
             schema do
               key :type, :array
               items do
-                key :'$ref', :NextTaskOutput
+                key :'$ref', :ProcedureRequestOutput
               end
             end
           end
@@ -107,35 +99,26 @@ module Swagger::NextTaskApi
             key :description, 'Unexpected Error'
           end
         end
-  
         operation :post do
-          key :summary, 'Create a new Next Task'
-          key :description, 'Returns the created Next Task'
-          key :operationId, :create_next_task
+          key :summary, 'Create a new procedure_request'
+          key :description, 'Returns the created Procedure request'
+          key :operationId, :create_procedure_request
           key :produces, ['application/json',]
-          key :tags, ['NextTasks']
+          key :tags, ['ProcedureRequests']
   
-          parameter name: :task_model_id do
-            key :in, :path
-            key :description, 'ID of task model to fetch'
-            key :required, true
-            key :type, :integer
-            key :format, :int64
-          end
-  
-          parameter name: :next_task do
+          parameter name: :procedure_request do
             key :in, :body
-            key :description, 'Next task to register'
+            key :description, 'Procedure request to register'
             key :required, true
             schema do
-              key :'$ref', :NextTaskInputPost
+              key :'$ref', :ProcedureRequestInputPost
             end
           end
   
           response 201 do
-            key :description, 'next task response'
+            key :description, 'Procedure request response'
             schema do
-              key :'$ref', :NextTaskOutput
+              key :'$ref', :ProcedureRequestOutput
             end
           end
           response 422 do
@@ -150,37 +133,37 @@ module Swagger::NextTaskApi
         end
       end
 
-      swagger_path '/next_tasks/{id}/active' do
+      swagger_path '/procedure_requests/{id}/active' do
         operation :put do
-          key :summary, 'Activate or deactivate a Next task by ID'
-          key :description, 'Returns the activated/deactivated next task by id'
-          key :operationId, :change_active_next_task
+          key :summary, 'Activate or deactivate a Procedure request by ID'
+          key :description, 'Returns the activated/deactivated Procedure request by id'
+          key :operationId, :change_active_procedure_request
           key :produces, ['application/json',]
-          key :tags, ['NextTasks']
+          key :tags, ['ProcedureRequests']
   
           parameter name: :id do
             key :in, :path
-            key :description, 'ID of Next task to fetch'
+            key :description, 'ID of Procedure request to fetch'
             key :required, true
             key :type, :integer
             key :format, :int64
           end
   
-          parameter name: :next_task do
+          parameter name: :procedure_request do
             key :in, :body
-            key :description, 'Next task to update'
+            key :description, 'Procedure request to update'
             key :required, true
             schema do
-              property :next_task do
+              property :procedure_request do
                 key :'$ref', :ChangeActive
               end
             end
           end
   
           response 200 do
-            key :description, 'next task response'
+            key :description, 'Procedure request response'
             schema do
-              key :'$ref', :NextTaskOutput
+              key :'$ref', :ProcedureRequestOutput
             end
           end
           response 422 do
