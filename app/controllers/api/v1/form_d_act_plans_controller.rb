@@ -20,7 +20,7 @@ module Api
         @form_d_act_plan = FormDActPlan.new(form_d_act_plan_params)
 
         if @form_d_act_plan.save
-          render json: @form_d_act_plan, status: :created, location: @form_d_act_plan
+          render json: @form_d_act_plan, status: :created
         else
           render json: @form_d_act_plan.errors, status: :unprocessable_entity
         end

@@ -7,6 +7,7 @@ class ActionPlan < ApplicationRecord
   has_many :form_b_act_plans
   has_many :form_c_act_plans
   has_many :form_d_act_plans
+  has_many :form_e_act_plans
 
   # Tracking inherited from ApplicationRecord, fields:
   # created_by and updated_by, see application_record.rb
