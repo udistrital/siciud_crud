@@ -1,6 +1,7 @@
 module Api
   module V1
     class FormEActPlansController < AbstractActionPlanController
+      include Swagger::FormEActPlanApi
 
       before_action :set_action_plan_to_form, only: [:index, :create, :update]
       before_action :set_form_e_act_plan, only: [:show, :update]
