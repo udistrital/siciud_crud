@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_09_182618) do
+ActiveRecord::Schema.define(version: 2021_08_16_170236) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -776,6 +776,23 @@ ActiveRecord::Schema.define(version: 2021_08_09_182618) do
     t.index ["goal_state_id"], name: "index_form_d_act_plans_on_goal_state_id"
     t.index ["plan_type_id"], name: "index_form_d_act_plans_on_plan_type_id"
     t.index ["updated_by"], name: "index_form_d_act_plans_on_updated_by"
+  end
+
+  create_table "form_e_act_plans", force: :cascade do |t|
+    t.text "type_description"
+    t.text "description"
+    t.boolean "inventoried"
+    t.string "inventory_plate"
+    t.bigint "action_plan_id"
+    t.bigint "plan_type_id"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["action_plan_id"], name: "index_form_e_act_plans_on_action_plan_id"
+    t.index ["created_by"], name: "index_form_e_act_plans_on_created_by"
+    t.index ["updated_by"], name: "index_form_e_act_plans_on_updated_by"
   end
 
   create_table "geo_cities", force: :cascade do |t|
@@ -2227,6 +2244,9 @@ ActiveRecord::Schema.define(version: 2021_08_09_182618) do
   add_foreign_key "form_d_act_plans", "subtypes", column: "plan_type_id"
   add_foreign_key "form_d_act_plans", "users", column: "created_by"
   add_foreign_key "form_d_act_plans", "users", column: "updated_by"
+  add_foreign_key "form_e_act_plans", "action_plans"
+  add_foreign_key "form_e_act_plans", "users", column: "created_by"
+  add_foreign_key "form_e_act_plans", "users", column: "updated_by"
   add_foreign_key "geo_cities", "geo_states"
   add_foreign_key "geo_cities", "users", column: "created_by"
   add_foreign_key "geo_cities", "users", column: "updated_by"
