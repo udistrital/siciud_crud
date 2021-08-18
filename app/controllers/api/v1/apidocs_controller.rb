@@ -115,6 +115,8 @@ module Api
         ProcedureRequestsController,
         RequestHasProceduresController,
         TechnologyDescriptionsController,
+        RequestHasApplicationAreasController,
+        PotentialMarketsController,
 
         Call,
         CallDocument,
@@ -208,6 +210,8 @@ module Api
         ProcedureRequest,
         RequestHasProcedure,
         TechnologyDescription,
+        RequestHasApplicationArea,
+        PotentialMarket,
 
         ApplicationRecord,
         self,

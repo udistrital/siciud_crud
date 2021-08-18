@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_14_010856) do
+ActiveRecord::Schema.define(version: 2021_08_17_222022) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -813,6 +813,11 @@ ActiveRecord::Schema.define(version: 2021_08_14_010856) do
     t.bigint "patent_id", null: false
   end
 
+  create_table "geo_countries_potential_markets", id: false, force: :cascade do |t|
+    t.bigint "potential_market_id", null: false
+    t.bigint "geo_country_id", null: false
+  end
+
   create_table "geo_states", force: :cascade do |t|
     t.string "name"
     t.string "code", limit: 10
@@ -1510,6 +1515,34 @@ ActiveRecord::Schema.define(version: 2021_08_14_010856) do
     t.index ["updated_by"], name: "index_plant_ind_prototypes_on_updated_by"
   end
 
+  create_table "potential_markets", force: :cascade do |t|
+    t.bigint "market_participation_id"
+    t.integer "necesary_time"
+    t.boolean "product_dependency"
+    t.string "product_dependency_name"
+    t.boolean "institution_participation"
+    t.string "institution_participation_name"
+    t.string "stakeholder"
+    t.bigint "success_rank_id"
+    t.string "market_place"
+    t.bigint "procedure_request_id"
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.boolean "active", default: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_potential_markets_on_created_by"
+    t.index ["market_participation_id"], name: "index_potential_markets_on_market_participation_id"
+    t.index ["procedure_request_id"], name: "index_potential_markets_on_procedure_request_id"
+    t.index ["success_rank_id"], name: "index_potential_markets_on_success_rank_id"
+    t.index ["updated_by"], name: "index_potential_markets_on_updated_by"
+  end
+
+  create_table "potential_markets_segments", id: false, force: :cascade do |t|
+    t.bigint "potential_market_id", null: false
+    t.bigint "subtype_id", null: false
+  end
+
   create_table "procedure_requests", force: :cascade do |t|
     t.text "approached_problem"
     t.bigint "created_by"
@@ -1676,6 +1709,20 @@ ActiveRecord::Schema.define(version: 2021_08_14_010856) do
     t.index ["product_type_id"], name: "index_reports_on_product_type_id"
     t.index ["research_group_id"], name: "index_reports_on_research_group_id"
     t.index ["updated_by"], name: "index_reports_on_updated_by"
+  end
+
+  create_table "request_has_application_areas", force: :cascade do |t|
+    t.bigint "procedure_request_id"
+    t.bigint "application_area_id"
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.boolean "active", default: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["application_area_id"], name: "index_request_has_application_areas_on_application_area_id"
+    t.index ["created_by"], name: "index_request_has_application_areas_on_created_by"
+    t.index ["procedure_request_id"], name: "index_request_has_application_areas_on_procedure_request_id"
+    t.index ["updated_by"], name: "index_request_has_application_areas_on_updated_by"
   end
 
   create_table "request_has_procedures", force: :cascade do |t|
@@ -2539,6 +2586,11 @@ ActiveRecord::Schema.define(version: 2021_08_14_010856) do
   add_foreign_key "plant_ind_prototypes", "subtypes", column: "plt_type_id"
   add_foreign_key "plant_ind_prototypes", "users", column: "created_by"
   add_foreign_key "plant_ind_prototypes", "users", column: "updated_by"
+  add_foreign_key "potential_markets", "procedure_requests"
+  add_foreign_key "potential_markets", "subtypes", column: "market_participation_id"
+  add_foreign_key "potential_markets", "subtypes", column: "success_rank_id"
+  add_foreign_key "potential_markets", "users", column: "created_by"
+  add_foreign_key "potential_markets", "users", column: "updated_by"
   add_foreign_key "procedure_requests", "users", column: "created_by"
   add_foreign_key "procedure_requests", "users", column: "updated_by"
   add_foreign_key "procedures", "users", column: "created_by"
@@ -2587,6 +2639,10 @@ ActiveRecord::Schema.define(version: 2021_08_14_010856) do
   add_foreign_key "reports", "subtypes", column: "product_type_id"
   add_foreign_key "reports", "users", column: "created_by"
   add_foreign_key "reports", "users", column: "updated_by"
+  add_foreign_key "request_has_application_areas", "procedure_requests"
+  add_foreign_key "request_has_application_areas", "subtypes", column: "application_area_id"
+  add_foreign_key "request_has_application_areas", "users", column: "created_by"
+  add_foreign_key "request_has_application_areas", "users", column: "updated_by"
   add_foreign_key "request_has_procedures", "procedure_requests"
   add_foreign_key "request_has_procedures", "procedures"
   add_foreign_key "request_has_procedures", "users", column: "created_by"

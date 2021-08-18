@@ -48,6 +48,15 @@ class Subtype < ApplicationRecord
   has_many :calls, through: :call_items, source: :call
   has_many :indicators, class_name: 'Indicator', foreign_key: 'product_type_id', dependent: :destroy
 
+  #OTRI subtypes
+  has_many :application_areas, class_name: 'RequestHasApplicationArea', foreign_key: 'application_area_id', dependent: :destroy
+
+  has_and_belongs_to_many :potential_markets,
+                          join_table: 'potential_markets_segments',
+                          class_name: 'PotentialMarket',
+                          inverse_of: :segments
+
+
   # Tracking inherited from ApplicationRecord, fields:
   # created_by and updated_by, see application_record.rb
   validates :st_name, presence: true, allow_blank: false, on: :create
@@ -55,4 +64,5 @@ class Subtype < ApplicationRecord
   validates :created_by, presence: true, allow_nil: false, on: :create
   validates :updated_by, presence: true, allow_nil: false, on: :update
   validate :validate_created_by, :validate_updated_by
+
 end
