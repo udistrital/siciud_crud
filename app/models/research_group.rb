@@ -12,7 +12,6 @@ class ResearchGroup < ApplicationRecord
                           join_table: 'research_focuses_units',
                           class_name: 'Subtype',
                           dependent: :destroy
-  has_and_belongs_to_many :agreements, dependent: :destroy
   has_and_belongs_to_many :oecd_disciplines, dependent: :destroy
   has_and_belongs_to_many :cine_detailed_areas, dependent: :destroy
 
@@ -20,7 +19,6 @@ class ResearchGroup < ApplicationRecord
   has_many :curricular_prj_ids_research_groups, dependent: :destroy
   has_many :group_members, dependent: :destroy
   has_many :historical_colciencias_ranks, dependent: :destroy
-  has_many :plan_periods, as: :planable, dependent: :destroy
 
   # Products
   has_many :books, dependent: :destroy
@@ -69,7 +67,6 @@ class ResearchGroup < ApplicationRecord
   has_many :idi_investigation_projects, dependent: :destroy
   has_many :extension_projects, dependent: :destroy
   has_many :training_courses, dependent: :destroy
-  has_many :online_counselings, dependent: :destroy
   has_many :accompaniment_consultancies, dependent: :destroy
 
   has_many :degree_works, dependent: :destroy
