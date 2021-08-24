@@ -51,10 +51,20 @@ class Subtype < ApplicationRecord
   #OTRI subtypes
   has_many :application_areas, class_name: 'RequestHasApplicationArea', foreign_key: 'application_area_id', dependent: :destroy
 
+  has_many :states, class_name: 'TaskHasState', foreign_key: 'state_id', dependent: :destroy
+
   has_and_belongs_to_many :potential_markets,
                           join_table: 'potential_markets_segments',
                           class_name: 'PotentialMarket',
                           inverse_of: :segments
+  has_and_belongs_to_many :technological_situations,
+                          join_table: 'technological_situations_development_stages',
+                          class_name: 'TechnologicalSituation',
+                          inverse_of: :development_stages
+  has_and_belongs_to_many :technological_situations,
+                          join_table: 'technological_situations_technology_reasons',
+                          class_name: 'TechnologicalSituation',
+                          inverse_of: :technology_reasons
 
 
   # Tracking inherited from ApplicationRecord, fields:

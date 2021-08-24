@@ -63,8 +63,7 @@ module Api
         end
         def technology_description_params_to_deactivate
           params.require(:technology_description).permit(:active, :updated_by)
-        end
-        
+        end 
     end
   end
 end

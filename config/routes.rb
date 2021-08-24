@@ -264,6 +264,8 @@ Rails.application.routes.draw do
         resources :technology_descriptions, only:[:index, :create]
         resources :request_has_application_areas, only:[:index, :create]
         resources :potential_markets, only:[:index, :create]
+        resources :technological_situations, only:[:index, :create]
+        resources :functional_applications, only:[:index, :create]
       end
       put "/procedure_requests/:id/active", to: "procedure_requests#change_active"
 
@@ -276,7 +278,27 @@ Rails.application.routes.draw do
       resources :potential_markets, only:[:show, :update]
       put "/potential_markets/:id/active", to: "potential_markets#change_active"
 
-      resources :request_has_procedures, only: [:index, :show, :create]
+      resources :technological_situations, only:[:show, :update]
+      put "/technological_situations/:id/active", to: "technological_situations#change_active"
+
+      resources :functional_applications, only:[:show, :update]
+      put "/functional_applications/:id/active", to: "functional_applications#change_active"
+
+      resources :tasks, only: [ :show, :update] do
+        resources :budgets, only:[:index, :create]
+        resources :task_has_states, only:[:index, :create]
+      end
+      put "/tasks/:id/active", to: "tasks#change_active"
+
+      resources :task_has_states, only:[:show]
+      put "/task_has_states/:id/active", to: "task_has_states#change_active"
+
+      resources :budgets, only:[:show, :update]
+      put "/budgets/:id/active", to: "budgets#change_active"
+
+      resources :request_has_procedures, only: [:index, :show, :create] do
+        resources :tasks, only:[:index, :create]
+      end
       put "/request_has_procedures/:id/active", to: "request_has_procedures#change_active"
 
     end

@@ -8,4 +8,6 @@ class TaskModel < ApplicationRecord
 
   has_many :task_attributes
   has_many :read_attributes
+
+  has_many :tasks
 end

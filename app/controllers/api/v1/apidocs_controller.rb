@@ -117,6 +117,11 @@ module Api
         TechnologyDescriptionsController,
         RequestHasApplicationAreasController,
         PotentialMarketsController,
+        TechnologicalSituationsController,
+        FunctionalApplicationsController,
+        TasksController,
+        BudgetsController,
+        TaskHasStatesController,
 
         Call,
         CallDocument,
@@ -212,6 +217,11 @@ module Api
         TechnologyDescription,
         RequestHasApplicationArea,
         PotentialMarket,
+        TechnologicalSituation,
+        FunctionalApplication,
+        Task,
+        Budget,
+        TaskHasState,
 
         ApplicationRecord,
         self,

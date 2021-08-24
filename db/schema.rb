@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_17_222022) do
+ActiveRecord::Schema.define(version: 2021_08_20_233650) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -170,6 +170,24 @@ ActiveRecord::Schema.define(version: 2021_08_17_222022) do
     t.index ["geo_state_id"], name: "index_books_on_geo_state_id"
     t.index ["research_group_id"], name: "index_books_on_research_group_id"
     t.index ["updated_by"], name: "index_books_on_updated_by"
+  end
+
+  create_table "budgets", force: :cascade do |t|
+    t.string "description"
+    t.string "ally_name"
+    t.date "used_date"
+    t.bigint "budget_type_id"
+    t.bigint "amount"
+    t.bigint "task_id"
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.boolean "active", default: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["budget_type_id"], name: "index_budgets_on_budget_type_id"
+    t.index ["created_by"], name: "index_budgets_on_created_by"
+    t.index ["task_id"], name: "index_budgets_on_task_id"
+    t.index ["updated_by"], name: "index_budgets_on_updated_by"
   end
 
   create_table "call_documents", force: :cascade do |t|
@@ -775,6 +793,22 @@ ActiveRecord::Schema.define(version: 2021_08_17_222022) do
     t.index ["goal_state_id"], name: "index_form_d_act_plans_on_goal_state_id"
     t.index ["plan_type_id"], name: "index_form_d_act_plans_on_plan_type_id"
     t.index ["updated_by"], name: "index_form_d_act_plans_on_updated_by"
+  end
+
+  create_table "functional_applications", force: :cascade do |t|
+    t.text "actual_applications"
+    t.text "future_applications"
+    t.string "alternative_technologies"
+    t.text "advantages"
+    t.bigint "procedure_request_id"
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.boolean "active", default: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_functional_applications_on_created_by"
+    t.index ["procedure_request_id"], name: "index_functional_applications_on_procedure_request_id"
+    t.index ["updated_by"], name: "index_functional_applications_on_updated_by"
   end
 
   create_table "geo_cities", force: :cascade do |t|
@@ -2017,6 +2051,20 @@ ActiveRecord::Schema.define(version: 2021_08_17_222022) do
     t.index ["updated_by"], name: "index_task_attributes_on_updated_by"
   end
 
+  create_table "task_has_states", force: :cascade do |t|
+    t.bigint "task_id"
+    t.bigint "state_id"
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.boolean "active", default: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_task_has_states_on_created_by"
+    t.index ["state_id"], name: "index_task_has_states_on_state_id"
+    t.index ["task_id"], name: "index_task_has_states_on_task_id"
+    t.index ["updated_by"], name: "index_task_has_states_on_updated_by"
+  end
+
   create_table "task_models", force: :cascade do |t|
     t.string "name"
     t.integer "duration"
@@ -2031,6 +2079,26 @@ ActiveRecord::Schema.define(version: 2021_08_17_222022) do
     t.index ["procedure_id"], name: "index_task_models_on_procedure_id"
     t.index ["professional_role_id"], name: "index_task_models_on_professional_role_id"
     t.index ["updated_by"], name: "index_task_models_on_updated_by"
+  end
+
+  create_table "tasks", force: :cascade do |t|
+    t.bigint "otri_professional_id"
+    t.bigint "task_model_id"
+    t.bigint "intelectual_property_id"
+    t.boolean "desition"
+    t.date "expired_date"
+    t.bigint "request_has_procedure_id"
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.boolean "active", default: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_tasks_on_created_by"
+    t.index ["intelectual_property_id"], name: "index_tasks_on_intelectual_property_id"
+    t.index ["otri_professional_id"], name: "index_tasks_on_otri_professional_id"
+    t.index ["request_has_procedure_id"], name: "index_tasks_on_request_has_procedure_id"
+    t.index ["task_model_id"], name: "index_tasks_on_task_model_id"
+    t.index ["updated_by"], name: "index_tasks_on_updated_by"
   end
 
   create_table "technical_concepts", force: :cascade do |t|
@@ -2059,6 +2127,37 @@ ActiveRecord::Schema.define(version: 2021_08_17_222022) do
     t.index ["geo_state_id"], name: "index_technical_concepts_on_geo_state_id"
     t.index ["research_group_id"], name: "index_technical_concepts_on_research_group_id"
     t.index ["updated_by"], name: "index_technical_concepts_on_updated_by"
+  end
+
+  create_table "technological_situations", force: :cascade do |t|
+    t.bigint "invention_type_id"
+    t.text "required_equipment"
+    t.text "pending_development"
+    t.text "differential_factors"
+    t.boolean "pi_requested"
+    t.boolean "media_spread"
+    t.string "channel_spread"
+    t.boolean "spread_plans"
+    t.bigint "procedure_request_id"
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.boolean "active", default: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_technological_situations_on_created_by"
+    t.index ["invention_type_id"], name: "index_technological_situations_on_invention_type_id"
+    t.index ["procedure_request_id"], name: "index_technological_situations_on_procedure_request_id"
+    t.index ["updated_by"], name: "index_technological_situations_on_updated_by"
+  end
+
+  create_table "technological_situations_development_stages", id: false, force: :cascade do |t|
+    t.bigint "technological_situation_id", null: false
+    t.bigint "subtype_id", null: false
+  end
+
+  create_table "technological_situations_technology_reasons", id: false, force: :cascade do |t|
+    t.bigint "technological_situation_id", null: false
+    t.bigint "subtype_id", null: false
   end
 
   create_table "technology_descriptions", force: :cascade do |t|
@@ -2239,6 +2338,10 @@ ActiveRecord::Schema.define(version: 2021_08_17_222022) do
   add_foreign_key "books", "subtypes", column: "category_id"
   add_foreign_key "books", "users", column: "created_by"
   add_foreign_key "books", "users", column: "updated_by"
+  add_foreign_key "budgets", "subtypes", column: "budget_type_id"
+  add_foreign_key "budgets", "tasks"
+  add_foreign_key "budgets", "users", column: "created_by"
+  add_foreign_key "budgets", "users", column: "updated_by"
   add_foreign_key "call_documents", "calls"
   add_foreign_key "call_documents", "subtypes", column: "document_id"
   add_foreign_key "call_documents", "users", column: "created_by"
@@ -2393,6 +2496,9 @@ ActiveRecord::Schema.define(version: 2021_08_17_222022) do
   add_foreign_key "form_d_act_plans", "subtypes", column: "plan_type_id"
   add_foreign_key "form_d_act_plans", "users", column: "created_by"
   add_foreign_key "form_d_act_plans", "users", column: "updated_by"
+  add_foreign_key "functional_applications", "procedure_requests"
+  add_foreign_key "functional_applications", "users", column: "created_by"
+  add_foreign_key "functional_applications", "users", column: "updated_by"
   add_foreign_key "geo_cities", "geo_states"
   add_foreign_key "geo_cities", "users", column: "created_by"
   add_foreign_key "geo_cities", "users", column: "updated_by"
@@ -2714,10 +2820,20 @@ ActiveRecord::Schema.define(version: 2021_08_17_222022) do
   add_foreign_key "task_attributes", "task_models"
   add_foreign_key "task_attributes", "users", column: "created_by"
   add_foreign_key "task_attributes", "users", column: "updated_by"
+  add_foreign_key "task_has_states", "subtypes", column: "state_id"
+  add_foreign_key "task_has_states", "tasks"
+  add_foreign_key "task_has_states", "users", column: "created_by"
+  add_foreign_key "task_has_states", "users", column: "updated_by"
   add_foreign_key "task_models", "procedures"
   add_foreign_key "task_models", "professional_roles"
   add_foreign_key "task_models", "users", column: "created_by"
   add_foreign_key "task_models", "users", column: "updated_by"
+  add_foreign_key "tasks", "otri_professionals"
+  add_foreign_key "tasks", "request_has_procedures"
+  add_foreign_key "tasks", "subtypes", column: "intelectual_property_id"
+  add_foreign_key "tasks", "task_models"
+  add_foreign_key "tasks", "users", column: "created_by"
+  add_foreign_key "tasks", "users", column: "updated_by"
   add_foreign_key "technical_concepts", "colciencias_calls"
   add_foreign_key "technical_concepts", "geo_cities"
   add_foreign_key "technical_concepts", "geo_countries"
@@ -2726,6 +2842,10 @@ ActiveRecord::Schema.define(version: 2021_08_17_222022) do
   add_foreign_key "technical_concepts", "subtypes", column: "category_id"
   add_foreign_key "technical_concepts", "users", column: "created_by"
   add_foreign_key "technical_concepts", "users", column: "updated_by"
+  add_foreign_key "technological_situations", "procedure_requests"
+  add_foreign_key "technological_situations", "subtypes", column: "invention_type_id"
+  add_foreign_key "technological_situations", "users", column: "created_by"
+  add_foreign_key "technological_situations", "users", column: "updated_by"
   add_foreign_key "technology_descriptions", "procedure_requests"
   add_foreign_key "technology_descriptions", "users", column: "created_by"
   add_foreign_key "technology_descriptions", "users", column: "updated_by"
