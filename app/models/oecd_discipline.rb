@@ -4,7 +4,7 @@ class OecdDiscipline < ApplicationRecord
   belongs_to :oecd_knowledge_subarea
   has_and_belongs_to_many :research_groups, dependent: :destroy
 
-  has_many :knwl_plans, as: :knwl_area
+  has_and_belongs_to_many :form_d_act_plans
 
   # Tracking inherited from ApplicationRecord, fields:
   # created_by and updated_by, see application_record.rb

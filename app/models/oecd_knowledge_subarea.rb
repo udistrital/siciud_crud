@@ -5,6 +5,8 @@ class OecdKnowledgeSubarea < ApplicationRecord
   has_many :research_groups, dependent: :destroy
   has_many :historical_colciencias_ranks, dependent: :destroy
 
+  has_and_belongs_to_many :form_d_act_plans
+
   validates :name, :code, uniqueness: true, exclusion: [nil, ""]
 
   # Tracking inherited from ApplicationRecord, fields:
