@@ -6,4 +6,6 @@ class Task < ApplicationRecord
 
   has_many :budgets
   has_many :task_has_states
+
+  has_many :documents, as: :documentable
 end
