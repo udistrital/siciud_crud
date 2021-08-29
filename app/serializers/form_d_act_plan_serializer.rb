@@ -32,30 +32,41 @@ class FormDActPlanSerializer < AbstractActionPlanSerializer
     result
   end
 
+
   private
 
   def get_cine_detailed_structure(cine_detailed_areas)
     complete_cine_structure = []
-    specific_detailed = {}
     specific_broad = {}
+    specific_detailed = {}
 
     cine_detailed_areas.each { |detailed_area|
       specific_area = detailed_area.cine_specific_area
       broad_area = specific_area.cine_broad_area
       specific_area_key = specific_area.id.to_s
-
+      detailed_area_data = {
+        'id': detailed_area.id,
+        'name': detailed_area.name
+      }
       if specific_detailed.has_key? specific_area_key
-        specific_detailed[specific_area_key].append(detailed_area.id)
+        specific_detailed[specific_area_key].append(detailed_area_data)
       else
-        specific_broad[specific_area_key] = broad_area.id
-        specific_detailed[specific_area_key] = [detailed_area.id]
+        specific_broad[specific_area_key] = {
+          "broad_area_id": broad_area.id,
+          "broad_area_name": broad_area.name,
+          "specific_area_id": specific_area.id,
+          "specific_area_name": specific_area.name,
+        }
+        specific_detailed[specific_area_key] = [detailed_area_data]
       end
     }
 
     specific_detailed.each do |key, value|
       data = {
-        "cine_broad_area_id": specific_broad[key],
-        "cine_specific_area_id": key,
+        "cine_broad_area_id": specific_broad[key][:broad_area_id],
+        "cine_broad_area_name": specific_broad[key][:broad_area_name],
+        "cine_specific_area_id": specific_broad[key][:specific_area_id],
+        "cine_specific_area_name": specific_broad[key][:specific_area_name],
         "cine_detailed_area_ids": value
       }
       complete_cine_structure.append(data)
@@ -70,7 +81,9 @@ class FormDActPlanSerializer < AbstractActionPlanSerializer
       broad_area = specific_area.cine_broad_area
       data = {
         "cine_broad_area_id": broad_area.id,
+        "cine_broad_area_name": broad_area.name,
         "cine_specific_area_id": specific_area.id,
+        "cine_specific_area_name": specific_area.name,
         "cine_detailed_area_ids": []
       }
       complete_cine_structure.append(data)
@@ -80,26 +93,37 @@ class FormDActPlanSerializer < AbstractActionPlanSerializer
 
   def get_oecd_discipline_structure(oecd_disciplines)
     complete_oecd_structure = []
-    subarea_discipline = {}
     subarea_area = {}
+    subarea_discipline = {}
 
     oecd_disciplines.each { |discipline|
       subarea = discipline.oecd_knowledge_subarea
       area = subarea.oecd_knowledge_area
       subarea_key = subarea.id.to_s
+      discipline_data = {
+        'id': discipline.id,
+        'name': discipline.name
+      }
 
       if subarea_discipline.has_key? subarea_key
-        subarea_discipline[subarea_discipline].append(discipline.id)
+        subarea_discipline[subarea_key].append(discipline_data)
       else
-        subarea_area[subarea_discipline] = area.id
-        subarea_discipline[subarea_discipline] = [discipline.id]
+        subarea_area[subarea_key] = {
+          "knowledge_area_id": area.id,
+          "knowledge_area_name": area.name,
+          "knowledge_subarea_id": subarea.id,
+          "knowledge_subarea_name": subarea.name,
+        }
+        subarea_discipline[subarea_key] = [discipline_data]
       end
     }
 
     subarea_discipline.each do |key, value|
       data = {
-        "oecd_knowledge_area_id": subarea_area[key],
-        "oecd_knowledge_subarea_id": key,
+        "oecd_knowledge_area_id": subarea_area[key][:knowledge_area_id],
+        "oecd_knowledge_area_name": subarea_area[key][:knowledge_area_name],
+        "oecd_knowledge_subarea_id": subarea_area[key][:knowledge_subarea_id],
+        "oecd_knowledge_subarea_name": subarea_area[key][:knowledge_subarea_name],
         "oecd_discipline_ids": value
       }
       complete_oecd_structure.append(data)
@@ -114,7 +138,9 @@ class FormDActPlanSerializer < AbstractActionPlanSerializer
       area = subarea.oecd_knowledge_area
       data = {
         "oecd_knowledge_area_id": area.id,
+        "oecd_knowledge_area_name": area.name,
         "oecd_knowledge_subarea_id": subarea.id,
+        "oecd_knowledge_subarea_name": subarea.name,
         "oecd_discipline_ids": []
       }
       complete_oecd_structure.append(data)
