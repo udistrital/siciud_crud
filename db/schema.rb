@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_22_214105) do
+ActiveRecord::Schema.define(version: 2021_08_30_045505) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -798,6 +798,11 @@ ActiveRecord::Schema.define(version: 2021_08_22_214105) do
     t.bigint "form_d_act_plan_id", null: false
   end
 
+  create_table "form_d_act_plans_snies", id: false, force: :cascade do |t|
+    t.bigint "snies_id", null: false
+    t.bigint "form_d_act_plan_id", null: false
+  end
+
   create_table "form_e_act_plans", force: :cascade do |t|
     t.text "type_description"
     t.text "description"
@@ -1208,21 +1213,6 @@ ActiveRecord::Schema.define(version: 2021_08_22_214105) do
     t.index ["geo_state_id"], name: "index_knowledge_networks_on_geo_state_id"
     t.index ["research_group_id"], name: "index_knowledge_networks_on_research_group_id"
     t.index ["updated_by"], name: "index_knowledge_networks_on_updated_by"
-  end
-
-  create_table "knwl_plans", force: :cascade do |t|
-    t.string "knwl_area_type"
-    t.bigint "knwl_area_id"
-    t.bigint "form_d_act_plan_id"
-    t.boolean "active", default: true
-    t.bigint "created_by"
-    t.bigint "updated_by"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["created_by"], name: "index_knwl_plans_on_created_by"
-    t.index ["form_d_act_plan_id"], name: "index_knwl_plans_on_form_d_act_plan_id"
-    t.index ["knwl_area_type", "knwl_area_id"], name: "index_knwl_plans_on_knwl_area_type_and_knwl_area_id"
-    t.index ["updated_by"], name: "index_knwl_plans_on_updated_by"
   end
 
   create_table "license_agreements", force: :cascade do |t|
@@ -1690,6 +1680,11 @@ ActiveRecord::Schema.define(version: 2021_08_22_214105) do
     t.bigint "subtype_id", null: false
   end
 
+  create_table "research_focuses_form_d_plans", id: false, force: :cascade do |t|
+    t.bigint "subtype_id", null: false
+    t.bigint "form_d_act_plan_id", null: false
+  end
+
   create_table "research_focuses_units", id: false, force: :cascade do |t|
     t.bigint "subtype_id", null: false
     t.bigint "research_group_id", null: false
@@ -1873,6 +1868,18 @@ ActiveRecord::Schema.define(version: 2021_08_22_214105) do
     t.index ["product_type_id"], name: "index_simple_books_on_product_type_id"
     t.index ["research_group_id"], name: "index_simple_books_on_research_group_id"
     t.index ["updated_by"], name: "index_simple_books_on_updated_by"
+  end
+
+  create_table "snies", force: :cascade do |t|
+    t.string "code"
+    t.string "name"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_snies_on_created_by"
+    t.index ["updated_by"], name: "index_snies_on_updated_by"
   end
 
   create_table "software", force: :cascade do |t|
@@ -2368,9 +2375,6 @@ ActiveRecord::Schema.define(version: 2021_08_22_214105) do
   add_foreign_key "knowledge_networks", "subtypes", column: "category_id"
   add_foreign_key "knowledge_networks", "users", column: "created_by"
   add_foreign_key "knowledge_networks", "users", column: "updated_by"
-  add_foreign_key "knwl_plans", "form_d_act_plans"
-  add_foreign_key "knwl_plans", "users", column: "created_by"
-  add_foreign_key "knwl_plans", "users", column: "updated_by"
   add_foreign_key "license_agreements", "colciencias_calls"
   add_foreign_key "license_agreements", "geo_cities"
   add_foreign_key "license_agreements", "geo_cities", column: "contract_geo_city_id"
@@ -2544,6 +2548,8 @@ ActiveRecord::Schema.define(version: 2021_08_22_214105) do
   add_foreign_key "simple_books", "subtypes", column: "product_type_id"
   add_foreign_key "simple_books", "users", column: "created_by"
   add_foreign_key "simple_books", "users", column: "updated_by"
+  add_foreign_key "snies", "users", column: "created_by"
+  add_foreign_key "snies", "users", column: "updated_by"
   add_foreign_key "software", "colciencias_calls"
   add_foreign_key "software", "geo_cities"
   add_foreign_key "software", "geo_countries"
@@ -4505,5 +4511,43 @@ ActiveRecord::Schema.define(version: 2021_08_22_214105) do
      FROM ((indicators i
        LEFT JOIN subtypes sin ON ((sin.id = i.subtype_id)))
        LEFT JOIN types t ON ((sin.type_id = t.id)));
+  SQL
+  create_view "complete_form_d_act_ps", sql_definition: <<-SQL
+      SELECT fdap.id,
+      fdap.action_plan_id,
+      fdap.name,
+      fdap.description,
+      fdap.goal_achieved,
+      fdap.goal_state_id,
+      sgs.st_name AS goal_state_name,
+      fdap."order",
+      fdap.plan_type_id,
+      spl.st_name AS plan_type_name,
+      ( SELECT count(*) AS count
+             FROM cine_detailed_areas_form_d_act_plans
+            WHERE (cine_detailed_areas_form_d_act_plans.form_d_act_plan_id = fdap.id)) AS total_cine_detailed_areas,
+      ( SELECT count(*) AS count
+             FROM cine_specific_areas_form_d_act_plans
+            WHERE (cine_specific_areas_form_d_act_plans.form_d_act_plan_id = fdap.id)) AS total_cine_specific_areas,
+      ( SELECT count(*) AS count
+             FROM form_d_act_plans_oecd_disciplines
+            WHERE (form_d_act_plans_oecd_disciplines.form_d_act_plan_id = fdap.id)) AS total_oecd_disciplines,
+      ( SELECT count(*) AS count
+             FROM form_d_act_plans_oecd_knowledge_subareas
+            WHERE (form_d_act_plans_oecd_knowledge_subareas.form_d_act_plan_id = fdap.id)) AS total_oecd_knowledge_subareas,
+      ( SELECT count(*) AS count
+             FROM research_focuses_form_d_plans
+            WHERE (research_focuses_form_d_plans.form_d_act_plan_id = fdap.id)) AS total_research_focuses,
+      ( SELECT count(*) AS count
+             FROM form_d_act_plans_snies
+            WHERE (form_d_act_plans_snies.form_d_act_plan_id = fdap.id)) AS total_snies,
+      fdap.active,
+      fdap.created_by,
+      fdap.updated_by,
+      fdap.created_at,
+      fdap.updated_at
+     FROM ((form_d_act_plans fdap
+       LEFT JOIN subtypes sgs ON ((sgs.id = fdap.goal_state_id)))
+       LEFT JOIN subtypes spl ON ((fdap.plan_type_id = spl.id)));
   SQL
 end

@@ -1,7 +1,7 @@
 class FormDActPlanSerializer < AbstractActionPlanSerializer
   attributes :id, :action_plan_id, :name, :description, :goal_state_id,
              :goal_state_name, :goal_achieved, :order, :plan_type_id,
-             :plan_type_name, :cine, :oecd,
+             :plan_type_name, :cine, :oecd, :snies, :research_focuses,
              :active, :created_by, :updated_by, :created_at, :updated_at
 
   def cine
@@ -30,6 +30,33 @@ class FormDActPlanSerializer < AbstractActionPlanSerializer
       result = get_oecd_discipline_structure(oecd_disciplines)
     end
     result
+  end
+
+  def research_focuses
+    complete_research_focuses = []
+    research_focuses_list = self.object.research_focuses
+    research_focuses_list.each do |research_focus|
+      data = {
+        "research_focus_id": research_focus.id,
+        "research_focus_name": research_focus.st_name
+      }
+      complete_research_focuses.append(data)
+    end
+    complete_research_focuses
+  end
+
+  def snies
+    complete_snies = []
+    snies_list = self.object.snies
+    snies_list.each do |snies|
+      data = {
+        "snies_id": snies.id,
+        "snies_code": snies.code,
+        "snies_name": snies.name
+      }
+      complete_snies.append(data)
+    end
+    complete_snies
   end
 
 
