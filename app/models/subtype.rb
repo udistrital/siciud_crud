@@ -15,6 +15,10 @@ class Subtype < ApplicationRecord
                           join_table: 'research_focuses_units',
                           class_name: 'ResearchGroup',
                           inverse_of: :research_units
+  has_and_belongs_to_many :form_d_act_plans,
+                          join_table: 'research_focuses_form_d_plans',
+                          class_name: 'FormDActPlan',
+                          inverse_of: :form_d_act_plans
 
   has_many :document_types, class_name: 'Document', foreign_key: 'document_type_id', dependent: :destroy
 

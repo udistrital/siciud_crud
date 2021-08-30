@@ -1,11 +1,16 @@
 module Api
   module V1
     class FormDActPlansController < ApplicationController
+      include Swagger::FormDActPlanApi
+
       before_action :set_form_d_act_plan, only: [:show, :update]
 
       # GET /form_d_act_plans
       def index
-        @form_d_act_plans = FormDActPlan.all
+        @form_d_act_plans = CompleteFormDActP.where(
+          "action_plan_id = ?", params[:action_plan_id]
+        )
+        @form_d_act_plans = DxService.load(@form_d_act_plans, params)
 
         render json: @form_d_act_plans
       end
@@ -52,7 +57,9 @@ module Api
                                                 cine_detailed_area_ids: [],
                                                 cine_specific_area_ids: [],
                                                 oecd_discipline_ids: [],
-                                                oecd_knowledge_subarea_ids: [])
+                                                oecd_knowledge_subarea_ids: [],
+                                                research_focus_ids: [],
+                                                snies_ids: [])
       end
 
       def form_d_act_pl_params_to_update
@@ -64,7 +71,9 @@ module Api
                                                 cine_detailed_area_ids: [],
                                                 cine_specific_area_ids: [],
                                                 oecd_discipline_ids: [],
-                                                oecd_knowledge_subarea_ids: [])
+                                                oecd_knowledge_subarea_ids: [],
+                                                research_focus_ids: [],
+                                                snies_ids: [])
       end
     end
   end
