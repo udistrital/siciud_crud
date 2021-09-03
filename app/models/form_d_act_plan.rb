@@ -9,13 +9,13 @@ class FormDActPlan < ApplicationRecord
   has_and_belongs_to_many :cine_detailed_areas
   has_and_belongs_to_many :oecd_knowledge_subareas
   has_and_belongs_to_many :oecd_disciplines
-  has_and_belongs_to_many :oecd_disciplines
   has_and_belongs_to_many :snies
 
   has_and_belongs_to_many :research_focuses,
                           join_table: 'research_focuses_form_d_plans',
                           class_name: 'Subtype'
 
+  validates_associated :cine_specific_areas
   # Tracking inherited from ApplicationRecord, fields:
   # created_by and updated_by, see application_record.rb
   validates :created_by, presence: true, allow_nil: false, on: :create

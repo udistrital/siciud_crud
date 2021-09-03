@@ -1,8 +1,9 @@
 module Api
   module V1
-    class FormDActPlansController < ApplicationController
+    class FormDActPlansController < AbstractActionPlanController
       include Swagger::FormDActPlanApi
 
+      before_action :set_action_plan_to_form, only: [:index, :create, :update]
       before_action :set_form_d_act_plan, only: [:show, :update]
 
       # GET /form_d_act_plans
@@ -22,7 +23,10 @@ module Api
 
       # POST /form_d_act_plans
       def create
-        @form_d_act_plan = FormDActPlan.new(form_d_act_pl_params_to_create)
+        puts "--------------------------"
+        puts form_d_act_pl_params_to_create
+        @form_d_act_plan = @action_plan.form_d_act_plans.new(
+          form_d_act_pl_params_to_create)
 
         if @form_d_act_plan.save
           render json: @form_d_act_plan, status: :created
@@ -51,7 +55,7 @@ module Api
       def form_d_act_pl_params_to_create
         params.require(:form_d_act_plan).permit(:name, :description,
                                                 :goal_state_id, :goal_achieved,
-                                                :order, :action_plan_id,
+                                                :order,
                                                 :plan_type_id, :active,
                                                 :created_by,
                                                 cine_detailed_area_ids: [],
