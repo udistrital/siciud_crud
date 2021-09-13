@@ -14,9 +14,11 @@
 /.bundle
 
 # Ignore the default SQLite database.
+db/schema.rb
+config/database.yml
+config/local_env.yml
 /config/database.yml
 /config/local_env.yml
-/config/database.yml
 /db/*.sqlite3
 /db/*.sqlite3-journal
 
