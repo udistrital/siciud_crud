@@ -5,4 +5,7 @@ class GeoCountry < ApplicationRecord
   # Products
   has_many :books, through: :geo_states
   has_and_belongs_to_many :patents
+
+  #end point OTRI
+  has_and_belongs_to_many :potential_markets
 end

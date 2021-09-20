@@ -20,4 +20,5 @@ ActiveSupport::Inflector.inflections do |inflect|
   inflect.irregular 'software', 'software'
   inflect.irregular 'criterion', 'criteria'
   inflect.irregular 'snies', 'snies'
+  inflect.irregular 'procedure', 'procedures'
 end
