@@ -1,4 +1,3 @@
-
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -11,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_20_233650) do
+ActiveRecord::Schema.define(version: 2021_08_30_045505) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -230,6 +229,7 @@ ActiveRecord::Schema.define(version: 2021_08_20_233650) do
     t.bigint "updated_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "ci_percentage", precision: 6, scale: 3
     t.index ["call_id"], name: "index_call_items_on_call_id"
     t.index ["created_by"], name: "index_call_items_on_created_by"
     t.index ["item_id"], name: "index_call_items_on_item_id"
@@ -321,6 +321,11 @@ ActiveRecord::Schema.define(version: 2021_08_20_233650) do
     t.index ["updated_by"], name: "index_cine_detailed_areas_on_updated_by"
   end
 
+  create_table "cine_detailed_areas_form_d_act_plans", id: false, force: :cascade do |t|
+    t.bigint "cine_detailed_area_id", null: false
+    t.bigint "form_d_act_plan_id", null: false
+  end
+
   create_table "cine_detailed_areas_research_groups", id: false, force: :cascade do |t|
     t.bigint "research_group_id", null: false
     t.bigint "cine_detailed_area_id", null: false
@@ -338,6 +343,11 @@ ActiveRecord::Schema.define(version: 2021_08_20_233650) do
     t.index ["cine_broad_area_id"], name: "index_cine_specific_areas_on_cine_broad_area_id"
     t.index ["created_by"], name: "index_cine_specific_areas_on_created_by"
     t.index ["updated_by"], name: "index_cine_specific_areas_on_updated_by"
+  end
+
+  create_table "cine_specific_areas_form_d_act_plans", id: false, force: :cascade do |t|
+    t.bigint "cine_specific_area_id", null: false
+    t.bigint "form_d_act_plan_id", null: false
   end
 
   create_table "clinical_practice_guidelines", force: :cascade do |t|
@@ -796,6 +806,38 @@ ActiveRecord::Schema.define(version: 2021_08_20_233650) do
     t.index ["updated_by"], name: "index_form_d_act_plans_on_updated_by"
   end
 
+  create_table "form_d_act_plans_oecd_disciplines", id: false, force: :cascade do |t|
+    t.bigint "oecd_discipline_id", null: false
+    t.bigint "form_d_act_plan_id", null: false
+  end
+
+  create_table "form_d_act_plans_oecd_knowledge_subareas", id: false, force: :cascade do |t|
+    t.bigint "oecd_knowledge_subarea_id", null: false
+    t.bigint "form_d_act_plan_id", null: false
+  end
+
+  create_table "form_d_act_plans_snies", id: false, force: :cascade do |t|
+    t.bigint "snies_id", null: false
+    t.bigint "form_d_act_plan_id", null: false
+  end
+
+  create_table "form_e_act_plans", force: :cascade do |t|
+    t.text "type_description"
+    t.text "description"
+    t.boolean "inventoried"
+    t.string "inventory_plate"
+    t.bigint "action_plan_id"
+    t.bigint "plan_type_id"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["action_plan_id"], name: "index_form_e_act_plans_on_action_plan_id"
+    t.index ["created_by"], name: "index_form_e_act_plans_on_created_by"
+    t.index ["updated_by"], name: "index_form_e_act_plans_on_updated_by"
+  end
+
   create_table "functional_applications", force: :cascade do |t|
     t.text "actual_applications"
     t.text "future_applications"
@@ -990,7 +1032,7 @@ ActiveRecord::Schema.define(version: 2021_08_20_233650) do
   end
 
   create_table "indicators", force: :cascade do |t|
-    t.bigint "product_type_id"
+    t.bigint "subtype_id"
     t.text "ind_description"
     t.boolean "active", default: true
     t.bigint "created_by"
@@ -998,7 +1040,7 @@ ActiveRecord::Schema.define(version: 2021_08_20_233650) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["created_by"], name: "index_indicators_on_created_by"
-    t.index ["product_type_id"], name: "index_indicators_on_product_type_id"
+    t.index ["subtype_id"], name: "index_indicators_on_subtype_id"
     t.index ["updated_by"], name: "index_indicators_on_updated_by"
   end
 
@@ -1810,6 +1852,11 @@ ActiveRecord::Schema.define(version: 2021_08_20_233650) do
     t.bigint "subtype_id", null: false
   end
 
+  create_table "research_focuses_form_d_plans", id: false, force: :cascade do |t|
+    t.bigint "subtype_id", null: false
+    t.bigint "form_d_act_plan_id", null: false
+  end
+
   create_table "research_focuses_units", id: false, force: :cascade do |t|
     t.bigint "subtype_id", null: false
     t.bigint "research_group_id", null: false
@@ -1894,6 +1941,8 @@ ActiveRecord::Schema.define(version: 2021_08_20_233650) do
     t.bigint "updated_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.date "sa_start_date"
+    t.date "sa_end_date"
     t.index ["call_id"], name: "index_schedule_activities_on_call_id"
     t.index ["created_by"], name: "index_schedule_activities_on_created_by"
     t.index ["updated_by"], name: "index_schedule_activities_on_updated_by"
@@ -1991,6 +2040,18 @@ ActiveRecord::Schema.define(version: 2021_08_20_233650) do
     t.index ["product_type_id"], name: "index_simple_books_on_product_type_id"
     t.index ["research_group_id"], name: "index_simple_books_on_research_group_id"
     t.index ["updated_by"], name: "index_simple_books_on_updated_by"
+  end
+
+  create_table "snies", force: :cascade do |t|
+    t.string "code"
+    t.string "name"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_snies_on_created_by"
+    t.index ["updated_by"], name: "index_snies_on_updated_by"
   end
 
   create_table "software", force: :cascade do |t|
@@ -2497,6 +2558,9 @@ ActiveRecord::Schema.define(version: 2021_08_20_233650) do
   add_foreign_key "form_d_act_plans", "subtypes", column: "plan_type_id"
   add_foreign_key "form_d_act_plans", "users", column: "created_by"
   add_foreign_key "form_d_act_plans", "users", column: "updated_by"
+  add_foreign_key "form_e_act_plans", "action_plans"
+  add_foreign_key "form_e_act_plans", "users", column: "created_by"
+  add_foreign_key "form_e_act_plans", "users", column: "updated_by"
   add_foreign_key "functional_applications", "procedure_requests"
   add_foreign_key "functional_applications", "users", column: "created_by"
   add_foreign_key "functional_applications", "users", column: "updated_by"
@@ -2536,7 +2600,7 @@ ActiveRecord::Schema.define(version: 2021_08_20_233650) do
   add_foreign_key "idi_investigation_projects", "subtypes", column: "category_id"
   add_foreign_key "idi_investigation_projects", "users", column: "created_by"
   add_foreign_key "idi_investigation_projects", "users", column: "updated_by"
-  add_foreign_key "indicators", "subtypes", column: "product_type_id"
+  add_foreign_key "indicators", "subtypes"
   add_foreign_key "indicators", "users", column: "created_by"
   add_foreign_key "indicators", "users", column: "updated_by"
   add_foreign_key "industrial_designs", "colciencias_calls"
@@ -2805,6 +2869,8 @@ ActiveRecord::Schema.define(version: 2021_08_20_233650) do
   add_foreign_key "simple_books", "subtypes", column: "product_type_id"
   add_foreign_key "simple_books", "users", column: "created_by"
   add_foreign_key "simple_books", "users", column: "updated_by"
+  add_foreign_key "snies", "users", column: "created_by"
+  add_foreign_key "snies", "users", column: "updated_by"
   add_foreign_key "software", "colciencias_calls"
   add_foreign_key "software", "geo_cities"
   add_foreign_key "software", "geo_countries"
@@ -4633,26 +4699,12 @@ ActiveRecord::Schema.define(version: 2021_08_20_233650) do
        LEFT JOIN subtypes st ON ((t.id = st.type_id)))
        LEFT JOIN subtypes pst ON ((st.parent_id = pst.id)));
   SQL
-  create_view "complete_call_items", sql_definition: <<-SQL
-      SELECT ci.id,
-      ci.call_id,
-      ci.item_id,
-      s.st_name AS item_name,
-      ci.ci_maximum_percentage,
-      ci.active,
-      ci.created_by,
-      ci.updated_by,
-      ci.created_at,
-      ci.updated_at
-     FROM (call_items ci
-       LEFT JOIN subtypes s ON ((s.id = ci.item_id)));
-  SQL
   create_view "complete_call_indicators", sql_definition: <<-SQL
       SELECT cind.id,
       cind.call_id,
       cind.indicator_id,
       i.ind_description AS indicator_description,
-      i.product_type_id,
+      i.subtype_id AS product_type_id,
       s.st_name AS product_type_name,
       cind.active,
       cind.created_by,
@@ -4661,7 +4713,7 @@ ActiveRecord::Schema.define(version: 2021_08_20_233650) do
       cind.updated_at
      FROM ((calls_indicators cind
        LEFT JOIN indicators i ON ((i.id = cind.indicator_id)))
-       LEFT JOIN subtypes s ON ((i.product_type_id = s.id)));
+       LEFT JOIN subtypes s ON ((i.subtype_id = s.id)));
   SQL
   create_view "complete_call_documents", sql_definition: <<-SQL
       SELECT cd.id,
@@ -4698,7 +4750,7 @@ ActiveRecord::Schema.define(version: 2021_08_20_233650) do
       faap.goal,
       faap.indicator_id,
       i.ind_description AS indicator_description,
-      i.product_type_id AS indicator_product_type_id,
+      i.subtype_id AS indicator_product_type_id,
       sip.st_name AS indicator_product_type_name,
       faap."order",
       faap.plan_type_id,
@@ -4712,7 +4764,7 @@ ActiveRecord::Schema.define(version: 2021_08_20_233650) do
       faap.updated_at
      FROM ((((form_a_act_plans faap
        LEFT JOIN indicators i ON ((faap.indicator_id = i.id)))
-       LEFT JOIN subtypes sip ON ((i.product_type_id = sip.id)))
+       LEFT JOIN subtypes sip ON ((i.subtype_id = sip.id)))
        LEFT JOIN subtypes spt ON ((faap.product_type_id = spt.id)))
        LEFT JOIN subtypes splt ON ((faap.plan_type_id = splt.id)));
   SQL
@@ -4732,5 +4784,116 @@ ActiveRecord::Schema.define(version: 2021_08_20_233650) do
       ap.updated_at
      FROM (action_plans ap
        LEFT JOIN research_groups rg ON ((rg.id = ap.research_group_id)));
+  SQL
+  create_view "complete_form_b_act_ps", sql_definition: <<-SQL
+      SELECT fbap.id,
+      fbap.action_plan_id,
+      fbap.description,
+      fbap.financing_type_id,
+      sft.st_name AS financing_type_name,
+      fbap.goal_achieved,
+      fbap.goal_state_id,
+      sgs.st_name AS goal_state_name,
+      fbap."order",
+      fbap.plan_type_id,
+      splt.st_name AS plan_type_name,
+      fbap.active,
+      fbap.created_by,
+      fbap.updated_by,
+      fbap.created_at,
+      fbap.updated_at
+     FROM (((form_b_act_plans fbap
+       LEFT JOIN subtypes sft ON ((sft.id = fbap.financing_type_id)))
+       LEFT JOIN subtypes sgs ON ((sgs.id = fbap.goal_state_id)))
+       LEFT JOIN subtypes splt ON ((fbap.plan_type_id = splt.id)));
+  SQL
+  create_view "complete_call_items", sql_definition: <<-SQL
+      SELECT ci.id,
+      ci.call_id,
+      ci.item_id,
+      s.st_name AS item_name,
+      ci.ci_maximum_percentage,
+      ci.ci_percentage,
+      ci.active,
+      ci.created_by,
+      ci.updated_by,
+      ci.created_at,
+      ci.updated_at
+     FROM (call_items ci
+       LEFT JOIN subtypes s ON ((s.id = ci.item_id)));
+  SQL
+  create_view "complete_form_c_act_ps", sql_definition: <<-SQL
+      SELECT fcap.id,
+      fcap.action_plan_id,
+      fcap.advanced_total,
+      fcap.description,
+      fcap.goal,
+      fcap."order",
+      fcap.plan_type_id,
+      spl.st_name AS plan_type_name,
+      fcap.product_type_id,
+      spt.st_name AS product_type_name,
+      fcap.active,
+      fcap.created_by,
+      fcap.updated_by,
+      fcap.created_at,
+      fcap.updated_at
+     FROM ((form_c_act_plans fcap
+       LEFT JOIN subtypes spl ON ((fcap.plan_type_id = spl.id)))
+       LEFT JOIN subtypes spt ON ((fcap.product_type_id = spt.id)));
+  SQL
+  create_view "complete_indicators", sql_definition: <<-SQL
+      SELECT i.id,
+      i.subtype_id,
+      sin.st_name AS subtype_name,
+      sin.type_id,
+      t.t_name AS type_name,
+      i.ind_description,
+      i.active,
+      i.created_by,
+      i.updated_by,
+      i.created_at,
+      i.updated_at
+     FROM ((indicators i
+       LEFT JOIN subtypes sin ON ((sin.id = i.subtype_id)))
+       LEFT JOIN types t ON ((sin.type_id = t.id)));
+  SQL
+  create_view "complete_form_d_act_ps", sql_definition: <<-SQL
+      SELECT fdap.id,
+      fdap.action_plan_id,
+      fdap.name,
+      fdap.description,
+      fdap.goal_achieved,
+      fdap.goal_state_id,
+      sgs.st_name AS goal_state_name,
+      fdap."order",
+      fdap.plan_type_id,
+      spl.st_name AS plan_type_name,
+      ( SELECT count(*) AS count
+             FROM cine_detailed_areas_form_d_act_plans
+            WHERE (cine_detailed_areas_form_d_act_plans.form_d_act_plan_id = fdap.id)) AS total_cine_detailed_areas,
+      ( SELECT count(*) AS count
+             FROM cine_specific_areas_form_d_act_plans
+            WHERE (cine_specific_areas_form_d_act_plans.form_d_act_plan_id = fdap.id)) AS total_cine_specific_areas,
+      ( SELECT count(*) AS count
+             FROM form_d_act_plans_oecd_disciplines
+            WHERE (form_d_act_plans_oecd_disciplines.form_d_act_plan_id = fdap.id)) AS total_oecd_disciplines,
+      ( SELECT count(*) AS count
+             FROM form_d_act_plans_oecd_knowledge_subareas
+            WHERE (form_d_act_plans_oecd_knowledge_subareas.form_d_act_plan_id = fdap.id)) AS total_oecd_knowledge_subareas,
+      ( SELECT count(*) AS count
+             FROM research_focuses_form_d_plans
+            WHERE (research_focuses_form_d_plans.form_d_act_plan_id = fdap.id)) AS total_research_focuses,
+      ( SELECT count(*) AS count
+             FROM form_d_act_plans_snies
+            WHERE (form_d_act_plans_snies.form_d_act_plan_id = fdap.id)) AS total_snies,
+      fdap.active,
+      fdap.created_by,
+      fdap.updated_by,
+      fdap.created_at,
+      fdap.updated_at
+     FROM ((form_d_act_plans fdap
+       LEFT JOIN subtypes sgs ON ((sgs.id = fdap.goal_state_id)))
+       LEFT JOIN subtypes spl ON ((fdap.plan_type_id = spl.id)));
   SQL
 end
