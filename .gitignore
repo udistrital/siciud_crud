@@ -15,9 +15,7 @@
 
 # Ignore the default SQLite database.
 db/schema.rb
-config/database.yml
 config/local_env.yml
-/config/database.yml
 /config/local_env.yml
 /db/*.sqlite3
 /db/*.sqlite3-journal
@@ -47,6 +45,5 @@ swagger-ui/
 migrate_backup/
 
 # Other files temporarily
-/config/database.yml
 /db/schema.rb
 Gemfile.lock
