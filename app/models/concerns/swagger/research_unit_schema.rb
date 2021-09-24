@@ -163,6 +163,25 @@ module Swagger::ResearchUnitSchema
           key :'$ref', :ResearchUnit
         end
         schema do
+          property :child_structures do
+            key :type, :array
+            items do
+              key :type, :object
+              property :id do
+                key :type, :integer
+                key :format, :int64
+              end
+              property :name do
+                key :type, :string
+              end
+            end
+          end
+          property :historical_colciencias do
+            key :type, :array
+            items do
+              key :type, :integer
+            end
+          end
           property :group_state_name do
             key :type, :string
           end
@@ -195,18 +214,49 @@ module Swagger::ResearchUnitSchema
     swagger_schema :ResearchUnitOutputComplete do
       allOf do
         schema do
-          key :'$ref', :ResearchUnitOutput
+          property :id do
+            key :type, :integer
+            key :format, :int64
+          end
         end
         schema do
+          key :'$ref', :ResearchUnit
+        end
+        schema do
+          property :child_structures_count do
+            key :type, :integer
+            key :format, :int64
+          end
           property :cine_broad_area_name do
             key :type, :string
           end
           property :cine_specific_area_name do
             key :type, :string
           end
-          property :daughter_structures_count do
+          property :group_state_name do
+            key :type, :string
+          end
+          property :group_type_name do
+            key :type, :string
+          end
+          property :parent_name do
+            key :type, :string
+          end
+          property :created_by do
             key :type, :integer
             key :format, :int64
+          end
+          property :updated_by do
+            key :type, :integer
+            key :format, :int64
+          end
+          property :created_at do
+            key :type, :string
+            key :format, 'date-time'
+          end
+          property :updated_at do
+            key :type, :string
+            key :format, 'date-time'
           end
           property :member_ids do
             key :type, :array

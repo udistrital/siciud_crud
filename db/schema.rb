@@ -4835,7 +4835,7 @@ ActiveRecord::Schema.define(version: 2021_09_23_033645) do
             WHERE (rg.parent_id = research_groups.id)) AS parent_name,
       ( SELECT count(*) AS count
              FROM research_groups
-            WHERE (rg.id = research_groups.parent_id)) AS daughter_structures_count,
+            WHERE (rg.id = research_groups.parent_id)) AS child_structures_count,
       rg.description,
       rg.cidc_registration_date,
       rg.cidc_act_number,

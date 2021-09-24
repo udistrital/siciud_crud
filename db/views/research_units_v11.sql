@@ -5,7 +5,7 @@ SELECT
     rg.acronym,
     rg.parent_id,
     (SELECT name FROM research_groups WHERE rg.parent_id = id) AS parent_name,
-    (SELECT count(*) FROM research_groups WHERE rg.id = parent_id) AS daughter_structures_count,
+    (SELECT count(*) FROM research_groups WHERE rg.id = parent_id) AS child_structures_count,
     rg.description,
     rg.cidc_registration_date,
     rg.cidc_act_number,
