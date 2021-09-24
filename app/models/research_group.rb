@@ -8,11 +8,15 @@ class ResearchGroup < ApplicationRecord
   belongs_to :oecd_knowledge_area, optional: true
   belongs_to :oecd_knowledge_subarea, optional: true
 
+  belongs_to :parent, class_name: 'ResearchGroup', optional: true
+
   has_and_belongs_to_many :research_focuses,
                           join_table: 'research_focuses_units',
                           class_name: 'Subtype'
   has_and_belongs_to_many :oecd_disciplines
   has_and_belongs_to_many :cine_detailed_areas
+
+  has_many :research_groups, class_name: 'ResearchGroup', foreign_key: 'parent_id'
 
   has_many :faculty_ids_research_groups
   has_many :curricular_prj_ids_research_groups
