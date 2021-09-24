@@ -55,7 +55,7 @@ module Api
                                            :oas_researcher_id, :mobile_number_one,
                                            :mobile_number_two, :phone_number_one,
                                            :phone_number_two,
-                                           :address,
+                                           :address, :cvlac,
                                            :created_by)
       end
 
@@ -65,7 +65,7 @@ module Api
                                            :oas_researcher_id, :mobile_number_one,
                                            :mobile_number_two, :phone_number_one,
                                            :phone_number_two,
-                                           :address,
+                                           :address, :cvlac,
                                            :updated_by)
       end
     end

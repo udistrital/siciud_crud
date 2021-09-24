@@ -28,6 +28,9 @@ module Swagger::ResearcherSchema
       property :address do
         key :type, :string
       end
+      property :cvlac do
+        key :type, :string
+      end
       property :oas_researcher_id do
         key :type, :string
       end
@@ -38,7 +41,7 @@ module Swagger::ResearcherSchema
         schema do
           property :researcher do
             key :required, [:identification_number]
-            key :'$ref', :Type
+            key :'$ref', :Researcher
           end
         end
         schema do
@@ -58,7 +61,7 @@ module Swagger::ResearcherSchema
         schema do
           property :researcher do
             key :required, [:identification_number]
-            key :'$ref', :Type
+            key :'$ref', :Researcher
           end
         end
         schema do
