@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_23_033645) do
+ActiveRecord::Schema.define(version: 2021_09_24_234636) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -629,6 +629,37 @@ ActiveRecord::Schema.define(version: 2021_09_23_033645) do
     t.index ["product_type_id"], name: "index_enterprises_on_product_type_id"
     t.index ["research_group_id"], name: "index_enterprises_on_research_group_id"
     t.index ["updated_by"], name: "index_enterprises_on_updated_by"
+  end
+
+  create_table "entities", force: :cascade do |t|
+    t.string "name"
+    t.string "nit"
+    t.integer "check_digit"
+    t.date "constitution_date"
+    t.bigint "legal_nature_id"
+    t.bigint "legal_representative_id"
+    t.bigint "institution_type_id"
+    t.bigint "geo_city_id"
+    t.bigint "geo_country_id"
+    t.bigint "geo_state_id"
+    t.string "headquarters_address"
+    t.string "email"
+    t.string "phone"
+    t.string "registration"
+    t.string "web_page"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_entities_on_created_by"
+    t.index ["geo_city_id"], name: "index_entities_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_entities_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_entities_on_geo_state_id"
+    t.index ["institution_type_id"], name: "index_entities_on_institution_type_id"
+    t.index ["legal_nature_id"], name: "index_entities_on_legal_nature_id"
+    t.index ["legal_representative_id"], name: "index_entities_on_legal_representative_id"
+    t.index ["updated_by"], name: "index_entities_on_updated_by"
   end
 
   create_table "events", force: :cascade do |t|
@@ -1252,6 +1283,21 @@ ActiveRecord::Schema.define(version: 2021_09_23_033645) do
     t.index ["geo_state_id"], name: "index_knowledge_networks_on_geo_state_id"
     t.index ["research_group_id"], name: "index_knowledge_networks_on_research_group_id"
     t.index ["updated_by"], name: "index_knowledge_networks_on_updated_by"
+  end
+
+  create_table "legal_representatives", force: :cascade do |t|
+    t.string "name"
+    t.string "identification_number"
+    t.string "email"
+    t.bigint "identification_type_id"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_legal_representatives_on_created_by"
+    t.index ["identification_type_id"], name: "index_legal_representatives_on_identification_type_id"
+    t.index ["updated_by"], name: "index_legal_representatives_on_updated_by"
   end
 
   create_table "license_agreements", force: :cascade do |t|
@@ -2515,6 +2561,14 @@ ActiveRecord::Schema.define(version: 2021_09_23_033645) do
   add_foreign_key "enterprises", "subtypes", column: "product_type_id"
   add_foreign_key "enterprises", "users", column: "created_by"
   add_foreign_key "enterprises", "users", column: "updated_by"
+  add_foreign_key "entities", "geo_cities"
+  add_foreign_key "entities", "geo_countries"
+  add_foreign_key "entities", "geo_states"
+  add_foreign_key "entities", "legal_representatives"
+  add_foreign_key "entities", "subtypes", column: "institution_type_id"
+  add_foreign_key "entities", "subtypes", column: "legal_nature_id"
+  add_foreign_key "entities", "users", column: "created_by"
+  add_foreign_key "entities", "users", column: "updated_by"
   add_foreign_key "events", "colciencias_calls"
   add_foreign_key "events", "geo_cities"
   add_foreign_key "events", "geo_countries"
@@ -2668,6 +2722,9 @@ ActiveRecord::Schema.define(version: 2021_09_23_033645) do
   add_foreign_key "knowledge_networks", "subtypes", column: "category_id"
   add_foreign_key "knowledge_networks", "users", column: "created_by"
   add_foreign_key "knowledge_networks", "users", column: "updated_by"
+  add_foreign_key "legal_representatives", "subtypes", column: "identification_type_id"
+  add_foreign_key "legal_representatives", "users", column: "created_by"
+  add_foreign_key "legal_representatives", "users", column: "updated_by"
   add_foreign_key "license_agreements", "colciencias_calls"
   add_foreign_key "license_agreements", "geo_cities"
   add_foreign_key "license_agreements", "geo_cities", column: "contract_geo_city_id"
