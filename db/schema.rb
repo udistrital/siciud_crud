@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_24_234636) do
+ActiveRecord::Schema.define(version: 2021_09_27_145947) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -634,7 +634,7 @@ ActiveRecord::Schema.define(version: 2021_09_24_234636) do
   create_table "entities", force: :cascade do |t|
     t.string "name"
     t.string "nit"
-    t.integer "check_digit"
+    t.integer "check_digit", limit: 2
     t.date "constitution_date"
     t.bigint "legal_nature_id"
     t.bigint "legal_representative_id"
@@ -4963,5 +4963,35 @@ ActiveRecord::Schema.define(version: 2021_09_24_234636) do
      FROM ((research_groups rg
        LEFT JOIN subtypes stgt ON ((rg.group_type_id = stgt.id)))
        LEFT JOIN subtypes stgs ON ((rg.group_state_id = stgs.id)));
+  SQL
+  create_view "siciud.complete_entities", sql_definition: <<-SQL
+      SELECT ent.id,
+      ent.name,
+      ent.nit,
+      ent.check_digit,
+      ent.constitution_date,
+      ent.email,
+      ent.headquarters_address,
+      ent.institution_type_id,
+      sit.st_name AS institution_type_name,
+      ent.geo_city_id,
+      ent.geo_country_id,
+      ent.geo_state_id,
+      ent.legal_nature_id,
+      sln.st_name AS legal_nature_name,
+      ent.legal_representative_id,
+      lr.name AS legal_representative_name,
+      ent.phone,
+      ent.registration,
+      ent.web_page,
+      ent.active,
+      ent.created_by,
+      ent.updated_by,
+      ent.created_at,
+      ent.updated_at
+     FROM (((entities ent
+       LEFT JOIN subtypes sit ON ((ent.institution_type_id = sit.id)))
+       LEFT JOIN subtypes sln ON ((ent.legal_nature_id = sln.id)))
+       LEFT JOIN legal_representatives lr ON ((ent.legal_representative_id = lr.id)));
   SQL
 end
