@@ -36,9 +36,36 @@ module Api
       end
 
       def researcher_research_units
-        research_units = ResearchUnitsByResearcher.where(
-          identification_number: params[:identification_number]
-        )
+        query = nil
+        query_params = []
+
+        if params[:identification_number]
+          if query.nil?
+            query = "identification_number = ?"
+            query_params.append(params[:identification_number])
+          else
+            query += " AND identification_number = ?"
+            query_params.append(params[:identification_number])
+          end
+        end
+
+        if params[:role_id]
+          if query.nil?
+            query = "role_id = ?"
+            query_params.append(params[:role_id])
+          else
+            query += " AND role_id = ?"
+            query_params.append(params[:role_id])
+          end
+        end
+
+        if query.nil?
+          research_units = []
+        else
+          research_units = ResearchUnitsByResearcher.where(
+            query, *query_params
+          )
+        end
 
         render json: research_units
       end
