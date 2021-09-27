@@ -1,11 +1,12 @@
 module Api
   module V1
     class EntitiesController < ApplicationController
+      include Swagger::EntityApi
       before_action :set_entity, only: [:show, :update]
 
       # GET /entities
       def index
-        @entities = Entity.all
+        @entities = CompleteEntity.all
         @entities = DxService.load(@entities, params)
         render json: @entities
       end
