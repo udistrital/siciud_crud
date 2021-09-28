@@ -49,19 +49,36 @@ module Api
           end
         end
 
-        if params[:role_id]
+        if params[:role_ids]
+          role_ids = params[:role_ids]
+          if role_ids.is_a? String
+            role_ids = role_ids.split(',')
+          end
+
           if query.nil?
-            query = "role_id = ?"
-            query_params.append(params[:role_id])
+            query = "role_id IN (?)"
+            query_params.append(role_ids)
           else
-            query += " AND role_id = ?"
-            query_params.append(params[:role_id])
+            query += " AND role_id IN (?)"
+            query_params.append(role_ids)
+          end
+        end
+
+        if params[:group_type_id]
+
+          if query.nil?
+            query = "group_type_id IN (?)"
+            query_params.append(params[:group_type_id])
+          else
+            query += " AND group_type_id IN (?)"
+            query_params.append(params[:group_type_id])
           end
         end
 
         if query.nil?
           research_units = []
         else
+          puts query
           research_units = ResearchUnitsByResearcher.where(
             query, *query_params
           )
