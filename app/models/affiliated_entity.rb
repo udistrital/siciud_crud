@@ -1,4 +1,6 @@
 class AffiliatedEntity < ApplicationRecord
+  include Swagger::AffiliatedEntitySchema
+
   belongs_to :research_network
   belongs_to :entity
   belongs_to :geo_country
