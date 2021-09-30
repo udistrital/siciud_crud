@@ -15,6 +15,10 @@ class Subtype < ApplicationRecord
                           join_table: 'research_focuses_units',
                           class_name: 'ResearchGroup',
                           inverse_of: :research_units
+  has_and_belongs_to_many :research_networks,
+                          join_table: 'research_focuses_networks',
+                          class_name: 'ResearchNetwork',
+                          inverse_of: :research_networks
   has_and_belongs_to_many :form_d_act_plans,
                           join_table: 'research_focuses_form_d_plans',
                           class_name: 'FormDActPlan',

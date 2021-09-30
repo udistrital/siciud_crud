@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_27_145947) do
+ActiveRecord::Schema.define(version: 2021_09_30_050032) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -54,6 +54,24 @@ ActiveRecord::Schema.define(version: 2021_09_27_145947) do
     t.index ["created_by"], name: "index_action_plans_on_created_by"
     t.index ["research_group_id"], name: "index_action_plans_on_research_group_id"
     t.index ["updated_by"], name: "index_action_plans_on_updated_by"
+  end
+
+  create_table "affiliated_entities", force: :cascade do |t|
+    t.bigint "research_network_id"
+    t.bigint "entity_id"
+    t.bigint "institution_type_id"
+    t.bigint "geo_country_id"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_affiliated_entities_on_created_by"
+    t.index ["entity_id"], name: "index_affiliated_entities_on_entity_id"
+    t.index ["geo_country_id"], name: "index_affiliated_entities_on_geo_country_id"
+    t.index ["institution_type_id"], name: "index_affiliated_entities_on_institution_type_id"
+    t.index ["research_network_id"], name: "index_affiliated_entities_on_research_network_id"
+    t.index ["updated_by"], name: "index_affiliated_entities_on_updated_by"
   end
 
   create_table "appropriation_processes", force: :cascade do |t|
@@ -329,6 +347,11 @@ ActiveRecord::Schema.define(version: 2021_09_27_145947) do
   create_table "cine_detailed_areas_research_groups", id: false, force: :cascade do |t|
     t.bigint "research_group_id", null: false
     t.bigint "cine_detailed_area_id", null: false
+  end
+
+  create_table "cine_detailed_areas_research_networks", id: false, force: :cascade do |t|
+    t.bigint "cine_detailed_area_id", null: false
+    t.bigint "research_network_id", null: false
   end
 
   create_table "cine_specific_areas", force: :cascade do |t|
@@ -1506,6 +1529,11 @@ ActiveRecord::Schema.define(version: 2021_09_27_145947) do
     t.bigint "oecd_discipline_id", null: false
   end
 
+  create_table "oecd_disciplines_research_networks", id: false, force: :cascade do |t|
+    t.bigint "oecd_discipline_id", null: false
+    t.bigint "research_network_id", null: false
+  end
+
   create_table "oecd_knowledge_areas", force: :cascade do |t|
     t.string "name"
     t.string "code"
@@ -1903,6 +1931,11 @@ ActiveRecord::Schema.define(version: 2021_09_27_145947) do
     t.bigint "form_d_act_plan_id", null: false
   end
 
+  create_table "research_focuses_networks", id: false, force: :cascade do |t|
+    t.bigint "subtype_id", null: false
+    t.bigint "research_network_id", null: false
+  end
+
   create_table "research_focuses_units", id: false, force: :cascade do |t|
     t.bigint "subtype_id", null: false
     t.bigint "research_group_id", null: false
@@ -1945,6 +1978,44 @@ ActiveRecord::Schema.define(version: 2021_09_27_145947) do
     t.index ["oecd_knowledge_subarea_id"], name: "index_research_groups_on_oecd_knowledge_subarea_id"
     t.index ["parent_id"], name: "index_research_groups_on_parent_id"
     t.index ["updated_by"], name: "index_research_groups_on_updated_by"
+  end
+
+  create_table "research_networks", force: :cascade do |t|
+    t.string "name"
+    t.string "acronym"
+    t.date "request_date"
+    t.text "mission"
+    t.text "vision"
+    t.text "advantage"
+    t.bigint "researcher_id"
+    t.bigint "main_research_group_id"
+    t.bigint "network_type_id"
+    t.bigint "cine_broad_area_id"
+    t.bigint "cine_specific_area_id"
+    t.bigint "oecd_knowledge_subarea_id"
+    t.bigint "oecd_knowledge_area_id"
+    t.text "academic_responsibilities"
+    t.text "financial_responsibilities"
+    t.text "legal_responsibilities"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cine_broad_area_id"], name: "index_research_networks_on_cine_broad_area_id"
+    t.index ["cine_specific_area_id"], name: "index_research_networks_on_cine_specific_area_id"
+    t.index ["created_by"], name: "index_research_networks_on_created_by"
+    t.index ["main_research_group_id"], name: "index_research_networks_on_main_research_group_id"
+    t.index ["network_type_id"], name: "index_research_networks_on_network_type_id"
+    t.index ["oecd_knowledge_area_id"], name: "index_research_networks_on_oecd_knowledge_area_id"
+    t.index ["oecd_knowledge_subarea_id"], name: "index_research_networks_on_oecd_knowledge_subarea_id"
+    t.index ["researcher_id"], name: "index_research_networks_on_researcher_id"
+    t.index ["updated_by"], name: "index_research_networks_on_updated_by"
+  end
+
+  create_table "research_networks_snies", id: false, force: :cascade do |t|
+    t.bigint "snies_id", null: false
+    t.bigint "research_network_id", null: false
   end
 
   create_table "researchers", force: :cascade do |t|
@@ -2418,6 +2489,12 @@ ActiveRecord::Schema.define(version: 2021_09_27_145947) do
   add_foreign_key "action_plans", "research_groups"
   add_foreign_key "action_plans", "users", column: "created_by"
   add_foreign_key "action_plans", "users", column: "updated_by"
+  add_foreign_key "affiliated_entities", "entities"
+  add_foreign_key "affiliated_entities", "geo_countries"
+  add_foreign_key "affiliated_entities", "research_networks"
+  add_foreign_key "affiliated_entities", "subtypes", column: "institution_type_id"
+  add_foreign_key "affiliated_entities", "users", column: "created_by"
+  add_foreign_key "affiliated_entities", "users", column: "updated_by"
   add_foreign_key "appropriation_processes", "colciencias_calls"
   add_foreign_key "appropriation_processes", "research_groups"
   add_foreign_key "appropriation_processes", "subtypes", column: "category_id"
@@ -2897,6 +2974,15 @@ ActiveRecord::Schema.define(version: 2021_09_27_145947) do
   add_foreign_key "research_groups", "subtypes", column: "group_type_id"
   add_foreign_key "research_groups", "users", column: "created_by"
   add_foreign_key "research_groups", "users", column: "updated_by"
+  add_foreign_key "research_networks", "cine_broad_areas"
+  add_foreign_key "research_networks", "cine_specific_areas"
+  add_foreign_key "research_networks", "oecd_knowledge_areas"
+  add_foreign_key "research_networks", "oecd_knowledge_subareas"
+  add_foreign_key "research_networks", "research_groups", column: "main_research_group_id"
+  add_foreign_key "research_networks", "researchers"
+  add_foreign_key "research_networks", "subtypes", column: "network_type_id"
+  add_foreign_key "research_networks", "users", column: "created_by"
+  add_foreign_key "research_networks", "users", column: "updated_by"
   add_foreign_key "researchers", "users", column: "created_by"
   add_foreign_key "researchers", "users", column: "identification_number", primary_key: "identification_number", on_delete: :cascade
   add_foreign_key "researchers", "users", column: "updated_by"
@@ -4993,5 +5079,26 @@ ActiveRecord::Schema.define(version: 2021_09_27_145947) do
        LEFT JOIN subtypes sit ON ((ent.institution_type_id = sit.id)))
        LEFT JOIN subtypes sln ON ((ent.legal_nature_id = sln.id)))
        LEFT JOIN legal_representatives lr ON ((ent.legal_representative_id = lr.id)));
+  SQL
+  create_view "siciud.complete_affiliated_entities", sql_definition: <<-SQL
+      SELECT ae.id,
+      ae.research_network_id,
+      rn.name AS research_network_name,
+      ae.entity_id,
+      e.name AS entity_name,
+      ae.institution_type_id,
+      st.st_name AS institution_type_name,
+      ae.geo_country_id,
+      gc.name AS geo_country_name,
+      ae.active,
+      ae.created_by,
+      ae.updated_by,
+      ae.created_at,
+      ae.updated_at
+     FROM ((((affiliated_entities ae
+       LEFT JOIN research_networks rn ON ((rn.id = ae.research_network_id)))
+       LEFT JOIN entities e ON ((e.id = ae.entity_id)))
+       LEFT JOIN subtypes st ON ((st.id = ae.institution_type_id)))
+       LEFT JOIN geo_countries gc ON ((gc.id = e.geo_country_id)));
   SQL
 end
