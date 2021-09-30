@@ -5,7 +5,13 @@ class Subtype < ApplicationRecord
 
   belongs_to :parent, class_name: 'Subtype', optional: true
 
-  has_many :subtypes, class_name: 'Subtype', foreign_key: 'parent_id', dependent: :destroy
+  has_many :subtypes, class_name: 'Subtype', foreign_key: 'parent_id'
+
+  has_and_belongs_to_many :fac_research_networks,
+                          join_table: 'faculties_research_networks',
+                          class_name: 'ResearchNetwork',
+                          inverse_of: :research_networks
+
   has_and_belongs_to_many :research_creation_works,
                           join_table: 'research_creation_works_work_types',
                           class_name: 'ResearchCreationWork',
@@ -15,7 +21,7 @@ class Subtype < ApplicationRecord
                           join_table: 'research_focuses_units',
                           class_name: 'ResearchGroup',
                           inverse_of: :research_units
-  has_and_belongs_to_many :research_networks,
+  has_and_belongs_to_many :rf_research_networks,
                           join_table: 'research_focuses_networks',
                           class_name: 'ResearchNetwork',
                           inverse_of: :research_networks

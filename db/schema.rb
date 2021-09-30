@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_30_050032) do
+ActiveRecord::Schema.define(version: 2021_09_30_210212) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -763,6 +763,11 @@ ActiveRecord::Schema.define(version: 2021_09_30_050032) do
     t.index ["geo_state_id"], name: "index_extension_projects_on_geo_state_id"
     t.index ["research_group_id"], name: "index_extension_projects_on_research_group_id"
     t.index ["updated_by"], name: "index_extension_projects_on_updated_by"
+  end
+
+  create_table "faculties_research_networks", id: false, force: :cascade do |t|
+    t.bigint "subtype_id", null: false
+    t.bigint "research_network_id", null: false
   end
 
   create_table "faculty_ids_research_groups", force: :cascade do |t|

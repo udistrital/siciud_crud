@@ -14,9 +14,13 @@ class ResearchNetwork < ApplicationRecord
 
   has_many :documents, as: :documentable
 
+  has_and_belongs_to_many :faculties,
+                          join_table: 'faculties_research_networks',
+                          class_name: 'Subtype'
   has_and_belongs_to_many :research_focuses,
                           join_table: 'research_focuses_networks',
                           class_name: 'Subtype'
+
   has_and_belongs_to_many :oecd_disciplines
   has_and_belongs_to_many :cine_detailed_areas
   has_and_belongs_to_many :snies

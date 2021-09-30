@@ -24,4 +24,11 @@ class AffiliatedEntitySerializer < ActiveModel::Serializer
       institution_type.st_name
     end
   end
+
+  def geo_country_name
+    geo_country = self.object.geo_country
+    if geo_country
+      geo_country.name
+    end
+  end
 end
