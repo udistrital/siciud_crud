@@ -15,9 +15,9 @@ SELECT rn.id,
        rn.network_type_id,
        snt.st_name AS network_type_name,
        rn.oecd_knowledge_area_id,
-       oka.name AS oecd_knowledge_area_name,
+       oka.name    AS oecd_knowledge_area_name,
        rn.oecd_knowledge_subarea_id,
-       oks.name AS oecd_knowledge_subarea_name,
+       oks.name    AS oecd_knowledge_subarea_name,
        rn.researcher_id,
        rn.request_date,
        rn.vision,
@@ -26,7 +26,7 @@ SELECT rn.id,
        rn.updated_by,
        rn.created_at,
        rn.updated_at
-FROM siciud.research_networks rn
+FROM research_networks rn
          LEFT JOIN cine_broad_areas cba on rn.cine_broad_area_id = cba.id
          LEFT JOIN cine_specific_areas csa on rn.cine_specific_area_id = csa.id
          LEFT JOIN research_groups rg on rn.main_research_group_id = rg.id
