@@ -1,6 +1,4 @@
 Rails.application.routes.draw do
-  resources :affiliated_entities
-  resources :research_networks
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root to: "health#health"
   get "/api" => redirect("/api/v1/apidocs/")
@@ -309,6 +307,10 @@ Rails.application.routes.draw do
 
       resources :entities, only: [:index, :show, :update, :create]
       resources :legal_representatives, only: [:index, :show, :update, :create]
+      resources :affiliated_entities, only: [:index, :show, :update]
+      resources :research_networks, only: [:index, :show, :update, :create] do
+        resources :affiliated_entities, only: [:index, :create]
+      end
     end
   end
 end

@@ -23,6 +23,7 @@ module Api
       # This list is ordered by the areas and groups that make up.
       # For example, areas of knowledge or type of production.
       SWAGGERED_CLASSES = [
+        AffiliatedEntitiesController,
         CallsController,
         CallDocumentsController,
         CallEvalCriteriaController,
@@ -130,6 +131,7 @@ module Api
         BudgetsController,
         TaskHasStatesController,
 
+        AffiliatedEntity,
         Call,
         CallDocument,
         CallEvalCriterion,
