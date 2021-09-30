@@ -4,6 +4,7 @@ class CineSpecificArea < ApplicationRecord
   belongs_to :cine_broad_area
   has_and_belongs_to_many :form_d_act_plans
   has_many :research_groups
+  has_many :research_networks
 
   # Tracking inherited from ApplicationRecord, fields:
   # created_by and updated_by, see application_record.rb
