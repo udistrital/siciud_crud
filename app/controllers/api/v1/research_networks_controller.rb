@@ -5,8 +5,8 @@ module Api
 
       # GET /research_networks
       def index
-        @research_networks = ResearchNetwork.all
-
+        @research_networks = CompleteResearchNetwork.all
+        @research_networks = DxService.load(@research_networks, params)
         render json: @research_networks
       end
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_30_210212) do
+ActiveRecord::Schema.define(version: 2021_09_30_221403) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -5105,5 +5105,42 @@ ActiveRecord::Schema.define(version: 2021_09_30_210212) do
        LEFT JOIN entities e ON ((e.id = ae.entity_id)))
        LEFT JOIN subtypes st ON ((st.id = ae.institution_type_id)))
        LEFT JOIN geo_countries gc ON ((gc.id = e.geo_country_id)));
+  SQL
+  create_view "siciud.complete_research_networks", sql_definition: <<-SQL
+      SELECT rn.id,
+      rn.name,
+      rn.acronym,
+      rn.academic_responsibilities,
+      rn.advantage,
+      rn.cine_broad_area_id,
+      cba.name AS cine_broad_area_name,
+      rn.cine_specific_area_id,
+      csa.name AS cine_specific_area_name,
+      rn.financial_responsibilities,
+      rn.legal_responsibilities,
+      rn.main_research_group_id,
+      rg.name AS main_research_group_name,
+      rn.mission,
+      rn.network_type_id,
+      snt.st_name AS network_type_name,
+      rn.oecd_knowledge_area_id,
+      oka.name AS oecd_knowledge_area_name,
+      rn.oecd_knowledge_subarea_id,
+      oks.name AS oecd_knowledge_subarea_name,
+      rn.researcher_id,
+      rn.request_date,
+      rn.vision,
+      rn.active,
+      rn.created_by,
+      rn.updated_by,
+      rn.created_at,
+      rn.updated_at
+     FROM ((((((research_networks rn
+       LEFT JOIN cine_broad_areas cba ON ((rn.cine_broad_area_id = cba.id)))
+       LEFT JOIN cine_specific_areas csa ON ((rn.cine_specific_area_id = csa.id)))
+       LEFT JOIN research_groups rg ON ((rn.main_research_group_id = rg.id)))
+       LEFT JOIN subtypes snt ON ((rn.network_type_id = snt.id)))
+       LEFT JOIN oecd_knowledge_areas oka ON ((rn.oecd_knowledge_area_id = oka.id)))
+       LEFT JOIN oecd_knowledge_subareas oks ON ((rn.oecd_knowledge_subarea_id = oks.id)));
   SQL
 end
