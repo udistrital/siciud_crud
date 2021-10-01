@@ -1,6 +1,8 @@
 module Api
   module V1
     class ResearchNetworksController < ApplicationController
+      include Swagger::ResearchNetworkApi
+
       before_action :set_research_network, only: [:show, :update]
 
       # GET /research_networks
