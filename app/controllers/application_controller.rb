@@ -27,6 +27,9 @@ class ApplicationController < ActionController::API
     elsif params[:call_id]
       id = params[:call_id]
       @context = Call.find(id)
+    elsif params[:research_network_id]
+      id = params[:research_network_id]
+      @context = ResearchNetwork.find(id)
     else
       set_product_context
     end

@@ -1,4 +1,6 @@
 class ResearchNetwork < ApplicationRecord
+  include Swagger::ResearchNetworkSchema
+
   belongs_to :researcher
   belongs_to :cine_broad_area, optional: true
   belongs_to :cine_specific_area, optional: true

@@ -4,7 +4,7 @@ module Swagger::DocumentApi
   require './app/models/concerns/constant.rb'
 
   PRODUCT_ARRAY = get_product_array
-  RU_PRODUCT_ARRAY = [:research_units, :calls] + PRODUCT_ARRAY
+  RU_PRODUCT_ARRAY = [:research_units, :calls, :research_networks] + PRODUCT_ARRAY
 
   included do
     swagger_path '/{context}/{context_id}/documents/{id}' do
