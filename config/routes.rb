@@ -310,6 +310,7 @@ Rails.application.routes.draw do
       resources :affiliated_entities, only: [:index, :show, :update]
       resources :research_networks, only: [:index, :show, :update, :create] do
         resources :affiliated_entities, only: [:index, :create]
+        resources :documents, only: [:index, :show, :create, :update]
       end
     end
   end
