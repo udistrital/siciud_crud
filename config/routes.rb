@@ -39,6 +39,12 @@ Rails.application.routes.draw do
         resources :form_d_act_plans, only: [:index, :create, :update]
         resources :form_e_act_plans, only: [:index, :create, :update]
       end
+      resources :ap_management_reports, only: [:update] do
+        resources :form_a_act_plans, only: [:index, :create, :update]
+        resources :form_b_act_plans, only: [:index, :create, :update]
+        resources :form_c_act_plans, only: [:index, :create, :update]
+        resources :form_d_act_plans, only: [:index, :create, :update]
+      end
       resources :form_a_act_plans, only: [:show]
       resources :form_b_act_plans, only: [:show]
       resources :form_c_act_plans, only: [:show]

@@ -100,6 +100,7 @@ module Api
         ResearchNetworksController,
         ResearchGroupController,
         ActionPlansController,
+        ApManagementReportsController,
         FormAActPlansController,
         FormBActPlansController,
         FormCActPlansController,

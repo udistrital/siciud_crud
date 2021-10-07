@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_01_215557) do
+ActiveRecord::Schema.define(version: 2021_10_07_074334) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -51,6 +51,8 @@ ActiveRecord::Schema.define(version: 2021_10_01_215557) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "published_at"
+    t.boolean "management_report_is_draft", default: true
+    t.datetime "management_report_published_at"
     t.index ["created_by"], name: "index_action_plans_on_created_by"
     t.index ["research_group_id"], name: "index_action_plans_on_research_group_id"
     t.index ["updated_by"], name: "index_action_plans_on_updated_by"
@@ -4844,23 +4846,6 @@ ActiveRecord::Schema.define(version: 2021_10_01_215557) do
        LEFT JOIN subtypes spt ON ((faap.product_type_id = spt.id)))
        LEFT JOIN subtypes splt ON ((faap.plan_type_id = splt.id)));
   SQL
-  create_view "siciud.complete_action_plans", sql_definition: <<-SQL
-      SELECT ap.id,
-      ap.execution_validity,
-      ap.research_group_id,
-      rg.name AS research_group_name,
-      rg.acronym AS research_group_acronym,
-      rg.gruplac AS research_group_gruplac,
-      ap.is_draft,
-      ap.active,
-      ap.created_by,
-      ap.updated_by,
-      ap.published_at,
-      ap.created_at,
-      ap.updated_at
-     FROM (action_plans ap
-       LEFT JOIN research_groups rg ON ((rg.id = ap.research_group_id)));
-  SQL
   create_view "siciud.complete_form_b_act_ps", sql_definition: <<-SQL
       SELECT fbap.id,
       fbap.action_plan_id,
@@ -4972,89 +4957,6 @@ ActiveRecord::Schema.define(version: 2021_10_01_215557) do
        LEFT JOIN subtypes sgs ON ((sgs.id = fdap.goal_state_id)))
        LEFT JOIN subtypes spl ON ((fdap.plan_type_id = spl.id)));
   SQL
-  create_view "siciud.research_units", sql_definition: <<-SQL
-      SELECT rg.id,
-      rg.legacy_siciud_id,
-      rg.name,
-      rg.acronym,
-      rg.parent_id,
-      ( SELECT research_groups.name
-             FROM research_groups
-            WHERE (rg.parent_id = research_groups.id)) AS parent_name,
-      ( SELECT count(*) AS count
-             FROM research_groups
-            WHERE (rg.id = research_groups.parent_id)) AS child_structures_count,
-      rg.description,
-      rg.cidc_registration_date,
-      rg.cidc_act_number,
-      rg.faculty_act_number,
-      rg.faculty_registration_date,
-      rg.email,
-      rg.gruplac,
-      rg.webpage,
-      rg.mission,
-      rg.vision,
-      rg.colciencias_code,
-      rg.snies_id,
-      rg.group_type_id,
-      stgt.st_name AS group_type_name,
-      rg.group_state_id,
-      stgs.st_name AS group_state_name,
-      rg.interinstitutional,
-      ARRAY( SELECT group_members.researcher_id
-             FROM group_members
-            WHERE (group_members.research_group_id = rg.id)) AS member_ids,
-      ( SELECT count(*) AS count
-             FROM group_members
-            WHERE (group_members.research_group_id = rg.id)) AS member_count,
-      ( SELECT count(*) AS count
-             FROM group_members
-            WHERE ((group_members.research_group_id = rg.id) AND (group_members.gm_state_id = 1))) AS active_member_count,
-      ( SELECT count(*) AS count
-             FROM group_members
-            WHERE ((group_members.research_group_id = rg.id) AND (group_members.gm_state_id = 2))) AS inactive_member_count,
-      ARRAY( SELECT faculty_ids_research_groups.faculty_id
-             FROM faculty_ids_research_groups
-            WHERE (faculty_ids_research_groups.research_group_id = rg.id)) AS faculty_ids,
-      ( SELECT count(*) AS count
-             FROM faculty_ids_research_groups
-            WHERE (faculty_ids_research_groups.research_group_id = rg.id)) AS total_faculties,
-      rg.cine_broad_area_id,
-      ( SELECT cine_broad_areas.name
-             FROM cine_broad_areas
-            WHERE (cine_broad_areas.id = rg.cine_broad_area_id)) AS cine_broad_area_name,
-      rg.cine_specific_area_id,
-      ( SELECT cine_specific_areas.name
-             FROM cine_specific_areas
-            WHERE (cine_specific_areas.id = rg.cine_specific_area_id)) AS cine_specific_area_name,
-      ARRAY( SELECT cine_detailed_areas_research_groups.cine_detailed_area_id
-             FROM cine_detailed_areas_research_groups
-            WHERE (cine_detailed_areas_research_groups.research_group_id = rg.id)) AS cine_detailed_area_ids,
-      ARRAY( SELECT curricular_prj_ids_research_groups.curricular_project_id
-             FROM curricular_prj_ids_research_groups
-            WHERE (curricular_prj_ids_research_groups.research_group_id = rg.id)) AS curricular_project_ids,
-      rg.oecd_knowledge_area_id,
-      ( SELECT oecd_knowledge_areas.name
-             FROM oecd_knowledge_areas
-            WHERE (oecd_knowledge_areas.id = rg.oecd_knowledge_area_id)) AS oecd_knowledge_area_name,
-      rg.oecd_knowledge_subarea_id,
-      ( SELECT oecd_knowledge_subareas.name
-             FROM oecd_knowledge_subareas
-            WHERE (oecd_knowledge_subareas.id = rg.oecd_knowledge_subarea_id)) AS oecd_knowledge_subarea_name,
-      ARRAY( SELECT oecd_disciplines_research_groups.oecd_discipline_id
-             FROM oecd_disciplines_research_groups
-            WHERE (oecd_disciplines_research_groups.research_group_id = rg.id)) AS oecd_discipline_ids,
-      ARRAY( SELECT research_focuses_units.subtype_id
-             FROM research_focuses_units
-            WHERE (research_focuses_units.research_group_id = rg.id)) AS research_focus_ids,
-      rg.created_at,
-      rg.updated_at,
-      rg.created_by,
-      rg.updated_by
-     FROM ((research_groups rg
-       LEFT JOIN subtypes stgt ON ((rg.group_type_id = stgt.id)))
-       LEFT JOIN subtypes stgs ON ((rg.group_state_id = stgs.id)));
-  SQL
   create_view "siciud.complete_entities", sql_definition: <<-SQL
       SELECT ent.id,
       ent.name,
@@ -5144,5 +5046,111 @@ ActiveRecord::Schema.define(version: 2021_10_01_215557) do
        LEFT JOIN oecd_knowledge_areas oka ON ((rn.oecd_knowledge_area_id = oka.id)))
        LEFT JOIN oecd_knowledge_subareas oks ON ((rn.oecd_knowledge_subarea_id = oks.id)))
        LEFT JOIN researchers r ON ((rn.researcher_id = r.id)));
+  SQL
+  create_view "siciud.complete_action_plans", sql_definition: <<-SQL
+      SELECT ap.id,
+      ap.execution_validity,
+      ap.research_group_id,
+      rg.name AS research_group_name,
+      rg.acronym AS research_group_acronym,
+      rg.gruplac AS research_group_gruplac,
+      ap.is_draft,
+      ap.management_report_is_draft,
+      ap.active,
+      ap.created_by,
+      ap.updated_by,
+      ap.created_at,
+      ap.updated_at,
+      ap.published_at,
+      ap.management_report_published_at
+     FROM (action_plans ap
+       LEFT JOIN research_groups rg ON ((rg.id = ap.research_group_id)));
+  SQL
+  create_view "siciud.research_units", sql_definition: <<-SQL
+      SELECT rg.id,
+      rg.legacy_siciud_id,
+      rg.name,
+      rg.acronym,
+      rg.parent_id,
+      ( SELECT research_groups.name
+             FROM research_groups
+            WHERE (rg.parent_id = research_groups.id)) AS parent_name,
+      ( SELECT count(*) AS count
+             FROM research_groups
+            WHERE (rg.id = research_groups.parent_id)) AS child_structures_count,
+      rg.description,
+      rg.cidc_registration_date,
+      rg.cidc_act_number,
+      rg.faculty_act_number,
+      rg.faculty_registration_date,
+      rg.email,
+      rg.gruplac,
+      rg.webpage,
+      rg.mission,
+      rg.vision,
+      rg.colciencias_code,
+      rg.snies_id,
+      rg.group_type_id,
+      stgt.st_name AS group_type_name,
+      rg.group_state_id,
+      stgs.st_name AS group_state_name,
+      rg.interinstitutional,
+      ARRAY( SELECT group_members.researcher_id
+             FROM group_members
+            WHERE (group_members.research_group_id = rg.id)) AS member_ids,
+      ARRAY( SELECT r.identification_number
+             FROM (group_members gm
+               LEFT JOIN researchers r ON ((gm.researcher_id = r.id)))
+            WHERE (gm.research_group_id = rg.id)) AS member_documents,
+      ( SELECT count(*) AS count
+             FROM group_members
+            WHERE (group_members.research_group_id = rg.id)) AS member_count,
+      ( SELECT count(*) AS count
+             FROM group_members
+            WHERE ((group_members.research_group_id = rg.id) AND (group_members.gm_state_id = 1))) AS active_member_count,
+      ( SELECT count(*) AS count
+             FROM group_members
+            WHERE ((group_members.research_group_id = rg.id) AND (group_members.gm_state_id = 2))) AS inactive_member_count,
+      ARRAY( SELECT faculty_ids_research_groups.faculty_id
+             FROM faculty_ids_research_groups
+            WHERE (faculty_ids_research_groups.research_group_id = rg.id)) AS faculty_ids,
+      ( SELECT count(*) AS count
+             FROM faculty_ids_research_groups
+            WHERE (faculty_ids_research_groups.research_group_id = rg.id)) AS total_faculties,
+      rg.cine_broad_area_id,
+      ( SELECT cine_broad_areas.name
+             FROM cine_broad_areas
+            WHERE (cine_broad_areas.id = rg.cine_broad_area_id)) AS cine_broad_area_name,
+      rg.cine_specific_area_id,
+      ( SELECT cine_specific_areas.name
+             FROM cine_specific_areas
+            WHERE (cine_specific_areas.id = rg.cine_specific_area_id)) AS cine_specific_area_name,
+      ARRAY( SELECT cine_detailed_areas_research_groups.cine_detailed_area_id
+             FROM cine_detailed_areas_research_groups
+            WHERE (cine_detailed_areas_research_groups.research_group_id = rg.id)) AS cine_detailed_area_ids,
+      ARRAY( SELECT curricular_prj_ids_research_groups.curricular_project_id
+             FROM curricular_prj_ids_research_groups
+            WHERE (curricular_prj_ids_research_groups.research_group_id = rg.id)) AS curricular_project_ids,
+      rg.oecd_knowledge_area_id,
+      ( SELECT oecd_knowledge_areas.name
+             FROM oecd_knowledge_areas
+            WHERE (oecd_knowledge_areas.id = rg.oecd_knowledge_area_id)) AS oecd_knowledge_area_name,
+      rg.oecd_knowledge_subarea_id,
+      ( SELECT oecd_knowledge_subareas.name
+             FROM oecd_knowledge_subareas
+            WHERE (oecd_knowledge_subareas.id = rg.oecd_knowledge_subarea_id)) AS oecd_knowledge_subarea_name,
+      ARRAY( SELECT oecd_disciplines_research_groups.oecd_discipline_id
+             FROM oecd_disciplines_research_groups
+            WHERE (oecd_disciplines_research_groups.research_group_id = rg.id)) AS oecd_discipline_ids,
+      ARRAY( SELECT research_focuses_units.subtype_id
+             FROM research_focuses_units
+            WHERE (research_focuses_units.research_group_id = rg.id)) AS research_focus_ids,
+      rg.created_at,
+      rg.updated_at,
+      rg.created_by,
+      rg.updated_by
+     FROM ((research_groups rg
+       LEFT JOIN subtypes stgt ON ((rg.group_type_id = stgt.id)))
+       LEFT JOIN subtypes stgs ON ((rg.group_state_id = stgs.id)));
   SQL
 end
