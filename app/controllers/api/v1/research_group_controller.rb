@@ -14,7 +14,9 @@ module Api
       def index
         @research_groups = DxService.load(ResearchUnit, params)
         @rg_data = @research_groups[:data]
-        @research_groups[:data] = @rg_data.select(@rg_data.column_names - ["member_documents"])
+        if @rg_data.is_a? ActiveRecord::Relation
+          @research_groups[:data] = @rg_data.select(@rg_data.column_names - ["member_documents"])
+        end
         render json: @research_groups
       end
 
