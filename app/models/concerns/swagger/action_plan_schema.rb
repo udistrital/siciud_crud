@@ -58,6 +58,19 @@ module Swagger::ActionPlanSchema
       end
     end
 
+    swagger_schema :ApManagementReportInputPut do
+      property :ap_management_report do
+        property :management_report_is_draft do
+          key :type, :boolean
+          key :default, :true
+        end
+        property :updated_by do
+          key :type, :integer
+          key :format, :int64
+        end
+      end
+    end
+
     swagger_schema :ActionPlanOutput do
       allOf do
         schema do
@@ -90,6 +103,10 @@ module Swagger::ActionPlanSchema
             key :format, 'date-time'
           end
           property :updated_at do
+            key :type, :string
+            key :format, 'date-time'
+          end
+          property :published_at do
             key :type, :string
             key :format, 'date-time'
           end

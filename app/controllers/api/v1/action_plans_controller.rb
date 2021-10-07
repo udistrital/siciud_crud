@@ -78,7 +78,7 @@ module Api
       # Only allow a trusted parameter "white list" through.
       def act_plan_params_to_create
         params.require(:action_plan).permit(:execution_validity,
-                                            :is_draft, :research_group_id,
+                                            :is_draft,
                                             :active, :created_by)
       end
 

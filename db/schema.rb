@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_01_215557) do
+ActiveRecord::Schema.define(version: 2021_10_07_052302) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -51,6 +51,8 @@ ActiveRecord::Schema.define(version: 2021_10_01_215557) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "published_at"
+    t.boolean "management_report_is_draft", default: true
+    t.datetime "management_report_published_at"
     t.index ["created_by"], name: "index_action_plans_on_created_by"
     t.index ["research_group_id"], name: "index_action_plans_on_research_group_id"
     t.index ["updated_by"], name: "index_action_plans_on_updated_by"
@@ -4844,23 +4846,6 @@ ActiveRecord::Schema.define(version: 2021_10_01_215557) do
        LEFT JOIN subtypes spt ON ((faap.product_type_id = spt.id)))
        LEFT JOIN subtypes splt ON ((faap.plan_type_id = splt.id)));
   SQL
-  create_view "siciud.complete_action_plans", sql_definition: <<-SQL
-      SELECT ap.id,
-      ap.execution_validity,
-      ap.research_group_id,
-      rg.name AS research_group_name,
-      rg.acronym AS research_group_acronym,
-      rg.gruplac AS research_group_gruplac,
-      ap.is_draft,
-      ap.active,
-      ap.created_by,
-      ap.updated_by,
-      ap.published_at,
-      ap.created_at,
-      ap.updated_at
-     FROM (action_plans ap
-       LEFT JOIN research_groups rg ON ((rg.id = ap.research_group_id)));
-  SQL
   create_view "siciud.complete_form_b_act_ps", sql_definition: <<-SQL
       SELECT fbap.id,
       fbap.action_plan_id,
@@ -5144,5 +5129,24 @@ ActiveRecord::Schema.define(version: 2021_10_01_215557) do
        LEFT JOIN oecd_knowledge_areas oka ON ((rn.oecd_knowledge_area_id = oka.id)))
        LEFT JOIN oecd_knowledge_subareas oks ON ((rn.oecd_knowledge_subarea_id = oks.id)))
        LEFT JOIN researchers r ON ((rn.researcher_id = r.id)));
+  SQL
+  create_view "siciud.complete_action_plans", sql_definition: <<-SQL
+      SELECT ap.id,
+      ap.execution_validity,
+      ap.research_group_id,
+      rg.name AS research_group_name,
+      rg.acronym AS research_group_acronym,
+      rg.gruplac AS research_group_gruplac,
+      ap.is_draft,
+      ap.management_report_is_draft,
+      ap.active,
+      ap.created_by,
+      ap.updated_by,
+      ap.created_at,
+      ap.updated_at,
+      ap.published_at,
+      ap.management_report_published_at
+     FROM (action_plans ap
+       LEFT JOIN research_groups rg ON ((rg.id = ap.research_group_id)));
   SQL
 end
