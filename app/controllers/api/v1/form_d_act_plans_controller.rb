@@ -23,8 +23,6 @@ module Api
 
       # POST /form_d_act_plans
       def create
-        puts "--------------------------"
-        puts form_d_act_pl_params_to_create
         @form_d_act_plan = @action_plan.form_d_act_plans.new(
           form_d_act_pl_params_to_create)
 
@@ -37,10 +35,43 @@ module Api
 
       # PATCH/PUT /form_d_act_plans/1
       def update
-        if @form_d_act_plan.update(form_d_act_pl_params_to_update)
-          render json: @form_d_act_plan
+        body_ap = form_d_act_pl_params_to_update.except(:goal_achieved)
+        body_mr = form_d_act_pl_params_to_update.except(:name, :description,
+                                                        :goal_state_id,
+                                                        :order, :action_plan_id,
+                                                        :plan_type_id, :active,
+                                                        cine_detailed_area_ids: [],
+                                                        cine_specific_area_ids: [],
+                                                        oecd_discipline_ids: [],
+                                                        oecd_knowledge_subarea_ids: [],
+                                                        research_focus_ids: [],
+                                                        snies_ids: [])
+        result = ActionPlanService.form_is_upgradeable(@action_plan,
+                                                       @form_d_act_plan,
+                                                       body_ap,
+                                                       body_mr,
+                                                       [
+                                                         :name, :description,
+                                                         :goal_state_id,
+                                                         :goal_achieved,
+                                                         :order, :action_plan_id,
+                                                         :plan_type_id,
+                                                         cine_detailed_area_ids: [],
+                                                         cine_specific_area_ids: [],
+                                                         oecd_discipline_ids: [],
+                                                         oecd_knowledge_subarea_ids: [],
+                                                         research_focus_ids: [],
+                                                         snies_ids: []],
+                                                       ", form d.")
+        if result[:is_upgradeable]
+          if @form_d_act_plan.update(result[:body_params])
+            render json: @form_d_act_plan
+          else
+            render json: @form_d_act_plan.errors, status: :unprocessable_entity
+          end
         else
-          render json: @form_d_act_plan.errors, status: :unprocessable_entity
+          render json: { error: result[:msg] },
+                 status: :unprocessable_entity
         end
       end
 
@@ -54,7 +85,7 @@ module Api
       # Only allow a trusted parameter "white list" through.
       def form_d_act_pl_params_to_create
         params.require(:form_d_act_plan).permit(:name, :description,
-                                                :goal_state_id, :goal_achieved,
+                                                :goal_state_id,
                                                 :order,
                                                 :plan_type_id, :active,
                                                 :created_by,
