@@ -35,9 +35,17 @@ module Api
 
       # PATCH/PUT /form_a_act_plans/1
       def update
+        body_ap = form_a_act_p_params_to_update.except(:advanced_total)
+        body_mr = form_a_act_p_params_to_update.except(:product_type_id,
+                                                       :indicator_id,
+                                                       :goal, :order,
+                                                       :action_plan_id,
+                                                       :plan_type_id,
+                                                       :active)
         result = ActionPlanService.form_is_upgradeable(@action_plan,
                                                        @form_a_act_plan,
-                                                       form_a_act_p_params_to_update,
+                                                       body_ap,
+                                                       body_mr,
                                                        [
                                                          :product_type_id, :indicator_id,
                                                          :goal, :advanced_total,
@@ -66,7 +74,7 @@ module Api
       # Only allow a trusted parameter "white list" through.
       def form_a_act_p_params_to_create
         params.require(:form_a_act_plan).permit(:product_type_id, :indicator_id,
-                                                :goal, :advanced_total, :order,
+                                                :goal, :order,
                                                 :plan_type_id, :active, :created_by)
       end
 

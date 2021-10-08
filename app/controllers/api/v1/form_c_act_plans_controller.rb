@@ -35,9 +35,15 @@ module Api
 
       # PATCH/PUT /form_c_act_plans/1
       def update
+        body_ap = form_c_act_p_params_to_update.except(:advanced_total)
+        body_mr = form_c_act_p_params_to_update.except(:product_type_id,
+                                                       :description, :goal, :order,
+                                                       :action_plan_id, :plan_type_id,
+                                                       :active)
         result = ActionPlanService.form_is_upgradeable(@action_plan,
                                                        @form_c_act_plan,
-                                                       form_c_act_p_params_to_update,
+                                                       body_ap,
+                                                       body_mr,
                                                        [
                                                          :product_type_id,
                                                          :description, :goal, :order,
@@ -75,6 +81,7 @@ module Api
         params.require(:form_c_act_plan).permit(:product_type_id,
                                                 :description, :goal, :order,
                                                 :action_plan_id, :plan_type_id,
+                                                :advanced_total,
                                                 :active, :updated_by)
       end
     end

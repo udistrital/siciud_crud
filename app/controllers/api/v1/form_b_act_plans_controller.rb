@@ -35,9 +35,15 @@ module Api
 
       # PATCH/PUT /form_b_act_plans/1
       def update
+        body_ap = form_b_act_p_params_to_update.except(:goal_achieved)
+        body_mr = form_b_act_p_params_to_update.except(:financing_type_id, :description,
+                                                       :goal_state_id, :order,
+                                                       :action_plan_id, :plan_type_id,
+                                                       :active)
         result = ActionPlanService.form_is_upgradeable(@action_plan,
                                                        @form_b_act_plan,
-                                                       form_b_act_p_params_to_update,
+                                                       body_ap,
+                                                       body_mr,
                                                        [
                                                          :financing_type_id, :description,
                                                          :goal_state_id, :goal_achieved,
