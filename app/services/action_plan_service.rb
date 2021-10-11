@@ -51,17 +51,17 @@ class ActionPlanService
         body_params: body_ap.except(*except_list),
         msg: "Only the [#{body_ap.keys.join(", ")}] fields were updated."
       }
-    elsif record_unchanged(form, body_ap)
-      result = {
-        is_upgradeable: true,
-        body_params: body_ap,
-        msg: "Record unchanged. Form"
-      }
     elsif action_plan.is_draft == false and action_plan.management_report_is_draft
       result = {
         is_upgradeable: true,
         body_params: body_mr,
         msg: ""
+      }
+    elsif record_unchanged(form, body_ap)
+      result = {
+        is_upgradeable: true,
+        body_params: body_ap,
+        msg: "Record unchanged. Form#{complement}"
       }
     elsif action_plan.is_draft == false and action_plan.management_report_is_draft == false
       result = {
