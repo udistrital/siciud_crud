@@ -308,9 +308,13 @@ Rails.application.routes.draw do
       resources :entities, only: [:index, :show, :update, :create]
       resources :legal_representatives, only: [:index, :show, :update, :create]
       resources :affiliated_entities, only: [:index, :show, :update]
+      resources :research_groups_research_networks, only: [:show, :update] do
+        resources :documents, only: [:index, :show, :create, :update]
+      end
       resources :research_networks, only: [:index, :show, :update, :create] do
         resources :affiliated_entities, only: [:index, :create]
         resources :documents, only: [:index, :show, :create, :update]
+        resources :research_groups_research_networks, only: [:index, :create]
       end
     end
   end

@@ -10,7 +10,8 @@ module Swagger::DocumentApi
                       :form_a_act_plans,
                       :form_b_act_plans,
                       :form_c_act_plans,
-                      :form_d_act_plans
+                      :form_d_act_plans,
+                      :research_groups_research_networks
   ] + PRODUCT_ARRAY
 
   included do

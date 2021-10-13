@@ -11,7 +11,7 @@ class ResearchNetworkSerializer < ActiveModel::Serializer
              :research_focus_ids, :snies_ids,
              :oecd_knowledge_subarea_id, :oecd_knowledge_subarea_name,
              :oecd_knowledge_area_id, :oecd_knowledge_area_name,
-             :oecd_discipline_ids,
+             :oecd_discipline_ids, :research_group_ids,
              :active, :created_by, :updated_by, :created_at, :updated_at
 
   def main_research_group_name
