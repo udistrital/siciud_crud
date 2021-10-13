@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_13_162939) do
+ActiveRecord::Schema.define(version: 2021_10_13_173659) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -662,7 +662,6 @@ ActiveRecord::Schema.define(version: 2021_10_13_162939) do
     t.integer "check_digit", limit: 2
     t.date "constitution_date"
     t.bigint "legal_nature_id"
-    t.bigint "legal_representative_id"
     t.bigint "institution_type_id"
     t.bigint "geo_city_id"
     t.bigint "geo_country_id"
@@ -683,7 +682,6 @@ ActiveRecord::Schema.define(version: 2021_10_13_162939) do
     t.index ["geo_state_id"], name: "index_entities_on_geo_state_id"
     t.index ["institution_type_id"], name: "index_entities_on_institution_type_id"
     t.index ["legal_nature_id"], name: "index_entities_on_legal_nature_id"
-    t.index ["legal_representative_id"], name: "index_entities_on_legal_representative_id"
     t.index ["updated_by"], name: "index_entities_on_updated_by"
   end
 
@@ -2664,7 +2662,6 @@ ActiveRecord::Schema.define(version: 2021_10_13_162939) do
   add_foreign_key "entities", "geo_cities"
   add_foreign_key "entities", "geo_countries"
   add_foreign_key "entities", "geo_states"
-  add_foreign_key "entities", "legal_representatives"
   add_foreign_key "entities", "subtypes", column: "institution_type_id"
   add_foreign_key "entities", "subtypes", column: "legal_nature_id"
   add_foreign_key "entities", "users", column: "created_by"
@@ -4977,36 +4974,6 @@ ActiveRecord::Schema.define(version: 2021_10_13_162939) do
        LEFT JOIN subtypes sgs ON ((sgs.id = fdap.goal_state_id)))
        LEFT JOIN subtypes spl ON ((fdap.plan_type_id = spl.id)));
   SQL
-  create_view "siciud.complete_entities", sql_definition: <<-SQL
-      SELECT ent.id,
-      ent.name,
-      ent.nit,
-      ent.check_digit,
-      ent.constitution_date,
-      ent.email,
-      ent.headquarters_address,
-      ent.institution_type_id,
-      sit.st_name AS institution_type_name,
-      ent.geo_city_id,
-      ent.geo_country_id,
-      ent.geo_state_id,
-      ent.legal_nature_id,
-      sln.st_name AS legal_nature_name,
-      ent.legal_representative_id,
-      lr.name AS legal_representative_name,
-      ent.phone,
-      ent.registration,
-      ent.web_page,
-      ent.active,
-      ent.created_by,
-      ent.updated_by,
-      ent.created_at,
-      ent.updated_at
-     FROM (((entities ent
-       LEFT JOIN subtypes sit ON ((ent.institution_type_id = sit.id)))
-       LEFT JOIN subtypes sln ON ((ent.legal_nature_id = sln.id)))
-       LEFT JOIN legal_representatives lr ON ((ent.legal_representative_id = lr.id)));
-  SQL
   create_view "siciud.complete_affiliated_entities", sql_definition: <<-SQL
       SELECT ae.id,
       ae.research_network_id,
@@ -5193,5 +5160,32 @@ ActiveRecord::Schema.define(version: 2021_10_13_162939) do
       rgrn.updated_at
      FROM (research_groups_research_networks rgrn
        LEFT JOIN research_groups rg ON ((rgrn.research_group_id = rg.id)));
+  SQL
+  create_view "siciud.complete_entities", sql_definition: <<-SQL
+      SELECT ent.id,
+      ent.name,
+      ent.nit,
+      ent.check_digit,
+      ent.constitution_date,
+      ent.email,
+      ent.headquarters_address,
+      ent.institution_type_id,
+      sit.st_name AS institution_type_name,
+      ent.geo_city_id,
+      ent.geo_country_id,
+      ent.geo_state_id,
+      ent.legal_nature_id,
+      sln.st_name AS legal_nature_name,
+      ent.phone,
+      ent.registration,
+      ent.web_page,
+      ent.active,
+      ent.created_by,
+      ent.updated_by,
+      ent.created_at,
+      ent.updated_at
+     FROM ((entities ent
+       LEFT JOIN subtypes sit ON ((ent.institution_type_id = sit.id)))
+       LEFT JOIN subtypes sln ON ((ent.legal_nature_id = sln.id)));
   SQL
 end
