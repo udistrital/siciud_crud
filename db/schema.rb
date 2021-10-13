@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_07_074334) do
+ActiveRecord::Schema.define(version: 2021_10_13_173659) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -662,7 +662,6 @@ ActiveRecord::Schema.define(version: 2021_10_07_074334) do
     t.integer "check_digit", limit: 2
     t.date "constitution_date"
     t.bigint "legal_nature_id"
-    t.bigint "legal_representative_id"
     t.bigint "institution_type_id"
     t.bigint "geo_city_id"
     t.bigint "geo_country_id"
@@ -683,7 +682,6 @@ ActiveRecord::Schema.define(version: 2021_10_07_074334) do
     t.index ["geo_state_id"], name: "index_entities_on_geo_state_id"
     t.index ["institution_type_id"], name: "index_entities_on_institution_type_id"
     t.index ["legal_nature_id"], name: "index_entities_on_legal_nature_id"
-    t.index ["legal_representative_id"], name: "index_entities_on_legal_representative_id"
     t.index ["updated_by"], name: "index_entities_on_updated_by"
   end
 
@@ -1987,6 +1985,22 @@ ActiveRecord::Schema.define(version: 2021_10_07_074334) do
     t.index ["updated_by"], name: "index_research_groups_on_updated_by"
   end
 
+  create_table "research_groups_research_networks", force: :cascade do |t|
+    t.bigint "research_group_id"
+    t.bigint "research_network_id"
+    t.boolean "has_expiration", default: false
+    t.date "expiration_date"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_research_groups_research_networks_on_created_by"
+    t.index ["research_group_id"], name: "index_research_groups_research_networks_on_research_group_id"
+    t.index ["research_network_id"], name: "index_research_groups_research_networks_on_research_network_id"
+    t.index ["updated_by"], name: "index_research_groups_research_networks_on_updated_by"
+  end
+
   create_table "research_networks", force: :cascade do |t|
     t.string "name"
     t.string "acronym"
@@ -2648,7 +2662,6 @@ ActiveRecord::Schema.define(version: 2021_10_07_074334) do
   add_foreign_key "entities", "geo_cities"
   add_foreign_key "entities", "geo_countries"
   add_foreign_key "entities", "geo_states"
-  add_foreign_key "entities", "legal_representatives"
   add_foreign_key "entities", "subtypes", column: "institution_type_id"
   add_foreign_key "entities", "subtypes", column: "legal_nature_id"
   add_foreign_key "entities", "users", column: "created_by"
@@ -2981,6 +2994,10 @@ ActiveRecord::Schema.define(version: 2021_10_07_074334) do
   add_foreign_key "research_groups", "subtypes", column: "group_type_id"
   add_foreign_key "research_groups", "users", column: "created_by"
   add_foreign_key "research_groups", "users", column: "updated_by"
+  add_foreign_key "research_groups_research_networks", "research_groups"
+  add_foreign_key "research_groups_research_networks", "research_networks"
+  add_foreign_key "research_groups_research_networks", "users", column: "created_by"
+  add_foreign_key "research_groups_research_networks", "users", column: "updated_by"
   add_foreign_key "research_networks", "cine_broad_areas"
   add_foreign_key "research_networks", "cine_specific_areas"
   add_foreign_key "research_networks", "oecd_knowledge_areas"
@@ -4957,36 +4974,6 @@ ActiveRecord::Schema.define(version: 2021_10_07_074334) do
        LEFT JOIN subtypes sgs ON ((sgs.id = fdap.goal_state_id)))
        LEFT JOIN subtypes spl ON ((fdap.plan_type_id = spl.id)));
   SQL
-  create_view "siciud.complete_entities", sql_definition: <<-SQL
-      SELECT ent.id,
-      ent.name,
-      ent.nit,
-      ent.check_digit,
-      ent.constitution_date,
-      ent.email,
-      ent.headquarters_address,
-      ent.institution_type_id,
-      sit.st_name AS institution_type_name,
-      ent.geo_city_id,
-      ent.geo_country_id,
-      ent.geo_state_id,
-      ent.legal_nature_id,
-      sln.st_name AS legal_nature_name,
-      ent.legal_representative_id,
-      lr.name AS legal_representative_name,
-      ent.phone,
-      ent.registration,
-      ent.web_page,
-      ent.active,
-      ent.created_by,
-      ent.updated_by,
-      ent.created_at,
-      ent.updated_at
-     FROM (((entities ent
-       LEFT JOIN subtypes sit ON ((ent.institution_type_id = sit.id)))
-       LEFT JOIN subtypes sln ON ((ent.legal_nature_id = sln.id)))
-       LEFT JOIN legal_representatives lr ON ((ent.legal_representative_id = lr.id)));
-  SQL
   create_view "siciud.complete_affiliated_entities", sql_definition: <<-SQL
       SELECT ae.id,
       ae.research_network_id,
@@ -5007,45 +4994,6 @@ ActiveRecord::Schema.define(version: 2021_10_07_074334) do
        LEFT JOIN entities e ON ((e.id = ae.entity_id)))
        LEFT JOIN subtypes st ON ((st.id = ae.institution_type_id)))
        LEFT JOIN geo_countries gc ON ((gc.id = e.geo_country_id)));
-  SQL
-  create_view "siciud.complete_research_networks", sql_definition: <<-SQL
-      SELECT rn.id,
-      rn.name,
-      rn.acronym,
-      rn.academic_responsibilities,
-      rn.advantage,
-      rn.cine_broad_area_id,
-      cba.name AS cine_broad_area_name,
-      rn.cine_specific_area_id,
-      csa.name AS cine_specific_area_name,
-      rn.financial_responsibilities,
-      rn.legal_responsibilities,
-      rn.main_research_group_id,
-      rg.name AS main_research_group_name,
-      rn.mission,
-      rn.network_type_id,
-      snt.st_name AS network_type_name,
-      rn.oecd_knowledge_area_id,
-      oka.name AS oecd_knowledge_area_name,
-      rn.oecd_knowledge_subarea_id,
-      oks.name AS oecd_knowledge_subarea_name,
-      rn.researcher_id,
-      r.identification_number AS researcher_identification_number,
-      rn.request_date,
-      rn.vision,
-      rn.active,
-      rn.created_by,
-      rn.updated_by,
-      rn.created_at,
-      rn.updated_at
-     FROM (((((((research_networks rn
-       LEFT JOIN cine_broad_areas cba ON ((rn.cine_broad_area_id = cba.id)))
-       LEFT JOIN cine_specific_areas csa ON ((rn.cine_specific_area_id = csa.id)))
-       LEFT JOIN research_groups rg ON ((rn.main_research_group_id = rg.id)))
-       LEFT JOIN subtypes snt ON ((rn.network_type_id = snt.id)))
-       LEFT JOIN oecd_knowledge_areas oka ON ((rn.oecd_knowledge_area_id = oka.id)))
-       LEFT JOIN oecd_knowledge_subareas oks ON ((rn.oecd_knowledge_subarea_id = oks.id)))
-       LEFT JOIN researchers r ON ((rn.researcher_id = r.id)));
   SQL
   create_view "siciud.complete_action_plans", sql_definition: <<-SQL
       SELECT ap.id,
@@ -5152,5 +5100,92 @@ ActiveRecord::Schema.define(version: 2021_10_07_074334) do
      FROM ((research_groups rg
        LEFT JOIN subtypes stgt ON ((rg.group_type_id = stgt.id)))
        LEFT JOIN subtypes stgs ON ((rg.group_state_id = stgs.id)));
+  SQL
+  create_view "siciud.complete_research_networks", sql_definition: <<-SQL
+      SELECT rn.id,
+      rn.name,
+      rn.acronym,
+      rn.academic_responsibilities,
+      rn.advantage,
+      rn.cine_broad_area_id,
+      cba.name AS cine_broad_area_name,
+      rn.cine_specific_area_id,
+      csa.name AS cine_specific_area_name,
+      rn.financial_responsibilities,
+      rn.legal_responsibilities,
+      rn.main_research_group_id,
+      rg.name AS main_research_group_name,
+      ARRAY( SELECT research_groups_research_networks.research_group_id
+             FROM research_groups_research_networks
+            WHERE (research_groups_research_networks.research_network_id = rn.id)) AS research_group_ids,
+      ( SELECT count(*) AS count
+             FROM research_groups_research_networks
+            WHERE (research_groups_research_networks.research_network_id = rn.id)) AS research_group_count,
+      rn.mission,
+      rn.network_type_id,
+      snt.st_name AS network_type_name,
+      rn.oecd_knowledge_area_id,
+      oka.name AS oecd_knowledge_area_name,
+      rn.oecd_knowledge_subarea_id,
+      oks.name AS oecd_knowledge_subarea_name,
+      rn.researcher_id,
+      r.identification_number AS researcher_identification_number,
+      rn.request_date,
+      rn.vision,
+      rn.active,
+      rn.created_by,
+      rn.updated_by,
+      rn.created_at,
+      rn.updated_at
+     FROM (((((((research_networks rn
+       LEFT JOIN cine_broad_areas cba ON ((rn.cine_broad_area_id = cba.id)))
+       LEFT JOIN cine_specific_areas csa ON ((rn.cine_specific_area_id = csa.id)))
+       LEFT JOIN research_groups rg ON ((rn.main_research_group_id = rg.id)))
+       LEFT JOIN subtypes snt ON ((rn.network_type_id = snt.id)))
+       LEFT JOIN oecd_knowledge_areas oka ON ((rn.oecd_knowledge_area_id = oka.id)))
+       LEFT JOIN oecd_knowledge_subareas oks ON ((rn.oecd_knowledge_subarea_id = oks.id)))
+       LEFT JOIN researchers r ON ((rn.researcher_id = r.id)));
+  SQL
+  create_view "siciud.complete_rg_research_networks", sql_definition: <<-SQL
+      SELECT rgrn.id,
+      rgrn.research_group_id,
+      rg.name AS research_group_name,
+      rgrn.research_network_id,
+      rgrn.has_expiration,
+      rgrn.expiration_date,
+      rgrn.active,
+      rgrn.created_by,
+      rgrn.updated_by,
+      rgrn.created_at,
+      rgrn.updated_at
+     FROM (research_groups_research_networks rgrn
+       LEFT JOIN research_groups rg ON ((rgrn.research_group_id = rg.id)));
+  SQL
+  create_view "siciud.complete_entities", sql_definition: <<-SQL
+      SELECT ent.id,
+      ent.name,
+      ent.nit,
+      ent.check_digit,
+      ent.constitution_date,
+      ent.email,
+      ent.headquarters_address,
+      ent.institution_type_id,
+      sit.st_name AS institution_type_name,
+      ent.geo_city_id,
+      ent.geo_country_id,
+      ent.geo_state_id,
+      ent.legal_nature_id,
+      sln.st_name AS legal_nature_name,
+      ent.phone,
+      ent.registration,
+      ent.web_page,
+      ent.active,
+      ent.created_by,
+      ent.updated_by,
+      ent.created_at,
+      ent.updated_at
+     FROM ((entities ent
+       LEFT JOIN subtypes sit ON ((ent.institution_type_id = sit.id)))
+       LEFT JOIN subtypes sln ON ((ent.legal_nature_id = sln.id)));
   SQL
 end

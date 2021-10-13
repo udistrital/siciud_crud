@@ -74,6 +74,8 @@ class ResearchGroup < ApplicationRecord
 
   has_many :degree_works
 
+  has_many :research_groups_research_networks
+  has_many :research_networks, through: :research_groups_research_networks
 
   has_many :action_plans
 

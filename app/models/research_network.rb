@@ -14,6 +14,8 @@ class ResearchNetwork < ApplicationRecord
 
   has_many :affiliated_entities
 
+  has_many :research_groups_research_networks
+  has_many :research_groups, through: :research_groups_research_networks
   has_many :documents, as: :documentable
 
   has_and_belongs_to_many :faculties,

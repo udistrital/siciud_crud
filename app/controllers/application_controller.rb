@@ -42,6 +42,9 @@ class ApplicationController < ActionController::API
     elsif params[:form_d_act_plan_id]
       id = params[:form_d_act_plan_id]
       @context = FormDActPlan.find(id)
+    elsif params[:research_groups_research_network_id]
+      id = params[:research_groups_research_network_id]
+      @context = ResearchGroupsResearchNetwork.find(id)
     else
       set_product_context
     end
