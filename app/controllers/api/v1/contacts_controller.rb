@@ -1,6 +1,8 @@
 module Api
   module V1
     class ContactsController < ApplicationController
+      include Swagger::ContactApi
+
       before_action :set_contact, only: [:show, :update]
 
       # GET /contacts

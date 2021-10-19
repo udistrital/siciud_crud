@@ -1,4 +1,5 @@
 class Contact < ApplicationRecord
+  include Swagger::ContactSchema
 
   # Tracking inherited from ApplicationRecord, fields:
   # created_by and updated_by, see application_record.rb
