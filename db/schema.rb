@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_13_173659) do
+ActiveRecord::Schema.define(version: 2021_10_13_182817) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1040,6 +1040,21 @@ ActiveRecord::Schema.define(version: 2021_10_13_173659) do
     t.index ["product_type_id"], name: "index_guide_manuals_on_product_type_id"
     t.index ["research_group_id"], name: "index_guide_manuals_on_research_group_id"
     t.index ["updated_by"], name: "index_guide_manuals_on_updated_by"
+  end
+
+  create_table "hist_legal_representatives", force: :cascade do |t|
+    t.bigint "legal_representative_id"
+    t.bigint "entity_id"
+    t.boolean "is_current", default: false
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_hist_legal_representatives_on_created_by"
+    t.index ["entity_id"], name: "index_hist_legal_representatives_on_entity_id"
+    t.index ["legal_representative_id"], name: "index_hist_legal_representatives_on_legal_representative_id"
+    t.index ["updated_by"], name: "index_hist_legal_representatives_on_updated_by"
   end
 
   create_table "historical_colciencias_ranks", force: :cascade do |t|
@@ -2742,6 +2757,10 @@ ActiveRecord::Schema.define(version: 2021_10_13_173659) do
   add_foreign_key "guide_manuals", "subtypes", column: "product_type_id"
   add_foreign_key "guide_manuals", "users", column: "created_by"
   add_foreign_key "guide_manuals", "users", column: "updated_by"
+  add_foreign_key "hist_legal_representatives", "entities"
+  add_foreign_key "hist_legal_representatives", "legal_representatives"
+  add_foreign_key "hist_legal_representatives", "users", column: "created_by"
+  add_foreign_key "hist_legal_representatives", "users", column: "updated_by"
   add_foreign_key "historical_colciencias_ranks", "oecd_knowledge_areas"
   add_foreign_key "historical_colciencias_ranks", "oecd_knowledge_subareas"
   add_foreign_key "historical_colciencias_ranks", "users", column: "created_by"
