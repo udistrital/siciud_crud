@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_19_151149) do
+ActiveRecord::Schema.define(version: 2021_10_19_153701) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -553,6 +553,19 @@ ActiveRecord::Schema.define(version: 2021_10_19_151149) do
     t.index ["dw_type_id"], name: "index_degree_works_on_dw_type_id"
     t.index ["research_group_id"], name: "index_degree_works_on_research_group_id"
     t.index ["updated_by"], name: "index_degree_works_on_updated_by"
+  end
+
+  create_table "dependencies", force: :cascade do |t|
+    t.string "name"
+    t.bigint "entity_id"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_dependencies_on_created_by"
+    t.index ["entity_id"], name: "index_dependencies_on_entity_id"
+    t.index ["updated_by"], name: "index_dependencies_on_updated_by"
   end
 
   create_table "distinctive_signs", force: :cascade do |t|
@@ -2646,6 +2659,9 @@ ActiveRecord::Schema.define(version: 2021_10_19_151149) do
   add_foreign_key "degree_works", "subtypes", column: "dw_type_id"
   add_foreign_key "degree_works", "users", column: "created_by"
   add_foreign_key "degree_works", "users", column: "updated_by"
+  add_foreign_key "dependencies", "entities"
+  add_foreign_key "dependencies", "users", column: "created_by"
+  add_foreign_key "dependencies", "users", column: "updated_by"
   add_foreign_key "distinctive_signs", "colciencias_calls"
   add_foreign_key "distinctive_signs", "geo_cities"
   add_foreign_key "distinctive_signs", "geo_countries"

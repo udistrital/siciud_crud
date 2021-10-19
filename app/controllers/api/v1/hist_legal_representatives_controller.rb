@@ -1,9 +1,9 @@
 module Api
   module V1
-    class HistLegalRepresentativesController < ApplicationController
+    class HistLegalRepresentativesController < AbstractEntityController
       include Swagger::HistLegalRepresentativeApi
 
-      before_action :set_entity, only: [:index, :create]
+      before_action :set_entity, only: [:create]
       before_action :set_hist_legal_representative, only: [:show, :update]
 
       # GET /entities/:id/hist_legal_representatives
@@ -23,7 +23,7 @@ module Api
 
       # POST /entities/:id/hist_legal_representatives
       def create
-        @hist_legal_representative = HistLegalRepresentative.new(
+        @hist_legal_representative = @entity.hist_legal_representatives.new(
           hist_lr_params_to_create)
         filter = "entity_id = #{params[:entity_id]} AND is_current = true"
         if HistoricalService.has_current(HistLegalRepresentative, filter)
@@ -51,10 +51,6 @@ module Api
       # Use callbacks to share common setup or constraints between actions.
       def set_hist_legal_representative
         @hist_legal_representative = HistLegalRepresentative.find(params[:id])
-      end
-
-      def set_entity
-        @entity = Entity.find(params[:entity_id])
       end
 
       # Only allow a trusted parameter "white list" through.
