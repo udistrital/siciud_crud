@@ -45,10 +45,6 @@ module Swagger::EntitySchema
         key :type, :integer
         key :format, :int64
       end
-      property :legal_representative_id do
-        key :type, :integer
-        key :format, :int64
-      end
       property :phone do
         key :type, :string
       end
@@ -123,9 +119,6 @@ module Swagger::EntitySchema
             key :type, :string
           end
           property :legal_nature_name do
-            key :type, :string
-          end
-          property :legal_representative_name do
             key :type, :string
           end
           property :created_by do
