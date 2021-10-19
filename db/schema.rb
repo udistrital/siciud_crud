@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_19_153701) do
+ActiveRecord::Schema.define(version: 2021_10_19_195332) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -451,6 +451,19 @@ ActiveRecord::Schema.define(version: 2021_10_19_153701) do
     t.index ["product_type_id"], name: "index_consultancies_on_product_type_id"
     t.index ["research_group_id"], name: "index_consultancies_on_research_group_id"
     t.index ["updated_by"], name: "index_consultancies_on_updated_by"
+  end
+
+  create_table "contacts", force: :cascade do |t|
+    t.string "name"
+    t.string "email"
+    t.string "phone", limit: 50
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_contacts_on_created_by"
+    t.index ["updated_by"], name: "index_contacts_on_updated_by"
   end
 
   create_table "content_generations", force: :cascade do |t|
@@ -2632,6 +2645,8 @@ ActiveRecord::Schema.define(version: 2021_10_19_153701) do
   add_foreign_key "consultancies", "subtypes", column: "product_type_id"
   add_foreign_key "consultancies", "users", column: "created_by"
   add_foreign_key "consultancies", "users", column: "updated_by"
+  add_foreign_key "contacts", "users", column: "created_by"
+  add_foreign_key "contacts", "users", column: "updated_by"
   add_foreign_key "content_generations", "colciencias_calls"
   add_foreign_key "content_generations", "geo_cities"
   add_foreign_key "content_generations", "geo_countries"
