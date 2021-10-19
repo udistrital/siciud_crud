@@ -1,7 +1,6 @@
-class HistLegalRepresentative < ApplicationRecord
-  include Swagger::HistLegalRepresentativeSchema
+class Dependency < ApplicationRecord
+  include Swagger::DependencySchema
 
-  belongs_to :legal_representative
   belongs_to :entity
 
   # Tracking inherited from ApplicationRecord, fields:

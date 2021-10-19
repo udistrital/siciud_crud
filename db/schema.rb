@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_13_173659) do
+ActiveRecord::Schema.define(version: 2021_10_19_153701) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -555,6 +555,19 @@ ActiveRecord::Schema.define(version: 2021_10_13_173659) do
     t.index ["updated_by"], name: "index_degree_works_on_updated_by"
   end
 
+  create_table "dependencies", force: :cascade do |t|
+    t.string "name"
+    t.bigint "entity_id"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_dependencies_on_created_by"
+    t.index ["entity_id"], name: "index_dependencies_on_entity_id"
+    t.index ["updated_by"], name: "index_dependencies_on_updated_by"
+  end
+
   create_table "distinctive_signs", force: :cascade do |t|
     t.string "registration_title"
     t.string "registration_number"
@@ -1040,6 +1053,21 @@ ActiveRecord::Schema.define(version: 2021_10_13_173659) do
     t.index ["product_type_id"], name: "index_guide_manuals_on_product_type_id"
     t.index ["research_group_id"], name: "index_guide_manuals_on_research_group_id"
     t.index ["updated_by"], name: "index_guide_manuals_on_updated_by"
+  end
+
+  create_table "hist_legal_representatives", force: :cascade do |t|
+    t.bigint "legal_representative_id"
+    t.bigint "entity_id"
+    t.boolean "is_current", default: false
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_hist_legal_representatives_on_created_by"
+    t.index ["entity_id"], name: "index_hist_legal_representatives_on_entity_id"
+    t.index ["legal_representative_id"], name: "index_hist_legal_representatives_on_legal_representative_id"
+    t.index ["updated_by"], name: "index_hist_legal_representatives_on_updated_by"
   end
 
   create_table "historical_colciencias_ranks", force: :cascade do |t|
@@ -2631,6 +2659,9 @@ ActiveRecord::Schema.define(version: 2021_10_13_173659) do
   add_foreign_key "degree_works", "subtypes", column: "dw_type_id"
   add_foreign_key "degree_works", "users", column: "created_by"
   add_foreign_key "degree_works", "users", column: "updated_by"
+  add_foreign_key "dependencies", "entities"
+  add_foreign_key "dependencies", "users", column: "created_by"
+  add_foreign_key "dependencies", "users", column: "updated_by"
   add_foreign_key "distinctive_signs", "colciencias_calls"
   add_foreign_key "distinctive_signs", "geo_cities"
   add_foreign_key "distinctive_signs", "geo_countries"
@@ -2742,6 +2773,10 @@ ActiveRecord::Schema.define(version: 2021_10_13_173659) do
   add_foreign_key "guide_manuals", "subtypes", column: "product_type_id"
   add_foreign_key "guide_manuals", "users", column: "created_by"
   add_foreign_key "guide_manuals", "users", column: "updated_by"
+  add_foreign_key "hist_legal_representatives", "entities"
+  add_foreign_key "hist_legal_representatives", "legal_representatives"
+  add_foreign_key "hist_legal_representatives", "users", column: "created_by"
+  add_foreign_key "hist_legal_representatives", "users", column: "updated_by"
   add_foreign_key "historical_colciencias_ranks", "oecd_knowledge_areas"
   add_foreign_key "historical_colciencias_ranks", "oecd_knowledge_subareas"
   add_foreign_key "historical_colciencias_ranks", "users", column: "created_by"
@@ -5187,5 +5222,24 @@ ActiveRecord::Schema.define(version: 2021_10_13_173659) do
      FROM ((entities ent
        LEFT JOIN subtypes sit ON ((ent.institution_type_id = sit.id)))
        LEFT JOIN subtypes sln ON ((ent.legal_nature_id = sln.id)));
+  SQL
+  create_view "siciud.complete_hist_lrs", sql_definition: <<-SQL
+      SELECT hlr.id,
+      hlr.entity_id,
+      e.name AS entity_name,
+      hlr.legal_representative_id,
+      lr.name AS legal_representative_name,
+      lr.identification_number AS legal_representative_identification,
+      lr.email AS legal_representative_email,
+      lr.identification_type_id AS legal_representative_identification_type,
+      hlr.is_current,
+      hlr.active,
+      hlr.created_by,
+      hlr.updated_by,
+      hlr.created_at,
+      hlr.updated_at
+     FROM ((hist_legal_representatives hlr
+       LEFT JOIN entities e ON ((hlr.entity_id = e.id)))
+       LEFT JOIN legal_representatives lr ON ((hlr.legal_representative_id = lr.id)));
   SQL
 end

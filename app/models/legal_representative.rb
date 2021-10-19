@@ -2,7 +2,7 @@ class LegalRepresentative < ApplicationRecord
   include Swagger::LegalRepresentativeSchema
 
   belongs_to :identification_type, class_name: 'Subtype', foreign_key: 'identification_type_id'
-  has_many :entities
+  has_many :hist_legal_representatives
 
   validates :identification_number, uniqueness: true
 
