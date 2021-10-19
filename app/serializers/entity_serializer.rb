@@ -1,7 +1,7 @@
 class EntitySerializer < AbstractProductSerializer
   attributes :id, :name, :nit, :check_digit, :constitution_date,
-             :legal_nature_id, :legal_nature_name, :legal_representative_id,
-             :legal_representative_name, :institution_type_id,
+             :legal_nature_id, :legal_nature_name, :legal_representative,
+             :institution_type_id,
              :institution_type_name, :geo_city_id, :geo_city_name,
              :geo_country_id, :geo_country_name, :geo_state_id, :geo_state_name,
              :headquarters_address, :email, :phone, :registration, :web_page,
@@ -14,10 +14,21 @@ class EntitySerializer < AbstractProductSerializer
     end
   end
 
-  def legal_representative_name
-    legal_representative = self.object.legal_representative
+  def legal_representative
+    legal_representative = HistLegalRepresentative.where(
+      "entity_id = ? AND is_current = true", self.object.id
+    )
     if legal_representative
-      legal_representative.name
+      lr = legal_representative[0]
+      {
+        "id": lr.id,
+        "legal_representative_id": lr.legal_representative_id,
+        "legal_representative_name": lr.legal_representative.name,
+        "legal_representative_email": lr.legal_representative.email,
+        "is_current": lr.is_current
+      }
+    else
+      {}
     end
   end
 
