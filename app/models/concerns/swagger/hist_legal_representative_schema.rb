@@ -68,6 +68,22 @@ module Swagger::HistLegalRepresentativeSchema
             key :type, :integer
             key :format, :int64
           end
+          property :entity_name do
+            key :type, :string
+          end
+          property :legal_representative_name do
+            key :type, :string
+          end
+          property :legal_representative_identification do
+            key :type, :string
+          end
+          property :legal_representative_email do
+            key :type, :string
+          end
+          property :legal_representative_identification_type do
+            key :type, :integer
+            key :format, :int64
+          end
           property :created_by do
             key :type, :integer
             key :format, :int64

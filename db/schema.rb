@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_13_182817) do
+ActiveRecord::Schema.define(version: 2021_10_19_151149) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -5206,5 +5206,24 @@ ActiveRecord::Schema.define(version: 2021_10_13_182817) do
      FROM ((entities ent
        LEFT JOIN subtypes sit ON ((ent.institution_type_id = sit.id)))
        LEFT JOIN subtypes sln ON ((ent.legal_nature_id = sln.id)));
+  SQL
+  create_view "siciud.complete_hist_lrs", sql_definition: <<-SQL
+      SELECT hlr.id,
+      hlr.entity_id,
+      e.name AS entity_name,
+      hlr.legal_representative_id,
+      lr.name AS legal_representative_name,
+      lr.identification_number AS legal_representative_identification,
+      lr.email AS legal_representative_email,
+      lr.identification_type_id AS legal_representative_identification_type,
+      hlr.is_current,
+      hlr.active,
+      hlr.created_by,
+      hlr.updated_by,
+      hlr.created_at,
+      hlr.updated_at
+     FROM ((hist_legal_representatives hlr
+       LEFT JOIN entities e ON ((hlr.entity_id = e.id)))
+       LEFT JOIN legal_representatives lr ON ((hlr.legal_representative_id = lr.id)));
   SQL
 end

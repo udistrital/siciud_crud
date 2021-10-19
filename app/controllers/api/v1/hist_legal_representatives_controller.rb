@@ -8,7 +8,9 @@ module Api
 
       # GET /entities/:id/hist_legal_representatives
       def index
-        @hist_legal_representatives = HistLegalRepresentative.all
+        @hist_legal_representatives = CompleteHistLr.where(
+          "entity_id = ?", params[:entity_id]
+        )
         @hist_legal_representatives = DxService.load(@hist_legal_representatives,
                                                      params)
         render json: @hist_legal_representatives
@@ -23,6 +25,10 @@ module Api
       def create
         @hist_legal_representative = HistLegalRepresentative.new(
           hist_lr_params_to_create)
+        filter = "entity_id = #{params[:entity_id]} AND is_current = true"
+        if HistoricalService.has_current(HistLegalRepresentative, filter)
+          HistoricalService.remove_current(HistLegalRepresentative, filter)
+        end
 
         if @hist_legal_representative.save
           render json: @hist_legal_representative, status: :created
