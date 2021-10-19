@@ -42,6 +42,15 @@ class ResearchNetworkSerializer < ActiveModel::Serializer
     end
   end
 
+  def faculty_ids
+    faculty_id = self.object.faculty_ids_research_networks
+    if faculty_id
+      faculty_id.map do |faculty|
+        faculty.faculty_id
+      end
+    end
+  end
+
   def oecd_knowledge_subarea_name
     oecd_knowledge_subarea = self.object.oecd_knowledge_subarea
     if oecd_knowledge_subarea

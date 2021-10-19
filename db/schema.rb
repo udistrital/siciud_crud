@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_19_202911) do
+ActiveRecord::Schema.define(version: 2021_10_19_210739) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -791,11 +791,6 @@ ActiveRecord::Schema.define(version: 2021_10_19_202911) do
     t.index ["updated_by"], name: "index_extension_projects_on_updated_by"
   end
 
-  create_table "faculties_research_networks", id: false, force: :cascade do |t|
-    t.bigint "subtype_id", null: false
-    t.bigint "research_network_id", null: false
-  end
-
   create_table "faculty_ids_research_groups", force: :cascade do |t|
     t.bigint "research_group_id"
     t.integer "faculty_id"
@@ -807,6 +802,19 @@ ActiveRecord::Schema.define(version: 2021_10_19_202911) do
     t.index ["created_by"], name: "index_faculty_ids_research_groups_on_created_by"
     t.index ["research_group_id"], name: "index_faculty_ids_research_groups_on_research_group_id"
     t.index ["updated_by"], name: "index_faculty_ids_research_groups_on_updated_by"
+  end
+
+  create_table "faculty_ids_research_networks", force: :cascade do |t|
+    t.bigint "research_network_id"
+    t.bigint "faculty_id"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_faculty_ids_research_networks_on_created_by"
+    t.index ["research_network_id"], name: "index_faculty_ids_research_networks_on_research_network_id"
+    t.index ["updated_by"], name: "index_faculty_ids_research_networks_on_updated_by"
   end
 
   create_table "form_a_act_plans", force: :cascade do |t|
@@ -2751,6 +2759,9 @@ ActiveRecord::Schema.define(version: 2021_10_19_202911) do
   add_foreign_key "faculty_ids_research_groups", "research_groups"
   add_foreign_key "faculty_ids_research_groups", "users", column: "created_by"
   add_foreign_key "faculty_ids_research_groups", "users", column: "updated_by"
+  add_foreign_key "faculty_ids_research_networks", "research_networks"
+  add_foreign_key "faculty_ids_research_networks", "users", column: "created_by"
+  add_foreign_key "faculty_ids_research_networks", "users", column: "updated_by"
   add_foreign_key "form_a_act_plans", "action_plans"
   add_foreign_key "form_a_act_plans", "indicators"
   add_foreign_key "form_a_act_plans", "subtypes", column: "plan_type_id"
