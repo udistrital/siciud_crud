@@ -19,7 +19,10 @@ module Api
 
       # POST /research_networks
       def create
-        @research_network = ResearchNetwork.new(r_network_params_to_create)
+        @research_network = ResearchNetwork.new(
+          r_network_params_to_create.except(:faculty_ids))
+
+        @research_network = setFaculties(@research_network)
 
         if @research_network.save
           render json: @research_network, status: :created
@@ -30,17 +33,37 @@ module Api
 
       # PATCH/PUT /research_networks/1
       def update
-        if @research_network.update(r_network_params_to_update)
-          render json: @research_network
+        if @research_network.update(
+          r_network_params_to_update.except(:faculty_ids))
+
+          @research_network = setFaculties(@research_network)
+
+          if @research_network.save
+            render json: @research_network
+          else
+            render json: @research_network.errors, status: :unprocessable_entity
+          end
         else
           render json: @research_network.errors, status: :unprocessable_entity
         end
       end
 
       private
+
       # Use callbacks to share common setup or constraints between actions.
       def set_research_network
         @research_network = ResearchNetwork.find(params[:id])
+      end
+
+      def setFaculties(research_net)
+        if params[:research_network].has_key?(:faculty_ids)
+          faculties = params[:research_network][:faculty_ids].uniq
+          research_net.faculty_ids_research_networks.destroy_all
+          faculties.map do |faculty|
+            research_net.faculty_ids_research_networks.new(faculty_id: faculty)
+          end
+        end
+        research_net
       end
 
       # Only allow a trusted parameter "white list" through.
@@ -65,7 +88,7 @@ module Api
                                                  research_focus_ids: [],
                                                  oecd_discipline_ids: [],
                                                  research_group_ids: []
-                                                 )
+        )
       end
 
       def r_network_params_to_update

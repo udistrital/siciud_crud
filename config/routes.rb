@@ -305,8 +305,13 @@ Rails.application.routes.draw do
       end
       put "/request_has_procedures/:id/active", to: "request_has_procedures#change_active"
 
+      #
+      resources :contacts, only: [:index, :show, :update, :create]
       resources :hist_legal_representatives, only: [:show, :update]
-      resources :dependencies, only: [:show, :update]
+      resources :hist_contacts, only: [:show, :update]
+      resources :dependencies, only: [:show, :update] do
+        resources :hist_contacts, only: [:index, :create]
+      end
       resources :entities, only: [:index, :show, :update, :create] do
         resources :hist_legal_representatives, only: [:index, :create]
         resources :dependencies, only: [:index, :create]

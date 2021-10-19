@@ -1,7 +1,5 @@
-class Dependency < ApplicationRecord
-  include Swagger::DependencySchema
-
-  belongs_to :entity
+class Contact < ApplicationRecord
+  include Swagger::ContactSchema
 
   has_many :hist_contacts
 

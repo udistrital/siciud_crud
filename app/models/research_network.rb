@@ -18,9 +18,7 @@ class ResearchNetwork < ApplicationRecord
   has_many :research_groups, through: :research_groups_research_networks
   has_many :documents, as: :documentable
 
-  has_and_belongs_to_many :faculties,
-                          join_table: 'faculties_research_networks',
-                          class_name: 'Subtype'
+  has_many :faculty_ids_research_networks
   has_and_belongs_to_many :research_focuses,
                           join_table: 'research_focuses_networks',
                           class_name: 'Subtype'

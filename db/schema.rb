@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_19_153701) do
+ActiveRecord::Schema.define(version: 2021_10_19_210739) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -453,6 +453,19 @@ ActiveRecord::Schema.define(version: 2021_10_19_153701) do
     t.index ["updated_by"], name: "index_consultancies_on_updated_by"
   end
 
+  create_table "contacts", force: :cascade do |t|
+    t.string "name"
+    t.string "email"
+    t.string "phone", limit: 50
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_contacts_on_created_by"
+    t.index ["updated_by"], name: "index_contacts_on_updated_by"
+  end
+
   create_table "content_generations", force: :cascade do |t|
     t.string "magazine_name"
     t.string "isbn"
@@ -778,11 +791,6 @@ ActiveRecord::Schema.define(version: 2021_10_19_153701) do
     t.index ["updated_by"], name: "index_extension_projects_on_updated_by"
   end
 
-  create_table "faculties_research_networks", id: false, force: :cascade do |t|
-    t.bigint "subtype_id", null: false
-    t.bigint "research_network_id", null: false
-  end
-
   create_table "faculty_ids_research_groups", force: :cascade do |t|
     t.bigint "research_group_id"
     t.integer "faculty_id"
@@ -794,6 +802,19 @@ ActiveRecord::Schema.define(version: 2021_10_19_153701) do
     t.index ["created_by"], name: "index_faculty_ids_research_groups_on_created_by"
     t.index ["research_group_id"], name: "index_faculty_ids_research_groups_on_research_group_id"
     t.index ["updated_by"], name: "index_faculty_ids_research_groups_on_updated_by"
+  end
+
+  create_table "faculty_ids_research_networks", force: :cascade do |t|
+    t.bigint "research_network_id"
+    t.bigint "faculty_id"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_faculty_ids_research_networks_on_created_by"
+    t.index ["research_network_id"], name: "index_faculty_ids_research_networks_on_research_network_id"
+    t.index ["updated_by"], name: "index_faculty_ids_research_networks_on_updated_by"
   end
 
   create_table "form_a_act_plans", force: :cascade do |t|
@@ -1053,6 +1074,21 @@ ActiveRecord::Schema.define(version: 2021_10_19_153701) do
     t.index ["product_type_id"], name: "index_guide_manuals_on_product_type_id"
     t.index ["research_group_id"], name: "index_guide_manuals_on_research_group_id"
     t.index ["updated_by"], name: "index_guide_manuals_on_updated_by"
+  end
+
+  create_table "hist_contacts", force: :cascade do |t|
+    t.bigint "contact_id"
+    t.bigint "dependency_id"
+    t.boolean "is_current", default: false
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["contact_id"], name: "index_hist_contacts_on_contact_id"
+    t.index ["created_by"], name: "index_hist_contacts_on_created_by"
+    t.index ["dependency_id"], name: "index_hist_contacts_on_dependency_id"
+    t.index ["updated_by"], name: "index_hist_contacts_on_updated_by"
   end
 
   create_table "hist_legal_representatives", force: :cascade do |t|
@@ -2632,6 +2668,8 @@ ActiveRecord::Schema.define(version: 2021_10_19_153701) do
   add_foreign_key "consultancies", "subtypes", column: "product_type_id"
   add_foreign_key "consultancies", "users", column: "created_by"
   add_foreign_key "consultancies", "users", column: "updated_by"
+  add_foreign_key "contacts", "users", column: "created_by"
+  add_foreign_key "contacts", "users", column: "updated_by"
   add_foreign_key "content_generations", "colciencias_calls"
   add_foreign_key "content_generations", "geo_cities"
   add_foreign_key "content_generations", "geo_countries"
@@ -2721,6 +2759,9 @@ ActiveRecord::Schema.define(version: 2021_10_19_153701) do
   add_foreign_key "faculty_ids_research_groups", "research_groups"
   add_foreign_key "faculty_ids_research_groups", "users", column: "created_by"
   add_foreign_key "faculty_ids_research_groups", "users", column: "updated_by"
+  add_foreign_key "faculty_ids_research_networks", "research_networks"
+  add_foreign_key "faculty_ids_research_networks", "users", column: "created_by"
+  add_foreign_key "faculty_ids_research_networks", "users", column: "updated_by"
   add_foreign_key "form_a_act_plans", "action_plans"
   add_foreign_key "form_a_act_plans", "indicators"
   add_foreign_key "form_a_act_plans", "subtypes", column: "plan_type_id"
@@ -2773,6 +2814,10 @@ ActiveRecord::Schema.define(version: 2021_10_19_153701) do
   add_foreign_key "guide_manuals", "subtypes", column: "product_type_id"
   add_foreign_key "guide_manuals", "users", column: "created_by"
   add_foreign_key "guide_manuals", "users", column: "updated_by"
+  add_foreign_key "hist_contacts", "contacts"
+  add_foreign_key "hist_contacts", "dependencies"
+  add_foreign_key "hist_contacts", "users", column: "created_by"
+  add_foreign_key "hist_contacts", "users", column: "updated_by"
   add_foreign_key "hist_legal_representatives", "entities"
   add_foreign_key "hist_legal_representatives", "legal_representatives"
   add_foreign_key "hist_legal_representatives", "users", column: "created_by"
@@ -5241,5 +5286,21 @@ ActiveRecord::Schema.define(version: 2021_10_19_153701) do
      FROM ((hist_legal_representatives hlr
        LEFT JOIN entities e ON ((hlr.entity_id = e.id)))
        LEFT JOIN legal_representatives lr ON ((hlr.legal_representative_id = lr.id)));
+  SQL
+  create_view "siciud.complete_hist_contacts", sql_definition: <<-SQL
+      SELECT hc.id,
+      hc.contact_id,
+      c.name AS contact_name,
+      c.email AS contact_email,
+      c.phone AS contact_phone,
+      hc.dependency_id,
+      hc.is_current,
+      hc.active,
+      hc.created_by,
+      hc.updated_by,
+      hc.created_at,
+      hc.updated_at
+     FROM (hist_contacts hc
+       LEFT JOIN contacts c ON ((hc.contact_id = c.id)));
   SQL
 end
