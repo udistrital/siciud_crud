@@ -105,7 +105,8 @@ module Swagger::ResearchUnitSchema
         end
       end
       property :snies_id do
-        key :type, :string
+        key :type, :integer
+        key :format, :int64
       end
       property :vision do
         key :type, :string
@@ -189,6 +190,12 @@ module Swagger::ResearchUnitSchema
             key :type, :string
           end
           property :parent_name do
+            key :type, :string
+          end
+          property :snies_code do
+            key :type, :string
+          end
+          property :snies_name do
             key :type, :string
           end
           property :created_by do
@@ -280,6 +287,12 @@ module Swagger::ResearchUnitSchema
             key :type, :string
           end
           property :oecd_knowledge_subarea_name do
+            key :type, :string
+          end
+          property :snies_code do
+            key :type, :string
+          end
+          property :snies_name do
             key :type, :string
           end
           property :total_faculties do

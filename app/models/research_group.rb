@@ -7,6 +7,7 @@ class ResearchGroup < ApplicationRecord
   belongs_to :cine_specific_area, optional: true
   belongs_to :oecd_knowledge_area, optional: true
   belongs_to :oecd_knowledge_subarea, optional: true
+  belongs_to :snies, optional: true
 
   belongs_to :parent, class_name: 'ResearchGroup', optional: true
 
