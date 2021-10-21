@@ -1,6 +1,6 @@
 class HistContactSerializer < ActiveModel::Serializer
   attributes :id, :is_current, :contact_id, :contact_name,
-             contact_email, contact_phone, :dependency,
+             :contact_email, :contact_phone, :dependency,
              :active, :created_by, :updated_by,
              :created_at, :updated_at
 
