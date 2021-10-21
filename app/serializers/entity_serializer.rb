@@ -15,8 +15,8 @@ class EntitySerializer < AbstractProductSerializer
   end
 
   def legal_representative
-    legal_representative = HistLegalRepresentative.where(
-      "entity_id = ? AND is_current = true", self.object.id
+    legal_representative = self.object.hist_legal_representatives.where(
+      "is_current = true"
     )
     if legal_representative
       lr = legal_representative[0]
