@@ -47,7 +47,7 @@ module Api
       def entity_params_to_create
         params.require(:entity).permit(:name, :nit, :check_digit,
                                        :constitution_date, :legal_nature_id,
-                                       :legal_representative_id, :institution_type_id,
+                                       :institution_type_id,
                                        :geo_city_id, :geo_country_id, :geo_state_id,
                                        :headquarters_address, :email, :phone,
                                        :registration, :web_page, :active,
@@ -57,7 +57,7 @@ module Api
       def entity_params_to_update
         params.require(:entity).permit(:name, :nit, :check_digit,
                                        :constitution_date, :legal_nature_id,
-                                       :legal_representative_id, :institution_type_id,
+                                       :institution_type_id,
                                        :geo_city_id, :geo_country_id, :geo_state_id,
                                        :headquarters_address, :email, :phone,
                                        :registration, :web_page, :active,

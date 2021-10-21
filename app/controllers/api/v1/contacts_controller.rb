@@ -7,7 +7,14 @@ module Api
 
       # GET /contacts
       def index
-        @contacts = Contact.all
+        if params[:identification_number]
+          @contacts = Contact.where(
+            "identification_number = ?",
+            params[:identification_number]
+          )
+        else
+          @contacts = Contact.all
+        end
         @contacts = DxService.load(@contacts, params)
         render json: @contacts
       end
@@ -46,14 +53,14 @@ module Api
 
       # Only allow a trusted parameter "white list" through.
       def contact_params_to_create
-        params.require(:contact).permit(:name, :email,
-                                        :phone, :active,
+        params.require(:contact).permit(:name, :email, :identification_number,
+                                        :identification_type_id, :phone, :active,
                                         :created_by)
       end
 
       def contact_params_to_update
-        params.require(:contact).permit(:name, :email,
-                                        :phone, :active,
+        params.require(:contact).permit(:name, :email, :identification_number,
+                                        :identification_type_id, :phone, :active,
                                         :updated_by)
       end
     end

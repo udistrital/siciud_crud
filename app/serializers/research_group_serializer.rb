@@ -12,7 +12,7 @@ class ResearchGroupSerializer < AbstractGeneralSerializer
              :oecd_knowledge_area_id,
              :oecd_discipline_ids, :research_focus_ids, :parent_id,
              :parent_name,
-             :snies_id, :vision, :webpage,
+             :snies_id, :snies_code, :snies_name, :vision, :webpage,
              :created_by, :updated_by, :created_at, :updated_at
 
   def child_structures
@@ -88,6 +88,20 @@ class ResearchGroupSerializer < AbstractGeneralSerializer
     parent = self.object.parent
     if parent
       parent.name
+    end
+  end
+
+  def snies_code
+    snies = self.object.snies
+    if snies
+      snies.code
+    end
+  end
+
+  def snies_name
+    snies = self.object.snies
+    if snies
+      snies.name
     end
   end
 end
