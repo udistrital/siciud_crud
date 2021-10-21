@@ -10,6 +10,13 @@ module Swagger::ContactSchema
       property :email do
         key :type, :string
       end
+      property :identification_number do
+        key :type, :string
+      end
+      property :identification_type_id do
+        key :type, :integer
+        key :format, :int64
+      end
       property :phone do
         key :type, :string
       end
@@ -64,6 +71,9 @@ module Swagger::ContactSchema
           property :id do
             key :type, :integer
             key :format, :int64
+          end
+          property :identification_type_name do
+            key :type, :string
           end
           property :created_by do
             key :type, :integer

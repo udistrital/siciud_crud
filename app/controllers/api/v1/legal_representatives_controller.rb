@@ -54,14 +54,14 @@ module Api
       # Only allow a trusted parameter "white list" through.
       def legal_rep_params_to_create
         params.require(:legal_representative).permit(:name,
-                                                     :identification_number, :email,
+                                                     :email, :identification_number,
                                                      :identification_type_id, :active,
                                                      :created_by)
       end
 
       def legal_rep_params_to_update
         params.require(:legal_representative).permit(:name,
-                                                     :identification_number, :email,
+                                                     :email, :identification_number,
                                                      :identification_type_id, :active,
                                                      :updated_by)
       end

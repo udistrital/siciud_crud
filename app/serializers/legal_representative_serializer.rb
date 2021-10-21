@@ -1,5 +1,5 @@
 class LegalRepresentativeSerializer < ActiveModel::Serializer
-  attributes :id, :name, :identification_number, :email,
+  attributes :id, :name, :email, :identification_number,
              :identification_type_id, :identification_type_name,
              :active, :created_by, :updated_by, :created_at, :updated_at
 

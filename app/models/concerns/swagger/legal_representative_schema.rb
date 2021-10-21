@@ -7,10 +7,10 @@ module Swagger::LegalRepresentativeSchema
       property :name do
         key :type, :string
       end
-      property :identification_number do
+      property :email do
         key :type, :string
       end
-      property :email do
+      property :identification_number do
         key :type, :string
       end
       property :identification_type_id do

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_19_210739) do
+ActiveRecord::Schema.define(version: 2021_10_21_143928) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -462,7 +462,11 @@ ActiveRecord::Schema.define(version: 2021_10_19_210739) do
     t.bigint "updated_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "identification_number"
+    t.bigint "identification_type_id"
     t.index ["created_by"], name: "index_contacts_on_created_by"
+    t.index ["identification_number"], name: "index_contacts_on_identification_number"
+    t.index ["identification_type_id"], name: "index_contacts_on_identification_type_id"
     t.index ["updated_by"], name: "index_contacts_on_updated_by"
   end
 
@@ -2668,6 +2672,7 @@ ActiveRecord::Schema.define(version: 2021_10_19_210739) do
   add_foreign_key "consultancies", "subtypes", column: "product_type_id"
   add_foreign_key "consultancies", "users", column: "created_by"
   add_foreign_key "consultancies", "users", column: "updated_by"
+  add_foreign_key "contacts", "subtypes", column: "identification_type_id"
   add_foreign_key "contacts", "users", column: "created_by"
   add_foreign_key "contacts", "users", column: "updated_by"
   add_foreign_key "content_generations", "colciencias_calls"

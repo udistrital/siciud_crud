@@ -1,7 +1,6 @@
 class Entity < ApplicationRecord
   include Swagger::EntitySchema
 
-  belongs_to :legal_representative
   belongs_to :geo_city
   belongs_to :geo_country
   belongs_to :geo_state

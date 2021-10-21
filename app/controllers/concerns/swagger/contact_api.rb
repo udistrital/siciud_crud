@@ -129,6 +129,13 @@ module Swagger::ContactApi
         key :produces, ['application/json',]
         key :tags, ['Contacts']
 
+        parameter name: :identification_number do
+          key :in, :query
+          key :description, 'identification number'
+          key :required, false
+          key :type, :string
+        end
+
         response 200 do
           key :description, 'contact response'
           schema do
