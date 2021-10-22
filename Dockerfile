@@ -1,12 +1,19 @@
 FROM ruby:2.6.2
 RUN apt-get update -qq && apt-get install -y nodejs postgresql-client
 
-RUN apt-get update -qq && \
-  apt-get install -y --no-install-recommends unzip python-dev && \
-  curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip" && \
-  unzip awscli-bundle.zip && \
-  ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws && \
-  rm -rf ./awscli-bundle awscli-bundle.zip
+RUN apt-get update && apt-get install -y \
+        software-properties-common
+RUN add-apt-repository ppa:deadsnakes/ppa
+RUN apt-get update && apt-get install -y \
+    python3.7 \
+    python3-pip
+RUN python3.7 -m pip install pip
+RUN apt-get update && apt-get install -y \
+    python3-distutils \
+    python3-setuptools
+RUN python3.7 -m pip install pip --upgrade pip
+
+RUN pip install awscli
 
 RUN mkdir /myapp
 WORKDIR /myapp
