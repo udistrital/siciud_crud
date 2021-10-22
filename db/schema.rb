@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_21_163022) do
+ActiveRecord::Schema.define(version: 2021_10_21_235413) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -910,11 +910,6 @@ ActiveRecord::Schema.define(version: 2021_10_21_163022) do
 
   create_table "form_d_act_plans_oecd_knowledge_subareas", id: false, force: :cascade do |t|
     t.bigint "oecd_knowledge_subarea_id", null: false
-    t.bigint "form_d_act_plan_id", null: false
-  end
-
-  create_table "form_d_act_plans_snies", id: false, force: :cascade do |t|
-    t.bigint "snies_id", null: false
     t.bigint "form_d_act_plan_id", null: false
   end
 
@@ -2041,7 +2036,6 @@ ActiveRecord::Schema.define(version: 2021_10_21_163022) do
     t.bigint "group_state_id"
     t.bigint "group_type_id"
     t.bigint "parent_id"
-    t.bigint "snies_id"
     t.index ["cine_broad_area_id"], name: "index_research_groups_on_cine_broad_area_id"
     t.index ["cine_specific_area_id"], name: "index_research_groups_on_cine_specific_area_id"
     t.index ["created_by"], name: "index_research_groups_on_created_by"
@@ -2050,7 +2044,6 @@ ActiveRecord::Schema.define(version: 2021_10_21_163022) do
     t.index ["oecd_knowledge_area_id"], name: "index_research_groups_on_oecd_knowledge_area_id"
     t.index ["oecd_knowledge_subarea_id"], name: "index_research_groups_on_oecd_knowledge_subarea_id"
     t.index ["parent_id"], name: "index_research_groups_on_parent_id"
-    t.index ["snies_id"], name: "index_research_groups_on_snies_id"
     t.index ["updated_by"], name: "index_research_groups_on_updated_by"
   end
 
@@ -2101,11 +2094,6 @@ ActiveRecord::Schema.define(version: 2021_10_21_163022) do
     t.index ["oecd_knowledge_subarea_id"], name: "index_research_networks_on_oecd_knowledge_subarea_id"
     t.index ["researcher_id"], name: "index_research_networks_on_researcher_id"
     t.index ["updated_by"], name: "index_research_networks_on_updated_by"
-  end
-
-  create_table "research_networks_snies", id: false, force: :cascade do |t|
-    t.bigint "snies_id", null: false
-    t.bigint "research_network_id", null: false
   end
 
   create_table "researchers", force: :cascade do |t|
@@ -2250,18 +2238,6 @@ ActiveRecord::Schema.define(version: 2021_10_21_163022) do
     t.index ["product_type_id"], name: "index_simple_books_on_product_type_id"
     t.index ["research_group_id"], name: "index_simple_books_on_research_group_id"
     t.index ["updated_by"], name: "index_simple_books_on_updated_by"
-  end
-
-  create_table "snies", force: :cascade do |t|
-    t.string "code"
-    t.string "name"
-    t.boolean "active", default: true
-    t.bigint "created_by"
-    t.bigint "updated_by"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["created_by"], name: "index_snies_on_created_by"
-    t.index ["updated_by"], name: "index_snies_on_updated_by"
   end
 
   create_table "software", force: :cascade do |t|
@@ -3076,7 +3052,6 @@ ActiveRecord::Schema.define(version: 2021_10_21_163022) do
   add_foreign_key "research_groups", "oecd_knowledge_areas"
   add_foreign_key "research_groups", "oecd_knowledge_subareas"
   add_foreign_key "research_groups", "research_groups", column: "parent_id"
-  add_foreign_key "research_groups", "snies"
   add_foreign_key "research_groups", "subtypes", column: "group_state_id"
   add_foreign_key "research_groups", "subtypes", column: "group_type_id"
   add_foreign_key "research_groups", "users", column: "created_by"
@@ -3127,8 +3102,6 @@ ActiveRecord::Schema.define(version: 2021_10_21_163022) do
   add_foreign_key "simple_books", "subtypes", column: "product_type_id"
   add_foreign_key "simple_books", "users", column: "created_by"
   add_foreign_key "simple_books", "users", column: "updated_by"
-  add_foreign_key "snies", "users", column: "created_by"
-  add_foreign_key "snies", "users", column: "updated_by"
   add_foreign_key "software", "colciencias_calls"
   add_foreign_key "software", "geo_cities"
   add_foreign_key "software", "geo_countries"
@@ -5023,44 +4996,6 @@ ActiveRecord::Schema.define(version: 2021_10_21_163022) do
        LEFT JOIN subtypes sin ON ((sin.id = i.subtype_id)))
        LEFT JOIN types t ON ((sin.type_id = t.id)));
   SQL
-  create_view "siciud.complete_form_d_act_ps", sql_definition: <<-SQL
-      SELECT fdap.id,
-      fdap.action_plan_id,
-      fdap.name,
-      fdap.description,
-      fdap.goal_achieved,
-      fdap.goal_state_id,
-      sgs.st_name AS goal_state_name,
-      fdap."order",
-      fdap.plan_type_id,
-      spl.st_name AS plan_type_name,
-      ( SELECT count(*) AS count
-             FROM cine_detailed_areas_form_d_act_plans
-            WHERE (cine_detailed_areas_form_d_act_plans.form_d_act_plan_id = fdap.id)) AS total_cine_detailed_areas,
-      ( SELECT count(*) AS count
-             FROM cine_specific_areas_form_d_act_plans
-            WHERE (cine_specific_areas_form_d_act_plans.form_d_act_plan_id = fdap.id)) AS total_cine_specific_areas,
-      ( SELECT count(*) AS count
-             FROM form_d_act_plans_oecd_disciplines
-            WHERE (form_d_act_plans_oecd_disciplines.form_d_act_plan_id = fdap.id)) AS total_oecd_disciplines,
-      ( SELECT count(*) AS count
-             FROM form_d_act_plans_oecd_knowledge_subareas
-            WHERE (form_d_act_plans_oecd_knowledge_subareas.form_d_act_plan_id = fdap.id)) AS total_oecd_knowledge_subareas,
-      ( SELECT count(*) AS count
-             FROM research_focuses_form_d_plans
-            WHERE (research_focuses_form_d_plans.form_d_act_plan_id = fdap.id)) AS total_research_focuses,
-      ( SELECT count(*) AS count
-             FROM form_d_act_plans_snies
-            WHERE (form_d_act_plans_snies.form_d_act_plan_id = fdap.id)) AS total_snies,
-      fdap.active,
-      fdap.created_by,
-      fdap.updated_by,
-      fdap.created_at,
-      fdap.updated_at
-     FROM ((form_d_act_plans fdap
-       LEFT JOIN subtypes sgs ON ((sgs.id = fdap.goal_state_id)))
-       LEFT JOIN subtypes spl ON ((fdap.plan_type_id = spl.id)));
-  SQL
   create_view "siciud.complete_affiliated_entities", sql_definition: <<-SQL
       SELECT ae.id,
       ae.research_network_id,
@@ -5308,5 +5243,40 @@ ActiveRecord::Schema.define(version: 2021_10_21_163022) do
      FROM ((research_groups rg
        LEFT JOIN subtypes stgt ON ((rg.group_type_id = stgt.id)))
        LEFT JOIN subtypes stgs ON ((rg.group_state_id = stgs.id)));
+  SQL
+  create_view "siciud.complete_form_d_act_ps", sql_definition: <<-SQL
+      SELECT fdap.id,
+      fdap.action_plan_id,
+      fdap.name,
+      fdap.description,
+      fdap.goal_achieved,
+      fdap.goal_state_id,
+      sgs.st_name AS goal_state_name,
+      fdap."order",
+      fdap.plan_type_id,
+      spl.st_name AS plan_type_name,
+      ( SELECT count(*) AS count
+             FROM cine_detailed_areas_form_d_act_plans
+            WHERE (cine_detailed_areas_form_d_act_plans.form_d_act_plan_id = fdap.id)) AS total_cine_detailed_areas,
+      ( SELECT count(*) AS count
+             FROM cine_specific_areas_form_d_act_plans
+            WHERE (cine_specific_areas_form_d_act_plans.form_d_act_plan_id = fdap.id)) AS total_cine_specific_areas,
+      ( SELECT count(*) AS count
+             FROM form_d_act_plans_oecd_disciplines
+            WHERE (form_d_act_plans_oecd_disciplines.form_d_act_plan_id = fdap.id)) AS total_oecd_disciplines,
+      ( SELECT count(*) AS count
+             FROM form_d_act_plans_oecd_knowledge_subareas
+            WHERE (form_d_act_plans_oecd_knowledge_subareas.form_d_act_plan_id = fdap.id)) AS total_oecd_knowledge_subareas,
+      ( SELECT count(*) AS count
+             FROM research_focuses_form_d_plans
+            WHERE (research_focuses_form_d_plans.form_d_act_plan_id = fdap.id)) AS total_research_focuses,
+      fdap.active,
+      fdap.created_by,
+      fdap.updated_by,
+      fdap.created_at,
+      fdap.updated_at
+     FROM ((form_d_act_plans fdap
+       LEFT JOIN subtypes sgs ON ((sgs.id = fdap.goal_state_id)))
+       LEFT JOIN subtypes spl ON ((fdap.plan_type_id = spl.id)));
   SQL
 end

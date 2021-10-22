@@ -18,7 +18,7 @@ class EntitySerializer < AbstractProductSerializer
     legal_representative = self.object.hist_legal_representatives.where(
       "is_current = true"
     )
-    if legal_representative
+    if legal_representative.length > 0
       lr = legal_representative[0]
       {
         "id": lr.id,
