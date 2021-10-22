@@ -14,6 +14,16 @@ module Swagger::ScheduleActivitySchema
       property :sa_date do
         key :type, :string
       end
+      property :sa_start_date do
+        key :type, :string
+        key :format, :date
+        key :example, '2021-10-28'
+      end
+      property :sa_end_date do
+        key :type, :string
+        key :format, :date
+        key :example, '2021-02-21'
+      end
       property :sa_responsible do
         key :type, :string
       end

@@ -12,6 +12,14 @@ module Swagger::CallItemSchema
         key :maximum, 100
         key :exclusiveMaximum, false
       end
+      property :ci_percentage do
+        key :type, :number
+        key :format, :float
+        key :minimum, 0
+        key :exclusiveMinimum, false
+        key :maximum, 100
+        key :exclusiveMaximum, false
+      end
       property :item_id do
         key :type, :integer
         key :format, :int64

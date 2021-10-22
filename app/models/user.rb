@@ -3,6 +3,7 @@ class User < ApplicationRecord
 
   belongs_to :user_role
   has_one :researcher, foreign_key: 'identification_number', primary_key: 'identification_number'
+  has_one :otri_professional
 
   validates :user_role, presence: true
   validates :identification_number, uniqueness: {

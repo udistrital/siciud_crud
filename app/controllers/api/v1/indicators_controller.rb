@@ -7,7 +7,8 @@ module Api
 
       # GET /indicators
       def index
-        @indicators = Indicator.all
+        @indicators = CompleteIndicator.all
+        @indicators = DxService.load(@indicators, params)
 
         render json: @indicators
       end
@@ -46,12 +47,12 @@ module Api
 
       # Only allow a trusted parameter "white list" through.
       def indicator_params_to_create
-        params.require(:indicator).permit(:product_type_id, :ind_description,
+        params.require(:indicator).permit(:subtype_id, :ind_description,
                                           :active, :created_by)
       end
 
       def indicator_params_to_update
-        params.require(:indicator).permit(:product_type_id, :ind_description,
+        params.require(:indicator).permit(:subtype_id, :ind_description,
                                           :active, :updated_by)
       end
     end
