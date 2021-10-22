@@ -23,7 +23,8 @@ module Api
 
       # POST calls/:call_id/schedule_activities
       def create
-        @schedule_activity = @call.schedule_activities.new(schedule_act_params_to_create)
+        @schedule_activity = @call.schedule_activities.new(
+          schedule_act_params_to_create)
 
         if @schedule_activity.save
           render json: @schedule_activity, status: :created
@@ -51,14 +52,14 @@ module Api
       # Only allow a trusted parameter "white list" through.
       def schedule_act_params_to_create
         params.require(:schedule_activity).permit(:sa_order, :sa_description,
-                                                  :sa_date, :sa_responsible,
-                                                  :active, :created_by)
+                                                  :sa_date, :sa_start_date, :sa_end_date,
+                                                  :sa_responsible, :active, :created_by)
       end
 
       def schedule_act_params_to_update
         params.require(:schedule_activity).permit(:call_id, :sa_order, :sa_description,
-                                                  :sa_date, :sa_responsible,
-                                                  :active, :updated_by)
+                                                  :sa_date, :sa_start_date, :sa_end_date,
+                                                  :sa_responsible, :active, :updated_by)
       end
     end
   end

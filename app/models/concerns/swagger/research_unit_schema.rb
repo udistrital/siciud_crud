@@ -10,6 +10,10 @@ module Swagger::ResearchUnitSchema
       property :acronym do
         key :type, :string
       end
+      property :parent_id do
+        key :type, :integer
+        key :format, :int64
+      end
       property :cidc_act_number do
         key :type, :string
       end
@@ -59,11 +63,11 @@ module Swagger::ResearchUnitSchema
         key :type, :string
         key :format, :date
       end
-      property :group_type_id do
+      property :group_state_id do
         key :type, :integer
         key :format, :int64
       end
-      property :group_state_id do
+      property :group_type_id do
         key :type, :integer
         key :format, :int64
       end
@@ -101,7 +105,8 @@ module Swagger::ResearchUnitSchema
         end
       end
       property :snies_id do
-        key :type, :string
+        key :type, :integer
+        key :format, :int64
       end
       property :vision do
         key :type, :string
@@ -159,11 +164,36 @@ module Swagger::ResearchUnitSchema
           key :'$ref', :ResearchUnit
         end
         schema do
-          property :member_ids do
+          property :child_structures do
+            key :type, :array
+            items do
+              key :type, :object
+              property :id do
+                key :type, :integer
+                key :format, :int64
+              end
+              property :name do
+                key :type, :string
+              end
+            end
+          end
+          property :historical_colciencias do
             key :type, :array
             items do
               key :type, :integer
             end
+          end
+          property :group_state_name do
+            key :type, :string
+          end
+          property :group_type_name do
+            key :type, :string
+          end
+          property :parent_name do
+            key :type, :string
+          end
+          property :snies_name do
+            key :type, :string
           end
           property :created_by do
             key :type, :integer
@@ -185,13 +215,95 @@ module Swagger::ResearchUnitSchema
       end
     end
 
+    swagger_schema :ResearchUnitOutputComplete do
+      allOf do
+        schema do
+          property :id do
+            key :type, :integer
+            key :format, :int64
+          end
+        end
+        schema do
+          key :'$ref', :ResearchUnit
+        end
+        schema do
+          property :child_structures_count do
+            key :type, :integer
+            key :format, :int64
+          end
+          property :cine_broad_area_name do
+            key :type, :string
+          end
+          property :cine_specific_area_name do
+            key :type, :string
+          end
+          property :group_state_name do
+            key :type, :string
+          end
+          property :group_type_name do
+            key :type, :string
+          end
+          property :parent_name do
+            key :type, :string
+          end
+          property :created_by do
+            key :type, :integer
+            key :format, :int64
+          end
+          property :updated_by do
+            key :type, :integer
+            key :format, :int64
+          end
+          property :created_at do
+            key :type, :string
+            key :format, 'date-time'
+          end
+          property :updated_at do
+            key :type, :string
+            key :format, 'date-time'
+          end
+          property :member_ids do
+            key :type, :array
+            items do
+              key :type, :integer
+            end
+          end
+          property :member_count do
+            key :type, :integer
+            key :format, :int64
+          end
+          property :active_member_count do
+            key :type, :integer
+            key :format, :int64
+          end
+          property :inactive_member_count do
+            key :type, :integer
+            key :format, :int64
+          end
+          property :oecd_knowledge_area_name do
+            key :type, :string
+          end
+          property :oecd_knowledge_subarea_name do
+            key :type, :string
+          end
+          property :snies_name do
+            key :type, :string
+          end
+          property :total_faculties do
+            key :type, :integer
+            key :format, :int64
+          end
+        end
+      end
+    end
+
     swagger_schema :ResearchUnitDxOutput do
       allOf do
         schema do
           property :data do
             key :type, :array
             items do
-              key :'$ref', :ResearchUnitOutput
+              key :'$ref', :ResearchUnitOutputComplete
             end
           end
         end

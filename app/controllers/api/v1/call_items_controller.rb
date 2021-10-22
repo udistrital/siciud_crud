@@ -50,13 +50,13 @@ module Api
       # Only allow a trusted parameter "white list" through.
       def call_item_params_to_create
         params.require(:call_item).permit(:item_id, :ci_maximum_percentage,
-                                          :active, :created_by)
+                                          :ci_percentage, :active, :created_by)
       end
 
       def call_item_params_to_update
         params.require(:call_item).permit(:call_id, :item_id,
-                                          :ci_maximum_percentage, :active,
-                                          :updated_by)
+                                          :ci_maximum_percentage, :ci_percentage,
+                                          :active, :updated_by)
       end
     end
   end

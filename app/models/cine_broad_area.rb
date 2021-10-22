@@ -3,4 +3,5 @@ class CineBroadArea < ApplicationRecord
 
   has_many :cine_specific_areas
   has_many :research_groups
+  has_many :research_networks
 end

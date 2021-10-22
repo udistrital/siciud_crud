@@ -9,7 +9,7 @@ module Swagger::IndicatorApi
         key :description, 'Returns a single indicator'
         key :operationId, :get_indicator_by_id
         key :produces, ['application/json',]
-        key :tags, ['Calls:: Indicators']
+        key :tags, ['Indicators']
 
         parameter name: :id do
           key :in, :path
@@ -41,7 +41,7 @@ module Swagger::IndicatorApi
         key :description, 'Returns the updated indicator'
         key :operationId, :update_indicator
         key :produces, ['application/json',]
-        key :tags, ['Calls:: Indicators']
+        key :tags, ['Indicators']
 
         parameter name: :id do
           key :in, :path
@@ -82,7 +82,7 @@ module Swagger::IndicatorApi
         key :description, 'Returns the activated/deactivated indicator'
         key :operationId, :change_active_indicator
         key :produces, ['application/json',]
-        key :tags, ['Calls:: Indicators']
+        key :tags, ['Indicators']
 
         parameter name: :id do
           key :in, :path
@@ -127,7 +127,7 @@ module Swagger::IndicatorApi
         key :description, 'Returns all indicators'
         key :operationId, :get_indicators
         key :produces, ['application/json',]
-        key :tags, ['Calls:: Indicators']
+        key :tags, ['Indicators']
 
         response 200 do
           key :description, 'indicator response'
@@ -148,7 +148,7 @@ module Swagger::IndicatorApi
         key :description, 'Returns the created indicator'
         key :operationId, :create_indicator
         key :produces, ['application/json',]
-        key :tags, ['Calls:: Indicators']
+        key :tags, ['Indicators']
 
         parameter name: :indicator do
           key :in, :body

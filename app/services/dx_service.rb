@@ -1,38 +1,80 @@
 class DxService < ApplicationService
   require 'json'
-  require 'ostruct'  
+  require 'ostruct'
 
   def self.load(dbSet, params, files = [])
     @dbSet = dbSet
     @params = params
 
     # Resultado
-    result = OpenStruct.new(root:{})
+    result = OpenStruct.new(root: {})
 
     # 202103120948: Filtro por IDs (ids=507,211,395)
     ids = GetParam(:ids)
     unless ids.nil?
-      @dbSet = @dbSet.where("id in ("+ ids +")")
+      @dbSet = @dbSet.where("id in (" + ids + ")")
     end
 
     # 202107040544: Filtro por Facultades (faculties=17,66)
-    # TODO: Determinar si el model tiene el campo 'faculties'
+    # 202110070120: Filtro por documento de identidad (member_documents=1234567,7592839481)
+    # 202110070120: Filtro por cine detallado (cine_detailed_areas=17,66)
+    # 202110070120: Filtro por proyecto curricular (curricular_projects=17,66)
+    # 202110070120: Filtro por disciplinas OCDE (oecd_disciplines=17,66)
+    # 202110070120: Filtro por líneas de investigación (research_focuses=17,66)
+    arr = []
+    db_set_column_names = @dbSet.column_names
+
     fids = GetParam(:faculties)
-    unless fids.nil?
-      # unless @dbSet["faculties"]?
-        arr = []
-        fids.split(',').each do |id|
-          arr.push("faculty_ids @> '{"+ id +"}'")
-        end
-        @dbSet = @dbSet.where(arr.join(" OR "))
-      # end
+    if db_set_column_names.include? "faculty_ids" and not fids.nil?
+      fids.split(',').each do |id|
+        arr.push("faculty_ids @> '{" + id + "}'")
+      end
+    end
+
+    cine_detailed_ids = GetParam(:cine_detailed_areas)
+    if db_set_column_names.include? "cine_detailed_area_ids" and not cine_detailed_ids.nil?
+      cine_detailed_ids.split(',').each do |id|
+        arr.push("cine_detailed_area_ids @> '{" + id + "}'")
+      end
+    end
+
+    curricular_project_ids = GetParam(:curricular_projects)
+    if db_set_column_names.include? "curricular_project_ids" and not curricular_project_ids.nil?
+      curricular_project_ids.split(',').each do |id|
+        arr.push("curricular_project_ids @> '{" + id + "}'")
+      end
+    end
+
+    member_docs = GetParam(:member_documents)
+    if db_set_column_names.include? "member_documents" and not member_docs.nil?
+      member_docs.split(',').each do |id|
+        arr.push("member_documents @> '{" + id + "}'")
+      end
+    end
+
+    oecd_discipline_ids = GetParam(:oecd_disciplines)
+    if db_set_column_names.include? "oecd_discipline_ids" and not oecd_discipline_ids.nil?
+      oecd_discipline_ids.split(',').each do |id|
+        arr.push("oecd_discipline_ids @> '{" + id + "}'")
+      end
+    end
+
+    research_focus_ids = GetParam(:research_focuses)
+    if db_set_column_names.include? "research_focus_ids" and not research_focus_ids.nil?
+      research_focus_ids.split(',').each do |id|
+        arr.push("research_focus_ids @> '{" + id + "}'")
+      end
+    end
+
+    if arr.length > 0
+      @dbSet = @dbSet.where(arr.join(" OR "))
     end
 
     # 202107040722: Filtro por estado (state=1) (state=2)
     # TODO: Determinar si el model tiene el campo 'group_state_id'
     state = GetParam(:state)
     unless state.nil?
-      @dbSet = @dbSet.where("group_state_id = "+ state)
+      @dbSet = @dbSet.where("group_state_id = " + state)
     end
 
     # Filtro
@@ -66,11 +108,11 @@ class DxService < ApplicationService
         g = dbRes.group(sel).count
         g.each_with_object({}) do |((sel), count), m|
           sql.push({
-            key: sel,
-            count: count,
-            summary: [count],
-            items: nil
-          })
+                     key: sel,
+                     count: count,
+                     summary: [count],
+                     items: nil
+                   })
         end
       }
       result.root[:data] = sql
@@ -111,15 +153,15 @@ class DxService < ApplicationService
         comodin_final = ""
         separador = columna.include?("_id") ? "" : "'"
         if operador == "contains" || operador == "notcontains" || operador == "startswith" || operador == "endswith"
-          comodin_inicio = operador == "startswith" ? "": "%"
-          comodin_final = operador == "endswith" ? "": "%"
+          comodin_inicio = operador == "startswith" ? "" : "%"
+          comodin_final = operador == "endswith" ? "" : "%"
           operador = operador == "notcontains" ? "NOT LIKE" : "LIKE"
-          columna = "LOWER("+ columna +")"
+          columna = "LOWER(" + columna + ")"
           valor = valor.downcase
-        # elsif 
-        #   operador = "NOT LIKE"
-        #   comodin_inicio = "%"
-        #   comodin_final = "%"
+          # elsif
+          #   operador = "NOT LIKE"
+          #   comodin_inicio = "%"
+          #   comodin_final = "%"
         end
         # operador = operador == "contains" ? "LIKE" : operador
         valor = separador + comodin_inicio + valor + comodin_final + separador
