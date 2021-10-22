@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_22_001438) do
+ActiveRecord::Schema.define(version: 2021_10_22_011408) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -5047,51 +5047,6 @@ ActiveRecord::Schema.define(version: 2021_10_22_001438) do
      FROM (action_plans ap
        LEFT JOIN research_groups rg ON ((rg.id = ap.research_group_id)));
   SQL
-  create_view "siciud.complete_research_networks", sql_definition: <<-SQL
-      SELECT rn.id,
-      rn.name,
-      rn.acronym,
-      rn.academic_responsibilities,
-      rn.advantage,
-      rn.cine_broad_area_id,
-      cba.name AS cine_broad_area_name,
-      rn.cine_specific_area_id,
-      csa.name AS cine_specific_area_name,
-      rn.financial_responsibilities,
-      rn.legal_responsibilities,
-      rn.main_research_group_id,
-      rg.name AS main_research_group_name,
-      ARRAY( SELECT research_groups_research_networks.research_group_id
-             FROM research_groups_research_networks
-            WHERE (research_groups_research_networks.research_network_id = rn.id)) AS research_group_ids,
-      ( SELECT count(*) AS count
-             FROM research_groups_research_networks
-            WHERE (research_groups_research_networks.research_network_id = rn.id)) AS research_group_count,
-      rn.mission,
-      rn.network_type_id,
-      snt.st_name AS network_type_name,
-      rn.oecd_knowledge_area_id,
-      oka.name AS oecd_knowledge_area_name,
-      rn.oecd_knowledge_subarea_id,
-      oks.name AS oecd_knowledge_subarea_name,
-      rn.researcher_id,
-      r.identification_number AS researcher_identification_number,
-      rn.request_date,
-      rn.vision,
-      rn.active,
-      rn.created_by,
-      rn.updated_by,
-      rn.created_at,
-      rn.updated_at
-     FROM (((((((research_networks rn
-       LEFT JOIN cine_broad_areas cba ON ((rn.cine_broad_area_id = cba.id)))
-       LEFT JOIN cine_specific_areas csa ON ((rn.cine_specific_area_id = csa.id)))
-       LEFT JOIN research_groups rg ON ((rn.main_research_group_id = rg.id)))
-       LEFT JOIN subtypes snt ON ((rn.network_type_id = snt.id)))
-       LEFT JOIN oecd_knowledge_areas oka ON ((rn.oecd_knowledge_area_id = oka.id)))
-       LEFT JOIN oecd_knowledge_subareas oks ON ((rn.oecd_knowledge_subarea_id = oks.id)))
-       LEFT JOIN researchers r ON ((rn.researcher_id = r.id)));
-  SQL
   create_view "siciud.complete_rg_research_networks", sql_definition: <<-SQL
       SELECT rgrn.id,
       rgrn.research_group_id,
@@ -5168,6 +5123,41 @@ ActiveRecord::Schema.define(version: 2021_10_22_001438) do
       hc.updated_at
      FROM (hist_contacts hc
        LEFT JOIN contacts c ON ((hc.contact_id = c.id)));
+  SQL
+  create_view "siciud.complete_form_d_act_ps", sql_definition: <<-SQL
+      SELECT fdap.id,
+      fdap.action_plan_id,
+      fdap.name,
+      fdap.description,
+      fdap.goal_achieved,
+      fdap.goal_state_id,
+      sgs.st_name AS goal_state_name,
+      fdap."order",
+      fdap.plan_type_id,
+      spl.st_name AS plan_type_name,
+      ( SELECT count(*) AS count
+             FROM cine_detailed_areas_form_d_act_plans
+            WHERE (cine_detailed_areas_form_d_act_plans.form_d_act_plan_id = fdap.id)) AS total_cine_detailed_areas,
+      ( SELECT count(*) AS count
+             FROM cine_specific_areas_form_d_act_plans
+            WHERE (cine_specific_areas_form_d_act_plans.form_d_act_plan_id = fdap.id)) AS total_cine_specific_areas,
+      ( SELECT count(*) AS count
+             FROM form_d_act_plans_oecd_disciplines
+            WHERE (form_d_act_plans_oecd_disciplines.form_d_act_plan_id = fdap.id)) AS total_oecd_disciplines,
+      ( SELECT count(*) AS count
+             FROM form_d_act_plans_oecd_knowledge_subareas
+            WHERE (form_d_act_plans_oecd_knowledge_subareas.form_d_act_plan_id = fdap.id)) AS total_oecd_knowledge_subareas,
+      ( SELECT count(*) AS count
+             FROM research_focuses_form_d_plans
+            WHERE (research_focuses_form_d_plans.form_d_act_plan_id = fdap.id)) AS total_research_focuses,
+      fdap.active,
+      fdap.created_by,
+      fdap.updated_by,
+      fdap.created_at,
+      fdap.updated_at
+     FROM ((form_d_act_plans fdap
+       LEFT JOIN subtypes sgs ON ((sgs.id = fdap.goal_state_id)))
+       LEFT JOIN subtypes spl ON ((fdap.plan_type_id = spl.id)));
   SQL
   create_view "siciud.research_units", sql_definition: <<-SQL
       SELECT rg.id,
@@ -5247,47 +5237,63 @@ ActiveRecord::Schema.define(version: 2021_10_22_001438) do
       ARRAY( SELECT research_focuses_units.subtype_id
              FROM research_focuses_units
             WHERE (research_focuses_units.research_group_id = rg.id)) AS research_focus_ids,
+      rg.snies_id,
+      sn.st_name AS snies_name,
       rg.created_at,
       rg.updated_at,
       rg.created_by,
       rg.updated_by
-     FROM ((research_groups rg
+     FROM (((research_groups rg
        LEFT JOIN subtypes stgt ON ((rg.group_type_id = stgt.id)))
-       LEFT JOIN subtypes stgs ON ((rg.group_state_id = stgs.id)));
+       LEFT JOIN subtypes stgs ON ((rg.group_state_id = stgs.id)))
+       LEFT JOIN subtypes sn ON ((rg.snies_id = sn.id)));
   SQL
-  create_view "siciud.complete_form_d_act_ps", sql_definition: <<-SQL
-      SELECT fdap.id,
-      fdap.action_plan_id,
-      fdap.name,
-      fdap.description,
-      fdap.goal_achieved,
-      fdap.goal_state_id,
-      sgs.st_name AS goal_state_name,
-      fdap."order",
-      fdap.plan_type_id,
-      spl.st_name AS plan_type_name,
+  create_view "siciud.complete_research_networks", sql_definition: <<-SQL
+      SELECT rn.id,
+      rn.name,
+      rn.acronym,
+      rn.academic_responsibilities,
+      rn.advantage,
+      rn.cine_broad_area_id,
+      cba.name AS cine_broad_area_name,
+      rn.cine_specific_area_id,
+      csa.name AS cine_specific_area_name,
+      rn.financial_responsibilities,
+      rn.legal_responsibilities,
+      rn.main_research_group_id,
+      rg.name AS main_research_group_name,
+      ARRAY( SELECT research_groups_research_networks.research_group_id
+             FROM research_groups_research_networks
+            WHERE (research_groups_research_networks.research_network_id = rn.id)) AS research_group_ids,
       ( SELECT count(*) AS count
-             FROM cine_detailed_areas_form_d_act_plans
-            WHERE (cine_detailed_areas_form_d_act_plans.form_d_act_plan_id = fdap.id)) AS total_cine_detailed_areas,
-      ( SELECT count(*) AS count
-             FROM cine_specific_areas_form_d_act_plans
-            WHERE (cine_specific_areas_form_d_act_plans.form_d_act_plan_id = fdap.id)) AS total_cine_specific_areas,
-      ( SELECT count(*) AS count
-             FROM form_d_act_plans_oecd_disciplines
-            WHERE (form_d_act_plans_oecd_disciplines.form_d_act_plan_id = fdap.id)) AS total_oecd_disciplines,
-      ( SELECT count(*) AS count
-             FROM form_d_act_plans_oecd_knowledge_subareas
-            WHERE (form_d_act_plans_oecd_knowledge_subareas.form_d_act_plan_id = fdap.id)) AS total_oecd_knowledge_subareas,
-      ( SELECT count(*) AS count
-             FROM research_focuses_form_d_plans
-            WHERE (research_focuses_form_d_plans.form_d_act_plan_id = fdap.id)) AS total_research_focuses,
-      fdap.active,
-      fdap.created_by,
-      fdap.updated_by,
-      fdap.created_at,
-      fdap.updated_at
-     FROM ((form_d_act_plans fdap
-       LEFT JOIN subtypes sgs ON ((sgs.id = fdap.goal_state_id)))
-       LEFT JOIN subtypes spl ON ((fdap.plan_type_id = spl.id)));
+             FROM research_groups_research_networks
+            WHERE (research_groups_research_networks.research_network_id = rn.id)) AS research_group_count,
+      rn.mission,
+      rn.network_type_id,
+      snt.st_name AS network_type_name,
+      rn.oecd_knowledge_area_id,
+      oka.name AS oecd_knowledge_area_name,
+      rn.oecd_knowledge_subarea_id,
+      oks.name AS oecd_knowledge_subarea_name,
+      rn.researcher_id,
+      r.identification_number AS researcher_identification_number,
+      rn.request_date,
+      rn.snies_id,
+      sn.st_name AS snies_name,
+      rn.vision,
+      rn.active,
+      rn.created_by,
+      rn.updated_by,
+      rn.created_at,
+      rn.updated_at
+     FROM ((((((((research_networks rn
+       LEFT JOIN cine_broad_areas cba ON ((rn.cine_broad_area_id = cba.id)))
+       LEFT JOIN cine_specific_areas csa ON ((rn.cine_specific_area_id = csa.id)))
+       LEFT JOIN research_groups rg ON ((rn.main_research_group_id = rg.id)))
+       LEFT JOIN subtypes snt ON ((rn.network_type_id = snt.id)))
+       LEFT JOIN oecd_knowledge_areas oka ON ((rn.oecd_knowledge_area_id = oka.id)))
+       LEFT JOIN oecd_knowledge_subareas oks ON ((rn.oecd_knowledge_subarea_id = oks.id)))
+       LEFT JOIN researchers r ON ((rn.researcher_id = r.id)))
+       LEFT JOIN subtypes sn ON ((rn.snies_id = sn.id)));
   SQL
 end
