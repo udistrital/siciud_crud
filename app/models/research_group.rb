@@ -3,11 +3,11 @@ class ResearchGroup < ApplicationRecord
 
   belongs_to :group_state, class_name: 'Subtype', foreign_key: 'group_state_id', optional: true
   belongs_to :group_type, class_name: 'Subtype', foreign_key: 'group_type_id', optional: true
+  belongs_to :snies, class_name: 'Subtype', foreign_key: 'snies_id', optional: true
   belongs_to :cine_broad_area, optional: true
   belongs_to :cine_specific_area, optional: true
   belongs_to :oecd_knowledge_area, optional: true
   belongs_to :oecd_knowledge_subarea, optional: true
-  belongs_to :snies, optional: true
 
   belongs_to :parent, class_name: 'ResearchGroup', optional: true
 

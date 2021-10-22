@@ -51,8 +51,7 @@ class FormDActPlanSerializer < AbstractActionPlanSerializer
     snies_list.each do |snies|
       data = {
         "snies_id": snies.id,
-        "snies_code": snies.code,
-        "snies_name": snies.name
+        "snies_name": snies.st_name
       }
       complete_snies.append(data)
     end

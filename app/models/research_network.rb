@@ -6,6 +6,7 @@ class ResearchNetwork < ApplicationRecord
   belongs_to :cine_specific_area, optional: true
   belongs_to :oecd_knowledge_subarea, optional: true
   belongs_to :oecd_knowledge_area, optional: true
+  belongs_to :snies, class_name: 'Subtype', foreign_key: 'snies_id', optional: true
 
   belongs_to :main_research_group, class_name: 'ResearchGroup',
              foreign_key: 'main_research_group_id'
@@ -25,7 +26,6 @@ class ResearchNetwork < ApplicationRecord
 
   has_and_belongs_to_many :oecd_disciplines
   has_and_belongs_to_many :cine_detailed_areas
-  has_and_belongs_to_many :snies
 
   # Tracking inherited from ApplicationRecord, fields:
   # created_by and updated_by, see application_record.rb

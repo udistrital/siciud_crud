@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_21_235413) do
+ActiveRecord::Schema.define(version: 2021_10_22_001438) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -911,6 +911,11 @@ ActiveRecord::Schema.define(version: 2021_10_21_235413) do
   create_table "form_d_act_plans_oecd_knowledge_subareas", id: false, force: :cascade do |t|
     t.bigint "oecd_knowledge_subarea_id", null: false
     t.bigint "form_d_act_plan_id", null: false
+  end
+
+  create_table "form_d_act_plans_snies", id: false, force: :cascade do |t|
+    t.bigint "form_d_act_plan_id", null: false
+    t.bigint "subtype_id", null: false
   end
 
   create_table "form_e_act_plans", force: :cascade do |t|
@@ -2036,6 +2041,7 @@ ActiveRecord::Schema.define(version: 2021_10_21_235413) do
     t.bigint "group_state_id"
     t.bigint "group_type_id"
     t.bigint "parent_id"
+    t.bigint "snies_id"
     t.index ["cine_broad_area_id"], name: "index_research_groups_on_cine_broad_area_id"
     t.index ["cine_specific_area_id"], name: "index_research_groups_on_cine_specific_area_id"
     t.index ["created_by"], name: "index_research_groups_on_created_by"
@@ -2044,6 +2050,7 @@ ActiveRecord::Schema.define(version: 2021_10_21_235413) do
     t.index ["oecd_knowledge_area_id"], name: "index_research_groups_on_oecd_knowledge_area_id"
     t.index ["oecd_knowledge_subarea_id"], name: "index_research_groups_on_oecd_knowledge_subarea_id"
     t.index ["parent_id"], name: "index_research_groups_on_parent_id"
+    t.index ["snies_id"], name: "index_research_groups_on_snies_id"
     t.index ["updated_by"], name: "index_research_groups_on_updated_by"
   end
 
@@ -2085,6 +2092,7 @@ ActiveRecord::Schema.define(version: 2021_10_21_235413) do
     t.bigint "updated_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "snies_id"
     t.index ["cine_broad_area_id"], name: "index_research_networks_on_cine_broad_area_id"
     t.index ["cine_specific_area_id"], name: "index_research_networks_on_cine_specific_area_id"
     t.index ["created_by"], name: "index_research_networks_on_created_by"
@@ -2093,6 +2101,7 @@ ActiveRecord::Schema.define(version: 2021_10_21_235413) do
     t.index ["oecd_knowledge_area_id"], name: "index_research_networks_on_oecd_knowledge_area_id"
     t.index ["oecd_knowledge_subarea_id"], name: "index_research_networks_on_oecd_knowledge_subarea_id"
     t.index ["researcher_id"], name: "index_research_networks_on_researcher_id"
+    t.index ["snies_id"], name: "index_research_networks_on_snies_id"
     t.index ["updated_by"], name: "index_research_networks_on_updated_by"
   end
 
@@ -3054,6 +3063,7 @@ ActiveRecord::Schema.define(version: 2021_10_21_235413) do
   add_foreign_key "research_groups", "research_groups", column: "parent_id"
   add_foreign_key "research_groups", "subtypes", column: "group_state_id"
   add_foreign_key "research_groups", "subtypes", column: "group_type_id"
+  add_foreign_key "research_groups", "subtypes", column: "snies_id"
   add_foreign_key "research_groups", "users", column: "created_by"
   add_foreign_key "research_groups", "users", column: "updated_by"
   add_foreign_key "research_groups_research_networks", "research_groups"
@@ -3067,6 +3077,7 @@ ActiveRecord::Schema.define(version: 2021_10_21_235413) do
   add_foreign_key "research_networks", "research_groups", column: "main_research_group_id"
   add_foreign_key "research_networks", "researchers"
   add_foreign_key "research_networks", "subtypes", column: "network_type_id"
+  add_foreign_key "research_networks", "subtypes", column: "snies_id"
   add_foreign_key "research_networks", "users", column: "created_by"
   add_foreign_key "research_networks", "users", column: "updated_by"
   add_foreign_key "researchers", "users", column: "created_by"
