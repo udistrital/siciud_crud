@@ -1,17 +1,12 @@
 FROM ruby:2.6.2
 RUN apt-get update -qq && apt-get install -y nodejs postgresql-client
 
-RUN apt-get update && apt-get install -y \
-        software-properties-common
-RUN add-apt-repository ppa:deadsnakes/ppa
-RUN apt-get update && apt-get install -y \
-    python3.7 \
-    python3-pip
-RUN python3.7 -m pip install pip
-RUN apt-get update && apt-get install -y \
-    python3-distutils \
-    python3-setuptools
-RUN python3.7 -m pip install pip --upgrade pip
+RUN apt-get update \
+  && apt-get install -y python3-pip python3-dev \
+  && cd /usr/local/bin \
+  && ln -s /usr/bin/python3 python \
+  && pip3 --no-cache-dir install --upgrade pip \
+  && rm -rf /var/lib/apt/lists/*
 
 RUN pip install awscli
 
