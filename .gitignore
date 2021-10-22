@@ -44,10 +44,6 @@ swagger-ui/
 # Backups
 migrate_backup/
 
-# Other files temporarily
-/db/schema.rb
-Gemfile.lock
-
 /db/data/202105210940-prod-siciud-v2.sql
 /db/data/202105210940-prod-siciud-v2-admins.sql
 /db/data/202106010752_siciud_v2_schema.sql
