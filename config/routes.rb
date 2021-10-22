@@ -221,8 +221,6 @@ Rails.application.routes.draw do
       resources :cine_specific_areas, only: [:index, :create, :update]
       resources :cine_detailed_areas, only: [:index, :create, :update]
 
-      resources :snies, only: [:index, :show, :create, :update]
-
       # Endpoints to Calls
       resources :indicators, only: [:index, :show, :create, :update]
 
