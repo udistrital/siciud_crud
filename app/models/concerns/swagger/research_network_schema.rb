@@ -81,11 +81,9 @@ module Swagger::ResearchNetworkSchema
         key :type, :integer
         key :format, :int64
       end
-      property :snies_ids do
-        key :type, :array
-        items do
-          key :type, :integer
-        end
+      property :snies_id do
+        key :type, :integer
+        key :format, :int64
       end
       property :vision do
         key :type, :string
@@ -161,6 +159,9 @@ module Swagger::ResearchNetworkSchema
             key :type, :string
           end
           property :researcher_identification_number do
+            key :type, :string
+          end
+          property :snies_name do
             key :type, :string
           end
           property :created_by do

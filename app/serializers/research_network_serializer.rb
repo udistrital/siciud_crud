@@ -8,7 +8,7 @@ class ResearchNetworkSerializer < ActiveModel::Serializer
              :cine_broad_area_id, :cine_broad_area_name,
              :cine_specific_area_id, :cine_specific_area_name,
              :cine_detailed_area_ids,
-             :research_focus_ids, :snies_ids,
+             :research_focus_ids, :snies_id, :snies_name,
              :oecd_knowledge_subarea_id, :oecd_knowledge_subarea_name,
              :oecd_knowledge_area_id, :oecd_knowledge_area_name,
              :oecd_discipline_ids, :research_group_ids,
@@ -62,6 +62,13 @@ class ResearchNetworkSerializer < ActiveModel::Serializer
     oecd_knowledge_area = self.object.oecd_knowledge_area
     if oecd_knowledge_area
       oecd_knowledge_area.name
+    end
+  end
+
+  def snies_name
+    snies = self.object.snies
+    if snies
+      snies.st_name
     end
   end
 end

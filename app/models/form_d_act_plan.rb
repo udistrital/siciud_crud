@@ -17,6 +17,10 @@ class FormDActPlan < ApplicationRecord
                           join_table: 'research_focuses_form_d_plans',
                           class_name: 'Subtype'
 
+  has_and_belongs_to_many :snies,
+                          join_table: 'form_d_act_plans_snies',
+                          class_name: 'Subtype'
+
   validates_associated :cine_specific_areas
   # Tracking inherited from ApplicationRecord, fields:
   # created_by and updated_by, see application_record.rb
