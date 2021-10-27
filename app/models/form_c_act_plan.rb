@@ -3,7 +3,7 @@ class FormCActPlan < ApplicationRecord
 
   belongs_to :action_plan
   belongs_to :plan_type, class_name: 'Subtype', foreign_key: 'plan_type_id'
-  belongs_to :child_prod_type, class_name: 'Subtype', foreign_key: 'child_prod_type_id'
+  belongs_to :child_prod_type, class_name: 'Subtype', foreign_key: 'child_prod_type_id', optional: true
   belongs_to :product_type, class_name: 'Subtype', foreign_key: 'product_type_id'
 
   has_many :documents, as: :documentable
