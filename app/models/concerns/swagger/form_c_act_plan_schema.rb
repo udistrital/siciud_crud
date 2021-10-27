@@ -27,6 +27,10 @@ module Swagger::FormCActPlanSchema
         key :type, :integer
         key :format, :int64
       end
+      property :child_prod_type_id do
+        key :type, :integer
+        key :format, :int64
+      end
       property :active do
         key :type, :boolean
         key :default, true
@@ -88,6 +92,9 @@ module Swagger::FormCActPlanSchema
             key :format, :int64
           end
           property :plan_type_name do
+            key :type, :string
+          end
+          property :child_prod_type_name do
             key :type, :string
           end
           property :product_type_name do
