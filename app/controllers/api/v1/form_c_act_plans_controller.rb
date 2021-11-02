@@ -37,6 +37,7 @@ module Api
       def update
         body_ap = form_c_act_p_params_to_update.except(:advanced_total)
         body_mr = form_c_act_p_params_to_update.except(:product_type_id,
+                                                       :child_prod_type_id,
                                                        :description, :goal, :order,
                                                        :action_plan_id, :plan_type_id,
                                                        :active)
@@ -46,6 +47,7 @@ module Api
                                                        body_mr,
                                                        [
                                                          :product_type_id,
+                                                         :child_prod_type_id,
                                                          :description, :goal, :order,
                                                          :action_plan_id, :plan_type_id
                                                        ],
@@ -72,6 +74,7 @@ module Api
       # Only allow a trusted parameter "white list" through.
       def form_c_act_p_params_to_create
         params.require(:form_c_act_plan).permit(:product_type_id,
+                                                :child_prod_type_id,
                                                 :description, :goal, :order,
                                                 :plan_type_id,
                                                 :active, :created_by)
@@ -79,6 +82,7 @@ module Api
 
       def form_c_act_p_params_to_update
         params.require(:form_c_act_plan).permit(:product_type_id,
+                                                :child_prod_type_id,
                                                 :description, :goal, :order,
                                                 :action_plan_id, :plan_type_id,
                                                 :advanced_total,
