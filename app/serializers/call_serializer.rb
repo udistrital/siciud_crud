@@ -1,37 +1,30 @@
 class CallSerializer < ActiveModel::Serializer
-  include Rails.application.routes.url_helpers
-  attributes :id, :name, :callNumber, :registerDate, :description, :call_type_id,
-             :call_user_role_id, :duration, :duration_type_id, :globalBudget, :maxBudgetPerProject,
-             :startDate, :closingDate, :directedTowards, :termsOfReference, :tor_date,
-             :apertureResolution, :ar_date, :addendum, :ad_date
+  attributes :id, :call_name, :call_state_id, :call_state_name,
+             :call_code, :call_type_id, :call_type_name,
+             :call_beneficiary_id, :call_beneficiary_name,
+             :call_duration, :call_start_date, :call_end_date,
+             :call_global_budget, :call_max_budget_per_project,
+             :call_directed_towards, :call_objective,
+             :active, :created_by, :updated_by, :created_at, :updated_at
 
-  def termsOfReference
-    sotr = self.object.termsOfReference
-    rails_blob_path(sotr, only_path: true) if sotr.attached?
+  def call_state_name
+    call_state = self.object.call_state
+    if call_state
+      call_state.st_name
+    end
   end
 
-  def tor_date
-    sotr = self.object.termsOfReference
-    sotr.attachment.created_at if sotr.attachment
+  def call_type_name
+    call_type = self.object.call_type
+    if call_type
+      call_type.st_name
+    end
   end
 
-  def apertureResolution
-    soar = self.object.apertureResolution
-    rails_blob_path(soar, only_path: true) if soar.attached?
-  end
-
-  def ar_date
-    soar = self.object.apertureResolution
-    soar.attachment.created_at if soar.attachment
-  end
-
-  def addendum
-    soa = self.object.addendum
-    rails_blob_path(soa, only_path: true) if soa.attached?
-  end
-
-  def ad_date
-    soa = self.object.addendum
-    soa.attachment.created_at if soa.attachment
+  def call_beneficiary_name
+    call_beneficiary = self.object.call_beneficiary
+    if call_beneficiary
+      call_beneficiary.st_name
+    end
   end
 end

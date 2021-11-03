@@ -14,9 +14,9 @@
 /.bundle
 
 # Ignore the default SQLite database.
-/config/database.yml
+db/schema.rb
+config/local_env.yml
 /config/local_env.yml
-/config/database.yml
 /db/*.sqlite3
 /db/*.sqlite3-journal
 
@@ -43,3 +43,12 @@ swagger-ui/
 
 # Backups
 migrate_backup/
+
+/db/data/202105210940-prod-siciud-v2.sql
+/db/data/202105210940-prod-siciud-v2-admins.sql
+/db/data/202106010752_siciud_v2_schema.sql
+/db/data/202106010753_siciud_v2.sql
+/db/data/202107072326_siciud_v2.sql
+/db/data/202107231328_siciud_v2.sql
+/db/data/202109101302_siciud_v2.sql
+/db/data/202109131230_backup_siciud_prod.sql

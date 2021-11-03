@@ -152,7 +152,7 @@ module Swagger::TechnicalConceptApi
       end
 
       operation :post do
-        key :summary, 'Create a new Technical Concepts'
+        key :summary, 'Create a new Technical Concept'
         key :description, 'Returns the created technical concept'
         key :operationId, :create_technical_concept
         key :produces, ['application/json',]
@@ -192,6 +192,5 @@ module Swagger::TechnicalConceptApi
         end
       end
     end
-
   end
 end

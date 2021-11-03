@@ -2,7 +2,9 @@ module Api
   module V1
     class DocumentsController < ApplicationController
       include Swagger::DocumentApi
-      
+
+      # TODO agregar validación para formularios que solo se
+      # puedan agregar si el informe esta en borrador
       before_action :set_general_context
       before_action :set_document, only: [:show, :update, :deactivate]
 
@@ -44,7 +46,6 @@ module Api
 
       # PUT context/:id/documents/1
       def deactivate
-        @document.active = false
         if @document.update(document_params_to_update)
           render json: @document
         else

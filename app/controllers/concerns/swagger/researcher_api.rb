@@ -156,6 +156,23 @@ module Swagger::ResearcherApi
           key :type, :string
         end
 
+        parameter name: :role_ids do
+          key :in, :query
+          key :description, 'researcher role ids'
+          key :required, false
+          key :type, :array
+          items do
+            key :type, :integer
+          end
+        end
+
+        parameter name: :group_type_id do
+          key :in, :query
+          key :description, 'researcher group type id'
+          key :required, false
+          key :type, :integer
+        end
+
         response 200 do
           key :description, 'researcher response'
           schema do

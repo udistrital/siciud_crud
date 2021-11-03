@@ -18,4 +18,7 @@ ActiveSupport::Inflector.inflections do |inflect|
   inflect.irregular 'focus', 'focuses'
   inflect.irregular 'axis', 'axes'
   inflect.irregular 'software', 'software'
+  inflect.irregular 'criterion', 'criteria'
+  inflect.irregular 'snies', 'snies'
+  inflect.irregular 'procedure', 'procedures'
 end

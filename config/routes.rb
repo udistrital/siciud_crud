@@ -1,12 +1,6 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root to: "health#health"
-
-  namespace :api do
-    namespace :v1 do
-      get 'arp_assignment_reports/index'
-    end
-  end
   get "/api" => redirect("/api/v1/apidocs/")
   namespace :api do
     namespace :v1 do
@@ -18,92 +12,45 @@ Rails.application.routes.draw do
         resources :geo_states, only: [:index, :show]
         resources :geo_cities_by_countries, only: [:index]
       end
-
       resources :geo_states, only: [:index, :show] do
         resources :geo_cities, only: [:index, :show]
       end
 
       # Types and Subtypes endpoints
       resources :types, only: [:index, :show, :create, :update]
-
+      get "/types_all", to: "types#all_types_and_subtypes"
       resources :subtypes, only: [:index, :show, :create, :update]
       get "/subtypes/by-type/:type_id", to: "subtypes#subtypes_by_type"
-
-      get "/types_all", to: "types#all_types_and_subtypes"
-
-      #Enpoint para actualizar los documentos de los convenios
-      put "agreement/:id/attach/", to: "agreement#attach"
 
       resources :gm_states, only: [:index, :show]
       resources :role, only: [:index, :show, :create, :update]
       resources :researchers, only: [:index, :show, :update, :create]
       get "researcher_research_units", to: "researchers#researcher_research_units"
 
-      resources :funding_entity, only: [:index, :show, :create, :update] do
-        resources :fe_contact, only: [:index, :show, :update, :create]
-      end
-      resources :entity_type, only: [:index]
-      resources :item_category, only: [:index, :show, :create, :update]
-      resources :agreement_status, only: [:index, :show]
-      resources :agreement_type, only: [:index, :show, :create]
-      resources :agreement, only: [:index, :show, :create, :update] do
-        resources :contribution, only: [:index, :show, :create, :update]
-        resources :agreement_research_project, only: [:index, :show, :create, :update]
-        get "arp_item/", to: "arp_item#index"
-        get "arp_item/:id", to: "arp_item#show"
-      end
-      resources :contribution, only: [] do
-        resources :contribution_funding_entity_item, only: [:index, :show, :create, :update]
-      end
-
-      resources :arp_role, only: [:index, :show, :create]
-
       resources :user_roles, only: [:index, :show, :create, :update]
-
-      resources :agreement_research_project, only: [] do
-        resources :contribution_rp_item, only: [:index, :show, :create, :update]
-        resources :arp_member, only: [:index, :show, :create]
-        resources :arp_general_goal, only: [:index, :show, :create, :update]
-        resources :arp_activity, only: [:index, :show, :create, :update]
-        resources :arp_assignments, only: [:index, :show, :create, :update]
-      end
-      resources :arp_general_goal, only: [] do
-        resources :arp_specific_goal, only: [:index, :show, :create, :update]
-        #put "arp_specific_goal/:id/report_progress/", to: "arp_specific_goal#report_progress"
-      end
-      resources :arp_specific_goal, only: [] do
-        resources :arp_act_s_goal, only: [:index, :show, :create, :update]
-        #put "arp_activity/:id/report_progress/", to: "arp_activity#report_progress"
-      end
-      resources :arp_activity, only: [] do
-        resources :arp_activity_report, only: [:index, :show, :create, :update]
-        put "arp_activity_report/:id/report_progress/", to: "arp_activity_report#response_activity_progress"
-      end
-      resources :contribution_rp_item, only: [] do
-        resources :arp_expense, only: [:index, :show, :create, :update]
-      end
-      resources :arp_expense, only: [] do
-        resources :arp_payment, only: [:index, :show, :create]
-        put "arp_payment/:id/attach/", to: "arp_payment#attach"
-      end
       resources :users, only: [:index, :show, :create, :update]
       put "/users/:id/active", to: "users#change_active"
 
+      # Action plan
+      resources :action_plans, only: [:index, :show, :update] do
+        resources :form_a_act_plans, only: [:index, :create, :update]
+        resources :form_b_act_plans, only: [:index, :create, :update]
+        resources :form_c_act_plans, only: [:index, :create, :update]
+        resources :form_d_act_plans, only: [:index, :create, :update]
+        resources :form_e_act_plans, only: [:index, :create, :update]
+      end
+      resources :ap_management_reports, only: [:update]
+      resources :form_a_act_plans, :form_b_act_plans,
+                :form_c_act_plans, :form_d_act_plans, only: [:show] do
+        resources :documents, only: [:index, :show, :create, :update]
+      end
+      resources :form_e_act_plans, only: [:show]
+
       # Enpoint CRUD de los grupos de investigacion
       resources :research_group, only: [:index, :show, :create, :update], path: 'research_units' do
+        resources :action_plans, only: [:index, :create]
         resources :documents, only: [:index, :show, :create, :update]
-
-        #    member do
         resources :group_member, only: [:index, :show, :create, :update]
-
-        resources :plan_periods do
-          #       member do
-          resources :research_project_plan
-          resources :researcher_formation_plan
-          resources :result_transfer_plan
-          resources :social_appropriation_plan
-        end
-
         resources :historical_colciencias_ranks, only: [:index, :show, :create, :update]
 
         # PRODUCTS ENDPOINTS BY TYPOLOGY
@@ -264,20 +211,6 @@ Rails.application.routes.draw do
       resources :colciencias_calls, only: [:index, :create, :update]
       resources :colciencias_categories, only: [:index, :create, :update]
 
-      # Main endpoints for Calls
-      resources :calls, only: [:index, :show, :create, :update] do
-        resources :calls_product_types, only: [:index, :create, :update, :destroy], path: 'production_items'
-        resources :call_item_categories, only: [:index, :create, :update, :destroy], path: 'call_items'
-        resources :calls_required_documents, only: [:index, :create, :update, :destroy], path: 'required_documents'
-      end
-      put "calls/:id/attach/", to: "calls#attach"
-      resources :call_types, only: [:index]
-      resources :call_user_roles, only: [:index]
-      resources :duration_types, only: [:index]
-      resources :required_types, only: [:index]
-      resources :item_calls, only: [:index]
-      resources :required_documents, only: [:index]
-
       # Endpoints OECD
       resources :oecd_knowledge_areas, only: [:index, :create, :update]
       resources :oecd_knowledge_subareas, only: [:index, :create, :update]
@@ -287,6 +220,110 @@ Rails.application.routes.draw do
       resources :cine_broad_areas, only: [:index, :create, :update]
       resources :cine_specific_areas, only: [:index, :create, :update]
       resources :cine_detailed_areas, only: [:index, :create, :update]
+
+      # Endpoints to Calls
+      resources :indicators, only: [:index, :show, :create, :update]
+
+      resources :calls, only: [:index, :show, :create, :update] do
+        resources :call_documents, only: [:index, :create]
+        resources :call_eval_criteria, only: [:index, :create]
+        resources :call_items, only: [:index, :create]
+        resources :calls_indicators, only: [:index, :create]
+        resources :schedule_activities, only: [:index, :create]
+      end
+      resources :call_documents, only: [:show, :update]
+      resources :call_eval_criteria, only: [:show, :update]
+      resources :call_items, only: [:show, :update]
+      resources :calls_indicators, only: [:show, :update]
+      resources :schedule_activities, only: [:show, :update]
+
+      #  Chapters or sections
+      resources :calls, only: [] do
+        resources :chapters, only: [:index, :show, :create, :update]
+        resources :documents, only: [:index, :show, :create, :update]
+      end
+
+      #rutas OTRI
+      resources :procedures, only: [:index, :show, :update, :create]
+      put "/procedures/:id/active", to: "procedures#change_active"
+      resources :professional_roles, only: [:index, :show, :update, :create]
+      put "/professional_roles/:id/active", to: "professional_roles#change_active"
+      resources :task_models, only: [:index, :show, :update, :create]
+      put "/task_models/:id/active", to: "task_models#change_active"
+      resources :task_models, only: [:index, :show, :update, :create] do
+        resources :next_tasks, only: [:index, :create]
+        resources :task_attributes, only: [:index, :create]
+        resources :read_attributes, only: [:index, :create]
+      end
+      resources :next_tasks, only: [:show, :update]
+      put "/next_tasks/:id/active", to: "next_tasks#change_active"
+      resources :task_attributes, only: [:show, :update]
+      put "/task_attributes/:id/active", to: "task_attributes#change_active"
+      resources :read_attributes, only: [:show, :update]
+      put "/read_attributes/:id/active", to: "read_attributes#change_active"
+      resources :otri_professionals, only: [:index, :show, :update, :create]
+      put "/otri_professionals/:id/active", to: "otri_professionals#change_active"
+      resources :procedure_requests, only: [:index, :show, :update, :create] do
+        resources :technology_descriptions, only: [:index, :create]
+        resources :request_has_application_areas, only: [:index, :create]
+        resources :potential_markets, only: [:index, :create]
+        resources :technological_situations, only: [:index, :create]
+        resources :functional_applications, only: [:index, :create]
+      end
+      put "/procedure_requests/:id/active", to: "procedure_requests#change_active"
+
+      resources :technology_descriptions, only: [:show, :update]
+      put "/technology_descriptions/:id/active", to: "technology_descriptions#change_active"
+
+      put "/request_has_application_areas/:id/active", to: "request_has_application_areas#change_active"
+
+      resources :potential_markets, only: [:show, :update]
+      put "/potential_markets/:id/active", to: "potential_markets#change_active"
+
+      resources :technological_situations, only: [:show, :update]
+      put "/technological_situations/:id/active", to: "technological_situations#change_active"
+
+      resources :functional_applications, only: [:show, :update]
+      put "/functional_applications/:id/active", to: "functional_applications#change_active"
+
+      resources :tasks, only: [:show, :update] do
+        resources :budgets, only: [:index, :create]
+        resources :task_has_states, only: [:index, :create]
+      end
+      put "/tasks/:id/active", to: "tasks#change_active"
+
+      resources :task_has_states, only: [:show]
+      put "/task_has_states/:id/active", to: "task_has_states#change_active"
+
+      resources :budgets, only: [:show, :update]
+      put "/budgets/:id/active", to: "budgets#change_active"
+
+      resources :request_has_procedures, only: [:index, :show, :create] do
+        resources :tasks, only: [:index, :create]
+      end
+      put "/request_has_procedures/:id/active", to: "request_has_procedures#change_active"
+
+      #
+      resources :contacts, only: [:index, :show, :update, :create]
+      resources :hist_legal_representatives, only: [:show, :update]
+      resources :hist_contacts, only: [:show, :update]
+      resources :dependencies, only: [:show, :update] do
+        resources :hist_contacts, only: [:index, :create]
+      end
+      resources :entities, only: [:index, :show, :update, :create] do
+        resources :hist_legal_representatives, only: [:index, :create]
+        resources :dependencies, only: [:index, :create]
+      end
+      resources :legal_representatives, only: [:index, :show, :update, :create]
+      resources :affiliated_entities, only: [:index, :show, :update]
+      resources :research_groups_research_networks, only: [:show, :update] do
+        resources :documents, only: [:index, :show, :create, :update]
+      end
+      resources :research_networks, only: [:index, :show, :update, :create] do
+        resources :affiliated_entities, only: [:index, :create]
+        resources :documents, only: [:index, :show, :create, :update]
+        resources :research_groups_research_networks, only: [:index, :create]
+      end
     end
   end
 end
