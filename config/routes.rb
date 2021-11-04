@@ -286,6 +286,7 @@ Rails.application.routes.draw do
       resources :functional_applications, only: [:show, :update]
       put "/functional_applications/:id/active", to: "functional_applications#change_active"
 
+      get "/tasks/by_professional", to: "tasks#index_by_professional"
       resources :tasks, only: [:show, :update] do
         resources :budgets, only: [:index, :create]
         resources :task_has_states, only: [:index, :create]
