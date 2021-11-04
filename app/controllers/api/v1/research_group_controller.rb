@@ -139,6 +139,7 @@ module Api
                                                :oecd_knowledge_subarea_id,
                                                :oecd_knowledge_area_id,
                                                :legacy_siciud_id,
+                                               :parent_id,
                                                :created_by, :updated_by,
                                                cine_detailed_area_ids: [],
                                                curricular_project_ids: [],
