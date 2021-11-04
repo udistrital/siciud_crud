@@ -12,6 +12,14 @@ module Api
         render json: @tasks
       end
 
+      def index_by_professional
+        @tasks = Task.where(
+          "otri_professional_id = ?", params[:otri_professional_id]
+        )
+        @tasks = DxService.load(@tasks, params)
+        render json: @tasks
+      end
+
       # GET /tasks/1
       def show
         render json: @task
