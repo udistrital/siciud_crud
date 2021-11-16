@@ -230,12 +230,18 @@ Rails.application.routes.draw do
         resources :call_items, only: [:index, :create]
         resources :calls_indicators, only: [:index, :create]
         resources :schedule_activities, only: [:index, :create]
+
+        # Endpoint to proposals
+        resources :proposals, only: [:index, :create]
       end
       resources :call_documents, only: [:show, :update]
       resources :call_eval_criteria, only: [:show, :update]
       resources :call_items, only: [:show, :update]
       resources :calls_indicators, only: [:show, :update]
       resources :schedule_activities, only: [:show, :update]
+
+      # Endpoint to proposals
+      resources :proposals, only: [:index, :show, :update]
 
       #  Chapters or sections
       resources :calls, only: [] do
