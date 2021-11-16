@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_27_205048) do
+ActiveRecord::Schema.define(version: 2021_11_12_051249) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -585,6 +585,11 @@ ActiveRecord::Schema.define(version: 2021_10_27_205048) do
     t.index ["updated_by"], name: "index_dependencies_on_updated_by"
   end
 
+  create_table "dependencies_proposals", id: false, force: :cascade do |t|
+    t.bigint "proposal_id", null: false
+    t.bigint "dependency_id", null: false
+  end
+
   create_table "distinctive_signs", force: :cascade do |t|
     t.string "registration_title"
     t.string "registration_number"
@@ -713,6 +718,11 @@ ActiveRecord::Schema.define(version: 2021_10_27_205048) do
     t.index ["institution_type_id"], name: "index_entities_on_institution_type_id"
     t.index ["legal_nature_id"], name: "index_entities_on_legal_nature_id"
     t.index ["updated_by"], name: "index_entities_on_updated_by"
+  end
+
+  create_table "entities_proposals", id: false, force: :cascade do |t|
+    t.bigint "proposal_id", null: false
+    t.bigint "entity_id", null: false
   end
 
   create_table "events", force: :cascade do |t|
@@ -876,7 +886,9 @@ ActiveRecord::Schema.define(version: 2021_10_27_205048) do
     t.bigint "updated_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "child_prod_type_id"
     t.index ["action_plan_id"], name: "index_form_c_act_plans_on_action_plan_id"
+    t.index ["child_prod_type_id"], name: "index_form_c_act_plans_on_child_prod_type_id"
     t.index ["created_by"], name: "index_form_c_act_plans_on_created_by"
     t.index ["plan_type_id"], name: "index_form_c_act_plans_on_plan_type_id"
     t.index ["product_type_id"], name: "index_form_c_act_plans_on_product_type_id"
@@ -1798,6 +1810,36 @@ ActiveRecord::Schema.define(version: 2021_10_27_205048) do
     t.boolean "active", default: true
     t.index ["created_by"], name: "index_professional_roles_on_created_by"
     t.index ["updated_by"], name: "index_professional_roles_on_updated_by"
+  end
+
+  create_table "proposals", force: :cascade do |t|
+    t.string "title"
+    t.text "description"
+    t.integer "duration", limit: 2
+    t.bigint "proposal_status_id"
+    t.bigint "project_type_id"
+    t.bigint "call_id"
+    t.bigint "geo_city_id"
+    t.bigint "geo_country_id"
+    t.bigint "geo_state_id"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["call_id"], name: "index_proposals_on_call_id"
+    t.index ["created_by"], name: "index_proposals_on_created_by"
+    t.index ["geo_city_id"], name: "index_proposals_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_proposals_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_proposals_on_geo_state_id"
+    t.index ["project_type_id"], name: "index_proposals_on_project_type_id"
+    t.index ["proposal_status_id"], name: "index_proposals_on_proposal_status_id"
+    t.index ["updated_by"], name: "index_proposals_on_updated_by"
+  end
+
+  create_table "proposals_research_groups", id: false, force: :cascade do |t|
+    t.bigint "proposal_id", null: false
+    t.bigint "research_group_id", null: false
   end
 
   create_table "protocol_acts", force: :cascade do |t|
@@ -2766,6 +2808,7 @@ ActiveRecord::Schema.define(version: 2021_10_27_205048) do
   add_foreign_key "form_b_act_plans", "users", column: "created_by"
   add_foreign_key "form_b_act_plans", "users", column: "updated_by"
   add_foreign_key "form_c_act_plans", "action_plans"
+  add_foreign_key "form_c_act_plans", "subtypes", column: "child_prod_type_id"
   add_foreign_key "form_c_act_plans", "subtypes", column: "plan_type_id"
   add_foreign_key "form_c_act_plans", "subtypes", column: "product_type_id"
   add_foreign_key "form_c_act_plans", "users", column: "created_by"
@@ -2996,6 +3039,14 @@ ActiveRecord::Schema.define(version: 2021_10_27_205048) do
   add_foreign_key "procedures", "users", column: "updated_by"
   add_foreign_key "professional_roles", "users", column: "created_by"
   add_foreign_key "professional_roles", "users", column: "updated_by"
+  add_foreign_key "proposals", "calls"
+  add_foreign_key "proposals", "geo_cities"
+  add_foreign_key "proposals", "geo_countries"
+  add_foreign_key "proposals", "geo_states"
+  add_foreign_key "proposals", "subtypes", column: "project_type_id"
+  add_foreign_key "proposals", "subtypes", column: "proposal_status_id"
+  add_foreign_key "proposals", "users", column: "created_by"
+  add_foreign_key "proposals", "users", column: "updated_by"
   add_foreign_key "protocol_acts", "colciencias_calls"
   add_foreign_key "protocol_acts", "geo_cities"
   add_foreign_key "protocol_acts", "geo_countries"
@@ -4971,26 +5022,6 @@ ActiveRecord::Schema.define(version: 2021_10_27_205048) do
      FROM (call_items ci
        LEFT JOIN subtypes s ON ((s.id = ci.item_id)));
   SQL
-  create_view "siciud.complete_form_c_act_ps", sql_definition: <<-SQL
-      SELECT fcap.id,
-      fcap.action_plan_id,
-      fcap.advanced_total,
-      fcap.description,
-      fcap.goal,
-      fcap."order",
-      fcap.plan_type_id,
-      spl.st_name AS plan_type_name,
-      fcap.product_type_id,
-      spt.st_name AS product_type_name,
-      fcap.active,
-      fcap.created_by,
-      fcap.updated_by,
-      fcap.created_at,
-      fcap.updated_at
-     FROM ((form_c_act_plans fcap
-       LEFT JOIN subtypes spl ON ((fcap.plan_type_id = spl.id)))
-       LEFT JOIN subtypes spt ON ((fcap.product_type_id = spt.id)));
-  SQL
   create_view "siciud.complete_indicators", sql_definition: <<-SQL
       SELECT i.id,
       i.subtype_id,
@@ -5295,5 +5326,68 @@ ActiveRecord::Schema.define(version: 2021_10_27_205048) do
        LEFT JOIN oecd_knowledge_subareas oks ON ((rn.oecd_knowledge_subarea_id = oks.id)))
        LEFT JOIN researchers r ON ((rn.researcher_id = r.id)))
        LEFT JOIN subtypes sn ON ((rn.snies_id = sn.id)));
+  SQL
+  create_view "siciud.complete_form_c_act_ps", sql_definition: <<-SQL
+      SELECT fcap.id,
+      fcap.action_plan_id,
+      fcap.advanced_total,
+      fcap.description,
+      fcap.goal,
+      fcap."order",
+      fcap.plan_type_id,
+      spl.st_name AS plan_type_name,
+      fcap.child_prod_type_id,
+      scpt.st_name AS child_prod_type_name,
+      fcap.product_type_id,
+      spt.st_name AS product_type_name,
+      fcap.active,
+      fcap.created_by,
+      fcap.updated_by,
+      fcap.created_at,
+      fcap.updated_at
+     FROM (((form_c_act_plans fcap
+       LEFT JOIN subtypes spl ON ((fcap.plan_type_id = spl.id)))
+       LEFT JOIN subtypes spt ON ((fcap.product_type_id = spt.id)))
+       LEFT JOIN subtypes scpt ON ((fcap.child_prod_type_id = scpt.id)));
+  SQL
+  create_view "siciud.complete_proposals", sql_definition: <<-SQL
+      SELECT p.id,
+      p.title,
+      p.call_id,
+      c.call_code,
+      c.call_name,
+      p.description,
+      p.duration,
+      p.geo_city_id,
+      gcty.name AS geo_city_name,
+      p.geo_country_id,
+      gctr.name AS geo_country_name,
+      p.geo_state_id,
+      gs.name AS geo_state_name,
+      p.project_type_id,
+      spj.st_name AS project_type_name,
+      p.proposal_status_id,
+      sps.st_name AS proposal_status_name,
+      ( SELECT count(*) AS count
+             FROM dependencies_proposals
+            WHERE (p.id = dependencies_proposals.proposal_id)) AS total_dependencies,
+      ( SELECT count(*) AS count
+             FROM entities_proposals
+            WHERE (p.id = entities_proposals.proposal_id)) AS total_entities,
+      ( SELECT count(*) AS count
+             FROM proposals_research_groups
+            WHERE (p.id = proposals_research_groups.proposal_id)) AS total_research_groups,
+      p.active,
+      p.created_at,
+      p.updated_at,
+      p.created_by,
+      p.updated_by
+     FROM ((((((proposals p
+       LEFT JOIN calls c ON ((p.call_id = c.id)))
+       LEFT JOIN geo_cities gcty ON ((p.geo_city_id = gcty.id)))
+       LEFT JOIN geo_countries gctr ON ((p.geo_country_id = gctr.id)))
+       LEFT JOIN geo_states gs ON ((p.geo_state_id = gs.id)))
+       LEFT JOIN subtypes spj ON ((p.project_type_id = spj.id)))
+       LEFT JOIN subtypes sps ON ((p.proposal_status_id = sps.id)));
   SQL
 end
