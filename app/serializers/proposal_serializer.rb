@@ -19,27 +19,57 @@ class ProposalSerializer < ActiveModel::Serializer
   end
 
   def entities
-    # TODO validar que sean unicos los ids
     complete_entities = []
+    entity_dependencies = {}
     entity_list = self.object.entities
     dependency_list = self.object.dependencies
     if dependency_list
-      complete_dependencies = []
       dependency_list.each do |dep|
+        entity_id = dep.entity_id
+        if entity_dependencies.has_key? entity_id
+          entity_dependencies[entity_id][:dependencies].append(
+            {
+              "dependency_id": dep.id,
+              "dependency_name": dep.name
+            }
+          )
+        else
+          entity_dependencies[entity_id] = {
+            "entity_id": entity_id,
+            "entity_name": dep.entity.name,
+            "dependencies": [
+              {
+                "dependency_id": dep.id,
+                "dependency_name": dep.name
+              }
+            ]
+          }
+        end
+      end
 
+      entity_list.each do |entity|
+        entity_id = entity.id
+        if entity_dependencies.has_key? entity_id
+          data = entity_dependencies[entity_id]
+        else
+          data = {
+            "entity_id": entity_id,
+            "entity_name": entity.name,
+            "dependencies": []
+          }
+        end
+        complete_entities.append(data)
+      end
+    else
+      entity_list.each do |entity|
+        data = {
+          "entity_id": entity.id,
+          "entity_name": entity.name,
+          "dependencies": []
+        }
+        complete_entities.append(data)
       end
     end
-    complete_entities = [{ "entity_id": 1,
-                           "entity_name": "Motorola",
-                           "dependencies": [
-                             { "dependency_id": 1,
-                               "dependency_name": "Dirección de desarrollo e innovación Telnet"
-                             },
-                             { "dependency_id": 5,
-                               "dependency_name": "Gestión del talento"
-                             }
-                           ]
-                         }]
     complete_entities
   end
 

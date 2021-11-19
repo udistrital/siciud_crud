@@ -10,6 +10,10 @@ module Swagger::FormEActPlanSchema
       property :description do
         key :type, :string
       end
+      property :classification_id do
+        key :type, :integer
+        key :format, :int64
+      end
       property :inventoried do
         key :type, :boolean
       end
@@ -80,6 +84,9 @@ module Swagger::FormEActPlanSchema
             key :type, :integer
             key :format, :int64
           end
+          property :classification_name do
+            key :type, :string
+            end
           property :plan_type_name do
             key :type, :string
           end

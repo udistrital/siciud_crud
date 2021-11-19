@@ -3,6 +3,7 @@ class FormEActPlan < ApplicationRecord
   belongs_to :action_plan
 
   belongs_to :plan_type, class_name: 'Subtype', foreign_key: 'plan_type_id'
+  belongs_to :classification, class_name: 'Subtype', foreign_key: 'classification_id'
 
   # Tracking inherited from ApplicationRecord, fields:
   # created_by and updated_by, see application_record.rb
