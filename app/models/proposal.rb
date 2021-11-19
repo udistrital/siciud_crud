@@ -1,4 +1,5 @@
 class Proposal < ApplicationRecord
+  include Swagger::ProposalSchema
 
   belongs_to :proposal_status, class_name: 'Subtype', foreign_key: 'proposal_status_id'
   belongs_to :project_type, class_name: 'Subtype', foreign_key: 'project_type_id'
