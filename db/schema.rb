@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_12_051249) do
+ActiveRecord::Schema.define(version: 2021_11_19_201329) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -942,7 +942,9 @@ ActiveRecord::Schema.define(version: 2021_11_12_051249) do
     t.bigint "updated_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "classification_id"
     t.index ["action_plan_id"], name: "index_form_e_act_plans_on_action_plan_id"
+    t.index ["classification_id"], name: "index_form_e_act_plans_on_classification_id"
     t.index ["created_by"], name: "index_form_e_act_plans_on_created_by"
     t.index ["updated_by"], name: "index_form_e_act_plans_on_updated_by"
   end
@@ -2819,6 +2821,7 @@ ActiveRecord::Schema.define(version: 2021_11_12_051249) do
   add_foreign_key "form_d_act_plans", "users", column: "created_by"
   add_foreign_key "form_d_act_plans", "users", column: "updated_by"
   add_foreign_key "form_e_act_plans", "action_plans"
+  add_foreign_key "form_e_act_plans", "subtypes", column: "classification_id"
   add_foreign_key "form_e_act_plans", "users", column: "created_by"
   add_foreign_key "form_e_act_plans", "users", column: "updated_by"
   add_foreign_key "functional_applications", "procedure_requests"
