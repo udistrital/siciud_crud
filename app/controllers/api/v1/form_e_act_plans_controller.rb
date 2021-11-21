@@ -8,7 +8,7 @@ module Api
 
       # GET /action_plans/:id/form_e_act_plans
       def index
-        @form_e_act_plans = FormEActPlan.where(
+        @form_e_act_plans = CompleteFormEActP.where(
           "action_plan_id = ?", params[:action_plan_id]
         )
         @form_e_act_plans = DxService.load(@form_e_act_plans, params)
@@ -39,6 +39,7 @@ module Api
                                                        @form_e_act_plan,
                                                        form_e_act_p_params_to_update,
                                                        [
+                                                         :classification_id,
                                                          :type_description, :description,
                                                          :inventoried, :inventory_plate,
                                                          :plan_type_id],
@@ -64,16 +65,17 @@ module Api
 
       # Only allow a trusted parameter "white list" through.
       def form_e_act_p_params_to_create
-        params.require(:form_e_act_plan).permit(:type_description, :description,
-                                                :inventoried, :inventory_plate,
-                                                :plan_type_id,
+        params.require(:form_e_act_plan).permit(:classification_id, :type_description,
+                                                :description, :inventoried,
+                                                :inventory_plate, :plan_type_id,
                                                 :active, :created_by)
       end
 
       def form_e_act_p_params_to_update
-        params.require(:form_e_act_plan).permit(:type_description, :description,
-                                                :inventoried, :inventory_plate,
-                                                :action_plan_id, :plan_type_id,
+        params.require(:form_e_act_plan).permit(:classification_id, :type_description,
+                                                :description, :inventoried,
+                                                :inventory_plate, :action_plan_id,
+                                                :plan_type_id,
                                                 :active, :updated_by)
       end
     end

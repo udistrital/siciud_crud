@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_19_201329) do
+ActiveRecord::Schema.define(version: 2021_11_21_205428) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -5392,5 +5392,25 @@ ActiveRecord::Schema.define(version: 2021_11_19_201329) do
        LEFT JOIN geo_states gs ON ((p.geo_state_id = gs.id)))
        LEFT JOIN subtypes spj ON ((p.project_type_id = spj.id)))
        LEFT JOIN subtypes sps ON ((p.proposal_status_id = sps.id)));
+  SQL
+  create_view "siciud.complete_form_e_act_ps", sql_definition: <<-SQL
+      SELECT feap.id,
+      feap.action_plan_id,
+      feap.classification_id,
+      scl.st_name AS classification_name,
+      feap.description,
+      feap.type_description,
+      feap.inventoried,
+      feap.inventory_plate,
+      feap.plan_type_id,
+      splt.st_name AS plan_type_name,
+      feap.active,
+      feap.created_by,
+      feap.updated_by,
+      feap.created_at,
+      feap.updated_at
+     FROM ((form_e_act_plans feap
+       LEFT JOIN subtypes scl ON ((feap.classification_id = scl.id)))
+       LEFT JOIN subtypes splt ON ((feap.plan_type_id = splt.id)));
   SQL
 end
