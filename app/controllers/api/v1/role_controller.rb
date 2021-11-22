@@ -37,11 +37,13 @@ module Api
       end
 
       def role_params_to_create
-        params.require(:role).permit(:name, :active, :created_by)
+        params.require(:role).permit(:name, :role_type_id,
+                                     :active, :created_by)
       end
 
       def role_params_to_update
-        params.require(:role).permit(:name, :active, :updated_by)
+        params.require(:role).permit(:name, :role_type_id,
+                                     :active, :updated_by)
       end
     end
   end

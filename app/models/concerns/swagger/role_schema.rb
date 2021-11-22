@@ -7,6 +7,10 @@ module Swagger::RoleSchema
       property :name do
         key :type, :string
       end
+      property :role_type_id do
+        key :type, :integer
+        key :format, :int64
+      end
       property :active do
         key :type, :boolean
         key :default, true
