@@ -22,6 +22,24 @@ module Api
         render json: @proposals
       end
 
+      def index_by_researcher
+        if params[:researcher_id]
+          @proposals = CompleteProposalsByIntMember.where(
+            "researcher_id = ?", params[:researcher_id]
+          )
+        elsif params[:researcher_identification]
+          @proposals = CompleteProposalsByIntMember.where(
+            "researcher_identification = ?", params[:researcher_identification]
+          )
+        else
+          @proposals = CompleteProposalsByIntMember.none
+        end
+
+        @proposals = DxService.load(@proposals, params)
+
+        render json: @proposals
+      end
+
       # GET /proposals/1
       def show
         render json: @proposal
