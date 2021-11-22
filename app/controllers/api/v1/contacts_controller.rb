@@ -54,13 +54,15 @@ module Api
       # Only allow a trusted parameter "white list" through.
       def contact_params_to_create
         params.require(:contact).permit(:name, :email, :identification_number,
-                                        :identification_type_id, :phone, :active,
+                                        :identification_type_id, :phone,
+                                        :mobile, :address, :active,
                                         :created_by)
       end
 
       def contact_params_to_update
         params.require(:contact).permit(:name, :email, :identification_number,
-                                        :identification_type_id, :phone, :active,
+                                        :identification_type_id, :phone,
+                                        :mobile, :address, :active,
                                         :updated_by)
       end
     end

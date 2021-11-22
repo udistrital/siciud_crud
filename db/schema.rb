@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_19_201329) do
+ActiveRecord::Schema.define(version: 2021_11_22_185601) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -464,6 +464,8 @@ ActiveRecord::Schema.define(version: 2021_11_19_201329) do
     t.datetime "updated_at", null: false
     t.string "identification_number"
     t.bigint "identification_type_id"
+    t.string "mobile"
+    t.string "address"
     t.index ["created_by"], name: "index_contacts_on_created_by"
     t.index ["identification_number"], name: "index_contacts_on_identification_number"
     t.index ["identification_type_id"], name: "index_contacts_on_identification_type_id"
@@ -803,6 +805,22 @@ ActiveRecord::Schema.define(version: 2021_11_19_201329) do
     t.index ["geo_state_id"], name: "index_extension_projects_on_geo_state_id"
     t.index ["research_group_id"], name: "index_extension_projects_on_research_group_id"
     t.index ["updated_by"], name: "index_extension_projects_on_updated_by"
+  end
+
+  create_table "external_members_proposals", force: :cascade do |t|
+    t.bigint "proposal_id"
+    t.bigint "contact_id"
+    t.bigint "role_id"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["contact_id"], name: "index_external_members_proposals_on_contact_id"
+    t.index ["created_by"], name: "index_external_members_proposals_on_created_by"
+    t.index ["proposal_id"], name: "index_external_members_proposals_on_proposal_id"
+    t.index ["role_id"], name: "index_external_members_proposals_on_role_id"
+    t.index ["updated_by"], name: "index_external_members_proposals_on_updated_by"
   end
 
   create_table "faculty_ids_research_groups", force: :cascade do |t|
@@ -2177,7 +2195,9 @@ ActiveRecord::Schema.define(version: 2021_11_19_201329) do
     t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
+    t.bigint "role_type_id"
     t.index ["created_by"], name: "index_roles_on_created_by"
+    t.index ["role_type_id"], name: "index_roles_on_role_type_id"
     t.index ["updated_by"], name: "index_roles_on_updated_by"
   end
 
@@ -2813,6 +2833,11 @@ ActiveRecord::Schema.define(version: 2021_11_19_201329) do
   add_foreign_key "extension_projects", "subtypes", column: "category_id"
   add_foreign_key "extension_projects", "users", column: "created_by"
   add_foreign_key "extension_projects", "users", column: "updated_by"
+  add_foreign_key "external_members_proposals", "contacts"
+  add_foreign_key "external_members_proposals", "proposals"
+  add_foreign_key "external_members_proposals", "roles"
+  add_foreign_key "external_members_proposals", "users", column: "created_by"
+  add_foreign_key "external_members_proposals", "users", column: "updated_by"
   add_foreign_key "faculty_ids_research_groups", "research_groups"
   add_foreign_key "faculty_ids_research_groups", "users", column: "created_by"
   add_foreign_key "faculty_ids_research_groups", "users", column: "updated_by"
@@ -3159,6 +3184,7 @@ ActiveRecord::Schema.define(version: 2021_11_19_201329) do
   add_foreign_key "researchers", "users", column: "created_by"
   add_foreign_key "researchers", "users", column: "identification_number", primary_key: "identification_number", on_delete: :cascade
   add_foreign_key "researchers", "users", column: "updated_by"
+  add_foreign_key "roles", "subtypes", column: "role_type_id"
   add_foreign_key "roles", "users", column: "created_by"
   add_foreign_key "roles", "users", column: "updated_by"
   add_foreign_key "schedule_activities", "calls"
@@ -5414,5 +5440,41 @@ ActiveRecord::Schema.define(version: 2021_11_19_201329) do
        LEFT JOIN geo_states gs ON ((p.geo_state_id = gs.id)))
        LEFT JOIN subtypes spj ON ((p.project_type_id = spj.id)))
        LEFT JOIN subtypes sps ON ((p.proposal_status_id = sps.id)));
+  SQL
+  create_view "siciud.complete_form_e_act_ps", sql_definition: <<-SQL
+      SELECT feap.id,
+      feap.action_plan_id,
+      feap.classification_id,
+      scl.st_name AS classification_name,
+      feap.description,
+      feap.type_description,
+      feap.inventoried,
+      feap.inventory_plate,
+      feap.plan_type_id,
+      splt.st_name AS plan_type_name,
+      feap.active,
+      feap.created_by,
+      feap.updated_by,
+      feap.created_at,
+      feap.updated_at
+     FROM ((form_e_act_plans feap
+       LEFT JOIN subtypes scl ON ((feap.classification_id = scl.id)))
+       LEFT JOIN subtypes splt ON ((feap.plan_type_id = splt.id)));
+  SQL
+  create_view "siciud.complete_ext_members_proposals", sql_definition: <<-SQL
+      SELECT emp.id,
+      ( SELECT json_build_object('id', contacts.id, 'identification_number', contacts.identification_number, 'identification_type_id', contacts.identification_type_id, 'mobile', contacts.mobile, 'address', contacts.address, 'name', contacts.name, 'email', contacts.email, 'phone', contacts.phone) AS json_build_object
+             FROM contacts
+            WHERE (emp.contact_id = contacts.id)) AS contact,
+      emp.proposal_id,
+      emp.role_id,
+      r.name AS role_name,
+      emp.active,
+      emp.created_by,
+      emp.updated_by,
+      emp.created_at,
+      emp.updated_at
+     FROM (external_members_proposals emp
+       LEFT JOIN roles r ON ((r.id = emp.role_id)));
   SQL
 end

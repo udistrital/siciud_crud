@@ -20,6 +20,12 @@ module Swagger::ContactSchema
       property :phone do
         key :type, :string
       end
+      property :mobile do
+        key :type, :string
+      end
+      property :address do
+        key :type, :string
+      end
       property :active do
         key :type, :boolean
         key :default, true

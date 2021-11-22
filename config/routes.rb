@@ -241,7 +241,11 @@ Rails.application.routes.draw do
       resources :schedule_activities, only: [:show, :update]
 
       # Endpoint to proposals
-      resources :proposals, only: [:index, :show, :update]
+      resources :proposals, only: [:index, :show, :update] do
+        resources :external_members_proposals, only: [:index, :create]
+      end
+      resources :external_members_proposals, only: [:show, :update]
+
 
       #  Chapters or sections
       resources :calls, only: [] do
