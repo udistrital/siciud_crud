@@ -14,6 +14,7 @@ class Proposal < ApplicationRecord
   has_and_belongs_to_many :research_groups
 
   has_many :external_members_proposals
+  has_many :internal_members_proposals
 
   validates :duration, numericality: { greater_than_or_equal_to: 0 }
 

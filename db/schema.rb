@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_22_185601) do
+ActiveRecord::Schema.define(version: 2021_11_22_230835) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1327,6 +1327,22 @@ ActiveRecord::Schema.define(version: 2021_11_22_185601) do
     t.index ["geo_state_id"], name: "index_integrated_circuit_diagrams_on_geo_state_id"
     t.index ["research_group_id"], name: "index_integrated_circuit_diagrams_on_research_group_id"
     t.index ["updated_by"], name: "index_integrated_circuit_diagrams_on_updated_by"
+  end
+
+  create_table "internal_members_proposals", force: :cascade do |t|
+    t.bigint "proposal_id"
+    t.bigint "researcher_id"
+    t.bigint "role_id"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_internal_members_proposals_on_created_by"
+    t.index ["proposal_id"], name: "index_internal_members_proposals_on_proposal_id"
+    t.index ["researcher_id"], name: "index_internal_members_proposals_on_researcher_id"
+    t.index ["role_id"], name: "index_internal_members_proposals_on_role_id"
+    t.index ["updated_by"], name: "index_internal_members_proposals_on_updated_by"
   end
 
   create_table "investigation_projects", force: :cascade do |t|
@@ -2958,6 +2974,11 @@ ActiveRecord::Schema.define(version: 2021_11_22_185601) do
   add_foreign_key "integrated_circuit_diagrams", "subtypes", column: "category_id"
   add_foreign_key "integrated_circuit_diagrams", "users", column: "created_by"
   add_foreign_key "integrated_circuit_diagrams", "users", column: "updated_by"
+  add_foreign_key "internal_members_proposals", "proposals"
+  add_foreign_key "internal_members_proposals", "researchers"
+  add_foreign_key "internal_members_proposals", "roles"
+  add_foreign_key "internal_members_proposals", "users", column: "created_by"
+  add_foreign_key "internal_members_proposals", "users", column: "updated_by"
   add_foreign_key "investigation_projects", "colciencias_calls"
   add_foreign_key "investigation_projects", "geo_cities"
   add_foreign_key "investigation_projects", "geo_countries"
@@ -5476,5 +5497,65 @@ ActiveRecord::Schema.define(version: 2021_11_22_185601) do
       emp.updated_at
      FROM (external_members_proposals emp
        LEFT JOIN roles r ON ((r.id = emp.role_id)));
+  SQL
+  create_view "siciud.complete_int_members_proposals", sql_definition: <<-SQL
+      SELECT imp.id,
+      ( SELECT json_build_object('id', researchers.id, 'orcid_id', researchers.orcid_id, 'identification_number', researchers.identification_number, 'oas_researcher_id', researchers.oas_researcher_id, 'mobile_number_one', researchers.mobile_number_one, 'mobile_number_two', researchers.mobile_number_two, 'address', researchers.address, 'phone_number_one', researchers.phone_number_one, 'phone_number_two', researchers.phone_number_two) AS json_build_object
+             FROM researchers
+            WHERE (imp.researcher_id = researchers.id)) AS researcher,
+      imp.proposal_id,
+      imp.role_id,
+      r.name AS role_name,
+      imp.active,
+      imp.created_by,
+      imp.updated_by,
+      imp.created_at,
+      imp.updated_at
+     FROM (internal_members_proposals imp
+       LEFT JOIN roles r ON ((r.id = imp.role_id)));
+  SQL
+  create_view "siciud.complete_proposals_by_int_members", sql_definition: <<-SQL
+      SELECT p.id,
+      p.title,
+      p.call_id,
+      c.call_code,
+      c.call_name,
+      p.description,
+      p.duration,
+      p.geo_city_id,
+      gcty.name AS geo_city_name,
+      p.geo_country_id,
+      gctr.name AS geo_country_name,
+      p.geo_state_id,
+      gs.name AS geo_state_name,
+      p.project_type_id,
+      spj.st_name AS project_type_name,
+      p.proposal_status_id,
+      sps.st_name AS proposal_status_name,
+      ( SELECT count(*) AS count
+             FROM dependencies_proposals
+            WHERE (p.id = dependencies_proposals.proposal_id)) AS total_dependencies,
+      ( SELECT count(*) AS count
+             FROM entities_proposals
+            WHERE (p.id = entities_proposals.proposal_id)) AS total_entities,
+      ( SELECT count(*) AS count
+             FROM proposals_research_groups
+            WHERE (p.id = proposals_research_groups.proposal_id)) AS total_research_groups,
+      imp.researcher_id,
+      res.identification_number AS researcher_identification,
+      p.active,
+      p.created_at,
+      p.updated_at,
+      p.created_by,
+      p.updated_by
+     FROM ((((((((proposals p
+       LEFT JOIN calls c ON ((p.call_id = c.id)))
+       LEFT JOIN geo_cities gcty ON ((p.geo_city_id = gcty.id)))
+       LEFT JOIN geo_countries gctr ON ((p.geo_country_id = gctr.id)))
+       LEFT JOIN geo_states gs ON ((p.geo_state_id = gs.id)))
+       LEFT JOIN subtypes spj ON ((p.project_type_id = spj.id)))
+       LEFT JOIN subtypes sps ON ((p.proposal_status_id = sps.id)))
+       LEFT JOIN internal_members_proposals imp ON ((p.id = imp.proposal_id)))
+       LEFT JOIN researchers res ON ((imp.researcher_id = res.id)));
   SQL
 end

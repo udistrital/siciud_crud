@@ -1,9 +1,9 @@
-module Swagger::ExternalMembersProposalSchema
+module Swagger::InternalMembersProposalSchema
   extend ActiveSupport::Concern
   include Swagger::Blocks
 
   included do
-    swagger_schema :ExternalMembersProposal do
+    swagger_schema :InternalMembersProposal do
       property :role_id do
         key :type, :integer
         key :format, :int64
@@ -14,16 +14,16 @@ module Swagger::ExternalMembersProposalSchema
       end
     end
 
-    swagger_schema :ExternalMembersProposalInputPost do
+    swagger_schema :InternalMembersProposalInputPost do
       allOf do
         schema do
-          property :external_members_proposal do
-            key :'$ref', :ExternalMembersProposal
+          property :internal_members_proposal do
+            key :'$ref', :InternalMembersProposal
           end
         end
         schema do
-          property :external_members_proposal do
-            property :contact_id do
+          property :internal_members_proposal do
+            property :researcher_id do
               key :type, :integer
               key :format, :int64
             end
@@ -36,20 +36,20 @@ module Swagger::ExternalMembersProposalSchema
       end
     end
 
-    swagger_schema :ExternalMembersProposalInputPut do
+    swagger_schema :InternalMembersProposalInputPut do
       allOf do
         schema do
-          property :external_members_proposal do
-            key :'$ref', :ExternalMembersProposal
+          property :internal_members_proposal do
+            key :'$ref', :InternalMembersProposal
           end
         end
         schema do
-          property :external_members_proposal do
-            property :contact_id do
+          property :internal_members_proposal do
+            property :proposal_id do
               key :type, :integer
               key :format, :int64
             end
-            property :proposal_id do
+            property :researcher_id do
               key :type, :integer
               key :format, :int64
             end
@@ -62,40 +62,15 @@ module Swagger::ExternalMembersProposalSchema
       end
     end
 
-    swagger_schema :ExternalMembersProposalOutput do
+    swagger_schema :InternalMembersProposalOutput do
       allOf do
         schema do
-          key :'$ref', :ExternalMembersProposal
+          key :'$ref', :InternalMembersProposal
         end
         schema do
           property :id do
             key :type, :integer
             key :format, :int64
-          end
-          property :contact do
-            key :type, :object
-            property :name do
-              key :type, :string
-            end
-            property :email do
-              key :type, :string
-            end
-            property :identification_number do
-              key :type, :string
-            end
-            property :identification_type_id do
-              key :type, :integer
-              key :format, :int64
-            end
-            property :phone do
-              key :type, :string
-            end
-            property :mobile do
-              key :type, :string
-            end
-            property :address do
-              key :type, :string
-            end
           end
           property :proposal_id do
             key :type, :integer
@@ -103,6 +78,33 @@ module Swagger::ExternalMembersProposalSchema
           end
           property :role_name do
             key :type, :string
+          end
+          property :researcher do
+            key :type, :object
+            property :identification_number do
+              key :type, :string
+            end
+            property :orcid_id do
+              key :type, :string
+            end
+            property :mobile_number_one do
+              key :type, :string
+            end
+            property :mobile_number_two do
+              key :type, :string
+            end
+            property :phone_number_one do
+              key :type, :string
+            end
+            property :phone_number_two do
+              key :type, :string
+            end
+            property :address do
+              key :type, :string
+            end
+            property :oas_researcher_id do
+              key :type, :string
+            end
           end
           property :created_by do
             key :type, :integer
@@ -124,13 +126,13 @@ module Swagger::ExternalMembersProposalSchema
       end
     end
 
-    swagger_schema :ExternalMembersProposalDxOutput do
+    swagger_schema :InternalMembersProposalDxOutput do
       allOf do
         schema do
           property :data do
             key :type, :array
             items do
-              key :'$ref', :ExternalMembersProposalOutput
+              key :'$ref', :InternalMembersProposalOutput
             end
           end
         end

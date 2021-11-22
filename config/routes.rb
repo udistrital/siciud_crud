@@ -241,10 +241,14 @@ Rails.application.routes.draw do
       resources :schedule_activities, only: [:show, :update]
 
       # Endpoint to proposals
+      get "/proposals/by-internal-member", to: "proposals#index_by_researcher"
+
       resources :proposals, only: [:index, :show, :update] do
         resources :external_members_proposals, only: [:index, :create]
+        resources :internal_members_proposals, only: [:index, :create]
       end
       resources :external_members_proposals, only: [:show, :update]
+      resources :internal_members_proposals, only: [:show, :update]
 
 
       #  Chapters or sections

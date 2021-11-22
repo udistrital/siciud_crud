@@ -45,6 +45,65 @@ module Swagger::ProposalApi
       end
     end
 
+    swagger_path '/proposals/by-internal-member' do
+      operation :get do
+        key :summary, 'Get all Proposals'
+        key :description, 'Returns all proposals'
+        key :operationId, :get_proposals_by_researcher
+        key :produces, ['application/json',]
+        key :tags, ['Proposals/Projects']
+
+        parameter name: :researcher_id do
+          key :in, :query
+          key :description, 'researcher id'
+          key :required, false
+          key :type, :integer
+          key :format, :int64
+          key :example, 0
+        end
+
+        parameter name: :researcher_identification do
+          key :in, :query
+          key :description, 'researcher identification number'
+          key :required, false
+          key :type, :integer
+          key :format, :int64
+          key :example, 0
+        end
+
+        parameter name: :skip do
+          key :in, :query
+          key :description, 'page number, start at 0'
+          key :required, false
+          key :type, :integer
+          key :format, :int64
+          key :example, 0
+        end
+
+        parameter name: :take do
+          key :in, :query
+          key :description, 'number of records per page'
+          key :required, false
+          key :type, :integer
+          key :format, :int64
+          key :example, 10
+        end
+
+        response 200 do
+          key :description, 'proposal response'
+          schema do
+            key :type, :array
+            items do
+              key :'$ref', :ProposalDxOutput
+            end
+          end
+        end
+        response :default do
+          key :description, 'Unexpected Error'
+        end
+      end
+    end
+
     swagger_path '/proposals/{id}' do
       operation :get do
         key :summary, 'Get a Proposal by ID'
