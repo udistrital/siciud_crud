@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_22_185601) do
+ActiveRecord::Schema.define(version: 2021_11_22_210312) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1327,6 +1327,22 @@ ActiveRecord::Schema.define(version: 2021_11_22_185601) do
     t.index ["geo_state_id"], name: "index_integrated_circuit_diagrams_on_geo_state_id"
     t.index ["research_group_id"], name: "index_integrated_circuit_diagrams_on_research_group_id"
     t.index ["updated_by"], name: "index_integrated_circuit_diagrams_on_updated_by"
+  end
+
+  create_table "internal_members_proposals", force: :cascade do |t|
+    t.bigint "proposal_id"
+    t.bigint "researcher_id"
+    t.bigint "role_id"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_internal_members_proposals_on_created_by"
+    t.index ["proposal_id"], name: "index_internal_members_proposals_on_proposal_id"
+    t.index ["researcher_id"], name: "index_internal_members_proposals_on_researcher_id"
+    t.index ["role_id"], name: "index_internal_members_proposals_on_role_id"
+    t.index ["updated_by"], name: "index_internal_members_proposals_on_updated_by"
   end
 
   create_table "investigation_projects", force: :cascade do |t|
@@ -2936,6 +2952,11 @@ ActiveRecord::Schema.define(version: 2021_11_22_185601) do
   add_foreign_key "integrated_circuit_diagrams", "subtypes", column: "category_id"
   add_foreign_key "integrated_circuit_diagrams", "users", column: "created_by"
   add_foreign_key "integrated_circuit_diagrams", "users", column: "updated_by"
+  add_foreign_key "internal_members_proposals", "proposals"
+  add_foreign_key "internal_members_proposals", "researchers"
+  add_foreign_key "internal_members_proposals", "roles"
+  add_foreign_key "internal_members_proposals", "users", column: "created_by"
+  add_foreign_key "internal_members_proposals", "users", column: "updated_by"
   add_foreign_key "investigation_projects", "colciencias_calls"
   add_foreign_key "investigation_projects", "geo_cities"
   add_foreign_key "investigation_projects", "geo_countries"
@@ -5454,5 +5475,21 @@ ActiveRecord::Schema.define(version: 2021_11_22_185601) do
       emp.updated_at
      FROM (external_members_proposals emp
        LEFT JOIN roles r ON ((r.id = emp.role_id)));
+  SQL
+  create_view "siciud.complete_int_members_proposals", sql_definition: <<-SQL
+      SELECT imp.id,
+      ( SELECT json_build_object('id', researchers.id, 'orcid_id', researchers.orcid_id, 'identification_number', researchers.identification_number, 'oas_researcher_id', researchers.oas_researcher_id, 'mobile_number_one', researchers.mobile_number_one, 'mobile_number_two', researchers.mobile_number_two, 'address', researchers.address, 'phone_number_one', researchers.phone_number_one, 'phone_number_two', researchers.phone_number_two) AS json_build_object
+             FROM researchers
+            WHERE (imp.researcher_id = researchers.id)) AS researcher,
+      imp.proposal_id,
+      imp.role_id,
+      r.name AS role_name,
+      imp.active,
+      imp.created_by,
+      imp.updated_by,
+      imp.created_at,
+      imp.updated_at
+     FROM (internal_members_proposals imp
+       LEFT JOIN roles r ON ((r.id = imp.role_id)));
   SQL
 end

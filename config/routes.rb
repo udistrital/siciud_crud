@@ -243,8 +243,10 @@ Rails.application.routes.draw do
       # Endpoint to proposals
       resources :proposals, only: [:index, :show, :update] do
         resources :external_members_proposals, only: [:index, :create]
+        resources :internal_members_proposals, only: [:index, :create]
       end
       resources :external_members_proposals, only: [:show, :update]
+      resources :internal_members_proposals, only: [:show, :update]
 
 
       #  Chapters or sections
