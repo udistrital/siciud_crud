@@ -134,7 +134,7 @@ module Swagger::RoleApi
           schema do
             key :type, :array
             items do
-              key :'$ref', :RoleOutput
+              key :'$ref', :RoleDxOutput
             end
           end
         end

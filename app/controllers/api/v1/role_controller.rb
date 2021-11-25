@@ -6,6 +6,7 @@ module Api
 
       def index
         @roles = Role.all.order(:id)
+        @roles = DxService.load(@roles, params)
         render json: @roles
       end
 
