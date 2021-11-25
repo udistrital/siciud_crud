@@ -82,5 +82,18 @@ module Swagger::RoleSchema
         end
       end
     end
+
+    swagger_schema :RoleDxOutput do
+      allOf do
+        schema do
+          property :data do
+            key :type, :array
+            items do
+              key :'$ref', :RoleOutput
+            end
+          end
+        end
+      end
+    end
   end
 end
