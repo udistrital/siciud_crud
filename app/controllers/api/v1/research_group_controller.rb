@@ -27,25 +27,27 @@ module Api
 
       # POST /research_units/:id
       def create
-        @research_group = ResearchGroup.new(
-          research_group_params.except(:cine_detailed_area_ids,
-                                       :curricular_project_ids,
-                                       :faculty_ids,
-                                       :research_focus_ids,
-                                       :oecd_discipline_ids,
-                                       :updated_by)
-        )
-        @research_group = pre_save_data_by_key(@research_group)
+        ResearchGroup.transaction do
+          @research_group = ResearchGroup.new(
+            research_group_params.except(:cine_detailed_area_ids,
+                                         :curricular_project_ids,
+                                         :faculty_ids,
+                                         :research_focus_ids,
+                                         :oecd_discipline_ids,
+                                         :updated_by)
+          )
+          @research_group = pre_save_data_by_key(@research_group)
 
-        unless @research_group.valid?
-          render json: @research_group.errors, status: :unprocessable_entity and return
-        end
+          unless @research_group.valid?
+            render json: @research_group.errors, status: :unprocessable_entity and return
+          end
 
-        if @research_group.save
-          @research_group = pos_save_data_by_key(@research_group)
-          render json: @research_group, status: :created
-        else
-          render json: @research_group.errors, status: :unprocessable_entity
+          if @research_group.save
+            @research_group = pos_save_data_by_key(@research_group)
+            render json: @research_group, status: :created
+          else
+            render json: @research_group.errors, status: :unprocessable_entity
+          end
         end
       end
 
