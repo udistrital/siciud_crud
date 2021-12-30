@@ -16,9 +16,9 @@ por ejemplo: Actas de creación de las Unidades de Investigación) labor apoyada
 
 # Modelo de Datos
 
-![entrada](https://github.com/NemediDev/siciud-v2-back/blob/staging/docs/DiagramaDatos2021.png)
+![entrada](https://github.com/udistrital/siciud_crud/blob/develop/docs/DiagramaDatos2021.png)
 
-[Modelo de Datos API SICIUD](https://github.com/NemediDev/siciud-v2-back/blob/staging/docs/DiagramaDatos2021.png)
+[Modelo de Datos API SICIUD](https://github.com/udistrital/siciud_crud/blob/develop/docs/DiagramaDatos2021.png)
 
 # Especificaciones Técnicas
 
