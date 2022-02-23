@@ -1,7 +1,8 @@
 class ContactSerializer < ActiveModel::Serializer
   attributes :id, :name, :email, :identification_number,
              :identification_type_id, :identification_type_name,
-             :phone, :active, :created_by, :updated_by,
+             :mobile, :phone, :address,
+             :active, :created_by, :updated_by,
              :created_at, :updated_at, :created_at, :updated_at
 
   def identification_type_name

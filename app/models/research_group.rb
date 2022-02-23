@@ -16,6 +16,7 @@ class ResearchGroup < ApplicationRecord
                           class_name: 'Subtype'
   has_and_belongs_to_many :oecd_disciplines
   has_and_belongs_to_many :cine_detailed_areas
+  has_and_belongs_to_many :proposals
 
   has_many :research_groups, class_name: 'ResearchGroup', foreign_key: 'parent_id'
 

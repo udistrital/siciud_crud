@@ -67,7 +67,7 @@ class DxService < ApplicationService
     end
 
     if arr.length > 0
-      @dbSet = @dbSet.where(arr.join(" OR "))
+      @dbSet = @dbSet.where(arr.join(" AND "))
     end
 
     # 202107040722: Filtro por estado (state=1) (state=2)

@@ -1,6 +1,11 @@
 class Role < ApplicationRecord
     include Swagger::RoleSchema
 
+    belongs_to :role_type, class_name: 'Subtype', foreign_key: 'role_type_id', optional: true
+    belongs_to :parent, class_name: 'Role', optional: true
+
+    has_many :roles, class_name: 'Role', foreign_key: 'parent_id'
+
     has_many :group_members
 
     validates :name, presence: true, uniqueness: true
