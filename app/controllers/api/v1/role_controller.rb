@@ -38,12 +38,12 @@ module Api
       end
 
       def role_params_to_create
-        params.require(:role).permit(:name, :role_type_id,
+        params.require(:role).permit(:name, :role_type_id, :parent_id,
                                      :active, :created_by)
       end
 
       def role_params_to_update
-        params.require(:role).permit(:name, :role_type_id,
+        params.require(:role).permit(:name, :role_type_id, :parent_id,
                                      :active, :updated_by)
       end
     end
