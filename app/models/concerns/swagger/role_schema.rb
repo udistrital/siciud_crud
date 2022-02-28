@@ -67,6 +67,12 @@ module Swagger::RoleSchema
             key :type, :integer
             key :format, :int64
           end
+          property :role_type_name do
+            key :type, :string
+          end
+          property :parent_name do
+            key :type, :string
+          end
           property :created_by do
             key :type, :integer
             key :format, :int64
