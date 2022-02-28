@@ -1,5 +1,7 @@
 class GroupMemberBaseSerializer < ActiveModel::Serializer
-  attributes :id, :researcher, :role_id, :role_name, :gm_state_id, :gm_state_name, :gm_periods
+  attributes :id, :researcher, :role_id, :role_name,
+             :gm_state_id, :gm_state_name, :gm_periods,
+             :parent_id, :role_type_id
 
   def gm_periods
     self.object.gm_periods.map do |gm_period|
@@ -27,6 +29,13 @@ class GroupMemberBaseSerializer < ActiveModel::Serializer
     end
   end
 
+  def parent_id
+    role = self.object.role
+    if role
+      role.parent_id
+    end
+  end
+
   def role_id
     role = self.object.role
     if role
@@ -38,6 +47,13 @@ class GroupMemberBaseSerializer < ActiveModel::Serializer
     role = self.object.role
     if role
       role.name
+    end
+  end
+
+  def role_type_id
+    role = self.object.role
+    if role
+      role.role_type_id
     end
   end
 

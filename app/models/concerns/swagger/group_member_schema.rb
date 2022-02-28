@@ -81,6 +81,16 @@ module Swagger::GroupMemberSchema
         schema do
           key :'$ref', :GroupMember
         end
+        schema do
+          property :parent_id do
+            key :type, :integer
+            key :format, :int64
+          end
+          property :role_type_id do
+            key :type, :integer
+            key :format, :int64
+          end
+        end
       end
     end
   end
