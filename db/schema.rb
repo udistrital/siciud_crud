@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_17_001121) do
+ActiveRecord::Schema.define(version: 2022_02_28_141408) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -5538,5 +5538,20 @@ ActiveRecord::Schema.define(version: 2022_02_17_001121) do
        LEFT JOIN subtypes sps ON ((p.proposal_status_id = sps.id)))
        LEFT JOIN internal_members_proposals imp ON ((p.id = imp.proposal_id)))
        LEFT JOIN researchers res ON ((imp.researcher_id = res.id)));
+  SQL
+  create_view "siciud.complete_roles", sql_definition: <<-SQL
+      SELECT r.name,
+      r.parent_id,
+      rp.name AS parent_name,
+      r.role_type_id,
+      st.st_name AS role_type_name,
+      r.active,
+      r.created_by,
+      r.updated_by,
+      r.created_at,
+      r.updated_at
+     FROM ((roles r
+       LEFT JOIN subtypes st ON ((r.role_type_id = st.id)))
+       LEFT JOIN roles rp ON ((r.parent_id = rp.id)));
   SQL
 end
