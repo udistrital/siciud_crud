@@ -10,6 +10,8 @@ class Entity < ApplicationRecord
   has_many :dependencies
   has_many :hist_legal_representatives
 
+  has_and_belongs_to_many :proposals
+
   # Tracking inherited from ApplicationRecord, fields:
   # created_by and updated_by, see application_record.rb
   validates :created_by, presence: true, allow_nil: false, on: :create

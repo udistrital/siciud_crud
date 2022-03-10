@@ -7,6 +7,14 @@ module Swagger::RoleSchema
       property :name do
         key :type, :string
       end
+      property :role_type_id do
+        key :type, :integer
+        key :format, :int64
+      end
+      property :parent_id do
+        key :type, :integer
+        key :format, :int64
+      end
       property :active do
         key :type, :boolean
         key :default, true
@@ -59,6 +67,12 @@ module Swagger::RoleSchema
             key :type, :integer
             key :format, :int64
           end
+          property :role_type_name do
+            key :type, :string
+          end
+          property :parent_name do
+            key :type, :string
+          end
           property :created_by do
             key :type, :integer
             key :format, :int64
@@ -74,6 +88,19 @@ module Swagger::RoleSchema
           property :updated_at do
             key :type, :string
             key :format, 'date-time'
+          end
+        end
+      end
+    end
+
+    swagger_schema :RoleDxOutput do
+      allOf do
+        schema do
+          property :data do
+            key :type, :array
+            items do
+              key :'$ref', :RoleOutput
+            end
           end
         end
       end

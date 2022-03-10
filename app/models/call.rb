@@ -14,6 +14,7 @@ class Call < ApplicationRecord
   has_many :call_eval_criteria
   has_many :eval_criteria, through: :call_eval_criteria, source: :eval_criterion
   has_many :schedule_activities
+  has_many :proposals
 
   has_many :chapters, as: :sectionable
 
