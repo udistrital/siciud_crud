@@ -6,6 +6,10 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :apidocs, only: [:index]
 
+      resources :manuals, only: [] do
+        resources :documents, only: [:index, :show, :create, :update]
+      end
+
       # General endpoints
       # Geo endpoints
       resources :geo_countries, only: [:index, :show] do
