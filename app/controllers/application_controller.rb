@@ -45,6 +45,9 @@ class ApplicationController < ActionController::API
     elsif params[:research_groups_research_network_id]
       id = params[:research_groups_research_network_id]
       @context = ResearchGroupsResearchNetwork.find(id)
+    elsif params[:manual_id]
+      id = params[:manual_id]
+      @context = Subtype.find(id)
     else
       set_product_context
     end
