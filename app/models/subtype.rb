@@ -62,6 +62,8 @@ class Subtype < ApplicationRecord
   has_many :calls, through: :call_items, source: :call
   has_many :indicators, class_name: 'Indicator', foreign_key: 'product_type_id', dependent: :destroy
 
+  has_many :documents, as: :documentable
+
   #OTRI subtypes
   has_many :application_areas, class_name: 'RequestHasApplicationArea', foreign_key: 'application_area_id', dependent: :destroy
 
