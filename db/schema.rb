@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_28_141408) do
+ActiveRecord::Schema.define(version: 2022_04_05_141403) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1504,6 +1504,32 @@ ActiveRecord::Schema.define(version: 2022_02_28_141408) do
     t.index ["geo_state_id"], name: "index_magazine_editions_on_geo_state_id"
     t.index ["research_group_id"], name: "index_magazine_editions_on_research_group_id"
     t.index ["updated_by"], name: "index_magazine_editions_on_updated_by"
+  end
+
+  create_table "mobility_calls", force: :cascade do |t|
+    t.bigint "call_id"
+    t.bigint "geo_city_id"
+    t.bigint "geo_country_id"
+    t.bigint "geo_state_id"
+    t.string "event_name"
+    t.integer "event_edition_number"
+    t.date "event_date"
+    t.string "paper_name"
+    t.boolean "is_organizer"
+    t.string "event_page"
+    t.bigint "research_group_id"
+    t.boolean "active"
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "researcher_id"
+    t.index ["call_id"], name: "index_mobility_calls_on_call_id"
+    t.index ["geo_city_id"], name: "index_mobility_calls_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_mobility_calls_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_mobility_calls_on_geo_state_id"
+    t.index ["research_group_id"], name: "index_mobility_calls_on_research_group_id"
+    t.index ["researcher_id"], name: "index_mobility_calls_on_researcher_id"
   end
 
   create_table "new_animal_breeds", force: :cascade do |t|
@@ -3006,6 +3032,12 @@ ActiveRecord::Schema.define(version: 2022_02_28_141408) do
   add_foreign_key "magazine_editions", "subtypes", column: "category_id"
   add_foreign_key "magazine_editions", "users", column: "created_by"
   add_foreign_key "magazine_editions", "users", column: "updated_by"
+  add_foreign_key "mobility_calls", "calls"
+  add_foreign_key "mobility_calls", "geo_cities"
+  add_foreign_key "mobility_calls", "geo_countries"
+  add_foreign_key "mobility_calls", "geo_states"
+  add_foreign_key "mobility_calls", "research_groups"
+  add_foreign_key "mobility_calls", "researchers"
   add_foreign_key "new_animal_breeds", "colciencias_calls"
   add_foreign_key "new_animal_breeds", "geo_cities"
   add_foreign_key "new_animal_breeds", "geo_countries"
