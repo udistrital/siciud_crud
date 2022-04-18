@@ -28,7 +28,9 @@ Rails.application.routes.draw do
 
       resources :gm_states, only: [:index, :show]
       resources :role, only: [:index, :show, :create, :update]
-      resources :researchers, only: [:index, :show, :update, :create]
+      resources :researchers, only: [:index, :show, :update, :create] do
+        resources :mobility_calls, only: [:index]
+      end
       get "researcher_research_units", to: "researchers#researcher_research_units"
 
       resources :user_roles, only: [:index, :show, :create, :update]
@@ -56,6 +58,7 @@ Rails.application.routes.draw do
         resources :documents, only: [:index, :show, :create, :update]
         resources :group_member, only: [:index, :show, :create, :update]
         resources :historical_colciencias_ranks, only: [:index, :show, :create, :update]
+        resources :mobility_calls, only: [:index]
 
         # PRODUCTS ENDPOINTS BY TYPOLOGY
         # New generation products endpoints
@@ -246,7 +249,7 @@ Rails.application.routes.draw do
       resources :calls_indicators, only: [:show, :update]
       resources :schedule_activities, only: [:show, :update]
 
-      resources :mobility_calls, only: [:show, :update]
+      resources :mobility_calls, only: [:index, :show, :update]
 
       # Endpoint to proposals
       get "/proposals/by-internal-member", to: "proposals#index_by_researcher"

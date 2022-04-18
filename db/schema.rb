@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_04_05_141403) do
+ActiveRecord::Schema.define(version: 2022_04_07_060305) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -5585,5 +5585,38 @@ ActiveRecord::Schema.define(version: 2022_04_05_141403) do
      FROM ((roles r
        LEFT JOIN subtypes st ON ((r.role_type_id = st.id)))
        LEFT JOIN roles rp ON ((r.parent_id = rp.id)));
+  SQL
+  create_view "siciud.complete_mobility_calls", sql_definition: <<-SQL
+      SELECT mc.id,
+      mc.call_id,
+      c.call_name,
+      mc.event_date,
+      mc.event_edition_number,
+      mc.event_name,
+      mc.event_page,
+      mc.geo_city_id,
+      gcity.name AS geo_city_name,
+      mc.geo_country_id,
+      gctry.name AS geo_country_name,
+      mc.geo_state_id,
+      gs.name AS geo_state_name,
+      mc.is_organizer,
+      mc.paper_name,
+      mc.research_group_id,
+      rg.name AS research_group_name,
+      mc.researcher_id,
+      r.oas_researcher_id,
+      mc.active,
+      mc.created_by,
+      mc.updated_by,
+      mc.created_at,
+      mc.updated_at
+     FROM ((((((mobility_calls mc
+       LEFT JOIN calls c ON ((c.id = mc.call_id)))
+       LEFT JOIN geo_cities gcity ON ((mc.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((mc.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((mc.geo_country_id = gctry.id)))
+       LEFT JOIN research_groups rg ON ((mc.research_group_id = rg.id)))
+       LEFT JOIN researchers r ON ((mc.researcher_id = r.id)));
   SQL
 end
