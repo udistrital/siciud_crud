@@ -1,6 +1,7 @@
 module Api
   module V1
     class MobilityCallsController < AbstractCallController
+      include Swagger::MobilityCallApi
 
       before_action :set_call, only: [:create]
       before_action :set_mobility_call, only: [:show, :update]
