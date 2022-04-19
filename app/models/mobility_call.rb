@@ -1,11 +1,12 @@
 class MobilityCall < ApplicationRecord
-  Swagger::MobilityCallSchema
+  include Swagger::MobilityCallSchema
 
   belongs_to :call
   belongs_to :geo_city, optional: true
   belongs_to :geo_country
   belongs_to :geo_state, optional: true
   belongs_to :research_group
+  belongs_to :researcher
 
   # Tracking inherited from ApplicationRecord, fields:
   # created_by and updated_by, see application_record.rb
