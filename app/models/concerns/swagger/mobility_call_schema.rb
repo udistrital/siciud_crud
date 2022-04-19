@@ -4,15 +4,6 @@ module Swagger::MobilityCallSchema
 
   included do
     swagger_schema :MobilityCall do
-      property :ci_maximum_percentage do
-        key :type, :number
-        key :format, :float
-        key :minimum, 0
-        key :exclusiveMinimum, false
-        key :maximum, 100
-        key :exclusiveMaximum, false
-      end
-
       property :geo_city_id do
         key :type, :integer
         key :format, :int64

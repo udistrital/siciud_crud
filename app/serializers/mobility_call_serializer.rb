@@ -8,6 +8,12 @@ class MobilityCallSerializer < ActiveModel::Serializer
              :active, :created_by, :updated_by, :created_at, :updated_at
 
   # GEOS
+  def call_name
+    call = self.object.call
+    if call
+      call.call_name
+    end
+  end
 
   def geo_city_name
     city = self.object.geo_city

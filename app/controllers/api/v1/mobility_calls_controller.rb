@@ -39,7 +39,7 @@ module Api
 
       # POST /calls/:call_id/mobility_calls
       def create
-        @mobility_call = MobilityCall.new(mobility_call_params_to_create)
+        @mobility_call = @call.mobility_calls.new(mobility_call_params_to_create)
 
         if @mobility_call.save
           render json: @mobility_call, status: :created
