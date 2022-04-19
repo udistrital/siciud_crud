@@ -7,7 +7,7 @@ module Swagger::MobilityCallApi
       operation :get do
         key :summary, 'Get a Mobility Call by ID'
         key :description, 'Returns a single mobility Call'
-        key :operationId, :get_call_item_by_id
+        key :operationId, :get_mobility_call_by_id
         key :produces, ['application/json',]
         key :tags, ['Calls:: Mobility Calls']
 
@@ -39,7 +39,7 @@ module Swagger::MobilityCallApi
       operation :put do
         key :summary, 'Update mobility call by ID'
         key :description, 'Returns the updated mobility call'
-        key :operationId, :update_call_item
+        key :operationId, :update_mobility_call
         key :produces, ['application/json',]
         key :tags, ['Calls:: Mobility Calls']
 
@@ -51,7 +51,7 @@ module Swagger::MobilityCallApi
           key :format, :int64
         end
 
-        parameter name: :call_item do
+        parameter name: :mobility_call do
           key :in, :body
           key :description, 'mobility call to update'
           key :required, true
@@ -80,7 +80,7 @@ module Swagger::MobilityCallApi
       operation :patch do
         key :summary, 'Activate or deactivate a mobility call by ID'
         key :description, 'Returns the activated/deactivated mobility call'
-        key :operationId, :change_active_call_item
+        key :operationId, :change_active_mobility_call
         key :produces, ['application/json',]
         key :tags, ['Calls:: Mobility Calls']
 
@@ -92,12 +92,12 @@ module Swagger::MobilityCallApi
           key :format, :int64
         end
 
-        parameter name: :call_item do
+        parameter name: :mobility_call do
           key :in, :body
           key :description, 'mobility call to activate or deactivate'
           key :required, true
           schema do
-            property :call_item do
+            property :mobility_call do
               key :'$ref', :ChangeActive
             end
           end
@@ -154,7 +154,7 @@ module Swagger::MobilityCallApi
       operation :post do
         key :summary, 'Create a new mobility call'
         key :description, 'Returns the created mobility call'
-        key :operationId, :create_call_item
+        key :operationId, :create_mobility_call
         key :produces, ['application/json',]
         key :tags, ['Calls:: Mobility Calls']
 
@@ -166,7 +166,7 @@ module Swagger::MobilityCallApi
           key :format, :int64
         end
 
-        parameter name: :call_item do
+        parameter name: :mobility_call do
           key :in, :body
           key :description, 'mobility call to register'
           key :required, true
