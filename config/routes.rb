@@ -45,6 +45,7 @@ Rails.application.routes.draw do
         resources :form_d_act_plans, only: [:index, :create, :update]
         resources :form_e_act_plans, only: [:index, :create, :update]
       end
+      get "/action_plans_print/:action_plan_id", to: "action_plans#action_plan_print"
       resources :ap_management_reports, only: [:update]
       resources :form_a_act_plans, :form_b_act_plans,
                 :form_c_act_plans, :form_d_act_plans, only: [:show] do

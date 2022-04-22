@@ -42,6 +42,14 @@ module Api
         end
       end
 
+      # GET /action_plans_print
+      def action_plan_print
+        @action_plans = ActionPlanPrintView.where(
+          "id = ?", params[:action_plan_id]
+        )
+        render json: @action_plans
+      end
+
       # PATCH/PUT /action_plans/1
       def update
         result = ActionPlanService.is_upgradeable(@action_plan,
