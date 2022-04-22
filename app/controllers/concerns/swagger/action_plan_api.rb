@@ -232,15 +232,15 @@ module Swagger::ActionPlanApi
           key :format, :int64
         end
 
-        response 200 do
-          key :description, 'action plan response'
-          schema do
-            key :type, :array
-            items do
-              key :'$ref', :ActionPlanDxOutput
-            end
-          end
-        end
+        # response 200 do
+        #   key :description, 'action plan response'
+        #   schema do
+        #     key :type, :array
+        #     items do
+        #       key :'$ref', :ActionPlanDxOutput
+        #     end
+        #   end
+        # end
         response :default do
           key :description, 'Unexpected Error'
         end
