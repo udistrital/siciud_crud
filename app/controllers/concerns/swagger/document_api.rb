@@ -5,6 +5,7 @@ module Swagger::DocumentApi
 
   PRODUCT_ARRAY = get_product_array
   RU_PRODUCT_ARRAY = [:manuals,
+                      :mobility_calls,
                       :research_units,
                       :calls,
                       :research_networks,
