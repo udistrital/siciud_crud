@@ -250,7 +250,9 @@ Rails.application.routes.draw do
       resources :calls_indicators, only: [:show, :update]
       resources :schedule_activities, only: [:show, :update]
 
-      resources :mobility_calls, only: [:index, :show, :update]
+      resources :mobility_calls, only: [:index, :show, :update] do
+        resources :documents, only: [:index, :show, :create, :update]
+      end
 
       # Endpoint to proposals
       get "/proposals/by-internal-member", to: "proposals#index_by_researcher"
