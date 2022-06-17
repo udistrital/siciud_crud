@@ -4,7 +4,7 @@ class MobilityCallSerializer < ActiveModel::Serializer
              :geo_city_id, :geo_city_name, :geo_country_id, :geo_country_name,
              :geo_state_id, :geo_state_name, :is_organizer,
              :paper_name, :research_group_id, :research_group_name,
-             :researcher_id, :oas_researcher_id,
+             :researcher_id, :oas_researcher_id, :state_id, :state_name, :total,
              :active, :created_by, :updated_by, :created_at, :updated_at
 
   # GEOS
@@ -47,6 +47,13 @@ class MobilityCallSerializer < ActiveModel::Serializer
     researcher = self.object.researcher
     if researcher
       researcher.oas_researcher_id
+    end
+  end
+
+  def state_name
+    state = self.object.state
+    if state
+      state.st_name
     end
   end
 end
