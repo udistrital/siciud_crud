@@ -72,6 +72,7 @@ module Api
                                               :event_date, :paper_name,
                                               :is_organizer, :event_page,
                                               :research_group_id, :researcher_id,
+                                              :state_id, :total,
                                               :active, :created_by)
       end
 
@@ -82,6 +83,7 @@ module Api
                                               :event_date, :paper_name,
                                               :is_organizer, :event_page,
                                               :research_group_id, :researcher_id,
+                                              :state_id, :total,
                                               :active, :updated_by)
       end
     end

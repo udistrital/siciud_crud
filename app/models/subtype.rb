@@ -52,22 +52,23 @@ class Subtype < ApplicationRecord
   has_many :vegetable_varieties, class_name: 'VegetableVariety', foreign_key: 'cycle_type_id', dependent: :destroy
   has_many :vegetable_varieties, class_name: 'VegetableVariety', foreign_key: 'petition_status_id', dependent: :destroy
 
-  has_many :ext_participants, class_name: 'ExtParticipant', foreign_key: 'participant_type_id', dependent: :destroy
-  has_many :int_participants, class_name: 'IntParticipant', foreign_key: 'participant_type_id', dependent: :destroy
+  has_many :ext_participants, class_name: 'ExtParticipant', foreign_key: 'participant_type_id'
+  has_many :int_participants, class_name: 'IntParticipant', foreign_key: 'participant_type_id'
 
-  has_many :calls, class_name: 'Call', foreign_key: 'call_beneficiary_id', dependent: :destroy
-  has_many :calls, class_name: 'Call', foreign_key: 'call_state_id', dependent: :destroy
-  has_many :calls, class_name: 'Call', foreign_key: 'call_type_id', dependent: :destroy
+  has_many :calls, class_name: 'Call', foreign_key: 'call_beneficiary_id'
+  has_many :calls, class_name: 'Call', foreign_key: 'call_state_id'
+  has_many :calls, class_name: 'Call', foreign_key: 'call_type_id'
   has_many :call_items
   has_many :calls, through: :call_items, source: :call
-  has_many :indicators, class_name: 'Indicator', foreign_key: 'product_type_id', dependent: :destroy
+  has_many :indicators, class_name: 'Indicator', foreign_key: 'product_type_id'
+  has_many :mobility_calls, class_name: 'MobilityCall', foreign_key: 'state_id'
 
   has_many :documents, as: :documentable
 
   #OTRI subtypes
   has_many :application_areas, class_name: 'RequestHasApplicationArea', foreign_key: 'application_area_id', dependent: :destroy
 
-  has_many :states, class_name: 'TaskHasState', foreign_key: 'state_id', dependent: :destroy
+  has_many :states, class_name: 'TaskHasState', foreign_key: 'state_id'
 
   has_and_belongs_to_many :potential_markets,
                           join_table: 'potential_markets_segments',

@@ -78,7 +78,7 @@ module Swagger::MobilityCallApi
       end
 
       operation :patch do
-        key :summary, 'Activate or deactivate a mobility call by ID'
+        key :summary, 'Update total, state or activate, deactivate a mobility call by ID'
         key :description, 'Returns the activated/deactivated mobility call'
         key :operationId, :change_active_mobility_call
         key :produces, ['application/json',]
@@ -94,11 +94,11 @@ module Swagger::MobilityCallApi
 
         parameter name: :mobility_call do
           key :in, :body
-          key :description, 'mobility call to activate or deactivate'
+          key :description, 'mobility call to activate, deactivate, or update total or state'
           key :required, true
           schema do
             property :mobility_call do
-              key :'$ref', :ChangeActive
+              key :'$ref', :ChangeMobilityCall
             end
           end
         end

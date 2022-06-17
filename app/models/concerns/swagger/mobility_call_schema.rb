@@ -45,6 +45,18 @@ module Swagger::MobilityCallSchema
         key :type, :integer
         key :format, :int64
       end
+      property :state_id do
+        key :type, :integer
+        key :format, :int64
+      end
+      property :total do
+        key :type, :number
+        key :format, :float
+        key :minimum, 0
+        key :exclusiveMinimum, false
+        key :maximum, 100
+        key :exclusiveMaximum, false
+      end
       property :active do
         key :type, :boolean
         key :default, true
@@ -117,6 +129,9 @@ module Swagger::MobilityCallSchema
           property :item_name do
             key :type, :string
           end
+          property :state_name do
+            key :type, :string
+          end
           property :created_by do
             key :type, :integer
             key :format, :int64
@@ -147,6 +162,29 @@ module Swagger::MobilityCallSchema
             end
           end
         end
+      end
+    end
+
+    swagger_schema :ChangeMobilityCall do
+      property :state_id do
+        key :type, :integer
+        key :format, :int64
+      end
+      property :total do
+        key :type, :number
+        key :format, :float
+        key :minimum, 0
+        key :exclusiveMinimum, false
+        key :maximum, 100
+        key :exclusiveMaximum, false
+      end
+      property :active do
+        key :type, :boolean
+        key :default, true
+      end
+      property :updated_by do
+        key :type, :integer
+        key :format, :int64
       end
     end
   end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_05_11_204141) do
+ActiveRecord::Schema.define(version: 2022_06_17_194719) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1524,12 +1524,15 @@ ActiveRecord::Schema.define(version: 2022_05_11_204141) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "researcher_id"
+    t.bigint "state_id"
+    t.decimal "total", precision: 5, scale: 2
     t.index ["call_id"], name: "index_mobility_calls_on_call_id"
     t.index ["geo_city_id"], name: "index_mobility_calls_on_geo_city_id"
     t.index ["geo_country_id"], name: "index_mobility_calls_on_geo_country_id"
     t.index ["geo_state_id"], name: "index_mobility_calls_on_geo_state_id"
     t.index ["research_group_id"], name: "index_mobility_calls_on_research_group_id"
     t.index ["researcher_id"], name: "index_mobility_calls_on_researcher_id"
+    t.index ["state_id"], name: "index_mobility_calls_on_state_id"
   end
 
   create_table "new_animal_breeds", force: :cascade do |t|
@@ -3038,6 +3041,7 @@ ActiveRecord::Schema.define(version: 2022_05_11_204141) do
   add_foreign_key "mobility_calls", "geo_states"
   add_foreign_key "mobility_calls", "research_groups"
   add_foreign_key "mobility_calls", "researchers"
+  add_foreign_key "mobility_calls", "subtypes", column: "state_id"
   add_foreign_key "new_animal_breeds", "colciencias_calls"
   add_foreign_key "new_animal_breeds", "geo_cities"
   add_foreign_key "new_animal_breeds", "geo_countries"
@@ -5586,39 +5590,6 @@ ActiveRecord::Schema.define(version: 2022_05_11_204141) do
        LEFT JOIN subtypes st ON ((r.role_type_id = st.id)))
        LEFT JOIN roles rp ON ((r.parent_id = rp.id)));
   SQL
-  create_view "siciud.complete_mobility_calls", sql_definition: <<-SQL
-      SELECT mc.id,
-      mc.call_id,
-      c.call_name,
-      mc.event_date,
-      mc.event_edition_number,
-      mc.event_name,
-      mc.event_page,
-      mc.geo_city_id,
-      gcity.name AS geo_city_name,
-      mc.geo_country_id,
-      gctry.name AS geo_country_name,
-      mc.geo_state_id,
-      gs.name AS geo_state_name,
-      mc.is_organizer,
-      mc.paper_name,
-      mc.research_group_id,
-      rg.name AS research_group_name,
-      mc.researcher_id,
-      r.oas_researcher_id,
-      mc.active,
-      mc.created_by,
-      mc.updated_by,
-      mc.created_at,
-      mc.updated_at
-     FROM ((((((mobility_calls mc
-       LEFT JOIN calls c ON ((c.id = mc.call_id)))
-       LEFT JOIN geo_cities gcity ON ((mc.geo_city_id = gcity.id)))
-       LEFT JOIN geo_states gs ON ((mc.geo_state_id = gs.id)))
-       LEFT JOIN geo_countries gctry ON ((mc.geo_country_id = gctry.id)))
-       LEFT JOIN research_groups rg ON ((mc.research_group_id = rg.id)))
-       LEFT JOIN researchers r ON ((mc.researcher_id = r.id)));
-  SQL
   create_view "siciud.action_plan_print_views", sql_definition: <<-SQL
       SELECT ap.id,
       ( SELECT json_agg(json_build_object('id', faap.id, 'advanced_total', faap.advanced_total, 'goal', faap.goal, 'order', faap."order", 'indicator_description', i.ind_description, 'indicator_product_type_name', si.st_name, 'plan_type_name', spt.st_name, 'product_type_name', spr.st_name)) AS json_agg
@@ -5673,5 +5644,42 @@ ActiveRecord::Schema.define(version: 2022_05_11_204141) do
                LEFT JOIN subtypes sc ON ((sc.id = feap.classification_id)))
             WHERE ((feap.action_plan_id = ap.id) AND (feap.plan_type_id = 827) AND (feap.active = true))) AS form_e_resources
      FROM action_plans ap;
+  SQL
+  create_view "siciud.complete_mobility_calls", sql_definition: <<-SQL
+      SELECT mc.id,
+      mc.call_id,
+      c.call_name,
+      mc.event_date,
+      mc.event_edition_number,
+      mc.event_name,
+      mc.event_page,
+      mc.geo_city_id,
+      gcity.name AS geo_city_name,
+      mc.geo_country_id,
+      gctry.name AS geo_country_name,
+      mc.geo_state_id,
+      gs.name AS geo_state_name,
+      mc.is_organizer,
+      mc.paper_name,
+      mc.research_group_id,
+      rg.name AS research_group_name,
+      mc.researcher_id,
+      r.oas_researcher_id,
+      mc.state_id,
+      ss.st_name AS state_name,
+      mc.total,
+      mc.active,
+      mc.created_by,
+      mc.updated_by,
+      mc.created_at,
+      mc.updated_at
+     FROM (((((((mobility_calls mc
+       LEFT JOIN calls c ON ((c.id = mc.call_id)))
+       LEFT JOIN geo_cities gcity ON ((mc.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((mc.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((mc.geo_country_id = gctry.id)))
+       LEFT JOIN research_groups rg ON ((mc.research_group_id = rg.id)))
+       LEFT JOIN researchers r ON ((mc.researcher_id = r.id)))
+       LEFT JOIN subtypes ss ON ((mc.state_id = ss.id)));
   SQL
 end
