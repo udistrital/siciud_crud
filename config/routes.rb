@@ -6,6 +6,10 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :apidocs, only: [:index]
 
+      resources :manuals, only: [] do
+        resources :documents, only: [:index, :show, :create, :update]
+      end
+
       # General endpoints
       # Geo endpoints
       resources :geo_countries, only: [:index, :show] do
@@ -24,7 +28,9 @@ Rails.application.routes.draw do
 
       resources :gm_states, only: [:index, :show]
       resources :role, only: [:index, :show, :create, :update]
-      resources :researchers, only: [:index, :show, :update, :create]
+      resources :researchers, only: [:index, :show, :update, :create] do
+        resources :mobility_calls, only: [:index]
+      end
       get "researcher_research_units", to: "researchers#researcher_research_units"
 
       resources :user_roles, only: [:index, :show, :create, :update]
@@ -39,6 +45,7 @@ Rails.application.routes.draw do
         resources :form_d_act_plans, only: [:index, :create, :update]
         resources :form_e_act_plans, only: [:index, :create, :update]
       end
+      get "/action_plans_print/:action_plan_id", to: "action_plans#action_plan_print"
       resources :ap_management_reports, only: [:update]
       resources :form_a_act_plans, :form_b_act_plans,
                 :form_c_act_plans, :form_d_act_plans, only: [:show] do
@@ -52,6 +59,7 @@ Rails.application.routes.draw do
         resources :documents, only: [:index, :show, :create, :update]
         resources :group_member, only: [:index, :show, :create, :update]
         resources :historical_colciencias_ranks, only: [:index, :show, :create, :update]
+        resources :mobility_calls, only: [:index]
 
         # PRODUCTS ENDPOINTS BY TYPOLOGY
         # New generation products endpoints
@@ -233,12 +241,18 @@ Rails.application.routes.draw do
 
         # Endpoint to proposals
         resources :proposals, only: [:index, :create]
+
+        resources :mobility_calls, only: [:index, :create]
       end
       resources :call_documents, only: [:show, :update]
       resources :call_eval_criteria, only: [:show, :update]
       resources :call_items, only: [:show, :update]
       resources :calls_indicators, only: [:show, :update]
       resources :schedule_activities, only: [:show, :update]
+
+      resources :mobility_calls, only: [:index, :show, :update] do
+        resources :documents, only: [:index, :show, :create, :update]
+      end
 
       # Endpoint to proposals
       get "/proposals/by-internal-member", to: "proposals#index_by_researcher"

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_28_141408) do
+ActiveRecord::Schema.define(version: 2022_06_17_194719) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1504,6 +1504,35 @@ ActiveRecord::Schema.define(version: 2022_02_28_141408) do
     t.index ["geo_state_id"], name: "index_magazine_editions_on_geo_state_id"
     t.index ["research_group_id"], name: "index_magazine_editions_on_research_group_id"
     t.index ["updated_by"], name: "index_magazine_editions_on_updated_by"
+  end
+
+  create_table "mobility_calls", force: :cascade do |t|
+    t.bigint "call_id"
+    t.bigint "geo_city_id"
+    t.bigint "geo_country_id"
+    t.bigint "geo_state_id"
+    t.string "event_name"
+    t.integer "event_edition_number"
+    t.date "event_date"
+    t.string "paper_name"
+    t.boolean "is_organizer"
+    t.string "event_page"
+    t.bigint "research_group_id"
+    t.boolean "active"
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "researcher_id"
+    t.bigint "state_id"
+    t.decimal "total", precision: 5, scale: 2
+    t.index ["call_id"], name: "index_mobility_calls_on_call_id"
+    t.index ["geo_city_id"], name: "index_mobility_calls_on_geo_city_id"
+    t.index ["geo_country_id"], name: "index_mobility_calls_on_geo_country_id"
+    t.index ["geo_state_id"], name: "index_mobility_calls_on_geo_state_id"
+    t.index ["research_group_id"], name: "index_mobility_calls_on_research_group_id"
+    t.index ["researcher_id"], name: "index_mobility_calls_on_researcher_id"
+    t.index ["state_id"], name: "index_mobility_calls_on_state_id"
   end
 
   create_table "new_animal_breeds", force: :cascade do |t|
@@ -3006,6 +3035,13 @@ ActiveRecord::Schema.define(version: 2022_02_28_141408) do
   add_foreign_key "magazine_editions", "subtypes", column: "category_id"
   add_foreign_key "magazine_editions", "users", column: "created_by"
   add_foreign_key "magazine_editions", "users", column: "updated_by"
+  add_foreign_key "mobility_calls", "calls"
+  add_foreign_key "mobility_calls", "geo_cities"
+  add_foreign_key "mobility_calls", "geo_countries"
+  add_foreign_key "mobility_calls", "geo_states"
+  add_foreign_key "mobility_calls", "research_groups"
+  add_foreign_key "mobility_calls", "researchers"
+  add_foreign_key "mobility_calls", "subtypes", column: "state_id"
   add_foreign_key "new_animal_breeds", "colciencias_calls"
   add_foreign_key "new_animal_breeds", "geo_cities"
   add_foreign_key "new_animal_breeds", "geo_countries"
@@ -5553,5 +5589,97 @@ ActiveRecord::Schema.define(version: 2022_02_28_141408) do
      FROM ((roles r
        LEFT JOIN subtypes st ON ((r.role_type_id = st.id)))
        LEFT JOIN roles rp ON ((r.parent_id = rp.id)));
+  SQL
+  create_view "siciud.action_plan_print_views", sql_definition: <<-SQL
+      SELECT ap.id,
+      ( SELECT json_agg(json_build_object('id', faap.id, 'advanced_total', faap.advanced_total, 'goal', faap.goal, 'order', faap."order", 'indicator_description', i.ind_description, 'indicator_product_type_name', si.st_name, 'plan_type_name', spt.st_name, 'product_type_name', spr.st_name)) AS json_agg
+             FROM ((((form_a_act_plans faap
+               LEFT JOIN indicators i ON ((i.id = faap.indicator_id)))
+               LEFT JOIN subtypes si ON ((si.id = i.subtype_id)))
+               LEFT JOIN subtypes spt ON ((spt.id = faap.plan_type_id)))
+               LEFT JOIN subtypes spr ON ((spr.id = faap.product_type_id)))
+            WHERE ((faap.action_plan_id = ap.id) AND (faap.plan_type_id = 781) AND (faap.active = true))) AS form_a_training_processes,
+      ( SELECT json_agg(json_build_object('id', faap.id, 'advanced_total', faap.advanced_total, 'goal', faap.goal, 'order', faap."order", 'indicator_description', i.ind_description, 'indicator_product_type_name', si.st_name, 'plan_type_name', spt.st_name, 'product_type_name', spr.st_name)) AS json_agg
+             FROM ((((form_a_act_plans faap
+               LEFT JOIN indicators i ON ((i.id = faap.indicator_id)))
+               LEFT JOIN subtypes si ON ((si.id = i.subtype_id)))
+               LEFT JOIN subtypes spt ON ((spt.id = faap.plan_type_id)))
+               LEFT JOIN subtypes spr ON ((spr.id = faap.product_type_id)))
+            WHERE ((faap.action_plan_id = ap.id) AND (faap.plan_type_id = 782) AND (faap.active = true))) AS form_a_resulting_products,
+      ( SELECT json_agg(json_build_object('id', fbap.id, 'financing_type_name', sft.st_name, 'description', fbap.description, 'goal_state_name', sgs.st_name, 'goal_achieved', fbap.goal_achieved, 'order', fbap."order", 'plan_type_name', spt.st_name)) AS json_agg
+             FROM (((form_b_act_plans fbap
+               LEFT JOIN subtypes sft ON ((sft.id = fbap.financing_type_id)))
+               LEFT JOIN subtypes sgs ON ((sgs.id = fbap.goal_state_id)))
+               LEFT JOIN subtypes spt ON ((spt.id = fbap.plan_type_id)))
+            WHERE ((fbap.action_plan_id = ap.id) AND (fbap.plan_type_id = 825) AND (fbap.active = true))) AS form_b_research_projects,
+      ( SELECT json_agg(json_build_object('id', fcap.id, 'product_type_name', sprd.st_name, 'description', fcap.description, 'goal', fcap.goal, 'advanced_total', fcap.advanced_total, 'order', fcap."order", 'plan_type_name', spt.st_name, 'child_prod_type_name', schprd.st_name)) AS json_agg
+             FROM (((form_c_act_plans fcap
+               LEFT JOIN subtypes sprd ON ((sprd.id = fcap.product_type_id)))
+               LEFT JOIN subtypes spt ON ((spt.id = fcap.plan_type_id)))
+               LEFT JOIN subtypes schprd ON ((schprd.id = fcap.child_prod_type_id)))
+            WHERE ((fcap.action_plan_id = ap.id) AND (fcap.plan_type_id = 826) AND (fcap.active = true))) AS form_c_potential_products,
+      ( SELECT json_agg(json_build_object('id', fdap.id, 'name', fdap.name, 'description', fdap.description, 'goal_state_name', sgs.st_name, 'goal_achieved', fdap.goal_achieved, 'order', fdap."order", 'plan_type_name', spt.st_name, 'cine_detailed_areas', ( SELECT json_agg(json_build_object('cine_detailed_area_name', cda.name)) AS json_agg
+                     FROM (cine_detailed_areas_form_d_act_plans cdafdap
+                       LEFT JOIN cine_detailed_areas cda ON ((cdafdap.cine_detailed_area_id = cda.id)))
+                    WHERE (cdafdap.form_d_act_plan_id = fdap.id)), 'cine_specific_areas', ( SELECT json_agg(json_build_object('cine_specific_area_name', csa.name)) AS json_agg
+                     FROM (cine_specific_areas_form_d_act_plans csafdap
+                       LEFT JOIN cine_specific_areas csa ON ((csafdap.cine_specific_area_id = csa.id)))
+                    WHERE (csafdap.form_d_act_plan_id = fdap.id)), 'oecd_disciplines', ( SELECT json_agg(json_build_object('oecd_discipline_name', od.name)) AS json_agg
+                     FROM (form_d_act_plans_oecd_disciplines fdapod
+                       LEFT JOIN oecd_disciplines od ON ((fdapod.oecd_discipline_id = od.id)))
+                    WHERE (fdapod.form_d_act_plan_id = fdap.id)), 'oecd_knowledge_subareas', ( SELECT json_agg(json_build_object('oecd_knowledge_subarea_name', oks.name)) AS json_agg
+                     FROM (form_d_act_plans_oecd_knowledge_subareas fdapoks
+                       LEFT JOIN oecd_knowledge_subareas oks ON ((fdapoks.oecd_knowledge_subarea_id = oks.id)))
+                    WHERE (fdapoks.form_d_act_plan_id = fdap.id)), 'snies', ( SELECT json_agg(json_build_object('snies_name', sd.st_name)) AS json_agg
+                     FROM (form_d_act_plans_snies fdaps
+                       LEFT JOIN subtypes sd ON ((fdaps.subtype_id = sd.id)))
+                    WHERE (fdaps.form_d_act_plan_id = fdap.id)))) AS json_agg
+             FROM ((form_d_act_plans fdap
+               LEFT JOIN subtypes sgs ON ((sgs.id = fdap.goal_state_id)))
+               LEFT JOIN subtypes spt ON ((spt.id = fdap.plan_type_id)))
+            WHERE ((fdap.action_plan_id = ap.id) AND (fdap.plan_type_id = 828) AND (fdap.active = true))) AS form_d_academic_networks,
+      ( SELECT json_agg(json_build_object('id', feap.id, 'type_description', feap.type_description, 'description', feap.description, 'inventoried', feap.inventoried, 'inventory_plate', feap.inventory_plate, 'plan_type_name', spt.st_name, 'classification_name', sc.st_name)) AS json_agg
+             FROM ((form_e_act_plans feap
+               LEFT JOIN subtypes spt ON ((spt.id = feap.plan_type_id)))
+               LEFT JOIN subtypes sc ON ((sc.id = feap.classification_id)))
+            WHERE ((feap.action_plan_id = ap.id) AND (feap.plan_type_id = 827) AND (feap.active = true))) AS form_e_resources
+     FROM action_plans ap;
+  SQL
+  create_view "siciud.complete_mobility_calls", sql_definition: <<-SQL
+      SELECT mc.id,
+      mc.call_id,
+      c.call_name,
+      mc.event_date,
+      mc.event_edition_number,
+      mc.event_name,
+      mc.event_page,
+      mc.geo_city_id,
+      gcity.name AS geo_city_name,
+      mc.geo_country_id,
+      gctry.name AS geo_country_name,
+      mc.geo_state_id,
+      gs.name AS geo_state_name,
+      mc.is_organizer,
+      mc.paper_name,
+      mc.research_group_id,
+      rg.name AS research_group_name,
+      mc.researcher_id,
+      r.oas_researcher_id,
+      mc.state_id,
+      ss.st_name AS state_name,
+      mc.total,
+      mc.active,
+      mc.created_by,
+      mc.updated_by,
+      mc.created_at,
+      mc.updated_at
+     FROM (((((((mobility_calls mc
+       LEFT JOIN calls c ON ((c.id = mc.call_id)))
+       LEFT JOIN geo_cities gcity ON ((mc.geo_city_id = gcity.id)))
+       LEFT JOIN geo_states gs ON ((mc.geo_state_id = gs.id)))
+       LEFT JOIN geo_countries gctry ON ((mc.geo_country_id = gctry.id)))
+       LEFT JOIN research_groups rg ON ((mc.research_group_id = rg.id)))
+       LEFT JOIN researchers r ON ((mc.researcher_id = r.id)))
+       LEFT JOIN subtypes ss ON ((mc.state_id = ss.id)));
   SQL
 end

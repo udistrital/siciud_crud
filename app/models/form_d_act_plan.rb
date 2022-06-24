@@ -11,7 +11,6 @@ class FormDActPlan < ApplicationRecord
   has_and_belongs_to_many :cine_detailed_areas
   has_and_belongs_to_many :oecd_knowledge_subareas
   has_and_belongs_to_many :oecd_disciplines
-  has_and_belongs_to_many :snies
 
   has_and_belongs_to_many :research_focuses,
                           join_table: 'research_focuses_form_d_plans',
