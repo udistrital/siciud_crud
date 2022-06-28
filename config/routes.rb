@@ -252,7 +252,9 @@ Rails.application.routes.draw do
 
       resources :mobility_calls, only: [:index, :show, :update] do
         resources :documents, only: [:index, :show, :create, :update]
+        resources :mobility_call_criteria, only: [:index, :create]
       end
+      resources :mobility_call_criteria, only: [:show, :update]
 
       # Endpoint to proposals
       get "/proposals/by-internal-member", to: "proposals#index_by_researcher"
