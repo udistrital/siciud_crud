@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_06_17_194719) do
+ActiveRecord::Schema.define(version: 2022_06_28_190146) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1504,6 +1504,21 @@ ActiveRecord::Schema.define(version: 2022_06_17_194719) do
     t.index ["geo_state_id"], name: "index_magazine_editions_on_geo_state_id"
     t.index ["research_group_id"], name: "index_magazine_editions_on_research_group_id"
     t.index ["updated_by"], name: "index_magazine_editions_on_updated_by"
+  end
+
+  create_table "mobility_call_criteria", force: :cascade do |t|
+    t.bigint "mobility_call_id"
+    t.bigint "call_eval_criterion_id"
+    t.integer "value", limit: 2
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["call_eval_criterion_id"], name: "index_mobility_call_criteria_on_call_eval_criterion_id"
+    t.index ["created_by"], name: "index_mobility_call_criteria_on_created_by"
+    t.index ["mobility_call_id"], name: "index_mobility_call_criteria_on_mobility_call_id"
+    t.index ["updated_by"], name: "index_mobility_call_criteria_on_updated_by"
   end
 
   create_table "mobility_calls", force: :cascade do |t|
@@ -3035,6 +3050,10 @@ ActiveRecord::Schema.define(version: 2022_06_17_194719) do
   add_foreign_key "magazine_editions", "subtypes", column: "category_id"
   add_foreign_key "magazine_editions", "users", column: "created_by"
   add_foreign_key "magazine_editions", "users", column: "updated_by"
+  add_foreign_key "mobility_call_criteria", "call_eval_criteria"
+  add_foreign_key "mobility_call_criteria", "mobility_calls"
+  add_foreign_key "mobility_call_criteria", "users", column: "created_by"
+  add_foreign_key "mobility_call_criteria", "users", column: "updated_by"
   add_foreign_key "mobility_calls", "calls"
   add_foreign_key "mobility_calls", "geo_cities"
   add_foreign_key "mobility_calls", "geo_countries"
@@ -5681,5 +5700,19 @@ ActiveRecord::Schema.define(version: 2022_06_17_194719) do
        LEFT JOIN research_groups rg ON ((mc.research_group_id = rg.id)))
        LEFT JOIN researchers r ON ((mc.researcher_id = r.id)))
        LEFT JOIN subtypes ss ON ((mc.state_id = ss.id)));
+  SQL
+  create_view "siciud.complete_mobility_call_criteria", sql_definition: <<-SQL
+      SELECT mc.id,
+      ( SELECT json_agg(json_build_object('id', mcc.id, 'call_eval_criterion_id', mcc.call_eval_criterion_id, 'eval_criterion_id', cec.eval_criterion_id, 'eval_criterion_name', scec.st_name, 'value', mcc.value, 'active', mcc.active, 'created_by', mcc.created_by, 'updated_by', mcc.updated_by)) AS json_agg
+             FROM ((mobility_call_criteria mcc
+               LEFT JOIN call_eval_criteria cec ON ((mcc.call_eval_criterion_id = cec.id)))
+               LEFT JOIN subtypes scec ON ((cec.eval_criterion_id = scec.id)))
+            WHERE (mcc.mobility_call_id = mc.id)) AS criteria,
+      mc.active,
+      mc.created_by,
+      mc.updated_by,
+      mc.created_at,
+      mc.updated_at
+     FROM mobility_calls mc;
   SQL
 end

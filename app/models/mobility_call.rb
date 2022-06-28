@@ -10,6 +10,7 @@ class MobilityCall < ApplicationRecord
   belongs_to :state, class_name: 'Subtype', foreign_key: 'state_id', optional: true
 
   has_many :documents, as: :documentable
+  has_many :mobility_call_criteria
 
   validates :total, numericality: {
     greater_than_or_equal_to: 0,
