@@ -4,6 +4,8 @@ class CallEvalCriterion < ApplicationRecord
   belongs_to :call
   belongs_to :eval_criterion, class_name: 'Subtype', foreign_key: 'eval_criterion_id'
 
+  has_many :mobility_call_criteria
+
   validates :cec_percentage, presence: true
   validates :cec_percentage, numericality: { greater_than_or_equal_to: 0,
                                              less_than_or_equal_to: 100 }
