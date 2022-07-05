@@ -23,13 +23,23 @@ module Api
 
       # POST /mobility_calls/:mobility_call_id/mobility_call_criteria
       def create
-        custom_params = mob_call_cri_params_to_create
-        custom_params[:criteria] = params[:mobility_call_criterion][:criteria]
-        save_criteria(@mobility_call, custom_params)
-        @mobility_call_criteria = CompleteMobilityCallCriterion.where(
-          "id = ?", params[:mobility_call_id]
-        )
-        render json: @mobility_call_criteria, status: :ok
+        begin
+          custom_params = mob_call_cri_params_to_create
+          custom_params[:criteria] = params[:mobility_call_criterion][:criteria]
+          save_criteria(@mobility_call, custom_params)
+          @mobility_call_criteria = CompleteMobilityCallCriterion.where(
+            "id = ?", params[:mobility_call_id]
+          )
+          render json: @mobility_call_criteria, status: :ok
+        rescue ActiveRecord::RecordInvalid => e_ri
+          render json: {
+            error: "Error creating or updating criteria. Details: #{e_ri}"
+          }, status: :unprocessable_entity
+        rescue => e
+          render json: {
+            error: e
+          }, status: :unprocessable_entity
+        end
       end
 
       # PATCH/PUT /mobility_call_criteria/1
@@ -81,21 +91,19 @@ module Api
       end
 
       def save_criterion(mobility_call, criterion)
-        if not criterion["id"].nil?
-          @mobility_call_criterion = MobilityCallCriterion.find(criterion["id"])
-          if @mobility_call_criterion.update(criterion)
-            puts "Updated"
+        begin
+          if not criterion["id"].nil?
+            @mobility_call_criterion = MobilityCallCriterion.find(criterion["id"])
+            @mobility_call_criterion.update!(criterion)
           else
-            render json: @mobility_call_criterion.errors, status: :unprocessable_entity
+            @mobility_call_criterion = mobility_call.mobility_call_criteria.new(
+              criterion.except(:id, "id"))
+            @mobility_call_criterion.save!
           end
-        else
-          @mobility_call_criterion = mobility_call.mobility_call_criteria.new(
-            criterion.except(:id, "id"))
-          if @mobility_call_criterion.save
-            puts "Created"
-          else
-            render json: @mobility_call_criterion.errors, status: :unprocessable_entity
-          end
+        rescue ActiveRecord::RecordInvalid => e_ri
+          raise "#{e_ri}. Criterion #{criterion.to_s}"
+        rescue => e
+          raise e
         end
       end
     end
