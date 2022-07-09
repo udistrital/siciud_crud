@@ -96,8 +96,8 @@ module Api
       def proposal_params_to_create
         params.require(:proposal).permit(:title, :description, :duration,
                                          :proposal_status_id, :project_type_id,
-                                         :geo_city_id, :geo_country_id,
-                                         :geo_state_id, :active, :created_by,
+                                         :total_amount_in_kind, :total_amount_request_cidc,
+                                         :total_counterparty, :active, :created_by,
                                          entity_ids: [], dependency_ids: [],
                                          research_group_ids: [])
       end
@@ -105,8 +105,8 @@ module Api
       def proposal_params_to_update
         params.require(:proposal).permit(:title, :description, :duration,
                                          :proposal_status_id, :project_type_id,
-                                         :call_id, :geo_city_id, :geo_country_id,
-                                         :geo_state_id, :active, :updated_by,
+                                         :call_id, :total_amount_in_kind, :total_amount_request_cidc,
+                                         :total_counterparty, :active, :updated_by,
                                          entity_ids: [], dependency_ids: [],
                                          research_group_ids: [])
       end

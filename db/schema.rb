@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_06_28_190146) do
+ActiveRecord::Schema.define(version: 2022_07_09_200940) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1899,19 +1899,16 @@ ActiveRecord::Schema.define(version: 2022_06_28_190146) do
     t.bigint "proposal_status_id"
     t.bigint "project_type_id"
     t.bigint "call_id"
-    t.bigint "geo_city_id"
-    t.bigint "geo_country_id"
-    t.bigint "geo_state_id"
     t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.float "total_amount_request_cidc"
+    t.float "total_counterparty"
+    t.float "total_amount_in_kind"
     t.index ["call_id"], name: "index_proposals_on_call_id"
     t.index ["created_by"], name: "index_proposals_on_created_by"
-    t.index ["geo_city_id"], name: "index_proposals_on_geo_city_id"
-    t.index ["geo_country_id"], name: "index_proposals_on_geo_country_id"
-    t.index ["geo_state_id"], name: "index_proposals_on_geo_state_id"
     t.index ["project_type_id"], name: "index_proposals_on_project_type_id"
     t.index ["proposal_status_id"], name: "index_proposals_on_proposal_status_id"
     t.index ["updated_by"], name: "index_proposals_on_updated_by"
@@ -3146,9 +3143,6 @@ ActiveRecord::Schema.define(version: 2022_06_28_190146) do
   add_foreign_key "professional_roles", "users", column: "created_by"
   add_foreign_key "professional_roles", "users", column: "updated_by"
   add_foreign_key "proposals", "calls"
-  add_foreign_key "proposals", "geo_cities"
-  add_foreign_key "proposals", "geo_countries"
-  add_foreign_key "proposals", "geo_states"
   add_foreign_key "proposals", "subtypes", column: "project_type_id"
   add_foreign_key "proposals", "subtypes", column: "proposal_status_id"
   add_foreign_key "proposals", "users", column: "created_by"
@@ -5458,46 +5452,6 @@ ActiveRecord::Schema.define(version: 2022_06_28_190146) do
        LEFT JOIN subtypes spt ON ((fcap.product_type_id = spt.id)))
        LEFT JOIN subtypes scpt ON ((fcap.child_prod_type_id = scpt.id)));
   SQL
-  create_view "siciud.complete_proposals", sql_definition: <<-SQL
-      SELECT p.id,
-      p.title,
-      p.call_id,
-      c.call_code,
-      c.call_name,
-      p.description,
-      p.duration,
-      p.geo_city_id,
-      gcty.name AS geo_city_name,
-      p.geo_country_id,
-      gctr.name AS geo_country_name,
-      p.geo_state_id,
-      gs.name AS geo_state_name,
-      p.project_type_id,
-      spj.st_name AS project_type_name,
-      p.proposal_status_id,
-      sps.st_name AS proposal_status_name,
-      ( SELECT count(*) AS count
-             FROM dependencies_proposals
-            WHERE (p.id = dependencies_proposals.proposal_id)) AS total_dependencies,
-      ( SELECT count(*) AS count
-             FROM entities_proposals
-            WHERE (p.id = entities_proposals.proposal_id)) AS total_entities,
-      ( SELECT count(*) AS count
-             FROM proposals_research_groups
-            WHERE (p.id = proposals_research_groups.proposal_id)) AS total_research_groups,
-      p.active,
-      p.created_at,
-      p.updated_at,
-      p.created_by,
-      p.updated_by
-     FROM ((((((proposals p
-       LEFT JOIN calls c ON ((p.call_id = c.id)))
-       LEFT JOIN geo_cities gcty ON ((p.geo_city_id = gcty.id)))
-       LEFT JOIN geo_countries gctr ON ((p.geo_country_id = gctr.id)))
-       LEFT JOIN geo_states gs ON ((p.geo_state_id = gs.id)))
-       LEFT JOIN subtypes spj ON ((p.project_type_id = spj.id)))
-       LEFT JOIN subtypes sps ON ((p.proposal_status_id = sps.id)));
-  SQL
   create_view "siciud.complete_form_e_act_ps", sql_definition: <<-SQL
       SELECT feap.id,
       feap.action_plan_id,
@@ -5549,50 +5503,6 @@ ActiveRecord::Schema.define(version: 2022_06_28_190146) do
       imp.updated_at
      FROM (internal_members_proposals imp
        LEFT JOIN roles r ON ((r.id = imp.role_id)));
-  SQL
-  create_view "siciud.complete_proposals_by_int_members", sql_definition: <<-SQL
-      SELECT p.id,
-      p.title,
-      p.call_id,
-      c.call_code,
-      c.call_name,
-      p.description,
-      p.duration,
-      p.geo_city_id,
-      gcty.name AS geo_city_name,
-      p.geo_country_id,
-      gctr.name AS geo_country_name,
-      p.geo_state_id,
-      gs.name AS geo_state_name,
-      p.project_type_id,
-      spj.st_name AS project_type_name,
-      p.proposal_status_id,
-      sps.st_name AS proposal_status_name,
-      ( SELECT count(*) AS count
-             FROM dependencies_proposals
-            WHERE (p.id = dependencies_proposals.proposal_id)) AS total_dependencies,
-      ( SELECT count(*) AS count
-             FROM entities_proposals
-            WHERE (p.id = entities_proposals.proposal_id)) AS total_entities,
-      ( SELECT count(*) AS count
-             FROM proposals_research_groups
-            WHERE (p.id = proposals_research_groups.proposal_id)) AS total_research_groups,
-      imp.researcher_id,
-      res.identification_number AS researcher_identification,
-      p.active,
-      p.created_at,
-      p.updated_at,
-      p.created_by,
-      p.updated_by
-     FROM ((((((((proposals p
-       LEFT JOIN calls c ON ((p.call_id = c.id)))
-       LEFT JOIN geo_cities gcty ON ((p.geo_city_id = gcty.id)))
-       LEFT JOIN geo_countries gctr ON ((p.geo_country_id = gctr.id)))
-       LEFT JOIN geo_states gs ON ((p.geo_state_id = gs.id)))
-       LEFT JOIN subtypes spj ON ((p.project_type_id = spj.id)))
-       LEFT JOIN subtypes sps ON ((p.proposal_status_id = sps.id)))
-       LEFT JOIN internal_members_proposals imp ON ((p.id = imp.proposal_id)))
-       LEFT JOIN researchers res ON ((imp.researcher_id = res.id)));
   SQL
   create_view "siciud.complete_roles", sql_definition: <<-SQL
       SELECT r.name,
@@ -5714,5 +5624,59 @@ ActiveRecord::Schema.define(version: 2022_06_28_190146) do
       mc.created_at,
       mc.updated_at
      FROM mobility_calls mc;
+  SQL
+  create_view "siciud.complete_proposals", sql_definition: <<-SQL
+      SELECT p.id,
+      p.title,
+      p.call_id,
+      c.call_code,
+      c.call_name,
+      p.description,
+      p.duration,
+      p.project_type_id,
+      spj.st_name AS project_type_name,
+      p.proposal_status_id,
+      sps.st_name AS proposal_status_name,
+      ( SELECT count(*) AS count
+             FROM proposals_research_groups
+            WHERE (p.id = proposals_research_groups.proposal_id)) AS total_research_groups,
+      p.active,
+      p.created_at,
+      p.updated_at,
+      p.created_by,
+      p.updated_by
+     FROM (((proposals p
+       LEFT JOIN calls c ON ((p.call_id = c.id)))
+       LEFT JOIN subtypes spj ON ((p.project_type_id = spj.id)))
+       LEFT JOIN subtypes sps ON ((p.proposal_status_id = sps.id)));
+  SQL
+  create_view "siciud.complete_proposals_by_int_members", sql_definition: <<-SQL
+      SELECT p.id,
+      p.title,
+      p.call_id,
+      c.call_code,
+      c.call_name,
+      p.description,
+      p.duration,
+      p.project_type_id,
+      spj.st_name AS project_type_name,
+      p.proposal_status_id,
+      sps.st_name AS proposal_status_name,
+      ( SELECT count(*) AS count
+             FROM proposals_research_groups
+            WHERE (p.id = proposals_research_groups.proposal_id)) AS total_research_groups,
+      imp.researcher_id,
+      res.identification_number AS researcher_identification,
+      p.active,
+      p.created_at,
+      p.updated_at,
+      p.created_by,
+      p.updated_by
+     FROM (((((proposals p
+       LEFT JOIN calls c ON ((p.call_id = c.id)))
+       LEFT JOIN subtypes spj ON ((p.project_type_id = spj.id)))
+       LEFT JOIN subtypes sps ON ((p.proposal_status_id = sps.id)))
+       LEFT JOIN internal_members_proposals imp ON ((p.id = imp.proposal_id)))
+       LEFT JOIN researchers res ON ((imp.researcher_id = res.id)));
   SQL
 end

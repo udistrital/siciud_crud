@@ -14,18 +14,6 @@ module Swagger::ProposalSchema
         key :type, :integer
         key :format, :int64
       end
-      property :geo_city_id do
-        key :type, :integer
-        key :format, :int64
-      end
-      property :geo_country_id do
-        key :type, :integer
-        key :format, :int64
-      end
-      property :geo_state_id do
-        key :type, :integer
-        key :format, :int64
-      end
       property :proposal_status_id do
         key :type, :integer
         key :format, :int64
@@ -33,6 +21,24 @@ module Swagger::ProposalSchema
       property :project_type_id do
         key :type, :integer
         key :format, :int64
+      end
+      property :total_amount_in_kind do
+        key :type, :number
+        key :format, :float
+        key :minimum, 0
+        key :exclusiveMinimum, false
+      end
+      property :total_amount_request_cidc do
+        key :type, :number
+        key :format, :float
+        key :minimum, 0
+        key :exclusiveMinimum, false
+      end
+      property :total_counterparty do
+        key :type, :number
+        key :format, :float
+        key :minimum, 0
+        key :exclusiveMinimum, false
       end
       property :active do
         key :type, :boolean
@@ -140,15 +146,6 @@ module Swagger::ProposalSchema
             key :type, :string
           end
           property :call_name do
-            key :type, :string
-          end
-          property :geo_city_name do
-            key :type, :string
-          end
-          property :geo_country_name do
-            key :type, :string
-          end
-          property :geo_state_name do
             key :type, :string
           end
           property :proposal_status_name do

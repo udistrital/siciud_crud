@@ -5,9 +5,6 @@ class Proposal < ApplicationRecord
   belongs_to :project_type, class_name: 'Subtype', foreign_key: 'project_type_id'
 
   belongs_to :call
-  belongs_to :geo_city, optional: true
-  belongs_to :geo_country
-  belongs_to :geo_state
 
   has_and_belongs_to_many :entities
   has_and_belongs_to_many :dependencies
@@ -16,7 +13,8 @@ class Proposal < ApplicationRecord
   has_many :external_members_proposals
   has_many :internal_members_proposals
 
-  validates :duration, numericality: { greater_than_or_equal_to: 0 }
+  validates :duration, :total_amount_in_kind, :total_amount_request_cidc,
+            :total_counterparty, numericality: { greater_than_or_equal_to: 0 }
 
   # Tracking inherited from ApplicationRecord, fields:
   # created_by and updated_by, see application_record.rb

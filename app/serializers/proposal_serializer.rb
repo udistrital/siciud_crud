@@ -2,6 +2,8 @@ class ProposalSerializer < ActiveModel::Serializer
   attributes :id, :title, :call_id, :call_code, :call_name,
              :description, :duration, :entities, :proposal_status_id,
              :proposal_status_name, :project_type_id, :project_type_name,
+             :total_amount_in_kind, :total_amount_request_cidc,
+             :total_counterparty,
              :active, :created_by, :updated_by, :created_at, :updated_at
 
   def call_name
