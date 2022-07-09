@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_07_09_200940) do
+ActiveRecord::Schema.define(version: 2022_07_09_220351) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1914,11 +1914,6 @@ ActiveRecord::Schema.define(version: 2022_07_09_200940) do
     t.index ["updated_by"], name: "index_proposals_on_updated_by"
   end
 
-  create_table "proposals_research_groups", id: false, force: :cascade do |t|
-    t.bigint "proposal_id", null: false
-    t.bigint "research_group_id", null: false
-  end
-
   create_table "protocol_acts", force: :cascade do |t|
     t.string "title"
     t.date "date_of_publication"
@@ -2171,6 +2166,22 @@ ActiveRecord::Schema.define(version: 2022_07_09_200940) do
     t.index ["parent_id"], name: "index_research_groups_on_parent_id"
     t.index ["snies_id"], name: "index_research_groups_on_snies_id"
     t.index ["updated_by"], name: "index_research_groups_on_updated_by"
+  end
+
+  create_table "research_groups_proposals", force: :cascade do |t|
+    t.bigint "research_group_id"
+    t.bigint "proposal_id"
+    t.bigint "role_id"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_research_groups_proposals_on_created_by"
+    t.index ["proposal_id"], name: "index_research_groups_proposals_on_proposal_id"
+    t.index ["research_group_id"], name: "index_research_groups_proposals_on_research_group_id"
+    t.index ["role_id"], name: "index_research_groups_proposals_on_role_id"
+    t.index ["updated_by"], name: "index_research_groups_proposals_on_updated_by"
   end
 
   create_table "research_groups_research_networks", force: :cascade do |t|
@@ -3217,6 +3228,11 @@ ActiveRecord::Schema.define(version: 2022_07_09_200940) do
   add_foreign_key "research_groups", "subtypes", column: "snies_id"
   add_foreign_key "research_groups", "users", column: "created_by"
   add_foreign_key "research_groups", "users", column: "updated_by"
+  add_foreign_key "research_groups_proposals", "proposals"
+  add_foreign_key "research_groups_proposals", "research_groups"
+  add_foreign_key "research_groups_proposals", "users", column: "created_by"
+  add_foreign_key "research_groups_proposals", "users", column: "role_id"
+  add_foreign_key "research_groups_proposals", "users", column: "updated_by"
   add_foreign_key "research_groups_research_networks", "research_groups"
   add_foreign_key "research_groups_research_networks", "research_networks"
   add_foreign_key "research_groups_research_networks", "users", column: "created_by"
@@ -5625,31 +5641,6 @@ ActiveRecord::Schema.define(version: 2022_07_09_200940) do
       mc.updated_at
      FROM mobility_calls mc;
   SQL
-  create_view "siciud.complete_proposals", sql_definition: <<-SQL
-      SELECT p.id,
-      p.title,
-      p.call_id,
-      c.call_code,
-      c.call_name,
-      p.description,
-      p.duration,
-      p.project_type_id,
-      spj.st_name AS project_type_name,
-      p.proposal_status_id,
-      sps.st_name AS proposal_status_name,
-      ( SELECT count(*) AS count
-             FROM proposals_research_groups
-            WHERE (p.id = proposals_research_groups.proposal_id)) AS total_research_groups,
-      p.active,
-      p.created_at,
-      p.updated_at,
-      p.created_by,
-      p.updated_by
-     FROM (((proposals p
-       LEFT JOIN calls c ON ((p.call_id = c.id)))
-       LEFT JOIN subtypes spj ON ((p.project_type_id = spj.id)))
-       LEFT JOIN subtypes sps ON ((p.proposal_status_id = sps.id)));
-  SQL
   create_view "siciud.complete_proposals_by_int_members", sql_definition: <<-SQL
       SELECT p.id,
       p.title,
@@ -5662,9 +5653,6 @@ ActiveRecord::Schema.define(version: 2022_07_09_200940) do
       spj.st_name AS project_type_name,
       p.proposal_status_id,
       sps.st_name AS proposal_status_name,
-      ( SELECT count(*) AS count
-             FROM proposals_research_groups
-            WHERE (p.id = proposals_research_groups.proposal_id)) AS total_research_groups,
       imp.researcher_id,
       res.identification_number AS researcher_identification,
       p.active,
@@ -5678,5 +5666,42 @@ ActiveRecord::Schema.define(version: 2022_07_09_200940) do
        LEFT JOIN subtypes sps ON ((p.proposal_status_id = sps.id)))
        LEFT JOIN internal_members_proposals imp ON ((p.id = imp.proposal_id)))
        LEFT JOIN researchers res ON ((imp.researcher_id = res.id)));
+  SQL
+  create_view "siciud.complete_proposals", sql_definition: <<-SQL
+      SELECT p.id,
+      p.title,
+      p.call_id,
+      c.call_code,
+      c.call_name,
+      p.description,
+      p.duration,
+      p.project_type_id,
+      spj.st_name AS project_type_name,
+      p.proposal_status_id,
+      sps.st_name AS proposal_status_name,
+      p.active,
+      p.created_at,
+      p.updated_at,
+      p.created_by,
+      p.updated_by
+     FROM (((proposals p
+       LEFT JOIN calls c ON ((p.call_id = c.id)))
+       LEFT JOIN subtypes spj ON ((p.project_type_id = spj.id)))
+       LEFT JOIN subtypes sps ON ((p.proposal_status_id = sps.id)));
+  SQL
+  create_view "siciud.complete_research_unit_proposals", sql_definition: <<-SQL
+      SELECT rgp.id,
+      ( SELECT json_build_object('id', research_groups.id, 'name', research_groups.name, 'acronym', research_groups.acronym) AS json_build_object
+             FROM research_groups
+            WHERE (rgp.research_group_id = research_groups.id)) AS research_unit,
+      rgp.proposal_id,
+      rgp.role_id,
+      sr.st_name AS role_name,
+      rgp.created_by,
+      rgp.updated_by,
+      rgp.created_at,
+      rgp.updated_at
+     FROM (research_groups_proposals rgp
+       LEFT JOIN subtypes sr ON ((sr.id = rgp.role_id)));
   SQL
 end

@@ -81,9 +81,6 @@ module Api
         if params[:proposal].has_key?(:dependency_ids)
           proposal.dependency_ids = (params[:proposal][:dependency_ids]).map(&:to_i).uniq
         end
-        if params[:proposal].has_key?(:research_group_ids)
-          proposal.research_group_ids = (params[:proposal][:research_group_ids]).map(&:to_i).uniq
-        end
         proposal
       end
 
@@ -98,8 +95,7 @@ module Api
                                          :proposal_status_id, :project_type_id,
                                          :total_amount_in_kind, :total_amount_request_cidc,
                                          :total_counterparty, :active, :created_by,
-                                         entity_ids: [], dependency_ids: [],
-                                         research_group_ids: [])
+                                         entity_ids: [], dependency_ids: [])
       end
 
       def proposal_params_to_update
@@ -107,8 +103,7 @@ module Api
                                          :proposal_status_id, :project_type_id,
                                          :call_id, :total_amount_in_kind, :total_amount_request_cidc,
                                          :total_counterparty, :active, :updated_by,
-                                         entity_ids: [], dependency_ids: [],
-                                         research_group_ids: [])
+                                         entity_ids: [], dependency_ids: [])
       end
     end
   end

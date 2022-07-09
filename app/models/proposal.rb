@@ -8,10 +8,11 @@ class Proposal < ApplicationRecord
 
   has_and_belongs_to_many :entities
   has_and_belongs_to_many :dependencies
-  has_and_belongs_to_many :research_groups
+  # has_and_belongs_to_many :research_groups
 
   has_many :external_members_proposals
   has_many :internal_members_proposals
+  has_many :research_groups_proposals
 
   validates :duration, :total_amount_in_kind, :total_amount_request_cidc,
             :total_counterparty, numericality: { greater_than_or_equal_to: 0 }

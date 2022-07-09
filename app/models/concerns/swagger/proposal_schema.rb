@@ -69,13 +69,6 @@ module Swagger::ProposalSchema
                 key :format, :int64
               end
             end
-            property :research_group_ids do
-              key :type, :array
-              items do
-                key :type, :integer
-                key :format, :int64
-              end
-            end
             property :created_by do
               key :type, :integer
               key :format, :int64
@@ -106,13 +99,6 @@ module Swagger::ProposalSchema
               end
             end
             property :entity_ids do
-              key :type, :array
-              items do
-                key :type, :integer
-                key :format, :int64
-              end
-            end
-            property :research_group_ids do
               key :type, :array
               items do
                 key :type, :integer
@@ -201,18 +187,6 @@ module Swagger::ProposalSchema
                     key :type, :string
                   end
                 end
-              end
-            end
-          end
-          property :research_groups do
-            key :type, :array
-            items do
-              property :research_group_id do
-                key :type, :integer
-                key :format, :int64
-              end
-              property :research_group_name do
-                key :type, :string
               end
             end
           end

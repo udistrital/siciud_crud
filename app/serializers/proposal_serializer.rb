@@ -75,19 +75,6 @@ class ProposalSerializer < ActiveModel::Serializer
     complete_entities
   end
 
-  def research_groups
-    complete_rgs = []
-    research_groups_list = self.object.research_groups
-    research_groups_list.each do |rg|
-      data = {
-        "research_group_id": rg.id,
-        "research_group_name": rg.name
-      }
-      complete_rgs.append(data)
-    end
-    complete_rgs
-  end
-
   def proposal_status_name
     proposal_status = self.object.proposal_status
     if proposal_status
