@@ -2,7 +2,7 @@ module Swagger::ChapterApi
   extend ActiveSupport::Concern
   include Swagger::Blocks
 
-  CHAPTER_CONTEXT_ARRAY = [:calls]
+  CHAPTER_CONTEXT_ARRAY = [:calls, :proposals]
   included do
     swagger_path '/{chapter_context}/{chapter_context_id}/chapters/{id}' do
       operation :get do
