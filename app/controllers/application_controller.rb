@@ -60,6 +60,9 @@ class ApplicationController < ActionController::API
     if params[:call_id]
       id = params[:call_id]
       @chapter_context = Call.find(id)
+    elsif params[:proposal_id]
+      id = params[:proposal_id]
+      @chapter_context = Proposal.find(id)
     end
   end
 
