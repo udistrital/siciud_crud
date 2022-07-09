@@ -8,7 +8,13 @@ module Api
 
       # GET /proposal/:proposal_id/internal_members_proposals
       def index
-        @internal_members_proposals = CompleteIntMembersProposal.all
+        if params[:proposal_id]
+          @internal_members_proposals = CompleteIntMembersProposal.where(
+            "proposal_id = ?", params[:proposal_id]
+          )
+        else
+          @internal_members_proposals = CompleteIntMembersProposal.all
+        end
 
         @internal_members_proposals = DxService.load(@internal_members_proposals,
                                                      params)
