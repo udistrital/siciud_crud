@@ -2,6 +2,8 @@ class ProposalSerializer < ActiveModel::Serializer
   attributes :id, :title, :call_id, :call_code, :call_name,
              :description, :duration, :entities, :proposal_status_id,
              :proposal_status_name, :project_type_id, :project_type_name,
+             :total_amount_in_kind, :total_amount_request_cidc,
+             :total_counterparty,
              :active, :created_by, :updated_by, :created_at, :updated_at
 
   def call_name
@@ -71,19 +73,6 @@ class ProposalSerializer < ActiveModel::Serializer
       end
     end
     complete_entities
-  end
-
-  def research_groups
-    complete_rgs = []
-    research_groups_list = self.object.research_groups
-    research_groups_list.each do |rg|
-      data = {
-        "research_group_id": rg.id,
-        "research_group_name": rg.name
-      }
-      complete_rgs.append(data)
-    end
-    complete_rgs
   end
 
   def proposal_status_name

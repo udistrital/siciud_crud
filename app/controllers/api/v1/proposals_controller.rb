@@ -81,9 +81,6 @@ module Api
         if params[:proposal].has_key?(:dependency_ids)
           proposal.dependency_ids = (params[:proposal][:dependency_ids]).map(&:to_i).uniq
         end
-        if params[:proposal].has_key?(:research_group_ids)
-          proposal.research_group_ids = (params[:proposal][:research_group_ids]).map(&:to_i).uniq
-        end
         proposal
       end
 
@@ -96,19 +93,17 @@ module Api
       def proposal_params_to_create
         params.require(:proposal).permit(:title, :description, :duration,
                                          :proposal_status_id, :project_type_id,
-                                         :geo_city_id, :geo_country_id,
-                                         :geo_state_id, :active, :created_by,
-                                         entity_ids: [], dependency_ids: [],
-                                         research_group_ids: [])
+                                         :total_amount_in_kind, :total_amount_request_cidc,
+                                         :total_counterparty, :active, :created_by,
+                                         entity_ids: [], dependency_ids: [])
       end
 
       def proposal_params_to_update
         params.require(:proposal).permit(:title, :description, :duration,
                                          :proposal_status_id, :project_type_id,
-                                         :call_id, :geo_city_id, :geo_country_id,
-                                         :geo_state_id, :active, :updated_by,
-                                         entity_ids: [], dependency_ids: [],
-                                         research_group_ids: [])
+                                         :call_id, :total_amount_in_kind, :total_amount_request_cidc,
+                                         :total_counterparty, :active, :updated_by,
+                                         entity_ids: [], dependency_ids: [])
       end
     end
   end

@@ -8,6 +8,7 @@ class InternalMembersProposalSerializer < AbstractMemberSerializer
     res = self.object.researcher
     if res
       {
+        "id": res.id,
         "orcid_id": res.orcid_id,
         "oas_researcher_id": res.oas_researcher_id,
         "phone_number_one": res.phone_number_one,
