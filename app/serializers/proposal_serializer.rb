@@ -1,9 +1,9 @@
 class ProposalSerializer < ActiveModel::Serializer
   attributes :id, :title, :call_id, :call_code, :call_name,
-             :description, :duration, :entities, :proposal_status_id,
+             :description, :duration, :geo_cities, :proposal_status_id,
              :proposal_status_name, :project_type_id, :project_type_name,
-             :total_amount_in_kind, :total_amount_request_cidc,
-             :total_counterparty,
+             :research_focuses, :total_amount_in_kind,
+             :total_amount_request_cidc, :total_counterparty,
              :active, :created_by, :updated_by, :created_at, :updated_at
 
   def call_name
@@ -73,6 +73,36 @@ class ProposalSerializer < ActiveModel::Serializer
       end
     end
     complete_entities
+  end
+
+  def geo_cities
+    complete_geo_cities = []
+    geo_list = self.object.geo_cities
+    if geo_list
+      geo_list.each do |geo|
+        data = {
+          "geo_city_id": geo.id,
+          "geo_city_name": geo.name
+        }
+        complete_geo_cities.append(data)
+      end
+    end
+    complete_geo_cities
+  end
+
+  def research_focuses
+    complete_research_focuses = []
+    research_focus_list = self.object.research_focuses
+    if research_focus_list
+      research_focus_list.each do |rf|
+        data = {
+          "research_focus_id": rf.id,
+          "research_focus_name": rf.st_name
+        }
+        complete_research_focuses.append(data)
+      end
+    end
+    complete_research_focuses
   end
 
   def proposal_status_name

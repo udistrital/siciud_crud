@@ -51,7 +51,7 @@ module Api
           @proposal = @call.proposals.new(
             proposal_params_to_create.except(:entity_ids,
                                              :dependency_ids,
-                                             :research_group_ids)
+                                             :geo_city_ids)
           )
 
           if @proposal.save
@@ -75,6 +75,12 @@ module Api
       private
 
       def save_supplementary_data(proposal)
+        if params[:proposal].has_key?(:geo_city_ids)
+          proposal.geo_city_ids = (params[:proposal][:geo_city_ids]).map(&:to_i).uniq
+        end
+        if params[:proposal].has_key?(:research_focus_ids)
+          proposal.research_focus_ids = (params[:proposal][:research_focus_ids]).map(&:to_i).uniq
+        end
         if params[:proposal].has_key?(:entity_ids)
           proposal.entity_ids = (params[:proposal][:entity_ids]).map(&:to_i).uniq
         end
@@ -95,6 +101,7 @@ module Api
                                          :proposal_status_id, :project_type_id,
                                          :total_amount_in_kind, :total_amount_request_cidc,
                                          :total_counterparty, :active, :created_by,
+                                         geo_city_ids: [], research_focus_ids: [],
                                          entity_ids: [], dependency_ids: [])
       end
 
@@ -103,6 +110,7 @@ module Api
                                          :proposal_status_id, :project_type_id,
                                          :call_id, :total_amount_in_kind, :total_amount_request_cidc,
                                          :total_counterparty, :active, :updated_by,
+                                         geo_city_ids: [], research_focus_ids: [],
                                          entity_ids: [], dependency_ids: [])
       end
     end

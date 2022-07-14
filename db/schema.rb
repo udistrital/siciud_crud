@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_07_09_220351) do
+ActiveRecord::Schema.define(version: 2022_07_14_183021) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -997,6 +997,11 @@ ActiveRecord::Schema.define(version: 2022_07_09_220351) do
     t.index ["created_by"], name: "index_geo_cities_on_created_by"
     t.index ["geo_state_id"], name: "index_geo_cities_on_geo_state_id"
     t.index ["updated_by"], name: "index_geo_cities_on_updated_by"
+  end
+
+  create_table "geo_cities_proposals", id: false, force: :cascade do |t|
+    t.bigint "geo_city_id", null: false
+    t.bigint "proposal_id", null: false
   end
 
   create_table "geo_countries", force: :cascade do |t|
@@ -2121,6 +2126,11 @@ ActiveRecord::Schema.define(version: 2022_07_09_220351) do
   create_table "research_focuses_networks", id: false, force: :cascade do |t|
     t.bigint "subtype_id", null: false
     t.bigint "research_network_id", null: false
+  end
+
+  create_table "research_focuses_proposals", id: false, force: :cascade do |t|
+    t.bigint "subtype_id", null: false
+    t.bigint "proposal_id", null: false
   end
 
   create_table "research_focuses_units", id: false, force: :cascade do |t|
@@ -5667,28 +5677,6 @@ ActiveRecord::Schema.define(version: 2022_07_09_220351) do
        LEFT JOIN internal_members_proposals imp ON ((p.id = imp.proposal_id)))
        LEFT JOIN researchers res ON ((imp.researcher_id = res.id)));
   SQL
-  create_view "siciud.complete_proposals", sql_definition: <<-SQL
-      SELECT p.id,
-      p.title,
-      p.call_id,
-      c.call_code,
-      c.call_name,
-      p.description,
-      p.duration,
-      p.project_type_id,
-      spj.st_name AS project_type_name,
-      p.proposal_status_id,
-      sps.st_name AS proposal_status_name,
-      p.active,
-      p.created_at,
-      p.updated_at,
-      p.created_by,
-      p.updated_by
-     FROM (((proposals p
-       LEFT JOIN calls c ON ((p.call_id = c.id)))
-       LEFT JOIN subtypes spj ON ((p.project_type_id = spj.id)))
-       LEFT JOIN subtypes sps ON ((p.proposal_status_id = sps.id)));
-  SQL
   create_view "siciud.complete_research_unit_proposals", sql_definition: <<-SQL
       SELECT rgp.id,
       ( SELECT json_build_object('id', research_groups.id, 'name', research_groups.name, 'acronym', research_groups.acronym) AS json_build_object
@@ -5703,5 +5691,36 @@ ActiveRecord::Schema.define(version: 2022_07_09_220351) do
       rgp.updated_at
      FROM (research_groups_proposals rgp
        LEFT JOIN subtypes sr ON ((sr.id = rgp.role_id)));
+  SQL
+  create_view "siciud.complete_proposals", sql_definition: <<-SQL
+      SELECT p.id,
+      p.title,
+      p.call_id,
+      c.call_code,
+      c.call_name,
+      p.description,
+      p.duration,
+      p.project_type_id,
+      spj.st_name AS project_type_name,
+      p.proposal_status_id,
+      sps.st_name AS proposal_status_name,
+      ( SELECT count(*) AS count
+             FROM geo_cities_proposals
+            WHERE (p.id = geo_cities_proposals.proposal_id)) AS total_geo_cities,
+      ( SELECT count(*) AS count
+             FROM research_focuses_proposals
+            WHERE (p.id = research_focuses_proposals.proposal_id)) AS total_research_focuses,
+      ( SELECT count(*) AS count
+             FROM research_groups_proposals
+            WHERE (p.id = research_groups_proposals.proposal_id)) AS total_research_groups,
+      p.active,
+      p.created_at,
+      p.updated_at,
+      p.created_by,
+      p.updated_by
+     FROM (((proposals p
+       LEFT JOIN calls c ON ((p.call_id = c.id)))
+       LEFT JOIN subtypes spj ON ((p.project_type_id = spj.id)))
+       LEFT JOIN subtypes sps ON ((p.proposal_status_id = sps.id)));
   SQL
 end
