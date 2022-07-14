@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_07_09_220351) do
+ActiveRecord::Schema.define(version: 2022_07_10_205728) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -997,6 +997,11 @@ ActiveRecord::Schema.define(version: 2022_07_09_220351) do
     t.index ["created_by"], name: "index_geo_cities_on_created_by"
     t.index ["geo_state_id"], name: "index_geo_cities_on_geo_state_id"
     t.index ["updated_by"], name: "index_geo_cities_on_updated_by"
+  end
+
+  create_table "geo_cities_proposals", id: false, force: :cascade do |t|
+    t.bigint "geo_city_id", null: false
+    t.bigint "proposal_id", null: false
   end
 
   create_table "geo_countries", force: :cascade do |t|
@@ -2121,6 +2126,11 @@ ActiveRecord::Schema.define(version: 2022_07_09_220351) do
   create_table "research_focuses_networks", id: false, force: :cascade do |t|
     t.bigint "subtype_id", null: false
     t.bigint "research_network_id", null: false
+  end
+
+  create_table "research_focuses_proposals", id: false, force: :cascade do |t|
+    t.bigint "subtype_id", null: false
+    t.bigint "proposal_id", null: false
   end
 
   create_table "research_focuses_units", id: false, force: :cascade do |t|
