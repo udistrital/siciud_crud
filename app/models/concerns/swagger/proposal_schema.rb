@@ -208,14 +208,6 @@ module Swagger::ProposalSchema
             key :type, :integer
             key :format, :int64
           end
-          property :total_dependencies do
-            key :type, :integer
-            key :format, :int64
-          end
-          property :total_entities do
-            key :type, :integer
-            key :format, :int64
-          end
           property :total_research_groups do
             key :type, :integer
             key :format, :int64
