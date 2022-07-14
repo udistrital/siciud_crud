@@ -212,7 +212,7 @@ module Swagger::EventApi
         response 200 do
           key :description, 'event response'
           schema do
-            key :'$ref', :eventOutput
+            key :'$ref', :EventOutput
           end
         end
         response 422 do
