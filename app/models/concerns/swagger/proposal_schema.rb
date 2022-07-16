@@ -13,14 +13,19 @@ module Swagger::ProposalSchema
       property :duration do
         key :type, :integer
         key :format, :int64
+        key :minimum, 0
+        key :exclusiveMinimum, false
+        key :example, 1
       end
       property :proposal_status_id do
         key :type, :integer
         key :format, :int64
+        key :example, 1
       end
       property :project_type_id do
         key :type, :integer
         key :format, :int64
+        key :example, 1
       end
       property :total_amount_in_kind do
         key :type, :number
@@ -55,12 +60,28 @@ module Swagger::ProposalSchema
         end
         schema do
           property :proposal do
+            property :evaluator_ids do
+              key :type, :array
+              items do
+                key :type, :integer
+                key :format, :int64
+              end
+              key :example, [1, 2]
+            end
             property :geo_city_ids do
               key :type, :array
               items do
                 key :type, :integer
                 key :format, :int64
               end
+              key :example, [1, 2]
+            end
+            property :keywords do
+              key :type, :array
+              items do
+                key :type, :string
+              end
+              key :example, %w[keyword_1 keyword_2]
             end
             property :research_focus_ids do
               key :type, :array
@@ -68,10 +89,12 @@ module Swagger::ProposalSchema
                 key :type, :integer
                 key :format, :int64
               end
+              key :example, [1, 2]
             end
             property :created_by do
               key :type, :integer
               key :format, :int64
+              key :example, 10
             end
           end
         end
@@ -90,6 +113,15 @@ module Swagger::ProposalSchema
             property :call_id do
               key :type, :integer
               key :format, :int64
+              key :example, 1
+            end
+            property :evaluator_ids do
+              key :type, :array
+              items do
+                key :type, :integer
+                key :format, :int64
+              end
+              key :example, [1, 2]
             end
             property :geo_city_ids do
               key :type, :array
@@ -97,17 +129,27 @@ module Swagger::ProposalSchema
                 key :type, :integer
                 key :format, :int64
               end
+              key :example, [1, 2]
+            end
+            property :keywords do
+              key :type, :array
+              items do
+                key :type, :string
+              end
+              key :example, %w[keyword_1 keyword_2]
             end
             property :research_focus_ids do
               key :type, :array
               items do
                 key :type, :integer
                 key :format, :int64
+                key :example, [1, 2]
               end
             end
             property :updated_by do
               key :type, :integer
               key :format, :int64
+              key :example, 10
             end
           end
         end
@@ -166,17 +208,60 @@ module Swagger::ProposalSchema
           key :'$ref', :BaseProposalOutput
         end
         schema do
-          property :geo_cities do
+          # property :geo_cities do
+          #   key :type, :array
+          #   items do
+          #     property :geo_city_id do
+          #       key :type, :integer
+          #       key :format, :int64
+          #     end
+          #     property :geo_city_name do
+          #       key :type, :string
+          #     end
+          #   end
+          # end
+          property :evaluator_ids do
             key :type, :array
             items do
-              property :geo_city_id do
-                key :type, :integer
-                key :format, :int64
-              end
-              property :geo_city_name do
-                key :type, :string
-              end
+              key :type, :integer
+              key :format, :int64
             end
+            key :example, [1, 2]
+          end
+          property :geo_city_ids do
+            key :type, :array
+            items do
+              key :type, :integer
+              key :format, :int64
+            end
+            key :example, [1, 2]
+          end
+          property :geo_country_id do
+            key :type, :integer
+            key :format, :int64
+          end
+          property :geo_country_ids do
+            key :type, :array
+            items do
+              key :type, :integer
+              key :format, :int64
+            end
+            key :example, [1, 2]
+          end
+          property :geo_state_ids do
+            key :type, :array
+            items do
+              key :type, :integer
+              key :format, :int64
+            end
+            key :example, [1, 2]
+          end
+          property :keywords do
+            key :type, :array
+            items do
+              key :type, :string
+            end
+            key :example, %w[keyword_1 keyword_2]
           end
           property :research_focuses do
             key :type, :array
