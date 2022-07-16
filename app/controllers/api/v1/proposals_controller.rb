@@ -90,6 +90,9 @@ module Api
         if params[:proposal].has_key?(:dependency_ids)
           proposal.dependency_ids = (params[:proposal][:dependency_ids]).map(&:to_i).uniq
         end
+        if params[:proposal].has_key?(:evaluator_ids)
+          proposal.evaluator_ids = (params[:proposal][:evaluator_ids]).map(&:to_i).uniq
+        end
         proposal
       end
 
@@ -114,7 +117,7 @@ module Api
                                          :total_amount_in_kind, :total_amount_request_cidc,
                                          :total_counterparty, :active, :created_by,
                                          geo_city_ids: [], research_focus_ids: [],
-                                         keywords: [],
+                                         evaluator_ids: [], keywords: [],
                                          entity_ids: [], dependency_ids: [])
       end
 
@@ -124,7 +127,7 @@ module Api
                                          :call_id, :total_amount_in_kind, :total_amount_request_cidc,
                                          :total_counterparty, :active, :updated_by,
                                          geo_city_ids: [], research_focus_ids: [],
-                                         keywords: [],
+                                         evaluator_ids: [], keywords: [],
                                          entity_ids: [], dependency_ids: [])
       end
     end

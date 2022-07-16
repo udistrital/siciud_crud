@@ -132,10 +132,7 @@ module Swagger::KeywordApi
         response 200 do
           key :description, 'keyword response'
           schema do
-            key :type, :array
-            items do
-              key :'$ref', :KeywordDxOutput
-            end
+            key :'$ref', :KeywordDxOutput
           end
         end
         response :default do

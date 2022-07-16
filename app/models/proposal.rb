@@ -7,6 +7,7 @@ class Proposal < ApplicationRecord
   belongs_to :call
 
   has_and_belongs_to_many :entities
+  has_and_belongs_to_many :evaluators
   has_and_belongs_to_many :dependencies
   has_and_belongs_to_many :geo_cities
   has_and_belongs_to_many :keywords
