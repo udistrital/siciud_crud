@@ -1,9 +1,9 @@
 class ProposalSerializer < ActiveModel::Serializer
   attributes :id, :title, :call_id, :call_code, :call_name,
              :description, :duration, :geo_country_ids, :geo_country_id,
-             :geo_state_ids, :geo_city_ids, :keywords, :proposal_status_id,
-             :proposal_status_name, :project_type_id, :project_type_name,
-             :research_focuses, :total_amount_in_kind,
+             :geo_state_ids, :geo_city_ids, :evaluator_ids, :keywords,
+             :proposal_status_id, :proposal_status_name, :project_type_id,
+             :project_type_name, :research_focuses, :total_amount_in_kind,
              :total_amount_request_cidc, :total_counterparty,
              :active, :created_by, :updated_by, :created_at, :updated_at
 

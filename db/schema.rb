@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_07_16_164728) do
+ActiveRecord::Schema.define(version: 2022_07_16_213732) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -727,6 +727,26 @@ ActiveRecord::Schema.define(version: 2022_07_16_164728) do
     t.bigint "entity_id", null: false
   end
 
+  create_table "evaluators", force: :cascade do |t|
+    t.string "name"
+    t.string "cvlac_url"
+    t.string "email"
+    t.string "mobile"
+    t.string "academic_title"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_evaluators_on_created_by"
+    t.index ["updated_by"], name: "index_evaluators_on_updated_by"
+  end
+
+  create_table "evaluators_proposals", id: false, force: :cascade do |t|
+    t.bigint "evaluator_id", null: false
+    t.bigint "proposal_id", null: false
+  end
+
   create_table "events", force: :cascade do |t|
     t.string "eve_name"
     t.date "eve_start_date"
@@ -1407,11 +1427,13 @@ ActiveRecord::Schema.define(version: 2022_07_16_164728) do
 
   create_table "keywords", force: :cascade do |t|
     t.string "name"
-    t.boolean "active"
+    t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_keywords_on_created_by"
+    t.index ["updated_by"], name: "index_keywords_on_updated_by"
   end
 
   create_table "keywords_proposals", id: false, force: :cascade do |t|
@@ -2884,6 +2906,8 @@ ActiveRecord::Schema.define(version: 2022_07_16_164728) do
   add_foreign_key "entities", "subtypes", column: "legal_nature_id"
   add_foreign_key "entities", "users", column: "created_by"
   add_foreign_key "entities", "users", column: "updated_by"
+  add_foreign_key "evaluators", "users", column: "created_by"
+  add_foreign_key "evaluators", "users", column: "updated_by"
   add_foreign_key "events", "colciencias_calls"
   add_foreign_key "events", "geo_cities"
   add_foreign_key "events", "geo_countries"
@@ -3052,6 +3076,8 @@ ActiveRecord::Schema.define(version: 2022_07_16_164728) do
   add_foreign_key "ip_livestock_breeds", "subtypes", column: "category_id"
   add_foreign_key "ip_livestock_breeds", "users", column: "created_by"
   add_foreign_key "ip_livestock_breeds", "users", column: "updated_by"
+  add_foreign_key "keywords", "users", column: "created_by"
+  add_foreign_key "keywords", "users", column: "updated_by"
   add_foreign_key "knowledge_networks", "colciencias_calls"
   add_foreign_key "knowledge_networks", "geo_cities"
   add_foreign_key "knowledge_networks", "geo_countries"
