@@ -19,6 +19,7 @@ Rails.application.routes.draw do
       resources :geo_states, only: [:index, :show] do
         resources :geo_cities, only: [:index, :show]
       end
+      resources :keywords, only: [:index, :show, :create, :update]
 
       # Types and Subtypes endpoints
       resources :types, only: [:index, :show, :create, :update]
