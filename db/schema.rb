@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_07_14_183021) do
+ActiveRecord::Schema.define(version: 2022_07_16_164728) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1403,6 +1403,20 @@ ActiveRecord::Schema.define(version: 2022_07_14_183021) do
     t.index ["geo_state_id"], name: "index_ip_livestock_breeds_on_geo_state_id"
     t.index ["research_group_id"], name: "index_ip_livestock_breeds_on_research_group_id"
     t.index ["updated_by"], name: "index_ip_livestock_breeds_on_updated_by"
+  end
+
+  create_table "keywords", force: :cascade do |t|
+    t.string "name"
+    t.boolean "active"
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "keywords_proposals", id: false, force: :cascade do |t|
+    t.bigint "keyword_id", null: false
+    t.bigint "proposal_id", null: false
   end
 
   create_table "knowledge_networks", force: :cascade do |t|
