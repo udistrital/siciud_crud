@@ -9,6 +9,7 @@ class Proposal < ApplicationRecord
   has_and_belongs_to_many :entities
   has_and_belongs_to_many :dependencies
   has_and_belongs_to_many :geo_cities
+  has_and_belongs_to_many :keywords
   has_and_belongs_to_many :research_focuses,
                           join_table: 'research_focuses_proposals',
                           class_name: 'Subtype'
