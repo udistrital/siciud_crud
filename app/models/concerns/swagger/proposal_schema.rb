@@ -60,6 +60,14 @@ module Swagger::ProposalSchema
         end
         schema do
           property :proposal do
+            property :evaluator_ids do
+              key :type, :array
+              items do
+                key :type, :integer
+                key :format, :int64
+              end
+              key :example, [1, 2]
+            end
             property :geo_city_ids do
               key :type, :array
               items do
@@ -106,6 +114,14 @@ module Swagger::ProposalSchema
               key :type, :integer
               key :format, :int64
               key :example, 1
+            end
+            property :evaluator_ids do
+              key :type, :array
+              items do
+                key :type, :integer
+                key :format, :int64
+              end
+              key :example, [1, 2]
             end
             property :geo_city_ids do
               key :type, :array
@@ -204,6 +220,14 @@ module Swagger::ProposalSchema
           #     end
           #   end
           # end
+          property :evaluator_ids do
+            key :type, :array
+            items do
+              key :type, :integer
+              key :format, :int64
+            end
+            key :example, [1, 2]
+          end
           property :geo_city_ids do
             key :type, :array
             items do

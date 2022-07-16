@@ -33,10 +33,7 @@ module Swagger::ProposalApi
         response 200 do
           key :description, 'proposal response'
           schema do
-            key :type, :array
-            items do
-              key :'$ref', :ProposalDxOutput
-            end
+            key :'$ref', :ProposalDxOutput
           end
         end
         response :default do

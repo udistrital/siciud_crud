@@ -12,6 +12,8 @@ Rails.application.routes.draw do
 
       # General endpoints
       # Geo endpoints
+      resources :evaluators, only: [:index, :show, :create, :update]
+
       resources :geo_countries, only: [:index, :show] do
         resources :geo_states, only: [:index, :show]
         resources :geo_cities_by_countries, only: [:index]
