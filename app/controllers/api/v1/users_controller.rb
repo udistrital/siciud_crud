@@ -8,10 +8,6 @@ module Api
         active_in_body_params? user_params_to_deactivate
       end
 
-      rescue_from Exception do |e|
-        render json: { error: e.message }, status: :internal_error
-      end
-
       # GET /users
       def index
         if (user_id = params[:identification_number])

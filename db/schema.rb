@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_06_17_194719) do
+ActiveRecord::Schema.define(version: 2022_07_16_213732) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -727,6 +727,26 @@ ActiveRecord::Schema.define(version: 2022_06_17_194719) do
     t.bigint "entity_id", null: false
   end
 
+  create_table "evaluators", force: :cascade do |t|
+    t.string "name"
+    t.string "cvlac_url"
+    t.string "email"
+    t.string "mobile"
+    t.string "academic_title"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_evaluators_on_created_by"
+    t.index ["updated_by"], name: "index_evaluators_on_updated_by"
+  end
+
+  create_table "evaluators_proposals", id: false, force: :cascade do |t|
+    t.bigint "evaluator_id", null: false
+    t.bigint "proposal_id", null: false
+  end
+
   create_table "events", force: :cascade do |t|
     t.string "eve_name"
     t.date "eve_start_date"
@@ -997,6 +1017,11 @@ ActiveRecord::Schema.define(version: 2022_06_17_194719) do
     t.index ["created_by"], name: "index_geo_cities_on_created_by"
     t.index ["geo_state_id"], name: "index_geo_cities_on_geo_state_id"
     t.index ["updated_by"], name: "index_geo_cities_on_updated_by"
+  end
+
+  create_table "geo_cities_proposals", id: false, force: :cascade do |t|
+    t.bigint "geo_city_id", null: false
+    t.bigint "proposal_id", null: false
   end
 
   create_table "geo_countries", force: :cascade do |t|
@@ -1400,6 +1425,22 @@ ActiveRecord::Schema.define(version: 2022_06_17_194719) do
     t.index ["updated_by"], name: "index_ip_livestock_breeds_on_updated_by"
   end
 
+  create_table "keywords", force: :cascade do |t|
+    t.string "name"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_keywords_on_created_by"
+    t.index ["updated_by"], name: "index_keywords_on_updated_by"
+  end
+
+  create_table "keywords_proposals", id: false, force: :cascade do |t|
+    t.bigint "keyword_id", null: false
+    t.bigint "proposal_id", null: false
+  end
+
   create_table "knowledge_networks", force: :cascade do |t|
     t.string "name"
     t.date "start_date"
@@ -1504,6 +1545,21 @@ ActiveRecord::Schema.define(version: 2022_06_17_194719) do
     t.index ["geo_state_id"], name: "index_magazine_editions_on_geo_state_id"
     t.index ["research_group_id"], name: "index_magazine_editions_on_research_group_id"
     t.index ["updated_by"], name: "index_magazine_editions_on_updated_by"
+  end
+
+  create_table "mobility_call_criteria", force: :cascade do |t|
+    t.bigint "mobility_call_id"
+    t.bigint "call_eval_criterion_id"
+    t.integer "value", limit: 2
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["call_eval_criterion_id"], name: "index_mobility_call_criteria_on_call_eval_criterion_id"
+    t.index ["created_by"], name: "index_mobility_call_criteria_on_created_by"
+    t.index ["mobility_call_id"], name: "index_mobility_call_criteria_on_mobility_call_id"
+    t.index ["updated_by"], name: "index_mobility_call_criteria_on_updated_by"
   end
 
   create_table "mobility_calls", force: :cascade do |t|
@@ -1884,27 +1940,19 @@ ActiveRecord::Schema.define(version: 2022_06_17_194719) do
     t.bigint "proposal_status_id"
     t.bigint "project_type_id"
     t.bigint "call_id"
-    t.bigint "geo_city_id"
-    t.bigint "geo_country_id"
-    t.bigint "geo_state_id"
     t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.float "total_amount_request_cidc"
+    t.float "total_counterparty"
+    t.float "total_amount_in_kind"
     t.index ["call_id"], name: "index_proposals_on_call_id"
     t.index ["created_by"], name: "index_proposals_on_created_by"
-    t.index ["geo_city_id"], name: "index_proposals_on_geo_city_id"
-    t.index ["geo_country_id"], name: "index_proposals_on_geo_country_id"
-    t.index ["geo_state_id"], name: "index_proposals_on_geo_state_id"
     t.index ["project_type_id"], name: "index_proposals_on_project_type_id"
     t.index ["proposal_status_id"], name: "index_proposals_on_proposal_status_id"
     t.index ["updated_by"], name: "index_proposals_on_updated_by"
-  end
-
-  create_table "proposals_research_groups", id: false, force: :cascade do |t|
-    t.bigint "proposal_id", null: false
-    t.bigint "research_group_id", null: false
   end
 
   create_table "protocol_acts", force: :cascade do |t|
@@ -2116,6 +2164,11 @@ ActiveRecord::Schema.define(version: 2022_06_17_194719) do
     t.bigint "research_network_id", null: false
   end
 
+  create_table "research_focuses_proposals", id: false, force: :cascade do |t|
+    t.bigint "subtype_id", null: false
+    t.bigint "proposal_id", null: false
+  end
+
   create_table "research_focuses_units", id: false, force: :cascade do |t|
     t.bigint "subtype_id", null: false
     t.bigint "research_group_id", null: false
@@ -2159,6 +2212,22 @@ ActiveRecord::Schema.define(version: 2022_06_17_194719) do
     t.index ["parent_id"], name: "index_research_groups_on_parent_id"
     t.index ["snies_id"], name: "index_research_groups_on_snies_id"
     t.index ["updated_by"], name: "index_research_groups_on_updated_by"
+  end
+
+  create_table "research_groups_proposals", force: :cascade do |t|
+    t.bigint "research_group_id"
+    t.bigint "proposal_id"
+    t.bigint "role_id"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_research_groups_proposals_on_created_by"
+    t.index ["proposal_id"], name: "index_research_groups_proposals_on_proposal_id"
+    t.index ["research_group_id"], name: "index_research_groups_proposals_on_research_group_id"
+    t.index ["role_id"], name: "index_research_groups_proposals_on_role_id"
+    t.index ["updated_by"], name: "index_research_groups_proposals_on_updated_by"
   end
 
   create_table "research_groups_research_networks", force: :cascade do |t|
@@ -2837,6 +2906,8 @@ ActiveRecord::Schema.define(version: 2022_06_17_194719) do
   add_foreign_key "entities", "subtypes", column: "legal_nature_id"
   add_foreign_key "entities", "users", column: "created_by"
   add_foreign_key "entities", "users", column: "updated_by"
+  add_foreign_key "evaluators", "users", column: "created_by"
+  add_foreign_key "evaluators", "users", column: "updated_by"
   add_foreign_key "events", "colciencias_calls"
   add_foreign_key "events", "geo_cities"
   add_foreign_key "events", "geo_countries"
@@ -3005,6 +3076,8 @@ ActiveRecord::Schema.define(version: 2022_06_17_194719) do
   add_foreign_key "ip_livestock_breeds", "subtypes", column: "category_id"
   add_foreign_key "ip_livestock_breeds", "users", column: "created_by"
   add_foreign_key "ip_livestock_breeds", "users", column: "updated_by"
+  add_foreign_key "keywords", "users", column: "created_by"
+  add_foreign_key "keywords", "users", column: "updated_by"
   add_foreign_key "knowledge_networks", "colciencias_calls"
   add_foreign_key "knowledge_networks", "geo_cities"
   add_foreign_key "knowledge_networks", "geo_countries"
@@ -3035,6 +3108,10 @@ ActiveRecord::Schema.define(version: 2022_06_17_194719) do
   add_foreign_key "magazine_editions", "subtypes", column: "category_id"
   add_foreign_key "magazine_editions", "users", column: "created_by"
   add_foreign_key "magazine_editions", "users", column: "updated_by"
+  add_foreign_key "mobility_call_criteria", "call_eval_criteria"
+  add_foreign_key "mobility_call_criteria", "mobility_calls"
+  add_foreign_key "mobility_call_criteria", "users", column: "created_by"
+  add_foreign_key "mobility_call_criteria", "users", column: "updated_by"
   add_foreign_key "mobility_calls", "calls"
   add_foreign_key "mobility_calls", "geo_cities"
   add_foreign_key "mobility_calls", "geo_countries"
@@ -3127,9 +3204,6 @@ ActiveRecord::Schema.define(version: 2022_06_17_194719) do
   add_foreign_key "professional_roles", "users", column: "created_by"
   add_foreign_key "professional_roles", "users", column: "updated_by"
   add_foreign_key "proposals", "calls"
-  add_foreign_key "proposals", "geo_cities"
-  add_foreign_key "proposals", "geo_countries"
-  add_foreign_key "proposals", "geo_states"
   add_foreign_key "proposals", "subtypes", column: "project_type_id"
   add_foreign_key "proposals", "subtypes", column: "proposal_status_id"
   add_foreign_key "proposals", "users", column: "created_by"
@@ -3204,6 +3278,11 @@ ActiveRecord::Schema.define(version: 2022_06_17_194719) do
   add_foreign_key "research_groups", "subtypes", column: "snies_id"
   add_foreign_key "research_groups", "users", column: "created_by"
   add_foreign_key "research_groups", "users", column: "updated_by"
+  add_foreign_key "research_groups_proposals", "proposals"
+  add_foreign_key "research_groups_proposals", "research_groups"
+  add_foreign_key "research_groups_proposals", "users", column: "created_by"
+  add_foreign_key "research_groups_proposals", "users", column: "role_id"
+  add_foreign_key "research_groups_proposals", "users", column: "updated_by"
   add_foreign_key "research_groups_research_networks", "research_groups"
   add_foreign_key "research_groups_research_networks", "research_networks"
   add_foreign_key "research_groups_research_networks", "users", column: "created_by"
@@ -5439,46 +5518,6 @@ ActiveRecord::Schema.define(version: 2022_06_17_194719) do
        LEFT JOIN subtypes spt ON ((fcap.product_type_id = spt.id)))
        LEFT JOIN subtypes scpt ON ((fcap.child_prod_type_id = scpt.id)));
   SQL
-  create_view "siciud.complete_proposals", sql_definition: <<-SQL
-      SELECT p.id,
-      p.title,
-      p.call_id,
-      c.call_code,
-      c.call_name,
-      p.description,
-      p.duration,
-      p.geo_city_id,
-      gcty.name AS geo_city_name,
-      p.geo_country_id,
-      gctr.name AS geo_country_name,
-      p.geo_state_id,
-      gs.name AS geo_state_name,
-      p.project_type_id,
-      spj.st_name AS project_type_name,
-      p.proposal_status_id,
-      sps.st_name AS proposal_status_name,
-      ( SELECT count(*) AS count
-             FROM dependencies_proposals
-            WHERE (p.id = dependencies_proposals.proposal_id)) AS total_dependencies,
-      ( SELECT count(*) AS count
-             FROM entities_proposals
-            WHERE (p.id = entities_proposals.proposal_id)) AS total_entities,
-      ( SELECT count(*) AS count
-             FROM proposals_research_groups
-            WHERE (p.id = proposals_research_groups.proposal_id)) AS total_research_groups,
-      p.active,
-      p.created_at,
-      p.updated_at,
-      p.created_by,
-      p.updated_by
-     FROM ((((((proposals p
-       LEFT JOIN calls c ON ((p.call_id = c.id)))
-       LEFT JOIN geo_cities gcty ON ((p.geo_city_id = gcty.id)))
-       LEFT JOIN geo_countries gctr ON ((p.geo_country_id = gctr.id)))
-       LEFT JOIN geo_states gs ON ((p.geo_state_id = gs.id)))
-       LEFT JOIN subtypes spj ON ((p.project_type_id = spj.id)))
-       LEFT JOIN subtypes sps ON ((p.proposal_status_id = sps.id)));
-  SQL
   create_view "siciud.complete_form_e_act_ps", sql_definition: <<-SQL
       SELECT feap.id,
       feap.action_plan_id,
@@ -5530,50 +5569,6 @@ ActiveRecord::Schema.define(version: 2022_06_17_194719) do
       imp.updated_at
      FROM (internal_members_proposals imp
        LEFT JOIN roles r ON ((r.id = imp.role_id)));
-  SQL
-  create_view "siciud.complete_proposals_by_int_members", sql_definition: <<-SQL
-      SELECT p.id,
-      p.title,
-      p.call_id,
-      c.call_code,
-      c.call_name,
-      p.description,
-      p.duration,
-      p.geo_city_id,
-      gcty.name AS geo_city_name,
-      p.geo_country_id,
-      gctr.name AS geo_country_name,
-      p.geo_state_id,
-      gs.name AS geo_state_name,
-      p.project_type_id,
-      spj.st_name AS project_type_name,
-      p.proposal_status_id,
-      sps.st_name AS proposal_status_name,
-      ( SELECT count(*) AS count
-             FROM dependencies_proposals
-            WHERE (p.id = dependencies_proposals.proposal_id)) AS total_dependencies,
-      ( SELECT count(*) AS count
-             FROM entities_proposals
-            WHERE (p.id = entities_proposals.proposal_id)) AS total_entities,
-      ( SELECT count(*) AS count
-             FROM proposals_research_groups
-            WHERE (p.id = proposals_research_groups.proposal_id)) AS total_research_groups,
-      imp.researcher_id,
-      res.identification_number AS researcher_identification,
-      p.active,
-      p.created_at,
-      p.updated_at,
-      p.created_by,
-      p.updated_by
-     FROM ((((((((proposals p
-       LEFT JOIN calls c ON ((p.call_id = c.id)))
-       LEFT JOIN geo_cities gcty ON ((p.geo_city_id = gcty.id)))
-       LEFT JOIN geo_countries gctr ON ((p.geo_country_id = gctr.id)))
-       LEFT JOIN geo_states gs ON ((p.geo_state_id = gs.id)))
-       LEFT JOIN subtypes spj ON ((p.project_type_id = spj.id)))
-       LEFT JOIN subtypes sps ON ((p.proposal_status_id = sps.id)))
-       LEFT JOIN internal_members_proposals imp ON ((p.id = imp.proposal_id)))
-       LEFT JOIN researchers res ON ((imp.researcher_id = res.id)));
   SQL
   create_view "siciud.complete_roles", sql_definition: <<-SQL
       SELECT r.name,
@@ -5681,5 +5676,91 @@ ActiveRecord::Schema.define(version: 2022_06_17_194719) do
        LEFT JOIN research_groups rg ON ((mc.research_group_id = rg.id)))
        LEFT JOIN researchers r ON ((mc.researcher_id = r.id)))
        LEFT JOIN subtypes ss ON ((mc.state_id = ss.id)));
+  SQL
+  create_view "siciud.complete_mobility_call_criteria", sql_definition: <<-SQL
+      SELECT mc.id,
+      ( SELECT json_agg(json_build_object('id', mcc.id, 'call_eval_criterion_id', mcc.call_eval_criterion_id, 'eval_criterion_id', cec.eval_criterion_id, 'eval_criterion_name', scec.st_name, 'value', mcc.value, 'active', mcc.active, 'created_by', mcc.created_by, 'updated_by', mcc.updated_by)) AS json_agg
+             FROM ((mobility_call_criteria mcc
+               LEFT JOIN call_eval_criteria cec ON ((mcc.call_eval_criterion_id = cec.id)))
+               LEFT JOIN subtypes scec ON ((cec.eval_criterion_id = scec.id)))
+            WHERE (mcc.mobility_call_id = mc.id)) AS criteria,
+      mc.active,
+      mc.created_by,
+      mc.updated_by,
+      mc.created_at,
+      mc.updated_at
+     FROM mobility_calls mc;
+  SQL
+  create_view "siciud.complete_proposals_by_int_members", sql_definition: <<-SQL
+      SELECT p.id,
+      p.title,
+      p.call_id,
+      c.call_code,
+      c.call_name,
+      p.description,
+      p.duration,
+      p.project_type_id,
+      spj.st_name AS project_type_name,
+      p.proposal_status_id,
+      sps.st_name AS proposal_status_name,
+      imp.researcher_id,
+      res.identification_number AS researcher_identification,
+      p.active,
+      p.created_at,
+      p.updated_at,
+      p.created_by,
+      p.updated_by
+     FROM (((((proposals p
+       LEFT JOIN calls c ON ((p.call_id = c.id)))
+       LEFT JOIN subtypes spj ON ((p.project_type_id = spj.id)))
+       LEFT JOIN subtypes sps ON ((p.proposal_status_id = sps.id)))
+       LEFT JOIN internal_members_proposals imp ON ((p.id = imp.proposal_id)))
+       LEFT JOIN researchers res ON ((imp.researcher_id = res.id)));
+  SQL
+  create_view "siciud.complete_research_unit_proposals", sql_definition: <<-SQL
+      SELECT rgp.id,
+      ( SELECT json_build_object('id', research_groups.id, 'name', research_groups.name, 'acronym', research_groups.acronym) AS json_build_object
+             FROM research_groups
+            WHERE (rgp.research_group_id = research_groups.id)) AS research_unit,
+      rgp.proposal_id,
+      rgp.role_id,
+      sr.st_name AS role_name,
+      rgp.created_by,
+      rgp.updated_by,
+      rgp.created_at,
+      rgp.updated_at
+     FROM (research_groups_proposals rgp
+       LEFT JOIN subtypes sr ON ((sr.id = rgp.role_id)));
+  SQL
+  create_view "siciud.complete_proposals", sql_definition: <<-SQL
+      SELECT p.id,
+      p.title,
+      p.call_id,
+      c.call_code,
+      c.call_name,
+      p.description,
+      p.duration,
+      p.project_type_id,
+      spj.st_name AS project_type_name,
+      p.proposal_status_id,
+      sps.st_name AS proposal_status_name,
+      ( SELECT count(*) AS count
+             FROM geo_cities_proposals
+            WHERE (p.id = geo_cities_proposals.proposal_id)) AS total_geo_cities,
+      ( SELECT count(*) AS count
+             FROM research_focuses_proposals
+            WHERE (p.id = research_focuses_proposals.proposal_id)) AS total_research_focuses,
+      ( SELECT count(*) AS count
+             FROM research_groups_proposals
+            WHERE (p.id = research_groups_proposals.proposal_id)) AS total_research_groups,
+      p.active,
+      p.created_at,
+      p.updated_at,
+      p.created_by,
+      p.updated_by
+     FROM (((proposals p
+       LEFT JOIN calls c ON ((p.call_id = c.id)))
+       LEFT JOIN subtypes spj ON ((p.project_type_id = spj.id)))
+       LEFT JOIN subtypes sps ON ((p.proposal_status_id = sps.id)));
   SQL
 end

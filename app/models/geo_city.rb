@@ -12,4 +12,7 @@ class GeoCity < ApplicationRecord
   has_many :research_creation_work
   has_many :scientific_note
   has_many :vegetable_variety
+
+  has_and_belongs_to_many :proposals
+
 end

@@ -89,7 +89,7 @@ module Swagger::IntParticipantApi
           key :description, 'Internal Participant to update'
           key :required, true
           schema do
-            key :'$ref', :IntParticipantInput
+            key :'$ref', :IntParticipantInputPut
           end
         end
 
@@ -177,7 +177,7 @@ module Swagger::IntParticipantApi
           key :description, 'Internal Participant to register'
           key :required, true
           schema do
-            key :'$ref', :IntParticipantInput
+            key :'$ref', :IntParticipantInputPost
           end
         end
 

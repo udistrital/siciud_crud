@@ -1,9 +1,9 @@
-module Swagger::InternalMembersProposalSchema
+module Swagger::ResearchGroupsProposalSchema
   extend ActiveSupport::Concern
   include Swagger::Blocks
 
   included do
-    swagger_schema :InternalMembersProposal do
+    swagger_schema :ResearchGroupsProposal do
       property :role_id do
         key :type, :integer
         key :format, :int64
@@ -14,16 +14,16 @@ module Swagger::InternalMembersProposalSchema
       end
     end
 
-    swagger_schema :InternalMembersProposalInputPost do
+    swagger_schema :ResearchGroupsProposalInputPost do
       allOf do
         schema do
-          property :internal_members_proposal do
-            key :'$ref', :InternalMembersProposal
+          property :research_groups_proposal do
+            key :'$ref', :ResearchGroupsProposal
           end
         end
         schema do
-          property :internal_members_proposal do
-            property :researcher_id do
+          property :research_groups_proposal do
+            property :research_group_id do
               key :type, :integer
               key :format, :int64
             end
@@ -36,20 +36,20 @@ module Swagger::InternalMembersProposalSchema
       end
     end
 
-    swagger_schema :InternalMembersProposalInputPut do
+    swagger_schema :ResearchGroupsProposalInputPut do
       allOf do
         schema do
-          property :internal_members_proposal do
-            key :'$ref', :InternalMembersProposal
+          property :research_groups_proposal do
+            key :'$ref', :ResearchGroupsProposal
           end
         end
         schema do
-          property :internal_members_proposal do
+          property :research_groups_proposal do
             property :proposal_id do
               key :type, :integer
               key :format, :int64
             end
-            property :researcher_id do
+            property :research_group_id do
               key :type, :integer
               key :format, :int64
             end
@@ -62,10 +62,10 @@ module Swagger::InternalMembersProposalSchema
       end
     end
 
-    swagger_schema :InternalMembersProposalOutput do
+    swagger_schema :ResearchGroupsProposalOutput do
       allOf do
         schema do
-          key :'$ref', :InternalMembersProposal
+          key :'$ref', :ResearchGroupsProposal
         end
         schema do
           property :id do
@@ -79,34 +79,16 @@ module Swagger::InternalMembersProposalSchema
           property :role_name do
             key :type, :string
           end
-          property :researcher do
+          property :research_unit do
             key :type, :object
             property :id do
               key :type, :integer
               key :format, :int64
             end
-            property :identification_number do
+            property :name do
               key :type, :string
             end
-            property :orcid_id do
-              key :type, :string
-            end
-            property :mobile_number_one do
-              key :type, :string
-            end
-            property :mobile_number_two do
-              key :type, :string
-            end
-            property :phone_number_one do
-              key :type, :string
-            end
-            property :phone_number_two do
-              key :type, :string
-            end
-            property :address do
-              key :type, :string
-            end
-            property :oas_researcher_id do
+            property :acronym do
               key :type, :string
             end
           end
@@ -130,13 +112,13 @@ module Swagger::InternalMembersProposalSchema
       end
     end
 
-    swagger_schema :InternalMembersProposalDxOutput do
+    swagger_schema :ResearchGroupsProposalDxOutput do
       allOf do
         schema do
           property :data do
             key :type, :array
             items do
-              key :'$ref', :InternalMembersProposalOutput
+              key :'$ref', :ResearchGroupsProposalOutput
             end
           end
         end

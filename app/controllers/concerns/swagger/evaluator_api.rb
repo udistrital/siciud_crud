@@ -1,28 +1,28 @@
-module Swagger::CallApi
+module Swagger::EvaluatorApi
   extend ActiveSupport::Concern
   include Swagger::Blocks
 
   included do
-    swagger_path '/calls/{id}' do
+    swagger_path '/evaluators/{id}' do
       operation :get do
-        key :summary, 'Get a Call by ID'
-        key :description, 'Returns a single call'
-        key :operationId, :get_call_by_id
+        key :summary, 'Get a Evaluator by ID'
+        key :description, 'Returns a single evaluator'
+        key :operationId, :get_evaluator_by_id
         key :produces, ['application/json',]
-        key :tags, ['Calls']
+        key :tags, ['Evaluators']
 
         parameter name: :id do
           key :in, :path
-          key :description, 'ID of call to fetch'
+          key :description, 'ID of evaluator to fetch'
           key :required, true
           key :type, :integer
           key :format, :int64
         end
 
         response 200 do
-          key :description, 'call response'
+          key :description, 'evaluator response'
           schema do
-            key :'$ref', :CallOutput
+            key :'$ref', :EvaluatorOutput
           end
         end
         response 404 do
@@ -37,33 +37,33 @@ module Swagger::CallApi
       end
 
       operation :put do
-        key :summary, 'Update Call by ID'
-        key :description, 'Returns the updated call'
-        key :operationId, :update_call
+        key :summary, 'Update Evaluator by ID'
+        key :description, 'Returns the updated evaluator'
+        key :operationId, :update_evaluator
         key :produces, ['application/json',]
-        key :tags, ['Calls']
+        key :tags, ['Evaluators']
 
         parameter name: :id do
           key :in, :path
-          key :description, 'ID of call to fetch'
+          key :description, 'ID of evaluator to fetch'
           key :required, true
           key :type, :integer
           key :format, :int64
         end
 
-        parameter name: :call do
+        parameter name: :evaluator do
           key :in, :body
-          key :description, 'call to update'
+          key :description, 'Evaluator to update'
           key :required, true
           schema do
-            key :'$ref', :CallInputPut
+            key :'$ref', :EvaluatorInputPut
           end
         end
 
         response 200 do
-          key :description, 'call response'
+          key :description, 'evaluator response'
           schema do
-            key :'$ref', :CallOutput
+            key :'$ref', :EvaluatorOutput
           end
         end
         response 422 do
@@ -78,35 +78,35 @@ module Swagger::CallApi
       end
 
       operation :patch do
-        key :summary, 'Activate or deactivate a Call by ID'
-        key :description, 'Returns the activated/deactivated call'
-        key :operationId, :change_active_call
+        key :summary, 'Activate or deactivate a evaluator by ID'
+        key :description, 'Returns the activated/deactivated evaluator'
+        key :operationId, :change_active_evaluator
         key :produces, ['application/json',]
-        key :tags, ['Calls']
+        key :tags, ['Evaluators']
 
         parameter name: :id do
           key :in, :path
-          key :description, 'ID of call to fetch'
+          key :description, 'ID of evaluator to fetch'
           key :required, true
           key :type, :integer
           key :format, :int64
         end
 
-        parameter name: :call do
+        parameter name: :evaluator do
           key :in, :body
-          key :description, 'call to activate or deactivate'
+          key :description, 'evaluator to activate or deactivate'
           key :required, true
           schema do
-            property :call do
+            property :evaluator do
               key :'$ref', :ChangeActive
             end
           end
         end
 
         response 200 do
-          key :description, 'call response'
+          key :description, 'evaluator response'
           schema do
-            key :'$ref', :CallOutput
+            key :'$ref', :EvaluatorOutput
           end
         end
         response 422 do
@@ -121,18 +121,18 @@ module Swagger::CallApi
       end
     end
 
-    swagger_path '/calls' do
+    swagger_path '/evaluators' do
       operation :get do
-        key :summary, 'Get all Calls'
-        key :description, 'Returns all calls'
-        key :operationId, :get_calls
+        key :summary, 'Get all Evaluators'
+        key :description, 'Returns all evaluators'
+        key :operationId, :get_evaluators
         key :produces, ['application/json',]
-        key :tags, ['Calls']
+        key :tags, ['Evaluators']
 
         response 200 do
-          key :description, 'call response'
+          key :description, 'evaluator response'
           schema do
-            key :'$ref', :CallDxOutput
+            key :'$ref', :EvaluatorDxOutput
           end
         end
         response :default do
@@ -141,25 +141,25 @@ module Swagger::CallApi
       end
 
       operation :post do
-        key :summary, 'Create a new Calls'
-        key :description, 'Returns the created call'
-        key :operationId, :create_call
+        key :summary, 'Create a new Evaluator'
+        key :description, 'Returns the created evaluator'
+        key :operationId, :create_evaluator
         key :produces, ['application/json',]
-        key :tags, ['Calls']
+        key :tags, ['Evaluators']
 
-        parameter name: :call do
+        parameter name: :evaluator do
           key :in, :body
-          key :description, 'call to register'
+          key :description, 'Evaluator to register'
           key :required, true
           schema do
-            key :'$ref', :CallInputPost
+            key :'$ref', :EvaluatorInputPost
           end
         end
 
         response 201 do
-          key :description, 'call response'
+          key :description, 'evaluator response'
           schema do
-            key :'$ref', :CallOutput
+            key :'$ref', :EvaluatorOutput
           end
         end
         response 422 do

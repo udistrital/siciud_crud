@@ -51,11 +51,13 @@ module Api
           @proposal = @call.proposals.new(
             proposal_params_to_create.except(:entity_ids,
                                              :dependency_ids,
-                                             :research_group_ids)
+                                             :geo_city_ids,
+                                             :keywords)
           )
 
           if @proposal.save
             @proposal = save_supplementary_data(@proposal)
+            @proposal = save_keywords(@proposal, params[:proposal][:created_by])
             render json: @proposal, status: :created
           else
             render json: @proposal.errors, status: :unprocessable_entity
@@ -65,7 +67,8 @@ module Api
 
       # PATCH/PUT /proposals/1
       def update
-        if @proposal.update(proposal_params_to_update)
+        if @proposal.update(proposal_params_to_update.except(:keywords))
+          @proposal = save_keywords(@proposal, params[:proposal][:updated_by])
           render json: @proposal
         else
           render json: @proposal.errors, status: :unprocessable_entity
@@ -75,14 +78,29 @@ module Api
       private
 
       def save_supplementary_data(proposal)
+        if params[:proposal].has_key?(:geo_city_ids)
+          proposal.geo_city_ids = (params[:proposal][:geo_city_ids]).map(&:to_i).uniq
+        end
+        if params[:proposal].has_key?(:research_focus_ids)
+          proposal.research_focus_ids = (params[:proposal][:research_focus_ids]).map(&:to_i).uniq
+        end
         if params[:proposal].has_key?(:entity_ids)
           proposal.entity_ids = (params[:proposal][:entity_ids]).map(&:to_i).uniq
         end
         if params[:proposal].has_key?(:dependency_ids)
           proposal.dependency_ids = (params[:proposal][:dependency_ids]).map(&:to_i).uniq
         end
-        if params[:proposal].has_key?(:research_group_ids)
-          proposal.research_group_ids = (params[:proposal][:research_group_ids]).map(&:to_i).uniq
+        if params[:proposal].has_key?(:evaluator_ids)
+          proposal.evaluator_ids = (params[:proposal][:evaluator_ids]).map(&:to_i).uniq
+        end
+        proposal
+      end
+
+      def save_keywords(proposal, created_by)
+        if params[:proposal].has_key?(:keywords)
+          keyword_list = (params[:proposal][:keywords]).map(&:to_s).uniq
+          keyword_ids = KeywordService.save_keywords(keyword_list, created_by)
+          proposal.keyword_ids = keyword_ids.uniq
         end
         proposal
       end
@@ -96,19 +114,21 @@ module Api
       def proposal_params_to_create
         params.require(:proposal).permit(:title, :description, :duration,
                                          :proposal_status_id, :project_type_id,
-                                         :geo_city_id, :geo_country_id,
-                                         :geo_state_id, :active, :created_by,
-                                         entity_ids: [], dependency_ids: [],
-                                         research_group_ids: [])
+                                         :total_amount_in_kind, :total_amount_request_cidc,
+                                         :total_counterparty, :active, :created_by,
+                                         geo_city_ids: [], research_focus_ids: [],
+                                         evaluator_ids: [], keywords: [],
+                                         entity_ids: [], dependency_ids: [])
       end
 
       def proposal_params_to_update
         params.require(:proposal).permit(:title, :description, :duration,
                                          :proposal_status_id, :project_type_id,
-                                         :call_id, :geo_city_id, :geo_country_id,
-                                         :geo_state_id, :active, :updated_by,
-                                         entity_ids: [], dependency_ids: [],
-                                         research_group_ids: [])
+                                         :call_id, :total_amount_in_kind, :total_amount_request_cidc,
+                                         :total_counterparty, :active, :updated_by,
+                                         geo_city_ids: [], research_focus_ids: [],
+                                         evaluator_ids: [], keywords: [],
+                                         entity_ids: [], dependency_ids: [])
       end
     end
   end

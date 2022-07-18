@@ -12,6 +12,8 @@ Rails.application.routes.draw do
 
       # General endpoints
       # Geo endpoints
+      resources :evaluators, only: [:index, :show, :create, :update]
+
       resources :geo_countries, only: [:index, :show] do
         resources :geo_states, only: [:index, :show]
         resources :geo_cities_by_countries, only: [:index]
@@ -19,6 +21,7 @@ Rails.application.routes.draw do
       resources :geo_states, only: [:index, :show] do
         resources :geo_cities, only: [:index, :show]
       end
+      resources :keywords, only: [:index, :show, :create, :update]
 
       # Types and Subtypes endpoints
       resources :types, only: [:index, :show, :create, :update]
@@ -252,7 +255,9 @@ Rails.application.routes.draw do
 
       resources :mobility_calls, only: [:index, :show, :update] do
         resources :documents, only: [:index, :show, :create, :update]
+        resources :mobility_call_criteria, only: [:index, :create]
       end
+      resources :mobility_call_criteria, only: [:show, :update]
 
       # Endpoint to proposals
       get "/proposals/by-internal-member", to: "proposals#index_by_researcher"
@@ -260,9 +265,12 @@ Rails.application.routes.draw do
       resources :proposals, only: [:index, :show, :update] do
         resources :external_members_proposals, only: [:index, :create]
         resources :internal_members_proposals, only: [:index, :create]
+        resources :research_groups_proposals, only: [:index, :create]
+        resources :chapters, only: [:index, :show, :create, :update]
       end
       resources :external_members_proposals, only: [:show, :update]
       resources :internal_members_proposals, only: [:show, :update]
+      resources :research_groups_proposals, only: [:show, :update]
 
 
       #  Chapters or sections
