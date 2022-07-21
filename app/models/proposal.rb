@@ -18,6 +18,7 @@ class Proposal < ApplicationRecord
 
   has_many :external_members_proposals
   has_many :internal_members_proposals
+  has_many :objectives
   has_many :research_groups_proposals
 
   has_many :chapters, as: :sectionable
