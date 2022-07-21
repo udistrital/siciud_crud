@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_07_16_213732) do
+ActiveRecord::Schema.define(version: 2022_07_18_030529) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1716,6 +1716,21 @@ ActiveRecord::Schema.define(version: 2022_07_16_213732) do
     t.index ["updated_by"], name: "index_nutraceutical_products_on_updated_by"
   end
 
+  create_table "objectives", force: :cascade do |t|
+    t.text "description"
+    t.bigint "parent_id"
+    t.bigint "proposal_id"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_objectives_on_created_by"
+    t.index ["parent_id"], name: "index_objectives_on_parent_id"
+    t.index ["proposal_id"], name: "index_objectives_on_proposal_id"
+    t.index ["updated_by"], name: "index_objectives_on_updated_by"
+  end
+
   create_table "oecd_disciplines", force: :cascade do |t|
     t.string "name"
     t.string "code"
@@ -3155,6 +3170,10 @@ ActiveRecord::Schema.define(version: 2022_07_16_213732) do
   add_foreign_key "nutraceutical_products", "subtypes", column: "category_id"
   add_foreign_key "nutraceutical_products", "users", column: "created_by"
   add_foreign_key "nutraceutical_products", "users", column: "updated_by"
+  add_foreign_key "objectives", "objectives", column: "parent_id"
+  add_foreign_key "objectives", "proposals"
+  add_foreign_key "objectives", "users", column: "created_by"
+  add_foreign_key "objectives", "users", column: "updated_by"
   add_foreign_key "oecd_disciplines", "oecd_knowledge_subareas"
   add_foreign_key "oecd_disciplines", "users", column: "created_by"
   add_foreign_key "oecd_disciplines", "users", column: "updated_by"
