@@ -1,28 +1,28 @@
-module Swagger::InternalMembersProposalApi
+module Swagger::ObjectiveApi
   extend ActiveSupport::Concern
   include Swagger::Blocks
 
   included do
-    swagger_path '/internal_members_proposals/{id}' do
+    swagger_path '/objectives/{id}' do
       operation :get do
-        key :summary, 'Get a Internal members proposal by ID'
-        key :description, 'Returns a single internal members proposal'
-        key :operationId, :get_internal_members_proposal_by_id
+        key :summary, 'Get a objective by ID'
+        key :description, 'Returns a single objective'
+        key :operationId, :get_objective_by_id
         key :produces, ['application/json',]
-        key :tags, ['Proposals:: Internal Members Proposals']
+        key :tags, ['Proposals:: Objectives']
 
         parameter name: :id do
           key :in, :path
-          key :description, 'ID of internal members proposal to fetch'
+          key :description, 'ID of objective to fetch'
           key :required, true
           key :type, :integer
           key :format, :int64
         end
 
         response 200 do
-          key :description, 'internal members proposal response'
+          key :description, 'objective response'
           schema do
-            key :'$ref', :InternalMembersProposalOutput
+            key :'$ref', :ObjectiveOutput
           end
         end
         response 404 do
@@ -37,33 +37,33 @@ module Swagger::InternalMembersProposalApi
       end
 
       operation :put do
-        key :summary, 'Update Internal members proposal by ID'
-        key :description, 'Returns the updated internal members proposal'
-        key :operationId, :update_internal_members_proposal
+        key :summary, 'Update objective by ID'
+        key :description, 'Returns the updated objective'
+        key :operationId, :update_objective
         key :produces, ['application/json',]
-        key :tags, ['Proposals:: Internal Members Proposals']
+        key :tags, ['Proposals:: Objectives']
 
         parameter name: :id do
           key :in, :path
-          key :description, 'ID of internal members proposal to fetch'
+          key :description, 'ID of objective to fetch'
           key :required, true
           key :type, :integer
           key :format, :int64
         end
 
-        parameter name: :internal_members_proposal do
+        parameter name: :objective do
           key :in, :body
-          key :description, 'Internal members proposal to update'
+          key :description, 'Objective to update'
           key :required, true
           schema do
-            key :'$ref', :InternalMembersProposalInputPut
+            key :'$ref', :ObjectiveInputPut
           end
         end
 
         response 200 do
-          key :description, 'internal members proposal response'
+          key :description, 'objective response'
           schema do
-            key :'$ref', :InternalMembersProposalOutput
+            key :'$ref', :ObjectiveOutput
           end
         end
         response 422 do
@@ -78,35 +78,35 @@ module Swagger::InternalMembersProposalApi
       end
 
       operation :patch do
-        key :summary, 'Activate or deactivate a Internal members proposal by ID'
-        key :description, 'Returns the activated/deactivated internal members proposal'
-        key :operationId, :change_active_internal_members_proposal
+        key :summary, 'Activate or deactivate a Objective by ID'
+        key :description, 'Returns the activated/deactivated objective'
+        key :operationId, :change_active_objective
         key :produces, ['application/json',]
-        key :tags, ['Proposals:: Internal Members Proposals']
+        key :tags, ['Proposals:: Objectives']
 
         parameter name: :id do
           key :in, :path
-          key :description, 'ID of internal members proposal to fetch'
+          key :description, 'ID of objective to fetch'
           key :required, true
           key :type, :integer
           key :format, :int64
         end
 
-        parameter name: :internal_members_proposal do
+        parameter name: :objective do
           key :in, :body
-          key :description, 'Internal members proposal to activate or deactivate'
+          key :description, 'Objective to activate or deactivate'
           key :required, true
           schema do
-            property :internal_members_proposal do
+            property :objective do
               key :'$ref', :ChangeActive
             end
           end
         end
 
         response 200 do
-          key :description, 'internal members proposal response'
+          key :description, 'objective response'
           schema do
-            key :'$ref', :InternalMembersProposalOutput
+            key :'$ref', :ObjectiveOutput
           end
         end
         response 422 do
@@ -121,13 +121,13 @@ module Swagger::InternalMembersProposalApi
       end
     end
 
-    swagger_path '/proposals/{proposal_id}/internal_members_proposals' do
+    swagger_path '/proposals/{proposal_id}/objectives' do
       operation :get do
-        key :summary, 'Get all Internal members proposals'
-        key :description, 'Returns all internal members proposals'
-        key :operationId, :get_internal_members_proposals
+        key :summary, 'Get all Objectives'
+        key :description, 'Returns all objectives'
+        key :operationId, :get_objectives
         key :produces, ['application/json',]
-        key :tags, ['Proposals:: Internal Members Proposals']
+        key :tags, ['Proposals:: Objectives']
 
         parameter name: :proposal_id do
           key :in, :path
@@ -138,9 +138,9 @@ module Swagger::InternalMembersProposalApi
         end
 
         response 200 do
-          key :description, 'internal members proposal response'
+          key :description, 'objective response'
           schema do
-            key :'$ref', :InternalMembersProposalDxOutput
+            key :'$ref', :ObjectiveDxOutput
           end
         end
         response :default do
@@ -149,11 +149,11 @@ module Swagger::InternalMembersProposalApi
       end
 
       operation :post do
-        key :summary, 'Create a new Internal members proposal'
-        key :description, 'Returns the created internal members proposal'
-        key :operationId, :create_internal_members_proposal
+        key :summary, 'Create a new Objective'
+        key :description, 'Returns the created objective'
+        key :operationId, :create_objective
         key :produces, ['application/json',]
-        key :tags, ['Proposals:: Internal Members Proposals']
+        key :tags, ['Proposals:: Objectives']
 
         parameter name: :proposal_id do
           key :in, :path
@@ -163,19 +163,19 @@ module Swagger::InternalMembersProposalApi
           key :format, :int64
         end
 
-        parameter name: :internal_members_proposal do
+        parameter name: :objective do
           key :in, :body
-          key :description, 'Internal members proposal to register'
+          key :description, 'Objective to register'
           key :required, true
           schema do
-            key :'$ref', :InternalMembersProposalInputPost
+            key :'$ref', :ObjectiveInputPost
           end
         end
 
         response 201 do
-          key :description, 'internal members proposal response'
+          key :description, 'objective response'
           schema do
-            key :'$ref', :InternalMembersProposalOutput
+            key :'$ref', :ObjectiveOutput
           end
         end
         response 422 do

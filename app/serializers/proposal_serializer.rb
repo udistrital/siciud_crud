@@ -115,11 +115,13 @@ class ProposalSerializer < ActiveModel::Serializer
   end
 
   def geo_country_id
+    country_id = nil
     geo_city_list = self.object.geo_cities
-    if geo_city_list
+    unless geo_city_list.blank?
       state = geo_city_list[0].geo_state
-      state.geo_country_id
+      country_id = state.geo_country_id
     end
+    country_id
   end
 
   def keywords
