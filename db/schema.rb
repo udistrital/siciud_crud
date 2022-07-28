@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_07_18_030529) do
+ActiveRecord::Schema.define(version: 2022_07_28_001509) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -56,6 +56,29 @@ ActiveRecord::Schema.define(version: 2022_07_18_030529) do
     t.index ["created_by"], name: "index_action_plans_on_created_by"
     t.index ["research_group_id"], name: "index_action_plans_on_research_group_id"
     t.index ["updated_by"], name: "index_action_plans_on_updated_by"
+  end
+
+  create_table "activity_schedules", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.date "start_date"
+    t.date "end_date"
+    t.integer "duration", limit: 2
+    t.text "deliverable"
+    t.bigint "proposal_id"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_activity_schedules_on_created_by"
+    t.index ["proposal_id"], name: "index_activity_schedules_on_proposal_id"
+    t.index ["updated_by"], name: "index_activity_schedules_on_updated_by"
+  end
+
+  create_table "activity_schedules_objectives", id: false, force: :cascade do |t|
+    t.bigint "activity_schedule_id", null: false
+    t.bigint "objective_id", null: false
   end
 
   create_table "affiliated_entities", force: :cascade do |t|
@@ -2759,6 +2782,9 @@ ActiveRecord::Schema.define(version: 2022_07_18_030529) do
   add_foreign_key "action_plans", "research_groups"
   add_foreign_key "action_plans", "users", column: "created_by"
   add_foreign_key "action_plans", "users", column: "updated_by"
+  add_foreign_key "activity_schedules", "proposals"
+  add_foreign_key "activity_schedules", "users", column: "created_by"
+  add_foreign_key "activity_schedules", "users", column: "updated_by"
   add_foreign_key "affiliated_entities", "entities"
   add_foreign_key "affiliated_entities", "geo_countries"
   add_foreign_key "affiliated_entities", "research_networks"

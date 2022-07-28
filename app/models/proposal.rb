@@ -16,6 +16,7 @@ class Proposal < ApplicationRecord
                           class_name: 'Subtype'
 
 
+  has_many :activity_schedules
   has_many :external_members_proposals
   has_many :internal_members_proposals
   has_many :objectives
