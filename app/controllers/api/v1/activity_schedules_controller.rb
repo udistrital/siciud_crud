@@ -9,11 +9,11 @@ module Api
       # GET /proposal/:proposal_id/activity_schedules
       def index
         if params[:proposal_id]
-          @activity_schedules = ActivitySchedule.where(
+          @activity_schedules = CompleteActivitySchedule.where(
             "proposal_id = ?", params[:proposal_id]
           )
         else
-          @activity_schedules = ActivitySchedule.all
+          @activity_schedules = CompleteActivitySchedule.all
         end
         @activity_schedules = DxService.load(@activity_schedules, params)
 
@@ -65,7 +65,7 @@ module Api
       def act_schedule_params_to_create
         params.require(:activity_schedule).permit(:name, :description,
                                                   :start_date, :end_date, :duration,
-                                                  :deliverable, :proposal_id, :active,
+                                                  :deliverable, :active,
                                                   :created_by, objective_ids: [])
       end
 

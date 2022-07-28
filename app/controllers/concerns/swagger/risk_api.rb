@@ -1,28 +1,28 @@
-module Swagger::ActivityScheduleApi
+module Swagger::RiskApi
   extend ActiveSupport::Concern
   include Swagger::Blocks
 
   included do
-    swagger_path '/activity_schedules/{id}' do
+    swagger_path '/risks/{id}' do
       operation :get do
-        key :summary, 'Get an activity schedule by ID'
-        key :description, 'Returns a single activity schedule'
-        key :operationId, :get_activity_schedule_by_id
+        key :summary, 'Get an risk by ID'
+        key :description, 'Returns a single risk'
+        key :operationId, :get_risk_by_id
         key :produces, ['application/json',]
-        key :tags, ['Proposals:: Activity Schedules']
+        key :tags, ['Proposals:: Risks']
 
         parameter name: :id do
           key :in, :path
-          key :description, 'ID of activity schedule to fetch'
+          key :description, 'ID of risk to fetch'
           key :required, true
           key :type, :integer
           key :format, :int64
         end
 
         response 200 do
-          key :description, 'activity schedule response'
+          key :description, 'Risk response'
           schema do
-            key :'$ref', :ActivityScheduleOutput
+            key :'$ref', :RiskOutput
           end
         end
         response 404 do
@@ -37,33 +37,33 @@ module Swagger::ActivityScheduleApi
       end
 
       operation :put do
-        key :summary, 'Update activity schedule by ID'
-        key :description, 'Returns the updated activity schedule'
-        key :operationId, :update_activity_schedule
+        key :summary, 'Update risk by ID'
+        key :description, 'Returns the updated risk'
+        key :operationId, :update_risk
         key :produces, ['application/json',]
-        key :tags, ['Proposals:: Activity Schedules']
+        key :tags, ['Proposals:: Risks']
 
         parameter name: :id do
           key :in, :path
-          key :description, 'ID of activity schedule to fetch'
+          key :description, 'ID of risk to fetch'
           key :required, true
           key :type, :integer
           key :format, :int64
         end
 
-        parameter name: :activity_schedule do
+        parameter name: :risk do
           key :in, :body
-          key :description, 'Activity schedule to update'
+          key :description, 'Risk to update'
           key :required, true
           schema do
-            key :'$ref', :ActivityScheduleInputPut
+            key :'$ref', :RiskInputPut
           end
         end
 
         response 200 do
-          key :description, 'activity schedule response'
+          key :description, 'risk response'
           schema do
-            key :'$ref', :ActivityScheduleOutput
+            key :'$ref', :RiskOutput
           end
         end
         response 422 do
@@ -78,35 +78,35 @@ module Swagger::ActivityScheduleApi
       end
 
       operation :patch do
-        key :summary, 'Activate or deactivate an activity schedule by ID'
-        key :description, 'Returns the activated/deactivated activity schedule'
-        key :operationId, :change_active_activitySchedule
+        key :summary, 'Activate or deactivate an risk by ID'
+        key :description, 'Returns the activated/deactivated risk'
+        key :operationId, :change_active_Risk
         key :produces, ['application/json',]
-        key :tags, ['Proposals:: Activity Schedules']
+        key :tags, ['Proposals:: Risks']
 
         parameter name: :id do
           key :in, :path
-          key :description, 'ID of activity schedule to fetch'
+          key :description, 'ID of risk to fetch'
           key :required, true
           key :type, :integer
           key :format, :int64
         end
 
-        parameter name: :activity_schedule do
+        parameter name: :risk do
           key :in, :body
-          key :description, 'Activity schedule to activate or deactivate'
+          key :description, 'Risk to activate or deactivate'
           key :required, true
           schema do
-            property :activity_schedule do
+            property :risk do
               key :'$ref', :ChangeActive
             end
           end
         end
 
         response 200 do
-          key :description, 'activity schedule response'
+          key :description, 'risk response'
           schema do
-            key :'$ref', :ActivityScheduleOutput
+            key :'$ref', :RiskOutput
           end
         end
         response 422 do
@@ -121,13 +121,13 @@ module Swagger::ActivityScheduleApi
       end
     end
 
-    swagger_path '/proposals/{proposal_id}/activity_schedules' do
+    swagger_path '/proposals/{proposal_id}/risks' do
       operation :get do
-        key :summary, 'Get all activity schedules'
-        key :description, 'Returns all activity schedules'
-        key :operationId, :get_activity_schedules
+        key :summary, 'Get all risks'
+        key :description, 'Returns all risks'
+        key :operationId, :get_risks
         key :produces, ['application/json',]
-        key :tags, ['Proposals:: Activity Schedules']
+        key :tags, ['Proposals:: Risks']
 
         parameter name: :proposal_id do
           key :in, :path
@@ -138,9 +138,9 @@ module Swagger::ActivityScheduleApi
         end
 
         response 200 do
-          key :description, 'activity schedule response'
+          key :description, 'risk response'
           schema do
-            key :'$ref', :ActivityScheduleDxOutput
+            key :'$ref', :RiskDxOutput
           end
         end
         response :default do
@@ -149,11 +149,11 @@ module Swagger::ActivityScheduleApi
       end
 
       operation :post do
-        key :summary, 'Create a new activity schedule'
-        key :description, 'Returns the created activity schedule'
-        key :operationId, :create_activity_schedule
+        key :summary, 'Create a new risk'
+        key :description, 'Returns the created risk'
+        key :operationId, :create_risk
         key :produces, ['application/json',]
-        key :tags, ['Proposals:: Activity Schedules']
+        key :tags, ['Proposals:: Risks']
 
         parameter name: :proposal_id do
           key :in, :path
@@ -163,19 +163,19 @@ module Swagger::ActivityScheduleApi
           key :format, :int64
         end
 
-        parameter name: :activity_schedule do
+        parameter name: :risk do
           key :in, :body
-          key :description, 'ActivitySchedule to register'
+          key :description, 'Risk to register'
           key :required, true
           schema do
-            key :'$ref', :ActivityScheduleInputPost
+            key :'$ref', :RiskInputPost
           end
         end
 
         response 201 do
-          key :description, 'activity schedule response'
+          key :description, 'risk response'
           schema do
-            key :'$ref', :ActivityScheduleOutput
+            key :'$ref', :RiskOutput
           end
         end
         response 422 do

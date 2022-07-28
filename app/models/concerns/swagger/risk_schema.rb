@@ -1,31 +1,19 @@
-module Swagger::ActivityScheduleSchema
+module Swagger::RiskSchema
   extend ActiveSupport::Concern
   include Swagger::Blocks
 
   included do
-    swagger_schema :ActivitySchedule do
+    swagger_schema :Risk do
       property :name do
         key :type, :string
       end
-      property :description do
+      property :consequence do
         key :type, :string
       end
-      property :start_date do
-        key :type, :string
-        key :format, :date
-      end
-      property :end_date do
-        key :type, :string
-        key :format, :date
-      end
-      property :duration do
-        key :type, :integer
-        key :format, :int64
-      end
-      property :deliverable do
+      property :mitigation do
         key :type, :string
       end
-      property :objective_ids do
+      property :activity_schedule_ids do
         key :type, :array
         items do
           key :type, :integer
@@ -38,15 +26,15 @@ module Swagger::ActivityScheduleSchema
       end
     end
 
-    swagger_schema :ActivityScheduleInputPost do
+    swagger_schema :RiskInputPost do
       allOf do
         schema do
-          property :activity_schedule do
-            key :'$ref', :ActivitySchedule
+          property :risk do
+            key :'$ref', :Risk
           end
         end
         schema do
-          property :activity_schedule do
+          property :risk do
             property :created_by do
               key :type, :integer
               key :format, :int64
@@ -56,15 +44,15 @@ module Swagger::ActivityScheduleSchema
       end
     end
 
-    swagger_schema :ActivityScheduleInputPut do
+    swagger_schema :RiskInputPut do
       allOf do
         schema do
-          property :activity_schedule do
-            key :'$ref', :ActivitySchedule
+          property :risk do
+            key :'$ref', :Risk
           end
         end
         schema do
-          property :activity_schedule do
+          property :risk do
             property :proposal_id do
               key :type, :integer
               key :format, :int64
@@ -78,10 +66,10 @@ module Swagger::ActivityScheduleSchema
       end
     end
 
-    swagger_schema :ActivityScheduleOutput do
+    swagger_schema :RiskOutput do
       allOf do
         schema do
-          key :'$ref', :ActivitySchedule
+          key :'$ref', :Risk
         end
         schema do
           property :id do
@@ -112,13 +100,13 @@ module Swagger::ActivityScheduleSchema
       end
     end
 
-    swagger_schema :ActivityScheduleDxOutput do
+    swagger_schema :RiskDxOutput do
       allOf do
         schema do
           property :data do
             key :type, :array
             items do
-              key :'$ref', :ActivityScheduleOutput
+              key :'$ref', :RiskOutput
             end
           end
         end

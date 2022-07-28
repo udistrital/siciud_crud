@@ -1,0 +1,5 @@
+class CreateCompleteRisks < ActiveRecord::Migration[5.2]
+  def change
+    create_view :complete_risks
+  end
+end

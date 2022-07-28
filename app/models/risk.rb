@@ -1,12 +1,9 @@
-class ActivitySchedule < ApplicationRecord
-  include Swagger::ActivityScheduleSchema
+class Risk < ApplicationRecord
+  include Swagger::RiskSchema
 
   belongs_to :proposal
 
-  has_and_belongs_to_many :objectives
-  has_and_belongs_to_many :risks
-
-  validates :duration, numericality: { greater_than_or_equal_to: 0 }
+  has_and_belongs_to_many :activity_schedules
 
   # Tracking inherited from ApplicationRecord, fields:
   # created_by and updated_by, see application_record.rb

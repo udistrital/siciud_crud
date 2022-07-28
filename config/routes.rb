@@ -268,6 +268,7 @@ Rails.application.routes.draw do
         resources :internal_members_proposals, only: [:index, :create]
         resources :objectives, only: [:index, :create]
         resources :research_groups_proposals, only: [:index, :create]
+        resources :risks, only: [:index, :create]
         resources :chapters, only: [:index, :show, :create, :update]
       end
       resources :activity_schedules, only: [:show, :update]
@@ -275,7 +276,7 @@ Rails.application.routes.draw do
       resources :internal_members_proposals, only: [:show, :update]
       resources :objectives, only: [:show, :update]
       resources :research_groups_proposals, only: [:show, :update]
-
+      resources :risks, only: [:show, :update]
 
       #  Chapters or sections
       resources :calls, only: [] do
