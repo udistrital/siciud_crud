@@ -263,17 +263,20 @@ Rails.application.routes.draw do
       get "/proposals/by-internal-member", to: "proposals#index_by_researcher"
 
       resources :proposals, only: [:index, :show, :update] do
+        resources :activity_schedules, only: [:index, :create]
         resources :external_members_proposals, only: [:index, :create]
         resources :internal_members_proposals, only: [:index, :create]
         resources :objectives, only: [:index, :create]
         resources :research_groups_proposals, only: [:index, :create]
+        resources :risks, only: [:index, :create]
         resources :chapters, only: [:index, :show, :create, :update]
       end
+      resources :activity_schedules, only: [:show, :update]
       resources :external_members_proposals, only: [:show, :update]
       resources :internal_members_proposals, only: [:show, :update]
       resources :objectives, only: [:show, :update]
       resources :research_groups_proposals, only: [:show, :update]
-
+      resources :risks, only: [:show, :update]
 
       #  Chapters or sections
       resources :calls, only: [] do
