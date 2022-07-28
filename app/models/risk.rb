@@ -1,5 +1,5 @@
-class Objective < ApplicationRecord
-  include Swagger::ObjectiveSchema
+class Risk < ApplicationRecord
+  include Swagger::RiskSchema
 
   belongs_to :proposal
 
