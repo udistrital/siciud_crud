@@ -1,11 +1,10 @@
-class Indicator < ApplicationRecord
-  include Swagger::IndicatorSchema
+class ProposalProduct < ApplicationRecord
+  include Swagger::ProposalProductSchema
 
-  belongs_to :subtype
-  has_many :calls_indicators
-  has_many :proposal_products
+  belongs_to :indicator
+  belongs_to :product_type, class_name: 'Subtype', foreign_key: 'product_type_id'
+  belongs_to :proposal
 
-  validates :ind_description, presence: true, allow_nil: false
   # Tracking inherited from ApplicationRecord, fields:
   # created_by and updated_by, see application_record.rb
   validates :created_by, presence: true, allow_nil: false, on: :create

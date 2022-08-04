@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_07_28_161208) do
+ActiveRecord::Schema.define(version: 2022_08_04_033623) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1976,6 +1976,24 @@ ActiveRecord::Schema.define(version: 2022_07_28_161208) do
     t.index ["updated_by"], name: "index_professional_roles_on_updated_by"
   end
 
+  create_table "proposal_products", force: :cascade do |t|
+    t.string "name"
+    t.bigint "product_type_id"
+    t.bigint "indicator_id"
+    t.string "beneficiary"
+    t.bigint "proposal_id"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_proposal_products_on_created_by"
+    t.index ["indicator_id"], name: "index_proposal_products_on_indicator_id"
+    t.index ["product_type_id"], name: "index_proposal_products_on_product_type_id"
+    t.index ["proposal_id"], name: "index_proposal_products_on_proposal_id"
+    t.index ["updated_by"], name: "index_proposal_products_on_updated_by"
+  end
+
   create_table "proposals", force: :cascade do |t|
     t.string "title"
     t.text "description"
@@ -3268,6 +3286,11 @@ ActiveRecord::Schema.define(version: 2022_07_28_161208) do
   add_foreign_key "procedures", "users", column: "updated_by"
   add_foreign_key "professional_roles", "users", column: "created_by"
   add_foreign_key "professional_roles", "users", column: "updated_by"
+  add_foreign_key "proposal_products", "indicators"
+  add_foreign_key "proposal_products", "proposals"
+  add_foreign_key "proposal_products", "subtypes", column: "product_type_id"
+  add_foreign_key "proposal_products", "users", column: "created_by"
+  add_foreign_key "proposal_products", "users", column: "updated_by"
   add_foreign_key "proposals", "calls"
   add_foreign_key "proposals", "subtypes", column: "project_type_id"
   add_foreign_key "proposals", "subtypes", column: "proposal_status_id"
@@ -5865,5 +5888,22 @@ ActiveRecord::Schema.define(version: 2022_07_28_161208) do
       r.created_at,
       r.updated_at
      FROM risks r;
+  SQL
+  create_view "siciud.complete_proposal_products", sql_definition: <<-SQL
+      SELECT pp.id,
+      pp.product_type_id,
+      pt.st_name AS product_type_name,
+      pp.indicator_id,
+      i.ind_description AS indicator_description,
+      pp.beneficiary,
+      pp.proposal_id,
+      pp.active,
+      pp.created_by,
+      pp.updated_by,
+      pp.created_at,
+      pp.updated_at
+     FROM ((proposal_products pp
+       LEFT JOIN subtypes pt ON ((pp.product_type_id = pt.id)))
+       LEFT JOIN indicators i ON ((pp.indicator_id = i.id)));
   SQL
 end

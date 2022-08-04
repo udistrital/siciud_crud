@@ -267,6 +267,7 @@ Rails.application.routes.draw do
         resources :external_members_proposals, only: [:index, :create]
         resources :internal_members_proposals, only: [:index, :create]
         resources :objectives, only: [:index, :create]
+        resources :proposal_products, only: [:index, :create]
         resources :research_groups_proposals, only: [:index, :create]
         resources :risks, only: [:index, :create]
         resources :chapters, only: [:index, :show, :create, :update]
@@ -275,6 +276,7 @@ Rails.application.routes.draw do
       resources :external_members_proposals, only: [:show, :update]
       resources :internal_members_proposals, only: [:show, :update]
       resources :objectives, only: [:show, :update]
+      resources :proposal_products, only: [:show, :update]
       resources :research_groups_proposals, only: [:show, :update]
       resources :risks, only: [:show, :update]
 
