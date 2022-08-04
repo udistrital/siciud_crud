@@ -18,6 +18,7 @@ class Proposal < ApplicationRecord
 
   has_many :activity_schedules
   has_many :external_members_proposals
+  has_many :impacts
   has_many :internal_members_proposals
   has_many :proposal_products
   has_many :objectives

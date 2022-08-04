@@ -1,13 +1,10 @@
-module Swagger::ProposalProductSchema
+module Swagger::ImpactSchema
   extend ActiveSupport::Concern
   include Swagger::Blocks
 
   included do
-    swagger_schema :ProposalProduct do
-      property :name do
-        key :type, :string
-      end
-      property :product_type_id do
+    swagger_schema :Impact do
+      property :impact_type_id do
         key :type, :integer
         key :format, :int64
       end
@@ -15,8 +12,15 @@ module Swagger::ProposalProductSchema
         key :type, :integer
         key :format, :int64
       end
-      property :beneficiary do
+      property :description do
         key :type, :string
+      end
+      property :goal do
+        key :type, :string
+      end
+      property :term_id do
+        key :type, :integer
+        key :format, :int64
       end
       property :active do
         key :type, :boolean
@@ -24,15 +28,15 @@ module Swagger::ProposalProductSchema
       end
     end
 
-    swagger_schema :ProposalProductInputPost do
+    swagger_schema :ImpactInputPost do
       allOf do
         schema do
-          property :proposal_product do
-            key :'$ref', :ProposalProduct
+          property :impact do
+            key :'$ref', :Impact
           end
         end
         schema do
-          property :proposal_product do
+          property :impact do
             property :created_by do
               key :type, :integer
               key :format, :int64
@@ -42,15 +46,15 @@ module Swagger::ProposalProductSchema
       end
     end
 
-    swagger_schema :ProposalProductInputPut do
+    swagger_schema :ImpactInputPut do
       allOf do
         schema do
-          property :proposal_product do
-            key :'$ref', :ProposalProduct
+          property :impact do
+            key :'$ref', :Impact
           end
         end
         schema do
-          property :proposal_product do
+          property :impact do
             property :proposal_id do
               key :type, :integer
               key :format, :int64
@@ -64,25 +68,28 @@ module Swagger::ProposalProductSchema
       end
     end
 
-    swagger_schema :ProposalProductOutput do
+    swagger_schema :ImpactOutput do
       allOf do
         schema do
-          key :'$ref', :ProposalProduct
+          key :'$ref', :Impact
         end
         schema do
           property :id do
             key :type, :integer
             key :format, :int64
           end
-          property :proposal_id do
-            key :type, :integer
-            key :format, :int64
-          end
-          property :product_type_name do
+          property :impact_type_name do
             key :type, :string
           end
           property :indicator_description do
             key :type, :string
+          end
+          property :term_name do
+            key :type, :string
+          end
+          property :proposal_id do
+            key :type, :integer
+            key :format, :int64
           end
           property :created_by do
             key :type, :integer
@@ -104,13 +111,13 @@ module Swagger::ProposalProductSchema
       end
     end
 
-    swagger_schema :ProposalProductDxOutput do
+    swagger_schema :ImpactDxOutput do
       allOf do
         schema do
           property :data do
             key :type, :array
             items do
-              key :'$ref', :ProposalProductOutput
+              key :'$ref', :ImpactOutput
             end
           end
         end
