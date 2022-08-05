@@ -264,6 +264,7 @@ Rails.application.routes.draw do
 
       resources :proposals, only: [:index, :show, :update] do
         resources :activity_schedules, only: [:index, :create]
+        get "evaluators", to: "evaluators#index_by_proposal"
         resources :external_members_proposals, only: [:index, :create]
         resources :impacts, only: [:index, :create]
         resources :internal_members_proposals, only: [:index, :create]
