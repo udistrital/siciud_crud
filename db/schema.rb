@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_04_043133) do
+ActiveRecord::Schema.define(version: 2022_08_05_003904) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -5915,23 +5915,6 @@ ActiveRecord::Schema.define(version: 2022_08_04_043133) do
       r.updated_at
      FROM risks r;
   SQL
-  create_view "siciud.complete_proposal_products", sql_definition: <<-SQL
-      SELECT pp.id,
-      pp.product_type_id,
-      pt.st_name AS product_type_name,
-      pp.indicator_id,
-      i.ind_description AS indicator_description,
-      pp.beneficiary,
-      pp.proposal_id,
-      pp.active,
-      pp.created_by,
-      pp.updated_by,
-      pp.created_at,
-      pp.updated_at
-     FROM ((proposal_products pp
-       LEFT JOIN subtypes pt ON ((pp.product_type_id = pt.id)))
-       LEFT JOIN indicators i ON ((pp.indicator_id = i.id)));
-  SQL
   create_view "siciud.complete_impacts", sql_definition: <<-SQL
       SELECT im.id,
       im.impact_type_id,
@@ -5952,5 +5935,23 @@ ActiveRecord::Schema.define(version: 2022_08_04_043133) do
        LEFT JOIN subtypes sim ON ((im.impact_type_id = sim.id)))
        LEFT JOIN indicators i ON ((im.indicator_id = i.id)))
        LEFT JOIN subtypes st ON ((im.term_id = st.id)));
+  SQL
+  create_view "siciud.complete_proposal_products", sql_definition: <<-SQL
+      SELECT pp.id,
+      pp.name,
+      pp.product_type_id,
+      pt.st_name AS product_type_name,
+      pp.indicator_id,
+      i.ind_description AS indicator_description,
+      pp.beneficiary,
+      pp.proposal_id,
+      pp.active,
+      pp.created_by,
+      pp.updated_by,
+      pp.created_at,
+      pp.updated_at
+     FROM ((proposal_products pp
+       LEFT JOIN subtypes pt ON ((pp.product_type_id = pt.id)))
+       LEFT JOIN indicators i ON ((pp.indicator_id = i.id)));
   SQL
 end
