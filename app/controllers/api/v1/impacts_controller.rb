@@ -2,7 +2,7 @@ module Api
   module V1
     class ImpactsController < AbstractProposalController
       include Swagger::ImpactApi
-      
+
       before_action :set_proposal, only: [:create]
       before_action :set_impact, only: [:show, :update]
 
