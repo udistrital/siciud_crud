@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_10_212938) do
+ActiveRecord::Schema.define(version: 2022_08_10_220835) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1471,6 +1471,26 @@ ActiveRecord::Schema.define(version: 2022_08_10_212938) do
     t.index ["geo_state_id"], name: "index_ip_livestock_breeds_on_geo_state_id"
     t.index ["research_group_id"], name: "index_ip_livestock_breeds_on_research_group_id"
     t.index ["updated_by"], name: "index_ip_livestock_breeds_on_updated_by"
+  end
+
+  create_table "item_details", force: :cascade do |t|
+    t.bigint "proposal_budget_id"
+    t.text "description"
+    t.text "justification"
+    t.date "estimated_date"
+    t.bigint "quantity"
+    t.float "individual_cost"
+    t.float "subtotal"
+    t.bigint "proposal_id"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_item_details_on_created_by"
+    t.index ["proposal_budget_id"], name: "index_item_details_on_proposal_budget_id"
+    t.index ["proposal_id"], name: "index_item_details_on_proposal_id"
+    t.index ["updated_by"], name: "index_item_details_on_updated_by"
   end
 
   create_table "keywords", force: :cascade do |t|
@@ -3199,6 +3219,10 @@ ActiveRecord::Schema.define(version: 2022_08_10_212938) do
   add_foreign_key "ip_livestock_breeds", "subtypes", column: "category_id"
   add_foreign_key "ip_livestock_breeds", "users", column: "created_by"
   add_foreign_key "ip_livestock_breeds", "users", column: "updated_by"
+  add_foreign_key "item_details", "proposal_budgets"
+  add_foreign_key "item_details", "proposals"
+  add_foreign_key "item_details", "users", column: "created_by"
+  add_foreign_key "item_details", "users", column: "updated_by"
   add_foreign_key "keywords", "users", column: "created_by"
   add_foreign_key "keywords", "users", column: "updated_by"
   add_foreign_key "knowledge_networks", "colciencias_calls"
