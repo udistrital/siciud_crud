@@ -1,14 +1,34 @@
 module Api
   module V1
-    class EvaluatorsController < ApplicationController
+    class EvaluatorsController < AbstractProposalController
       include Swagger::EvaluatorApi
 
+      before_action :set_proposal, only: [:index_by_proposal]
       before_action :set_evaluator, only: [:show, :update]
 
       # GET /evaluators
       def index
-        @evaluators = Evaluator.all
+        if params[:email]
+          puts params[:email]
+          @evaluators = Evaluator.where(
+            "email = ?", params[:email]
+          )
+        else
+          @evaluators = Evaluator.all
+        end
 
+        @evaluators = DxService.load(@evaluators, params)
+
+        render json: @evaluators
+      end
+
+      # GET /proposal/:proposal_id/evaluators
+      def index_by_proposal
+        if params[:proposal_id]
+          @evaluators = @proposal.evaluators
+        else
+          @evaluators = Evaluator.all
+        end
         @evaluators = DxService.load(@evaluators, params)
 
         render json: @evaluators

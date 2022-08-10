@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_07_28_161208) do
+ActiveRecord::Schema.define(version: 2022_08_10_220835) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1243,6 +1243,26 @@ ActiveRecord::Schema.define(version: 2022_07_28_161208) do
     t.index ["updated_by"], name: "index_idi_investigation_projects_on_updated_by"
   end
 
+  create_table "impacts", force: :cascade do |t|
+    t.bigint "impact_type_id"
+    t.bigint "indicator_id"
+    t.text "description"
+    t.string "goal"
+    t.bigint "term_id"
+    t.bigint "proposal_id"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_impacts_on_created_by"
+    t.index ["impact_type_id"], name: "index_impacts_on_impact_type_id"
+    t.index ["indicator_id"], name: "index_impacts_on_indicator_id"
+    t.index ["proposal_id"], name: "index_impacts_on_proposal_id"
+    t.index ["term_id"], name: "index_impacts_on_term_id"
+    t.index ["updated_by"], name: "index_impacts_on_updated_by"
+  end
+
   create_table "indicators", force: :cascade do |t|
     t.bigint "subtype_id"
     t.text "ind_description"
@@ -1451,6 +1471,26 @@ ActiveRecord::Schema.define(version: 2022_07_28_161208) do
     t.index ["geo_state_id"], name: "index_ip_livestock_breeds_on_geo_state_id"
     t.index ["research_group_id"], name: "index_ip_livestock_breeds_on_research_group_id"
     t.index ["updated_by"], name: "index_ip_livestock_breeds_on_updated_by"
+  end
+
+  create_table "item_details", force: :cascade do |t|
+    t.bigint "proposal_budget_id"
+    t.text "description"
+    t.text "justification"
+    t.date "estimated_date"
+    t.bigint "quantity"
+    t.float "individual_cost"
+    t.float "subtotal"
+    t.bigint "proposal_id"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_item_details_on_created_by"
+    t.index ["proposal_budget_id"], name: "index_item_details_on_proposal_budget_id"
+    t.index ["proposal_id"], name: "index_item_details_on_proposal_id"
+    t.index ["updated_by"], name: "index_item_details_on_updated_by"
   end
 
   create_table "keywords", force: :cascade do |t|
@@ -1974,6 +2014,42 @@ ActiveRecord::Schema.define(version: 2022_07_28_161208) do
     t.boolean "active", default: true
     t.index ["created_by"], name: "index_professional_roles_on_created_by"
     t.index ["updated_by"], name: "index_professional_roles_on_updated_by"
+  end
+
+  create_table "proposal_budgets", force: :cascade do |t|
+    t.bigint "call_item_id"
+    t.float "amount_request_cidc"
+    t.float "counterparty"
+    t.float "amount_in_kind"
+    t.float "subtotal"
+    t.bigint "proposal_id"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["call_item_id"], name: "index_proposal_budgets_on_call_item_id"
+    t.index ["created_by"], name: "index_proposal_budgets_on_created_by"
+    t.index ["proposal_id"], name: "index_proposal_budgets_on_proposal_id"
+    t.index ["updated_by"], name: "index_proposal_budgets_on_updated_by"
+  end
+
+  create_table "proposal_products", force: :cascade do |t|
+    t.string "name"
+    t.bigint "product_type_id"
+    t.bigint "indicator_id"
+    t.string "beneficiary"
+    t.bigint "proposal_id"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_proposal_products_on_created_by"
+    t.index ["indicator_id"], name: "index_proposal_products_on_indicator_id"
+    t.index ["product_type_id"], name: "index_proposal_products_on_product_type_id"
+    t.index ["proposal_id"], name: "index_proposal_products_on_proposal_id"
+    t.index ["updated_by"], name: "index_proposal_products_on_updated_by"
   end
 
   create_table "proposals", force: :cascade do |t|
@@ -3075,6 +3151,12 @@ ActiveRecord::Schema.define(version: 2022_07_28_161208) do
   add_foreign_key "idi_investigation_projects", "subtypes", column: "category_id"
   add_foreign_key "idi_investigation_projects", "users", column: "created_by"
   add_foreign_key "idi_investigation_projects", "users", column: "updated_by"
+  add_foreign_key "impacts", "indicators"
+  add_foreign_key "impacts", "proposals"
+  add_foreign_key "impacts", "subtypes", column: "impact_type_id"
+  add_foreign_key "impacts", "subtypes", column: "term_id"
+  add_foreign_key "impacts", "users", column: "created_by"
+  add_foreign_key "impacts", "users", column: "updated_by"
   add_foreign_key "indicators", "subtypes"
   add_foreign_key "indicators", "users", column: "created_by"
   add_foreign_key "indicators", "users", column: "updated_by"
@@ -3137,6 +3219,10 @@ ActiveRecord::Schema.define(version: 2022_07_28_161208) do
   add_foreign_key "ip_livestock_breeds", "subtypes", column: "category_id"
   add_foreign_key "ip_livestock_breeds", "users", column: "created_by"
   add_foreign_key "ip_livestock_breeds", "users", column: "updated_by"
+  add_foreign_key "item_details", "proposal_budgets"
+  add_foreign_key "item_details", "proposals"
+  add_foreign_key "item_details", "users", column: "created_by"
+  add_foreign_key "item_details", "users", column: "updated_by"
   add_foreign_key "keywords", "users", column: "created_by"
   add_foreign_key "keywords", "users", column: "updated_by"
   add_foreign_key "knowledge_networks", "colciencias_calls"
@@ -3268,6 +3354,15 @@ ActiveRecord::Schema.define(version: 2022_07_28_161208) do
   add_foreign_key "procedures", "users", column: "updated_by"
   add_foreign_key "professional_roles", "users", column: "created_by"
   add_foreign_key "professional_roles", "users", column: "updated_by"
+  add_foreign_key "proposal_budgets", "call_items"
+  add_foreign_key "proposal_budgets", "proposals"
+  add_foreign_key "proposal_budgets", "users", column: "created_by"
+  add_foreign_key "proposal_budgets", "users", column: "updated_by"
+  add_foreign_key "proposal_products", "indicators"
+  add_foreign_key "proposal_products", "proposals"
+  add_foreign_key "proposal_products", "subtypes", column: "product_type_id"
+  add_foreign_key "proposal_products", "users", column: "created_by"
+  add_foreign_key "proposal_products", "users", column: "updated_by"
   add_foreign_key "proposals", "calls"
   add_foreign_key "proposals", "subtypes", column: "project_type_id"
   add_foreign_key "proposals", "subtypes", column: "proposal_status_id"
@@ -5865,5 +5960,62 @@ ActiveRecord::Schema.define(version: 2022_07_28_161208) do
       r.created_at,
       r.updated_at
      FROM risks r;
+  SQL
+  create_view "siciud.complete_impacts", sql_definition: <<-SQL
+      SELECT im.id,
+      im.impact_type_id,
+      sim.st_name AS impact_type_name,
+      im.indicator_id,
+      i.ind_description AS indicator_description,
+      im.description,
+      im.goal,
+      im.term_id,
+      st.st_name AS term_name,
+      im.proposal_id,
+      im.active,
+      im.created_by,
+      im.updated_by,
+      im.created_at,
+      im.updated_at
+     FROM (((impacts im
+       LEFT JOIN subtypes sim ON ((im.impact_type_id = sim.id)))
+       LEFT JOIN indicators i ON ((im.indicator_id = i.id)))
+       LEFT JOIN subtypes st ON ((im.term_id = st.id)));
+  SQL
+  create_view "siciud.complete_proposal_products", sql_definition: <<-SQL
+      SELECT pp.id,
+      pp.name,
+      pp.product_type_id,
+      pt.st_name AS product_type_name,
+      pp.indicator_id,
+      i.ind_description AS indicator_description,
+      pp.beneficiary,
+      pp.proposal_id,
+      pp.active,
+      pp.created_by,
+      pp.updated_by,
+      pp.created_at,
+      pp.updated_at
+     FROM ((proposal_products pp
+       LEFT JOIN subtypes pt ON ((pp.product_type_id = pt.id)))
+       LEFT JOIN indicators i ON ((pp.indicator_id = i.id)));
+  SQL
+  create_view "siciud.complete_proposal_budgets", sql_definition: <<-SQL
+      SELECT pb.id,
+      pb.call_item_id,
+      ci.item_id,
+      pb.amount_request_cidc,
+      pb.counterparty,
+      pb.amount_in_kind,
+      pb.subtotal,
+      pb.proposal_id,
+      pb.active,
+      pb.created_by,
+      pb.updated_by,
+      pb.created_at,
+      pb.updated_at
+     FROM ((proposal_budgets pb
+       LEFT JOIN call_items ci ON ((pb.call_item_id = ci.id)))
+       LEFT JOIN subtypes sci ON ((ci.item_id = sci.id)));
   SQL
 end
