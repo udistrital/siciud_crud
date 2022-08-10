@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_05_003904) do
+ActiveRecord::Schema.define(version: 2022_08_10_212938) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1996,6 +1996,24 @@ ActiveRecord::Schema.define(version: 2022_08_05_003904) do
     t.index ["updated_by"], name: "index_professional_roles_on_updated_by"
   end
 
+  create_table "proposal_budgets", force: :cascade do |t|
+    t.bigint "call_item_id"
+    t.float "amount_request_cidc"
+    t.float "counterparty"
+    t.float "amount_in_kind"
+    t.float "subtotal"
+    t.bigint "proposal_id"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["call_item_id"], name: "index_proposal_budgets_on_call_item_id"
+    t.index ["created_by"], name: "index_proposal_budgets_on_created_by"
+    t.index ["proposal_id"], name: "index_proposal_budgets_on_proposal_id"
+    t.index ["updated_by"], name: "index_proposal_budgets_on_updated_by"
+  end
+
   create_table "proposal_products", force: :cascade do |t|
     t.string "name"
     t.bigint "product_type_id"
@@ -3312,6 +3330,10 @@ ActiveRecord::Schema.define(version: 2022_08_05_003904) do
   add_foreign_key "procedures", "users", column: "updated_by"
   add_foreign_key "professional_roles", "users", column: "created_by"
   add_foreign_key "professional_roles", "users", column: "updated_by"
+  add_foreign_key "proposal_budgets", "call_items"
+  add_foreign_key "proposal_budgets", "proposals"
+  add_foreign_key "proposal_budgets", "users", column: "created_by"
+  add_foreign_key "proposal_budgets", "users", column: "updated_by"
   add_foreign_key "proposal_products", "indicators"
   add_foreign_key "proposal_products", "proposals"
   add_foreign_key "proposal_products", "subtypes", column: "product_type_id"
@@ -5953,5 +5975,23 @@ ActiveRecord::Schema.define(version: 2022_08_05_003904) do
      FROM ((proposal_products pp
        LEFT JOIN subtypes pt ON ((pp.product_type_id = pt.id)))
        LEFT JOIN indicators i ON ((pp.indicator_id = i.id)));
+  SQL
+  create_view "siciud.complete_proposal_budgets", sql_definition: <<-SQL
+      SELECT pb.id,
+      pb.call_item_id,
+      ci.item_id,
+      pb.amount_request_cidc,
+      pb.counterparty,
+      pb.amount_in_kind,
+      pb.subtotal,
+      pb.proposal_id,
+      pb.active,
+      pb.created_by,
+      pb.updated_by,
+      pb.created_at,
+      pb.updated_at
+     FROM ((proposal_budgets pb
+       LEFT JOIN call_items ci ON ((pb.call_item_id = ci.id)))
+       LEFT JOIN subtypes sci ON ((ci.item_id = sci.id)));
   SQL
 end
