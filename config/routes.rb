@@ -277,7 +277,9 @@ Rails.application.routes.draw do
         resources :chapters, only: [:index, :show, :create, :update]
       end
       resources :activity_schedules, only: [:show, :update]
-      resources :proposal_budgets, only: [:show, :update]
+      resources :proposal_budgets, only: [:show, :update] do
+        resources :item_details, only: [:index]
+      end
       resources :external_members_proposals, only: [:show, :update]
       resources :impacts, only: [:show, :update]
       resources :internal_members_proposals, only: [:show, :update]

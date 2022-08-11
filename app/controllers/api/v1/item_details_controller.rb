@@ -6,11 +6,16 @@ module Api
       before_action :set_proposal, only: [:create]
       before_action :set_item_detail, only: [:show, :update]
 
-      # GET /proposal/:proposal_id/item_details
+      # GET /proposals/:proposal_id/item_details
+      # GET /proposal_budgets/:proposal_budget_id/item_details
       def index
         if params[:proposal_id]
           @item_details = ItemDetail.where(
             "proposal_id = ?", params[:proposal_id]
+          )
+        elsif params[:proposal_budget_id]
+          @item_details = ItemDetail.where(
+            "proposal_budget_id = ?", params[:proposal_budget_id]
           )
         else
           @item_details = ItemDetail.all
@@ -25,7 +30,7 @@ module Api
         render json: @item_detail
       end
 
-      # POST /proposal/:proposal_id/item_details
+      # POST /proposals/:proposal_id/item_details
       def create
         @item_detail = @proposal.item_details.new(item_detail_params_to_create)
 
