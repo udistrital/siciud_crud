@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_10_220835) do
+ActiveRecord::Schema.define(version: 2022_08_11_142937) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -6004,6 +6004,7 @@ ActiveRecord::Schema.define(version: 2022_08_10_220835) do
       SELECT pb.id,
       pb.call_item_id,
       ci.item_id,
+      sci.st_name AS item_name,
       pb.amount_request_cidc,
       pb.counterparty,
       pb.amount_in_kind,
