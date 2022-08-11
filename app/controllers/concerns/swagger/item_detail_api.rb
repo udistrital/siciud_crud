@@ -189,5 +189,33 @@ module Swagger::ItemDetailApi
         end
       end
     end
+
+    swagger_path '/proposal_budgets/{proposal_budget_id}/item_details' do
+      operation :get do
+        key :summary, 'Get all  item details by proposal budget'
+        key :description, 'Returns all item details by proposal budget id'
+        key :operationId, :get_item_details_by_proposal_budget
+        key :produces, ['application/json',]
+        key :tags, ['Proposals:: Item details']
+
+        parameter name: :proposal_budget_id do
+          key :in, :path
+          key :description, 'ID of proposal budget to fetch'
+          key :required, true
+          key :type, :integer
+          key :format, :int64
+        end
+
+        response 200 do
+          key :description, 'Item detail response'
+          schema do
+            key :'$ref', :ItemDetailDxOutput
+          end
+        end
+        response :default do
+          key :description, 'Unexpected Error'
+        end
+      end
+    end
   end
 end
