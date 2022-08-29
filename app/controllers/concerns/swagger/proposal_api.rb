@@ -101,6 +101,42 @@ module Swagger::ProposalApi
       end
     end
 
+    swagger_path '/proposals/{proposal_id}/validate_proposal' do
+      operation :get do
+        key :summary, 'Validates if a proposal has the minimum required records'
+        key :description, 'Validates if a proposal has the minimum required records'
+        key :operationId, :validate_proposal
+        key :produces, ['application/json',]
+        key :tags, ['Proposals/Projects']
+
+        parameter name: :proposal_id do
+          key :in, :path
+          key :description, 'ID of proposal to fetch'
+          key :required, true
+          key :type, :integer
+          key :format, :int64
+        end
+
+        response 200 do
+          key :description, 'objective response'
+          schema do
+            property :valid do
+              key :type, :boolean
+            end
+            property :message do
+              key :type, :array
+              items do
+                key :type, :string
+              end
+            end
+          end
+        end
+        response :default do
+          key :description, 'Unexpected Error'
+        end
+      end
+    end
+
     swagger_path '/proposals/{id}' do
       operation :get do
         key :summary, 'Get a Proposal by ID'
