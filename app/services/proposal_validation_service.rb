@@ -93,7 +93,7 @@ class ProposalValidationService
           "minimum_quantity": 9,
           "sentence_complement": "Los capítulos están conformados por:",
           "detail": [
-            "Resumen",
+            "(Resumen",
             "Introducción",
             "Descripción del problema",
             "Justificación",
@@ -101,14 +101,14 @@ class ProposalValidationService
             "Marco Teórico y Estado del arte",
             "Metodología",
             "Capacidad del equipo de Investigación/Conformación y trayectoria del Equipo de Investigación",
-            "Bibliografía",
+            "Bibliografía)",
           ]
         },
         {
           "name": "Documentos",
           "required": true,
           "table": "documents",
-          "type": 25,
+          "type": nil,
           "subtype": nil,
           "field": nil,
           "minimum_quantity": 2
@@ -151,13 +151,26 @@ class ProposalValidationService
 
   def self.run_document_validation(proposal, validation)
     message = []
-    type_id = validation[:type]
-    subtypes = Type.find(type_id).subtypes
-    subtypes.each do |subtype|
-      if subtype[:required] == true
-        quantity_d = proposal.documents.where("document_type_id = ?", subtype[:id]).count
-        unless quantity_d > 0
-          message.append("El documento '#{subtype[:st_name]}' es requerido")
+    if validation[:type].nil?
+      call = proposal.call
+      call_documents = call.call_documents
+      call_documents.each do |c_document|
+        if c_document[:cd_required] == true
+          quantity_d = proposal.documents.where("document_type_id = ?", c_document[:document_id]).count
+          unless quantity_d > 0
+            message.append("El documento '#{c_document.document[:st_name]}' es requerido")
+          end
+        end
+      end
+    else
+      type_id = validation[:type]
+      subtypes = Type.find(type_id).subtypes
+      subtypes.each do |subtype|
+        if subtype[:required] == true
+          quantity_d = proposal.documents.where("document_type_id = ?", subtype[:id]).count
+          unless quantity_d > 0
+            message.append("El documento '#{subtype[:st_name]}' es requerido")
+          end
         end
       end
     end
