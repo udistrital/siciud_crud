@@ -22,6 +22,7 @@ module Api
         render json: @proposals
       end
 
+      # GET /proposals/by-internal-member
       def index_by_researcher
         if params[:researcher_id]
           @proposals = CompleteProposalsByIntMember.where(
@@ -38,6 +39,16 @@ module Api
         @proposals = DxService.load(@proposals, params)
 
         render json: @proposals
+      end
+
+      # GET /proposals/1/validate-proposal
+      def validate_proposal
+        @proposal = Proposal.find(params[:proposal_id])
+        valid, message = ProposalValidationService.run_validation(@proposal)
+        render json: {
+          "valid": valid,
+          "message": message
+        }
       end
 
       # GET /proposals/1
