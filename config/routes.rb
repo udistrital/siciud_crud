@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  resources :anonymous_evaluators
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root to: "health#health"
   get "/api" => redirect("/api/v1/apidocs/")
@@ -281,6 +280,9 @@ Rails.application.routes.draw do
         resources :documents, only: [:index, :show, :create, :update]
       end
       resources :activity_schedules, only: [:show, :update]
+      resources :anonymous_evaluators, only: [:index, :show, :create, :update] do
+        put "proposal_evaluations", to: "anonymous_evaluators#update_criteria"
+      end
       resources :proposal_budgets, only: [:show, :update] do
         resources :item_details, only: [:index]
       end

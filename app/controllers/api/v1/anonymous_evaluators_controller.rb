@@ -37,10 +37,19 @@ module Api
 
       # PATCH/PUT /anonymous_evaluators/:anonymous_evaluator_id/proposal_evaluations
       def update_criteria
-        
+        @anonymous_evaluator = AnonymousEvaluator.find(params[:anonymous_evaluator_id])
+        if @anonymous_evaluator.update(criteria_params_to_update.except(:criteria))
+          EvaluatorService.update_criteria(
+            params[:anonymous_evaluator][:criteria],
+            params[:anonymous_evaluator][:updated_by])
+          render json: @anonymous_evaluator, serializer: AnonymousEvaluatorCriterionSerializer
+        else
+          render json: @anonymous_evaluator.errors, status: :unprocessable_entity
+        end
       end
 
       private
+
       # Use callbacks to share common setup or constraints between actions.
       def set_anonymous_evaluator
         @anonymous_evaluator = AnonymousEvaluator.find(params[:id])
@@ -49,19 +58,19 @@ module Api
       # Only allow a trusted parameter "white list" through.
       def anon_eval_params_to_create
         params.require(:anonymous_evaluator).permit(:code, :total,
-                                                    :active, :created_by, :updated_by)
+                                                    :active, :created_by)
       end
 
       def anon_eval_params_to_update
         params.require(:anonymous_evaluator).permit(:code, :total,
-                                                    :active, :created_by, :updated_by)
+                                                    :active, :updated_by)
       end
 
       def criteria_params_to_update
         params.require(:anonymous_evaluator).permit(:code, :total,
                                                     :active, :updated_by,
                                                     criteria: []
-                                                    )
+        )
       end
     end
   end
