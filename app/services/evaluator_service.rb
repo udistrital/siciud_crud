@@ -2,7 +2,7 @@ class EvaluatorService
   def self.new_evaluation(proposal, params)
     begin
       criteria = proposal.call.call_eval_criteria
-      created_by = params[:created_by]
+      created_by = params[:proposal_evaluation][:created_by]
       proposal_id = proposal.id
       evaluator = self.new_evaluator(proposal_id, created_by)
 
@@ -30,5 +30,18 @@ class EvaluatorService
     new_code = "Anónimo #{evaluator_proposal_count + 1}"
     evaluator = AnonymousEvaluator.create!(code: new_code, created_by: created_by)
     return evaluator
+  end
+
+  def self.update_criteria(criteria, updated_by)
+    puts criteria
+    criteria.each do |criterion|
+      proposal_evaluation = ProposalEvaluation.find(criterion[:id])
+      params = {
+        :value => criterion[:value],
+        :active => criterion[:active],
+        :updated_by => updated_by
+      }
+      proposal_evaluation.update(params)
+    end
   end
 end

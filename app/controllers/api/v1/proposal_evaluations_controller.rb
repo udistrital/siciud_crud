@@ -26,7 +26,8 @@ module Api
 
       # POST /proposals/:proposal_id/proposal_evaluations
       def create
-        response, status = EvaluatorService.new_evaluation(@proposal, proposal_eval_params_to_create)
+        response, status = EvaluatorService.new_evaluation(@proposal,
+                                                           params)
         render json: response, status: status
       end
 
