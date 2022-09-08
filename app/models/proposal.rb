@@ -26,6 +26,7 @@ class Proposal < ApplicationRecord
   has_many :objectives
   has_many :research_groups_proposals
   has_many :risks
+  has_many :proposal_evaluations
 
   has_many :chapters, as: :sectionable
 

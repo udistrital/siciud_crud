@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_11_142937) do
+ActiveRecord::Schema.define(version: 2022_09_07_224554) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -102,6 +102,19 @@ ActiveRecord::Schema.define(version: 2022_08_11_142937) do
     t.index ["institution_type_id"], name: "index_affiliated_entities_on_institution_type_id"
     t.index ["research_network_id"], name: "index_affiliated_entities_on_research_network_id"
     t.index ["updated_by"], name: "index_affiliated_entities_on_updated_by"
+  end
+
+  create_table "anonymous_evaluators", force: :cascade do |t|
+    t.string "code"
+    t.decimal "total", precision: 5, scale: 2
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["code"], name: "index_anonymous_evaluators_on_code"
+    t.index ["created_by"], name: "index_anonymous_evaluators_on_created_by"
+    t.index ["updated_by"], name: "index_anonymous_evaluators_on_updated_by"
   end
 
   create_table "appropriation_processes", force: :cascade do |t|
@@ -1651,12 +1664,14 @@ ActiveRecord::Schema.define(version: 2022_08_11_142937) do
     t.bigint "state_id"
     t.decimal "total", precision: 5, scale: 2
     t.index ["call_id"], name: "index_mobility_calls_on_call_id"
+    t.index ["created_by"], name: "index_mobility_calls_on_created_by"
     t.index ["geo_city_id"], name: "index_mobility_calls_on_geo_city_id"
     t.index ["geo_country_id"], name: "index_mobility_calls_on_geo_country_id"
     t.index ["geo_state_id"], name: "index_mobility_calls_on_geo_state_id"
     t.index ["research_group_id"], name: "index_mobility_calls_on_research_group_id"
     t.index ["researcher_id"], name: "index_mobility_calls_on_researcher_id"
     t.index ["state_id"], name: "index_mobility_calls_on_state_id"
+    t.index ["updated_by"], name: "index_mobility_calls_on_updated_by"
   end
 
   create_table "new_animal_breeds", force: :cascade do |t|
@@ -2032,6 +2047,23 @@ ActiveRecord::Schema.define(version: 2022_08_11_142937) do
     t.index ["created_by"], name: "index_proposal_budgets_on_created_by"
     t.index ["proposal_id"], name: "index_proposal_budgets_on_proposal_id"
     t.index ["updated_by"], name: "index_proposal_budgets_on_updated_by"
+  end
+
+  create_table "proposal_evaluations", force: :cascade do |t|
+    t.bigint "proposal_id"
+    t.bigint "call_eval_criterion_id"
+    t.bigint "anonymous_evaluator_id"
+    t.integer "value"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["anonymous_evaluator_id"], name: "index_proposal_evaluations_on_anonymous_evaluator_id"
+    t.index ["call_eval_criterion_id"], name: "index_proposal_evaluations_on_call_eval_criterion_id"
+    t.index ["created_by"], name: "index_proposal_evaluations_on_created_by"
+    t.index ["proposal_id"], name: "index_proposal_evaluations_on_proposal_id"
+    t.index ["updated_by"], name: "index_proposal_evaluations_on_updated_by"
   end
 
   create_table "proposal_products", force: :cascade do |t|
@@ -2887,6 +2919,8 @@ ActiveRecord::Schema.define(version: 2022_08_11_142937) do
   add_foreign_key "affiliated_entities", "subtypes", column: "institution_type_id"
   add_foreign_key "affiliated_entities", "users", column: "created_by"
   add_foreign_key "affiliated_entities", "users", column: "updated_by"
+  add_foreign_key "anonymous_evaluators", "users", column: "created_by"
+  add_foreign_key "anonymous_evaluators", "users", column: "updated_by"
   add_foreign_key "appropriation_processes", "colciencias_calls"
   add_foreign_key "appropriation_processes", "research_groups"
   add_foreign_key "appropriation_processes", "subtypes", column: "category_id"
@@ -3266,6 +3300,8 @@ ActiveRecord::Schema.define(version: 2022_08_11_142937) do
   add_foreign_key "mobility_calls", "research_groups"
   add_foreign_key "mobility_calls", "researchers"
   add_foreign_key "mobility_calls", "subtypes", column: "state_id"
+  add_foreign_key "mobility_calls", "users", column: "created_by"
+  add_foreign_key "mobility_calls", "users", column: "updated_by"
   add_foreign_key "new_animal_breeds", "colciencias_calls"
   add_foreign_key "new_animal_breeds", "geo_cities"
   add_foreign_key "new_animal_breeds", "geo_countries"
@@ -3358,6 +3394,11 @@ ActiveRecord::Schema.define(version: 2022_08_11_142937) do
   add_foreign_key "proposal_budgets", "proposals"
   add_foreign_key "proposal_budgets", "users", column: "created_by"
   add_foreign_key "proposal_budgets", "users", column: "updated_by"
+  add_foreign_key "proposal_evaluations", "anonymous_evaluators"
+  add_foreign_key "proposal_evaluations", "call_eval_criteria"
+  add_foreign_key "proposal_evaluations", "proposals"
+  add_foreign_key "proposal_evaluations", "users", column: "created_by"
+  add_foreign_key "proposal_evaluations", "users", column: "updated_by"
   add_foreign_key "proposal_products", "indicators"
   add_foreign_key "proposal_products", "proposals"
   add_foreign_key "proposal_products", "subtypes", column: "product_type_id"
@@ -6018,5 +6059,26 @@ ActiveRecord::Schema.define(version: 2022_08_11_142937) do
      FROM ((proposal_budgets pb
        LEFT JOIN call_items ci ON ((pb.call_item_id = ci.id)))
        LEFT JOIN subtypes sci ON ((ci.item_id = sci.id)));
+  SQL
+  create_view "siciud.complete_proposal_evaluations", sql_definition: <<-SQL
+      SELECT p.id,
+      ( SELECT json_agg(json_build_object('anonymous_evaluator_id', evaluator_criteria.anonymous_evaluator_id, 'code', evaluator_criteria.code, 'criteria', evaluator_criteria.criteria, 'total', evaluator_criteria.total)) AS json_agg
+             FROM ( SELECT DISTINCT ON (pe.anonymous_evaluator_id) pe.anonymous_evaluator_id,
+                      ae.code,
+                      ae.total,
+                      ( SELECT json_agg(json_build_object('id', pec.id, 'call_eval_criterion_id', pec.call_eval_criterion_id, 'eval_criterion_id', cec.eval_criterion_id, 'eval_criterion_name', scec.st_name, 'value', pec.value, 'active', pec.active, 'created_by', pec.created_by, 'updated_by', pec.updated_by)) AS json_agg
+                             FROM ((proposal_evaluations pec
+                               LEFT JOIN call_eval_criteria cec ON ((pec.call_eval_criterion_id = cec.id)))
+                               LEFT JOIN subtypes scec ON ((cec.eval_criterion_id = scec.id)))
+                            WHERE (pec.anonymous_evaluator_id = ae.id)) AS criteria
+                     FROM (proposal_evaluations pe
+                       LEFT JOIN anonymous_evaluators ae ON ((pe.anonymous_evaluator_id = ae.id)))
+                    WHERE (pe.proposal_id = p.id)) evaluator_criteria) AS anonymous_evaluators,
+      p.active,
+      p.created_by,
+      p.updated_by,
+      p.created_at,
+      p.updated_at
+     FROM proposals p;
   SQL
 end
