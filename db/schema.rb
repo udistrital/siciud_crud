@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_09_07_224554) do
+ActiveRecord::Schema.define(version: 2022_09_12_160616) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -6066,7 +6066,7 @@ ActiveRecord::Schema.define(version: 2022_09_07_224554) do
              FROM ( SELECT DISTINCT ON (pe.anonymous_evaluator_id) pe.anonymous_evaluator_id,
                       ae.code,
                       ae.total,
-                      ( SELECT json_agg(json_build_object('id', pec.id, 'call_eval_criterion_id', pec.call_eval_criterion_id, 'eval_criterion_id', cec.eval_criterion_id, 'eval_criterion_name', scec.st_name, 'value', pec.value, 'active', pec.active, 'created_by', pec.created_by, 'updated_by', pec.updated_by)) AS json_agg
+                      ( SELECT json_agg(json_build_object('id', pec.id, 'call_eval_criterion_id', pec.call_eval_criterion_id, 'call_eval_criterion_percentage', cec.cec_percentage, 'eval_criterion_id', cec.eval_criterion_id, 'eval_criterion_name', scec.st_name, 'value', pec.value, 'active', pec.active, 'created_by', pec.created_by, 'updated_by', pec.updated_by)) AS json_agg
                              FROM ((proposal_evaluations pec
                                LEFT JOIN call_eval_criteria cec ON ((pec.call_eval_criterion_id = cec.id)))
                                LEFT JOIN subtypes scec ON ((cec.eval_criterion_id = scec.id)))
