@@ -34,6 +34,10 @@ module Swagger::ItemDetailSchema
         key :minimum, 0
         key :exclusiveMinimum, false
       end
+      property :source_id do
+        key :type, :integer
+        key :format, :int64
+      end
       property :active do
         key :type, :boolean
         key :default, true
@@ -89,6 +93,9 @@ module Swagger::ItemDetailSchema
           property :id do
             key :type, :integer
             key :format, :int64
+          end
+          property :source_name do
+            key :type, :string
           end
           property :proposal_id do
             key :type, :integer

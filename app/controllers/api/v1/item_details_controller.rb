@@ -10,15 +10,15 @@ module Api
       # GET /proposal_budgets/:proposal_budget_id/item_details
       def index
         if params[:proposal_id]
-          @item_details = ItemDetail.where(
+          @item_details = CompleteItemDetail.where(
             "proposal_id = ?", params[:proposal_id]
           )
         elsif params[:proposal_budget_id]
-          @item_details = ItemDetail.where(
+          @item_details = CompleteItemDetail.where(
             "proposal_budget_id = ?", params[:proposal_budget_id]
           )
         else
-          @item_details = ItemDetail.all
+          @item_details = CompleteItemDetail.all
         end
         @item_details = DxService.load(@item_details, params)
 
@@ -61,7 +61,7 @@ module Api
       def item_detail_params_to_create
         params.require(:item_detail).permit(:proposal_budget_id, :description,
                                             :justification, :estimated_date, :quantity,
-                                            :individual_cost, :subtotal,
+                                            :individual_cost, :subtotal, :source_id,
                                             :active, :created_by)
       end
 
@@ -69,7 +69,7 @@ module Api
         params.require(:item_detail).permit(:proposal_budget_id, :description,
                                             :justification, :estimated_date, :quantity,
                                             :individual_cost, :subtotal, :proposal_id,
-                                            :active, :updated_by)
+                                            :source_id, :active, :updated_by)
       end
     end
   end
