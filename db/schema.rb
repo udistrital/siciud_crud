@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_09_12_160616) do
+ActiveRecord::Schema.define(version: 2022_09_15_161321) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1500,9 +1500,11 @@ ActiveRecord::Schema.define(version: 2022_09_12_160616) do
     t.bigint "updated_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "source_id"
     t.index ["created_by"], name: "index_item_details_on_created_by"
     t.index ["proposal_budget_id"], name: "index_item_details_on_proposal_budget_id"
     t.index ["proposal_id"], name: "index_item_details_on_proposal_id"
+    t.index ["source_id"], name: "index_item_details_on_source_id"
     t.index ["updated_by"], name: "index_item_details_on_updated_by"
   end
 
@@ -3255,6 +3257,7 @@ ActiveRecord::Schema.define(version: 2022_09_12_160616) do
   add_foreign_key "ip_livestock_breeds", "users", column: "updated_by"
   add_foreign_key "item_details", "proposal_budgets"
   add_foreign_key "item_details", "proposals"
+  add_foreign_key "item_details", "subtypes", column: "source_id"
   add_foreign_key "item_details", "users", column: "created_by"
   add_foreign_key "item_details", "users", column: "updated_by"
   add_foreign_key "keywords", "users", column: "created_by"
@@ -6080,5 +6083,25 @@ ActiveRecord::Schema.define(version: 2022_09_12_160616) do
       p.created_at,
       p.updated_at
      FROM proposals p;
+  SQL
+  create_view "siciud.complete_item_details", sql_definition: <<-SQL
+      SELECT itd.id,
+      itd.proposal_budget_id,
+      itd.description,
+      itd.justification,
+      itd.estimated_date,
+      itd.quantity,
+      itd.individual_cost,
+      itd.subtotal,
+      itd.proposal_id,
+      itd.source_id,
+      s.st_name AS source_name,
+      itd.active,
+      itd.created_by,
+      itd.updated_by,
+      itd.created_at,
+      itd.updated_at
+     FROM (item_details itd
+       LEFT JOIN subtypes s ON ((itd.source_id = s.id)));
   SQL
 end
