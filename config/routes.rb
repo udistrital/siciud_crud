@@ -264,6 +264,7 @@ Rails.application.routes.draw do
 
       resources :proposals, only: [:index, :show, :update] do
         resources :activity_schedules, only: [:index, :create]
+        resources :activity_evaluations, only: [:index]
         get "evaluators", to: "evaluators#index_by_proposal"
         get "validate_proposal", to: "proposals#validate_proposal"
         resources :proposal_budgets, only: [:index, :create]
@@ -279,7 +280,10 @@ Rails.application.routes.draw do
         resources :chapters, only: [:index, :show, :create, :update]
         resources :documents, only: [:index, :show, :create, :update]
       end
-      resources :activity_schedules, only: [:show, :update]
+      resources :activity_schedules, only: [:show, :update] do
+        resources :activity_evaluations, only: [:index, :create]
+      end
+      resources :activity_evaluations, only: [:show, :update]
       resources :anonymous_evaluators, only: [:index, :show, :create, :update] do
         put "proposal_evaluations", to: "anonymous_evaluators#update_criteria"
       end
