@@ -54,6 +54,9 @@ class ApplicationController < ActionController::API
     elsif params[:proposal_id]
       id = params[:proposal_id]
       @context = Proposal.find(id)
+    elsif params[:proposal_product_id]
+      id = params[:proposal_product_id]
+      @context = ProposalProduct.find(id)
     else
       set_product_context
     end

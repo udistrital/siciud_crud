@@ -3,6 +3,7 @@ class ActivitySchedule < ApplicationRecord
 
   belongs_to :proposal
 
+  has_one :activity_evaluation
   has_and_belongs_to_many :objectives
   has_and_belongs_to_many :risks
 
