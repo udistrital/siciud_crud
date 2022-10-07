@@ -8,6 +8,7 @@ module Swagger::DocumentApi
                       :manuals,
                       :mobility_calls,
                       :proposals,
+                      :proposal_products,
                       :research_units,
                       :research_networks,
                       :form_a_act_plans,

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_10_05_150318) do
+ActiveRecord::Schema.define(version: 2022_10_05_161042) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -6154,5 +6154,30 @@ ActiveRecord::Schema.define(version: 2022_10_05_150318) do
      FROM ((activity_evaluations ae
        LEFT JOIN activity_schedules acs ON ((acs.id = ae.activity_schedule_id)))
        LEFT JOIN subtypes ss ON ((ss.id = ae.state_id)));
+  SQL
+  create_view "siciud.activity_evaluation_notifications", sql_definition: <<-SQL
+      SELECT p.id,
+      p.title,
+      p.call_id,
+      c.call_code,
+      c.call_name,
+      p.project_type_id,
+      spj.st_name AS project_type_name,
+      imp.researcher_id,
+      res.identification_number,
+      res.oas_researcher_id,
+      imp.role_id,
+      rol.name AS role_name,
+      p.active,
+      p.created_at,
+      p.updated_at,
+      p.created_by,
+      p.updated_by
+     FROM (((((proposals p
+       LEFT JOIN calls c ON ((p.call_id = c.id)))
+       LEFT JOIN subtypes spj ON ((p.project_type_id = spj.id)))
+       LEFT JOIN internal_members_proposals imp ON ((p.id = imp.proposal_id)))
+       LEFT JOIN researchers res ON ((imp.researcher_id = res.id)))
+       LEFT JOIN roles rol ON ((imp.role_id = rol.id)));
   SQL
 end
