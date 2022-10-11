@@ -5,6 +5,8 @@ class ProposalProduct < ApplicationRecord
   belongs_to :product_type, class_name: 'Subtype', foreign_key: 'product_type_id'
   belongs_to :proposal
 
+  has_and_belongs_to_many :researchers
+
   has_many :documents, as: :documentable
 
   # Tracking inherited from ApplicationRecord, fields:

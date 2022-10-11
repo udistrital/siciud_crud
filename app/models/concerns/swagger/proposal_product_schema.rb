@@ -18,6 +18,10 @@ module Swagger::ProposalProductSchema
       property :beneficiary do
         key :type, :string
       end
+      property :validated do
+        key :type, :boolean
+        key :default, false
+      end
       property :active do
         key :type, :boolean
         key :default, true
@@ -36,6 +40,13 @@ module Swagger::ProposalProductSchema
             property :created_by do
               key :type, :integer
               key :format, :int64
+            end
+            property :researcher_ids do
+              key :type, :array
+              items do
+                key :type, :integer
+                key :format, :int64
+              end
             end
           end
         end
@@ -58,6 +69,13 @@ module Swagger::ProposalProductSchema
             property :updated_by do
               key :type, :integer
               key :format, :int64
+            end
+            property :researcher_ids do
+              key :type, :array
+              items do
+                key :type, :integer
+                key :format, :int64
+              end
             end
           end
         end
@@ -83,6 +101,19 @@ module Swagger::ProposalProductSchema
           end
           property :indicator_description do
             key :type, :string
+          end
+          property :researchers do
+            key :type, :array
+            items do
+              key :type, :object
+              property :id do
+                key :type, :integer
+                key :format, :int64
+              end
+              property :oas_researcher_id do
+                key :type, :string
+              end
+            end
           end
           property :created_by do
             key :type, :integer

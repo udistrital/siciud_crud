@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_10_05_161042) do
+ActiveRecord::Schema.define(version: 2022_10_11_052720) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -2095,11 +2095,17 @@ ActiveRecord::Schema.define(version: 2022_10_05_161042) do
     t.bigint "updated_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "validated", default: false
     t.index ["created_by"], name: "index_proposal_products_on_created_by"
     t.index ["indicator_id"], name: "index_proposal_products_on_indicator_id"
     t.index ["product_type_id"], name: "index_proposal_products_on_product_type_id"
     t.index ["proposal_id"], name: "index_proposal_products_on_proposal_id"
     t.index ["updated_by"], name: "index_proposal_products_on_updated_by"
+  end
+
+  create_table "proposal_products_researchers", id: false, force: :cascade do |t|
+    t.bigint "proposal_product_id", null: false
+    t.bigint "researcher_id", null: false
   end
 
   create_table "proposals", force: :cascade do |t|
@@ -6046,24 +6052,6 @@ ActiveRecord::Schema.define(version: 2022_10_05_161042) do
        LEFT JOIN indicators i ON ((im.indicator_id = i.id)))
        LEFT JOIN subtypes st ON ((im.term_id = st.id)));
   SQL
-  create_view "siciud.complete_proposal_products", sql_definition: <<-SQL
-      SELECT pp.id,
-      pp.name,
-      pp.product_type_id,
-      pt.st_name AS product_type_name,
-      pp.indicator_id,
-      i.ind_description AS indicator_description,
-      pp.beneficiary,
-      pp.proposal_id,
-      pp.active,
-      pp.created_by,
-      pp.updated_by,
-      pp.created_at,
-      pp.updated_at
-     FROM ((proposal_products pp
-       LEFT JOIN subtypes pt ON ((pp.product_type_id = pt.id)))
-       LEFT JOIN indicators i ON ((pp.indicator_id = i.id)));
-  SQL
   create_view "siciud.complete_proposal_budgets", sql_definition: <<-SQL
       SELECT pb.id,
       pb.call_item_id,
@@ -6179,5 +6167,28 @@ ActiveRecord::Schema.define(version: 2022_10_05_161042) do
        LEFT JOIN internal_members_proposals imp ON ((p.id = imp.proposal_id)))
        LEFT JOIN researchers res ON ((imp.researcher_id = res.id)))
        LEFT JOIN roles rol ON ((imp.role_id = rol.id)));
+  SQL
+  create_view "siciud.complete_proposal_products", sql_definition: <<-SQL
+      SELECT pp.id,
+      pp.name,
+      pp.product_type_id,
+      pt.st_name AS product_type_name,
+      pp.indicator_id,
+      i.ind_description AS indicator_description,
+      pp.beneficiary,
+      pp.proposal_id,
+      ( SELECT json_agg(json_build_object('id', r.id, 'oas_researcher_id', r.oas_researcher_id)) AS json_agg
+             FROM (proposal_products_researchers ppr
+               LEFT JOIN researchers r ON ((r.id = ppr.researcher_id)))
+            WHERE (ppr.proposal_product_id = pp.id)) AS researchers,
+      pp.validated,
+      pp.active,
+      pp.created_by,
+      pp.updated_by,
+      pp.created_at,
+      pp.updated_at
+     FROM ((proposal_products pp
+       LEFT JOIN subtypes pt ON ((pp.product_type_id = pt.id)))
+       LEFT JOIN indicators i ON ((pp.indicator_id = i.id)));
   SQL
 end
