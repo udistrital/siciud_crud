@@ -1,6 +1,7 @@
 class InternalMembersProposalSerializer < AbstractMemberSerializer
   attributes :id, :proposal_id,
              :role_id, :role_name, :researcher,
+             :start_date, :end_date,
              :active, :created_by, :updated_by,
              :created_at, :updated_at
 

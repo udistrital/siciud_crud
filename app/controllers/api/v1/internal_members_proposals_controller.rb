@@ -58,13 +58,15 @@ module Api
       # Only allow a trusted parameter "white list" through.
       def int_mem_prl_params_to_create
         params.require(:internal_members_proposal).permit(:researcher_id,
-                                                          :role_id,
+                                                          :role_id, :start_date,
+                                                          :end_date,
                                                           :active, :created_by)
       end
 
       def int_mem_prl_params_to_update
         params.require(:internal_members_proposal).permit(:proposal_id,
                                                           :researcher_id, :role_id,
+                                                          :start_date, :end_date,
                                                           :active, :updated_by)
       end
     end
