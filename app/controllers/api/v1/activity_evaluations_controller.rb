@@ -1,6 +1,7 @@
 module Api
   module V1
     class ActivityEvaluationsController < ApplicationController
+      include Swagger::ActivityEvaluationApi
 
       before_action :set_activity_schedule, only: [:create]
       before_action :set_activity_evaluation, only: [:show, :update]
@@ -8,9 +9,11 @@ module Api
       # GET /proposal/:proposal_id/activity_evaluations
       # GET /activity_evaluations
       def index
+        puts "aaaaaaaaaaaaaaaaaaaa"
+        puts params[:proposal_id]
         if params[:proposal_id]
           @activity_evaluations = CompleteActivityEvaluation.where(
-            "proposal_id", params[:proposal_id]
+            "proposal_id = ?", params[:proposal_id]
           )
         else
           @activity_evaluations = CompleteActivityEvaluation.all
@@ -25,9 +28,10 @@ module Api
         render json: @activity_evaluation
       end
 
-      # POST /activity_evaluations
+      # POST /activity_schedules/:activity_schedule_id/activity_evaluations
       def create
-        @activity_evaluation = @activity_schedule.activity_evaluation.new(act_eval_params_to_create)
+        @activity_evaluation = ActivityEvaluation.new(act_eval_params_to_create)
+        @activity_evaluation.activity_schedule_id = @activity_schedule.id
 
         if @activity_evaluation.save
           render json: @activity_evaluation, status: :created
@@ -60,6 +64,7 @@ module Api
       def act_eval_params_to_create
         params.require(:activity_evaluation).permit(:notified_due_to_expire,
                                                     :notified_expired, :state_id,
+                                                    :is_completed,
                                                     :active, :created_by)
       end
 
@@ -67,6 +72,7 @@ module Api
         params.require(:activity_evaluation).permit(:activity_schedule_id,
                                                     :notified_due_to_expire,
                                                     :notified_expired, :state_id,
+                                                    :is_completed,
                                                     :active, :updated_by)
       end
     end

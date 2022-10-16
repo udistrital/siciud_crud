@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_10_13_154349) do
+ActiveRecord::Schema.define(version: 2022_10_16_002128) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -60,14 +60,15 @@ ActiveRecord::Schema.define(version: 2022_10_13_154349) do
 
   create_table "activity_evaluations", force: :cascade do |t|
     t.bigint "activity_schedule_id"
-    t.boolean "notified_due_to_expire"
-    t.boolean "notified_expired"
+    t.boolean "notified_due_to_expire", default: false
+    t.boolean "notified_expired", default: false
     t.bigint "state_id"
     t.boolean "active", default: true
     t.bigint "created_by"
     t.bigint "updated_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "is_completed", default: false
     t.index ["activity_schedule_id"], name: "index_activity_evaluations_on_activity_schedule_id"
     t.index ["created_by"], name: "index_activity_evaluations_on_created_by"
     t.index ["state_id"], name: "index_activity_evaluations_on_state_id"
@@ -6098,37 +6099,6 @@ ActiveRecord::Schema.define(version: 2022_10_13_154349) do
      FROM (item_details itd
        LEFT JOIN subtypes s ON ((itd.source_id = s.id)));
   SQL
-  create_view "siciud.complete_activity_evaluations", sql_definition: <<-SQL
-      SELECT ae.id,
-      ae.activity_schedule_id,
-      acs.name,
-      acs.description,
-      acs.start_date,
-      acs.end_date,
-      acs.duration,
-      acs.deliverable,
-      acs.proposal_id,
-      ARRAY( SELECT aso.objective_id
-             FROM activity_schedules_objectives aso
-            WHERE (acs.id = aso.activity_schedule_id)) AS objective_ids,
-      acs.active AS activity_schedule_active,
-      acs.created_by AS activity_schedule_created_by,
-      acs.updated_by AS activity_schedule_updated_by,
-      acs.created_at AS activity_schedule_created_at,
-      acs.updated_at AS activity_schedule_updated_at,
-      ae.notified_due_to_expire,
-      ae.notified_expired,
-      ae.state_id,
-      ss.st_name AS state_name,
-      ae.active AS activity_evaluation_active,
-      ae.created_by AS activity_evaluation_created_by,
-      ae.updated_by AS activity_evaluation_updated_by,
-      ae.created_at AS activity_evaluation_created_at,
-      ae.updated_at AS activity_evaluation_updated_at
-     FROM ((activity_evaluations ae
-       LEFT JOIN activity_schedules acs ON ((acs.id = ae.activity_schedule_id)))
-       LEFT JOIN subtypes ss ON ((ss.id = ae.state_id)));
-  SQL
   create_view "siciud.activity_evaluation_notifications", sql_definition: <<-SQL
       SELECT p.id,
       p.title,
@@ -6194,5 +6164,37 @@ ActiveRecord::Schema.define(version: 2022_10_13_154349) do
       imp.updated_at
      FROM (internal_members_proposals imp
        LEFT JOIN roles r ON ((r.id = imp.role_id)));
+  SQL
+  create_view "siciud.complete_activity_evaluations", sql_definition: <<-SQL
+      SELECT ae.id,
+      ae.activity_schedule_id,
+      acs.name,
+      acs.description,
+      acs.start_date,
+      acs.end_date,
+      acs.duration,
+      acs.deliverable,
+      acs.proposal_id,
+      ARRAY( SELECT aso.objective_id
+             FROM activity_schedules_objectives aso
+            WHERE (acs.id = aso.activity_schedule_id)) AS objective_ids,
+      acs.active AS activity_schedule_active,
+      acs.created_by AS activity_schedule_created_by,
+      acs.updated_by AS activity_schedule_updated_by,
+      acs.created_at AS activity_schedule_created_at,
+      acs.updated_at AS activity_schedule_updated_at,
+      ae.notified_due_to_expire,
+      ae.notified_expired,
+      ae.is_completed,
+      ae.state_id,
+      ss.st_name AS state_name,
+      ae.active AS activity_evaluation_active,
+      ae.created_by AS activity_evaluation_created_by,
+      ae.updated_by AS activity_evaluation_updated_by,
+      ae.created_at AS activity_evaluation_created_at,
+      ae.updated_at AS activity_evaluation_updated_at
+     FROM ((activity_evaluations ae
+       LEFT JOIN activity_schedules acs ON ((acs.id = ae.activity_schedule_id)))
+       LEFT JOIN subtypes ss ON ((ss.id = ae.state_id)));
   SQL
 end
