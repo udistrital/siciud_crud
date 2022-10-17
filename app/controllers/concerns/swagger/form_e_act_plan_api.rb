@@ -139,6 +139,92 @@ module Swagger::FormEActPlanApi
       end
     end
 
+    swagger_path '/inventories/{id}' do
+      operation :put do
+        key :summary, 'Update Form E action plan or inventory by ID'
+        key :description, 'Returns the updated form E action plan or inventory'
+        key :operationId, :update_inventory
+        key :produces, ['application/json',]
+        key :tags, ['Projects::Inventories']
+
+        parameter name: :id do
+          key :in, :path
+          key :description, 'ID of form E action plan or inventory to fetch'
+          key :required, true
+          key :type, :integer
+          key :format, :int64
+        end
+
+        parameter name: :form_e_act_plan do
+          key :in, :body
+          key :description, 'Form E action plan or inventory to update'
+          key :required, true
+          schema do
+            key :'$ref', :FormEActPlanInputPut
+          end
+        end
+
+        response 200 do
+          key :description, 'form e action plan or inventory response'
+          schema do
+            key :'$ref', :FormEActPlanOutput
+          end
+        end
+        response 422 do
+          key :description, 'Unprocessable Entity'
+          schema do
+            key :'$ref', :ErrorUnprocessableEntity
+          end
+        end
+        response :default do
+          key :description, 'Unexpected Error'
+        end
+      end
+
+      operation :patch do
+        key :summary, 'Activate or deactivate a Form E action plan or inventory by ID'
+        key :description, 'Returns the activated/deactivated form E action plan or inventory'
+        key :operationId, :change_active_inventory
+        key :produces, ['application/json',]
+        key :tags, ['Projects::Inventories']
+
+        parameter name: :id do
+          key :in, :path
+          key :description, 'ID of form E action plan or inventory to fetch '
+          key :required, true
+          key :type, :integer
+          key :format, :int64
+        end
+
+        parameter name: :form_e_act_plan do
+          key :in, :body
+          key :description, 'Form E action plan or inventory to activate or deactivate'
+          key :required, true
+          schema do
+            property :form_e_act_plan do
+              key :'$ref', :ChangeActive
+            end
+          end
+        end
+
+        response 200 do
+          key :description, 'form e action plan or inventory response'
+          schema do
+            key :'$ref', :FormEActPlanOutput
+          end
+        end
+        response 422 do
+          key :description, 'Unprocessable Entity'
+          schema do
+            key :'$ref', :ErrorUnprocessableEntity
+          end
+        end
+        response :default do
+          key :description, 'Unexpected Error'
+        end
+      end
+    end
+
     swagger_path '/action_plans/{action_plan_id}/form_e_act_plans' do
       operation :get do
         key :summary, 'Get all Form E action plans'

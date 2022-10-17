@@ -24,6 +24,10 @@ module Swagger::FormEActPlanSchema
         key :type, :integer
         key :format, :int64
       end
+      property :value do
+        key :type, :number
+        key :format, :float
+      end
       property :active do
         key :type, :boolean
         key :default, true

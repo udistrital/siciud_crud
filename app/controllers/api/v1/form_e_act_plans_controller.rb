@@ -4,7 +4,7 @@ module Api
       include Swagger::FormEActPlanApi
 
       before_action :set_action_plan_to_form, only: [:index, :create, :update]
-      before_action :set_form_e_act_plan, only: [:show, :update]
+      before_action :set_form_e_act_plan, only: [:show, :update, :update_inventory]
 
       # GET /action_plans/:id/form_e_act_plans
       def index
@@ -42,7 +42,7 @@ module Api
                                                          :classification_id,
                                                          :type_description, :description,
                                                          :inventoried, :inventory_plate,
-                                                         :plan_type_id],
+                                                         :plan_type_id, :value],
                                                        ", form e.")
         if result[:is_upgradeable]
           if @form_e_act_plan.update(result[:body_params])
@@ -56,6 +56,15 @@ module Api
         end
       end
 
+      # PATCH/PUT /inventories/1
+      def update_inventory
+        if @form_e_act_plan.update(form_e_act_p_params_to_update)
+          render json: @form_e_act_plan
+        else
+          render json: @form_e_act_plan.errors, status: :unprocessable_entity
+        end
+      end
+
       private
 
       # Use callbacks to share common setup or constraints between actions.
@@ -66,7 +75,7 @@ module Api
       # Only allow a trusted parameter "white list" through.
       def form_e_act_p_params_to_create
         params.require(:form_e_act_plan).permit(:classification_id, :type_description,
-                                                :description, :inventoried,
+                                                :description, :inventoried, :value,
                                                 :inventory_plate, :plan_type_id,
                                                 :active, :created_by)
       end
@@ -75,7 +84,7 @@ module Api
         params.require(:form_e_act_plan).permit(:classification_id, :type_description,
                                                 :description, :inventoried,
                                                 :inventory_plate, :action_plan_id,
-                                                :plan_type_id,
+                                                :plan_type_id, :value,
                                                 :active, :updated_by)
       end
     end

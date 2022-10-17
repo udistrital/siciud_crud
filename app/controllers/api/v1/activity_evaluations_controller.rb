@@ -9,8 +9,6 @@ module Api
       # GET /proposal/:proposal_id/activity_evaluations
       # GET /activity_evaluations
       def index
-        puts "aaaaaaaaaaaaaaaaaaaa"
-        puts params[:proposal_id]
         if params[:proposal_id]
           @activity_evaluations = CompleteActivityEvaluation.where(
             "proposal_id = ?", params[:proposal_id]
