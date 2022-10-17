@@ -55,6 +55,9 @@ Rails.application.routes.draw do
         resources :documents, only: [:index, :show, :create, :update]
       end
       resources :form_e_act_plans, only: [:show]
+      get "/inventories", to: "form_e_act_plans#index"
+      post "/inventories", to: "form_e_act_plans#create_inventory"
+      get "/inventories/:id", to: "form_e_act_plans#show"
       put "/inventories/:id", to: "form_e_act_plans#update_inventory"
 
       # Enpoint CRUD de los grupos de investigacion
