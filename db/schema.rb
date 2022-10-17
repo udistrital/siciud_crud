@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_10_16_002128) do
+ActiveRecord::Schema.define(version: 2022_10_17_044617) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1039,6 +1039,7 @@ ActiveRecord::Schema.define(version: 2022_10_16_002128) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "classification_id"
+    t.float "value"
     t.index ["action_plan_id"], name: "index_form_e_act_plans_on_action_plan_id"
     t.index ["classification_id"], name: "index_form_e_act_plans_on_classification_id"
     t.index ["created_by"], name: "index_form_e_act_plans_on_created_by"
@@ -5754,26 +5755,6 @@ ActiveRecord::Schema.define(version: 2022_10_16_002128) do
        LEFT JOIN subtypes spt ON ((fcap.product_type_id = spt.id)))
        LEFT JOIN subtypes scpt ON ((fcap.child_prod_type_id = scpt.id)));
   SQL
-  create_view "siciud.complete_form_e_act_ps", sql_definition: <<-SQL
-      SELECT feap.id,
-      feap.action_plan_id,
-      feap.classification_id,
-      scl.st_name AS classification_name,
-      feap.description,
-      feap.type_description,
-      feap.inventoried,
-      feap.inventory_plate,
-      feap.plan_type_id,
-      splt.st_name AS plan_type_name,
-      feap.active,
-      feap.created_by,
-      feap.updated_by,
-      feap.created_at,
-      feap.updated_at
-     FROM ((form_e_act_plans feap
-       LEFT JOIN subtypes scl ON ((feap.classification_id = scl.id)))
-       LEFT JOIN subtypes splt ON ((feap.plan_type_id = splt.id)));
-  SQL
   create_view "siciud.complete_ext_members_proposals", sql_definition: <<-SQL
       SELECT emp.id,
       ( SELECT json_build_object('id', contacts.id, 'identification_number', contacts.identification_number, 'identification_type_id', contacts.identification_type_id, 'mobile', contacts.mobile, 'address', contacts.address, 'name', contacts.name, 'email', contacts.email, 'phone', contacts.phone) AS json_build_object
@@ -6196,5 +6177,26 @@ ActiveRecord::Schema.define(version: 2022_10_16_002128) do
      FROM ((activity_evaluations ae
        LEFT JOIN activity_schedules acs ON ((acs.id = ae.activity_schedule_id)))
        LEFT JOIN subtypes ss ON ((ss.id = ae.state_id)));
+  SQL
+  create_view "siciud.complete_form_e_act_ps", sql_definition: <<-SQL
+      SELECT feap.id,
+      feap.action_plan_id,
+      feap.classification_id,
+      scl.st_name AS classification_name,
+      feap.description,
+      feap.type_description,
+      feap.inventoried,
+      feap.inventory_plate,
+      feap.plan_type_id,
+      splt.st_name AS plan_type_name,
+      feap.value,
+      feap.active,
+      feap.created_by,
+      feap.updated_by,
+      feap.created_at,
+      feap.updated_at
+     FROM ((form_e_act_plans feap
+       LEFT JOIN subtypes scl ON ((feap.classification_id = scl.id)))
+       LEFT JOIN subtypes splt ON ((feap.plan_type_id = splt.id)));
   SQL
 end

@@ -3,20 +3,25 @@ module Api
     class FormEActPlansController < AbstractActionPlanController
       include Swagger::FormEActPlanApi
 
-      before_action :set_action_plan_to_form, only: [:index, :create, :update]
-      before_action :set_form_e_act_plan, only: [:show, :update]
+      before_action :set_action_plan_to_form, only: [:create, :update]
+      before_action :set_form_e_act_plan, only: [:show, :update, :update_inventory]
 
       # GET /action_plans/:id/form_e_act_plans
       def index
-        @form_e_act_plans = CompleteFormEActP.where(
-          "action_plan_id = ?", params[:action_plan_id]
-        )
+        if params[:action_plan_id]
+          @form_e_act_plans = CompleteFormEActP.where(
+            "action_plan_id = ?", params[:action_plan_id]
+          )
+        else
+          @form_e_act_plans = CompleteFormEActP.all
+        end
         @form_e_act_plans = DxService.load(@form_e_act_plans, params)
 
         render json: @form_e_act_plans
       end
 
       # GET /form_e_act_plans/1
+      # GET /inventories/1
       def show
         render json: @form_e_act_plan
       end
@@ -24,6 +29,18 @@ module Api
       # POST /action_plans/:id/form_e_act_plans
       def create
         @form_e_act_plan = @action_plan.form_e_act_plans.new(
+          form_e_act_p_params_to_create)
+
+        if @form_e_act_plan.save
+          render json: @form_e_act_plan, status: :created
+        else
+          render json: @form_e_act_plan.errors, status: :unprocessable_entity
+        end
+      end
+
+      # POST /inventories
+      def create_inventory
+        @form_e_act_plan = FormEActPlan.new(
           form_e_act_p_params_to_create)
 
         if @form_e_act_plan.save
@@ -42,7 +59,7 @@ module Api
                                                          :classification_id,
                                                          :type_description, :description,
                                                          :inventoried, :inventory_plate,
-                                                         :plan_type_id],
+                                                         :plan_type_id, :value],
                                                        ", form e.")
         if result[:is_upgradeable]
           if @form_e_act_plan.update(result[:body_params])
@@ -56,6 +73,15 @@ module Api
         end
       end
 
+      # PATCH/PUT /inventories/1
+      def update_inventory
+        if @form_e_act_plan.update(form_e_act_p_params_to_update)
+          render json: @form_e_act_plan
+        else
+          render json: @form_e_act_plan.errors, status: :unprocessable_entity
+        end
+      end
+
       private
 
       # Use callbacks to share common setup or constraints between actions.
@@ -66,7 +92,7 @@ module Api
       # Only allow a trusted parameter "white list" through.
       def form_e_act_p_params_to_create
         params.require(:form_e_act_plan).permit(:classification_id, :type_description,
-                                                :description, :inventoried,
+                                                :description, :inventoried, :value,
                                                 :inventory_plate, :plan_type_id,
                                                 :active, :created_by)
       end
@@ -75,7 +101,7 @@ module Api
         params.require(:form_e_act_plan).permit(:classification_id, :type_description,
                                                 :description, :inventoried,
                                                 :inventory_plate, :action_plan_id,
-                                                :plan_type_id,
+                                                :plan_type_id, :value,
                                                 :active, :updated_by)
       end
     end
