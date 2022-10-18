@@ -1,6 +1,6 @@
 class FormEActPlanSerializer < AbstractActionPlanSerializer
   attributes :id, :action_plan_id, :type_description, :classification_id,
-             :classification_name, :description, :value,
+             :classification_name, :description, :value, :state_id, :state_name,
              :inventoried, :inventory_plate, :plan_type_id, :plan_type_name,
              :active, :created_by, :updated_by, :created_at, :updated_at
 
@@ -8,6 +8,13 @@ class FormEActPlanSerializer < AbstractActionPlanSerializer
     classification = self.object.classification
     if classification
       classification.st_name
+    end
+  end
+
+  def state_name
+    state = self.object.state
+    if state
+      state.st_name
     end
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_10_17_044617) do
+ActiveRecord::Schema.define(version: 2022_10_18_013629) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1040,9 +1040,11 @@ ActiveRecord::Schema.define(version: 2022_10_17_044617) do
     t.datetime "updated_at", null: false
     t.bigint "classification_id"
     t.float "value"
+    t.bigint "state_id"
     t.index ["action_plan_id"], name: "index_form_e_act_plans_on_action_plan_id"
     t.index ["classification_id"], name: "index_form_e_act_plans_on_classification_id"
     t.index ["created_by"], name: "index_form_e_act_plans_on_created_by"
+    t.index ["state_id"], name: "index_form_e_act_plans_on_state_id"
     t.index ["updated_by"], name: "index_form_e_act_plans_on_updated_by"
   end
 
@@ -3168,6 +3170,7 @@ ActiveRecord::Schema.define(version: 2022_10_17_044617) do
   add_foreign_key "form_d_act_plans", "users", column: "updated_by"
   add_foreign_key "form_e_act_plans", "action_plans"
   add_foreign_key "form_e_act_plans", "subtypes", column: "classification_id"
+  add_foreign_key "form_e_act_plans", "subtypes", column: "state_id"
   add_foreign_key "form_e_act_plans", "users", column: "created_by"
   add_foreign_key "form_e_act_plans", "users", column: "updated_by"
   add_foreign_key "functional_applications", "procedure_requests"
@@ -6190,13 +6193,16 @@ ActiveRecord::Schema.define(version: 2022_10_17_044617) do
       feap.plan_type_id,
       splt.st_name AS plan_type_name,
       feap.value,
+      feap.state_id,
+      spst.st_name AS state_name,
       feap.active,
       feap.created_by,
       feap.updated_by,
       feap.created_at,
       feap.updated_at
-     FROM ((form_e_act_plans feap
+     FROM (((form_e_act_plans feap
        LEFT JOIN subtypes scl ON ((feap.classification_id = scl.id)))
-       LEFT JOIN subtypes splt ON ((feap.plan_type_id = splt.id)));
+       LEFT JOIN subtypes splt ON ((feap.plan_type_id = splt.id)))
+       LEFT JOIN subtypes spst ON ((feap.state_id = spst.id)));
   SQL
 end
