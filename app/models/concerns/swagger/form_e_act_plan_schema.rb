@@ -28,6 +28,10 @@ module Swagger::FormEActPlanSchema
         key :type, :number
         key :format, :float
       end
+      property :state_id do
+        key :type, :integer
+        key :format, :int64
+      end
       property :active do
         key :type, :boolean
         key :default, true
@@ -90,8 +94,11 @@ module Swagger::FormEActPlanSchema
           end
           property :classification_name do
             key :type, :string
-            end
+          end
           property :plan_type_name do
+            key :type, :string
+          end
+          property :state_name do
             key :type, :string
           end
           property :created_by do

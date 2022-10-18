@@ -59,7 +59,7 @@ module Api
                                                          :classification_id,
                                                          :type_description, :description,
                                                          :inventoried, :inventory_plate,
-                                                         :plan_type_id, :value],
+                                                         :plan_type_id, :value, :state_id],
                                                        ", form e.")
         if result[:is_upgradeable]
           if @form_e_act_plan.update(result[:body_params])
@@ -93,7 +93,7 @@ module Api
       def form_e_act_p_params_to_create
         params.require(:form_e_act_plan).permit(:classification_id, :type_description,
                                                 :description, :inventoried, :value,
-                                                :inventory_plate, :plan_type_id,
+                                                :inventory_plate, :plan_type_id, :state_id,
                                                 :active, :created_by)
       end
 
@@ -101,7 +101,7 @@ module Api
         params.require(:form_e_act_plan).permit(:classification_id, :type_description,
                                                 :description, :inventoried,
                                                 :inventory_plate, :action_plan_id,
-                                                :plan_type_id, :value,
+                                                :plan_type_id, :value, :state_id,
                                                 :active, :updated_by)
       end
     end
