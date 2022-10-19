@@ -300,7 +300,9 @@ Rails.application.routes.draw do
       resources :item_details, only: [:show, :update]
       resources :objectives, only: [:show, :update]
       resources :proposal_evaluations, only: [:show, :update]
-      resources :proposal_products, only: [:show, :update]
+      resources :proposal_products, only: [:show, :update] do
+        resources :documents, only: [:index, :show, :create, :update]
+      end
       resources :research_groups_proposals, only: [:show, :update]
       resources :risks, only: [:show, :update]
 
