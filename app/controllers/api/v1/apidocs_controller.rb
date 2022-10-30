@@ -52,6 +52,7 @@ module Api
         CineDetailedAreasController,
         KeywordsController,
         LegalRepresentativesController,
+        NotificationsController,
         OecdDisciplinesController,
         OecdKnowledgeAreasController,
         OecdKnowledgeSubareasController,

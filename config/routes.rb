@@ -10,6 +10,8 @@ Rails.application.routes.draw do
         resources :documents, only: [:index, :show, :create, :update]
       end
 
+      post "/notifications", to: "notifications#health_check"
+
       # General endpoints
       # Geo endpoints
       resources :evaluators, only: [:index, :show, :create, :update]
