@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_10_18_013629) do
+ActiveRecord::Schema.define(version: 2022_11_02_024547) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1451,6 +1451,23 @@ ActiveRecord::Schema.define(version: 2022_10_18_013629) do
     t.index ["researcher_id"], name: "index_internal_members_proposals_on_researcher_id"
     t.index ["role_id"], name: "index_internal_members_proposals_on_role_id"
     t.index ["updated_by"], name: "index_internal_members_proposals_on_updated_by"
+  end
+
+  create_table "inventory_histories", force: :cascade do |t|
+    t.bigint "form_e_act_plan_id"
+    t.bigint "state_id"
+    t.string "usable_type"
+    t.bigint "usable_id"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_inventory_histories_on_created_by"
+    t.index ["form_e_act_plan_id"], name: "index_inventory_histories_on_form_e_act_plan_id"
+    t.index ["state_id"], name: "index_inventory_histories_on_state_id"
+    t.index ["updated_by"], name: "index_inventory_histories_on_updated_by"
+    t.index ["usable_type", "usable_id"], name: "index_inventory_histories_on_usable_type_and_usable_id"
   end
 
   create_table "investigation_projects", force: :cascade do |t|
@@ -3271,6 +3288,10 @@ ActiveRecord::Schema.define(version: 2022_10_18_013629) do
   add_foreign_key "internal_members_proposals", "roles"
   add_foreign_key "internal_members_proposals", "users", column: "created_by"
   add_foreign_key "internal_members_proposals", "users", column: "updated_by"
+  add_foreign_key "inventory_histories", "form_e_act_plans"
+  add_foreign_key "inventory_histories", "subtypes", column: "state_id"
+  add_foreign_key "inventory_histories", "users", column: "created_by"
+  add_foreign_key "inventory_histories", "users", column: "updated_by"
   add_foreign_key "investigation_projects", "colciencias_calls"
   add_foreign_key "investigation_projects", "geo_cities"
   add_foreign_key "investigation_projects", "geo_countries"
@@ -6195,6 +6216,11 @@ ActiveRecord::Schema.define(version: 2022_10_18_013629) do
       feap.value,
       feap.state_id,
       spst.st_name AS state_name,
+      ( SELECT inventory_histories.usable_id
+             FROM inventory_histories
+            WHERE (((inventory_histories.usable_type)::text = 'Proposal'::text) AND (inventory_histories.form_e_act_plan_id = feap.id))
+            ORDER BY inventory_histories.updated_at DESC
+           LIMIT 1) AS proposal_id,
       feap.active,
       feap.created_by,
       feap.updated_by,

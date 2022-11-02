@@ -29,8 +29,8 @@ class Proposal < ApplicationRecord
   has_many :proposal_evaluations
 
   has_many :chapters, as: :sectionable
-
   has_many :documents, as: :documentable
+  has_many :inventory_histories, as: :usable
 
   validates :duration, :total_amount_in_kind, :total_amount_request_cidc,
             :total_counterparty, numericality: { greater_than_or_equal_to: 0 }

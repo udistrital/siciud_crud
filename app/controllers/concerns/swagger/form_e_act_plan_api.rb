@@ -384,5 +384,36 @@ module Swagger::FormEActPlanApi
         end
       end
     end
+
+    swagger_path '/proposals/{proposal_id}/inventories' do
+      operation :get do
+        key :summary, 'Get all Form E action plans or inventories by proposal'
+        key :description, 'Returns all form E action plans or inventories by proposal'
+        key :operationId, :get_inventories_by_proposal
+        key :produces, ['application/json',]
+        key :tags, ['Projects::Inventories']
+
+        parameter name: :proposal_id do
+          key :in, :path
+          key :description, 'ID of proposal to fetch'
+          key :required, true
+          key :type, :integer
+          key :format, :int64
+        end
+
+        response 200 do
+          key :description, 'form e action plan response'
+          schema do
+            key :type, :array
+            items do
+              key :'$ref', :FormEActPlanDxOutput
+            end
+          end
+        end
+        response :default do
+          key :description, 'Unexpected Error'
+        end
+      end
+    end
   end
 end

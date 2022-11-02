@@ -59,12 +59,12 @@ Rails.application.configure do
 
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-      :address => "smtp.gmail.com",
-      :port => 587,
-      :domain => "udistrital.edu.co",
+      :address => ENV["MAIL_ADDRESS"],
+      :port => ENV["MAIL_PORT"],
+      :domain => ENV["MAIL_DOMAIN"],
       :user_name => ENV['GMAIL_USERNAME'],
       :password => ENV['GMAIL_PASSWORD'],
-      :authentication => "plain",
+      :authentication => ENV["MAIL_AUTHENTICATION"],
       #:enable_starttls_auto => true
   }
   #config.action_mailer.default_url_options = {:host => "chronos.udistrital.edu.co:8095/siciud/ "}
