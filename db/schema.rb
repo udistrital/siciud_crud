@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_11_02_024547) do
+ActiveRecord::Schema.define(version: 2022_11_02_040557) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -6129,29 +6129,6 @@ ActiveRecord::Schema.define(version: 2022_11_02_024547) do
        LEFT JOIN researchers res ON ((imp.researcher_id = res.id)))
        LEFT JOIN roles rol ON ((imp.role_id = rol.id)));
   SQL
-  create_view "siciud.complete_proposal_products", sql_definition: <<-SQL
-      SELECT pp.id,
-      pp.name,
-      pp.product_type_id,
-      pt.st_name AS product_type_name,
-      pp.indicator_id,
-      i.ind_description AS indicator_description,
-      pp.beneficiary,
-      pp.proposal_id,
-      ( SELECT json_agg(json_build_object('id', r.id, 'oas_researcher_id', r.oas_researcher_id)) AS json_agg
-             FROM (proposal_products_researchers ppr
-               LEFT JOIN researchers r ON ((r.id = ppr.researcher_id)))
-            WHERE (ppr.proposal_product_id = pp.id)) AS researchers,
-      pp.validated,
-      pp.active,
-      pp.created_by,
-      pp.updated_by,
-      pp.created_at,
-      pp.updated_at
-     FROM ((proposal_products pp
-       LEFT JOIN subtypes pt ON ((pp.product_type_id = pt.id)))
-       LEFT JOIN indicators i ON ((pp.indicator_id = i.id)));
-  SQL
   create_view "siciud.complete_int_members_proposals", sql_definition: <<-SQL
       SELECT imp.id,
       ( SELECT json_build_object('id', researchers.id, 'orcid_id', researchers.orcid_id, 'identification_number', researchers.identification_number, 'oas_researcher_id', researchers.oas_researcher_id, 'mobile_number_one', researchers.mobile_number_one, 'mobile_number_two', researchers.mobile_number_two, 'address', researchers.address, 'phone_number_one', researchers.phone_number_one, 'phone_number_two', researchers.phone_number_two) AS json_build_object
@@ -6230,5 +6207,28 @@ ActiveRecord::Schema.define(version: 2022_11_02_024547) do
        LEFT JOIN subtypes scl ON ((feap.classification_id = scl.id)))
        LEFT JOIN subtypes splt ON ((feap.plan_type_id = splt.id)))
        LEFT JOIN subtypes spst ON ((feap.state_id = spst.id)));
+  SQL
+  create_view "siciud.complete_proposal_products", sql_definition: <<-SQL
+      SELECT pp.id,
+      pp.name,
+      pp.product_type_id,
+      pt.st_name AS product_type_name,
+      pp.indicator_id,
+      i.ind_description AS indicator_description,
+      pp.beneficiary,
+      pp.proposal_id,
+      ( SELECT json_agg(json_build_object('id', r.id, 'oas_researcher_id', r.oas_researcher_id, 'identification_number', r.identification_number)) AS json_agg
+             FROM (proposal_products_researchers ppr
+               LEFT JOIN researchers r ON ((r.id = ppr.researcher_id)))
+            WHERE (ppr.proposal_product_id = pp.id)) AS researchers,
+      pp.validated,
+      pp.active,
+      pp.created_by,
+      pp.updated_by,
+      pp.created_at,
+      pp.updated_at
+     FROM ((proposal_products pp
+       LEFT JOIN subtypes pt ON ((pp.product_type_id = pt.id)))
+       LEFT JOIN indicators i ON ((pp.indicator_id = i.id)));
   SQL
 end
