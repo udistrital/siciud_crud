@@ -7,6 +7,8 @@ class FormEActPlan < ApplicationRecord
   belongs_to :classification, class_name: 'Subtype', foreign_key: 'classification_id', optional: true
   belongs_to :state, class_name: 'Subtype', foreign_key: 'state_id', optional: true
 
+  has_many :inventory_histories
+
   # Tracking inherited from ApplicationRecord, fields:
   # created_by and updated_by, see application_record.rb
   validates :created_by, presence: true, allow_nil: false, on: :create

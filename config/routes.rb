@@ -62,6 +62,7 @@ Rails.application.routes.draw do
       post "/inventories", to: "form_e_act_plans#create_inventory"
       get "/inventories/:id", to: "form_e_act_plans#show"
       put "/inventories/:id", to: "form_e_act_plans#update_inventory"
+      resources :inventory_histories
 
       # Enpoint CRUD de los grupos de investigacion
       resources :research_group, only: [:index, :show, :create, :update], path: 'research_units' do
@@ -279,6 +280,7 @@ Rails.application.routes.draw do
         resources :impacts, only: [:index, :create]
         resources :internal_members_proposals, only: [:index, :create]
         resources :item_details, only: [:index, :create]
+        get "/inventories", to: "form_e_act_plans#index"
         resources :objectives, only: [:index, :create]
         resources :proposal_evaluations, only: [:index, :create]
         resources :proposal_products, only: [:index, :create]
