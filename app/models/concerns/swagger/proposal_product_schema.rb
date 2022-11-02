@@ -113,6 +113,9 @@ module Swagger::ProposalProductSchema
               property :oas_researcher_id do
                 key :type, :string
               end
+              property :identification_number do
+                key :type, :string
+              end
             end
           end
           property :created_by do

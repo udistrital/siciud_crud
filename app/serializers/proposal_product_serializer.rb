@@ -25,7 +25,8 @@ class ProposalProductSerializer < ActiveModel::Serializer
       researchers_.each do |researcher|
         result.append({
                         "id": researcher.id,
-                        "oas_researcher_id": researcher.oas_researcher_id
+                        "oas_researcher_id": researcher.oas_researcher_id,
+                        "identification_number": researcher.identification_number
                       })
       end
     end

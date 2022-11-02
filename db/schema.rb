@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_11_02_024547) do
+ActiveRecord::Schema.define(version: 2022_11_02_060524) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -2084,6 +2084,8 @@ ActiveRecord::Schema.define(version: 2022_11_02_024547) do
     t.bigint "updated_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.float "amount_executed"
+    t.float "balance"
     t.index ["call_item_id"], name: "index_proposal_budgets_on_call_item_id"
     t.index ["created_by"], name: "index_proposal_budgets_on_created_by"
     t.index ["proposal_id"], name: "index_proposal_budgets_on_proposal_id"
@@ -6044,25 +6046,6 @@ ActiveRecord::Schema.define(version: 2022_11_02_024547) do
        LEFT JOIN indicators i ON ((im.indicator_id = i.id)))
        LEFT JOIN subtypes st ON ((im.term_id = st.id)));
   SQL
-  create_view "siciud.complete_proposal_budgets", sql_definition: <<-SQL
-      SELECT pb.id,
-      pb.call_item_id,
-      ci.item_id,
-      sci.st_name AS item_name,
-      pb.amount_request_cidc,
-      pb.counterparty,
-      pb.amount_in_kind,
-      pb.subtotal,
-      pb.proposal_id,
-      pb.active,
-      pb.created_by,
-      pb.updated_by,
-      pb.created_at,
-      pb.updated_at
-     FROM ((proposal_budgets pb
-       LEFT JOIN call_items ci ON ((pb.call_item_id = ci.id)))
-       LEFT JOIN subtypes sci ON ((ci.item_id = sci.id)));
-  SQL
   create_view "siciud.complete_proposal_evaluations", sql_definition: <<-SQL
       SELECT p.id,
       ( SELECT json_agg(json_build_object('anonymous_evaluator_id', evaluator_criteria.anonymous_evaluator_id, 'code', evaluator_criteria.code, 'criteria', evaluator_criteria.criteria, 'total', evaluator_criteria.total)) AS json_agg
@@ -6128,29 +6111,6 @@ ActiveRecord::Schema.define(version: 2022_11_02_024547) do
        LEFT JOIN internal_members_proposals imp ON ((p.id = imp.proposal_id)))
        LEFT JOIN researchers res ON ((imp.researcher_id = res.id)))
        LEFT JOIN roles rol ON ((imp.role_id = rol.id)));
-  SQL
-  create_view "siciud.complete_proposal_products", sql_definition: <<-SQL
-      SELECT pp.id,
-      pp.name,
-      pp.product_type_id,
-      pt.st_name AS product_type_name,
-      pp.indicator_id,
-      i.ind_description AS indicator_description,
-      pp.beneficiary,
-      pp.proposal_id,
-      ( SELECT json_agg(json_build_object('id', r.id, 'oas_researcher_id', r.oas_researcher_id)) AS json_agg
-             FROM (proposal_products_researchers ppr
-               LEFT JOIN researchers r ON ((r.id = ppr.researcher_id)))
-            WHERE (ppr.proposal_product_id = pp.id)) AS researchers,
-      pp.validated,
-      pp.active,
-      pp.created_by,
-      pp.updated_by,
-      pp.created_at,
-      pp.updated_at
-     FROM ((proposal_products pp
-       LEFT JOIN subtypes pt ON ((pp.product_type_id = pt.id)))
-       LEFT JOIN indicators i ON ((pp.indicator_id = i.id)));
   SQL
   create_view "siciud.complete_int_members_proposals", sql_definition: <<-SQL
       SELECT imp.id,
@@ -6230,5 +6190,49 @@ ActiveRecord::Schema.define(version: 2022_11_02_024547) do
        LEFT JOIN subtypes scl ON ((feap.classification_id = scl.id)))
        LEFT JOIN subtypes splt ON ((feap.plan_type_id = splt.id)))
        LEFT JOIN subtypes spst ON ((feap.state_id = spst.id)));
+  SQL
+  create_view "siciud.complete_proposal_products", sql_definition: <<-SQL
+      SELECT pp.id,
+      pp.name,
+      pp.product_type_id,
+      pt.st_name AS product_type_name,
+      pp.indicator_id,
+      i.ind_description AS indicator_description,
+      pp.beneficiary,
+      pp.proposal_id,
+      ( SELECT json_agg(json_build_object('id', r.id, 'oas_researcher_id', r.oas_researcher_id, 'identification_number', r.identification_number)) AS json_agg
+             FROM (proposal_products_researchers ppr
+               LEFT JOIN researchers r ON ((r.id = ppr.researcher_id)))
+            WHERE (ppr.proposal_product_id = pp.id)) AS researchers,
+      pp.validated,
+      pp.active,
+      pp.created_by,
+      pp.updated_by,
+      pp.created_at,
+      pp.updated_at
+     FROM ((proposal_products pp
+       LEFT JOIN subtypes pt ON ((pp.product_type_id = pt.id)))
+       LEFT JOIN indicators i ON ((pp.indicator_id = i.id)));
+  SQL
+  create_view "siciud.complete_proposal_budgets", sql_definition: <<-SQL
+      SELECT pb.id,
+      pb.call_item_id,
+      ci.item_id,
+      sci.st_name AS item_name,
+      pb.amount_request_cidc,
+      pb.counterparty,
+      pb.amount_in_kind,
+      pb.subtotal,
+      pb.amount_executed,
+      pb.balance,
+      pb.proposal_id,
+      pb.active,
+      pb.created_by,
+      pb.updated_by,
+      pb.created_at,
+      pb.updated_at
+     FROM ((proposal_budgets pb
+       LEFT JOIN call_items ci ON ((pb.call_item_id = ci.id)))
+       LEFT JOIN subtypes sci ON ((ci.item_id = sci.id)));
   SQL
 end
