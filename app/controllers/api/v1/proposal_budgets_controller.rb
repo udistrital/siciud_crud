@@ -56,13 +56,13 @@ module Api
       def prop_budget_params_to_create
         params.require(:proposal_budget).permit(:call_item_id, :amount_request_cidc,
                                                 :counterparty, :amount_in_kind, :subtotal,
-                                                :amount_executed, :balance, :active, :created_by)
+                                                :executed_amount, :balance, :active, :created_by)
       end
 
       def prop_budget_params_to_update
         params.require(:proposal_budget).permit(:call_item_id, :amount_request_cidc,
                                                 :counterparty, :amount_in_kind, :subtotal,
-                                                :proposal_id, :amount_executed, :balance,
+                                                :proposal_id, :executed_amount, :balance,
                                                 :active, :updated_by)
       end
     end

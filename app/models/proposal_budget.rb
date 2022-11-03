@@ -8,7 +8,7 @@ class ProposalBudget < ApplicationRecord
             :subtotal,
             numericality: {
     greater_than_or_equal_to: 0}
-  validates :amount_executed, :balance, allow_nil: true,
+  validates :executed_amount, :balance, allow_nil: true,
             numericality: {
               greater_than_or_equal_to: 0}
 

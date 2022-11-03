@@ -9,6 +9,7 @@ module Swagger::DocumentApi
                       :mobility_calls,
                       :proposals,
                       :proposal_products,
+                      :item_details,
                       :research_units,
                       :research_networks,
                       :form_a_act_plans,

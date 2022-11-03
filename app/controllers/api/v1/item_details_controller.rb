@@ -62,6 +62,10 @@ module Api
         params.require(:item_detail).permit(:proposal_budget_id, :description,
                                             :justification, :estimated_date, :quantity,
                                             :individual_cost, :subtotal, :source_id,
+                                            :state_id, :requested_amount,
+                                            :executed_amount, :balance, :approved,
+                                            :payments, :notified_due_to_expire,
+                                            :notified_expired,
                                             :active, :created_by)
       end
 
@@ -69,7 +73,11 @@ module Api
         params.require(:item_detail).permit(:proposal_budget_id, :description,
                                             :justification, :estimated_date, :quantity,
                                             :individual_cost, :subtotal, :proposal_id,
-                                            :source_id, :active, :updated_by)
+                                            :source_id, :state_id, :requested_amount,
+                                            :executed_amount, :balance, :approved,
+                                            :payments, :notified_due_to_expire,
+                                            :notified_expired,
+                                            :active, :updated_by)
       end
     end
   end

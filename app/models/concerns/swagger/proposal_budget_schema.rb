@@ -32,7 +32,7 @@ module Swagger::ProposalBudgetSchema
         key :minimum, 0
         key :exclusiveMinimum, false
       end
-      property :amount_executed do
+      property :executed_amount do
         key :type, :number
         key :format, :float
         key :minimum, 0

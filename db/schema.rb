@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_11_02_060524) do
+ActiveRecord::Schema.define(version: 2022_11_03_033810) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1540,10 +1540,19 @@ ActiveRecord::Schema.define(version: 2022_11_02_060524) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "source_id"
+    t.bigint "state_id"
+    t.float "requested_amount"
+    t.float "executed_amount"
+    t.float "balance"
+    t.boolean "approved", default: false
+    t.integer "payments", limit: 2
+    t.boolean "notified_due_to_expire", default: false
+    t.boolean "notified_expired", default: false
     t.index ["created_by"], name: "index_item_details_on_created_by"
     t.index ["proposal_budget_id"], name: "index_item_details_on_proposal_budget_id"
     t.index ["proposal_id"], name: "index_item_details_on_proposal_id"
     t.index ["source_id"], name: "index_item_details_on_source_id"
+    t.index ["state_id"], name: "index_item_details_on_state_id"
     t.index ["updated_by"], name: "index_item_details_on_updated_by"
   end
 
@@ -2084,7 +2093,7 @@ ActiveRecord::Schema.define(version: 2022_11_02_060524) do
     t.bigint "updated_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.float "amount_executed"
+    t.float "executed_amount"
     t.float "balance"
     t.index ["call_item_id"], name: "index_proposal_budgets_on_call_item_id"
     t.index ["created_by"], name: "index_proposal_budgets_on_created_by"
@@ -3314,6 +3323,7 @@ ActiveRecord::Schema.define(version: 2022_11_02_060524) do
   add_foreign_key "item_details", "proposal_budgets"
   add_foreign_key "item_details", "proposals"
   add_foreign_key "item_details", "subtypes", column: "source_id"
+  add_foreign_key "item_details", "subtypes", column: "state_id"
   add_foreign_key "item_details", "users", column: "created_by"
   add_foreign_key "item_details", "users", column: "updated_by"
   add_foreign_key "keywords", "users", column: "created_by"
@@ -6067,26 +6077,6 @@ ActiveRecord::Schema.define(version: 2022_11_02_060524) do
       p.updated_at
      FROM proposals p;
   SQL
-  create_view "siciud.complete_item_details", sql_definition: <<-SQL
-      SELECT itd.id,
-      itd.proposal_budget_id,
-      itd.description,
-      itd.justification,
-      itd.estimated_date,
-      itd.quantity,
-      itd.individual_cost,
-      itd.subtotal,
-      itd.proposal_id,
-      itd.source_id,
-      s.st_name AS source_name,
-      itd.active,
-      itd.created_by,
-      itd.updated_by,
-      itd.created_at,
-      itd.updated_at
-     FROM (item_details itd
-       LEFT JOIN subtypes s ON ((itd.source_id = s.id)));
-  SQL
   create_view "siciud.activity_evaluation_notifications", sql_definition: <<-SQL
       SELECT p.id,
       p.title,
@@ -6223,7 +6213,7 @@ ActiveRecord::Schema.define(version: 2022_11_02_060524) do
       pb.counterparty,
       pb.amount_in_kind,
       pb.subtotal,
-      pb.amount_executed,
+      pb.executed_amount,
       pb.balance,
       pb.proposal_id,
       pb.active,
@@ -6234,5 +6224,35 @@ ActiveRecord::Schema.define(version: 2022_11_02_060524) do
      FROM ((proposal_budgets pb
        LEFT JOIN call_items ci ON ((pb.call_item_id = ci.id)))
        LEFT JOIN subtypes sci ON ((ci.item_id = sci.id)));
+  SQL
+  create_view "siciud.complete_item_details", sql_definition: <<-SQL
+      SELECT itd.id,
+      itd.proposal_budget_id,
+      itd.description,
+      itd.justification,
+      itd.estimated_date,
+      itd.quantity,
+      itd.individual_cost,
+      itd.subtotal,
+      itd.proposal_id,
+      itd.source_id,
+      s.st_name AS source_name,
+      itd.state_id,
+      st.st_name AS state_name,
+      itd.requested_amount,
+      itd.executed_amount,
+      itd.balance,
+      itd.approved,
+      itd.payments,
+      itd.notified_due_to_expire,
+      itd.notified_expired,
+      itd.active,
+      itd.created_by,
+      itd.updated_by,
+      itd.created_at,
+      itd.updated_at
+     FROM ((item_details itd
+       LEFT JOIN subtypes s ON ((itd.source_id = s.id)))
+       LEFT JOIN subtypes st ON ((itd.state_id = s.id)));
   SQL
 end
