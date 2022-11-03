@@ -302,7 +302,9 @@ Rails.application.routes.draw do
       resources :external_members_proposals, only: [:show, :update]
       resources :impacts, only: [:show, :update]
       resources :internal_members_proposals, only: [:show, :update]
-      resources :item_details, only: [:show, :update]
+      resources :item_details, only: [:show, :update] do
+        resources :documents, only: [:index, :show, :create, :update]
+      end
       resources :objectives, only: [:show, :update]
       resources :proposal_evaluations, only: [:show, :update]
       resources :proposal_products, only: [:show, :update] do

@@ -38,6 +38,44 @@ module Swagger::ItemDetailSchema
         key :type, :integer
         key :format, :int64
       end
+      property :state_id do
+        key :type, :integer
+        key :format, :int64
+      end
+      property :requested_amount do
+        key :type, :number
+        key :format, :float
+        key :minimum, 0
+        key :exclusiveMinimum, false
+      end
+      property :executed_amount do
+        key :type, :number
+        key :format, :float
+        key :minimum, 0
+        key :exclusiveMinimum, false
+      end
+      property :balance do
+        key :type, :number
+        key :format, :float
+        key :minimum, 0
+        key :exclusiveMinimum, false
+      end
+      property :approved do
+        key :type, :boolean
+        key :default, false
+      end
+      property :payments do
+        key :type, :integer
+        key :format, :int64
+      end
+      property :notified_due_to_expire do
+        key :type, :boolean
+        key :default, false
+      end
+      property :notified_expired do
+        key :type, :boolean
+        key :default, false
+      end
       property :active do
         key :type, :boolean
         key :default, true
@@ -95,6 +133,9 @@ module Swagger::ItemDetailSchema
             key :format, :int64
           end
           property :source_name do
+            key :type, :string
+          end
+          property :state_name do
             key :type, :string
           end
           property :proposal_id do
