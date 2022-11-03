@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_11_02_060524) do
+ActiveRecord::Schema.define(version: 2022_11_03_001820) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -2084,7 +2084,7 @@ ActiveRecord::Schema.define(version: 2022_11_02_060524) do
     t.bigint "updated_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.float "amount_executed"
+    t.float "executed_amount"
     t.float "balance"
     t.index ["call_item_id"], name: "index_proposal_budgets_on_call_item_id"
     t.index ["created_by"], name: "index_proposal_budgets_on_created_by"
@@ -6223,7 +6223,7 @@ ActiveRecord::Schema.define(version: 2022_11_02_060524) do
       pb.counterparty,
       pb.amount_in_kind,
       pb.subtotal,
-      pb.amount_executed,
+      pb.executed_amount AS amount_executed,
       pb.balance,
       pb.proposal_id,
       pb.active,
