@@ -13,6 +13,10 @@ Rails.application.routes.draw do
       post "/notifications/health_check", to: "notifications#health_check"
       post "/notifications", to: "notifications#custom_notification"
 
+      get "/projects/summary", to: "project_activity_information#summary"
+      get "/projects/:proposal_id/activities_to_expire", to: "project_activity_information#activities_to_expire"
+      get "/projects/:proposal_id/expired_activities", to: "project_activity_information#expired_activities"
+
       # General endpoints
       # Geo endpoints
       resources :evaluators, only: [:index, :show, :create, :update]
