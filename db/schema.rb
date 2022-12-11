@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_11_03_033810) do
+ActiveRecord::Schema.define(version: 2022_12_11_035408) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1724,6 +1724,27 @@ ActiveRecord::Schema.define(version: 2022_11_03_033810) do
     t.index ["updated_by"], name: "index_mobility_calls_on_updated_by"
   end
 
+  create_table "modifications", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.boolean "editable", default: false
+    t.bigint "state_id"
+    t.bigint "type_id"
+    t.float "amount"
+    t.bigint "research_group_id"
+    t.date "start_date"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_modifications_on_created_by"
+    t.index ["research_group_id"], name: "index_modifications_on_research_group_id"
+    t.index ["state_id"], name: "index_modifications_on_state_id"
+    t.index ["type_id"], name: "index_modifications_on_type_id"
+    t.index ["updated_by"], name: "index_modifications_on_updated_by"
+  end
+
   create_table "new_animal_breeds", force: :cascade do |t|
     t.string "name"
     t.date "date"
@@ -3371,6 +3392,11 @@ ActiveRecord::Schema.define(version: 2022_11_03_033810) do
   add_foreign_key "mobility_calls", "subtypes", column: "state_id"
   add_foreign_key "mobility_calls", "users", column: "created_by"
   add_foreign_key "mobility_calls", "users", column: "updated_by"
+  add_foreign_key "modifications", "research_groups"
+  add_foreign_key "modifications", "subtypes", column: "state_id"
+  add_foreign_key "modifications", "subtypes", column: "type_id"
+  add_foreign_key "modifications", "users", column: "created_by"
+  add_foreign_key "modifications", "users", column: "updated_by"
   add_foreign_key "new_animal_breeds", "colciencias_calls"
   add_foreign_key "new_animal_breeds", "geo_cities"
   add_foreign_key "new_animal_breeds", "geo_countries"
@@ -6077,31 +6103,6 @@ ActiveRecord::Schema.define(version: 2022_11_03_033810) do
       p.updated_at
      FROM proposals p;
   SQL
-  create_view "siciud.activity_evaluation_notifications", sql_definition: <<-SQL
-      SELECT p.id,
-      p.title,
-      p.call_id,
-      c.call_code,
-      c.call_name,
-      p.project_type_id,
-      spj.st_name AS project_type_name,
-      imp.researcher_id,
-      res.identification_number,
-      res.oas_researcher_id,
-      imp.role_id,
-      rol.name AS role_name,
-      p.active,
-      p.created_at,
-      p.updated_at,
-      p.created_by,
-      p.updated_by
-     FROM (((((proposals p
-       LEFT JOIN calls c ON ((p.call_id = c.id)))
-       LEFT JOIN subtypes spj ON ((p.project_type_id = spj.id)))
-       LEFT JOIN internal_members_proposals imp ON ((p.id = imp.proposal_id)))
-       LEFT JOIN researchers res ON ((imp.researcher_id = res.id)))
-       LEFT JOIN roles rol ON ((imp.role_id = rol.id)));
-  SQL
   create_view "siciud.complete_int_members_proposals", sql_definition: <<-SQL
       SELECT imp.id,
       ( SELECT json_build_object('id', researchers.id, 'orcid_id', researchers.orcid_id, 'identification_number', researchers.identification_number, 'oas_researcher_id', researchers.oas_researcher_id, 'mobile_number_one', researchers.mobile_number_one, 'mobile_number_two', researchers.mobile_number_two, 'address', researchers.address, 'phone_number_one', researchers.phone_number_one, 'phone_number_two', researchers.phone_number_two) AS json_build_object
@@ -6254,5 +6255,70 @@ ActiveRecord::Schema.define(version: 2022_11_03_033810) do
      FROM ((item_details itd
        LEFT JOIN subtypes s ON ((itd.source_id = s.id)))
        LEFT JOIN subtypes st ON ((itd.state_id = s.id)));
+  SQL
+  create_view "siciud.complete_modifications", sql_definition: <<-SQL
+      SELECT modifications.id,
+      modifications.name,
+      modifications.description,
+      modifications.editable,
+      modifications.state_id,
+      modifications.type_id,
+      modifications.amount,
+      modifications.research_group_id,
+      modifications.start_date,
+      modifications.active,
+      modifications.created_by,
+      modifications.updated_by,
+      modifications.created_at,
+      modifications.updated_at
+     FROM modifications;
+  SQL
+  create_view "siciud.activity_evaluation_notifications", sql_definition: <<-SQL
+      SELECT p.id AS proposal_id,
+      p.title AS proposal_title,
+      p.call_id,
+      c.call_code,
+      c.call_name,
+      p.project_type_id,
+      spj.st_name AS project_type_name,
+      imp.researcher_id,
+      res.identification_number,
+      res.oas_researcher_id,
+      imp.role_id,
+      rol.name AS role_name,
+      ( SELECT count(acsc.id) AS count
+             FROM (activity_schedules acsc
+               LEFT JOIN activity_evaluations acev ON ((acsc.id = acev.activity_schedule_id)))
+            WHERE ((acev.notified_due_to_expire = false) AND (acsc.end_date < (CURRENT_DATE - 15)) AND (acev.is_completed = false))) AS total_notified_due_to_expire,
+      ( SELECT count(acsc.id) AS count
+             FROM (activity_schedules acsc
+               LEFT JOIN activity_evaluations acev ON ((acsc.id = acev.activity_schedule_id)))
+            WHERE ((acev.notified_expired = false) AND (acsc.end_date < CURRENT_DATE) AND (acev.is_completed = false))) AS total_notified_expired,
+      p.active,
+      p.created_at,
+      p.updated_at,
+      p.created_by,
+      p.updated_by
+     FROM (((((proposals p
+       LEFT JOIN calls c ON ((p.call_id = c.id)))
+       LEFT JOIN subtypes spj ON ((p.project_type_id = spj.id)))
+       LEFT JOIN internal_members_proposals imp ON ((p.id = imp.proposal_id)))
+       LEFT JOIN researchers res ON ((imp.researcher_id = res.id)))
+       LEFT JOIN roles rol ON ((imp.role_id = rol.id)));
+  SQL
+  create_view "siciud.complete_project_activities", sql_definition: <<-SQL
+      SELECT acsc.id,
+      acsc.name,
+      acsc.start_date,
+      acsc.end_date,
+      acsc.proposal_id,
+      acev.notified_due_to_expire,
+      acev.notified_expired,
+      acev.state_id,
+      s.st_name AS state_name,
+      acev.is_completed
+     FROM ((activity_schedules acsc
+       LEFT JOIN activity_evaluations acev ON ((acsc.id = acev.activity_schedule_id)))
+       LEFT JOIN subtypes s ON ((acev.state_id = s.id)));
   SQL
 end
