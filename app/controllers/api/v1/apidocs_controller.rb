@@ -53,6 +53,7 @@ module Api
         KeywordsController,
         LegalRepresentativesController,
         NotificationsController,
+        ProjectActivityInformationController,
         OecdDisciplinesController,
         OecdKnowledgeAreasController,
         OecdKnowledgeSubareasController,

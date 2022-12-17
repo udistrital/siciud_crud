@@ -1,6 +1,8 @@
 module Api
   module V1
     class ProjectActivityInformationController < ApplicationController
+      include Swagger::ProjectActivityInformationSchema
+      include Swagger::ProjectActivityInformationApi
 
       # GET /projects/summary
       def summary
@@ -35,6 +37,42 @@ module Api
         @activities = DxService.load(@activities, params)
 
         render json: @activities
+      end
+
+      # PUT /notified_activities
+      def update_notified
+        updated_activities = []
+        if params[:notified_activity].has_key?(:notified_due_to_expire_ids)
+          activity_ids = (params[:notified_activity][:notified_due_to_expire_ids]).map(&:to_i).uniq
+          activity_ids.each do |act_schedule_id|
+            @activity_evaluation = ActivityEvaluation.find_by(activity_schedule_id: act_schedule_id)
+            unless @activity_evaluation.nil?
+              @activity_evaluation.update(notified_due_to_expire: true)
+              updated_activities.append(act_schedule_id)
+            end
+          end
+        end
+
+        if params[:notified_activity].has_key?(:notified_expired_ids)
+          activity_ids = (params[:notified_activity][:notified_expired_ids]).map(&:to_i).uniq
+          activity_ids.each do |act_schedule_id|
+            @activity_evaluation = ActivityEvaluation.find_by(activity_schedule_id: act_schedule_id)
+            unless @activity_evaluation.nil?
+              @activity_evaluation.update(notified_expired: true)
+              updated_activities.append(act_schedule_id)
+            end
+          end
+        end
+
+        render json: {"updated_activities": updated_activities.uniq}, status: :ok
+      end
+
+      private
+
+      def notified_activities_params
+        params.require(:notified_activity).permit(notified_due_to_expire_ids: [],
+                                                  notified_expired_ids: []
+        )
       end
     end
   end
