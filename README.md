@@ -69,7 +69,17 @@ SICIUD_CRUD_PGPORT=[puerto de la base de datos]
 SICIUD_CRUD_PGUSER=[usuario con acceso a la base de datos]
 SICIUD_CRUD_PGPASS=[contraseña del usuario]
 SICIUD_CRUD_PGSCHEMA=[esquema de la base de datos]
+
+# Variables para el envío de correos
+MAIL_ADDRESS=[servidor de correo]
+MAIL_PORT=[puerto del servidor de correo]
+MAIL_DOMAIN=[nombre del dominio]
+GMAIL_FROM=[nombre de usuario]
+GMAIL_PASSWORD=[contraseña]
+MAIL_AUTHENTICATION=[tipo de autenticación]
 ```
+
+Documentación: https://railsguides.es/action_mailer_basics.html
 
 ## Ejecución del Proyecto
 
