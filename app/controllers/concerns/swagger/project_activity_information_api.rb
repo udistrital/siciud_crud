@@ -116,6 +116,14 @@ module Swagger::ProjectActivityInformationApi
         key :produces, ['application/json',]
         key :tags, ['Notifications:: Project summary']
 
+        parameter name: :role_id do
+          key :in, :query
+          key :description, 'role id to filter'
+          key :required, true
+          key :type, :integer
+          key :format, :int64
+        end
+
         response 200 do
           key :description, 'project summary response'
           schema do

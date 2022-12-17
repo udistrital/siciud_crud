@@ -6,9 +6,16 @@ module Api
 
       # GET /projects/summary
       def summary
-        @projects = ActivityEvaluationNotification.where(
-          "total_notified_due_to_expire > 0 OR total_notified_expired > 0"
-        )
+        if params[:role_id]
+          @projects = ActivityEvaluationNotification.where(
+            "(total_notified_due_to_expire > 0 OR total_notified_expired > 0) AND role_id = ?",
+            params[:role_id]
+          )
+        else
+          @projects = ActivityEvaluationNotification.where(
+            "total_notified_due_to_expire > 0 OR total_notified_expired > 0"
+          )
+        end
 
         @projects = DxService.load(@projects, params)
 

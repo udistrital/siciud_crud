@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_12_11_035408) do
+ActiveRecord::Schema.define(version: 2022_12_17_215731) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -6273,6 +6273,21 @@ ActiveRecord::Schema.define(version: 2022_12_11_035408) do
       modifications.updated_at
      FROM modifications;
   SQL
+  create_view "siciud.complete_project_activities", sql_definition: <<-SQL
+      SELECT acsc.id,
+      acsc.name,
+      acsc.start_date,
+      acsc.end_date,
+      acsc.proposal_id,
+      acev.notified_due_to_expire,
+      acev.notified_expired,
+      acev.state_id,
+      s.st_name AS state_name,
+      acev.is_completed
+     FROM ((activity_schedules acsc
+       LEFT JOIN activity_evaluations acev ON ((acsc.id = acev.activity_schedule_id)))
+       LEFT JOIN subtypes s ON ((acev.state_id = s.id)));
+  SQL
   create_view "siciud.activity_evaluation_notifications", sql_definition: <<-SQL
       SELECT p.id AS proposal_id,
       p.title AS proposal_title,
@@ -6289,11 +6304,11 @@ ActiveRecord::Schema.define(version: 2022_12_11_035408) do
       ( SELECT count(acsc.id) AS count
              FROM (activity_schedules acsc
                LEFT JOIN activity_evaluations acev ON ((acsc.id = acev.activity_schedule_id)))
-            WHERE ((acev.notified_due_to_expire = false) AND (acsc.end_date < (CURRENT_DATE - 15)) AND (acev.is_completed = false))) AS total_notified_due_to_expire,
+            WHERE ((acev.notified_due_to_expire = false) AND (acsc.end_date < (CURRENT_DATE - 15)) AND (acev.is_completed = false) AND (acsc.proposal_id = p.id))) AS total_notified_due_to_expire,
       ( SELECT count(acsc.id) AS count
              FROM (activity_schedules acsc
                LEFT JOIN activity_evaluations acev ON ((acsc.id = acev.activity_schedule_id)))
-            WHERE ((acev.notified_expired = false) AND (acsc.end_date < CURRENT_DATE) AND (acev.is_completed = false))) AS total_notified_expired,
+            WHERE ((acev.notified_expired = false) AND (acsc.end_date < CURRENT_DATE) AND (acev.is_completed = false) AND (acsc.proposal_id = p.id))) AS total_notified_expired,
       p.active,
       p.created_at,
       p.updated_at,
@@ -6305,20 +6320,5 @@ ActiveRecord::Schema.define(version: 2022_12_11_035408) do
        LEFT JOIN internal_members_proposals imp ON ((p.id = imp.proposal_id)))
        LEFT JOIN researchers res ON ((imp.researcher_id = res.id)))
        LEFT JOIN roles rol ON ((imp.role_id = rol.id)));
-  SQL
-  create_view "siciud.complete_project_activities", sql_definition: <<-SQL
-      SELECT acsc.id,
-      acsc.name,
-      acsc.start_date,
-      acsc.end_date,
-      acsc.proposal_id,
-      acev.notified_due_to_expire,
-      acev.notified_expired,
-      acev.state_id,
-      s.st_name AS state_name,
-      acev.is_completed
-     FROM ((activity_schedules acsc
-       LEFT JOIN activity_evaluations acev ON ((acsc.id = acev.activity_schedule_id)))
-       LEFT JOIN subtypes s ON ((acev.state_id = s.id)));
   SQL
 end
