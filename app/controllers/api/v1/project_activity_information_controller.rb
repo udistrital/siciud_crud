@@ -38,7 +38,7 @@ module Api
       def activities_to_expire
         @activities = CompleteProjectActivity.where(
           "is_completed = FALSE AND notified_due_to_expire = FALSE AND end_date < (CURRENT_DATE + ?) AND proposal_id = ?",
-          params[:delta_days], params[:proposal_id]
+          params[:delta_days].to_i, params[:proposal_id]
         )
 
         @activities = DxService.load(@activities, params)
