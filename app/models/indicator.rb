@@ -2,7 +2,10 @@ class Indicator < ApplicationRecord
   include Swagger::IndicatorSchema
 
   belongs_to :subtype
+
   has_many :calls_indicators
+  has_many :impacts
+  has_many :proposal_products
 
   validates :ind_description, presence: true, allow_nil: false
   # Tracking inherited from ApplicationRecord, fields:

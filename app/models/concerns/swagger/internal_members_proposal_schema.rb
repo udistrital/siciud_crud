@@ -8,6 +8,14 @@ module Swagger::InternalMembersProposalSchema
         key :type, :integer
         key :format, :int64
       end
+      property :start_date do
+        key :type, :string
+        key :format, :date
+      end
+      property :end_date do
+        key :type, :string
+        key :format, :date
+      end
       property :active do
         key :type, :boolean
         key :default, true

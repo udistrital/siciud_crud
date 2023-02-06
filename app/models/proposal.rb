@@ -16,11 +16,21 @@ class Proposal < ApplicationRecord
                           class_name: 'Subtype'
 
 
+  has_many :activity_schedules
   has_many :external_members_proposals
+  has_many :impacts
   has_many :internal_members_proposals
+  has_many :item_details
+  has_many :proposal_budgets
+  has_many :proposal_products
+  has_many :objectives
   has_many :research_groups_proposals
+  has_many :risks
+  has_many :proposal_evaluations
 
   has_many :chapters, as: :sectionable
+  has_many :documents, as: :documentable
+  has_many :inventory_histories, as: :usable
 
   validates :duration, :total_amount_in_kind, :total_amount_request_cidc,
             :total_counterparty, numericality: { greater_than_or_equal_to: 0 }

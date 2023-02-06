@@ -140,10 +140,7 @@ module Swagger::InternalMembersProposalApi
         response 200 do
           key :description, 'internal members proposal response'
           schema do
-            key :type, :array
-            items do
-              key :'$ref', :InternalMembersProposalDxOutput
-            end
+            key :'$ref', :InternalMembersProposalDxOutput
           end
         end
         response :default do
