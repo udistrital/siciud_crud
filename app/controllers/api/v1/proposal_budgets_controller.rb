@@ -7,6 +7,7 @@ module Api
       before_action :set_proposal_budget, only: [:show, :update]
 
       # GET /proposal/:proposal_id/proposal_budgets
+      # GET /proposal_budgets
       def index
         if params[:proposal_id]
           @proposal_budgets = CompleteProposalBudget.where(
@@ -55,13 +56,14 @@ module Api
       def prop_budget_params_to_create
         params.require(:proposal_budget).permit(:call_item_id, :amount_request_cidc,
                                                 :counterparty, :amount_in_kind, :subtotal,
-                                                 :active, :created_by)
+                                                :executed_amount, :balance, :active, :created_by)
       end
 
       def prop_budget_params_to_update
         params.require(:proposal_budget).permit(:call_item_id, :amount_request_cidc,
                                                 :counterparty, :amount_in_kind, :subtotal,
-                                                :proposal_id, :active, :updated_by)
+                                                :proposal_id, :executed_amount, :balance,
+                                                :active, :updated_by)
       end
     end
   end

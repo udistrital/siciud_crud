@@ -80,7 +80,7 @@ module Swagger::ActivityScheduleApi
       operation :patch do
         key :summary, 'Activate or deactivate an activity schedule by ID'
         key :description, 'Returns the activated/deactivated activity schedule'
-        key :operationId, :change_active_activitySchedule
+        key :operationId, :change_active_activity_schedule
         key :produces, ['application/json',]
         key :tags, ['Proposals:: Activity Schedules']
 

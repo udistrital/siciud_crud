@@ -8,6 +8,9 @@ class ProposalBudget < ApplicationRecord
             :subtotal,
             numericality: {
     greater_than_or_equal_to: 0}
+  validates :executed_amount, :balance, allow_nil: true,
+            numericality: {
+              greater_than_or_equal_to: 0}
 
   # Tracking inherited from ApplicationRecord, fields:
   # created_by and updated_by, see application_record.rb

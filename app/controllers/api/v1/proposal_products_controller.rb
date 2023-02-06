@@ -27,10 +27,11 @@ module Api
 
       # POST /proposal_products
       def create
-        @proposal_product = @proposal.proposal_products.new(prop_product_params_to_create)
+        @proposal_product = @proposal.proposal_products.new(
+          prop_product_params_to_create.except(:researcher_ids))
 
         if @proposal_product.save
-          render json: @proposal_product, status: :created
+          save_researchers(@proposal_product, :created)
         else
           render json: @proposal_product.errors, status: :unprocessable_entity
         end
@@ -38,28 +39,41 @@ module Api
 
       # PATCH/PUT /proposal_products/1
       def update
-        if @proposal_product.update(prop_product_params_to_update)
-          render json: @proposal_product
+        if @proposal_product.update(prop_product_params_to_update.except(:researcher_ids))
+          save_researchers(@proposal_product, :ok)
         else
           render json: @proposal_product.errors, status: :unprocessable_entity
         end
       end
 
       private
+
       # Use callbacks to share common setup or constraints between actions.
       def set_proposal_product
         @proposal_product = ProposalProduct.find(params[:id])
       end
 
+      def save_researchers(proposal_product, status_c)
+        if params[:proposal_product].has_key?(:researcher_ids)
+          proposal_product.researcher_ids = (params[:proposal_product][:researcher_ids]).map(&:to_i).uniq
+          render json: @proposal_product, status: status_c
+        else
+          render json: @proposal_product, status: status_c
+        end
+      end
+
       # Only allow a trusted parameter "white list" through.
       def prop_product_params_to_create
         params.require(:proposal_product).permit(:name, :product_type_id, :indicator_id,
-                                                 :beneficiary, :active, :created_by)
+                                                 :validated, :beneficiary, :active, :created_by,
+                                                 researcher_ids: [])
       end
 
       def prop_product_params_to_update
         params.require(:proposal_product).permit(:name, :product_type_id, :indicator_id,
-                                                 :beneficiary, :proposal_id, :active, :updated_by)
+                                                 :validated, :beneficiary, :proposal_id,
+                                                 :active, :updated_by,
+                                                 researcher_ids: [])
       end
     end
   end

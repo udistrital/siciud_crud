@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_10_220835) do
+ActiveRecord::Schema.define(version: 2022_12_17_215731) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -58,6 +58,23 @@ ActiveRecord::Schema.define(version: 2022_08_10_220835) do
     t.index ["updated_by"], name: "index_action_plans_on_updated_by"
   end
 
+  create_table "activity_evaluations", force: :cascade do |t|
+    t.bigint "activity_schedule_id"
+    t.boolean "notified_due_to_expire", default: false
+    t.boolean "notified_expired", default: false
+    t.bigint "state_id"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "is_completed", default: false
+    t.index ["activity_schedule_id"], name: "index_activity_evaluations_on_activity_schedule_id"
+    t.index ["created_by"], name: "index_activity_evaluations_on_created_by"
+    t.index ["state_id"], name: "index_activity_evaluations_on_state_id"
+    t.index ["updated_by"], name: "index_activity_evaluations_on_updated_by"
+  end
+
   create_table "activity_schedules", force: :cascade do |t|
     t.string "name"
     t.text "description"
@@ -102,6 +119,19 @@ ActiveRecord::Schema.define(version: 2022_08_10_220835) do
     t.index ["institution_type_id"], name: "index_affiliated_entities_on_institution_type_id"
     t.index ["research_network_id"], name: "index_affiliated_entities_on_research_network_id"
     t.index ["updated_by"], name: "index_affiliated_entities_on_updated_by"
+  end
+
+  create_table "anonymous_evaluators", force: :cascade do |t|
+    t.string "code"
+    t.decimal "total", precision: 5, scale: 2
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["code"], name: "index_anonymous_evaluators_on_code"
+    t.index ["created_by"], name: "index_anonymous_evaluators_on_created_by"
+    t.index ["updated_by"], name: "index_anonymous_evaluators_on_updated_by"
   end
 
   create_table "appropriation_processes", force: :cascade do |t|
@@ -1009,9 +1039,12 @@ ActiveRecord::Schema.define(version: 2022_08_10_220835) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "classification_id"
+    t.float "value"
+    t.bigint "state_id"
     t.index ["action_plan_id"], name: "index_form_e_act_plans_on_action_plan_id"
     t.index ["classification_id"], name: "index_form_e_act_plans_on_classification_id"
     t.index ["created_by"], name: "index_form_e_act_plans_on_created_by"
+    t.index ["state_id"], name: "index_form_e_act_plans_on_state_id"
     t.index ["updated_by"], name: "index_form_e_act_plans_on_updated_by"
   end
 
@@ -1411,11 +1444,30 @@ ActiveRecord::Schema.define(version: 2022_08_10_220835) do
     t.bigint "updated_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.date "start_date"
+    t.date "end_date"
     t.index ["created_by"], name: "index_internal_members_proposals_on_created_by"
     t.index ["proposal_id"], name: "index_internal_members_proposals_on_proposal_id"
     t.index ["researcher_id"], name: "index_internal_members_proposals_on_researcher_id"
     t.index ["role_id"], name: "index_internal_members_proposals_on_role_id"
     t.index ["updated_by"], name: "index_internal_members_proposals_on_updated_by"
+  end
+
+  create_table "inventory_histories", force: :cascade do |t|
+    t.bigint "form_e_act_plan_id"
+    t.bigint "state_id"
+    t.string "usable_type"
+    t.bigint "usable_id"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_inventory_histories_on_created_by"
+    t.index ["form_e_act_plan_id"], name: "index_inventory_histories_on_form_e_act_plan_id"
+    t.index ["state_id"], name: "index_inventory_histories_on_state_id"
+    t.index ["updated_by"], name: "index_inventory_histories_on_updated_by"
+    t.index ["usable_type", "usable_id"], name: "index_inventory_histories_on_usable_type_and_usable_id"
   end
 
   create_table "investigation_projects", force: :cascade do |t|
@@ -1487,9 +1539,20 @@ ActiveRecord::Schema.define(version: 2022_08_10_220835) do
     t.bigint "updated_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "source_id"
+    t.bigint "state_id"
+    t.float "requested_amount"
+    t.float "executed_amount"
+    t.float "balance"
+    t.boolean "approved", default: false
+    t.integer "payments", limit: 2
+    t.boolean "notified_due_to_expire", default: false
+    t.boolean "notified_expired", default: false
     t.index ["created_by"], name: "index_item_details_on_created_by"
     t.index ["proposal_budget_id"], name: "index_item_details_on_proposal_budget_id"
     t.index ["proposal_id"], name: "index_item_details_on_proposal_id"
+    t.index ["source_id"], name: "index_item_details_on_source_id"
+    t.index ["state_id"], name: "index_item_details_on_state_id"
     t.index ["updated_by"], name: "index_item_details_on_updated_by"
   end
 
@@ -1651,12 +1714,35 @@ ActiveRecord::Schema.define(version: 2022_08_10_220835) do
     t.bigint "state_id"
     t.decimal "total", precision: 5, scale: 2
     t.index ["call_id"], name: "index_mobility_calls_on_call_id"
+    t.index ["created_by"], name: "index_mobility_calls_on_created_by"
     t.index ["geo_city_id"], name: "index_mobility_calls_on_geo_city_id"
     t.index ["geo_country_id"], name: "index_mobility_calls_on_geo_country_id"
     t.index ["geo_state_id"], name: "index_mobility_calls_on_geo_state_id"
     t.index ["research_group_id"], name: "index_mobility_calls_on_research_group_id"
     t.index ["researcher_id"], name: "index_mobility_calls_on_researcher_id"
     t.index ["state_id"], name: "index_mobility_calls_on_state_id"
+    t.index ["updated_by"], name: "index_mobility_calls_on_updated_by"
+  end
+
+  create_table "modifications", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.boolean "editable", default: false
+    t.bigint "state_id"
+    t.bigint "type_id"
+    t.float "amount"
+    t.bigint "research_group_id"
+    t.date "start_date"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by"], name: "index_modifications_on_created_by"
+    t.index ["research_group_id"], name: "index_modifications_on_research_group_id"
+    t.index ["state_id"], name: "index_modifications_on_state_id"
+    t.index ["type_id"], name: "index_modifications_on_type_id"
+    t.index ["updated_by"], name: "index_modifications_on_updated_by"
   end
 
   create_table "new_animal_breeds", force: :cascade do |t|
@@ -2028,10 +2114,29 @@ ActiveRecord::Schema.define(version: 2022_08_10_220835) do
     t.bigint "updated_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.float "executed_amount"
+    t.float "balance"
     t.index ["call_item_id"], name: "index_proposal_budgets_on_call_item_id"
     t.index ["created_by"], name: "index_proposal_budgets_on_created_by"
     t.index ["proposal_id"], name: "index_proposal_budgets_on_proposal_id"
     t.index ["updated_by"], name: "index_proposal_budgets_on_updated_by"
+  end
+
+  create_table "proposal_evaluations", force: :cascade do |t|
+    t.bigint "proposal_id"
+    t.bigint "call_eval_criterion_id"
+    t.bigint "anonymous_evaluator_id"
+    t.integer "value"
+    t.boolean "active", default: true
+    t.bigint "created_by"
+    t.bigint "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["anonymous_evaluator_id"], name: "index_proposal_evaluations_on_anonymous_evaluator_id"
+    t.index ["call_eval_criterion_id"], name: "index_proposal_evaluations_on_call_eval_criterion_id"
+    t.index ["created_by"], name: "index_proposal_evaluations_on_created_by"
+    t.index ["proposal_id"], name: "index_proposal_evaluations_on_proposal_id"
+    t.index ["updated_by"], name: "index_proposal_evaluations_on_updated_by"
   end
 
   create_table "proposal_products", force: :cascade do |t|
@@ -2045,11 +2150,17 @@ ActiveRecord::Schema.define(version: 2022_08_10_220835) do
     t.bigint "updated_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "validated", default: false
     t.index ["created_by"], name: "index_proposal_products_on_created_by"
     t.index ["indicator_id"], name: "index_proposal_products_on_indicator_id"
     t.index ["product_type_id"], name: "index_proposal_products_on_product_type_id"
     t.index ["proposal_id"], name: "index_proposal_products_on_proposal_id"
     t.index ["updated_by"], name: "index_proposal_products_on_updated_by"
+  end
+
+  create_table "proposal_products_researchers", id: false, force: :cascade do |t|
+    t.bigint "proposal_product_id", null: false
+    t.bigint "researcher_id", null: false
   end
 
   create_table "proposals", force: :cascade do |t|
@@ -2878,6 +2989,10 @@ ActiveRecord::Schema.define(version: 2022_08_10_220835) do
   add_foreign_key "action_plans", "research_groups"
   add_foreign_key "action_plans", "users", column: "created_by"
   add_foreign_key "action_plans", "users", column: "updated_by"
+  add_foreign_key "activity_evaluations", "activity_schedules"
+  add_foreign_key "activity_evaluations", "subtypes", column: "state_id"
+  add_foreign_key "activity_evaluations", "users", column: "created_by"
+  add_foreign_key "activity_evaluations", "users", column: "updated_by"
   add_foreign_key "activity_schedules", "proposals"
   add_foreign_key "activity_schedules", "users", column: "created_by"
   add_foreign_key "activity_schedules", "users", column: "updated_by"
@@ -2887,6 +3002,8 @@ ActiveRecord::Schema.define(version: 2022_08_10_220835) do
   add_foreign_key "affiliated_entities", "subtypes", column: "institution_type_id"
   add_foreign_key "affiliated_entities", "users", column: "created_by"
   add_foreign_key "affiliated_entities", "users", column: "updated_by"
+  add_foreign_key "anonymous_evaluators", "users", column: "created_by"
+  add_foreign_key "anonymous_evaluators", "users", column: "updated_by"
   add_foreign_key "appropriation_processes", "colciencias_calls"
   add_foreign_key "appropriation_processes", "research_groups"
   add_foreign_key "appropriation_processes", "subtypes", column: "category_id"
@@ -3102,6 +3219,7 @@ ActiveRecord::Schema.define(version: 2022_08_10_220835) do
   add_foreign_key "form_d_act_plans", "users", column: "updated_by"
   add_foreign_key "form_e_act_plans", "action_plans"
   add_foreign_key "form_e_act_plans", "subtypes", column: "classification_id"
+  add_foreign_key "form_e_act_plans", "subtypes", column: "state_id"
   add_foreign_key "form_e_act_plans", "users", column: "created_by"
   add_foreign_key "form_e_act_plans", "users", column: "updated_by"
   add_foreign_key "functional_applications", "procedure_requests"
@@ -3202,6 +3320,10 @@ ActiveRecord::Schema.define(version: 2022_08_10_220835) do
   add_foreign_key "internal_members_proposals", "roles"
   add_foreign_key "internal_members_proposals", "users", column: "created_by"
   add_foreign_key "internal_members_proposals", "users", column: "updated_by"
+  add_foreign_key "inventory_histories", "form_e_act_plans"
+  add_foreign_key "inventory_histories", "subtypes", column: "state_id"
+  add_foreign_key "inventory_histories", "users", column: "created_by"
+  add_foreign_key "inventory_histories", "users", column: "updated_by"
   add_foreign_key "investigation_projects", "colciencias_calls"
   add_foreign_key "investigation_projects", "geo_cities"
   add_foreign_key "investigation_projects", "geo_countries"
@@ -3221,6 +3343,8 @@ ActiveRecord::Schema.define(version: 2022_08_10_220835) do
   add_foreign_key "ip_livestock_breeds", "users", column: "updated_by"
   add_foreign_key "item_details", "proposal_budgets"
   add_foreign_key "item_details", "proposals"
+  add_foreign_key "item_details", "subtypes", column: "source_id"
+  add_foreign_key "item_details", "subtypes", column: "state_id"
   add_foreign_key "item_details", "users", column: "created_by"
   add_foreign_key "item_details", "users", column: "updated_by"
   add_foreign_key "keywords", "users", column: "created_by"
@@ -3266,6 +3390,13 @@ ActiveRecord::Schema.define(version: 2022_08_10_220835) do
   add_foreign_key "mobility_calls", "research_groups"
   add_foreign_key "mobility_calls", "researchers"
   add_foreign_key "mobility_calls", "subtypes", column: "state_id"
+  add_foreign_key "mobility_calls", "users", column: "created_by"
+  add_foreign_key "mobility_calls", "users", column: "updated_by"
+  add_foreign_key "modifications", "research_groups"
+  add_foreign_key "modifications", "subtypes", column: "state_id"
+  add_foreign_key "modifications", "subtypes", column: "type_id"
+  add_foreign_key "modifications", "users", column: "created_by"
+  add_foreign_key "modifications", "users", column: "updated_by"
   add_foreign_key "new_animal_breeds", "colciencias_calls"
   add_foreign_key "new_animal_breeds", "geo_cities"
   add_foreign_key "new_animal_breeds", "geo_countries"
@@ -3358,6 +3489,11 @@ ActiveRecord::Schema.define(version: 2022_08_10_220835) do
   add_foreign_key "proposal_budgets", "proposals"
   add_foreign_key "proposal_budgets", "users", column: "created_by"
   add_foreign_key "proposal_budgets", "users", column: "updated_by"
+  add_foreign_key "proposal_evaluations", "anonymous_evaluators"
+  add_foreign_key "proposal_evaluations", "call_eval_criteria"
+  add_foreign_key "proposal_evaluations", "proposals"
+  add_foreign_key "proposal_evaluations", "users", column: "created_by"
+  add_foreign_key "proposal_evaluations", "users", column: "updated_by"
   add_foreign_key "proposal_products", "indicators"
   add_foreign_key "proposal_products", "proposals"
   add_foreign_key "proposal_products", "subtypes", column: "product_type_id"
@@ -5681,26 +5817,6 @@ ActiveRecord::Schema.define(version: 2022_08_10_220835) do
        LEFT JOIN subtypes spt ON ((fcap.product_type_id = spt.id)))
        LEFT JOIN subtypes scpt ON ((fcap.child_prod_type_id = scpt.id)));
   SQL
-  create_view "siciud.complete_form_e_act_ps", sql_definition: <<-SQL
-      SELECT feap.id,
-      feap.action_plan_id,
-      feap.classification_id,
-      scl.st_name AS classification_name,
-      feap.description,
-      feap.type_description,
-      feap.inventoried,
-      feap.inventory_plate,
-      feap.plan_type_id,
-      splt.st_name AS plan_type_name,
-      feap.active,
-      feap.created_by,
-      feap.updated_by,
-      feap.created_at,
-      feap.updated_at
-     FROM ((form_e_act_plans feap
-       LEFT JOIN subtypes scl ON ((feap.classification_id = scl.id)))
-       LEFT JOIN subtypes splt ON ((feap.plan_type_id = splt.id)));
-  SQL
   create_view "siciud.complete_ext_members_proposals", sql_definition: <<-SQL
       SELECT emp.id,
       ( SELECT json_build_object('id', contacts.id, 'identification_number', contacts.identification_number, 'identification_type_id', contacts.identification_type_id, 'mobile', contacts.mobile, 'address', contacts.address, 'name', contacts.name, 'email', contacts.email, 'phone', contacts.phone) AS json_build_object
@@ -5716,22 +5832,6 @@ ActiveRecord::Schema.define(version: 2022_08_10_220835) do
       emp.updated_at
      FROM (external_members_proposals emp
        LEFT JOIN roles r ON ((r.id = emp.role_id)));
-  SQL
-  create_view "siciud.complete_int_members_proposals", sql_definition: <<-SQL
-      SELECT imp.id,
-      ( SELECT json_build_object('id', researchers.id, 'orcid_id', researchers.orcid_id, 'identification_number', researchers.identification_number, 'oas_researcher_id', researchers.oas_researcher_id, 'mobile_number_one', researchers.mobile_number_one, 'mobile_number_two', researchers.mobile_number_two, 'address', researchers.address, 'phone_number_one', researchers.phone_number_one, 'phone_number_two', researchers.phone_number_two) AS json_build_object
-             FROM researchers
-            WHERE (imp.researcher_id = researchers.id)) AS researcher,
-      imp.proposal_id,
-      imp.role_id,
-      r.name AS role_name,
-      imp.active,
-      imp.created_by,
-      imp.updated_by,
-      imp.created_at,
-      imp.updated_at
-     FROM (internal_members_proposals imp
-       LEFT JOIN roles r ON ((r.id = imp.role_id)));
   SQL
   create_view "siciud.complete_roles", sql_definition: <<-SQL
       SELECT r.name,
@@ -5982,6 +6082,106 @@ ActiveRecord::Schema.define(version: 2022_08_10_220835) do
        LEFT JOIN indicators i ON ((im.indicator_id = i.id)))
        LEFT JOIN subtypes st ON ((im.term_id = st.id)));
   SQL
+  create_view "siciud.complete_proposal_evaluations", sql_definition: <<-SQL
+      SELECT p.id,
+      ( SELECT json_agg(json_build_object('anonymous_evaluator_id', evaluator_criteria.anonymous_evaluator_id, 'code', evaluator_criteria.code, 'criteria', evaluator_criteria.criteria, 'total', evaluator_criteria.total)) AS json_agg
+             FROM ( SELECT DISTINCT ON (pe.anonymous_evaluator_id) pe.anonymous_evaluator_id,
+                      ae.code,
+                      ae.total,
+                      ( SELECT json_agg(json_build_object('id', pec.id, 'call_eval_criterion_id', pec.call_eval_criterion_id, 'call_eval_criterion_percentage', cec.cec_percentage, 'eval_criterion_id', cec.eval_criterion_id, 'eval_criterion_name', scec.st_name, 'value', pec.value, 'active', pec.active, 'created_by', pec.created_by, 'updated_by', pec.updated_by)) AS json_agg
+                             FROM ((proposal_evaluations pec
+                               LEFT JOIN call_eval_criteria cec ON ((pec.call_eval_criterion_id = cec.id)))
+                               LEFT JOIN subtypes scec ON ((cec.eval_criterion_id = scec.id)))
+                            WHERE (pec.anonymous_evaluator_id = ae.id)) AS criteria
+                     FROM (proposal_evaluations pe
+                       LEFT JOIN anonymous_evaluators ae ON ((pe.anonymous_evaluator_id = ae.id)))
+                    WHERE (pe.proposal_id = p.id)) evaluator_criteria) AS anonymous_evaluators,
+      p.active,
+      p.created_by,
+      p.updated_by,
+      p.created_at,
+      p.updated_at
+     FROM proposals p;
+  SQL
+  create_view "siciud.complete_int_members_proposals", sql_definition: <<-SQL
+      SELECT imp.id,
+      ( SELECT json_build_object('id', researchers.id, 'orcid_id', researchers.orcid_id, 'identification_number', researchers.identification_number, 'oas_researcher_id', researchers.oas_researcher_id, 'mobile_number_one', researchers.mobile_number_one, 'mobile_number_two', researchers.mobile_number_two, 'address', researchers.address, 'phone_number_one', researchers.phone_number_one, 'phone_number_two', researchers.phone_number_two) AS json_build_object
+             FROM researchers
+            WHERE (imp.researcher_id = researchers.id)) AS researcher,
+      imp.proposal_id,
+      imp.role_id,
+      r.name AS role_name,
+      imp.start_date,
+      imp.end_date,
+      imp.active,
+      imp.created_by,
+      imp.updated_by,
+      imp.created_at,
+      imp.updated_at
+     FROM (internal_members_proposals imp
+       LEFT JOIN roles r ON ((r.id = imp.role_id)));
+  SQL
+  create_view "siciud.complete_activity_evaluations", sql_definition: <<-SQL
+      SELECT ae.id,
+      ae.activity_schedule_id,
+      acs.name,
+      acs.description,
+      acs.start_date,
+      acs.end_date,
+      acs.duration,
+      acs.deliverable,
+      acs.proposal_id,
+      ARRAY( SELECT aso.objective_id
+             FROM activity_schedules_objectives aso
+            WHERE (acs.id = aso.activity_schedule_id)) AS objective_ids,
+      acs.active AS activity_schedule_active,
+      acs.created_by AS activity_schedule_created_by,
+      acs.updated_by AS activity_schedule_updated_by,
+      acs.created_at AS activity_schedule_created_at,
+      acs.updated_at AS activity_schedule_updated_at,
+      ae.notified_due_to_expire,
+      ae.notified_expired,
+      ae.is_completed,
+      ae.state_id,
+      ss.st_name AS state_name,
+      ae.active AS activity_evaluation_active,
+      ae.created_by AS activity_evaluation_created_by,
+      ae.updated_by AS activity_evaluation_updated_by,
+      ae.created_at AS activity_evaluation_created_at,
+      ae.updated_at AS activity_evaluation_updated_at
+     FROM ((activity_evaluations ae
+       LEFT JOIN activity_schedules acs ON ((acs.id = ae.activity_schedule_id)))
+       LEFT JOIN subtypes ss ON ((ss.id = ae.state_id)));
+  SQL
+  create_view "siciud.complete_form_e_act_ps", sql_definition: <<-SQL
+      SELECT feap.id,
+      feap.action_plan_id,
+      feap.classification_id,
+      scl.st_name AS classification_name,
+      feap.description,
+      feap.type_description,
+      feap.inventoried,
+      feap.inventory_plate,
+      feap.plan_type_id,
+      splt.st_name AS plan_type_name,
+      feap.value,
+      feap.state_id,
+      spst.st_name AS state_name,
+      ( SELECT inventory_histories.usable_id
+             FROM inventory_histories
+            WHERE (((inventory_histories.usable_type)::text = 'Proposal'::text) AND (inventory_histories.form_e_act_plan_id = feap.id))
+            ORDER BY inventory_histories.updated_at DESC
+           LIMIT 1) AS proposal_id,
+      feap.active,
+      feap.created_by,
+      feap.updated_by,
+      feap.created_at,
+      feap.updated_at
+     FROM (((form_e_act_plans feap
+       LEFT JOIN subtypes scl ON ((feap.classification_id = scl.id)))
+       LEFT JOIN subtypes splt ON ((feap.plan_type_id = splt.id)))
+       LEFT JOIN subtypes spst ON ((feap.state_id = spst.id)));
+  SQL
   create_view "siciud.complete_proposal_products", sql_definition: <<-SQL
       SELECT pp.id,
       pp.name,
@@ -5991,6 +6191,11 @@ ActiveRecord::Schema.define(version: 2022_08_10_220835) do
       i.ind_description AS indicator_description,
       pp.beneficiary,
       pp.proposal_id,
+      ( SELECT json_agg(json_build_object('id', r.id, 'oas_researcher_id', r.oas_researcher_id, 'identification_number', r.identification_number)) AS json_agg
+             FROM (proposal_products_researchers ppr
+               LEFT JOIN researchers r ON ((r.id = ppr.researcher_id)))
+            WHERE (ppr.proposal_product_id = pp.id)) AS researchers,
+      pp.validated,
       pp.active,
       pp.created_by,
       pp.updated_by,
@@ -6004,10 +6209,13 @@ ActiveRecord::Schema.define(version: 2022_08_10_220835) do
       SELECT pb.id,
       pb.call_item_id,
       ci.item_id,
+      sci.st_name AS item_name,
       pb.amount_request_cidc,
       pb.counterparty,
       pb.amount_in_kind,
       pb.subtotal,
+      pb.executed_amount,
+      pb.balance,
       pb.proposal_id,
       pb.active,
       pb.created_by,
@@ -6017,5 +6225,100 @@ ActiveRecord::Schema.define(version: 2022_08_10_220835) do
      FROM ((proposal_budgets pb
        LEFT JOIN call_items ci ON ((pb.call_item_id = ci.id)))
        LEFT JOIN subtypes sci ON ((ci.item_id = sci.id)));
+  SQL
+  create_view "siciud.complete_item_details", sql_definition: <<-SQL
+      SELECT itd.id,
+      itd.proposal_budget_id,
+      itd.description,
+      itd.justification,
+      itd.estimated_date,
+      itd.quantity,
+      itd.individual_cost,
+      itd.subtotal,
+      itd.proposal_id,
+      itd.source_id,
+      s.st_name AS source_name,
+      itd.state_id,
+      st.st_name AS state_name,
+      itd.requested_amount,
+      itd.executed_amount,
+      itd.balance,
+      itd.approved,
+      itd.payments,
+      itd.notified_due_to_expire,
+      itd.notified_expired,
+      itd.active,
+      itd.created_by,
+      itd.updated_by,
+      itd.created_at,
+      itd.updated_at
+     FROM ((item_details itd
+       LEFT JOIN subtypes s ON ((itd.source_id = s.id)))
+       LEFT JOIN subtypes st ON ((itd.state_id = s.id)));
+  SQL
+  create_view "siciud.complete_modifications", sql_definition: <<-SQL
+      SELECT modifications.id,
+      modifications.name,
+      modifications.description,
+      modifications.editable,
+      modifications.state_id,
+      modifications.type_id,
+      modifications.amount,
+      modifications.research_group_id,
+      modifications.start_date,
+      modifications.active,
+      modifications.created_by,
+      modifications.updated_by,
+      modifications.created_at,
+      modifications.updated_at
+     FROM modifications;
+  SQL
+  create_view "siciud.complete_project_activities", sql_definition: <<-SQL
+      SELECT acsc.id,
+      acsc.name,
+      acsc.start_date,
+      acsc.end_date,
+      acsc.proposal_id,
+      acev.notified_due_to_expire,
+      acev.notified_expired,
+      acev.state_id,
+      s.st_name AS state_name,
+      acev.is_completed
+     FROM ((activity_schedules acsc
+       LEFT JOIN activity_evaluations acev ON ((acsc.id = acev.activity_schedule_id)))
+       LEFT JOIN subtypes s ON ((acev.state_id = s.id)));
+  SQL
+  create_view "siciud.activity_evaluation_notifications", sql_definition: <<-SQL
+      SELECT p.id AS proposal_id,
+      p.title AS proposal_title,
+      p.call_id,
+      c.call_code,
+      c.call_name,
+      p.project_type_id,
+      spj.st_name AS project_type_name,
+      imp.researcher_id,
+      res.identification_number,
+      res.oas_researcher_id,
+      imp.role_id,
+      rol.name AS role_name,
+      ( SELECT count(acsc.id) AS count
+             FROM (activity_schedules acsc
+               LEFT JOIN activity_evaluations acev ON ((acsc.id = acev.activity_schedule_id)))
+            WHERE ((acev.notified_due_to_expire = false) AND (acsc.end_date < (CURRENT_DATE - 15)) AND (acev.is_completed = false) AND (acsc.proposal_id = p.id))) AS total_notified_due_to_expire,
+      ( SELECT count(acsc.id) AS count
+             FROM (activity_schedules acsc
+               LEFT JOIN activity_evaluations acev ON ((acsc.id = acev.activity_schedule_id)))
+            WHERE ((acev.notified_expired = false) AND (acsc.end_date < CURRENT_DATE) AND (acev.is_completed = false) AND (acsc.proposal_id = p.id))) AS total_notified_expired,
+      p.active,
+      p.created_at,
+      p.updated_at,
+      p.created_by,
+      p.updated_by
+     FROM (((((proposals p
+       LEFT JOIN calls c ON ((p.call_id = c.id)))
+       LEFT JOIN subtypes spj ON ((p.project_type_id = spj.id)))
+       LEFT JOIN internal_members_proposals imp ON ((p.id = imp.proposal_id)))
+       LEFT JOIN researchers res ON ((imp.researcher_id = res.id)))
+       LEFT JOIN roles rol ON ((imp.role_id = rol.id)));
   SQL
 end

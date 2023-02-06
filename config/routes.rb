@@ -10,6 +10,14 @@ Rails.application.routes.draw do
         resources :documents, only: [:index, :show, :create, :update]
       end
 
+      post "/notifications/health_check", to: "notifications#health_check"
+      post "/notifications", to: "notifications#custom_notification"
+
+      get "/projects/summary", to: "project_activity_information#summary"
+      get "/projects/:proposal_id/activities_to_expire", to: "project_activity_information#activities_to_expire"
+      get "/projects/:proposal_id/expired_activities", to: "project_activity_information#expired_activities"
+      put "/notified_activities", to: "project_activity_information#update_notified"
+
       # General endpoints
       # Geo endpoints
       resources :evaluators, only: [:index, :show, :create, :update]
@@ -55,6 +63,11 @@ Rails.application.routes.draw do
         resources :documents, only: [:index, :show, :create, :update]
       end
       resources :form_e_act_plans, only: [:show]
+      get "/inventories", to: "form_e_act_plans#index"
+      post "/inventories", to: "form_e_act_plans#create_inventory"
+      get "/inventories/:id", to: "form_e_act_plans#show"
+      put "/inventories/:id", to: "form_e_act_plans#update_inventory"
+      resources :inventory_histories
 
       # Enpoint CRUD de los grupos de investigacion
       resources :research_group, only: [:index, :show, :create, :update], path: 'research_units' do
@@ -264,26 +277,44 @@ Rails.application.routes.draw do
 
       resources :proposals, only: [:index, :show, :update] do
         resources :activity_schedules, only: [:index, :create]
+        resources :activity_evaluations, only: [:index]
         get "evaluators", to: "evaluators#index_by_proposal"
+        get "validate_proposal", to: "proposals#validate_proposal"
         resources :proposal_budgets, only: [:index, :create]
         resources :external_members_proposals, only: [:index, :create]
         resources :impacts, only: [:index, :create]
         resources :internal_members_proposals, only: [:index, :create]
         resources :item_details, only: [:index, :create]
+        get "/inventories", to: "form_e_act_plans#index"
         resources :objectives, only: [:index, :create]
+        resources :proposal_evaluations, only: [:index, :create]
         resources :proposal_products, only: [:index, :create]
         resources :research_groups_proposals, only: [:index, :create]
         resources :risks, only: [:index, :create]
         resources :chapters, only: [:index, :show, :create, :update]
+        resources :documents, only: [:index, :show, :create, :update]
       end
-      resources :activity_schedules, only: [:show, :update]
-      resources :proposal_budgets, only: [:show, :update]
+      resources :activity_schedules, only: [:show, :update] do
+        resources :activity_evaluations, only: [:index, :create]
+      end
+      resources :activity_evaluations, only: [:show, :update]
+      resources :anonymous_evaluators, only: [:index, :show, :create, :update] do
+        put "proposal_evaluations", to: "anonymous_evaluators#update_criteria"
+      end
+      resources :proposal_budgets, only: [:show, :update] do
+        resources :item_details, only: [:index]
+      end
       resources :external_members_proposals, only: [:show, :update]
       resources :impacts, only: [:show, :update]
       resources :internal_members_proposals, only: [:show, :update]
-      resources :item_details, only: [:show, :update]
+      resources :item_details, only: [:show, :update] do
+        resources :documents, only: [:index, :show, :create, :update]
+      end
       resources :objectives, only: [:show, :update]
-      resources :proposal_products, only: [:show, :update]
+      resources :proposal_evaluations, only: [:show, :update]
+      resources :proposal_products, only: [:show, :update] do
+        resources :documents, only: [:index, :show, :create, :update]
+      end
       resources :research_groups_proposals, only: [:show, :update]
       resources :risks, only: [:show, :update]
 
