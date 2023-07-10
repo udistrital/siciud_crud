@@ -7,6 +7,8 @@ class ActivitySchedule < ApplicationRecord
   has_and_belongs_to_many :objectives
   has_and_belongs_to_many :risks
 
+  has_many :documents, as: :documentable
+
   validates :duration, numericality: { greater_than_or_equal_to: 0 }
 
   # Tracking inherited from ApplicationRecord, fields:
