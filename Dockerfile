@@ -1,15 +1,12 @@
-FROM ruby:2.7.8
+FROM ruby:2.6.2-alpine
 
-RUN apt-get update -qq && apt-get install -y nodejs postgresql-client
-
-RUN apt-get update \
-  && apt-get install -y python3-pip python3-dev \
-  && cd /usr/local/bin \
-  && ln -s /usr/bin/python3 python \
-  && pip3 --no-cache-dir install --upgrade pip \
-  && rm -rf /var/lib/apt/lists/*
-
-RUN pip install awscli
+RUN apk add --no-cache \
+        python3 \
+        py3-pip \
+    && pip3 install --upgrade pip \
+    && pip3 install --no-cache-dir \
+        awscli \
+    && rm -rf /var/cache/apk/*
 
 RUN mkdir /myapp
 WORKDIR /myapp
