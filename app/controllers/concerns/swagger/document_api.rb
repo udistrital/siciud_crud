@@ -4,7 +4,8 @@ module Swagger::DocumentApi
   require './app/models/concerns/constant.rb'
 
   PRODUCT_ARRAY = get_product_array
-  RU_PRODUCT_ARRAY = [:calls,
+  RU_PRODUCT_ARRAY = [:activity_schedules,
+                      :calls,
                       :manuals,
                       :mobility_calls,
                       :proposals,

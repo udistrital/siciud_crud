@@ -60,6 +60,9 @@ class ApplicationController < ActionController::API
     elsif params[:item_detail_id]
       id = params[:item_detail_id]
       @context = ItemDetail.find(id)
+    elsif params[:activity_schedule_id]
+      id = params[:activity_schedule_id]
+      @context = ActivitySchedule.find(id)
     else
       set_product_context
     end

@@ -1,19 +1,21 @@
-FROM ruby:2.6.2
-RUN apt-get update -qq && apt-get install -y nodejs postgresql-client
+FROM ruby:2.6.2-alpine
 
-RUN apt-get update \
-  && apt-get install -y python3-pip python3-dev \
-  && cd /usr/local/bin \
-  && ln -s /usr/bin/python3 python \
-  && pip3 --no-cache-dir install --upgrade pip \
-  && rm -rf /var/lib/apt/lists/*
+RUN apk --update add build-base nodejs tzdata postgresql-dev postgresql-client libxslt-dev libxml2-dev imagemagick
 
-RUN pip install awscli
+RUN apk add --no-cache \
+        python3 \
+        py3-pip \
+    && pip3 install --upgrade pip \
+    && pip3 install --no-cache-dir \
+        awscli \
+    && rm -rf /var/cache/apk/*
 
 RUN mkdir /myapp
 WORKDIR /myapp
 COPY Gemfile /myapp/Gemfile
 COPY Gemfile.lock /myapp/Gemfile.lock
+
+RUN apk update && apk add --virtual build-dependencies build-base
 RUN gem install bundler:2.2.11
 RUN bundle install
 COPY . /myapp
