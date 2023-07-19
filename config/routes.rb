@@ -296,6 +296,7 @@ Rails.application.routes.draw do
       end
       resources :activity_schedules, only: [:show, :update] do
         resources :activity_evaluations, only: [:index, :create]
+        resources :documents, only: [:index, :show, :create, :update]
       end
       resources :activity_evaluations, only: [:show, :update]
       resources :anonymous_evaluators, only: [:index, :show, :create, :update] do
